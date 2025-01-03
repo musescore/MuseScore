@@ -13,8 +13,9 @@
 #include "loginmanager.h"
 #include "loginmanager_p.h"
 #include "musescore.h"
-#include "libmscore/score.h"
 #include "preferences.h"
+
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -44,6 +45,15 @@ QByteArray ApiInfo::genClientId()
       if (!qtGeneratedId.isEmpty())
             return qtGeneratedId;
 #endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+      long long randId = QRandomGenerator().bounded(INT_MAX);
+      constexpr size_t randBytes = sizeof(decltype(QRandomGenerator().bounded(INT_MAX)));
+      qDebug() << "randBytes =" << randBytes << "sizeof(randId)" << sizeof(randId);
+      for (size_t bytes = randBytes; bytes < sizeof(randId); bytes += randBytes) {
+            randId <<= 8 * randBytes;
+            randId += QRandomGenerator().bounded(INT_MAX);
+            }
+#else
       long long randId = qrand();
       constexpr size_t randBytes = sizeof(decltype(qrand()));
       qDebug() << "randBytes =" << randBytes << "sizeof(randId)" << sizeof(randId);
@@ -51,6 +61,7 @@ QByteArray ApiInfo::genClientId()
             randId <<= 8 * randBytes;
             randId += qrand();
             }
+#endif
       qDebug() << randId << QString::number(randId, 2) << QString::number(randId, 16);
 
       return QString::number(randId, 16).toLatin1();
@@ -69,7 +80,11 @@ void ApiInfo::createInstance()
       QByteArray clientId;
       if (f.open(QIODevice::ReadOnly)) {
             const QByteArray saveData = f.readAll();
-            const QJsonDocument d(QJsonDocument::fromBinaryData(saveData));
+#if 0 // QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) // TODO, login doesn't work with this ?!
+            const QJsonDocument d(QJsonDocument::fromJson(saveData));
+#else
+            const QJsonDocument d(QJsonDocument::fromBinaryData(saveData)); // TODO: Use CBOR format instead
+#endif
             QJsonObject saveObject = d.object();
             clientId = saveObject["clientId"].toString().toLatin1();
             f.close();
@@ -81,7 +96,11 @@ void ApiInfo::createInstance()
                   QJsonObject saveObject;
                   saveObject["clientId"] = QString(clientId);
                   QJsonDocument saveDoc(saveObject);
-                  f.write(saveDoc.toBinaryData());
+#if 0 // QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) // TODO, login doesn't work with this ?!
+                  f.write(saveDoc.toJson());
+#else
+                  f.write(saveDoc.toBinaryData()); // TODO: Use CBOR format instead
+#endif
                   f.close();
                   }
             }
@@ -167,7 +186,11 @@ bool LoginManager::save()
       saveObject["accessToken"] = _accessToken;
       saveObject["refreshToken"] = _refreshToken;
       QJsonDocument saveDoc(saveObject);
-      saveFile.write(saveDoc.toBinaryData());
+#if 0 // QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) // TODO, login doesn't work with this ?!
+      saveFile.write(saveDoc.toJson());
+#else
+      saveFile.write(saveDoc.toBinaryData()); // TODO: Use CBOR format instead
+#endif
       saveFile.close();
       return true;
       }
@@ -182,7 +205,11 @@ bool LoginManager::load()
       if (!loadFile.open(QIODevice::ReadOnly))
             return false;
       QByteArray saveData = loadFile.readAll();
-      QJsonDocument loadDoc(QJsonDocument::fromBinaryData(saveData));
+#if 0 // QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) // TODO, login doesn't work with this ?!
+      QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+#else
+      QJsonDocument loadDoc(QJsonDocument::fromBinaryData(saveData)); // TODO: Use CBOR format instead
+#endif
       QJsonObject saveObject = loadDoc.object();
       _accessToken = saveObject["accessToken"].toString();
       _refreshToken = saveObject["refreshToken"].toString();
@@ -574,7 +601,11 @@ void LoginManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
             QJsonValue urlValue = response.value("url");
             if (urlValue.isString()) {
                   _mediaUrl = urlValue.toString();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+                  QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(QRandomGenerator().bounded(100000));
+#else
                   QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
+#endif
                   _mp3File = new QFile(mp3Path);
                   Score* score = mscore->currentScore()->masterScore();
                   int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
@@ -660,8 +691,8 @@ void LoginManager::mediaUploadProgress(qint64 progress, qint64 total)
       {
       if (!_progressDialog->wasCanceled()) {
             _progressDialog->setMinimum(0);
-            _progressDialog->setMaximum(total);
-            _progressDialog->setValue(progress);
+            _progressDialog->setMaximum((int)total);
+            _progressDialog->setValue((int)progress);
             }
       }
 
@@ -681,7 +712,11 @@ void LoginManager::upload(const QString& path, int nid, const QString& title)
 
       QHttpPart filePart;
       filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+      QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(QRandomGenerator().bounded(100000));
+#else
       QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(qrand() % 100000);
+#endif
       filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
       QFile *file = new QFile(path);
       file->open(QIODevice::ReadOnly);

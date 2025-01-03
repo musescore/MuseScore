@@ -13,7 +13,6 @@
 #ifndef __STAFFTEXT_H__
 #define __STAFFTEXT_H__
 
-#include "text.h"
 #include "part.h"
 #include "staff.h"
 #include "stafftextbase.h"

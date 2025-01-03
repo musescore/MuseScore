@@ -45,6 +45,10 @@
 #include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#define endl Qt::endl
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 // FOR GRADIENT FUNCTIONALITY THAT IS NOT IMPLEMENTED (YET):
 //

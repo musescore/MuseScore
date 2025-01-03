@@ -10,16 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "global/log.h"
-
-#include "measure.h"
-#include "score.h"
-#include "system.h"
-#include "undo.h"
-#include "slurtie.h"
-#include "tie.h"
 #include "chord.h"
 #include "page.h"
+#include "measure.h"
+#include "score.h"
+#include "slurtie.h"
+#include "system.h"
+#include "undo.h"
+
+#include "global/log.h"
 
 namespace Ms {
 

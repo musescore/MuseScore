@@ -10,23 +10,23 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+//#include "barline.h"
 #include "box.h"
-#include "textframe.h"
-#include "text.h"
-#include "score.h"
-#include "barline.h"
-#include "repeat.h"
-#include "symbol.h"
-#include "system.h"
+#include "fret.h"
+#include "icon.h"
 #include "image.h"
 #include "layoutbreak.h"
-#include "fret.h"
-#include "mscore.h"
-#include "stafftext.h"
-#include "icon.h"
-#include "xml.h"
 #include "measure.h"
+#include "mscore.h"
+#include "repeat.h"
+#include "score.h"
+#include "stafftext.h"
+#include "symbol.h"
+#include "system.h"
+#include "text.h"
+#include "textframe.h"
 #include "undo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -139,7 +139,7 @@ void Box::editDrag(EditData& ed)
             _boxHeight += Spatium(ed.delta.y() / spatium());
             if (ed.vRaster) {
                   qreal vRaster = 1.0 / MScore::vRaster();
-                  int n = lrint(_boxHeight.val() / vRaster);
+                  int n = (int)lrint(_boxHeight.val() / vRaster);
                   _boxHeight = Spatium(vRaster * n);
                   }
             bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
@@ -150,7 +150,7 @@ void Box::editDrag(EditData& ed)
             _boxWidth += Spatium(ed.delta.x() / spatium());
             if (ed.hRaster) {
                   qreal hRaster = 1.0 / MScore::hRaster();
-                  int n = lrint(_boxWidth.val() / hRaster);
+                  int n = (int)lrint(_boxWidth.val() / hRaster);
                   _boxWidth = Spatium(hRaster * n);
                   }
             triggerLayout();

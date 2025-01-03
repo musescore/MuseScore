@@ -10,28 +10,27 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "mscore.h"
-#include "staff.h"
-#include "part.h"
-#include "clef.h"
-#include "xml.h"
-#include "score.h"
-#include "bracket.h"
-#include "keysig.h"
-#include "segment.h"
-#include "style.h"
-#include "measure.h"
-#include "stringdata.h"
-#include "stafftype.h"
-#include "undo.h"
-#include "cleflist.h"
-#include "timesig.h"
-#include "instrtemplate.h"
 #include "barline.h"
-#include "ottava.h"
-#include "harmony.h"
+#include "bracket.h"
 #include "bracketItem.h"
 #include "chord.h"
+#include "clef.h"
+#include "cleflist.h"
+#include "instrtemplate.h"
+#include "keysig.h"
+#include "measure.h"
+#include "mscore.h"
+#include "ottava.h"
+#include "part.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "stringdata.h"
+#include "style.h"
+#include "timesig.h"
+#include "undo.h"
+#include "xml.h"
 
 // #define DEBUG_CLEFS
 
@@ -147,7 +146,11 @@ void Staff::swapBracket(int oldIdx, int newIdx)
       fillBrackets(idx);
       _brackets[oldIdx]->setColumn(newIdx);
       _brackets[newIdx]->setColumn(oldIdx);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+      _brackets.swapItemsAt(oldIdx, newIdx);
+#else
       _brackets.swap(oldIdx, newIdx);
+#endif
       cleanBrackets();
       }
 
@@ -165,7 +168,11 @@ void Staff::changeBracketColumn(int oldColumn, int newColumn)
             int newIdx = i + step;
             _brackets[oldIdx]->setColumn(newIdx);
             _brackets[newIdx]->setColumn(oldIdx);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+            _brackets.swapItemsAt(oldIdx, newIdx);
+#else
             _brackets.swap(oldIdx, newIdx);
+#endif
             }
       cleanBrackets();
       }

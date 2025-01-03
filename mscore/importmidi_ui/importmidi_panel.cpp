@@ -1,18 +1,16 @@
-#include "importmidi_panel.h"
-
 #include "ui_importmidi_panel.h"
 #include "importmidi_delegate.h"
+#include "importmidi_panel.h"
 
-#include "importexport/midiimport/importmidi_model.h"
-#include "importexport/midiimport/importmidi_lyrics.h"
-#include "importexport/midiimport/importmidi_operations.h"
 #include "importexport/midiimport/importmidi_inner.h"
+#include "importexport/midiimport/importmidi_lyrics.h"
+#include "importexport/midiimport/importmidi_model.h"
+#include "importexport/midiimport/importmidi_operations.h"
 
 #include "libmscore/score.h"
 
-#include "mscore/preferences.h"
-#include "mscore/musescore.h"
 #include "mscore/icons.h"
+#include "mscore/musescore.h"
 
 namespace Ms {
 
@@ -156,7 +154,11 @@ void ImportMidiPanel::fillCharsetList()
             _ui->comboBoxCharset->addItem(charset);
             if (charset == MidiCharset::defaultCharset())
                   _ui->comboBoxCharset->setCurrentIndex(idx);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+            int newWidth = fm.horizontalAdvance(charset);
+#else
             int newWidth = fm.width(charset);
+#endif
             if (newWidth > maxWidth)
                   maxWidth = newWidth;
             ++idx;

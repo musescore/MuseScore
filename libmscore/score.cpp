@@ -1165,7 +1165,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag * spatium();
 
       const qreal yOff = sstaff->yOffset();  // Get system staff vertical offset (usually for 1-line staves)
-      pos->line  = lrint((pppp.y() - sstaff->bbox().y() - yOff) / lineDist);
+      pos->line  = (int)lrint((pppp.y() - sstaff->bbox().y() - yOff) / lineDist);
       if (s->isTabStaff(measure->tick())) {
             if (pos->line < -1 || pos->line > s->lines(tick)+1)
                   return false;
@@ -4832,7 +4832,7 @@ int Score::duration()
       if (rl.empty())
             return 0;
       const RepeatSegment* rs = rl.last();
-      return lrint(utick2utime(rs->utick + rs->len()));
+      return (int)lrint(utick2utime(rs->utick + rs->len()));
       }
 
 //---------------------------------------------------------
@@ -4845,7 +4845,7 @@ int Score::durationWithoutRepeats()
       if (rl.empty())
             return 0;
       const RepeatSegment* rs = rl.last();
-      return lrint(utick2utime(rs->utick + rs->len()));
+      return (int)lrint(utick2utime(rs->utick + rs->len()));
       }
 
 //---------------------------------------------------------

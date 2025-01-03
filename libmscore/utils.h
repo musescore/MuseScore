@@ -13,7 +13,6 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include "mscore.h"
 #include "interval.h"
 #include "sym.h"
 

@@ -81,13 +81,13 @@ sf_count_t AudioFile::readData(short* data, sf_count_t frames)
             resFrames = sf_readf_short(sf, data, frames);
       else {
             //read native float values
-            int totalFrames = frames * channels();
+            sf_count_t totalFrames = frames * channels();
             std::vector<float> dataF;
             dataF.resize(totalFrames);
             resFrames = sf_readf_float(sf, dataF.data(), frames);
             //find the maximum signal value
             float maxSignal = 0.f;
-            for (int i = 0; i < totalFrames; ++i) {
+            for (sf_count_t i = 0; i < totalFrames; ++i) {
                   if (fabs(dataF[i]) > maxSignal)
                         maxSignal = dataF[i] > 0 ? dataF[i] : -dataF[i];
                   }
@@ -95,7 +95,7 @@ sf_count_t AudioFile::readData(short* data, sf_count_t frames)
             //which means having at least one sample value more than 1.0
             float adjScale = maxSignal > 1.f ? 1.f/maxSignal : 1.f;
             //convert normalized floats to signed short values
-            for (int i = 0; i < totalFrames; ++i)
+            for (sf_count_t i = 0; i < totalFrames; ++i)
                   data[i] = adjScale * lrintf(dataF[i] * (dataF[i] > 0 ? SHRT_MAX : -SHRT_MIN));
             }
 
@@ -108,7 +108,7 @@ sf_count_t AudioFile::readData(short* data, sf_count_t frames)
 
 sf_count_t AudioFile::seek(sf_count_t offset, int whence)
       {
-      switch(whence) {
+      switch (whence) {
             case SEEK_SET:
                   idx = offset;
                   break;

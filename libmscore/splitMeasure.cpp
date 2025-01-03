@@ -10,14 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "score.h"
-#include "measure.h"
-#include "segment.h"
 #include "chordrest.h"
+#include "measure.h"
 #include "range.h"
-#include "tuplet.h"
+#include "score.h"
+#include "segment.h"
 #include "spanner.h"
 #include "tie.h"
+#include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
 

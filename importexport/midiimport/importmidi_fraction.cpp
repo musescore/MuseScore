@@ -1,8 +1,7 @@
-#include "importmidi_fraction.h"
-#include "libmscore/mscore.h"
-
 #include <limits>
 
+#include "importmidi_fraction.h"
+#include "libmscore/mscore.h"
 
 namespace Ms {
 
@@ -78,7 +77,7 @@ namespace {
 
 static unsigned lcm(int a, int b)
       {
-      const int g =  Ms::gcd(a, b);
+      const int g =  (int)Ms::gcd(a, b);
       
       Q_ASSERT_X(!isDivisionOverflow(a, g),
                  "ReducedFraction, lcm", "Division overflow");
@@ -119,7 +118,7 @@ ReducedFraction ReducedFraction::fromTicks(int ticks)
 
 ReducedFraction ReducedFraction::reduced() const
       {
-      const int tmp = gcd(numerator_, denominator_);
+      const int tmp = (int)Ms::gcd(numerator_, denominator_);
 
       Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
                  "ReducedFraction::reduced", "Division overflow");
@@ -158,7 +157,7 @@ void ReducedFraction::reduce()
             denominator_ = 1;
             return;
             }
-      const int tmp = gcd(numerator_, denominator_);
+      const int tmp = (int)Ms::gcd(numerator_, denominator_);
 
       Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
                  "ReducedFraction::reduce", "Division overflow");

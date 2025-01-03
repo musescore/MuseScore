@@ -11,16 +11,11 @@
 //=============================================================================
 
 #include "box.h"
-#include "text.h"
-#include "score.h"
-#include "barline.h"
-#include "repeat.h"
-#include "symbol.h"
-#include "system.h"
-#include "image.h"
-#include "layoutbreak.h"
-#include "fret.h"
 #include "mscore.h"
+#include "repeat.h"
+#include "score.h"
+#include "system.h"
+#include "text.h"
 #include "textframe.h"
 #include "xml.h"
 

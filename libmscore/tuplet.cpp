@@ -15,6 +15,7 @@
 #include "element.h"
 #include "measure.h"
 #include "note.h"
+#include "rest.h"
 #include "score.h"
 #include "staff.h"
 #include "stem.h"

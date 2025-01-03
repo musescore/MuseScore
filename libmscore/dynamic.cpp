@@ -10,7 +10,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "score.h"
 #include "chord.h"
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
@@ -21,6 +20,7 @@
 #include "segment.h"
 #include "style.h"
 #include "system.h"
+#include "tempo.h"
 #include "utils.h"
 #include "undo.h"
 #include "xml.h"

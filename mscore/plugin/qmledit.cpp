@@ -13,8 +13,8 @@
 //  (git://gitorious.org/ofi-labs/x2.git BSD licensed).
 //=============================================================================
 
-#include "qmledit.h"
 #include "musescore.h"
+#include "qmledit.h"
 
 namespace Ms {
 
@@ -291,7 +291,11 @@ QStringList JSHighlighter::keywords() const
 
 void JSHighlighter::setKeywords(const QStringList &keywords)
       {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+      m_keywords = QSet<QString>(keywords.begin(), keywords.end());
+#else
       m_keywords = QSet<QString>::fromList(keywords);
+#endif
       rehighlight();
       }
 

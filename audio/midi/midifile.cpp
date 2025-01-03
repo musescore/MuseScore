@@ -11,11 +11,6 @@
 //=============================================================================
 
 #include "midifile.h"
-#include "libmscore/xml.h"
-#include "libmscore/part.h"
-#include "libmscore/note.h"
-#include "libmscore/drumset.h"
-#include "libmscore/utils.h"
 
 namespace Ms {
 
@@ -401,7 +396,7 @@ int MidiFile::readShort()
 //   writeShort
 //---------------------------------------------------------
 
-void MidiFile::writeShort(int i)
+void MidiFile::writeShort(short i)
       {
       fp->putChar(i >> 8);
       fp->putChar(i);
@@ -428,7 +423,7 @@ int MidiFile::readLong()
 //   writeLong
 //---------------------------------------------------------
 
-void MidiFile::writeLong(int i)
+void MidiFile::writeLong(long i)
       {
       fp->putChar(i >> 24);
       fp->putChar(i >> 16);

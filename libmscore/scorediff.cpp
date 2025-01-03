@@ -10,18 +10,17 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "scorediff.h"
+#include <algorithm>
+#include <utility>
 
 #include "duration.h"
 #include "measure.h"
 #include "score.h"
+#include "scorediff.h"
 #include "staff.h"
 #include "xml.h"
 
 #include "dtl/dtl.hpp"
-
-#include <algorithm>
-#include <utility>
 
 namespace Ms {
 
@@ -124,8 +123,15 @@ std::vector<TextDiff> MscxModeDiff::lineModeDiff(const QString& s1, const QStrin
 
       // QVector does not contain range constructor used inside dtl
       // so we have to convert to std::vector.
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+      QVector<QStringRef>s1Ref = s1.splitRef('\n');
+      std::vector<QStringRef> lines1 = { s1Ref.begin(), s1Ref.begin() };
+      QVector<QStringRef>s2Ref = s2.splitRef('\n');
+      std::vector<QStringRef> lines2 = { s2Ref.begin(), s2Ref.begin() };
+#else
       std::vector<QStringRef> lines1 = s1.splitRef('\n').toStdVector();
       std::vector<QStringRef> lines2 = s2.splitRef('\n').toStdVector();
+#endif
       dtl::Diff<QStringRef, std::vector<QStringRef>> diff(lines1, lines2);
 
       diff.compose();

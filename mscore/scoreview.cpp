@@ -1136,7 +1136,7 @@ void ScoreView::drawBackground(QPainter* p, const QRectF& r) const
             p->fillRect(r, _fgColor);
       else {
             p->drawTiledPixmap(r, *_fgPixmap, r.topLeft()
-               - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
+               - QPoint((int)lrint(_matrix.dx()), (int)lrint(_matrix.dy())));
             }
       }
 
@@ -1257,7 +1257,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.fillRect(r, _fgColor);
       else {
             p.drawTiledPixmap(r, *_fgPixmap, r.topLeft()
-               - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
+               - QPoint((int)lrint(_matrix.dx()), (int)lrint(_matrix.dy())));
             }
 
       p.setTransform(_matrix);
@@ -1764,8 +1764,8 @@ void ScoreView::setLogicalZoom(ZoomIndex index, qreal logicalLevel, const QPoint
             const QPointF p2 = imatrix.map(pos);
             const QPointF p3 = p2 - p1;
 
-            dx = lrint(p3.x() * newPhysicalLevel);
-            dy = lrint(p3.y() * newPhysicalLevel);
+            dx = (int)lrint(p3.x() * newPhysicalLevel);
+            dy = (int)lrint(p3.y() * newPhysicalLevel);
             }
 
       constraintCanvas(&dx, &dy);

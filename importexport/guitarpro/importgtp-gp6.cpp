@@ -13,54 +13,51 @@
 
 #include "importgtp.h"
 
-#include <libmscore/score.h>
-#include <libmscore/measurebase.h>
-#include <libmscore/text.h>
-#include <libmscore/stafftext.h>
-#include <libmscore/box.h>
-#include <libmscore/staff.h>
-#include <libmscore/part.h>
-#include <libmscore/measure.h>
-#include <libmscore/timesig.h>
-#include <libmscore/tremolo.h>
-#include <libmscore/rest.h>
-#include <libmscore/chord.h>
-#include <libmscore/note.h>
-#include <libmscore/stringdata.h>
-#include <libmscore/clef.h>
-#include <libmscore/lyrics.h>
-#include <libmscore/tempotext.h>
-#include <libmscore/slur.h>
-#include <libmscore/tie.h>
-#include <libmscore/tuplet.h>
-#include <libmscore/barline.h>
-#include <libmscore/excerpt.h>
-#include <libmscore/stafftype.h>
-#include <libmscore/bracket.h>
+#include <libmscore/arpeggio.h>
 #include <libmscore/articulation.h>
-#include <libmscore/keysig.h>
-#include <libmscore/harmony.h>
+#include <libmscore/barline.h>
 #include <libmscore/bend.h>
-#include <libmscore/tremolobar.h>
-#include <libmscore/segment.h>
+#include <libmscore/bracket.h>
+#include "libmscore/bracketItem.h"
+#include <libmscore/box.h>
+#include <libmscore/chord.h>
+#include <libmscore/clef.h>
+#include <libmscore/dynamic.h>
+#include <libmscore/excerpt.h>
+#include <libmscore/fingering.h>
+#include <libmscore/glissando.h>
+#include <libmscore/hairpin.h>
+#include <libmscore/harmony.h>
+#include <libmscore/instrtemplate.h>
+#include <libmscore/keysig.h>
+#include <libmscore/lyrics.h>
+#include <libmscore/marker.h>
+#include <libmscore/measure.h>
+#include <libmscore/measurebase.h>
+#include <libmscore/note.h>
+#include <libmscore/notedot.h>
+#include <libmscore/ottava.h>
+#include <libmscore/part.h>
 #include <libmscore/rehearsalmark.h>
 #include <libmscore/repeat.h>
-#include <libmscore/glissando.h>
-#include <libmscore/dynamic.h>
-#include <libmscore/arpeggio.h>
-#include <libmscore/volta.h>
-#include <libmscore/instrtemplate.h>
-#include <libmscore/hairpin.h>
-#include <libmscore/fingering.h>
+#include <libmscore/rest.h>
+#include <libmscore/score.h>
+#include <libmscore/segment.h>
+#include <libmscore/slur.h>
+#include <libmscore/staff.h>
+#include <libmscore/stafftext.h>
+#include <libmscore/stafftype.h>
+#include <libmscore/stringdata.h>
 #include <libmscore/sym.h>
-#include <libmscore/ottava.h>
-#include <libmscore/marker.h>
-#include <libmscore/notedot.h>
-#include "libmscore/sym.h"
-#include "libmscore/bracketItem.h"
+#include <libmscore/tempotext.h>
+#include <libmscore/text.h>
 #include "libmscore/textline.h"
-#include <libmscore/repeat.h>
-// #include <symtext.h>
+#include <libmscore/tie.h>
+#include <libmscore/timesig.h>
+#include <libmscore/tremolobar.h>
+#include <libmscore/tremolo.h>
+#include <libmscore/tuplet.h>
+#include <libmscore/volta.h>
 
 namespace Ms {
 
@@ -2317,7 +2314,11 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                     currentFermata = currentFermata.nextSibling();
 
                                     // get the fermata information and construct a gpFermata from them
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+                                    QStringList fermataComponents = fermata.split("/", Qt::SkipEmptyParts);
+#else
                                     QStringList fermataComponents = fermata.split("/", QString::SkipEmptyParts);
+#endif
                                     GPFermata gpFermata;
                                     gpFermata.index        = fermataComponents.at(0).toInt();
                                     gpFermata.timeDivision = fermataComponents.at(1).toInt();

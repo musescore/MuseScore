@@ -16,11 +16,10 @@
 #include <QtGlobal>
 #include <QString>
 
-#include "stringdata.h"
-#include "mscore.h"
-#include "notifier.hpp"
-#include "interval.h"
 #include "clef.h"
+#include "interval.h"
+#include "notifier.hpp"
+#include "stringdata.h"
 
 #include "audio/midi/event.h"
 

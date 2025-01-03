@@ -13,9 +13,7 @@
 #ifndef __PART_H__
 #define __PART_H__
 
-#include "mscore.h"
 #include "instrument.h"
-#include "text.h"
 
 namespace Ms {
 

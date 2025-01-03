@@ -10,9 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "global/log.h"
 #include "textedit.h"
 #include "score.h"
+#include "textedit.h"
+
+#include "global/log.h"
 
 namespace Ms {
 

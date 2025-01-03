@@ -16,10 +16,10 @@
 #include <QMultiMap>
 
 #include "connector.h"
-#include "stafftype.h"
-#include "interval.h"
 #include "element.h"
+#include "interval.h"
 #include "select.h"
+#include "stafftype.h"
 
 namespace Ms {
 

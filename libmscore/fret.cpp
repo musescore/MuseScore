@@ -16,6 +16,7 @@
 #include "measure.h"
 #include "mscore.h"
 #include "note.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"

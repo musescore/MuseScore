@@ -63,7 +63,7 @@ std::string formatting_options::get_style_id(const std::string &style)
    strmap::iterator i_style = styles.find(style);
    if (i_style == styles.end())
    {
-      i_style = styles.insert(strmap::value_type(style, std::string("cls") + from_int(static_cast<int>(styles.size())))).first;
+      i_style = styles.insert(strmap::value_type(style, std::string("cls") + from_int(styles.size()))).first;
    }
    return i_style->second;
 }

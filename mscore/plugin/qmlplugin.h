@@ -13,8 +13,6 @@
 #ifndef __QMLPLUGIN_H__
 #define __QMLPLUGIN_H__
 
-#include "config.h"
-
 #include "libmscore/mscore.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/utils.h"

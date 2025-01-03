@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "mscore.h"
 #include "tempo.h"
-#include "xml.h"
 
 namespace Ms {
 
@@ -302,7 +302,7 @@ int TempoMap::time2tick(qreal time, int* sn) const
             tempo = e->second.tempo;
             }
       delta = time - delta;
-      tick += lrint(delta * _relTempo * MScore::division * tempo);
+      tick += (int)lrint(delta * _relTempo * MScore::division * tempo);
       if (sn)
             *sn = _tempoSN;
       return tick;

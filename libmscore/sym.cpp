@@ -6453,8 +6453,8 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
       worldScale      *= pixelRatio;
 //      if (worldScale < 1.0)
 //            worldScale = 1.0;
-      int scale16X      = lrint(worldScale * 6553.6 * mag.width() * DPI_F);
-      int scale16Y      = lrint(worldScale * 6553.6 * mag.height() * DPI_F);
+      int scale16X      = (int)lrint(worldScale * 6553.6 * mag.width() * DPI_F);
+      int scale16Y      = (int)lrint(worldScale * 6553.6 * mag.height() * DPI_F);
 
       GlyphKey gk(face, id, mag.width(), mag.height(), worldScale, color);
       GlyphPixmap* pm = cache->object(gk);

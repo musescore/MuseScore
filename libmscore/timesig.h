@@ -14,9 +14,8 @@
 #define __TIMESIG_H__
 
 #include "element.h"
-#include "sig.h"
-#include "mscore.h"
 #include "groups.h"
+#include "sig.h"
 
 namespace Ms {
 

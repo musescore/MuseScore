@@ -10,14 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "score.h"
-#include "image.h"
-#include "xml.h"
-#include "staff.h"
-#include "segment.h"
-#include "page.h"
-#include "system.h"
 #include "measure.h"
+#include "page.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "system.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -185,12 +184,12 @@ QRectF BSymbol::drag(EditData& ed)
       qreal _spatium = spatium();
       if (ed.hRaster) {
             qreal hRaster = _spatium / MScore::hRaster();
-            int n = lrint(x / hRaster);
+            int n = (int)lrint(x / hRaster);
             x = hRaster * n;
             }
       if (ed.vRaster) {
             qreal vRaster = _spatium / MScore::vRaster();
-            int n = lrint(y / vRaster);
+            int n = (int)lrint(y / vRaster);
             y = vRaster * n;
             }
 

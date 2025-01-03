@@ -122,7 +122,7 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
       symbols.clear();
       qreal w1 = f->advance(end, mag);
       qreal w2 = f->advance(fill, mag);
-      int n    = lrint((w - w1) / w2);
+      int n    = (int)lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
            symbols.push_back(fill);
       symbols.push_back(end);

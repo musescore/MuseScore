@@ -17,37 +17,33 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "click.h"
 #include "config.h"
-#include "seq.h"
 #include "musescore.h"
+#include "pianotools.h"
+#include "playpanel.h"
+#include "preferences.h"
+#include "scoreview.h"
+#include "seq.h"
+#include "synthcontrol.h"
 
 #include "audio/midi/msynthesizer.h"
+
+#include "libmscore/audio.h"
+#include "libmscore/chord.h"
+#include "libmscore/measure.h"
+#include "libmscore/note.h"
+#include "libmscore/part.h"
 #include "libmscore/rendermidi.h"
-#include "libmscore/slur.h"
-#include "libmscore/tie.h"
+#include "libmscore/repeatlist.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
-#include "libmscore/note.h"
-#include "libmscore/chord.h"
-#include "libmscore/tempo.h"
-#include "scoreview.h"
-#include "playpanel.h"
 #include "libmscore/staff.h"
-#include "libmscore/measure.h"
-#include "preferences.h"
-#include "libmscore/part.h"
-#include "libmscore/ottava.h"
+#include "libmscore/tempo.h"
+#include "libmscore/tie.h"
 #include "libmscore/utils.h"
-#include "libmscore/repeatlist.h"
-#include "libmscore/audio.h"
-#include "synthcontrol.h"
+
 #include "pianoroll/pianoroll.h"
-#include "pianotools.h"
-
-#include "click.h"
-
-#define OV_EXCLUDE_STATIC_CALLBACKS
-#include <vorbis/vorbisfile.h>
 
 #ifdef USE_PORTMIDI
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -56,6 +52,9 @@
   #include <porttime.h>
 #endif
 #endif
+
+#define OV_EXCLUDE_STATIC_CALLBACKS
+#include <vorbis/vorbisfile.h>
 
 namespace Ms {
 
@@ -118,13 +117,13 @@ static int ovSeek(void* datasource, ogg_int64_t offset, int whence)
       VorbisData* vd = (VorbisData*)datasource;
       switch(whence) {
             case SEEK_SET:
-                  vd->pos = offset;
+                  vd->pos = (int)offset;
                   break;
             case SEEK_CUR:
-                  vd->pos += offset;
+                  vd->pos += (int)offset;
                   break;
             case SEEK_END:
-                  vd->pos = vd->data.size() - offset;
+                  vd->pos = vd->data.size() - (int)offset;
                   break;
             }
       return 0;
@@ -416,14 +415,17 @@ void Seq::stopWait()
       {
       stop();
       QWaitCondition sleep;
+#ifndef NDEBUG
       int idx = 0;
+#endif
       while (state != Transport::STOP) {
             qDebug("State %d", (int)state);
             mutex.lock();
             sleep.wait(&mutex, 100);
             mutex.unlock();
-            ++idx;
-            Q_ASSERT(idx <= 10);
+#ifndef NDEBUG
+            Q_ASSERT(++idx <= 10);
+#endif
             }
       }
 

@@ -10,9 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "stemslash.h"
-#include "score.h"
 #include "chord.h"
+#include "score.h"
+#include "stemslash.h"
 
 namespace Ms {
 

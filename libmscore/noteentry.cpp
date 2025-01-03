@@ -10,22 +10,23 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "utils.h"
-#include "score.h"
+#include "accidental.h"
 #include "chord.h"
+#include "drumset.h"
+#include "excerpt.h"
 #include "measure.h"
+#include "navigate.h"
+#include "part.h"
+#include "range.h"
+#include "rest.h"
+#include "score.h"
+#include "slur.h"
+#include "staff.h"
+#include "stringdata.h"
 #include "tie.h"
 #include "tuplet.h"
-#include "staff.h"
-#include "part.h"
-#include "drumset.h"
-#include "slur.h"
-#include "navigate.h"
-#include "stringdata.h"
 #include "undo.h"
-#include "range.h"
-#include "excerpt.h"
-#include "accidental.h"
+#include "utils.h"
 
 namespace Ms {
 

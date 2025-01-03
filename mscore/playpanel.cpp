@@ -17,15 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "playpanel.h"
-#include "libmscore/sig.h"
-#include "libmscore/score.h"
-#include "libmscore/repeatlist.h"
-#include "seq.h"
 #include "musescore.h"
-#include "libmscore/measure.h"
+#include "playpanel.h"
+#include "seq.h"
+
 #include "audio/midi/msynthesizer.h"
 
+#include "libmscore/measure.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/sig.h"
 
 namespace Ms {
 
@@ -371,15 +372,15 @@ void PlayPanel::updateTimeLabel(int sec)
       // alternative would be to use a monospaced font and a
       // single label
       char hourBuffer[8];
-      sprintf(hourBuffer, "%d", h);
+      snprintf(hourBuffer, sizeof hourBuffer, "%d", h);
       hourLabel->setText(QString(hourBuffer));
 
       char minBuffer[8];
-      sprintf(minBuffer, "%02d", m);
+      snprintf(minBuffer, sizeof minBuffer, "%02d", m);
       minuteLabel->setText(QString(minBuffer));
       
       char secondBuffer[8];
-      sprintf(secondBuffer, "%02d", sec);
+      snprintf(secondBuffer, sizeof secondBuffer, "%02d", sec);
       secondLabel->setText(QString(secondBuffer));
           
       }
@@ -408,11 +409,11 @@ void PlayPanel::updatePosLabel(int utick)
       // single label
 
       char barBuffer[12];
-      sprintf(barBuffer, "%d", bar+1);// sprintf(barBuffer, "%03d", bar+1);
+      snprintf(barBuffer, sizeof barBuffer, "%d", bar+1);// snprintf(barBuffer, sizeof barBuffer, "%03d", bar+1);
       measureLabel->setText(QString(barBuffer));
 
       char beatBuffer[12];
-      sprintf(beatBuffer, "%02d", beat+1);
+      snprintf(beatBuffer, sizeof beatBuffer, "%02d", beat+1);
       beatLabel->setText(QString(beatBuffer));
       }
 

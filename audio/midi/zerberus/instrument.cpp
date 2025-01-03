@@ -16,13 +16,13 @@
 #include <QFileInfo>
 #include <QStringList>
 
-#include "libmscore/xml.h"
-#include "audiofile/audiofile.h"
-#include "thirdparty/qzip/qzipreader_p.h"
-
 #include "instrument.h"
-#include "zone.h"
 #include "sample.h"
+#include "zone.h"
+
+#include "audiofile/audiofile.h"
+#include "libmscore/xml.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 
 QByteArray ZInstrument::buf;
 int ZInstrument::idx;

@@ -10,9 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "score.h"
 #include "stafftypelist.h"
 #include "xml.h"
-#include "score.h"
 
 namespace Ms {
 

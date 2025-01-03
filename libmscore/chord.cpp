@@ -662,7 +662,7 @@ void Chord::remove(Element* e)
                   {
                   auto i = std::find(_graceNotes.begin(), _graceNotes.end(), toChord(e));
                   Chord* grace = *i;
-                  grace->setGraceIndex(i - _graceNotes.begin());
+                  grace->setGraceIndex((int)(i - _graceNotes.begin()));
                   _graceNotes.erase(i);
                   }
                   break;
@@ -3542,7 +3542,7 @@ void Chord::layoutArticulations()
                         y = upPos() + stem()->stemLen();
                         if (beam())
                               y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
-                        int line   = lrint((y + 0.5 * _spStaff) / _spStaff);
+                        int line = (int)lrint((y + 0.5 * _spStaff) / _spStaff);
                         if (line < staffType->lines())  // align between staff lines
                               y = line * _spStaff + _spatium * .5;
                         else
@@ -3572,7 +3572,7 @@ void Chord::layoutArticulations()
                         y = downPos() + stem()->stemLen();
                         if (beam())
                               y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
-                        int line   = lrint((y-0.5*_spStaff) / _spStaff);
+                        int line = (int)lrint((y-0.5*_spStaff) / _spStaff);
                         if (line >= 0)  // align between staff lines
                               y = line * _spStaff - _spatium * .5;
                         else

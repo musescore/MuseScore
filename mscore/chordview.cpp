@@ -11,12 +11,13 @@
 //=============================================================================
 
 #include "chordview.h"
+#include "musescore.h"
 #include "piano.h"
+
 #include "libmscore/chord.h"
+#include "libmscore/mscore.h"
 #include "libmscore/note.h"
 #include "libmscore/noteevent.h"
-#include "musescore.h"
-#include "libmscore/mscore.h"
 #include "libmscore/score.h"
 
 namespace Ms {
@@ -242,11 +243,11 @@ void ChordView::drawBackground(QPainter* p, const QRectF& r)
             for (int i = 0; i < 3; ++i) {
                   p->setPen(Qt::lightGray);
                   for (int k = 1; k < 4; ++k) {
-                        int x = lrint(i * step1 + k * step2);
+                        int x = (int)lrint(i * step1 + k * step2);
                         p->drawLine(pos2pix(x), y1, pos2pix(x), y2);
                         }
                   p->setPen(Qt::black);
-                  int x = lrint(i * step1);
+                  int x = (int)lrint(i * step1);
                   p->drawLine(pos2pix(x), y1, pos2pix(x), y2);
                   }
             }
@@ -397,7 +398,12 @@ void ChordView::wheelEvent(QWheelEvent* event)
                   emit xposChanged(xpos);
             }
       else if (event->modifiers() == Qt::ShiftModifier) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            QWheelEvent we(event->position(), event->globalPosition(), event->pixelDelta(), event->angleDelta(),
+                           event->buttons(), Qt::NoModifier, Qt::ScrollPhase::NoScrollPhase, false);
+#else
             QWheelEvent we(event->pos(), event->delta(), event->buttons(), 0, Qt::Horizontal);
+#endif
             QGraphicsView::wheelEvent(&we);
             }
       else if (event->modifiers() == 0) {

@@ -27,7 +27,7 @@ class Sample {
       int _loopMode     { 0 };
 
    public:
-      Sample(int ch, short* val, int f, int sr)
+      Sample(int ch, short* val, long long f, int sr)
          : _channel(ch), _data(val), _frames(f), _sampleRate(sr) {}
       ~Sample();
       bool read(const QString&);

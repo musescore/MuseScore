@@ -25,6 +25,7 @@
 #include "revisions.h"
 #include "page.h"
 #include "part.h"
+#include "rest.h"
 #include "score.h"
 #include "scoreOrder.h"
 #include "segment.h"
@@ -547,7 +548,7 @@ QImage Score::createThumbnail()
 
       QImage pm(w, h, QImage::Format_ARGB32_Premultiplied);
 
-      int dpm = lrint(DPMM * 1000.0);
+      int dpm = (int)lrint(DPMM * 1000.0);
       pm.setDotsPerMeterX(dpm);
       pm.setDotsPerMeterY(dpm);
       pm.fill(0xffffffff);

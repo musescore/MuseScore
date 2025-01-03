@@ -18,14 +18,14 @@
  Definition of class Staff.
 */
 
-#include "mscore.h"
 #include "changeMap.h"
-#include "pitch.h"
 #include "cleflist.h"
-#include "keylist.h"
-#include "stafftypelist.h"
 #include "groups.h"
+#include "keylist.h"
+#include "mscore.h"
+#include "pitch.h"
 #include "scoreElement.h"
+#include "stafftypelist.h"
 
 namespace Ms {
 

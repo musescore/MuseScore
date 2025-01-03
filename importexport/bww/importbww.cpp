@@ -21,14 +21,14 @@
 // Currently all output (both debug and error reports) are done using qDebug.
 
 #include "lexer.h"
-#include "writer.h"
 #include "parser.h"
+#include "writer.h"
 
-#include "libmscore/fraction.h"
 #include "libmscore/barline.h"
 #include "libmscore/box.h"
 #include "libmscore/chord.h"
 #include "libmscore/clef.h"
+#include "libmscore/fraction.h"
 #include "libmscore/keysig.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/measure.h"
@@ -36,10 +36,10 @@
 #include "libmscore/part.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/score.h"
-#include "libmscore/slur.h"
 #include "libmscore/tie.h"
 #include "libmscore/staff.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/text.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"

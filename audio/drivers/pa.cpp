@@ -316,7 +316,7 @@ void Portaudio::putEvent(const NPlayEvent& e, unsigned framePos)
                   // Catch CTRL_PROGRAM and let other ME_CONTROLLER events to go
                   if (e.dataA() == CTRL_PROGRAM) {
                         // Convert CTRL_PROGRAM event to ME_PROGRAM
-                        long msg = Pm_Message(ME_PROGRAM | chan, less128(e.dataB()), 0);
+                        int msg = Pm_Message(ME_PROGRAM | chan, less128(e.dataB()), 0);
                         PmError error = Pm_WriteShort(portMidiDriver->getOutputStream(), seq->getCurrentMillisecondTimestampWithLatency(framePos), msg);
                         if (error != pmNoError) {
                               qDebug("Portaudio: error %d", error);
@@ -327,7 +327,7 @@ void Portaudio::putEvent(const NPlayEvent& e, unsigned framePos)
                   // fall through
             case ME_PITCHBEND:
                   {
-                  long msg = Pm_Message(e.type() | chan, less128(e.dataA()), less128(e.dataB()));
+                  int msg = Pm_Message(e.type() | chan, less128(e.dataA()), less128(e.dataB()));
                   PmError error = Pm_WriteShort(portMidiDriver->getOutputStream(), seq->getCurrentMillisecondTimestampWithLatency(framePos), msg);
                   if (error != pmNoError) {
                         qDebug("Portaudio: error %d", error);
@@ -339,7 +339,7 @@ void Portaudio::putEvent(const NPlayEvent& e, unsigned framePos)
             case ME_PROGRAM:
             case ME_AFTERTOUCH:
                   {
-                  long msg = Pm_Message(e.type() | chan, less128(e.dataA()), 0);
+                  int msg = Pm_Message(e.type() | chan, less128(e.dataA()), 0);
                   PmError error = Pm_WriteShort(portMidiDriver->getOutputStream(), seq->getCurrentMillisecondTimestampWithLatency(framePos), msg);
                   if (error != pmNoError) {
                         qDebug("Portaudio: error %d", error);

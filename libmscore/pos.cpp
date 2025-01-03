@@ -11,9 +11,9 @@
 //=============================================================================
 
 #include "pos.h"
-#include "xml.h"
 #include "sig.h"
 #include "tempo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -103,7 +103,7 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, int min, int sec, int frame, int subframe
             }
       _type  = TType::FRAMES;
       _tick  = 0;
-      _frame = lrint(time * MScore::sampleRate);
+      _frame = (int)lrint(time * MScore::sampleRate);
       sn     = -1;
       _valid = true;
       }
@@ -553,8 +553,8 @@ void Pos::msf(int* min, int* sec, int* fr, int* subFrame) const
                   rest *= 30;
                   break;
             }
-      *fr       = lrint(rest);
-      *subFrame = lrint((rest - (*fr)) * 100.0);
+      *fr       = (int)lrint(rest);
+      *subFrame = (int)lrint((rest - (*fr)) * 100.0);
       }
 
 //---------------------------------------------------------

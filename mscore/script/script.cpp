@@ -10,14 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "script.h"
-
 #include "musescore.h"
 #include "scoreview.h"
+#include "script.h"
 #include "scriptentry.h"
 #include "testscript.h"
 
-#include "libmscore/score.h"
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#define endl Qt::endl
+#endif
 
 namespace Ms {
 

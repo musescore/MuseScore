@@ -18,7 +18,6 @@
  Definition of Score class.
 */
 
-#include "config.h"
 #include "input.h"
 #include "instrument.h"
 #include "select.h"
@@ -865,7 +864,7 @@ class Score : public QObject, public ScoreElement {
       Element* getScoreElementOfMeasureBase(MeasureBase*) const;
 
       void cmd(const QAction*, EditData&);
-      int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }
+      int fileDivision(int t) const { return (t * MScore::division + _fileDivision / 2) / _fileDivision; }
       void setFileDivision(int t) { _fileDivision = t; }
 
       QString importedFilePath() const           { return _importedFilePath; }
@@ -940,7 +939,7 @@ class Score : public QObject, public ScoreElement {
       void setInputTrack(int t)                { inputState().setTrack(t);    }
 
       void spatiumChanged(qreal oldValue, qreal newValue);
-      void styleChanged();
+      void styleChanged() override;
 
       void cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
       bool pasteStaff(XmlReader&, Segment* dst, int staffIdx, Fraction scale = Fraction(1, 1));

@@ -13,11 +13,11 @@
 #ifndef __STAFFTYPE_H__
 #define __STAFFTYPE_H__
 
-#include "element.h"
-#include "spatium.h"
-#include "mscore.h"
 #include "durationtype.h"
+#include "element.h"
+#include "mscore.h"
 #include "note.h"
+#include "spatium.h"
 
 namespace Ms {
 

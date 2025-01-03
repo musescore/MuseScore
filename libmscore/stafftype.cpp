@@ -10,15 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "stafftype.h"
-
 #include "chord.h"
 #include "measure.h"
 #include "mscore.h"
 #include "navigate.h"
-#include "staff.h"
-#include "xml.h"
 #include "score.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "xml.h"
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0

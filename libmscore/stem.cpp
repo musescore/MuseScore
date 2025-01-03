@@ -10,19 +10,18 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "stem.h"
-#include "staff.h"
 #include "chord.h"
-#include "score.h"
-#include "stafftype.h"
 #include "hook.h"
-#include "tremolo.h"
 #include "note.h"
-#include "xml.h"
-
+#include "score.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "stem.h"
 // TEMPORARY HACK!!
 #include "sym.h"
 // END OF HACK
+#include "tremolo.h"
+#include "xml.h"
 
 namespace Ms {
 

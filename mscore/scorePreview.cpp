@@ -53,7 +53,11 @@ void ScorePreview::setScore(const ScoreInfo& si)
       {
       scoreInfo = si;
       name->setText(si.completeBaseName());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      creationDate->setText(si.birthTime().toString());
+#else
       creationDate->setText(si.created().toString());
+#endif
       fileSize->setText(QString("%1 KiB").arg(si.size() / 1024));
       name->setEnabled(true);
       creationDate->setEnabled(true);

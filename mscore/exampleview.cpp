@@ -12,12 +12,13 @@
 
 #include "exampleview.h"
 #include "preferences.h"
-#include "libmscore/score.h"
-#include "libmscore/element.h"
-#include "libmscore/page.h"
-#include "libmscore/system.h"
-#include "libmscore/icon.h"
+
 #include "libmscore/chord.h"
+#include "libmscore/element.h"
+#include "libmscore/icon.h"
+#include "libmscore/page.h"
+#include "libmscore/score.h"
+#include "libmscore/system.h"
 #include "libmscore/xml.h"
 
 namespace Ms {
@@ -159,7 +160,7 @@ void ExampleView::drawBackground(QPainter* p, const QRectF& r) const
             p->fillRect(r, _fgColor);
       else {
             p->drawTiledPixmap(r, *_fgPixmap, r.topLeft()
-               - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
+               - QPoint((int)lrint(_matrix.dx()), (int)lrint(_matrix.dy())));
             }
       }
 

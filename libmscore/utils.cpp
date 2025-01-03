@@ -10,25 +10,25 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
-#include "score.h"
-#include "page.h"
-#include "segment.h"
-#include "clef.h"
-#include "keysig.h"
-#include "utils.h"
-#include "system.h"
-#include "measure.h"
-#include "pitchspelling.h"
-#include "chordrest.h"
-#include "part.h"
-#include "staff.h"
-#include "note.h"
 #include "chord.h"
+#include "chordrest.h"
+#include "clef.h"
+#include "config.h"
 #include "key.h"
+#include "keysig.h"
+#include "measure.h"
+#include "note.h"
+#include "page.h"
+#include "part.h"
+#include "pitchspelling.h"
+#include "score.h"
+#include "segment.h"
 #include "sig.h"
-#include "tuplet.h"
+#include "staff.h"
 #include "sym.h"
+#include "system.h"
+#include "tuplet.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -404,7 +404,7 @@ int pitchKeyAdjust(int step, Key key)
 
 int y2pitch(qreal y, ClefType clef, qreal _spatium)
       {
-      int l = lrint(y / _spatium * 2.0);
+      int l = (int)lrint(y / _spatium * 2.0);
       return line2pitch(l, clef, Key::C);
       }
 

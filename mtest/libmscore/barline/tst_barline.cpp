@@ -11,13 +11,15 @@
 //=============================================================================
 
 #include <QtTest/QtTest>
-#include "mtest/testutils.h"
+
 #include "libmscore/barline.h"
+#include "libmscore/bracket.h"
 #include "libmscore/measure.h"
 #include "libmscore/score.h"
 #include "libmscore/system.h"
 #include "libmscore/undo.h"
-#include "libmscore/bracket.h"
+
+#include "mtest/testutils.h"
 
 #define DIR QString("libmscore/barline/")
 
@@ -89,7 +91,7 @@ void TestBarline::barline01()
       int sysNo = 0;
       for (System* sys : score->systems()) {
             // check number of the brackets of each system
-            sprintf(msg, "Wrong number of brackets in system %d.", sysNo+1);
+            snprintf(msg, sizeof msg, "Wrong number of brackets in system %d.", sysNo+1);
             QVERIFY2(sys->brackets().count() == 1, msg);
 
             // check height of the bracket of each system
@@ -98,7 +100,7 @@ void TestBarline::barline01()
             height      = bracket->bbox().height() / spatium;
             heightMin   = (sysNo == 0) ? BRACKET0_HEIGHT_MIN : BRACKET_HEIGHT_MIN;
             heightMax   = (sysNo == 0) ? BRACKET0_HEIGHT_MAX : BRACKET_HEIGHT_MAX;
-            sprintf(msg, "Wrong bracket height in system %d.", sysNo+1);
+            snprintf(msg, sizeof msg, "Wrong bracket height in system %d.", sysNo+1);
             QVERIFY2(height > heightMin && height < heightMax, msg);
 
             // check presence and height of the bar line of each measure of each system
@@ -109,16 +111,16 @@ void TestBarline::barline01()
                   BarLine* bar = nullptr;
                   Measure* msr = toMeasure(sys->measure(msrNo));
                   Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
-                  sprintf(msg, "No SegEndBarLine in measure %d of system %d.", msrNo+1, sysNo+1);
+                  snprintf(msg, sizeof msg, "No SegEndBarLine in measure %d of system %d.", msrNo+1, sysNo+1);
                   QVERIFY2(seg != nullptr, msg);
 
                   bar = toBarLine(seg->element(0));
-                  sprintf(msg, "No barline in measure %d of system %d.", msrNo+1, sysNo+1);
+                  snprintf(msg, sizeof msg, "No barline in measure %d of system %d.", msrNo+1, sysNo+1);
                   QVERIFY2(bar != nullptr, msg);
 
 #if 0 // not valid anymore
                   height      = bar->bbox().height() / spatium;
-                  sprintf(msg, "Wrong barline height %f %f %f in measure %d of system %d.",
+                  snprintf(msg, sizeof msg, "Wrong barline height %f %f %f in measure %d of system %d.",
                      heightMin, height, heightMax, msrNo+1, sysNo+1);
                   QVERIFY2(height > heightMin && height < heightMax, msg);
 #endif
@@ -154,15 +156,15 @@ void TestBarline::barline02()
       while ((msr = msr->nextMeasure())) {
             ++msrNo;
             Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
-            sprintf(msg, "No SegEndBarLine in measure %d.", msrNo);
+            snprintf(msg, sizeof msg, "No SegEndBarLine in measure %d.", msrNo);
             QVERIFY2(seg != nullptr, msg);
 
             BarLine* bar = static_cast<BarLine*>(seg->element(0));
-            sprintf(msg, "No barline in measure %d.", msrNo);
+            snprintf(msg, sizeof msg, "No barline in measure %d.", msrNo);
             QVERIFY2(bar != nullptr, msg);
 
             // bar line should be generated if NORMAL, except the END one at the end
-            sprintf(msg, "Barline in measure %d changed into 'non-generated'.", msrNo);
+            snprintf(msg, sizeof msg, "Barline in measure %d changed into 'non-generated'.", msrNo);
 // ws: end barline is also generated
 //            bool test = (bar->barLineType() == BarLineType::NORMAL) ? bar->generated() : !bar->generated();
             bool test = bar->generated();
@@ -321,11 +323,11 @@ void TestBarline::barline06()
       int         msrNo = 1;
       for (int i=0; i < 3; i++) {
             // check measure endbarline type
-            sprintf(msg, "EndBarLineType not NORMAL in measure %d.", msrNo);
+            snprintf(msg, sizeof msg, "EndBarLineType not NORMAL in measure %d.", msrNo);
 //TODO            QVERIFY2(msr->endBarLineType() == BarLineType::NORMAL, msg);
             // locate end-measure bar line segment
             Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
-            sprintf(msg, "No SegEndBarLine in measure %d.", msr->no());
+            snprintf(msg, sizeof msg, "No SegEndBarLine in measure %d.", msr->no());
             QVERIFY2(seg != nullptr, msg);
 
             // check only i-th staff has custom bar line type
@@ -333,15 +335,15 @@ void TestBarline::barline06()
                   BarLine* bar = static_cast<BarLine*>(seg->element(j*VOICES));
                   // if not the i-th staff, bar should be normal and not custom
                   if (j != i) {
-                        sprintf(msg, "barline type NOT NORMAL or CUSTOM TYPE in staff %d of measure %d.", j+1, msrNo);
+                        snprintf(msg, sizeof msg, "barline type NOT NORMAL or CUSTOM TYPE in staff %d of measure %d.", j+1, msrNo);
                         QVERIFY2(bar->barLineType() == BarLineType::NORMAL, msg);
 //                        QVERIFY2(bar->customSubtype() == false, msg);
                         }
                   // in the i-th staff, the bar line should be of type DOUBLE and custom type should be true
                   else {
-                        sprintf(msg, "No barline for staff %d in measure %d", j+1, msrNo);
+                        snprintf(msg, sizeof msg, "No barline for staff %d in measure %d", j+1, msrNo);
                         QVERIFY2(bar != nullptr, msg);
-                        sprintf(msg, "barline type NOT DOUBLE or NOT CUSTOM TYPE in staff %d of measure %d.", j+1, msrNo);
+                        snprintf(msg, sizeof msg, "barline type NOT DOUBLE or NOT CUSTOM TYPE in staff %d of measure %d.", j+1, msrNo);
                         QVERIFY2(bar->barLineType() == BarLineType::DOUBLE, msg);
 //                        QVERIFY2(bar->customSubtype() == true, msg);
                         }

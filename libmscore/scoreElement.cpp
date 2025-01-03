@@ -13,6 +13,7 @@
 #include "bracketItem.h"
 #include "measure.h"
 #include "musescoreCore.h"
+#include "rest.h"
 #include "score.h"
 #include "scoreElement.h"
 #include "undo.h"

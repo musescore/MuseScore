@@ -10,15 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "navigator.h"
 #include "musescore.h"
+#include "navigator.h"
 #include "scoreview.h"
-#include "libmscore/score.h"
-#include "libmscore/page.h"
-#include "preferences.h"
-#include "libmscore/mscore.h"
-#include "libmscore/system.h"
+
 #include "libmscore/measurebase.h"
+#include "libmscore/mscore.h"
+#include "libmscore/page.h"
+#include "libmscore/score.h"
+#include "libmscore/system.h"
 
 namespace Ms {
 
@@ -359,7 +359,11 @@ void Navigator::paintEvent(QPaintEvent* ev)
       QFont font("FreeSans", 4000);
       QFontMetrics fm (font);
       Page* firstPage = _score->pages()[0];
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      qreal factor = (firstPage->width() * 0.5) / fm.horizontalAdvance(QString::number(_score->pages().size()));
+#else
       qreal factor = (firstPage->width() * 0.5) / fm.width(QString::number(_score->pages().size()));
+#endif
       font.setPointSizeF(font.pointSizeF() * factor);
 
       p.setTransform(matrix);

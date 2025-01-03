@@ -10,16 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "instrument.h"
-#include "xml.h"
 #include "drumset.h"
-#include "articulation.h"
-#include "utils.h"
-#include "stringdata.h"
 #include "instrtemplate.h"
+#include "instrument.h"
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
+#include "stringdata.h"
+#include "text.h"
+#include "utils.h"
+#include "xml.h"
 
 #include "audio/midi/synthesizer.h"
 #include "audio/midi/midipatch.h"

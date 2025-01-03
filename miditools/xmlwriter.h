@@ -14,9 +14,9 @@
 #define __XMLWRITER_H__
 
 #include <QIODevice>
-#include <QTextStream>
 #include <QList>
 #include <QString>
+#include <QTextStream>
 #include <QVariant>
 
 //---------------------------------------------------------

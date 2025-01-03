@@ -114,8 +114,8 @@ void MeterSlider::resizeEvent(QResizeEvent* /*ev*/)
       offPm = QPixmap(mw, mh);
 
       double range = maxValue() - minValue();
-      int h1 = mh - lrint((maxValue() - redScale) * mh / range);
-      int h2 = mh - lrint((maxValue() - yellowScale) * mh / range);
+      int h1 = mh - (int)lrint((maxValue() - redScale) * mh / range);
+      int h2 = mh - (int)lrint((maxValue() - yellowScale) * mh / range);
 
       QColor yellowRed;
       yellowRed.setHsv(QColor(Qt::yellow).hue() - 8,
@@ -187,7 +187,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       p.setPen(QPen(Qt::white, 2));
 
       for (int i = 0; i < _channel; ++i) {
-            int h1 = mh - (lrint(fast_log10(meterval[i]) * -20.0f * mh / range));
+            int h1 = mh - ((int)lrint(fast_log10(meterval[i]) * -20.0f * mh / range));
             if (h1 < 0)
                   h1 = 0;
             else if (h1 > mh)
@@ -200,7 +200,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
             //    draw peak line
             //---------------------------------------------------
 
-            h1 = mh - (lrint(fast_log10(meterPeak[i]) * -20.0f * mh / range));
+            h1 = mh - ((int)lrint(fast_log10(meterPeak[i]) * -20.0f * mh / range));
             if (h1 > mh)
                   h1 = mh;
             if (h1 > 0)
@@ -237,7 +237,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
 
       QString s;
       for (int i = 0; i <= range; i += 10) {
-            h  = y1 + lrint(i * mh / range);
+            h  = y1 + (int)lrint(i * mh / range);
             s.setNum(i);
             if (i == 0) {
                   p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString("dB"));

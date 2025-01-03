@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "musescoreCore.h"
 #include "score.h"
-#include "textline.h"
 #include "staff.h"
 #include "system.h"
+#include "textline.h"
 #include "undo.h"
-#include "musescoreCore.h"
 
 namespace Ms {
 

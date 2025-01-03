@@ -280,7 +280,7 @@ int Piano::pitch2y(int pitch) const
       int y = (75 * keyHeight) - (tt[pitch % 12] + (7 * keyHeight) * (pitch / 12));
       if (y < 0)
             y = 0;
-      return lrint(y - _ypos / _ymag);
+      return (int)lrint(y - _ypos / _ymag);
       }
 
 //---------------------------------------------------------
@@ -290,7 +290,7 @@ int Piano::pitch2y(int pitch) const
 
 int Piano::y2pitch(int y) const
       {
-      y = lrint((y + _ypos) / _ymag);
+      y = (int)lrint((y + _ypos) / _ymag);
       static const int total = (10 * 7 + 5) * keyHeight;     // 75 steps
       y = total - y;
       int oct = (y / (7 * keyHeight)) * 12;

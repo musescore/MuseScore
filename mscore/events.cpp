@@ -10,28 +10,26 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "scoreview.h"
-#include "zoombox.h"
+#include "fotomode.h"
 #include "musescore.h"
+#include "scoreview.h"
 #include "seq.h"
 #include "texttools.h"
-#include "pianotools.h"
-#include "fotomode.h"
-#include "tourhandler.h"
-#include "scoreaccessibility.h"
-#include "libmscore/score.h"
+#include "zoombox.h"
+
+#include "libmscore/chordrest.h"
 #include "libmscore/keysig.h"
-#include "libmscore/timesig.h"
-#include "libmscore/segment.h"
-#include "libmscore/utils.h"
-#include "libmscore/text.h"
 #include "libmscore/measure.h"
-#include "libmscore/stafflines.h"
-#include "libmscore/chord.h"
-#include "libmscore/shadownote.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
 #include "libmscore/select.h"
+#include "libmscore/shadownote.h"
 #include "libmscore/staff.h"
+#include "libmscore/stafflines.h"
+#include "libmscore/text.h"
+#include "libmscore/timesig.h"
+#include "libmscore/utils.h"
 
 namespace Ms {
 
@@ -185,7 +183,11 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
       if (event->modifiers() & Qt::ControlModifier) { // Windows touch pad pinches also execute this
             QApplication::sendPostedEvents(this, 0);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            zoomBySteps(nReal, true, event->position());
+#else
             zoomBySteps(nReal, true, event->posF());
+#endif
             return;
             }
 

@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "spannermap.h"
 #include "spanner.h"
+#include "spannermap.h"
 
 namespace Ms {
 

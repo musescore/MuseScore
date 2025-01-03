@@ -17,9 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include <fenv.h>
-
 #include "musescore.h"
+#include "parteditbase.h"
+#include "playpanel.h"
+#include "preferences.h"
+#include "scoreview.h"
+#include "seq.h"
+#include "shortcut.h"
+
+#include "audio/midi/msynthesizer.h"
+
 #include "libmscore/score.h"
 #include "libmscore/instrument.h"
 #include "libmscore/measure.h"
@@ -28,14 +35,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/undo.h"
+
 #include "mixer/mixer.h"
-#include "parteditbase.h"
-#include "scoreview.h"
-#include "playpanel.h"
-#include "preferences.h"
-#include "seq.h"
-#include "audio/midi/msynthesizer.h"
-#include "shortcut.h"
 
 #ifdef OSC
 #include "ofqf/qoscserver.h"
@@ -306,7 +307,7 @@ void MuseScore::oscVolChannel(double val)
       if( i >= 0 && i < int(mms.size())) {
             MidiMapping& mm = mms[i];
             Channel* channel = mm.articulation();
-            int iv = lrint(val*127);
+            int iv = (int)lrint(val*127);
             seq->setController(channel->channel(), CTRL_VOLUME, iv);
             channel->setVolume(val * 100.0);
             if (mixer)
@@ -329,7 +330,7 @@ void MuseScore::oscPanChannel(double val)
       if (i >= 0 && i < int(mms.size())) {
             MidiMapping& mm = mms[i];
             Channel* channel = mm.articulation();
-            int iv = lrint((val + 1) * 64);
+            int iv = (int)lrint((val + 1) * 64);
             seq->setController(channel->channel(), CTRL_PANPOT, iv);
             channel->setPan(val * 180.0);
             if (mixer)

@@ -13,9 +13,9 @@
 #ifndef __STAFFTEXTBASE_H__
 #define __STAFFTEXTBASE_H__
 
-#include "text.h"
 #include "part.h"
 #include "staff.h"
+#include "textbase.h"
 
 namespace Ms {
 

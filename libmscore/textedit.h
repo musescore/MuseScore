@@ -14,7 +14,6 @@
 #define __TEXTEDIT_H__
 
 #include "element.h"
-#include "text.h"
 #include "undo.h"
 
 namespace Ms {

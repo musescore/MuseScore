@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "stafflines.h"
-#include "system.h"
 #include "measure.h"
 #include "score.h"
-#include "stafftype.h"
 #include "staff.h"
+#include "stafflines.h"
+#include "stafftype.h"
+#include "system.h"
 
 // Anatomy of StaffLines:
 //

@@ -13,8 +13,9 @@
 #ifndef __MVOICE_H__
 #define __MVOICE_H__
 
-#include <cstdint>
 #include <math.h>
+#include <cstdint>
+
 #include "filter.h"
 
 // Disable warning C4201: nonstandard extension used: nameless struct/union in VS2017
@@ -86,7 +87,7 @@ struct Phase {
       void set(int b)                 { data = b * 256;   }
       void set(double b)              { data = b * 256.0; }
       void setIndex(int b)            { data = b * 256 + _fract; }
-      int index() const               { return data >> 8; }
+      int index() const               { return (int)(data >> 8); }
       unsigned fract() const          { return _fract;    }
 
       Phase() {}

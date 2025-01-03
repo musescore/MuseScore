@@ -11,27 +11,27 @@
 //=============================================================================
 
 #include "beam.h"
-#include "segment.h"
-#include "score.h"
 #include "chord.h"
-#include "sig.h"
-#include "style.h"
-#include "note.h"
-#include "tuplet.h"
-#include "system.h"
-#include "tremolo.h"
+#include "groups.h"
+#include "hook.h"
+#include "icon.h"
 #include "measure.h"
-#include "undo.h"
+#include "mscore.h"
+#include "note.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "stem.h"
-#include "hook.h"
-#include "mscore.h"
-#include "icon.h"
 #include "stemslash.h"
-#include "groups.h"
+#include "style.h"
+#include "system.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "undo.h"
 #include "xml.h"
-#include "spanner.h"
 
 namespace Ms {
 
@@ -1098,7 +1098,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
             for (size_t i = 1; i < n; ++i) {
                   QPointF p3(cl[i]->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
-                  int l       = lrint((yUp - p3.y()) / (_spatium4));
+                  int l       = (int)lrint((yUp - p3.y()) / (_spatium4));
                   ml          = qMax(ml, l);
                   }
             }
@@ -1107,7 +1107,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
                   const ChordRest* c = cl[i];
                   QPointF p3(c->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
-                  int l       = lrint((p3.y() - yUp) / (_spatium4));
+                  int l       = (int)lrint((p3.y() - yUp) / (_spatium4));
                   ml          = qMax(ml, l);
                   }
             }
@@ -2064,8 +2064,8 @@ void Beam::write(XmlWriter& xml) const
       if (MScore::testMode) {
             qreal _spatium4 = spatium() * .25;
             for (BeamFragment* f : fragments) {
-                  xml.tag("l1", int(lrint(f->py1[idx] / _spatium4)));
-                  xml.tag("l2", int(lrint(f->py2[idx] / _spatium4)));
+                  xml.tag("l1", (int)lrint(f->py1[idx] / _spatium4));
+                  xml.tag("l2", (int)lrint(f->py2[idx] / _spatium4));
                   }
             }
 

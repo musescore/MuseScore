@@ -4802,7 +4802,11 @@ QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::Sequen
             code[i] = 0;
 
       static QRegularExpression re("(?<!\\\\),|(?<=\\\\\\\\),");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      QStringList strList = str.split(re, Qt::SkipEmptyParts);
+#else
       QStringList strList = str.split(re, QString::SkipEmptyParts);
+#endif
       //split based on commas that are not preceded by a single slash; two is okay
       //original regex: (?<!\\),|(?<=\\\\),
 

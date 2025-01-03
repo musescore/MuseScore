@@ -18,27 +18,26 @@
 //=============================================================================
 
 #include "musedata.h"
-#include "libmscore/score.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/barline.h"
-#include "libmscore/clef.h"
-#include "libmscore/key.h"
-#include "libmscore/note.h"
-#include "libmscore/chord.h"
-#include "libmscore/rest.h"
-#include "libmscore/text.h"
-#include "libmscore/bracket.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/slur.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/lyrics.h"
+
 #include "libmscore/articulation.h"
-#include "libmscore/sig.h"
+#include "libmscore/barline.h"
+#include "libmscore/bracket.h"
+#include "libmscore/chord.h"
+#include "libmscore/clef.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/key.h"
+#include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
-#include "libmscore/timesig.h"
+#include "libmscore/note.h"
+#include "libmscore/part.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
 #include "libmscore/segment.h"
+#include "libmscore/slur.h"
+#include "libmscore/staff.h"
 #include "libmscore/sym.h"
+#include "libmscore/timesig.h"
+#include "libmscore/tuplet.h"
 
 namespace Ms {
 
@@ -48,7 +47,11 @@ namespace Ms {
 
 void MuseData::musicalAttribute(QString s, Part* part)
       {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      QStringList al = s.mid(3).split(" ", Qt::SkipEmptyParts);
+#else
       QStringList al = s.mid(3).split(" ", QString::SkipEmptyParts);
+#endif
       foreach(QString item, al) {
             if (item.startsWith("K:")) {
                   int key = item.midRef(2).toInt();

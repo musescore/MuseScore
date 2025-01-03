@@ -69,10 +69,17 @@ QSize PosLabel::sizeHint() const
       int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
       int h  = fm.height() + fw * 2;
       int w;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      if (_smpte)
+            w  = 2 + fm.horizontalAdvance('9') * 9 + fm.horizontalAdvance(':') * 3 + fw * 4;
+      else
+            w  = 2 + fm.horizontalAdvance('9') * 9 + fm.horizontalAdvance('.') * 2 + fw * 4;
+#else
       if (_smpte)
             w  = 2 + fm.width('9') * 9 + fm.width(':') * 3 + fw * 4;
       else
             w  = 2 + fm.width('9') * 9 + fm.width('.') * 2 + fw * 4;
+#endif
       return QSize(w, h).expandedTo(QApplication::globalStrut());
       }
 

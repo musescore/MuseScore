@@ -14,8 +14,8 @@
 #define __TEXTLINEBASE_H__
 
 #include "line.h"
-#include "style.h"
 #include "property.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -47,7 +47,7 @@ class TextLineBaseSegment : public LineSegment {
       virtual void draw(QPainter*) const override;
 
       virtual void layout() override;
-      virtual void setSelected(bool f);
+      virtual void setSelected(bool f) override;
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 

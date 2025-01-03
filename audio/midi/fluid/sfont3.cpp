@@ -1,7 +1,8 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 #include "sfont.h"
+
 #include "audiofile/audiofile.h"
 
 namespace FluidS {
@@ -21,16 +22,16 @@ bool Sample::decompressOggVorbis(char* src, unsigned int size)
             qDebug("SoundFont(%s) Sample(%s) decompressOggVorbis: open failed: %s", qPrintable(sf->get_name()), name, af.error());
             return false;
             }
-      unsigned int frames = af.frames();
+      sf_count_t frames = af.frames();
       data = new short[frames * af.channels()];
-      if (frames != (unsigned int)af.readData(data, frames)) {
+      if (frames != af.readData(data, frames)) {
             qDebug("SoundFont(%s) Sample(%s) read failed: %s", qPrintable(sf->get_name()), name, af.error());
             delete[] data;
             data = 0;
             return false;
             }
       // cf. https://musescore.org/en/node/89216#comment-1068379 and following
-      end = frames;
+      end = (unsigned int)frames;
 
       // loop is fowled?? (cluck cluck :)
       if (loopend > end || loopstart >= loopend || loopstart <= start) {

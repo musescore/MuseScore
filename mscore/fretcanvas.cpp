@@ -17,18 +17,15 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "fretcanvas.h"
+#include "musescore.h"
+#include "preferences.h"
+
 #include "libmscore/fret.h"
 #include "libmscore/measure.h"
-#include "libmscore/system.h"
-#include "libmscore/score.h"
-//#include "libmscore/stringdata.h"
-#include "fretcanvas.h"
-#include "preferences.h"
-#include "libmscore/chord.h"
 #include "libmscore/note.h"
-#include "libmscore/segment.h"
+#include "libmscore/score.h"
 #include "libmscore/undo.h"
-#include "musescore.h"
 
 namespace Ms {
 
@@ -69,7 +66,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
       double yo = (height() - h) * .5;
 
       QFont font("FreeSans");
-      int size = lrint(18.0 * mag);
+      int size = (int)lrint(18.0 * mag);
       font.setPixelSize(size);
 
       QPainter p(this);

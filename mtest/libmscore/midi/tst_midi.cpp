@@ -10,25 +10,31 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include <QFile>
 #include <QCoreApplication>
-#include <QTextStream>
-#include "libmscore/mscore.h"
-#include "libmscore/score.h"
-#include "libmscore/durationtype.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/keysig.h"
-#include "audio/exports/exportmidi.h"
+#include <QFile>
 #include <QIODevice>
+#include <QTextStream>
+#include <QtTest/QtTest>
 
+#include "audio/exports/exportmidi.h"
+
+#include "libmscore/chord.h"
+#include "libmscore/durationtype.h"
+#include "libmscore/keysig.h"
 #include "libmscore/mcursor.h"
+#include "libmscore/measure.h"
+#include "libmscore/mscore.h"
+#include "libmscore/note.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+
 #include "mtest/testutils.h"
 #define DIR QString("libmscore/midi/")
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#define endl Qt::endl
+#define dec Qt::dec
+#endif
 
 namespace Ms {
       extern Score::FileError importMidi(MasterScore*, const QString&);

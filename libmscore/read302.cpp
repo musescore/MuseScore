@@ -11,7 +11,6 @@
 //=============================================================================
 
 #include "audio.h"
-//#include "barline.h"
 #include "excerpt.h"
 #include "measurebase.h"
 #include "page.h"
@@ -25,6 +24,7 @@
 #include "stafftext.h"
 #include "style.h"
 #include "sym.h"
+#include "text.h"
 #include "xml.h"
 
 #ifdef OMR

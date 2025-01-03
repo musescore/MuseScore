@@ -28,3 +28,10 @@ endif (MSVC)
 if (BUILD_PCH)
     target_use_pch(qzip)
 endif (BUILD_PCH)
+
+if (APPLE)
+  set_target_properties( qzip PROPERTIES
+    COMPILE_FLAGS "-Wno-shorten-64-to-32"
+  )
+endif (APPLE)
+

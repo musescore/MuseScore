@@ -10,11 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QColor>
+#include <QRectF>
+#include <QSizeF>
+
 #include "xmlwriter.h"
 
-#include <QSizeF>
-#include <QRectF>
-#include <QColor>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#define endl Qt::endl
+#endif
 
 //---------------------------------------------------------
 //   XmlWriter

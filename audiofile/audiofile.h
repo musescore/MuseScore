@@ -30,7 +30,7 @@ class AudioFile {
       SF_INSTRUMENT inst;
       bool hasInstrument { false };
       QByteArray buf;  // used during read of Sample
-      int idx { 0 };
+      sf_count_t idx { 0 };
       FormatType _type { fltp };
 
    public:

@@ -11,22 +11,18 @@
 //=============================================================================
 
 #include <QtTest/QtTest>
-#include "libmscore/score.h"
+
+#include "libmscore/element.h"
 #include "libmscore/excerpt.h"
-#include "libmscore/part.h"
-#include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurenumber.h"
 #include "libmscore/mmrestrange.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/breath.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
 #include "libmscore/segment.h"
-#include "libmscore/fingering.h"
-#include "libmscore/image.h"
-#include "libmscore/element.h"
 #include "libmscore/system.h"
-#include "libmscore/durationtype.h"
+#include "libmscore/undo.h"
+
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/measure/")

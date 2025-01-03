@@ -44,6 +44,8 @@
 #include "rtf_keyword.h"
 #include "fmt_opts.h"
 #include <cstdlib>
+#include <stdexcept>
+#include <fstream>
 #include <string>
 
 QString rtf2html(const QString& iString)
@@ -552,8 +554,8 @@ QString rtf2html(const QString& iString)
       }
    }
 
-            QString qTitle(QString::fromUtf8(title.data(), static_cast<int>(title.size())));
-            QString qHtml(QString::fromUtf8(html.data(), static_cast<int>(html.size())));
+            QString qTitle(QString::fromUtf8(title.data(), title.size()));
+            QString qHtml(QString::fromUtf8(html.data(), html.size()));
 
             oString = QString("<html><head><STYLE type=\"text/css\">body {padding-left:"
                   "%1"

@@ -10,17 +10,18 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "fermata.h"
-#include "score.h"
+#include "barline.h"
 #include "chordrest.h"
-#include "system.h"
+#include "fermata.h"
 #include "measure.h"
+#include "page.h"
+#include "rest.h"
+#include "score.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "undo.h"
-#include "page.h"
-#include "barline.h"
 #include "sym.h"
+#include "system.h"
+#include "undo.h"
 #include "xml.h"
 
 namespace Ms {

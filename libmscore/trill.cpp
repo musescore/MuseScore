@@ -10,17 +10,17 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "trill.h"
-#include "style.h"
-#include "system.h"
-#include "measure.h"
-#include "xml.h"
-#include "utils.h"
-#include "sym.h"
-#include "score.h"
 #include "accidental.h"
+#include "measure.h"
+#include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "style.h"
+#include "sym.h"
+#include "system.h"
+#include "trill.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -101,7 +101,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
       _symbols.push_back(start);
       qreal w1 = f->advance(start, mag);
       qreal w2 = f->advance(fill, mag);
-      int n    = lrint((w - w1) / w2);
+      int n    = (int)lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
            _symbols.push_back(fill);
       QRectF r(f->bbox(_symbols, mag));
@@ -121,7 +121,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
       qreal w1 = f->advance(start, mag);
       qreal w2 = f->advance(fill, mag);
       qreal w3 = f->advance(end, mag);
-      int n    = lrint((w - w1 - w3) / w2);
+      int n    = (int)lrint((w - w1 - w3) / w2);
       for (int i = 0; i < n; ++i)
            _symbols.push_back(fill);
       _symbols.push_back(end);

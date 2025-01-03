@@ -13,8 +13,8 @@
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
 
-#include "libmscore/sig.h"
 #include "event.h"
+#include "libmscore/sig.h"
 
 namespace Ms {
 
@@ -87,8 +87,8 @@ class MidiFile {
    protected:
       // write
       bool write(const void*, qint64);
-      void writeShort(int);
-      void writeLong(int);
+      void writeShort(short);
+      void writeLong(long);
       bool writeTrack(const MidiTrack &);
       void putvl(unsigned);
       void put(unsigned char c) { write(&c, 1); }

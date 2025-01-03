@@ -16,125 +16,140 @@
 #include <QStandardPaths>
 #include <QStyleFactory>
 
+#include "accessibletoolbutton.h"
 #include "config.h"
+#include "drumroll.h"
+#include "drumtools.h"
+#include "editraster.h"
+#include "editstafftype.h"
+#include "editstyle.h"
+#include "extension.h"
+#include "harmonyedit.h"
+#include "icons.h"
+#include "instrdialog.h"
+#include "keyedit.h"
+#include "mediadialog.h"
+#include "metaedit.h"
+#include "mssplashscreen.h"
+#include "musescoredialogs.h"
+#include "navigator.h"
+#include "newwizard.h"
+#ifdef OMR
+#include "omrpanel.h"
+#endif
+#include "pagesettings.h"
+#include "palette.h"
+#include "pianotools.h"
+#include "playpanel.h"
+#include "preferences.h"
+#include "prefsdialog.h"
+#include "qjsondocument.h"
+#include "realizeharmonydialog.h"
+#include "resourceManager.h"
+#include "scoreaccessibility.h"
+#include "scoretab.h"
+#include "scoreview.h"
+#include "searchComboBox.h"
+#include "selectdialog.h"
+#include "selectionwindow.h"
+#include "selectnotedialog.h"
+#include "seq.h"
+#include "shortcut.h"
+#include "startcenter.h"
+#include "startupWizard.h"
+#include "synthcontrol.h"
+#include "textpalette.h"
+#include "texttools.h"
+#include "timedialog.h"
+#include "timeline.h"
+#include "toolbuttonmenu.h"
+#include "tourhandler.h"
+#include "transposedialog.h"
+#include "workspace.h"
+#include "workspacecombobox.h"
+#include "zoombox.h"
+
+#include "audio/drivers/driver.h"
+
+#ifdef USE_LAME
+#include "audio/exports/exportmp3.h"
+#endif
+
+#include "audio/midi/event.h"
+#include "audio/midi/fluid/fluid.h"
+#include "audio/midi/msynthesizer.h"
+#include "audio/midi/synthesizer.h"
+#include "audio/midi/synthesizergui.h"
+
+#include "awl/aslider.h"
 
 #include "cloud/loginmanager.h"
 #include "cloud/uploadscoredialog.h"
 
-#include "musescoredialogs.h"
-#include "qjsondocument.h"
-#include "scoreview.h"
-#include "libmscore/style.h"
-#include "libmscore/score.h"
-#include "instrdialog.h"
-#include "preferences.h"
-#include "prefsdialog.h"
-#include "realizeharmonydialog.h"
-#include "icons.h"
-#include "libmscore/xml.h"
-#include "seq.h"
-#include "libmscore/tempo.h"
-#include "libmscore/sym.h"
-#include "pagesettings.h"
 #include "debugger/debugger.h"
-#include "editstyle.h"
-#include "playpanel.h"
-#include "libmscore/page.h"
-#include "mixer/mixer.h"
-#include "selectionwindow.h"
-#include "palette.h"
-#include "palette/palettemodel.h"
-#include "palette/palettewidget.h"
-#include "palette/paletteworkspace.h"
-#include "libmscore/part.h"
-#include "libmscore/drumset.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/scoreOrder.h"
-#include "libmscore/note.h"
-#include "libmscore/staff.h"
-#include "libmscore/harmony.h"
-#include "zoombox.h"
-#include "libmscore/sig.h"
-#include "libmscore/undo.h"
-#include "synthcontrol.h"
-#include "pianoroll/pianoroll.h"
-#include "drumroll.h"
-#include "scoretab.h"
-#include "timedialog.h"
-#include "keyedit.h"
-#include "harmonyedit.h"
-#include "navigator.h"
-#include "newwizard.h"
-#include "timeline.h"
 
-#include "importmidi_ui/importmidi_panel.h"
+#include "effects/compressor/compressor.h"
+#include "effects/noeffect/noeffect.h"
+#include "effects/zita1/zita.h"
+
 #include "importexport/midiimport/importmidi_instrument.h"
 #include "importexport/midiimport/importmidi_operations.h"
 
-#include "migration/scoremigrationdialog.h"
-#include "scorecmp/scorecmp.h"
-#include "script/recorderwidget.h"
-#include "libmscore/scorediff.h"
-#include "libmscore/chord.h"
-#include "libmscore/segment.h"
-#include "editraster.h"
-#include "pianotools.h"
-#include "mediadialog.h"
-#include "workspace.h"
-#include "workspacecombobox.h"
-#include "selectdialog.h"
-#include "selectnotedialog.h"
-#include "transposedialog.h"
-#include "metaedit.h"
+#include "importmidi_ui/importmidi_panel.h"
+
 #include "inspector/inspector.h"
-#ifdef OMR
-#include "omrpanel.h"
+
+#include "libmscore/chord.h"
+#include "libmscore/chordlist.h"
+#include "libmscore/drumset.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/harmony.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/measure.h"
+#include "libmscore/mscore.h"
+#include "libmscore/note.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/scorediff.h"
+#include "libmscore/scoreOrder.h"
+#include "libmscore/segment.h"
+#include "libmscore/sig.h"
+#include "libmscore/staff.h"
+#include "libmscore/style.h"
+#include "libmscore/sym.h"
+#include "libmscore/synthesizerstate.h"
+#include "libmscore/system.h"
+#include "libmscore/tempo.h"
+#include "libmscore/undo.h"
+#include "libmscore/utils.h"
+#include "libmscore/volta.h"
+#include "libmscore/xml.h"
+
+#ifdef Q_OS_MAC
+#include "macos/cocoabridge.h"
 #endif
-#include "shortcut.h"
+
+#include "migration/scoremigrationdialog.h"
+
+#include "mixer/mixer.h"
+
+#include "palette/palettemodel.h"
+#include "palette/palettewidget.h"
+#include "palette/paletteworkspace.h"
+
+#include "plugin/qmlplugin.h"
 #ifdef SCRIPT_INTERFACE
 #include "plugin/pluginCreator.h"
 #include "plugin/pluginManager.h"
 #include "plugin/qmlpluginengine.h"
 #endif
-//#include "helpBrowser.h"
-#include "drumtools.h"
-#include "editstafftype.h"
-#include "texttools.h"
-#include "textpalette.h"
-#include "resourceManager.h"
-#include "scoreaccessibility.h"
-#include "startupWizard.h"
-#include "tourhandler.h"
-#include "mssplashscreen.h"
 
-#include "libmscore/mscore.h"
-#include "libmscore/system.h"
-#include "libmscore/measure.h"
-#include "libmscore/chordlist.h"
-#include "libmscore/volta.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/synthesizerstate.h"
-#include "libmscore/utils.h"
+#include "pianoroll/pianoroll.h"
 
-#include "audio/drivers/driver.h"
+#include "scorecmp/scorecmp.h"
 
-#include "effects/zita1/zita.h"
-#include "effects/compressor/compressor.h"
-#include "effects/noeffect/noeffect.h"
-#include "audio/midi/synthesizer.h"
-#include "audio/midi/synthesizergui.h"
-#include "audio/midi/msynthesizer.h"
-#include "audio/midi/event.h"
-#include "audio/midi/fluid/fluid.h"
-
-#include "plugin/qmlplugin.h"
-#include "accessibletoolbutton.h"
-#include "toolbuttonmenu.h"
-#include "searchComboBox.h"
-#include "startcenter.h"
-#include "awl/aslider.h"
-#include "extension.h"
-#include "thirdparty/qzip/qzipreader_p.h"
+#include "script/recorderwidget.h"
 
 #include "sparkle/autoUpdater.h"
 #if defined(WIN_SPARKLE_ENABLED)
@@ -143,12 +158,7 @@
 #include "sparkle/sparkleAutoUpdater.h"
 #endif
 
-#ifdef USE_LAME
-#include "audio/exports/exportmp3.h"
-#endif
-#ifdef Q_OS_MAC
-#include "macos/cocoabridge.h"
-#endif
+#include "thirdparty/qzip/qzipreader_p.h"
 
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
@@ -174,6 +184,10 @@ extern Ms::Synthesizer* createZerberus();
 #include "widgets/telemetrypermissiondialog.h"
 #endif
 #include "telemetrymanager.h"
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#define endl Qt::endl
+#endif
 
 namespace Ms {
 
@@ -1617,14 +1631,14 @@ MuseScore::MuseScore()
 
       for (int i = 0; i < 7; ++i) {
             char buffer[8];
-            sprintf(buffer, "note-%c", "cdefgab"[i]);
+            snprintf(buffer, sizeof buffer, "note-%c", "cdefgab"[i]);
             a = getAction(buffer);
             menuAddPitch->addAction(a);
             }
       menuAddPitch->addSeparator();
       for (int i = 0; i < 7; ++i) {
             char buffer[8];
-            sprintf(buffer, "chord-%c", "cdefgab"[i]);
+            snprintf(buffer, sizeof buffer, "chord-%c", "cdefgab"[i]);
             a = getAction(buffer);
             menuAddPitch->addAction(a);
             }
@@ -1633,14 +1647,14 @@ MuseScore::MuseScore()
       menuAddInterval = new QMenu();
       for (int i = 1; i < 10; ++i) {
             char buffer[16];
-            sprintf(buffer, "interval%d", i);
+            snprintf(buffer, sizeof buffer, "interval%d", i);
             a = getAction(buffer);
             menuAddInterval->addAction(a);
             }
       menuAddInterval->addSeparator();
       for (int i = 2; i < 10; ++i) {
             char buffer[16];
-            sprintf(buffer, "interval-%d", i);
+            snprintf(buffer, sizeof buffer, "interval-%d", i);
             a = getAction(buffer);
             menuAddInterval->addAction(a);
             }

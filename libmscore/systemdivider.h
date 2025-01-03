@@ -14,7 +14,6 @@
 #define __SYSTEMDIVIDER_H__
 
 #include "symbol.h"
-#include "sym.h"
 
 namespace Ms {
 

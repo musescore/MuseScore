@@ -10,13 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "xml.h"
+#include "beam.h"
 #include "measure.h"
 #include "score.h"
 #include "spanner.h"
 #include "staff.h"
-#include "beam.h"
 #include "tuplet.h"
+#include "xml.h"
 
 namespace Ms {
 

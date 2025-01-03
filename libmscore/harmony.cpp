@@ -2071,7 +2071,11 @@ QString Harmony::generateScreenReaderInfo() const
             aux = aux.replace("#", QObject::tr("♯")).replace("<", "");
             QString extension = "";
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+            for (QString s : aux.split(">", Qt::SkipEmptyParts)) {
+#else
             for (QString s : aux.split(">", QString::SkipEmptyParts)) {
+#endif
                   if (!s.contains("blues"))
                         s.replace("b", QObject::tr("♭"));
                   extension += s + " ";

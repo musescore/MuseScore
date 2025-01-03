@@ -10,24 +10,24 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "fontStyleSelect.h"
+#include "icons.h"
+#include "inspector.h"
+#include "inspectorBase.h"
+#include "musescore.h"
+#include "offsetSelect.h"
+#include "preferences.h"
+#include "resetButton.h"
+#include "scaleSelect.h"
+#include "scoreview.h"
+#include "sizeSelect.h"
+#include "tourhandler.h"
+
 #include "libmscore/score.h"
 #include "libmscore/element.h"
-#include "libmscore/beam.h"
 #include "libmscore/undo.h"
-#include "musescore.h"
-#include "inspectorBase.h"
-#include "inspector.h"
-#include "icons.h"
-#include "preferences.h"
-#include "offsetSelect.h"
-#include "scaleSelect.h"
-#include "sizeSelect.h"
-#include "fontStyleSelect.h"
-#include "scoreview.h"
+
 #include "script/script.h"
-#include "resetButton.h"
-#include "telemetrymanager.h"
-#include "tourhandler.h"
 
 namespace Ms {
 
@@ -126,7 +126,11 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   v = QVariant::fromValue<Direction>(Direction(v.toInt()));
                   break;
             case P_TYPE::INT_LIST: {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+                  QStringList sl = v.toString().split(",", Qt::SkipEmptyParts);
+#else
                   QStringList sl = v.toString().split(",", QString::SkipEmptyParts);
+#endif
                   QList<int> il;
                   for (const QString& l : sl) {
                         int i = l.simplified().toInt();

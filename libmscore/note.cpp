@@ -2629,7 +2629,7 @@ void Note::verticalDrag(EditData &ed)
       qreal _spatium      = spatium();
       bool tab            = st->isTabStaff();
       qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
-      int lineOffset      = lrint(ed.moveDelta.y() / step);
+      int lineOffset      = (int)lrint(ed.moveDelta.y() / step);
 
       if (tab) {
             const StringData* strData = staff()->part()->instrument(_tick)->stringData();

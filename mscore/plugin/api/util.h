@@ -13,12 +13,8 @@
 #ifndef __PLUGIN_API_UTIL_H__
 #define __PLUGIN_API_UTIL_H__
 
-#include "config.h"
-
-#include "libmscore/element.h"
 #include "libmscore/mscoreview.h"
 #include "libmscore/score.h"
-#include "libmscore/utils.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -121,7 +117,11 @@ class MsProcess : public QProcess {
 
    public slots:
       //@ --
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+      Q_INVOKABLE void start(const QString& program)      { QProcess::start(program, QStringList()); }
+#else
       Q_INVOKABLE void start(const QString& program)      { QProcess::start(program); }
+#endif
       //@ --
       Q_INVOKABLE bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
       //@ --

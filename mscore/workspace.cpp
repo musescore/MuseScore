@@ -17,17 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "workspace.h"
+#include "extension.h"
+#include "palette.h"
+#include "preferences.h"
 #include "musescore.h"
+#include "workspace.h"
+
 #include "libmscore/score.h"
 #include "libmscore/imageStore.h"
 #include "libmscore/xml.h"
+
+#include "palette/paletteworkspace.h"
+
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
-#include "preferences.h"
-#include "palette.h"
-#include "palette/paletteworkspace.h"
-#include "extension.h"
 
 #if defined(FOR_WINSTORE)  // or even just Q_OS_WIN ?
 extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
@@ -67,8 +70,8 @@ static QString editedWorkspaceTranslatableName(const QString& oldWorkspaceTransl
       const auto it = std::find(WorkspacesManager::defaultWorkspaces.begin(), WorkspacesManager::defaultWorkspaces.end(), oldWorkspaceTranslatableName);
 
       if (it != WorkspacesManager::defaultWorkspaces.end()) {
-            const int idx = it - WorkspacesManager::defaultWorkspaces.begin();
-            if (idx < int(WorkspacesManager::defaultEditedWorkspaces.size()))
+            const long idx = it - WorkspacesManager::defaultWorkspaces.begin();
+            if (idx < long(WorkspacesManager::defaultEditedWorkspaces.size()))
                   return WorkspacesManager::defaultEditedWorkspaces[idx];
             }
 
@@ -84,8 +87,8 @@ QString WorkspacesManager::defaultWorkspaceTranslatableName(const QString& edite
       const auto it = std::find(WorkspacesManager::defaultEditedWorkspaces.begin(), WorkspacesManager::defaultEditedWorkspaces.end(), editedWorkspaceName);
 
       if (it != WorkspacesManager::defaultEditedWorkspaces.end()) {
-            const int idx = it - WorkspacesManager::defaultEditedWorkspaces.begin();
-            if (idx < int(WorkspacesManager::defaultWorkspaces.size()))
+            const long idx = it - WorkspacesManager::defaultEditedWorkspaces.begin();
+            if (idx < long(WorkspacesManager::defaultWorkspaces.size()))
                   return WorkspacesManager::defaultWorkspaces[idx];
             }
 

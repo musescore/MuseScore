@@ -196,4 +196,8 @@ if (MSVC)
   set_target_properties( mscore_freetype PROPERTIES
     COMPILE_FLAGS "/wd4244 /wd4267"
   )
-endif (MSVC)
+elseif (APPLE)
+  set_target_properties( mscore_freetype PROPERTIES
+    COMPILE_FLAGS "-Wno-shorten-64-to-32"
+  )
+endif ()

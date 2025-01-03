@@ -10,16 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <stdio.h>
-
-#include "voice.h"
-#include "instrument.h"
 #include "channel.h"
+#include "instrument.h"
+#include "sample.h"
+#include "voice.h"
 #include "zerberus.h"
 #include "zone.h"
-#include "sample.h"
-
-#include "midi/msynthesizer.h"
 
 float Envelope::egPow[EG_SIZE];
 float Envelope::egLin[EG_SIZE];
@@ -310,7 +306,7 @@ void Voice::updateLoop()
       if (idx + loopOffset > _loopEnd)
             _looping = true;
       if (idx > _loopEnd)
-            phase.setIndex(_loopStart+(idx-_loopEnd-1));
+            phase.setIndex((int)(_loopStart+(idx-_loopEnd-1)));
       }
 
 short Voice::getData(long long pos) {

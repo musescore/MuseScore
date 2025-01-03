@@ -326,10 +326,10 @@ class TextBase : public Element {
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
-      virtual void writeProperties(XmlWriter& xml) const { writeProperties(xml, true, true); }
+      virtual void writeProperties(XmlWriter& xml) const override { writeProperties(xml, true, true); }
       void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
       void writeProperties(XmlWriter&, bool, bool) const;
-      bool readProperties(XmlReader&);
+      bool readProperties(XmlReader&) override;
 
       virtual void paste(EditData&);
 
@@ -371,8 +371,8 @@ class TextBase : public Element {
       virtual QVariant propertyDefault(Pid id) const override;
       virtual void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
       virtual Pid propertyId(const QStringRef& xmlName) const override;
-      virtual Sid getPropertyStyle(Pid) const;
-      virtual void styleChanged();
+      virtual Sid getPropertyStyle(Pid) const override;
+      virtual void styleChanged() override;
       void editInsertText(TextCursor*, const QString&);
 
       TextCursor* cursor(const EditData&);

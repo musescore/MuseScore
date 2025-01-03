@@ -10,18 +10,18 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "scoreview.h"
-#include "musescore.h"
-#include "libmscore/score.h"
-#include "libmscore/lasso.h"
-#include "icons.h"
-#include "libmscore/page.h"
-#include "preferences.h"
-#include "libmscore/image.h"
-#include "libmscore/mscore.h"
-#include "svggenerator.h"
-#include "inspector/inspector.h"
 #include "fotomode.h"
+#include "musescore.h"
+#include "preferences.h"
+#include "scoreview.h"
+#include "svggenerator.h"
+
+#include "inspector/inspector.h"
+
+#include "libmscore/lasso.h"
+#include "libmscore/mscore.h"
+#include "libmscore/page.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -411,13 +411,13 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 QImage ScoreView::getRectImage(const QRectF& rect, double dpi, bool transparent, bool printMode)
       {
       const double mag = dpi / DPI;
-      const int w = lrint(rect.width()  * mag);
-      const int h = lrint(rect.height() * mag);
+      const int w = (int)lrint(rect.width()  * mag);
+      const int h = (int)lrint(rect.height() * mag);
 
       QImage::Format f = QImage::Format_ARGB32_Premultiplied;
       QImage img(w, h, f);
-      img.setDotsPerMeterX(lrint((dpi * 1000) / INCH));
-      img.setDotsPerMeterY(lrint((dpi * 1000) / INCH));
+      img.setDotsPerMeterX((int)lrint((dpi * 1000) / INCH));
+      img.setDotsPerMeterY((int)lrint((dpi * 1000) / INCH));
       img.fill(transparent ? 0 : 0xffffffff);
 
       const auto pr = MScore::pixelRatio;
@@ -537,8 +537,8 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       if (ext == "svg")
             mag = 1; // SVG is not scaled, it's scalable.
 
-      int w = lrint(r.width()  * mag);
-      int h = lrint(r.height() * mag);
+      int w = (int)lrint(r.width()  * mag);
+      int h = (int)lrint(r.height() * mag);
 
       double pr = MScore::pixelRatio;
       if (ext == "pdf") {
@@ -629,8 +629,8 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
 //      QString fn = "/home/ws/mops.eps";
       QString fn = tf.fileName();
 
-      int w = lrint(r.width());
-      int h = lrint(r.height());
+      int w = (int)lrint(r.width());
+      int h = (int)lrint(r.height());
       SvgGenerator printer;
       printer.setFileName(fn);
       printer.setTitle(_score->title());

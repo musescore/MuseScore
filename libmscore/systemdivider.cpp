@@ -10,11 +10,10 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "measure.h"
 #include "score.h"
 #include "systemdivider.h"
 #include "xml.h"
-#include "measure.h"
-#include "system.h"
 
 namespace Ms {
 

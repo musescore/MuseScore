@@ -14,11 +14,11 @@
 #define __ELEMENT_H__
 
 #include "elementgroup.h"
-#include "spatium.h"
 #include "fraction.h"
 #include "scoreElement.h"
 #include "shape.h"
 #include "sig.h"
+#include "spatium.h"
 #include "sym.h"
 
 namespace Ms {

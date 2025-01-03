@@ -1406,7 +1406,7 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  Add Text to Note.
  */
 
-static void addTextToNote(int l, int c, QString txt, QString placement, QString fontWeight,
+static void addTextToNote(long l, long c, QString txt, QString placement, QString fontWeight,
                           qreal fontSize, QString fontStyle, QString fontFamily, QColor color, Tid subType, Score* score, Note* note)
       {
       if (note) {
@@ -4175,7 +4175,7 @@ MusicXMLInferredFingering::MusicXMLInferredFingering(qreal totalY,
 void MusicXMLInferredFingering::roundTick(Measure* measure)
       {
       measure->computeTicks();
-      int gcdTicks = Fraction(1, 1).ticks();
+      long gcdTicks = Fraction(1, 1).ticks();
       for (auto s = measure->segments().begin(); s != measure->segments().end(); ++s) {
             if ((*s).isChordRestType())
                   gcdTicks = gcd(gcdTicks, (*s).ticks().ticks());

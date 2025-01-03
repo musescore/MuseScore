@@ -10,14 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "stringdata.h"
 #include "chord.h"
 #include "note.h"
 #include "part.h"
 #include "score.h"
-#include "staff.h"
-#include "undo.h"
 #include "segment.h"
+#include "staff.h"
+#include "stringdata.h"
+#include "undo.h"
 
 namespace Ms {
 

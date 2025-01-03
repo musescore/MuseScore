@@ -12,20 +12,21 @@
 
 #include "exportmidi.h"
 
-#include "libmscore/score.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/tempo.h"
-#include "libmscore/sig.h"
-#include "libmscore/key.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/measure.h"
-#include "libmscore/repeatlist.h"
-#include "libmscore/synthesizerstate.h"
 
 #include "audio/midi/midifile.h"
 #include "audio/midi/event.h"
+
+#include "libmscore/chordrest.h"
+#include "libmscore/key.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/sig.h"
+#include "libmscore/staff.h"
+#include "libmscore/synthesizerstate.h"
+#include "libmscore/tempo.h"
 
 namespace Ms {
 
@@ -218,7 +219,7 @@ void ExportMidi::writeHeader(MidiTrack& tempoTrack)
             //
             // compute midi tempo: microseconds / quarter note
             //
-            int tempo = lrint((1.0 / (it->second.tempo * relTempo)) * 1000000.0);
+            int tempo = (int)lrint((1.0 / (it->second.tempo * relTempo)) * 1000000.0);
 
             ev.setMetaType(META_TEMPO);
             ev.setLen(3);

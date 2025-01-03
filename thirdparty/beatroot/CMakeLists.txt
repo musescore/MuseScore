@@ -10,3 +10,13 @@ add_library (beatroot STATIC
       AgentList.cpp
       Agent.cpp
   )
+
+if (MSVC)
+  set_target_properties( beatroot PROPERTIES
+    COMPILE_FLAGS "/wd4267"
+  )
+elseif (APPLE)
+  set_target_properties( beatroot PROPERTIES
+    COMPILE_FLAGS "-Wno-shorten-64-to-32"
+  )
+endif ()

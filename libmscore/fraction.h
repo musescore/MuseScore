@@ -15,7 +15,6 @@
 #ifndef __FRACTION_H__
 #define __FRACTION_H__
 
-#include "config.h"
 #include "mscore.h"
 
 namespace Ms {
@@ -27,9 +26,9 @@ namespace Ms {
 //    return int to avoid accidental implicit unsigned cast
 //---------------------------------------------------------
 
-static int_least64_t gcd(int_least64_t a, int_least64_t b)
+static int64_t gcd(int64_t a, int64_t b)
       {
-      int bp;
+      int64_t bp;
       if (b > a) { bp = b; b = a; a = bp; } // Saves one % if true
       while (b != 0) {
             bp = b; b = a % b; a = bp;
@@ -44,61 +43,68 @@ static int_least64_t gcd(int_least64_t a, int_least64_t b)
 //---------------------------------------------------------
 
 class Fraction {
-
       // ensure 64 bit to avoid overflows in comparisons
-      int_least64_t _numerator   { 0 };
-      int_least64_t _denominator { 1 };
+      int64_t _numerator   { 0 };
+      int64_t _denominator { 1 };
 
    public:
 
-#if 0
-      // implicit conversion from int to Fraction: this is convenient but may hide some potential bugs
-      constexpr Fraction(int z=0, int n=1) : _numerator(z), _denominator(n) {}
-#else
       // no implicit conversion from int to Fraction:
-      constexpr Fraction()  {}
-      constexpr Fraction(int z, int n) : _numerator { n < 0 ? -z : z }, _denominator { n < 0 ? -n : n } { }
-#endif
-      int numerator() const      { return _numerator;           }
-      int denominator() const    { return _denominator;         }
-      int_least64_t& rnumerator()          { return _numerator;           }
-      int_least64_t& rdenominator()        { return _denominator;         }
+      constexpr Fraction() {}
+      constexpr Fraction(int z, int n)
+            : _numerator { n < 0 ? -z : z }, _denominator { n < 0 ? -n : n } {}
+      constexpr int numerator() const   { return static_cast<int>(_numerator);   }
+      constexpr int denominator() const { return static_cast<int>(_denominator); }
+      //int64_t& rnumerator()   { return _numerator;   }
+      //int64_t& rdenominator() { return _denominator; }
 
-      void setNumerator(int v)   { _numerator = v;              }
+      /// Use this when you need to initialize a Fraction to an arbitrary high value
+      static constexpr Fraction max() { return Fraction(std::numeric_limits<int>::max(), 1); }
+
+      void setNumerator(int v) { _numerator = v; }
       void setDenominator(int v) {
-            if (v < 0) { _numerator = -_numerator; _denominator = -v; }
+            if (v < 0) {
+                  _numerator = -_numerator;
+                  _denominator = -v; }
             else _denominator = v;
             }
-      void set(int z, int n)     {
-            if (n < 0)  { _numerator = -z; _denominator = -n; }
-            else { _numerator = z; _denominator = n; }
+
+      void set(int z, int n) {
+            if (n < 0)  {
+                  _numerator = -z;
+                  _denominator = -n;
+                  }
+            else {
+                  _numerator = z;
+                  _denominator = n;
+                  }
             }
 
-      bool isZero() const        { return _numerator == 0;      }
-      bool isNotZero() const     { return _numerator != 0;      }
-      bool negative() const      { return _numerator < 0;       }
+      constexpr bool isZero() const        { return _numerator == 0;      }
+      constexpr bool isNotZero() const     { return _numerator != 0;      }
+      constexpr bool negative() const      { return _numerator < 0;       }
 
-      bool isValid() const       { return _denominator != 0;    }
+      constexpr bool isValid() const       { return _denominator != 0;    }
 
       // check if two fractions are identical (numerator & denominator)
       // == operator checks for equal value:
-      bool identical(const Fraction& v) const {
+      constexpr bool identical(const Fraction& v) const {
             return (_numerator == v._numerator) &&
                    (_denominator == v._denominator);
             }
 
       Fraction absValue() const  {
-            return Fraction(qAbs(_numerator), _denominator); }
+            return Fraction(static_cast<int>(qAbs(_numerator)), static_cast<int>(_denominator)); }
 
-      Fraction inverse() const  {
-            return Fraction(_denominator, _numerator); }
+      constexpr Fraction inverse() const  {
+            return Fraction(static_cast<int>(_denominator), static_cast<int>(_numerator)); }
 
 
       // --- reduction --- //
 
       void reduce()
             {
-            const int g = gcd(_numerator, _denominator);
+            const int64_t g = gcd(_numerator, _denominator);
             if (g) {
                   _numerator /= g;
                   _denominator /= g;
@@ -107,40 +113,40 @@ class Fraction {
 
       Fraction reduced() const
             {
-            const int g = gcd(_numerator, _denominator);
+            const int64_t g = gcd(_numerator, _denominator);
             if (g)
-                  return Fraction(_numerator / g, _denominator / g);
-            return Fraction(_numerator, _denominator);
+                  return Fraction(static_cast<int>(_numerator / g), static_cast<int>(_denominator / g));
+            return Fraction(static_cast<int>(_numerator), static_cast<int>(_denominator));
             }      
 
       // --- comparison --- //
 
-      bool operator<(const Fraction& val) const
+      constexpr bool operator<(const Fraction& val) const
             {
             return _numerator * val._denominator < val._numerator * _denominator;
             }
 
-      bool operator<=(const Fraction& val) const
+      constexpr bool operator<=(const Fraction& val) const
             {
             return _numerator * val._denominator <= val._numerator * _denominator;
             }
 
-      bool operator>=(const Fraction& val) const
+      constexpr bool operator>=(const Fraction& val) const
             {
             return _numerator * val._denominator >= val._numerator * _denominator;
             }
 
-      bool operator>(const Fraction& val) const
+      constexpr bool operator>(const Fraction& val) const
             {
             return _numerator * val._denominator > val._numerator * _denominator;
             }
 
-      bool operator==(const Fraction& val) const
+     constexpr  bool operator==(const Fraction& val) const
             {
             return _numerator * val._denominator == val._numerator * _denominator;
             }
 
-      bool operator!=(const Fraction& val) const
+      constexpr bool operator!=(const Fraction& val) const
             {
             return _numerator * val._denominator != val._numerator * _denominator;
             }
@@ -152,9 +158,9 @@ class Fraction {
             if (_denominator == val._denominator)
                   _numerator += val._numerator;  // Common enough use case to be handled separately for efficiency
             else {
-                  const int g = gcd(_denominator, val._denominator);
+                  const int64_t g = gcd(_denominator, val._denominator);
                   if (g) {
-                        const int m1 = val._denominator / g; // This saves one division over straight lcm
+                        const int64_t m1 = val._denominator / g; // This saves one division over straight lcm
                         _numerator = _numerator * m1 + val._numerator * (_denominator / g);
                         _denominator = m1 * _denominator;
                         }
@@ -167,9 +173,9 @@ class Fraction {
             if (_denominator == val._denominator)
                   _numerator -= val._numerator; // Common enough use case to be handled separately for efficiency
             else {
-                  const int g = gcd(_denominator, val._denominator);
+                  const int64_t g = gcd(_denominator, val._denominator);
                   if (g) {
-                        const int m1 = val._denominator / g; // This saves one division over straight lcm
+                        const int64_t m1 = val._denominator / g; // This saves one division over straight lcm
                         _numerator = _numerator * m1 - val._numerator * (_denominator / g);
                         _denominator = m1 * _denominator;
                         }
@@ -181,7 +187,8 @@ class Fraction {
             {
             _numerator *= val._numerator;
             _denominator  *= val._denominator;
-            if (val._denominator != 1) reduce(); // We should be free to fully reduce here
+            if (val._denominator != 1)
+                  reduce(); // We should be free to fully reduce here
             return *this;
             }
 
@@ -196,7 +203,8 @@ class Fraction {
             const int sign = (val._numerator >= 0 ? 1 : -1);
             _numerator   *= (sign*val._denominator);
             _denominator *= (sign*val._numerator);
-            if (val._numerator != sign) reduce();
+            if (val._numerator != sign)
+                  reduce();
             return *this;
             }
 
@@ -216,12 +224,12 @@ class Fraction {
 
       Fraction operator+(const Fraction& v) const { return Fraction(*this) += v; }
       Fraction operator-(const Fraction& v) const { return Fraction(*this) -= v; }
-      Fraction operator-() const                  { return Fraction(-_numerator, _denominator); }
+      constexpr Fraction operator-() const        { return Fraction(static_cast<int>(-_numerator), static_cast<int>(_denominator)); }
       Fraction operator*(const Fraction& v) const { return Fraction(*this) *= v; }
       Fraction operator/(const Fraction& v) const { return Fraction(*this) /= v; }
       Fraction operator/(int v)             const { return Fraction(*this) /= v; }
 
-      double toDouble() { return (double)_numerator / _denominator; }
+      constexpr double toDouble() const { return static_cast<double>(_numerator) / static_cast<double>(_denominator); }
 
       //---------------------------------------------------------
       //   fromTicks
@@ -258,8 +266,6 @@ class Fraction {
             return static_cast<int>(result);
             }
 
-
-
       QString print() const     { return QString("%1/%2").arg(_numerator).arg(_denominator); }
       QString toString() const  { return print(); }
       static Fraction fromString(const QString& str) {
@@ -269,9 +275,8 @@ class Fraction {
       operator QVariant() const { return QVariant::fromValue(*this); }
       };
 
- inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
- inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
-
+      inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
+      inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Fraction);

@@ -17,16 +17,15 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "config.h"
 #include "icons.h"
 #include "instrwidget.h"
 
 #include "libmscore/clef.h"
 #include "libmscore/instrtemplate.h"
-#include "libmscore/line.h"
 #include "libmscore/measure.h"
 #include "libmscore/part.h"
 #include "libmscore/score.h"
+#include "libmscore/scoreOrder.h"
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
@@ -34,8 +33,6 @@
 #include "libmscore/system.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/undo.h"
-#include "libmscore/keysig.h"
-#include "libmscore/scoreOrder.h"
 
 namespace Ms {
 
@@ -736,7 +733,11 @@ QTreeWidgetItem* InstrumentsWidget::movePartItem(int oldPos, int newPos)
             staffItem->initStaffTypeCombo(true);
             staffItem->setStaffType(staffIdx[itemIdx]);
             }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+      item->setExpanded(true);
+#else
       partiturList->setItemExpanded(item, true);
+#endif
       return item;
       }
 
@@ -844,7 +845,11 @@ void InstrumentsWidget::on_addButton_clicked()
                   }
             pli->updateClefs();
             partiturList->resizeColumnToContents(0);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+            pli->setExpanded(true);
+#else
             partiturList->setItemExpanded(pli, true);
+#endif
             partiturList->clearSelection();     // should not be necessary
             partiturList->setCurrentItem(pli);
             }
@@ -959,7 +964,11 @@ void InstrumentsWidget::on_upButton_clicked()
             if (idx) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item1 = movePartItem(idx, idx - 1);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+                  item1->setExpanded(isExpanded);
+#else
                   partiturList->setItemExpanded(item1, isExpanded);
+#endif
                   partiturList->setCurrentItem(item1);
                   }
             }
@@ -1023,7 +1032,11 @@ void InstrumentsWidget::on_downButton_clicked()
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
                   QTreeWidgetItem* item1 = movePartItem(idx, idx + 1);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+                  item1->setExpanded(isExpanded);
+#else
                   partiturList->setItemExpanded(item1, isExpanded);
+#endif
                   partiturList->setCurrentItem(item1);
                   }
             }

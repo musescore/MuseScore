@@ -2725,12 +2725,12 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
             }
       else
             r = page->abbox();
-      int w = lrint(r.width()  * convDpi / DPI);
-      int h = lrint(r.height() * convDpi / DPI);
+      int w = (int)lrint(r.width()  * convDpi / DPI);
+      int h = (int)lrint(r.height() * convDpi / DPI);
 
       QImage printer(w, h, f);
-      printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
-      printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
+      printer.setDotsPerMeterX((int)lrint((convDpi * 1000) / INCH));
+      printer.setDotsPerMeterY((int)lrint((convDpi * 1000) / INCH));
 
       int exportBgStyle = preferences.getInt(PREF_EXPORT_BG_STYLE);
       bool useFgColor = preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR);

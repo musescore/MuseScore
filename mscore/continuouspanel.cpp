@@ -10,24 +10,24 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "libmscore/score.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/system.h"
-#include "libmscore/staff.h"
-#include "libmscore/page.h"
-#include "libmscore/sym.h"
-#include "libmscore/instrument.h"
-#include "libmscore/part.h"
-#include "libmscore/timesig.h"
-#include "libmscore/keysig.h"
-#include "libmscore/barline.h"
-#include "libmscore/rest.h"
-#include "libmscore/stafflines.h"
-
+#include "continuouspanel.h"
 #include "preferences.h"
 #include "scoreview.h"
-#include "continuouspanel.h"
+
+#include "libmscore/barline.h"
+#include "libmscore/instrument.h"
+#include "libmscore/keysig.h"
+#include "libmscore/measure.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/rest.h"
+#include "libmscore/segment.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafflines.h"
+#include "libmscore/system.h"
+#include "libmscore/text.h"
+#include "libmscore/timesig.h"
 
 namespace Ms {
 
@@ -282,7 +282,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
             painter.fillRect(bg, preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       else
             painter.drawTiledPixmap(bg, *fgPixmap, bg.topLeft()
-               - QPoint(lrint(_sv->matrix().dx()), lrint(_sv->matrix().dy())));
+               - QPoint((int)lrint(_sv->matrix().dx()), (int)lrint(_sv->matrix().dy())));
 
       painter.setClipRect(_rect);
       painter.setClipping(true);

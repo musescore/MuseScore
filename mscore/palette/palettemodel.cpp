@@ -17,16 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "palette.h"
 #include "palettemodel.h"
+#include "palettetree.h"
+#include "preferences.h"
+#include "scoreaccessibility.h"
 
 #include "libmscore/beam.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/icon.h"
 #include "libmscore/select.h"
-#include "palettetree.h"
-#include "palette.h"
-#include "preferences.h"
-#include "scoreaccessibility.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -105,7 +105,7 @@ PalettePanel* PaletteTreeModel::iptrToPalettePanel(void* iptr, int* idx)
                });
 
       if (idx)
-            (*idx) = palette - palettes().begin();
+            (*idx) = (int)(palette - palettes().begin());
 
       if (palette != palettes().end())
             return static_cast<PalettePanel*>(iptr);

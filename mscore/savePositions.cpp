@@ -10,17 +10,15 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "libmscore/score.h"
 #include "libmscore/measure.h"
-#include "libmscore/segment.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
 #include "libmscore/system.h"
 #include "libmscore/xml.h"
-#include "mscore/globals.h"
-#include "mscore/preferences.h"
+
 #include "mscore/musescore.h"
-
-
+#include "mscore/preferences.h"
 
 namespace Ms {
 
@@ -35,7 +33,7 @@ static void saveMeasureEvents(XmlWriter& xml, Measure* m, int offset)
       for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
             int tick = s->tick().ticks() + offset;
             int id = segs[(void*)s];
-            int time = lrint(m->score()->repeatList().utick2utime(tick) * 1000);
+            int time = (int)lrint(m->score()->repeatList().utick2utime(tick) * 1000);
             xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
                .arg(id)
                .arg(time)
@@ -127,7 +125,7 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
                         else {
                               int tick = m->tick().ticks() + tickOffset;
                               int i = segs[(void*)m];
-                              int time = lrint(m->score()->repeatList().utick2utime(tick) * 1000);
+                              int time = (int)lrint(m->score()->repeatList().utick2utime(tick) * 1000);
                               xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
                                  .arg(i)
                                  .arg(time)

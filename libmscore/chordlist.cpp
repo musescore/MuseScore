@@ -10,12 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
 #include "chordlist.h"
+#include "mscore.h"
+#include "pitchspelling.h"
 #include "score.h"
 #include "xml.h"
-#include "pitchspelling.h"
-#include "mscore.h"
 
 namespace Ms {
 
@@ -30,7 +29,11 @@ HChord::HChord(const QString& str)
             { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" }
             };
       keys = 0;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      QStringList sl = str.split(" ", Qt::SkipEmptyParts);
+#else
       QStringList sl = str.split(" ", QString::SkipEmptyParts);
+#endif
       for (const QString& s : qAsConst(sl)) {
             for (int i = 0; i < 12; ++i) {
                   if (s == scaleNames[0][i] || s == scaleNames[1][i]) {
@@ -294,10 +297,18 @@ void HChord::add(const QList<HDegree>& degreeList)
 static void readRenderList(QString val, QList<RenderAction>& renderList)
       {
       renderList.clear();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      QStringList sl = val.split(" ", Qt::SkipEmptyParts);
+#else
       QStringList sl = val.split(" ", QString::SkipEmptyParts);
+#endif
       for (const QString& s : qAsConst(sl)) {
             if (s.startsWith("m:")) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+                  QStringList ssl = s.split(":", Qt::SkipEmptyParts);
+#else
                   QStringList ssl = s.split(":", QString::SkipEmptyParts);
+#endif
                   if (ssl.size() == 3) {
                         // m:x:y
                         RenderAction a;

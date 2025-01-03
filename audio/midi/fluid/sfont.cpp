@@ -21,13 +21,11 @@
  * 02111-1307, USA
  */
 
-#include "sfont.h"
 #include "fluid.h"
+#include "sfont.h"
 #include "voice.h"
 
 // #define DEBUG_SFONT
-
-#include "libmscore/xml.h"
 
 static bool debugMode = false;
 
@@ -978,7 +976,7 @@ void SFont::process_sdta (unsigned int size)
       if (chunk.size > size)
             throw(QString("SDTA chunk size mismatch %1 != %2").arg(size).arg(chunk.size));
       /* sample data follows */
-      setSamplepos(f.pos());
+      setSamplepos((unsigned int)f.pos());
       setSamplesize(chunk.size);
       FSKIP(size);
       }

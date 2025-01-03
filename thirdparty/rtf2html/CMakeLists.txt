@@ -34,3 +34,13 @@ add_library (rtf2html STATIC
 if (BUILD_PCH)
     target_use_pch(rtf2html)
 endif (BUILD_PCH)
+
+if (MSVC)
+  set_target_properties( rtf2html PROPERTIES
+    COMPILE_FLAGS "/wd4267"
+  )
+elseif (APPLE)
+  set_target_properties( rtf2html PROPERTIES
+    COMPILE_FLAGS "-Wno-shorten-64-to-32 -Wno-deprecated-declarations"
+  )
+endif ()

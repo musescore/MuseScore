@@ -1189,7 +1189,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   }
             }
 
-      qreal dy = lrint(2 * magS);
+      qreal dy = (int)lrint(2 * magS);
 
       //
       // draw symbols
@@ -1319,8 +1319,8 @@ QPixmap Palette::pixmap(int paletteIdx) const
       Element* e = c->element.get();
       e->layout();
       QRectF r = e->bbox();
-      int w    = lrint(r.width()  * cellMag);
-      int h    = lrint(r.height() * cellMag);
+      int w    = (int)lrint(r.width()  * cellMag);
+      int h    = (int)lrint(r.height() * cellMag);
 
       if (w * h == 0) {
             qDebug("zero pixmap %d %d %s", w, h, e->name());
@@ -1734,7 +1734,7 @@ int Palette::heightForWidth(int w) const
       if (rows <= 0)
             rows = 1;
       qreal magS = PALETTE_SPATIUM * extraMag * guiMag();
-      int h = lrint(_yOffset * 2 * magS);
+      int h = (int)lrint(_yOffset * 2 * magS);
       return rows * vgridM + h;
       }
 

@@ -298,7 +298,11 @@ void OperationsDelegate::drawArrow(
       const int height = 4;
       const int width = 8;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+      const int textWidth = fm.horizontalAdvance(index.data(Qt::DisplayRole).toString());
+#else
       const int textWidth = fm.width(index.data(Qt::DisplayRole).toString());
+#endif
       const int x = rightArrowAlign
                   ? option.rect.right() - width - gap
                   : option.rect.left() + textWidth + gap;

@@ -10,15 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "timesig.h"
-#include "xml.h"
 #include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "stafftype.h"
 #include "style.h"
 #include "sym.h"
 #include "symbol.h"
-#include "staff.h"
-#include "stafftype.h"
-#include "segment.h"
+#include "timesig.h"
+#include "xml.h"
 #include "utils.h"
 
 namespace Ms {

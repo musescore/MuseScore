@@ -10,16 +10,17 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "measure.h"
-#include "score.h"
-#include "system.h"
-#include "undo.h"
+#include "accidental.h"
 #include "chord.h"
 #include "hook.h"
 #include "ledgerline.h"
-#include "accidental.h"
+#include "measure.h"
+#include "notedot.h"
+#include "score.h"
 #include "stem.h"
+#include "system.h"
 #include "tie.h"
+#include "undo.h"
 
 namespace Ms {
 

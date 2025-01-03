@@ -10,25 +10,22 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "rest.h"
-#include "score.h"
-#include "xml.h"
-#include "style.h"
-#include "utils.h"
-#include "tuplet.h"
-#include "sym.h"
-#include "stafftext.h"
 #include "articulation.h"
 #include "chord.h"
-#include "note.h"
-#include "measure.h"
-#include "undo.h"
-#include "staff.h"
-#include "harmony.h"
-#include "segment.h"
-#include "stafftype.h"
 #include "icon.h"
 #include "image.h"
+#include "measure.h"
+#include "note.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "style.h"
+#include "sym.h"
+#include "undo.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -153,7 +150,7 @@ void Rest::draw(QPainter* painter) const
 void Rest::setOffset(const QPointF& o)
       {
       qreal _spatium = spatium();
-      int line = lrint(o.y()/_spatium);
+      int line = (int)lrint(o.y()/_spatium);
 
       if (_sym == SymId::restWhole && (line <= -2 || line >= 3))
             _sym = SymId::restWholeLegerLine;
@@ -430,7 +427,7 @@ void Rest::layout()
       const Staff* stf = staff();
       const StaffType*  st = stf ? stf->staffTypeForElement(this) : 0;
       qreal lineDist = st ? st->lineDistance().val() : 1.0;
-      int userLine   = qFuzzyIsNull(yOff) ? 0 : lrint(yOff / (lineDist * _spatium));
+      int userLine   = qFuzzyIsNull(yOff) ? 0 : (int)lrint(yOff / (lineDist * _spatium));
       int lines      = st ? st->lines() : 5;
       int lineOffset = computeLineOffset(lines);
 
@@ -793,7 +790,7 @@ qreal Rest::mag() const
 int Rest::upLine() const
       {
       qreal _spatium = spatium();
-      return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
+      return (int)lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
       }
 
 //---------------------------------------------------------
@@ -803,7 +800,7 @@ int Rest::upLine() const
 int Rest::downLine() const
       {
       qreal _spatium = spatium();
-      return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
+      return (int)lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
       }
 
 //---------------------------------------------------------

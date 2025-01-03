@@ -10,21 +10,21 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "utils.h"
-#include "score.h"
-#include "pitchspelling.h"
-#include "key.h"
-#include "staff.h"
-#include "note.h"
-#include "harmony.h"
-#include "segment.h"
-#include "undo.h"
-#include "keysig.h"
-#include "stafftype.h"
 #include "chord.h"
-#include "measure.h"
 #include "fret.h"
+#include "harmony.h"
+#include "key.h"
+#include "keysig.h"
+#include "measure.h"
+#include "note.h"
 #include "part.h"
+#include "pitchspelling.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "undo.h"
+#include "utils.h"
 
 namespace Ms {
 

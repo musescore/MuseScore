@@ -119,7 +119,7 @@ static inline float f_db2lin_cube(float db)
 static inline float f_db2lin_lerp(float db)
       {
       float scale = (db - DB_MIN) * (float)LIN_TABLE_SIZE / (DB_MAX - DB_MIN);
-      int base = f_round(scale - 0.5f);
+      int base = (int)f_round(scale - 0.5f);
       float ofs = scale - base;
 
       if (base < 1) {
@@ -156,7 +156,7 @@ static inline float f_lin2db_cube(float lin)
 static inline float f_lin2db_lerp(float lin)
       {
       float scale = (lin - LIN_MIN) * (float)DB_TABLE_SIZE / (LIN_MAX - LIN_MIN);
-      int base = f_round(scale - 0.5f);
+      int base = (int)f_round(scale - 0.5f);
       float ofs = scale - base;
 
       if (base < 2) {

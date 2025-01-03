@@ -10,13 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "staffstate.h"
-#include "score.h"
 #include "instrtemplate.h"
-#include "segment.h"
-#include "staff.h"
-#include "part.h"
 #include "mscore.h"
+#include "part.h"
+#include "score.h"
+#include "staff.h"
+#include "staffstate.h"
 #include "xml.h"
 
 namespace Ms {

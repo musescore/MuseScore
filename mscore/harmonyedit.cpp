@@ -17,17 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "musescore.h"
 #include "harmonyedit.h"
 #include "harmonycanvas.h"
+#include "musescore.h"
 #include "palette.h"
-#include "libmscore/accidental.h"
-#include "libmscore/score.h"
-#include "icons.h"
-#include "libmscore/pitchspelling.h"
-#include "libmscore/symbol.h"
+
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
+#include "libmscore/pitchspelling.h"
+#include "libmscore/score.h"
+#include "libmscore/symbol.h"
 #include "libmscore/xml.h"
 
 namespace Ms {
@@ -159,7 +158,7 @@ void ChordStyleEditor::setChordList(ChordList* cl)
             paletteTab->addTab(accPalette, f.family);
             QFont qf(f.family);
             qf.setStyleStrategy(QFont::NoFontMerging);
-            int size = lrint(20.0 * DPI / PPI);
+            int size = (int)lrint(20.0 * DPI / PPI);
             qf.setPixelSize(size);
 
             QFontMetricsF fi(qf);

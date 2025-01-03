@@ -12,7 +12,6 @@
 
 
 #include "musescore.h"
-#include "libmscore/mscore.h"
 #include "startcenter.h"
 #include "scoreBrowser.h"
 #include "tourhandler.h"
