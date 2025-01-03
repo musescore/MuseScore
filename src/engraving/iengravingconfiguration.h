@@ -54,7 +54,6 @@ public:
 
     virtual Color defaultColor() const = 0;
     virtual Color scoreInversionColor() const = 0;
-    virtual Color invisibleColor() const = 0;
     virtual Color lassoColor() const = 0;
     virtual Color warningColor() const = 0;
     virtual Color warningSelectedColor() const = 0;
@@ -80,6 +79,9 @@ public:
 
     virtual Color formattingColor() const = 0;
     virtual muse::async::Channel<Color> formattingColorChanged() const = 0;
+
+    virtual Color invisibleColor() const = 0;
+    virtual muse::async::Channel<Color> invisibleColorChanged() const = 0;
 
     virtual Color unlinkedColor() const = 0;
     virtual muse::async::Channel<Color> unlinkedColorChanged() const = 0;
