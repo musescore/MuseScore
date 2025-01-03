@@ -154,7 +154,6 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, const mu::engr
 
         const BendDataContext::BendNoteData& bendNoteData = bendChordData.noteDataByPitch.at(note->pitch());
         Note* startNote = startChordNotes[noteIndex];
-        int pitch = bendNoteData.quarterTones / 2;
 
         if (bendNoteData.type == GuitarBendType::PRE_BEND) {
             int pitch = bendNoteData.quarterTones / 2;
@@ -163,10 +162,10 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, const mu::engr
             GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
             QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
             bend->setEndNotePitch(note->pitch(), quarterOff);
-            Note* startNote = bend->startNote();
-            if (startNote) {
-                startNote->setPitch(note->pitch() - pitch);
-                startNote->setTpcFromPitch();
+            Note* bendStartNote = bend->startNote();
+            if (bendStartNote) {
+                bendStartNote->setPitch(note->pitch() - pitch);
+                bendStartNote->setTpcFromPitch();
             }
         } else if (bendNoteData.type == GuitarBendType::SLIGHT_BEND) {
             GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
@@ -186,6 +185,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, const mu::engr
             }
 
             QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+            int pitch = bendNoteData.quarterTones / 2;
             bend->setEndNotePitch(startNote->pitch() + pitch, quarterOff);
             bend->setStartTimeFactor(bendNoteData.startFactor);
             bend->setEndTimeFactor(bendNoteData.endFactor);
