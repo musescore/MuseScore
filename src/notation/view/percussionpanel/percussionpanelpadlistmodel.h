@@ -73,7 +73,7 @@ public:
     int numPads() const { return m_padModels.count(); }
 
     void setDrumset(const engraving::Drumset* drumset);
-    engraving::Drumset* drumset() const { return m_drumset; }
+    const engraving::Drumset* drumset() const { return m_drumset; }
 
     QList<PercussionPanelPadModel*> padList() const { return m_padModels; }
 

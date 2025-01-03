@@ -183,7 +183,6 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         return;
     }
 
-    Drumset* updatedDrumset = m_padListModel->drumset();
     m_padListModel->removeEmptyRows();
 
     NoteInputState inputState = interaction()->noteInput()->state();
@@ -205,6 +204,8 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         return;
     }
 
+    Drumset updatedDrumset = *m_padListModel->drumset();
+
     for (int i = 0; i < m_padListModel->padList().size(); ++i) {
         const PercussionPanelPadModel* model = m_padListModel->padList().at(i);
         if (!model) {
@@ -214,7 +215,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         const int row = i / m_padListModel->numColumns();
         const int column = i % m_padListModel->numColumns();
 
-        engraving::DrumInstrument& drum = updatedDrumset->drum(model->pitch());
+        engraving::DrumInstrument& drum = updatedDrumset.drum(model->pitch());
 
         drum.panelRow = row;
         drum.panelColumn = column;
@@ -224,8 +225,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     }
 
     // Return if nothing changed after edit...
-    if (inst->drumset() && updatedDrumset
-        && *inst->drumset() == *updatedDrumset) {
+    if (inst->drumset() && *inst->drumset() == updatedDrumset) {
         setCurrentPanelMode(m_panelModeToRestore);
         m_padListModel->focusLastActivePad();
         return;
@@ -234,7 +234,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     INotationUndoStackPtr undoStack = notation()->undoStack();
 
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, staff->part()));
+    score()->undo(new engraving::ChangeDrumset(inst, &updatedDrumset, staff->part()));
     undoStack->commitChanges();
 
     setCurrentPanelMode(m_panelModeToRestore);

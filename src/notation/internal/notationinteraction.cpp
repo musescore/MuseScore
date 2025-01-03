@@ -194,6 +194,7 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 
     m_undoStack->undoRedoNotification().onNotify(this, [this]() {
         endEditElement();
+        notifyAboutNoteInputStateChanged();
     });
 
     m_undoStack->stackChanged().onNotify(this, [this]() {
