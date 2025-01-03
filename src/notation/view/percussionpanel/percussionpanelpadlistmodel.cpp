@@ -225,6 +225,16 @@ mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const
     return defaultLayout;
 }
 
+void PercussionPanelPadListModel::focusFirstActivePad()
+{
+    for (int i = 0; i < m_padModels.size(); i++) {
+        if (m_padModels.at(i)) {
+            emit padFocusRequested(i);
+            return;
+        }
+    }
+}
+
 void PercussionPanelPadListModel::focusLastActivePad()
 {
     for (int i = m_padModels.size() - 1; i >= 0; --i) {

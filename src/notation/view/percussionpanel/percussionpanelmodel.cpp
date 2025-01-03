@@ -21,6 +21,9 @@
  */
 
 #include "percussionpanelmodel.h"
+
+#include "notation/utilities/percussionutilities.h"
+
 #include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 
@@ -158,8 +161,13 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
     } else if (itemId == NOTATION_PREVIEW_CODE) {
         setUseNotationPreview(true);
     } else if (itemId == EDIT_LAYOUT_CODE) {
-        const bool currentlyEditing = m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT;
-        currentlyEditing ? finishEditing() : setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT);
+        if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
+            finishEditing();
+            m_padListModel->focusFirstActivePad();
+            return;
+        }
+        setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT);
+        m_padListModel->padFocusRequested(0);
     } else if (itemId == RESET_LAYOUT_CODE) {
         resetLayout();
     }
@@ -180,13 +188,13 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     Instrument* inst = instAndPart.first;
     Part* part = instAndPart.second;
 
-    IF_ASSERT_FAILED(inst && inst->drumset() && part) {
+    if (discardChanges) {
+        m_padListModel->setDrumset(inst ? inst->drumset() : nullptr);
+        setCurrentPanelMode(m_panelModeToRestore);
         return;
     }
 
-    if (discardChanges) {
-        m_padListModel->setDrumset(inst->drumset());
-        setCurrentPanelMode(m_panelModeToRestore);
+    IF_ASSERT_FAILED(inst && inst->drumset() && part) {
         return;
     }
 
@@ -211,7 +219,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     }
 
     // Return if nothing changed after edit...
-    if (inst->drumset() && *inst->drumset() == updatedDrumset) {
+    if (*inst->drumset() == updatedDrumset) {
         setCurrentPanelMode(m_panelModeToRestore);
         m_padListModel->focusLastActivePad();
         return;
@@ -220,7 +228,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     INotationUndoStackPtr undoStack = notation()->undoStack();
 
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
-    score()->undo(new engraving::ChangeDrumset(inst, &updatedDrumset, part));
+    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
     undoStack->commitChanges();
 
     setCurrentPanelMode(m_panelModeToRestore);
@@ -376,7 +384,7 @@ void PercussionPanelModel::onDuplicatePadRequested(int pitch)
     INotationUndoStackPtr undoStack = notation()->undoStack();
 
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Duplicate percussion panel pad"));
-    score()->undo(new engraving::ChangeDrumset(inst, &updatedDrumset, part));
+    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
     undoStack->commitChanges();
 }
 
@@ -396,7 +404,7 @@ void PercussionPanelModel::onDeletePadRequested(int pitch)
     INotationUndoStackPtr undoStack = notation()->undoStack();
 
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Delete percussion panel pad"));
-    score()->undo(new engraving::ChangeDrumset(inst, &updatedDrumset, part));
+    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
     undoStack->commitChanges();
 }
 
@@ -427,26 +435,17 @@ void PercussionPanelModel::writePitch(int pitch)
 
 void PercussionPanelModel::playPitch(int pitch)
 {
-    const mu::engraving::InputState& inputState = score()->inputState();
-    if (!inputState.cr()) {
+    if (!interaction()) {
         return;
     }
 
-    Chord* chord = mu::engraving::Factory::createChord(inputState.lastSegment());
-    chord->setParent(inputState.lastSegment());
+    const NoteInputState inputState = interaction()->noteInput()->state();
+    std::shared_ptr<Chord> chord = PercussionUtilities::getDrumNoteForPreview(m_padListModel->drumset(), pitch);
 
-    Note* note = mu::engraving::Factory::createNote(chord);
-    note->setParent(chord);
+    chord->setParent(inputState.segment);
+    chord->setTrack(inputState.currentTrack);
 
-    note->setStaffIdx(mu::engraving::track2staff(inputState.cr()->track()));
-
-    const mu::engraving::NoteVal nval = score()->noteVal(pitch, /*transpose*/ false);
-    note->setNval(nval);
-
-    playbackController()->playElements({ note });
-
-    note->setParent(nullptr);
-    delete note;
+    playbackController()->playElements({ chord.get() });
 }
 
 void PercussionPanelModel::resetLayout()
@@ -479,7 +478,7 @@ void PercussionPanelModel::resetLayout()
     INotationUndoStackPtr undoStack = notation()->undoStack();
 
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Reset percussion panel layout"));
-    score()->undo(new engraving::ChangeDrumset(inst, &defaultLayout, part));
+    score()->undo(new engraving::ChangeDrumset(inst, defaultLayout, part));
     undoStack->commitChanges();
 }
 

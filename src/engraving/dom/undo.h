@@ -1505,8 +1505,8 @@ class ChangeDrumset : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangeDrumset(Instrument* i, const Drumset* d, Part* p)
-        : instrument(i), drumset(*d), part(p) {}
+    ChangeDrumset(Instrument* i, const Drumset& d, Part* p)
+        : instrument(i), drumset(d), part(p) {}
 
     UNDO_TYPE(CommandType::ChangeDrumset)
     UNDO_NAME("ChangeDrumset")

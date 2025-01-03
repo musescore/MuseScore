@@ -415,6 +415,7 @@ Item {
                 orientation: Qt.Horizontal
 
                 navigation.panel: addRowButtonPanel
+                drawFocusBorderInsideRect: true
 
                 onClicked: {
                     padGrid.model.addEmptyRow()
@@ -428,9 +429,7 @@ Item {
 
             visible: !percModel.enabled
 
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: (padGrid.cellHeight / 2) - (panelDisabledLabel.height / 2)
+            anchors.centerIn: parent
 
             font: ui.theme.bodyFont
             text: qsTrc("notation/percussion", "Select an unpitched percussion staff to see available sounds")

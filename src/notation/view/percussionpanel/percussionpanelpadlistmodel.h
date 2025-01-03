@@ -81,6 +81,7 @@ public:
     int nextAvailableIndex(int pitch) const; //! NOTE: This may be equal to m_padModels.size()
     int nextAvailablePitch(int pitch) const;
 
+    void focusFirstActivePad();
     void focusLastActivePad();
 
     muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
