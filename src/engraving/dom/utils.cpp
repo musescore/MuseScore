@@ -42,6 +42,7 @@
 #include "sig.h"
 #include "staff.h"
 #include "system.h"
+#include "spanner.h"
 #include "tuplet.h"
 
 #include "log.h"
@@ -1334,6 +1335,50 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
             chords.push_back(chord);
         }
     }
+}
+
+std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves)
+{
+    std::vector<EngravingItem*> result;
+
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (const Segment& seg : measure->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+
+            for (EngravingItem* annotation : seg.annotations()) {
+                if (!annotation || !annotation->systemFlag()) {
+                    continue;
+                }
+
+                if (!staves.empty()) {
+                    if (muse::contains(staves, annotation->staff())) {
+                        result.push_back(annotation);
+                    }
+                } else if (annotation->isTopSystemObject()) {
+                    result.push_back(annotation);
+                }
+            }
+        }
+    }
+
+    for (const auto& pair : score->spanner()) {
+        Spanner* spanner = pair.second;
+        if (!spanner->systemFlag()) {
+            continue;
+        }
+
+        if (!staves.empty()) {
+            if (muse::contains(staves, spanner->staff())) {
+                result.push_back(spanner);
+            }
+        } else if (spanner->isTopSystemObject()) {
+            result.push_back(spanner);
+        }
+    }
+
+    return result;
 }
 
 String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames)

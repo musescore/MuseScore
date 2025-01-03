@@ -22,21 +22,36 @@
 
 #pragma once
 
-#include "abstractlayoutpaneltreeitem.h"
+#include <QAbstractListModel>
 
-#include "notation/inotationparts.h"
+#include "modularity/ioc.h"
+#include "notation/inotation.h"
+
+#include "layoutpanelutils.h"
 
 namespace mu::instrumentsscene {
-class StaffTreeItem : public AbstractLayoutPanelTreeItem
+class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::Injectable
 {
     Q_OBJECT
 
-public:
-    StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+    muse::Inject<context::IGlobalContext> context = { this };
 
-    void init(const notation::Staff* masterStaff);
+public:
+    explicit SystemObjectsLayerSettingsModel(QObject* parent = nullptr);
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
+
+    Q_INVOKABLE void load(const QString& staffId);
+    Q_INVOKABLE void setSystemObjectsGroupVisible(int index, bool visible);
 
 private:
-    bool m_isInited = false;
+    enum Roles {
+        TitleRole = Qt::UserRole + 1,
+        VisibilityRole,
+    };
+
+    std::vector<SystemObjectsGroup> m_systemObjectGroups;
 };
 }
