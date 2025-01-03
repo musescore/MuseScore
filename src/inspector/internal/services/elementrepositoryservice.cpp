@@ -41,6 +41,7 @@
 #include "engraving/dom/trill.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/lyrics.h"
 
 #include "log.h"
 
@@ -92,6 +93,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::BRACKET: return findBrackets();
     case mu::engraving::ElementType::REST: return findRests();
     case mu::engraving::ElementType::ORNAMENT: return findOrnaments();
+    case mu::engraving::ElementType::LYRICS: return findLyrics();
     case mu::engraving::ElementType::PEDAL:
     case mu::engraving::ElementType::GLISSANDO:
     case mu::engraving::ElementType::VIBRATO:
@@ -443,6 +445,22 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findOrnaments() c
             resultList << (EngravingItem*)(toTrill(element)->ornament());
         } else if (element->isTrillSegment()) {
             resultList << (EngravingItem*)(toTrillSegment(element)->trill()->ornament());
+        }
+    }
+
+    return resultList;
+}
+
+QList<EngravingItem*> ElementRepositoryService::findLyrics() const
+{
+    QList<mu::engraving::EngravingItem*> resultList;
+    for (mu::engraving::EngravingItem* element : m_exposedElementList) {
+        if (element->isLyrics()) {
+            resultList << element;
+        } else if (element->isPartialLyricsLine()) {
+            resultList << element;
+        } else if (element->isPartialLyricsLineSegment()) {
+            resultList << toPartialLyricsLineSegment(element)->lyricsLine();
         }
     }
 

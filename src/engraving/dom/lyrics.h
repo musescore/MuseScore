@@ -217,8 +217,10 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
+    Sid getPropertyStyle(Pid propertyId) const override;
 
-    Lyrics* findLyricsInPreviousRepeatSeg();
+    Lyrics* findLyricsInPreviousRepeatSeg() const;
+    Lyrics* findAdjacentLyricsOrDefault() const;
 
 protected:
     void doComputeEndElement() override;
@@ -246,5 +248,7 @@ public:
     bool lyricsAddToSkyline() const override { return lyricsLine()->addToSkyline(); }
     Color color() const override { return lyricsLine()->color(); }
     double baseLineShift() const override;
+
+    EngravingItem* propertyDelegate(Pid) override;
 };
 } // namespace mu::engraving

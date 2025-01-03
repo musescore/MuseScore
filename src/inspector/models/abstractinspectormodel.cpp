@@ -110,6 +110,8 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE },
     { mu::engraving::ElementType::INSTRUMENT_NAME, InspectorModelType::TYPE_INSTRUMENT_NAME },
     { mu::engraving::ElementType::LYRICS, InspectorModelType::TYPE_LYRICS },
+    { mu::engraving::ElementType::PARTIAL_LYRICSLINE, InspectorModelType::TYPE_LYRICS },
+    { mu::engraving::ElementType::PARTIAL_LYRICSLINE_SEGMENT, InspectorModelType::TYPE_LYRICS },
     { mu::engraving::ElementType::REST, InspectorModelType::TYPE_REST },
     { mu::engraving::ElementType::DYNAMIC, InspectorModelType::TYPE_DYNAMIC },
     { mu::engraving::ElementType::EXPRESSION, InspectorModelType::TYPE_EXPRESSION },

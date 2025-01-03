@@ -237,7 +237,10 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     UNUSED(ctx);
 
     assert(item->isPartialLyricsLineSegment() || item->lyrics());
-    item->ryoffset() = 0.0;
+
+    if (!item->isPartialLyricsLineSegment()) {
+        item->ryoffset() = 0.0;
+    }
 
     LyricsLineSegment::LayoutData* ldata = item->mutldata();
     ldata->clearDashes();
@@ -837,7 +840,7 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     // Partial melisma or dashes
     if (lyricsLine->isPartialLyricsLine()) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->no());
-        item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : 0.0;
+        item->ryoffset() = nextLyrics ? nextLyrics->offset().y() : item->offset().y();
         return;
     }
 
