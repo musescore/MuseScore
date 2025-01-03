@@ -235,6 +235,35 @@ void PercussionPanelPadListModel::focusLastActivePad()
     }
 }
 
+int PercussionPanelPadListModel::nextAvailableIndex(int pitch) const
+{
+    const int currentModelIndex = getModelIndexForPitch(pitch);
+    for (int candidateIndex = currentModelIndex + 1; candidateIndex != currentModelIndex; ++candidateIndex) {
+        if (candidateIndex == m_padModels.size()) {
+            // Wrap around
+            candidateIndex = 0;
+        }
+        if (!m_padModels.at(candidateIndex)) {
+            return candidateIndex;
+        }
+    }
+    return m_padModels.size();
+}
+
+int PercussionPanelPadListModel::nextAvailablePitch(int pitch) const
+{
+    for (int candidatePitch = pitch + 1; candidatePitch != pitch; ++candidatePitch) {
+        if (candidatePitch == mu::engraving::DRUM_INSTRUMENTS) {
+            // Wrap around
+            candidatePitch = 0;
+        }
+        if (!m_drumset->isValid(candidatePitch)) {
+            return candidatePitch;
+        }
+    }
+    return -1;
+}
+
 void PercussionPanelPadListModel::load()
 {
     beginResetModel();
@@ -317,8 +346,8 @@ PercussionPanelPadModel* PercussionPanelPadListModel::createPadModelForPitch(int
 
     model->setPitch(pitch);
 
-    model->padTriggered().onNotify(this, [this, pitch]() {
-        m_triggeredChannel.send(pitch);
+    model->padActionTriggered().onReceive(this, [this, pitch](PercussionPanelPadModel::PadAction action) {
+        m_padActionRequestChannel.send(action, pitch);
     });
 
     model->setNotationPreviewItem(PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch));
@@ -393,6 +422,22 @@ void PercussionPanelPadListModel::swapMidiNotesAndShortcuts(int fromIndex, int t
 
     toModel->setPitch(tempPitch);
     toModel->setKeyboardShortcut(tempShortcut);
+}
+
+int PercussionPanelPadListModel::getModelIndexForPitch(int pitch) const
+{
+    IF_ASSERT_FAILED(m_drumset && m_drumset->isValid(pitch)) {
+        return -1;
+    }
+
+    for (int i = 0; i < m_padModels.size(); ++i) {
+        const PercussionPanelPadModel* model = m_padModels.at(i);
+        if (model && model->pitch() == pitch) {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 void PercussionPanelPadListModel::movePad(int fromIndex, int toIndex)

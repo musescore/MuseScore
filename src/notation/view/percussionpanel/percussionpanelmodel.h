@@ -113,6 +113,11 @@ private:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    void onPadTriggered(int pitch);
+    void onDuplicatePadRequested(int pitch);
+    void onDeletePadRequested(int pitch);
+    void onDefinePadShortcutRequested(int pitch);
+
     void writePitch(int pitch);
     void playPitch(int pitch);
 
@@ -121,6 +126,9 @@ private:
     mu::engraving::InstrumentTrackId currentTrackId() const;
 
     const project::IProjectAudioSettingsPtr audioSettings() const;
+
+    std::pair<mu::engraving::Instrument*, mu::engraving::Part*> getCurrentInstrumentAndPart() const;
+
     const mu::notation::INotationPtr notation() const;
     const mu::notation::INotationInteractionPtr interaction() const;
 
