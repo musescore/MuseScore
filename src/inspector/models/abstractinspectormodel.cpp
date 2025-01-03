@@ -652,6 +652,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
 
         QVariant elementCurrentValue = valueFromElementUnits(pid, element->getProperty(pid), element);
         QVariant elementDefaultValue = valueFromElementUnits(pid, element->propertyDefault(pid), element);
+        mu::engraving::Sid elementStyleId = element->getPropertyStyle(pid);
 
         bool isPropertySupportedByElement = elementCurrentValue.isValid();
 
@@ -669,7 +670,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
             defaultPropertyValue = elementDefaultValue;
         }
 
-        isUndefined = propertyValue != elementCurrentValue;
+        isUndefined = ((styleId != elementStyleId) || (propertyValue != elementCurrentValue));
 
         if (isUndefined) {
             break;
