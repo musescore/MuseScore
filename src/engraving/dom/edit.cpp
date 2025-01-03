@@ -23,6 +23,7 @@
 #include <map>
 #include <set>
 
+#include "dom/volta.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -65,6 +66,7 @@
 #include "ornament.h"
 #include "ottava.h"
 #include "part.h"
+#include "partialtie.h"
 #include "range.h"
 #include "rehearsalmark.h"
 #include "rest.h"
@@ -602,7 +604,7 @@ Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool force
         if (referenceNote->chord()->findNote(noteVal.pitch)) {
             return nullptr;
         }
-        if (!referenceNote->tieBack()) {
+        if (!referenceNote->tieBack() || referenceNote->incomingPartialTie()) {
             break;
         }
         referenceNote = referenceNote->tieBack()->startNote();
@@ -682,7 +684,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     firstChordRest->score()->undoAddElement(slur);
     SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
     ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    if (firstChordRest == secondChordRest) {
+    if (firstChordRest == secondChordRest && !(slur->isOutgoing() || slur->isIncoming())) {
         ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->style().spatium(), 0.0));
     }
     slur->add(ss);
@@ -870,6 +872,17 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
 
         int no = static_cast<int>(chordRest->lyrics().size());
+        const auto& spanners = spannerMap().findOverlapping(chordRest->tick().ticks(), chordRest->endTick().ticks());
+        for (auto& spanner : spanners) {
+            if (!spanner.value->isPartialLyricsLine() || spanner.start != chordRest->tick().ticks()) {
+                continue;
+            }
+            const PartialLyricsLine* line = toPartialLyricsLine(spanner.value);
+
+            no = std::max(no, line->no() + 1);
+        }
+
+        // Also check how many partial lines there are
         Lyrics* lyrics = Factory::createLyrics(chordRest);
         lyrics->setTrack(chordRest->track());
         lyrics->setParent(chordRest);
@@ -1890,6 +1903,28 @@ std::vector<Note*> Score::cmdTieNoteList(const Selection& selection, bool noteEn
 //   cmdAddTie
 //---------------------------------------------------------
 
+static Tie* createAndAddTie(Note* startNote, Note* endNote)
+{
+    Score* score = startNote->score();
+    Tie* tie = endNote ? Factory::createTie(startNote) : Factory::createPartialTie(startNote);
+    tie->setStartNote(startNote);
+    tie->setTrack(startNote->track());
+    tie->setTick(startNote->chord()->segment()->tick());
+    if (endNote) {
+        tie->setEndNote(endNote);
+        tie->setTicks(endNote->chord()->segment()->tick() - startNote->chord()->segment()->tick());
+    }
+    score->undoAddElement(tie);
+
+    tie->addTiesToJumpPoints();
+    if (!tie->endNote() && tie->tieJumpPoints() && tie->tieJumpPoints()->empty()) {
+        score->undoRemoveElement(tie);
+        tie = nullptr;
+    }
+
+    return tie;
+}
+
 void Score::cmdAddTie(bool addToChord)
 {
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
@@ -1968,13 +2003,8 @@ void Score::cmdAddTie(bool addToChord)
                     // tpc was set correctly already
                     //n->setLine(note->line());
                     //n->setTpc(note->tpc());
-                    Tie* tie = Factory::createTie(this->dummy());
-                    tie->setStartNote(note);
-                    tie->setEndNote(nnote);
-                    tie->setTrack(note->track());
-                    tie->setTick(note->chord()->segment()->tick());
-                    tie->setTicks(nnote->chord()->segment()->tick() - note->chord()->segment()->tick());
-                    undoAddElement(tie);
+                    createAndAddTie(note, nnote);
+
                     if (!addFlag || nnote->chord()->tick() >= lastAddedChord->tick() || nnote->chord()->isGrace()) {
                         break;
                     } else {
@@ -1987,13 +2017,7 @@ void Score::cmdAddTie(bool addToChord)
         } else {
             Note* note2 = searchTieNote(note);
             if (note2) {
-                Tie* tie = Factory::createTie(this->dummy());
-                tie->setStartNote(note);
-                tie->setEndNote(note2);
-                tie->setTrack(note->track());
-                tie->setTick(note->chord()->segment()->tick());
-                tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
-                undoAddElement(tie);
+                createAndAddTie(note, note2);
             }
         }
     }
@@ -2007,13 +2031,13 @@ void Score::cmdAddTie(bool addToChord)
 //   cmdRemoveTie
 //---------------------------------------------------------
 
-void Score::cmdToggleTie()
+Tie* Score::cmdToggleTie()
 {
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
 
     if (noteList.empty()) {
         LOGD("no notes selected");
-        return;
+        return nullptr;
     }
 
     bool canAddTies = false;
@@ -2039,31 +2063,45 @@ void Score::cmdToggleTie()
 
     startCmd(actionName);
 
+    Tie* tie = nullptr;
+
     if (canAddTies) {
         for (size_t i = 0; i < notes; ++i) {
             Note* note2 = tieNoteList[i];
             if (note2) {
                 Note* note = noteList[i];
-
-                Tie* tie = Factory::createTie(this->dummy());
-                tie->setStartNote(note);
-                tie->setEndNote(note2);
-                tie->setTrack(note->track());
-                tie->setTick(note->chord()->segment()->tick());
-                tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
-                undoAddElement(tie);
+                tie = createAndAddTie(note, note2);
             }
         }
     } else {
+        bool shouldTieListSelection = noteList.size() == 2;
         for (Note* n : noteList) {
-            Tie* tie = n->tieFor();
+            tie = n->tieFor();
+            Chord* chord = n->chord();
             if (tie) {
                 undoRemoveElement(tie);
+                tie = nullptr;
+                shouldTieListSelection = false;
+            } else if (chord->hasFollowingJumpItem()) {
+                // Create outgoing partial tie
+                tie = createAndAddTie(n, nullptr);
+                shouldTieListSelection = false;
+            }
+        }
+
+        if (shouldTieListSelection) {
+            Note* startNote = noteList.at(0);
+            Note* endNote = noteList.at(1);
+            if (startNote->part() == endNote->part() && startNote->pitch() == endNote->pitch()
+                && startNote->unisonIndex() == endNote->unisonIndex() && startNote->tick() != endNote->tick()) {
+                tie = createAndAddTie(startNote, endNote);
             }
         }
     }
 
     endCmd();
+
+    return tie;
 }
 
 void Score::cmdToggleLaissezVib()
@@ -2876,7 +2914,9 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
@@ -2890,6 +2930,15 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::GUITAR_BEND_SEGMENT:
     {
         el = toSpannerSegment(el)->spanner();
+        if (el->isTie()) {
+            Tie* tie = toTie(el);
+            if (tie->tieJumpPoints()) {
+                tie->undoRemoveTiesFromJumpPoints();
+            }
+            if (tie->jumpPoint()) {
+                tie->updateStartTieOnRemoval();
+            }
+        }
         undoRemoveElement(el);
     }
     break;
@@ -3806,42 +3855,6 @@ void Score::cmdFullMeasureRest()
     } else {
         deselectAll();
     }
-}
-
-//---------------------------------------------------------
-//   addLyrics
-//    called from Keyboard Accelerator & menu
-//---------------------------------------------------------
-
-Lyrics* Score::addLyrics()
-{
-    EngravingItem* el = selection().element();
-    if (el == 0 || (!el->isNote() && !el->isLyrics() && !el->isRest())) {
-        MScore::setError(MsError::NO_LYRICS_SELECTED);
-        return 0;
-    }
-    ChordRest* cr;
-    if (el->isNote()) {
-        cr = toNote(el)->chord();
-        if (cr->isGrace()) {
-            cr = toChordRest(cr->explicitParent());
-        }
-    } else if (el->isLyrics()) {
-        cr = toLyrics(el)->chordRest();
-    } else if (el->isRest()) {
-        cr = toChordRest(el);
-    } else {
-        return 0;
-    }
-
-    int no = int(cr->lyrics().size());
-    Lyrics* lyrics = Factory::createLyrics(cr);
-    lyrics->setTrack(cr->track());
-    lyrics->setParent(cr);
-    lyrics->setNo(no);
-    undoAddElement(lyrics);
-    select(lyrics, SelectType::SINGLE, 0);
-    return lyrics;
 }
 
 std::vector<Hairpin*> Score::addHairpins(HairpinType type)
@@ -5971,6 +5984,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         || et == ElementType::LAISSEZ_VIB
+        || et == ElementType::PARTIAL_TIE
         ) {
         const EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;
@@ -6078,6 +6092,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::VIBRATO
             && et != ElementType::TEXTLINE
             && et != ElementType::PEDAL
+            && et != ElementType::PARTIAL_LYRICSLINE
             && et != ElementType::BREATH
             && et != ElementType::DYNAMIC
             && et != ElementType::EXPRESSION
@@ -6143,6 +6158,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::TEXTLINE,
             ElementType::PEDAL,
             ElementType::LYRICS,
+            ElementType::PARTIAL_LYRICSLINE,
             ElementType::CLEF,
             ElementType::AMBITUS
         };
@@ -6176,6 +6192,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 case ElementType::DYNAMIC:
                 case ElementType::EXPRESSION:
                 case ElementType::LYRICS:                       // not normally segment-attached
+                case ElementType::PARTIAL_LYRICSLINE:
                     continue;
                 default:
                     break;
@@ -6345,7 +6362,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                    || element->isTrill()
                    || element->isVibrato()
                    || element->isTextLine()
-                   || element->isPedal()) {
+                   || element->isPedal()
+                   || element->isPartialLyricsLine()) {
             Spanner* sp   = toSpanner(element);
             Spanner* nsp  = toSpanner(ne);
             track_idx_t tr2 = sp->effectiveTrack2();
@@ -7067,7 +7085,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
             for (Note* n : c->notes()) {
                 // Remove ties crossing measure range boundaries
                 Tie* t = n->tieBack();
-                if (t && (t->startNote()->chord()->tick() < startTick)) {
+                if (t && t->startNote() && (t->startNote()->chord()->tick() < startTick)) {
                     if (preserveTies) {
                         t->setEndNote(0);
                     } else {
@@ -7128,6 +7146,104 @@ void Score::undoChangeMeasureRepeatCount(Measure* m, int newCount, staff_idx_t s
         int currCount = linkedMeasure->measureRepeatCount(linkedStaffIdx);
         if (currCount != newCount) {
             linkedScore->undo(new ChangeMeasureRepeatCount(linkedMeasure, newCount, linkedStaffIdx));
+        }
+    }
+}
+
+void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
+{
+    std::vector<Tie*> oldTies;
+    for (TieJumpPoint* jumpPoint : *tie->tieJumpPoints()) {
+        if (jumpPoint->followingNote()) {
+            continue;
+        }
+        oldTies.push_back(jumpPoint->endTie());
+    }
+
+    tie->updatePossibleJumpPoints();
+
+    for (Tie* oldTie : oldTies) {
+        auto findEndTie = [&oldTie](const TieJumpPoint* jumpPoint) {
+            return jumpPoint->endTie() == oldTie;
+        };
+
+        if (std::find_if((*tie->tieJumpPoints()).begin(), (*tie->tieJumpPoints()).end(),
+                         findEndTie) != (*tie->tieJumpPoints()).end()) {
+            continue;
+        }
+        startCmd(TranslatableString("engraving", "Remove stale partial tie"));
+        undoRemoveElement(oldTie);
+        endCmd();
+        // These changes should be merged with the change in repeat structure which caused the ties to become invalid
+        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    }
+}
+
+void Score::doUndoResetPartialSlur(Slur* slur)
+{
+    const size_t undoIdx = undoStack()->currentIndex();
+    if (!slur->startCR()->hasPrecedingJumpItem() && slur->isIncoming()) {
+        startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
+        slur->undoSetIncoming(false);
+        endCmd();
+    }
+
+    if (!slur->endCR()->hasFollowingJumpItem() && slur->isOutgoing()) {
+        startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
+        slur->undoSetOutgoing(false);
+        endCmd();
+    }
+
+    if (undoIdx != undoStack()->currentIndex()) {
+        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    }
+}
+
+void Score::undoRemoveStaleTieJumpPoints()
+{
+    size_t tracks = nstaves() * VOICES;
+    Measure* m = firstMeasure();
+    if (!m) {
+        return;
+    }
+
+    for (auto& interval : spanner()) {
+        Spanner* sp = interval.second;
+        if (!sp || !sp->isSlur()) {
+            continue;
+        }
+        doUndoResetPartialSlur(toSlur(sp));
+    }
+
+    SegmentType st = SegmentType::ChordRest;
+    for (Segment* s = m->first(st); s; s = s->next1(st)) {
+        for (track_idx_t i = 0; i < tracks; ++i) {
+            EngravingItem* e = s->element(i);
+            if (e == 0 || !e->isChordRest()) {
+                continue;
+            }
+
+            // Remove invalid lyrics dashes
+            for (Lyrics* lyrics : toChordRest(e)->lyrics()) {
+                LyricsLine* separator = lyrics->separator();
+                if ((lyrics->syllabic() == LyricsSyllabic::BEGIN || lyrics->syllabic() == LyricsSyllabic::MIDDLE) && separator
+                    && !separator->nextLyrics() && !separator->isEndMelisma()) {
+                    lyrics->setNeedRemoveInvalidSegments();
+                }
+            }
+
+            if (!e->isChord()) {
+                continue;
+            }
+
+            Chord* c = toChord(e);
+            for (Note* n : c->notes()) {
+                if (!n->tieFor()) {
+                    continue;
+                }
+
+                doUndoRemoveStaleTieJumpPoints(n->tieFor());
+            }
         }
     }
 }

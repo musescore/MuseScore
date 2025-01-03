@@ -59,6 +59,7 @@
 #include "noteevent.h"
 #include "page.h"
 #include "part.h"
+#include "partialtie.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
@@ -1008,11 +1009,17 @@ std::vector<const EngravingObject*> AddElement::objectItems() const
 static void removeNote(const Note* note)
 {
     Score* score = note->score();
-    if (note->tieFor() && note->tieFor()->endNote()) {
-        score->doUndoRemoveElement(note->tieFor());
+    Tie* tieFor = note->tieFor();
+    Tie* tieBack = note->tieBack();
+    if (tieFor && tieFor->endNote()) {
+        score->doUndoRemoveElement(tieFor);
     }
-    if (note->tieBack()) {
-        score->doUndoRemoveElement(note->tieBack());
+    if (tieBack) {
+        if (tieBack->tieJumpPoints() && tieBack->tieJumpPoints()->size() > 1) {
+            Tie::changeTieType(tieBack);
+        } else {
+            score->doUndoRemoveElement(tieBack);
+        }
     }
     for (Spanner* s : note->spannerBack()) {
         score->doUndoRemoveElement(s);
@@ -3353,4 +3360,16 @@ void RemoveSystemLock::cleanup(bool undo)
 std::vector<const EngravingObject*> RemoveSystemLock::objectItems() const
 {
     return { m_systemLock->startMB(), m_systemLock->endMB() };
+}
+
+void ChangeTieJumpPointActive::flip(EditData*)
+{
+    TieJumpPoint* jumpPoint = m_jumpPointList->findJumpPoint(m_id);
+    if (!jumpPoint) {
+        return;
+    }
+    bool oldActive = jumpPoint->active();
+
+    jumpPoint->setActive(m_active);
+    m_active = oldActive;
 }

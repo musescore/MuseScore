@@ -136,6 +136,7 @@
 #include "../../dom/palmmute.h"
 #include "../../dom/segment.h"
 #include "../../dom/part.h"
+#include "../../dom/partialtie.h"
 #include "../../dom/whammybar.h"
 
 #include "../xmlreader.h"
@@ -261,6 +262,10 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::PAGE: read(item_cast<Page*>(item), xml, ctx);
         break;
     case ElementType::PALM_MUTE: read(item_cast<PalmMute*>(item), xml, ctx);
+        break;
+    case ElementType::PARTIAL_LYRICSLINE: read(item_cast<PartialLyricsLine*>(item), xml, ctx);
+        break;
+    case ElementType::PARTIAL_TIE: read(item_cast<PartialTie*>(item), xml, ctx);
         break;
     case ElementType::PEDAL: read(item_cast<Pedal*>(item), xml, ctx);
         break;
@@ -448,6 +453,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), VoiceAssignment::ALL_VOICE_IN_INSTRUMENT));
     case P_TYPE::AUTO_ON_OFF:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
+    case P_TYPE::PARTIAL_SPANNER_DIRECTION:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), PartialSpannerDirection::OUTGOING));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -3616,6 +3623,15 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         TRead::read(lv, e, ctx);
         lv->setParent(n);
         n->add(lv);
+    } else if (tag == "PartialTie") {
+        PartialTie* pt = Factory::createPartialTie(n);
+        TRead::read(pt, e, ctx);
+        if (pt->isOutgoing()) {
+            pt->setStartNote(n);
+        } else {
+            pt->setEndNote(n);
+        }
+        n->add(pt);
     } else if (readItemProperties(n, e, ctx)) {
     } else {
         return false;
@@ -3750,6 +3766,31 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
 
     if (p->partName().isEmpty()) {
         p->setPartName(p->instrument()->trackName());
+    }
+}
+
+void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (tag == "isEndMelisma") {
+            p->setIsEndMelisma(xml.readBool());
+        } else if (TRead::readProperty(p, tag, xml, ctx, Pid::VERSE)) {
+        } else if (!readItemProperties(p, xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+void TRead::read(PartialTie* p, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (TRead::readProperty(p, tag, xml, ctx, Pid::TIE_PLACEMENT)) {
+        } else if (TRead::readProperty(p, tag, xml, ctx, Pid::PARTIAL_SPANNER_DIRECTION)) {
+        } else if (!readProperties(static_cast<SlurTie*>(p), xml, ctx)) {
+            xml.unknown();
+        }
     }
 }
 
@@ -3975,7 +4016,10 @@ bool TRead::readProperties(Slur* s, XmlReader& e, ReadContext& ctx)
     if (tag == "stemArr") {
         s->setSourceStemArrangement(e.readInt());
         return true;
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::PARTIAL_SPANNER_DIRECTION)) {
+        return true;
     }
+
     return readProperties(static_cast<SlurTie*>(s), e, ctx);
 }
 

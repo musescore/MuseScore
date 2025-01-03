@@ -1535,6 +1535,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
     case ElementType::PICK_SCRAPE:
+    case ElementType::PARTIAL_LYRICSLINE:
     {
         Spanner* spanner = toSpanner(element);
         if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE) {
@@ -1718,6 +1719,7 @@ void Score::removeElement(EngravingItem* element)
     case ElementType::LET_RING:
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::PALM_MUTE:
+    case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
@@ -5741,7 +5743,10 @@ void Score::connectTies(bool silent)
                 }
                 // connect a tie without end note
                 Tie* tie = n->tieFor();
-                if (tie && !tie->endNote()) {
+                if (tie) {
+                    tie->updatePossibleJumpPoints();
+                }
+                if (tie && !tie->isPartialTie() && !tie->endNote()) {
                     Note* nnote;
                     if (m_mscVersion <= 114) {
                         nnote = searchTieNote114(n);
@@ -6073,7 +6078,11 @@ void Score::updateChannel()
 
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }
 const RepeatList& Score::repeatList()  const { return m_masterScore->repeatList(); }
-const RepeatList& Score::repeatList(bool expandRepeats)  const { return m_masterScore->repeatList(expandRepeats); }
+const RepeatList& Score::repeatList(bool expandRepeats, bool updateTies)  const
+{
+    return m_masterScore->repeatList(expandRepeats, updateTies);
+}
+
 TempoMap* Score::tempomap() const { return m_masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return m_masterScore->sigmap(); }
 //QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }

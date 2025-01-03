@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TYPES_H
-#define MU_ENGRAVING_TYPES_H
+#pragma once
 
 #include <functional>
 #include <map>
@@ -78,7 +77,7 @@ enum class ElementType {
     SLUR_SEGMENT,
     TIE_SEGMENT,
     LAISSEZ_VIB_SEGMENT,
-    LAISSEZ_VIB,
+    PARTIAL_TIE_SEGMENT,
     BAR_LINE,
     STAFF_LINES,
     SYSTEM_DIVIDER,
@@ -100,6 +99,8 @@ enum class ElementType {
     BREATH,
     MEASURE_REPEAT,
     TIE,
+    LAISSEZ_VIB,
+    PARTIAL_TIE,
     ARTICULATION,
     ORNAMENT,
     FERMATA,
@@ -148,6 +149,7 @@ enum class ElementType {
     VOLTA_SEGMENT,
     PEDAL_SEGMENT,
     LYRICSLINE_SEGMENT,
+    PARTIAL_LYRICSLINE_SEGMENT,
     GLISSANDO_SEGMENT,
     NOTELINE_SEGMENT,
     LAYOUT_BREAK,
@@ -180,6 +182,7 @@ enum class ElementType {
     TEXTLINE_BASE,
     NOTELINE,
     LYRICSLINE,
+    PARTIAL_LYRICSLINE,
     GLISSANDO,
     BRACKET,
     SEGMENT,
@@ -742,6 +745,13 @@ enum class OrnamentShowAccidental {
     ALWAYS,
 };
 
+enum class PartialSpannerDirection : char {
+    NONE = -1,
+    INCOMING,
+    OUTGOING,
+    BOTH
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -1184,5 +1194,3 @@ Q_DECLARE_METATYPE(mu::engraving::MarkerType)
 Q_DECLARE_METATYPE(mu::engraving::TrillType)
 Q_DECLARE_METATYPE(mu::engraving::VibratoType)
 #endif
-
-#endif // MU_ENGRAVING_TYPES_H

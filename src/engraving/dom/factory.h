@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_FACTORY_H
-#define MU_ENGRAVING_FACTORY_H
+#pragma once
 
 #include <memory>
 
@@ -143,6 +142,12 @@ public:
     static std::shared_ptr<NoteLine> makeNoteLine(Note* parent);
 
     static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
+
+    static PartialTie* createPartialTie(Note* parent, bool isAccessibleEnabled = true);
+    static PartialTie* copyPartialTie(const PartialTie& src);
+
+    static PartialLyricsLine* createPartialLyricsLine(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static PartialLyricsLine* copyPartialLyricsLine(const PartialLyricsLine& src);
 
     static Rest* createRest(Segment* parent, bool isAccessibleEnabled = true);
     static Rest* createRest(Segment* parent, const TDuration& t, bool isAccessibleEnabled = true);
@@ -307,5 +312,3 @@ private:
     static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);
 };
 }
-
-#endif // MU_ENGRAVING_FACTORY_H

@@ -327,6 +327,7 @@ void ConnectorInfoReader::readAddConnector(Measure* item, ConnectorInfoReader* i
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
+    case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
@@ -363,7 +364,6 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
     case ElementType::NOTELINE:
-    case ElementType::LAISSEZ_VIB:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
@@ -389,7 +389,11 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             sp->setTick2(item->tick());
             sp->setEndElement(item);
             if (sp->isTie()) {
-                item->setTieBack(toTie(sp));
+                Tie* tie = toTie(sp);
+                item->setTieBack(tie);
+                if (pasteMode) {
+                    tie->updatePossibleJumpPoints();
+                }
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
                 if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()
@@ -428,6 +432,7 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
     case ElementType::TEXTLINE:
     case ElementType::VOLTA:
     case ElementType::PALM_MUTE:
+    case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:

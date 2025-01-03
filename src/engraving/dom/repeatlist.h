@@ -57,6 +57,8 @@ public:
     void addMeasure(Measure const* const);
     void addMeasures(Measure const* const);
     bool containsMeasure(Measure const* const) const;
+    bool endsWithMeasure(Measure const* const) const;
+    bool startsWithMeasure(Measure const* const) const;
     bool isEmpty() const;
     int len() const;
     void popMeasure();
@@ -85,7 +87,7 @@ public:
     RepeatList& operator=(const RepeatList&) = delete;
     ~RepeatList();
 
-    void update(bool expand);
+    void update(bool expand, bool updateTies = true);
     void setScoreChanged() { m_scoreChanged = true; }
     const Score* score() const { return m_score; }
 

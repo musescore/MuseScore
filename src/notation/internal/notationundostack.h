@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_UNDOSTACK
-#define MU_NOTATION_UNDOSTACK
+#pragma once
 
 #include "inotationundostack.h"
 #include "igetscore.h"
@@ -53,6 +52,8 @@ public:
 
     bool isStackClean() const override;
 
+    void mergeCommands(size_t startIdx) override;
+
     void lock() override;
     void unlock() override;
     bool isLocked() const override;
@@ -83,5 +84,3 @@ private:
     muse::async::Notification m_undoRedoNotification;
 };
 }
-
-#endif // MU_NOTATION_UNDOSTACK

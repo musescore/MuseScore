@@ -65,6 +65,7 @@ private:
     QList<mu::engraving::EngravingItem*> findLines(mu::engraving::ElementType lineType) const;
     QList<mu::engraving::EngravingItem*> findRests() const;
     QList<mu::engraving::EngravingItem*> findOrnaments() const;
+    QList<mu::engraving::EngravingItem*> findLyrics() const;
 
     QList<mu::engraving::EngravingItem*> m_exposedElementList;
     QList<mu::engraving::EngravingItem*> m_rawElementList;

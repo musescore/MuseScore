@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_UTILS_H
-#define MU_ENGRAVING_UTILS_H
+#pragma once
 
 #include "../types/types.h"
 
@@ -35,9 +34,12 @@ class EngravingItem;
 class KeySig;
 class Note;
 class Rest;
+class Measure;
+class Score;
 class Segment;
 class System;
 class Tuplet;
+class Volta;
 
 enum class Key;
 
@@ -67,7 +69,8 @@ extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
-extern Note* searchTieNote(Note* note);
+extern Volta* findVolta(const Segment* seg, const Score* score);
+extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr);
 extern Note* searchTieNote114(Note* note);
 
 extern int absStep(int pitch);
@@ -102,5 +105,7 @@ extern bool isFirstSystemKeySig(const KeySig* ks);
 extern String bendAmountToString(int fulls, int quarts);
 
 extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
+
+extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure);
+extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
 } // namespace mu::engraving
-#endif

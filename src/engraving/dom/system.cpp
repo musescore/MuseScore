@@ -474,8 +474,10 @@ void System::add(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
@@ -555,8 +557,10 @@ void System::remove(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
@@ -989,46 +993,14 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 //    or the position just after the last non-chordrest segment
 //---------------------------------------------------------
 
-double System::firstNoteRestSegmentX(bool leading)
+double System::firstNoteRestSegmentX(bool leading) const
 {
     double margin = style().styleMM(Sid::headerToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(mb);
-            for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-                if (seg->isChordRestType()) {
-                    double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
-                    if (!leading) {
-                        return noteRestPos;
-                    }
-
-                    // first CR found; back up to previous segment
-                    seg = seg->prevActive();
-                    while (seg && seg->allElementsInvisible()) {
-                        seg = seg->prevActive();
-                    }
-                    if (seg) {
-                        // find maximum width
-                        double width = 0.0;
-                        size_t n = score()->nstaves();
-                        for (staff_idx_t i = 0; i < n; ++i) {
-                            if (!staff(i)->show()) {
-                                continue;
-                            }
-                            EngravingItem* e = seg->element(i * VOICES);
-                            if (e && e->addToSkyline()) {
-                                width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
-                            }
-                        }
-                        if (seg->isStartRepeatBarLineType()) {
-                            margin = style().styleMM(Sid::repeatBarlineDotSeparation);
-                        }
-                        return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
-                    } else {
-                        return margin;
-                    }
-                }
-            }
+            margin = measure->firstNoteRestSegmentX(leading);
+            break;
         }
     }
     LOGD("firstNoteRestSegmentX: did not find segment");
@@ -1043,7 +1015,7 @@ double System::firstNoteRestSegmentX(bool leading)
 
 double System::endingXForOpenEndedLines() const
 {
-    double margin = style().spatium() / 4;  // TODO: this can be parameterizable
+    double margin = style().styleMM(Sid::lineEndToBarlineDistance);
     double systemEndX = ldata()->bbox().width();
 
     Measure* lastMeas = lastMeasure();
@@ -1051,15 +1023,7 @@ double System::endingXForOpenEndedLines() const
         return systemEndX - margin;
     }
 
-    Segment* lastSeg = lastMeas->last();
-    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
-        lastSeg = lastSeg->prevEnabled();
-    }
-    if (!lastSeg) {
-        return systemEndX - margin;
-    }
-
-    return lastSeg->x() + lastMeas->x() - margin;
+    return lastMeas->endingXForOpenEndedLines();
 }
 
 //---------------------------------------------------------
@@ -1067,19 +1031,12 @@ double System::endingXForOpenEndedLines() const
 //    returns the last chordrest of a system for a particular track
 //---------------------------------------------------------
 
-ChordRest* System::lastChordRest(track_idx_t track)
+ChordRest* System::lastChordRest(track_idx_t track) const
 {
     for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
         if ((*measureBaseIter)->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
-            for (const Segment* seg = measure->last(); seg; seg = seg->prev()) {
-                if (seg->isChordRestType()) {
-                    ChordRest* cr = seg->cr(track);
-                    if (cr) {
-                        return cr;
-                    }
-                }
-            }
+            return measure->lastChordRest(track);
         }
     }
     return nullptr;
@@ -1090,23 +1047,16 @@ ChordRest* System::lastChordRest(track_idx_t track)
 //    returns the last chordrest of a system for a particular track
 //---------------------------------------------------------
 
-ChordRest* System::firstChordRest(track_idx_t track)
+ChordRest* System::firstChordRest(track_idx_t track) const
 {
     for (const MeasureBase* mb : measures()) {
         if (!mb->isMeasure()) {
             continue;
         }
         const Measure* measure = static_cast<const Measure*>(mb);
-        for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-            if (seg->isChordRestType()) {
-                ChordRest* cr = seg->cr(track);
-                if (cr) {
-                    return cr;
-                }
-            }
-        }
+        return measure->firstChordRest(track);
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
