@@ -42,7 +42,7 @@ public:
     int gripsCount() const override { return 0; }
     void editDrag(EditData&) override;
 
-    struct LayoutData : public SlurTieSegment::LayoutData {
+    struct LayoutData : public TieSegment::LayoutData {
         SymId symbol = SymId::noSym;
         ld_field<PointF> posRelativeToNote = { "[LaissezVibSegment] posRelativeToNote", PointF() };
     };

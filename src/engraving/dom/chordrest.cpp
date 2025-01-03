@@ -40,6 +40,7 @@
 #include "instrchange.h"
 #include "keysig.h"
 #include "lyrics.h"
+#include "marker.h"
 #include "measure.h"
 #include "navigate.h"
 #include "note.h"
@@ -54,6 +55,7 @@
 #include "system.h"
 #include "tuplet.h"
 #include "utils.h"
+#include "volta.h"
 
 #include "log.h"
 
@@ -1207,17 +1209,29 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
 //   isBefore
 //---------------------------------------------------------
 
-bool ChordRest::isBefore(const ChordRest* o) const
+bool ChordRest::isBefore(const EngravingItem* o) const
 {
     if (!o || this == o) {
         return false;
     }
+
+    const ChordRest* otherCr = nullptr;
+    if (o->isChordRest()) {
+        otherCr = toChordRest(o);
+    } else if (o->isNote()) {
+        otherCr = toNote(o)->chord();
+    }
+
+    if (!otherCr) {
+        return EngravingItem::isBefore(o);
+    }
+
     int otick = o->tick().ticks();
     int t     = tick().ticks();
     if (t == otick) {   // At least one of the chord is a grace, order the grace notes
-        bool oGraceAfter = o->isGraceAfter();
+        bool oGraceAfter = otherCr->isGraceAfter();
         bool graceAfter  = isGraceAfter();
-        bool oGrace      = o->isGrace();
+        bool oGrace      = otherCr->isGrace();
         bool grace       = isGrace();
         // normal note are initialized at graceIndex 0 and graceIndex is 0 based
         size_t oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;
@@ -1290,5 +1304,121 @@ void ChordRest::checkStaffMoveValidity()
         // Move valid, clear stored move
         m_storedStaffMove = 0;
     }
+}
+
+bool ChordRest::hasFollowingJumpItem() const
+{
+    const Segment* seg = segment();
+    const Measure* measure = seg->measure();
+    const Fraction nextTick = seg->tick() + actualTicks();
+
+    if (measure->lastChordRest(track()) != this) {
+        return false;
+    }
+
+    // Jumps & markers
+    for (const EngravingItem* e : measure->el()) {
+        if (!e->isJump() && !e->isMarker()) {
+            continue;
+        }
+
+        if (e->isJump()) {
+            return true;
+        }
+
+        const Marker* marker = toMarker(e);
+
+        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+            return true;
+        }
+    }
+
+    // Voltas
+    auto spanners = score()->spannerMap().findOverlapping(measure->endTick().ticks(), measure->endTick().ticks());
+    for (auto& spanner : spanners) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != nextTick) {
+            continue;
+        }
+
+        return true;
+    }
+
+    // Repeats
+    if (measure->repeatEnd()) {
+        return true;
+    }
+
+    for (Segment* nextSeg = seg->next(SegmentType::BarLineType); nextSeg && nextSeg->tick() == nextTick;
+         nextSeg = nextSeg->next(SegmentType::BarLineType)) {
+        const EngravingItem* el = nextSeg->element(track());
+        if (!el || !el->isBarLine()) {
+            continue;
+        }
+        const BarLine* bl = toBarLine(el);
+
+        if (bl->barLineType() & (BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ChordRest::hasPrecedingJumpItem() const
+{
+    const Segment* seg = segment();
+    const Measure* measure = seg->measure();
+
+    if (measure->firstChordRest(track()) != this) {
+        return false;
+    }
+
+    if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
+        return true;
+    }
+
+    // Markers
+    for (const EngravingItem* e : measure->el()) {
+        if (!e->isMarker()) {
+            continue;
+        }
+
+        const Marker* marker = toMarker(e);
+        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+            continue;
+        }
+
+        return true;
+    }
+
+    // Voltas
+    auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
+    for (auto& spanner : spanners) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick()) {
+            continue;
+        }
+
+        return true;
+    }
+
+    // Repeat barlines
+    if (measure->repeatStart()) {
+        return true;
+    }
+
+    for (Segment* prevSeg = seg->prev(SegmentType::BarLineType); prevSeg && prevSeg->tick() == seg->tick();
+         prevSeg = prevSeg->prev(SegmentType::BarLineType)) {
+        EngravingItem* el = prevSeg->element(track());
+        if (!el || !el->isBarLine()) {
+            continue;
+        }
+
+        BarLine* bl = toBarLine(el);
+        if (bl->barLineType() & (BarLineType::START_REPEAT | BarLineType::END_START_REPEAT)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 }

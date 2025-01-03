@@ -134,6 +134,7 @@ public:
     // Move
     void movePitch(MoveDirection d, PitchMode mode) override;
     void nudge(MoveDirection d, bool quickly) override;
+    void nudgeAnchors(MoveDirection) override;
     void moveChordRestToStaff(MoveDirection d) override;
     void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
@@ -389,7 +390,7 @@ private:
     void applyLineNoteToNote(engraving::Score* score, Note* note1, Note* note2, EngravingItem* line);
 
     void doAddSlur(const mu::engraving::Slur* slurTemplate = nullptr);
-    void doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const mu::engraving::Slur* slurTemplate);
+    void doAddSlur(EngravingItem* firstItem, EngravingItem* secondItem, const mu::engraving::Slur* slurTemplate);
 
     bool scoreHasMeasure() const;
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;

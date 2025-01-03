@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SCORE_H
-#define MU_ENGRAVING_SCORE_H
+#pragma once
 
 /**
  \file
@@ -340,7 +339,7 @@ public:
     void cmdSetBeamMode(BeamMode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
-    void cmdToggleTie();
+    Tie* cmdToggleTie();
     void cmdToggleLaissezVib();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
@@ -768,7 +767,7 @@ public:
     /// where those need to have the same value for expandRepeats.
     virtual const RepeatList& repeatList() const;
     /// For small, one-step operations, where you need to get the relevant repeatList just once
-    virtual const RepeatList& repeatList(bool expandRepeats) const;
+    virtual const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
 
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
@@ -804,11 +803,11 @@ public:
     Segment* lastSegmentMM() const;
 
     void connectTies(bool silent = false);
+    void undoRemoveStaleTieJumpPoints();
 
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
-    Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
     void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
@@ -1079,6 +1078,9 @@ private:
     void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
     void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
 
+    void doUndoRemoveStaleTieJumpPoints(Tie* tie);
+    void doUndoResetPartialSlur(Slur* slur);
+
     void deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
                                              const SelectionFilter& filter);
     void deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
@@ -1206,5 +1208,3 @@ public:
 
 DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
 } // namespace mu::engraving
-
-#endif

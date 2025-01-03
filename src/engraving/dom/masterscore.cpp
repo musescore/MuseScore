@@ -202,14 +202,14 @@ const RepeatList& MasterScore::repeatList() const
     return *m_nonExpandedRepeatList;
 }
 
-const RepeatList& MasterScore::repeatList(bool expandRepeats) const
+const RepeatList& MasterScore::repeatList(bool expandRepeats, bool updateTies) const
 {
     if (expandRepeats) {
-        m_expandedRepeatList->update(true);
+        m_expandedRepeatList->update(true, updateTies);
         return *m_expandedRepeatList;
     }
 
-    m_nonExpandedRepeatList->update(false);
+    m_nonExpandedRepeatList->update(false, updateTies);
     return *m_nonExpandedRepeatList;
 }
 

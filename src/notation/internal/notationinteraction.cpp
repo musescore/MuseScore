@@ -2178,23 +2178,23 @@ void NotationInteraction::applyLineNoteToNote(Score* score, Note* note1, Note* n
 }
 
 //! NOTE Copied from ScoreView::cmdAddSlur
-void NotationInteraction::doAddSlur(const mu::engraving::Slur* slurTemplate)
+void NotationInteraction::doAddSlur(const Slur* slurTemplate)
 {
     startEdit(TranslatableString("undoableAction", "Add slur"));
     m_notifyAboutDropChanged = true;
 
-    mu::engraving::ChordRest* firstChordRest = nullptr;
-    mu::engraving::ChordRest* secondChordRest = nullptr;
+    ChordRest* firstChordRest = nullptr;
+    ChordRest* secondChordRest = nullptr;
     const auto& sel = score()->selection();
     auto el = sel.uniqueElements();
 
     if (sel.isRange()) {
-        mu::engraving::track_idx_t startTrack = sel.staffStart() * mu::engraving::VOICES;
-        mu::engraving::track_idx_t endTrack = sel.staffEnd() * mu::engraving::VOICES;
-        for (mu::engraving::track_idx_t track = startTrack; track < endTrack; ++track) {
+        track_idx_t startTrack = sel.staffStart() * VOICES;
+        track_idx_t endTrack = sel.staffEnd() * VOICES;
+        for (track_idx_t track = startTrack; track < endTrack; ++track) {
             firstChordRest = nullptr;
             secondChordRest = nullptr;
-            for (mu::engraving::EngravingItem* e : el) {
+            for (EngravingItem* e : el) {
                 if (e->track() != track) {
                     continue;
                 }
@@ -2204,7 +2204,7 @@ void NotationInteraction::doAddSlur(const mu::engraving::Slur* slurTemplate)
                 if (!e->isChord()) {
                     continue;
                 }
-                mu::engraving::ChordRest* cr = mu::engraving::toChordRest(e);
+                ChordRest* cr = toChordRest(e);
                 if (!firstChordRest || firstChordRest->tick() > cr->tick()) {
                     firstChordRest = cr;
                 }
@@ -2226,50 +2226,92 @@ void NotationInteraction::doAddSlur(const mu::engraving::Slur* slurTemplate)
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
         }
     } else {
-        for (mu::engraving::EngravingItem* e : el) {
+        EngravingItem* firstItem = nullptr;
+        EngravingItem* secondItem = nullptr;
+        for (EngravingItem* e : el) {
             if (e->isNote()) {
-                e = mu::engraving::toNote(e)->chord();
+                e = toNote(e)->chord();
             }
-            if (!e->isChord()) {
+            if (!e->isChord() && !e->isBarLine()) {
                 continue;
             }
-            mu::engraving::ChordRest* cr = mu::engraving::toChordRest(e);
-            if (!firstChordRest || cr->isBefore(firstChordRest)) {
-                firstChordRest = cr;
+
+            if (!firstItem || e->isBefore(firstItem)) {
+                firstItem = e;
             }
-            if (!secondChordRest || secondChordRest->isBefore(cr)) {
-                secondChordRest = cr;
+            if (!secondItem || secondItem->isBefore(e)) {
+                secondItem = e;
             }
         }
 
-        if (firstChordRest == secondChordRest) {
-            secondChordRest = mu::engraving::nextChordRest(firstChordRest);
+        if (firstChordRest == secondItem && (!firstItem || firstItem->isChordRest())) {
+            secondItem = nextChordRest(toChordRest(firstItem));
         }
 
-        bool firstCrTrill = firstChordRest && firstChordRest->isChord() && toChord(firstChordRest)->isTrillCueNote();
-        bool secondCrTrill = secondChordRest && secondChordRest->isChord() && toChord(secondChordRest)->isTrillCueNote();
+        bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
+        bool secondCrTrill = secondItem && secondItem->isChord() && toChord(secondItem)->isTrillCueNote();
 
-        if (firstChordRest && !(firstCrTrill || secondCrTrill)) {
-            doAddSlur(firstChordRest, secondChordRest, slurTemplate);
+        if (firstItem && !(firstCrTrill || secondCrTrill)) {
+            doAddSlur(firstItem, secondItem, slurTemplate);
         }
     }
 
     apply();
 }
 
-void NotationInteraction::doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const mu::engraving::Slur* slurTemplate)
+void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* secondItem, const Slur* slurTemplate)
 {
-    mu::engraving::Slur* slur = firstChordRest->slur(secondChordRest);
-    if (!slur || slur->slurDirection() != mu::engraving::DirectionV::AUTO) {
+    ChordRest* firstChordRest = nullptr;
+    ChordRest* secondChordRest = nullptr;
+
+    if (firstItem && secondItem && (firstItem->isBarLine() != secondItem->isBarLine())) {
+        const bool outgoing = firstItem->isChordRest();
+        const BarLine* bl = outgoing ? toBarLine(secondItem) : toBarLine(firstItem);
+
+        // Check the barline is the start of a repeat section
+        const Segment* adjacentCrSeg
+            = outgoing ? bl->segment()->prev1(SegmentType::ChordRest) : bl->segment()->next1(SegmentType::ChordRest);
+        ChordRest* adjacentCr = nullptr;
+        for (track_idx_t track = 0; track < score()->ntracks(); track++) {
+            EngravingItem* adjacentItem = adjacentCrSeg->element(track);
+            if (!adjacentItem || !adjacentItem->isChordRest()) {
+                continue;
+            }
+            adjacentCr = toChordRest(adjacentItem);
+            break;
+        }
+
+        if (!adjacentCr || (outgoing && !adjacentCr->hasFollowingJumpItem()) || (!outgoing && !adjacentCr->hasPrecedingJumpItem())) {
+            return;
+        }
+
+        Slur* partialSlur = slurTemplate ? slurTemplate->clone() : Factory::createSlur(score()->dummy());
+        if (outgoing) {
+            partialSlur->undoSetOutgoing(true);
+            firstChordRest = toChordRest(firstItem);
+            secondChordRest = toChordRest(adjacentCr);
+        } else {
+            partialSlur->undoSetIncoming(true);
+            firstChordRest = toChordRest(adjacentCr);
+            secondChordRest = toChordRest(secondItem);
+        }
+        slurTemplate = partialSlur;
+    } else {
+        firstChordRest = toChordRest(firstItem);
+        secondChordRest = toChordRest(secondItem);
+    }
+
+    Slur* slur = firstChordRest->slur(secondChordRest);
+    if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
     }
 
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->addSlur(slur);
-    } else if (!secondChordRest) {
-        mu::engraving::SlurSegment* segment = slur->frontSegment();
+    } else if (!secondItem) {
+        SlurSegment* segment = slur->frontSegment();
         select({ segment }, SelectType::SINGLE);
-        startEditGrip(segment, mu::engraving::Grip::END);
+        startEditGrip(segment, Grip::END);
     }
 }
 
@@ -2323,8 +2365,8 @@ bool NotationInteraction::dropCanvas(EngravingItem* e)
 {
     if (e->isActionIcon()) {
         switch (mu::engraving::toActionIcon(e)->actionType()) {
-        case mu::engraving::ActionIconType::VFRAME:
-            score()->insertBox(ElementType::VBOX);
+        case mu::engraving::ActionIconType::VFRAME
+            : score()->insertBox(ElementType::VBOX);
             break;
         case mu::engraving::ActionIconType::HFRAME:
             score()->insertBox(ElementType::HBOX);
@@ -3224,6 +3266,45 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly)
     apply();
 
     notifyAboutDragChanged();
+}
+
+void NotationInteraction::nudgeAnchors(MoveDirection d)
+{
+    startEdit(TranslatableString("undoableAction", "Nudge"));
+    qreal vRaster = mu::engraving::MScore::vRaster();
+    qreal hRaster = mu::engraving::MScore::hRaster();
+
+    switch (d) {
+    case MoveDirection::Left:
+        m_editData.delta = QPointF(-nudgeDistance(m_editData, hRaster), 0);
+        break;
+    case MoveDirection::Right:
+        m_editData.delta = QPointF(nudgeDistance(m_editData, hRaster), 0);
+        break;
+    case MoveDirection::Up:
+        m_editData.delta = QPointF(0, -nudgeDistance(m_editData, vRaster));
+        break;
+    case MoveDirection::Down:
+        m_editData.delta = QPointF(0, nudgeDistance(m_editData, vRaster));
+        break;
+    default:
+        rollback();
+        return;
+    }
+
+    m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
+    m_editData.hRaster = hRaster;
+    m_editData.vRaster = vRaster;
+
+    if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
+        m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
+    }
+
+    m_editData.element->startEditDrag(m_editData);
+    m_editData.element->editDrag(m_editData);
+    m_editData.element->endEditDrag(m_editData);
+
+    apply();
 }
 
 bool NotationInteraction::isTextSelected() const
@@ -4220,9 +4301,13 @@ void NotationInteraction::flipSelection()
 void NotationInteraction::addTieToSelection()
 {
     // Calls `startEdit` internally
-    score()->cmdToggleTie();
+    Tie* newTie = score()->cmdToggleTie();
 
     notifyAboutNotationChanged();
+
+    if (newTie && newTie->tieJumpPoints() && newTie->tieJumpPoints()->size() > 1) {
+        selectAndStartEditIfNeeded(newTie);
+    }
 }
 
 void NotationInteraction::addLaissezVibToSelection()
