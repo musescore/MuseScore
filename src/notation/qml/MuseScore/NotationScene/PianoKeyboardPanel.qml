@@ -30,10 +30,12 @@ Item {
 
     property alias contextMenuModel: contextMenuModel
 
-    property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: NavigationPanel {
+    property alias navigationSection: navPanel.section
+    property alias contentNavigationPanelOrderStart: navPanel.order
+
+    NavigationPanel {
+        id: navPanel
         name: "PianoKeyboardSection"
-        section: root.navigationSection
         direction: NavigationPanel.Vertical
         enabled: root.enabled && root.visible
     }

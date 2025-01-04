@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,19 +21,24 @@
  */
 import QtQuick 2.15
 
-import Muse.Dock 1.0
+// Based on qrc:/kddockwidgets/private/quick/qml/TitleBarBase.qml, but adapted to our needs
+MouseArea {
+    objectName: "titleBarMouseArea"
 
-DockPanelView {
-    id: root
+    required property QtObject titleBarCpp
 
-    default property alias contentComponent : contentLoader.sourceComponent
+    /// Set to true if you're using a custom MouseEventRedirector in your code
+    property bool hasCustomMouseEventRedirector: false
 
-    navigationSection: Boolean(contentLoader.item) && Boolean(contentLoader.item.navigationSection) ?
-                           contentLoader.item.navigationSection : null
+    onDoubleClicked: {
+        if (titleBarCpp) {
+            titleBarCpp.onDoubleClicked();
+        }
+    }
 
-    Loader {
-        id: contentLoader
-
-        active: root.visible
+    onTitleBarCppChanged: {
+        if (titleBarCpp && !hasCustomMouseEventRedirector) {
+            titleBarCpp.redirectMouseEvents(this)
+        }
     }
 }

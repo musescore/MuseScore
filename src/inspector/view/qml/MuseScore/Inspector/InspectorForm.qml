@@ -35,8 +35,7 @@ Rectangle {
     property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAtIndex(0)?.navigationPanel : null // first panel
-    property int navigationOrderStart: 0
+    property int navigationOrderStart: 1
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -121,11 +120,6 @@ Rectangle {
                 anchorItem: root
                 navigationPanel.section: root.navigationSection
                 navigationPanel.order: root.navigationOrderStart + model.index
-                navigationPanel.onOrderChanged: {
-                    if (model.index === 0) {
-                        root.navigationOrderStart = navigationPanel.order
-                    }
-                }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     sectionList.ensureContentVisible(invisibleContentHeight)

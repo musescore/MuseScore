@@ -60,7 +60,7 @@ void DockPageView::init()
             reorderSections();
         });
 
-        connect(dock, &DockBase::reorderNavigationRequested, [this](){
+        connect(dock, &DockBase::visibleChanged, [this](){
             reorderSections();
         });
     }
@@ -254,7 +254,7 @@ void DockPageView::doReorderSections()
     QList<DockBase*> docksAvailableForNavigation;
 
     for (DockBase* dock: docks) {
-        if (dock->contentNavigationPanel() && dock->isVisible()) {
+        if (dock->navigationSection() && dock->isVisible()) {
             docksAvailableForNavigation.append(dock);
         }
     }
@@ -264,43 +264,11 @@ void DockPageView::doReorderSections()
 
 void DockPageView::reorderDocksNavigationSections(QList<DockBase*>& docks)
 {
-    std::sort(docks.begin(), docks.end(), [this](DockBase* dock1, DockBase* dock2) {
-        if (!dock1->contentNavigationPanel() || !dock2->contentNavigationPanel()) {
-            return false;
-        }
-
-        QPoint dock1Pos = dock1->globalPosition();
-        QPoint dock2Pos = dock2->globalPosition();
-
-        if (dock1Pos.y() == dock2Pos.y()) {
-            if (dock1 == m_central) {
-                return true;
-            } else if (dock2 == m_central) {
-                return false;
-            }
-
-            return dock1Pos.x() < dock2Pos.x();
-        }
-
-        return dock1Pos.y() < dock2Pos.y();
-    });
-
-    int i = 0;
     QHash<muse::ui::INavigationSection*, QList<DockBase*> > orderedSections;
     for (DockBase* dock: docks) {
-        muse::ui::NavigationPanel* panel = dock->contentNavigationPanel();
-        if (!panel) {
-            continue;
+        if (ui::INavigationSection* section = dock->navigationSection()) {
+            orderedSections[section] << dock;
         }
-
-        muse::ui::INavigationSection* section = panel->section();
-        if (section && !orderedSections.contains(section)) {
-            auto index = section->index();
-            index.setOrder(i++);
-            section->setIndex(index);
-        }
-
-        orderedSections[section] << dock;
     }
 
     for (QList<DockBase*>& panels : orderedSections.values()) {
@@ -311,7 +279,7 @@ void DockPageView::reorderDocksNavigationSections(QList<DockBase*>& docks)
 void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks)
 {
     std::sort(sectionDocks.begin(), sectionDocks.end(), [](DockBase* dock1, DockBase* dock2) {
-        if (!dock1->contentNavigationPanel() || !dock2->contentNavigationPanel()) {
+        if (!dock1->navigationSection() || !dock2->navigationSection()) {
             return false;
         }
 
@@ -341,7 +309,7 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
     for (DockBase* dock: sectionDocks) {
         //!NOTE: It is possible that the dock contains multiple panels.
         //! Reserve n panels for each dock.
-        int order = i++ *100;
+        int order = i++ *1000;
 
         //! NOTE: If a panel is inside a frame with another panel,
         //! there is no need to set the order for the frame panel, as it is already set.
@@ -357,7 +325,7 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
             dock->setFramePanelOrder(order);
         }
 
-        dock->contentNavigationPanel()->setOrder(order + 1);
+        dock->setContentNavigationPanelOrderStart(order + 1);
     }
 }
 
