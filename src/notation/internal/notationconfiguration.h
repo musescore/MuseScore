@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONCONFIGURATION_H
-#define MU_NOTATION_NOTATIONCONFIGURATION_H
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -207,11 +206,11 @@ public:
     muse::async::Notification autoShowPercussionPanelChanged() const override;
 
     bool showPercussionPanelPadSwapDialog() const override;
-    void setShowPercussionPanelPadSwapDialog(bool show);
+    void setShowPercussionPanelPadSwapDialog(bool show) override;
     muse::async::Notification showPercussionPanelPadSwapDialogChanged() const override;
 
     bool percussionPanelMoveMidiNotesAndShortcuts() const override;
-    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move);
+    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move) override;
     muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
 
     muse::io::path_t styleFileImportPath() const override;
@@ -253,5 +252,3 @@ private:
     int m_styleDialogLastSubPageIndex = 0;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONCONFIGURATION_H
