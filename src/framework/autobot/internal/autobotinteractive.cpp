@@ -37,15 +37,16 @@ std::shared_ptr<IInteractive> AutobotInteractive::realInteractive() const
 }
 
 IInteractive::Result AutobotInteractive::question(const std::string& title, const std::string& text, const Buttons& buttons,
-                                                  const Button& def, const Options& options) const
+                                                  const Button& def, const Options& options,
+                                                  const std::string& dialogTitle) const
 {
-    return m_real->question(title, text, buttons, def, options);
+    return m_real->question(title, text, buttons, def, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::question(const std::string& title, const Text& text, const ButtonDatas& buttons,
-                                                  int defBtn, const Options& options) const
+                                                  int defBtn, const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->question(title, text, buttons, defBtn, options);
+    return m_real->question(title, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::ButtonData AutobotInteractive::buttonData(Button b) const
@@ -54,52 +55,53 @@ IInteractive::ButtonData AutobotInteractive::buttonData(Button b) const
 }
 
 IInteractive::Result AutobotInteractive::info(const std::string& title, const std::string& text, const Buttons& buttons,
-                                              int defBtn, const Options& options) const
+                                              int defBtn, const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->info(title, text, buttons, defBtn, options);
+    return m_real->info(title, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::info(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn,
-                                              const Options& options) const
+                                              const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->info(title, text, buttons, defBtn, options);
+    return m_real->info(title, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::warning(const std::string& title, const std::string& text, const Buttons& buttons,
-                                                 const Button& def, const Options& options) const
+                                                 const Button& def, const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->warning(title, text, buttons, def, options);
+    return m_real->warning(title, text, buttons, def, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::warning(const std::string& title, const Text& text, const ButtonDatas& buttons,
-                                                 int defBtn, const Options& options) const
+                                                 int defBtn, const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->warning(title, text, buttons, defBtn, options);
+    return m_real->warning(title, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::warning(const std::string& title, const Text& text, const std::string& detailedText,
                                                  const ButtonDatas& buttons, int defBtn,
-                                                 const Options& options) const
+                                                 const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->warning(title, text, detailedText, buttons, defBtn, options);
+    return m_real->warning(title, text, detailedText, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::error(const std::string& title, const std::string& text, const Buttons& buttons,
-                                               const Button& def, const Options& options) const
+                                               const Button& def, const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->error(title, text, buttons, def, options);
+    return m_real->error(title, text, buttons, def, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::error(const std::string& title, const Text& text, const ButtonDatas& buttons,
-                                               int defBtn, const Options& options) const
+                                               int defBtn, const Options& options, const std::string& dialogTitle) const
 {
-    return m_real->error(title, text, buttons, defBtn, options);
+    return m_real->error(title, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::error(const std::string& title, const Text& text, const std::string& detailedText,
-                                               const ButtonDatas& buttons, int defBtn, const Options& options) const
+                                               const ButtonDatas& buttons, int defBtn, const Options& options,
+                                               const std::string& dialogTitle) const
 {
-    return m_real->error(title, text, detailedText, buttons, defBtn, options);
+    return m_real->error(title, text, detailedText, buttons, defBtn, options, dialogTitle);
 }
 
 Ret AutobotInteractive::showProgress(const std::string& title, Progress* progress) const

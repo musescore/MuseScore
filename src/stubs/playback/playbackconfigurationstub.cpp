@@ -47,6 +47,12 @@ void PlaybackConfigurationStub::setPlayChordWhenEditing(bool)
 {
 }
 
+muse::async::Channel<bool> PlaybackConfigurationStub::playChordWhenEditingChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 bool PlaybackConfigurationStub::playHarmonyWhenEditing() const
 {
     return false;
@@ -54,6 +60,12 @@ bool PlaybackConfigurationStub::playHarmonyWhenEditing() const
 
 void PlaybackConfigurationStub::setPlayHarmonyWhenEditing(bool)
 {
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::playHarmonyWhenEditingChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
 }
 
 PlaybackCursorType PlaybackConfigurationStub::cursorType() const

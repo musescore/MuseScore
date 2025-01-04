@@ -34,6 +34,10 @@ PreferencesPage {
         id: updateModel
     }
 
+    Component.onCompleted: {
+        updateModel.load()
+    }
+
     Column {
         width: parent.width
         spacing: root.sectionsSpacing
