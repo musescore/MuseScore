@@ -66,6 +66,9 @@ public:
     async::Notification sampleRateChanged() const override;
 
     size_t desiredAudioThreadNumber() const override;
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+
     size_t minTrackCountForMultithreading() const override;
 
     // synthesizers
@@ -80,6 +83,7 @@ public:
 
 private:
     void updateSamplesToPreallocate();
+    int m_audioDelayCompensate = 0;
 
     async::Channel<io::paths_t> m_soundFontDirsChanged;
     async::Channel<samples_t> m_samplesToPreallocateChanged;
