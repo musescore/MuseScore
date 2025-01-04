@@ -4287,10 +4287,10 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         }
 
         if (!isCueNote(note)) {
-            if (note->tieBack()) {
+            if (note->tieBackNonPartial()) {
                 m_xml.tag("tie", { { "type", "stop" } });
             }
-            if (note->tieFor() && !note->tieFor()->isLaissezVib()) {
+            if (note->tieForNonPartial()) {
                 m_xml.tag("tie", { { "type", "start" } });
             }
         }

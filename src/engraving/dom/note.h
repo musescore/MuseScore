@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_NOTE_H
-#define MU_ENGRAVING_NOTE_H
+#pragma once
 
 /**
  \file
@@ -36,6 +35,7 @@
 #include "noteevent.h"
 #include "pitchspelling.h"
 #include "symbol.h"
+#include "tie.h"
 #include "types.h"
 
 namespace mu::engraving {
@@ -64,15 +64,17 @@ static constexpr int MAX_DOTS = 4;
 class LineAttachPoint
 {
 public:
-    LineAttachPoint(EngravingItem* l, double x, double y)
-        : m_line(l), m_pos(PointF(x, y)) {}
+    LineAttachPoint(EngravingItem* l, double x, double y, bool start)
+        : m_line(l), m_pos(PointF(x, y)), m_start(start) {}
 
     const EngravingItem* line() const { return m_line; }
     const PointF pos() const { return m_pos; }
+    bool start() const { return m_start; }
 
 private:
     EngravingItem* m_line = nullptr;
     PointF m_pos = PointF(0.0, 0.0);
+    bool m_start = true;
 };
 
 //---------------------------------------------------------
@@ -295,9 +297,13 @@ public:
     GuitarBend* bendBack() const;
     Tie* tieFor() const { return m_tieFor; }
     Tie* tieBack() const { return m_tieBack; }
+    Tie* tieForNonPartial() const;
+    Tie* tieBackNonPartial() const;
     LaissezVib* laissezVib() const;
-    void setTieFor(Tie* t) { m_tieFor = t; }
-    void setTieBack(Tie* t) { m_tieBack = t; }
+    PartialTie* incomingPartialTie() const;
+    PartialTie* outgoingPartialTie() const;
+    void setTieFor(Tie* t);
+    void setTieBack(Tie* t);
     Note* firstTiedNote(bool ignorePlayback = true) const;
     const Note* lastTiedNote(bool ignorePlayback = true) const;
     Note* lastTiedNote(bool ignorePlayback = true)
@@ -308,6 +314,8 @@ public:
     int unisonIndex() const;
     void disconnectTiedNotes();
     void connectTiedNotes();
+
+    bool hasFollowingJumpItem();
 
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
@@ -441,9 +449,10 @@ public:
 
     bool hasAnotherStraightAboveOrBelow(bool above) const;
 
-    void addLineAttachPoint(PointF point, EngravingItem* line);
     std::vector<LineAttachPoint>& lineAttachPoints() { return m_lineAttachPoints; }
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return m_lineAttachPoints; }
+    void addStartLineAttachPoint(PointF point, EngravingItem* line) { addLineAttachPoint(point, line, true); }
+    void addEndLineAttachPoint(PointF point, EngravingItem* line) { addLineAttachPoint(point, line, false); }
 
     PointF posInStaffCoordinates();
 
@@ -458,6 +467,9 @@ public:
     bool shouldForceShowFret() const;
 
     void setVisible(bool v) override;
+
+    TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
+    const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };
@@ -486,11 +498,15 @@ private:
     int concertPitchIdx() const;
     void updateRelLine(int absLine, bool undoable);
 
+    static std::vector<Note*> findTiedNotes(Note* startNote, bool followPartialTies = true);
+
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
     static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
 
     void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
+
+    void addLineAttachPoint(PointF point, EngravingItem* line, bool start);
 
     bool m_ghost = false;        // ghost note
     bool m_deadNote = false;     // dead note
@@ -560,6 +576,6 @@ private:
     String m_fretString;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
+    TieJumpPointList m_jumpPoints;
 };
 } // namespace mu::engraving
-#endif

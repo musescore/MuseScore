@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_SLURANDTIESETTINGSMODEL_H
-#define MU_INSPECTOR_SLURANDTIESETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
 
@@ -42,7 +41,8 @@ public:
     enum ElementType {
         Slur,
         Tie,
-        LaissezVib
+        LaissezVib,
+        PartialTie
     };
 
     explicit SlurAndTieSettingsModel(QObject* parent, IElementRepositoryService* repository, ElementType elementType);
@@ -86,5 +86,3 @@ private:
     bool m_isLaissezVib = false;
 };
 }
-
-#endif // MU_INSPECTOR_SLURANDTIESETTINGSMODEL_H

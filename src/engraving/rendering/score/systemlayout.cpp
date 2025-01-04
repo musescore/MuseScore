@@ -1537,7 +1537,7 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, 
     for (Note* note : ch->notes()) {
         Tie* t = note->tieFor();
         if (t && !t->isLaissezVib()) {
-            TieSegment* ts = SlurTieLayout::tieLayoutFor(t, system);
+            TieSegment* ts = SlurTieLayout::layoutTieFor(t, system);
             if (ts && ts->addToSkyline()) {
                 staff->skyline().add(ts->shape().translate(ts->pos()));
                 stackedForwardTies.push_back(ts);
@@ -1545,8 +1545,8 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, 
         }
         t = note->tieBack();
         if (t) {
-            if (t->startNote()->tick() < stick) {
-                TieSegment* ts = SlurTieLayout::tieLayoutBack(t, system, ctx);
+            if (note->incomingPartialTie() || t->startNote()->tick() < stick) {
+                TieSegment* ts = SlurTieLayout::layoutTieBack(t, system, ctx);
                 if (ts && ts->addToSkyline()) {
                     staff->skyline().add(ts->shape().translate(ts->pos()));
                     stackedBackwardTies.push_back(ts);
