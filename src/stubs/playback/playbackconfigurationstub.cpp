@@ -33,6 +33,15 @@ void PlaybackConfigurationStub::setPlayNotesWhenEditing(bool)
 {
 }
 
+bool PlaybackConfigurationStub::playNotesOnMidiInput() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setPlayNotesOnMidiInput(bool)
+{
+}
+
 muse::async::Notification PlaybackConfigurationStub::playNotesWhenEditingChanged() const
 {
     return muse::async::Notification();

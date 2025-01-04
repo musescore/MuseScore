@@ -142,6 +142,10 @@ void PlaybackController::init()
         updateLoop();
     });
 
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        notifyActionCheckedChanged(MIDI_ON_CODE);
+    });
+
     configuration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
         notifyActionCheckedChanged(TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE);
     });
@@ -320,13 +324,13 @@ void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
     m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
 }
 
-void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
+void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
         return;
     }
 
-    if (!configuration()->playNotesWhenEditing()) {
+    if ((!isMidi && !configuration()->playNotesWhenEditing()) || (isMidi && !configuration()->playNotesOnMidiInput())) {
         return;
     }
 

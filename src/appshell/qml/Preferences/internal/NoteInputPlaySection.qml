@@ -27,22 +27,25 @@ import Muse.UiComponents 1.0
 BaseSection {
     id: root
 
+    title: qsTrc("appshell/preferences", "Note preview")
+
     property alias playNotesWhenEditing: playNotesBox.checked
+    property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
-    property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
+    property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
 
     signal playNotesWhenEditingChangeRequested(bool play)
+    signal notePlayDurationChangeRequested(int duration)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
-    signal notePlayDurationChangeRequested(int duration)
+    signal playNotesOnMidiInputChangeRequested(bool play)
 
     CheckBox {
         id: playNotesBox
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Play notes when editing")
-        font: ui.theme.bodyBoldFont
+        text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
 
         navigation.name: "PlayNotesBox"
         navigation.panel: root.navigation
@@ -56,9 +59,9 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: notePlayDurationControl
 
-        title: qsTrc("appshell/preferences", "Default duration:")
+        title: qsTrc("appshell/preferences", "Playback duration:")
 
-        enabled: root.playNotesWhenEditing
+        enabled: (root.playNotesWhenEditing || root.playNotesOnMidiInput)
 
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
@@ -68,7 +71,7 @@ BaseSection {
 
         navigation.name: "NotePlayDurationControl"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 4
 
         onValueEdited: function(newValue) {
             root.notePlayDurationChangeRequested(newValue)
@@ -77,7 +80,7 @@ BaseSection {
 
     CheckBox {
         id: playChordBox
-        width: parent.width
+        width: parent.width;
 
         text: qsTrc("appshell/preferences", "Play chord when editing")
 
@@ -85,7 +88,7 @@ BaseSection {
 
         navigation.name: "PlayChordBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 1
 
         onClicked: {
             root.playChordWhenEditingChangeRequested(!checked)
@@ -94,18 +97,33 @@ BaseSection {
 
     CheckBox {
         id: playChordSymbolBox
-        width: parent.width
+        width: parent.width;
 
-        text: qsTrc("appshell/preferences", "Play chord symbol when editing")
+        text: qsTrc("appshell/preferences", "Play chord symbols and Nashville numbers")
 
         enabled: root.playNotesWhenEditing
 
         navigation.name: "PlayChordSymbolBox"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 2
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: playNotesOnMidiInputBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play MIDI input")
+
+        navigation.name: "PlayNotesOnMidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 3
+
+        onClicked: {
+            root.playNotesOnMidiInputChangeRequested(!checked)
         }
     }
 }
