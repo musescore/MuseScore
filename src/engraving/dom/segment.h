@@ -276,6 +276,8 @@ public:
     bool isKeySigType() const { return m_segmentType == SegmentType::KeySig; }
     bool isAmbitusType() const { return m_segmentType == SegmentType::Ambitus; }
     bool isTimeSigType() const { return m_segmentType == SegmentType::TimeSig; }
+    bool hasTimeSigAboveStaves() const;
+    bool hasTimeSigCenteredAcrossStaves() const;
     bool isStartRepeatBarLineType() const { return m_segmentType == SegmentType::StartRepeatBarLine; }
     bool isBarLineType() const { return m_segmentType == SegmentType::BarLine; }
     bool isBreathType() const { return m_segmentType == SegmentType::Breath; }

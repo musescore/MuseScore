@@ -1441,7 +1441,7 @@ void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
         bool thisMeasureVisible = measure()->visible(staffIdx) && score()->staff(staffIdx)->show();
-        if (!all && !thisMeasureVisible) {
+        if (!all && !thisMeasureVisible && !isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
             Measure* nextMeasure = measure()->nextMeasure();
             bool nextMeasureVisible = nextMeasure
                                       && nextMeasure->system() == measure()->system()
@@ -2602,12 +2602,6 @@ double Segment::minRight() const
     for (const Shape& sh : shapes()) {
         distance = std::max(distance, sh.right());
     }
-    if (isClefType()) {
-        distance += style().styleMM(Sid::clefBarlineDistance);
-    }
-    if (trailer()) {
-        distance += style().styleMM(Sid::systemTrailerRightMargin);
-    }
     return distance;
 }
 
@@ -2631,6 +2625,19 @@ void Segment::setSpacing(double val)
 double Segment::spacing() const
 {
     return m_spacing;
+}
+
+bool Segment::hasTimeSigAboveStaves() const
+{
+    return isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+           && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES;
+}
+
+bool Segment::hasTimeSigCenteredAcrossStaves() const
+{
+    return isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+           && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES
+           && style().styleB(Sid::timeSigCenterAcrossStaveGroup);
 }
 
 bool Segment::canWriteSpannerStartEnd(track_idx_t track, const Spanner* spanner) const

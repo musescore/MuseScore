@@ -595,7 +595,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::hideTabClefAfterFirst,    false, hideTabClefs,                 0 },
         { StyleId::genClef,                  false, clefVisibility,               0 },
         { StyleId::genKeysig,                false, keysigVisibility,             0 },
-        { StyleId::genCourtesyTimesig,       false, genCourtesyTimesig,           0 },
         { StyleId::genCourtesyKeysig,        false, genCourtesyKeysig,            0 },
         { StyleId::genCourtesyClef,          false, genCourtesyClef,              0 },
         { StyleId::keySigCourtesyBarlineMode, false, ksbl,                        0 },
@@ -938,6 +937,16 @@ EditStyle::EditStyle(QWidget* parent)
     noteLineSection.widget->setMinimumSize(224, 200);
     connect(noteLineSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     groupBox_noteline->layout()->addWidget(noteLineSection.widget);
+
+    // ====================================================
+    // TIME SIG PAGE (QML)
+    // ====================================================
+
+    auto timeSigPage = createQmlWidget(
+        groupBox_timeSigSettings,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TimeSigPage.qml")));
+    timeSigPage.widget->setMinimumSize(224, 650);
+    groupBox_timeSigSettings->layout()->addWidget(timeSigPage.widget);
 
     // ====================================================
     // Figured Bass
@@ -2121,6 +2130,8 @@ PropertyValue EditStyle::getValue(StyleId idx)
     case P_TYPE::PLACEMENT_H:
     case P_TYPE::PLACEMENT_V:
     case P_TYPE::LINE_TYPE:
+    case P_TYPE::TIMESIG_PLACEMENT:
+    case P_TYPE::TIMESIG_STYLE:
     case P_TYPE::INT: {
         if (qobject_cast<QComboBox*>(sw.widget)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
@@ -2246,6 +2257,8 @@ void EditStyle::setValues()
         case P_TYPE::DYNAMIC_TYPE:
         case P_TYPE::ACCIDENTAL_ROLE:
         case P_TYPE::TIE_PLACEMENT:
+        case P_TYPE::TIMESIG_PLACEMENT:
+        case P_TYPE::TIMESIG_STYLE:
         case P_TYPE::INT: {
             int value = val.toInt();
             if (qobject_cast<QComboBox*>(sw.widget)) {

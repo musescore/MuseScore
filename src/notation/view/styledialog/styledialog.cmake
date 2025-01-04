@@ -22,4 +22,6 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/glissandosectionmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/notelinesectionmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notelinesectionmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/timesigpagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/timesigpagemodel.h
     )
