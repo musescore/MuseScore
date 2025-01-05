@@ -40,6 +40,10 @@ set(MODULE_LINK
     liblouis
     )
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Qml)
+endif()
+
 setup_module()
 
 if (MUE_BUILD_BRAILLE_TESTS)

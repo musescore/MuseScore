@@ -121,6 +121,10 @@ if (MUSE_MODULE_DRAW_TRACE)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_TRACE)
 endif()
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Gui Qt::Svg)
+endif()
+
 setup_module()
 
 if (MUSE_MODULE_DRAW_TESTS)

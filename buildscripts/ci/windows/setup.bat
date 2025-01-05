@@ -36,17 +36,6 @@ IF ERRORLEVEL 1 ( choco install -y 7zip.install )
 SET TEMP_DIR="c:\TEMP\musescore"
 MKDIR %TEMP_DIR%
 
-:: Install Qt
-ECHO "=== Install Qt ==="
-
-:: r2 - added websocket module
-SET "Qt_ARCHIVE=Qt624_msvc2019_64_r2.7z"
-SET "QT_DIR=C:\Qt\6.2.4"
-SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
-
-CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
-CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
-
 :: Install dependencies
 ECHO "=== Install dependencies ==="
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/musescore_dependencies_win32.7z" -O %TEMP_DIR%\musescore_dependencies_win32.7z
