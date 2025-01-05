@@ -48,7 +48,7 @@ ListItemBlank {
     RowLayout {
         anchors.fill: parent
 
-        // 70 = 32+2+32+4 for the buttons and spacing in InstrumentsTreeItemDelegate
+        // 70 = 32+2+32+4 for the buttons and spacing in LayoutPanelItemDelegate
         // to make sure that the Add button aligns vertically with the text of the item above it
         anchors.leftMargin: sideMargin + 70 + 12 * styleData.depth
         spacing: 4

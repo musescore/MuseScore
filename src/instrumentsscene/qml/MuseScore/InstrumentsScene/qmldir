@@ -1,4 +1,4 @@
 module MuseScore.InstrumentsScene
 ChooseInstrumentsPage 1.0 ChooseInstrumentsPage.qml
-InstrumentsPanel 1.0 InstrumentsPanel.qml
+LayoutPanel 1.0 LayoutPanel.qml
 InstrumentsDialog 1.0 InstrumentsDialog.qml

@@ -30,6 +30,7 @@
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
+class Score;
 class Chord;
 class EngravingItem;
 class KeySig;
@@ -37,6 +38,7 @@ class Note;
 class Rest;
 class Segment;
 class System;
+class Staff;
 class Tuplet;
 
 enum class Key;
@@ -92,6 +94,7 @@ extern bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff
 
 extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests);
 extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords);
+extern std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves = {});
 
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 
