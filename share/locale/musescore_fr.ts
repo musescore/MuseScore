@@ -19216,7 +19216,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="241"/>
         <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
-        <translation>Type et nom de jeton attendus ‘EndElement %1’, actuellement ‘%2 %3’</translation>
+        <translation>type et nom de jeton attendus ‘EndElement %1’, actuellement ‘%2 %3’</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="197"/>

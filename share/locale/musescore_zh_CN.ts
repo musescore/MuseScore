@@ -3176,7 +3176,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7921"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation>1＆3声部位于谱表上方，2＆4位于谱表下方</translation>
+        <translation>1＆3声部位于谱表上方，2＆4声部位于谱表下方</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
@@ -5807,7 +5807,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
         <source>Value:</source>
-        <translation>分数：</translation>
+        <translation>数值：</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="98"/>
@@ -7112,7 +7112,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1821"/>
         <source>Toggle trill</source>
-        <translation>颤音切换开关</translation>
+        <translation>切换颤音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2334"/>
@@ -7122,12 +7122,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1869"/>
         <source>Toggle up bow</source>
-        <translation>上弓切换开关</translation>
+        <translation>切换上弓</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1875"/>
         <source>Toggle down bow</source>
-        <translation>下弓切换开关</translation>
+        <translation>切换下弓</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1602"/>
@@ -8103,7 +8103,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1610"/>
         <source>Toggle concert pitch</source>
-        <translation>标准音高切换开关</translation>
+        <translation>切换标准音高</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
@@ -8451,7 +8451,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2267"/>
         <source>Toggle rest</source>
-        <translation>休止符开关</translation>
+        <translation>切换休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2274"/>
@@ -9095,7 +9095,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="68"/>
         <source>Toggle metronome playback</source>
-        <translation>节拍器播放切换开关</translation>
+        <translation>切换节拍器播放</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="75"/>
@@ -9129,7 +9129,7 @@ text x-height):</source>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="93"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="94"/>
         <source>Play repeats</source>
-        <translation>重复记号播放开关</translation>
+        <translation>播放重复记号</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="425"/>
@@ -9342,7 +9342,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>节奏性斜杠记谱切换开关(&amp;A)</translation>
+        <translation>切换节奏性斜杠记谱(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
@@ -9782,22 +9782,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
         <source>Toggle inverted turn</source>
-        <translation>切换逆回旋音</translation>
+        <translation>切换逆回音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
         <source>Add ornament: inverted turn</source>
-        <translation>添加装饰音：逆回旋音</translation>
+        <translation>添加装饰音：逆回音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
         <source>Toggle turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>切换逆回音（穿线）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
         <source>Add ornament: turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：逆回音（穿线）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1822"/>
@@ -9807,7 +9807,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1827"/>
         <source>Toggle short trill</source>
-        <translation>短颤音切换开关</translation>
+        <translation>切换短颤音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
@@ -9847,32 +9847,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1851"/>
         <source>Toggle shake</source>
-        <translation type="unfinished"/>
+        <translation>切换颤抖音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1852"/>
         <source>Add ornament: shake</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音： 颤抖音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1857"/>
         <source>Toggle shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <translation>切换颤抖音（穆法特）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1858"/>
         <source>Add ornament: shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音： 颤抖音（穆法特）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1863"/>
         <source>Toggle tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>切换强颤音（库普兰）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
         <source>Add ornament: tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：强颤音（库普兰）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
@@ -9943,12 +9943,12 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
         <source>Toggle multimeasure rests</source>
-        <translation>长休止符切换开关</translation>
+        <translation>切换长休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1965"/>
         <source>Toggle empty staves</source>
-        <translation>空谱表切换开关</translation>
+        <translation>空谱表切换</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1989"/>
@@ -10060,7 +10060,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
         <source>All voices on staff</source>
-        <translation>乐谱上的所有声部</translation>
+        <translation>谱表上的所有声部</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
@@ -10218,7 +10218,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload Muse Sampler</source>
-        <translation>重加载Muse采样器</translation>
+        <translation>重新加载Muse采样器</translation>
     </message>
 </context>
 <context>
@@ -10357,7 +10357,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="329"/>
         <source>Revert</source>
-        <translation>回复</translation>
+        <translation>还原</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="340"/>
@@ -10669,7 +10669,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="358"/>
         <source>&amp;System</source>
-        <translation>总谱(&amp;S)</translation>
+        <translation>系统(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="370"/>
@@ -11501,7 +11501,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
-        <translation type="unfinished"/>
+        <translation>当乐器被隐藏/显示时，对应音轨也会被静音/解除静音</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="102"/>
@@ -12998,7 +12998,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
         <source>Extension line segment</source>
-        <translation type="unfinished"/>
+        <translation>唱词延长区段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
@@ -13008,7 +13008,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
         <source>Time tick anchor</source>
-        <translation type="unfinished"/>
+        <translation>时钟节拍锚点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
@@ -13320,22 +13320,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2306"/>
         <source>Slide out down (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波纹下滑出</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2307"/>
         <source>Slide out up (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波纹上滑出</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2308"/>
         <source>Slide in above (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波纹滑入（上）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2309"/>
         <source>Slide in below (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波纹滑入（下）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2426"/>
@@ -13415,7 +13415,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2481"/>
         <source>To coda (symbol)</source>
-        <translation>转到coda（记号）</translation>
+        <translation>转到Coda（记号）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2722"/>
@@ -13670,12 +13670,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
         <source>Formatting color</source>
-        <translation>设置颜色格式</translation>
+        <translation>格式化颜色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
         <source>Desynchronized color</source>
-        <translation type="unfinished"/>
+        <translation>未同步颜色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -15432,7 +15432,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1725"/>
         <source>Keep measures on the same system</source>
-        <translation>静止此处换行</translation>
+        <translation>禁止在此换行</translation>
     </message>
 </context>
 <context>
@@ -16687,17 +16687,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation type="unfinished"/>
+        <translation>谐和地重新表达近似相等的变音号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3459"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation type="unfinished"/>
+        <translation>谐和地重新表达相等的变音号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3460"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation type="unfinished"/>
+        <translation>谐和地重新表达变音波形号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3466"/>
@@ -17672,7 +17672,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5315"/>
         <source>Inverted turn</source>
-        <translation>逆旋音</translation>
+        <translation>逆回音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5316"/>
@@ -17717,7 +17717,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5631"/>
         <source>Right and left repeat sign</source>
-        <translation>结束与起始反复号</translation>
+        <translation>结束并起始反复号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5632"/>
@@ -18140,7 +18140,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
         <source>Tremolo sawtooth wide</source>
-        <translation>震音锯齿宽</translation>
+        <translation>宽震音锯齿</translation>
     </message>
 </context>
 <context>
@@ -18999,7 +18999,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="314"/>
         <source>Quarter</source>
-        <translation>4分音符</translation>
+        <translation>四分音符</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="315"/>
@@ -19186,7 +19186,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="96"/>
         <source>Debug message:</source>
-        <translation>排障消息：</translation>
+        <translation>调试消息：</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="98"/>
@@ -19471,7 +19471,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml" line="42"/>
         <source>Spread delay</source>
-        <translation>琶音速率</translation>
+        <translation>琶音时程</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/staffs/staffsettingsmodel.cpp" line="32"/>
@@ -20415,7 +20415,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="64"/>
         <source>Codetta</source>
-        <translation>Codetta（小尾声记号）</translation>
+        <translation>小尾声（Codetta）</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="65"/>
@@ -22234,7 +22234,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="167"/>
         <source>Sorry, we are unable to load these sounds right now</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，我们现在无法加载这些音效</translation>
     </message>
 </context>
 <context>
@@ -22396,7 +22396,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="166"/>
         <source>Duplicate</source>
-        <translation>复制</translation>
+        <translation>创建副本</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="167"/>
@@ -27242,7 +27242,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="679"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>此乐器上的音色标志可能会重置，但谱表文本将保留。此操作无法撤销。</translation>
+        <translation>此乐器上的音色旗标可能会被重置，但谱表文本将被保留。此操作无法撤销。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -27287,7 +27287,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation>Aux送出</translation>
+        <translation>辅助输出</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
@@ -27352,7 +27352,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>声音标志可以重置，但谱表文本将保留。此操作无法撤消。</translation>
+        <translation>音色旗标可能被重置，但谱表文本将被保留。此操作无法撤消。</translation>
     </message>
 </context>
 <context>
@@ -29477,7 +29477,7 @@ failed.</source>
         <source>unchecked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'off' state of a toggle-able ui item.</extracomment>
-        <translation>已弃选</translation>
+        <translation>未勾选</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="81"/>
@@ -29770,7 +29770,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation>您已拥您有MuseScore Studio的最新版本。请访问&lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt;了解即将到来的消息。</translation>
+        <translation>您已拥有最新版本的MuseScore Studio。请访问&lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt;了解更多前瞻性内容。</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
@@ -29800,7 +29800,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation>阅读%1发布通告</translation>
+        <translation>阅读%1版本说明</translation>
     </message>
     <message>
         <source>No thanks</source>

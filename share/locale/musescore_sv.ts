@@ -12441,7 +12441,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1156"/>
         <source>Tuplet</source>
-        <translation>Triol och &lt;i&gt;N&lt;/i&gt;-ol</translation>
+        <translation>Triol och N-ol</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
