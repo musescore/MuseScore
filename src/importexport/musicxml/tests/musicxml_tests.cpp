@@ -986,6 +986,9 @@ TEST_F(MusicXml_Tests, pedalStyles) {
 TEST_F(MusicXml_Tests, placementDefaults) {
     musicXmlImportTestRef("testPlacementDefaults");
 }
+TEST_F(MusicXml_Tests, playtech) {
+    musicXmlIoTest("testPlaytech");
+}
 TEST_F(MusicXml_Tests, printSpacingNo) {
     musicXmlIoTestRef("testPrintSpacingNo");
 }
