@@ -616,7 +616,6 @@ private:
     muse::String m_metroText;
     muse::String m_rehearsalText;
     muse::String m_dynaVelocity;
-    muse::String m_tempo;
     muse::String m_sndCoda;
     muse::String m_sndDacapo;
     muse::String m_sndDalsegno;

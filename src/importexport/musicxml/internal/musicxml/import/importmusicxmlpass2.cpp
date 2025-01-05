@@ -3452,11 +3452,11 @@ void MusicXmlParserDirection::direction(const String& partId,
         } else {
             if (!m_wordsText.empty() || !m_metroText.empty()) {
                 PlayingTechniqueType technique = PlayingTechniqueType::Undefined;
-                if (m_play.empty()) {
-                    technique = getPlayingTechnique();
+                if (!m_play.empty()) {
+                    technique = TConv::fromXml(m_play.toAscii().constChar(), PlayingTechniqueType::Undefined);
+                    m_play.clear();
                 } else {
-                    technique = TConv::fromXml(m_play, PlayingTechniqueType::Undefined);
-                    m_play = "";
+                    technique = getPlayingTechnique();
                 }
                 isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty() && placement() == u"below";
                 if (isExpressionText) {
@@ -3576,7 +3576,7 @@ void MusicXmlParserDirection::direction(const String& partId,
             }
         }
 
-        if (!m_dynaVelocity.isEmpty()) {
+        if (!m_dynaVelocity.empty()) {
             int dynaValue = round(m_dynaVelocity.toDouble() * 0.9);
             if (dynaValue > 127) {
                 dynaValue = 127;
@@ -7446,7 +7446,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
     Fraction offset;
-    if (!placement.isEmpty()) {
+    if (!placement.empty()) {
         ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
         ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         ha->resetProperty(Pid::OFFSET);
