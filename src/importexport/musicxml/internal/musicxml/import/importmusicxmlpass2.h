@@ -565,6 +565,7 @@ private:
                std::vector<MusicXmlSpannerDesc>& stops);
     muse::String metronome(double& r);
     void sound();
+    void play();
     void dynamics();
     void otherDirection();
     void handleRepeats(engraving::Measure* measure, const engraving::Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
@@ -625,6 +626,7 @@ private:
     muse::String m_codaId;
     muse::String m_segnoId;
     muse::String m_placement;
+    muse::String m_play;
     bool m_hasDefaultY = false;
     double m_defaultY = 0.0;
     bool m_hasRelativeY = false;
