@@ -105,3 +105,11 @@ endif (NOT APPLE AND NOT MINGW AND NOT MSVC AND CMAKE_BUILD_TYPE MATCHES "DEBUG"
 if (BUILD_PCH)
     target_use_pch(libmscore)
 endif (BUILD_PCH)
+
+if (APPLE)
+  # silence some 150+ annoying warnings from qvector.h
+  set_target_properties( libmscore PROPERTIES
+    COMPILE_FLAGS "-Wno-shorten-64-to-32"
+  )
+endif (APPLE)
+
