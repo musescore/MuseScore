@@ -1788,6 +1788,25 @@ enum class Sid {
     autoplaceEnabled,
     defaultsVersion,
 
+    courtesyChangesBeforeBarlineRepeats,
+    courtesyChangesBeforeBarlineOtherJumps,
+
+    placeClefsBeforeRepeats,
+    changesBetweenEndStartRepeat,
+
+    showCourtesiesRepeats,
+    useParensRepeatCourtesies,
+    showCourtesiesFinalBar,
+
+    showCourtesiesOtherJumps,
+    useParensOtherJumpCourtesies,
+
+    showCourtesiesAfterCancellingRepeats,
+    useParensRepeatCourtesiesAfterCancelling,
+
+    showCourtesiesAfterCancellingOtherJumps,
+    useParensOtherJumpCourtesiesAfterCancelling,
+
     STYLES
     ///\}
 };
