@@ -469,6 +469,7 @@ private:
     TrillHash m_trillStart;
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
+    PlayingTechniqueType m_currPtt;
 };
 
 //---------------------------------------------------------
@@ -5066,9 +5067,9 @@ void ExportMusicXml::playText(PlayTechAnnotation const* const annot, staff_idx_t
     const PlayingTechniqueType type = annot->techniqueType();
     if (type == PlayingTechniqueType::Pizzicato) {
         m_xml.tag("sound", { { "pizzicato", "yes" } });
-    } else if (type == PlayingTechniqueType::Natural) {
+    } else if ((type != PlayingTechniqueType::Pizzicato) && (m_currPtt == PlayingTechniqueType::Pizzicato)) {
         m_xml.tag("sound", { { "pizzicato", "no" } });
-    } else if (type != PlayingTechniqueType::Undefined) {
+    } else if ((type != PlayingTechniqueType::Undefined) && (type != PlayingTechniqueType::Natural)) {
         m_xml.startElement("sound");
         m_xml.startElement("play");
         if (type == PlayingTechniqueType::Mute) {
@@ -5081,6 +5082,7 @@ void ExportMusicXml::playText(PlayTechAnnotation const* const annot, staff_idx_t
         m_xml.endElement();
         m_xml.endElement();
     }
+    m_currPtt = type;
 
     directionETag(m_xml, staff);
 }
