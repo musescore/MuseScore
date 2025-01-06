@@ -217,18 +217,20 @@ Tie::Tie(const ElementType& type, EngravingItem* parent)
 
 void Tie::updatePossibleJumpPoints()
 {
-    const Note* note = toNote(parentItem());
-    const Chord* chord = note->chord();
-    const Measure* measure = chord->measure();
     if (!tieJumpPoints()) {
         return;
     }
 
     tieJumpPoints()->clear();
 
+    const Note* note = toNote(parentItem());
+    const Chord* chord = note->chord();
+
     if (!chord->hasFollowingJumpItem()) {
         return;
     }
+
+    const Measure* measure = chord->measure();
 
     int jumpPointIdx = 0;
 
@@ -276,7 +278,7 @@ void Tie::addTiesToJumpPoints()
             jumpPoint->undoSetActive(true);
             continue;
         }
-        jumpPoints->addTieToScore(jumpPoint);
+        jumpPoints->undoAddTieToScore(jumpPoint);
     }
 }
 
@@ -482,10 +484,10 @@ const String TieJumpPoint::menuTitle() const
 {
     const Measure* measure = m_note->findMeasure();
     const int measureNo = measure ? measure->no() + 1 : 0;
-    const TranslatableString tieTo("engraving", "Tie to ");
-    const String title = tieTo.str + precedingJumpItemName() + u" " + muse::mtrc("engraving", "(m. %1)").arg(measureNo);
+    const String measureStr = String::fromStdString(std::to_string(measureNo));
 
-    return title;
+    //: %1 represents the preceding jump item eg. coda. %2 represents the measure number
+    return muse::mtrc("engraving", "Tie to %1 (m. %2)").arg(precedingJumpItemName(), measureStr);
 }
 
 String TieJumpPoint::precedingJumpItemName() const
@@ -495,7 +497,8 @@ String TieJumpPoint::precedingJumpItemName() const
     const Measure* measure = seg->measure();
 
     if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
-        return muse::mtrc("engraving", "start of score");
+        //: Used at %1 in the string "Tie to %1 (m. %2)"
+        return muse::mtrc("engraving", "start of score", "partial tie menu");
     }
 
     // Markers
@@ -510,9 +513,11 @@ String TieJumpPoint::precedingJumpItemName() const
         }
 
         if (marker->markerType() == MarkerType::CODA || marker->markerType() == MarkerType::VARCODA) {
-            return muse::mtrc("engraving", "coda");
+            //: Used at %1 in the string "Tie to %1 (m. %2)"
+            return muse::mtrc("engraving", "coda", "partial tie menu");
         } else {
-            return muse::mtrc("engraving", "segno");
+            //: Used at %1 in the string "Tie to %1 (m. %2)"
+            return muse::mtrc("engraving", "segno", "partial tie menu");
         }
     }
 
@@ -525,12 +530,14 @@ String TieJumpPoint::precedingJumpItemName() const
 
         Volta* volta = toVolta(spanner.value);
 
-        return muse::mtrc("engraving", "“%1” volta").arg(volta->beginText());
+        //: Used at %1 in the string "Tie to %1 (m. %2)". %1 in this string represents the volta's text set by the user
+        return muse::mtrc("engraving", "“%1” volta", "partial tie menu").arg(volta->beginText());
     }
 
     // Repeat barlines
     if (measure->repeatStart()) {
-        return muse::mtrc("engraving", "start repeat");
+        //: Used at %1 in the string "Tie to %1 (m. %2)"
+        return muse::mtrc("engraving", "start repeat", "partial tie menu");
     }
 
     for (Segment* prevSeg = seg->prev(SegmentType::BarLineType); prevSeg && prevSeg->tick() == seg->tick();
@@ -542,15 +549,18 @@ String TieJumpPoint::precedingJumpItemName() const
 
         BarLine* bl = toBarLine(el);
         if (bl->barLineType() & (BarLineType::START_REPEAT | BarLineType::END_START_REPEAT)) {
-            return muse::mtrc("engraving", "start repeat");
+            //: Used at %1 in the string "Tie to %1 (m. %2)"
+            return muse::mtrc("engraving", "start repeat", "partial tie menu");
         }
     }
 
     if (m_note->tieBack() && m_note->tieBack()->startNote()) {
-        return muse::mtrc("engraving", "next note");
+        //: Used at %1 in the string "Tie to %1 (m. %2)"
+        return muse::mtrc("engraving", "next note", "partial tie menu");
     }
 
-    return muse::mtrc("engraving", "invalid");
+    //: Used at %1 in the string "Tie to %1 (m. %2)"
+    return muse::mtrc("engraving", "invalid", "partial tie menu");
 }
 
 //---------------------------------------------------------
@@ -613,12 +623,12 @@ void TieJumpPointList::toggleJumpPoint(const String& id)
     if (checked) {
         undoRemoveTieFromScore(end);
     } else {
-        addTieToScore(end);
+        undoAddTieToScore(end);
     }
     score->endCmd();
 }
 
-void TieJumpPointList::addTieToScore(TieJumpPoint* jumpPoint)
+void TieJumpPointList::undoAddTieToScore(TieJumpPoint* jumpPoint)
 {
     Note* note = jumpPoint->note();
     Score* score = note ? note->score() : nullptr;
@@ -697,8 +707,8 @@ Tie* Tie::changeTieType(Tie* oldTie, Note* endNote)
         return nullptr;
     }
 
-    TranslatableString undoCmd = addPartialTie ? TranslatableString("engraving", "Replace full tie with partial tie") : TranslatableString(
-        "engraving", "Replace partial tie with full tie");
+    TranslatableString undoCmd = addPartialTie ? TranslatableString("engraving", "Replace full tie with partial tie")
+                                 : TranslatableString("engraving", "Replace partial tie with full tie");
     Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(score->dummy()->note());
 
     score->undoRemoveElement(oldTie);

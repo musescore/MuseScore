@@ -36,7 +36,7 @@ StyledPopupView {
     property alias navigationOrderStart: partialTieNavPanel.order
     readonly property alias navigationOrderEnd: partialTieNavPanel.order
 
-    property QtObject model: partialTiePopupModel
+    readonly property alias model: partialTiePopupModel
 
     showArrow: false
 

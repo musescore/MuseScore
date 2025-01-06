@@ -33,7 +33,7 @@ StyledPopupView {
     property alias navigationOrderStart: capoSettingsNavPanel.order
     readonly property alias navigationOrderEnd: capoSettingsNavPanel.order
 
-    property QtObject model: capoModel
+    readonly property alias model: capoModel
 
 
     contentWidth: content.width
