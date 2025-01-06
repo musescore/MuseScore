@@ -49,6 +49,12 @@ endif()
 set(OPUS_INCLUDE_DIRS ${OPUS_LIB_DIR}/include)
 set(OPUS_LIBRARIES opus)
 
+set_target_properties(opus PROPERTIES
+    AUTOMOC OFF
+    AUTOUIC OFF
+    AUTORCC OFF
+)
+
 target_no_warning(opus -Wno-conversion)
 target_no_warning(opus -Wno-truncate)
 target_no_warning(opus -Wno-uninitialized)
