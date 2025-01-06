@@ -35,6 +35,7 @@
 
 #include "log.h"
 #include <iostream>
+#include <iostream>
 
 using namespace mu::converter;
 using namespace mu::project;
@@ -263,28 +264,9 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 
         Job job;
         job.in = correctUserInputPath(obj["in"].toString());
-<<<<<<< HEAD
         job.out = correctUserInputPath(obj["out"].toString());
 
-        QJsonObject transposeOptionsObj = obj["transpose"].toObject();
-        if (!transposeOptionsObj.isEmpty()) {
-            RetVal<TransposeOptions> transposeOptions = ConverterUtils::parseTransposeOptions(transposeOptionsObj);
-            if (!transposeOptions.ret) {
-                rv.ret = transposeOptions.ret;
-                return rv;
-            }
-
-            job.transposeOptions = transposeOptions.val;
-        }
-
         if (!job.in.empty() && !job.out.empty()) {
-        
-=======
-
->>>>>>> c7c5a3f4a0 (Code style adjustment)
-        QJsonValue outValue = obj["out"];
-        if (outValue.isString()) {
-            job.out = correctUserInputPath(outValue.toString());
             rv.val.push_back(std::move(job));
         } else if (outValue.isArray()) {
             QJsonArray outArray = outValue.toArray();
