@@ -34,9 +34,9 @@ StyledPopupView {
 
     property variant pedalState: harpModel.pedalState
 
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-    property int navigationOrderEnd: isDiagramNavPanel.order
+    property alias notationViewNavigationSection: pedalSettingsNavPanel.section
+    property alias navigationOrderStart: pedalSettingsNavPanel.order
+    readonly property alias navigationOrderEnd: isDiagramNavPanel.order
 
     contentWidth: menuItems.width
     contentHeight: menuItems.height
@@ -121,8 +121,6 @@ StyledPopupView {
             id: pedalSettingsNavPanel
             name: "PedalSettings"
             direction: NavigationPanel.Vertical
-            section: root.notationViewNavigationSection
-            order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Pedal settings buttons")
         }
 

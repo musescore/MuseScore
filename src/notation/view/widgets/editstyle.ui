@@ -8107,7 +8107,7 @@
                  </item>
                 </layout>
                </item>
-                              <item>
+               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_17">
                  <item>
                   <widget class="QLabel" name="minHangingTieLengthLabel">
@@ -15467,6 +15467,8 @@ first note of the system</string>
   <tabstop>resetTieMinDistance</tabstop>
   <tabstop>minTieLength</tabstop>
   <tabstop>resetMinTieLength</tabstop>
+  <tabstop>minHangingTieLength</tabstop>
+  <tabstop>resetMinHangingTieLength</tabstop>
   <tabstop>minLaissezVibLength</tabstop>
   <tabstop>resetMinLaissezVibLength</tabstop>
   <tabstop>laissezVibUseSmufl</tabstop>

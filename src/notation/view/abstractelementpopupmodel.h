@@ -38,7 +38,6 @@ class AbstractElementPopupModel : public QObject, public muse::Injectable, publi
 
     Q_PROPERTY(PopupModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(QRect itemRect READ itemRect NOTIFY itemRectChanged)
-    Q_PROPERTY(bool canOpen READ canOpen CONSTANT)
 
 public:
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
@@ -60,9 +59,7 @@ public:
     PopupModelType modelType() const;
     QRect itemRect() const;
 
-    virtual bool canOpen() const { return true; }
-
-    static bool supportsPopup(const mu::engraving::ElementType& elementType);
+    static bool supportsPopup(const mu::engraving::EngravingItem* element);
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
 
     virtual void init();

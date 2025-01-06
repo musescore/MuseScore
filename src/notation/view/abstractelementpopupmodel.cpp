@@ -21,6 +21,7 @@
  */
 
 #include "abstractelementpopupmodel.h"
+#include "internal/partialtiepopupmodel.h"
 #include "log.h"
 
 using namespace mu::notation;
@@ -57,9 +58,23 @@ QRect AbstractElementPopupModel::itemRect() const
     return m_itemRect;
 }
 
-bool AbstractElementPopupModel::supportsPopup(const engraving::ElementType& elementType)
+bool AbstractElementPopupModel::supportsPopup(const EngravingItem* element)
 {
-    return modelTypeFromElement(elementType) != PopupModelType::TYPE_UNDEFINED;
+    if (!element) {
+        return false;
+    }
+
+    const PopupModelType modelType = modelTypeFromElement(element->type());
+    if (modelType == PopupModelType::TYPE_UNDEFINED) {
+        return false;
+    }
+
+    switch (modelType) {
+    case PopupModelType::TYPE_PARTIAL_TIE:
+        return PartialTiePopupModel::canOpen(element);
+    default:
+        return true;
+    }
 }
 
 PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::ElementType& elementType)
@@ -184,10 +199,6 @@ void AbstractElementPopupModel::init()
     }
 
     m_item = selection->element();
-
-    if (!canOpen()) {
-        return;
-    }
 
     undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
         for (ElementType type : dependentElementTypes()) {

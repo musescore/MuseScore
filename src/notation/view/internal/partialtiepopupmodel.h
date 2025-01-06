@@ -18,7 +18,7 @@ public:
 
     QVariantList items() const;
     bool tieDirection() const;
-    bool canOpen() const override;
+    static bool canOpen(const EngravingItem* element);
     QPointF dialogPosition() const;
 
     Q_INVOKABLE void init() override;

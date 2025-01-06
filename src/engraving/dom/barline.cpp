@@ -103,8 +103,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     // createMMRest will then set for the mmrest directly
     Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
 
-    BarLineType prevBarType = bl->barLineType();
-
     switch (barType) {
     case BarLineType::END:
     case BarLineType::NORMAL:

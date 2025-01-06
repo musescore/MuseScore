@@ -75,10 +75,6 @@ Item {
         var component = prv.componentByType(elementType)
 
         var popup = loader.loadPopup(component, elementRect)
-        if (!popup.model.canOpen) {
-            loader.unloadPopup()
-            return
-        }
         popup.open()
     }
 

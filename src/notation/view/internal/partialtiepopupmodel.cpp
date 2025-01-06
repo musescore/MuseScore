@@ -22,9 +22,13 @@ bool PartialTiePopupModel::tieDirection() const
     return tieItem->up();
 }
 
-bool PartialTiePopupModel::canOpen() const
+bool PartialTiePopupModel::canOpen(const EngravingItem* element)
 {
-    Tie* tieItem = tie();
+    if (!element->isTieSegment()) {
+        return false;
+    }
+
+    Tie* tieItem = toTieSegment(element)->tie();
     if (!tieItem || !tieItem->tieJumpPoints()) {
         return false;
     }

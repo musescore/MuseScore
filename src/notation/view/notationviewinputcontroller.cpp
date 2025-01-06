@@ -137,7 +137,7 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (AbstractElementPopupModel::supportsPopup(type)) {
+        if (AbstractElementPopupModel::supportsPopup(selectedItem)) {
             m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
         }
     });
@@ -1231,7 +1231,7 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
 
     ElementType type = item->type();
 
-    if (AbstractElementPopupModel::supportsPopup(type)) {
+    if (AbstractElementPopupModel::supportsPopup(item)) {
         m_view->toggleElementPopup(type, item->canvasBoundingRect());
     }
 }

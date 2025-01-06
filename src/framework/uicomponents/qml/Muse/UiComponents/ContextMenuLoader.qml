@@ -48,7 +48,7 @@ Item {
     height: 0
 
     onNotationViewNavigationSectionChanged: function() {
-        contextMenuLoader.item.notationViewNavigationSection = container.notationViewNavigationSection
+        contextMenuLoader.item.navigationSectionOverride = container.notationViewNavigationSection
     }
     onNavigationOrderStartChanged: function() {
         contextMenuLoader.item.navigationOrderStart = container.navigationOrderStart

@@ -32,9 +32,9 @@ StyledPopupView {
     id: root
     margins: 0
 
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-    property int navigationOrderEnd: partialTieNavPanel.order
+    property alias notationViewNavigationSection: partialTieNavPanel.section
+    property alias navigationOrderStart: partialTieNavPanel.order
+    readonly property alias navigationOrderEnd: partialTieNavPanel.order
 
     property QtObject model: partialTiePopupModel
 
@@ -59,11 +59,20 @@ StyledPopupView {
         root.setOpensUpward(opensUp)
     }
 
-    contentWidth: content.width
-    contentHeight: content.childrenRect.height
+    contentWidth: tieMenuLoader.width
+    contentHeight: tieMenuLoader.childrenRect.height
 
-    ColumnLayout {
-        id: content
+    ContextMenuLoader {
+        id: tieMenuLoader
+        closeMenuOnSelection: false
+        focusOnOpened: false
+        opensUpward: root.opensUpward
+
+        items: partialTiePopupModel.items
+
+        onHandleMenuItem: function(itemId) {
+            partialTiePopupModel.toggleItemChecked(itemId)
+        }
 
         PartialTiePopupModel {
             id: partialTiePopupModel
@@ -73,7 +82,6 @@ StyledPopupView {
             }
 
             onItemsChanged: function() {
-                tieMenuLoader.items = partialTiePopupModel.items
                 tieMenuLoader.show(Qt.point(0, 0))
             }
         }
@@ -82,25 +90,10 @@ StyledPopupView {
             partialTiePopupModel.init()
         }
 
-        ContextMenuLoader {
-            id: tieMenuLoader
-            closeMenuOnSelection: false
-            focusOnOpened: false
-            opensUpward: root.opensUpward
-
-            items: partialTiePopupModel.items
-
-            onHandleMenuItem: function(itemId) {
-                partialTiePopupModel.toggleItemChecked(itemId)
-            }
-        }
-
         NavigationPanel {
             id: partialTieNavPanel
             name: "PartialTieMenu"
             direction: NavigationPanel.Vertical
-            section: root.notationViewNavigationSection
-            order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Partial tie menu items")
 
             onSectionChanged: function() {
