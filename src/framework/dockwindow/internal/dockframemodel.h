@@ -42,11 +42,12 @@ class DockFrameModel : public QObject, public muse::Injectable
     Q_PROPERTY(QVariantList tabs READ tabs NOTIFY tabsChanged)
 
     Q_PROPERTY(QQmlComponent * titleBar READ titleBar NOTIFY titleBarChanged)
-    Q_PROPERTY(bool titleBarVisible READ titleBarVisible NOTIFY titleBarVisibleChanged)
+    Q_PROPERTY(bool titleBarAllowed READ titleBarAllowed NOTIFY titleBarAllowedChanged)
     Q_PROPERTY(bool isHorizontalPanel READ isHorizontalPanel NOTIFY isHorizontalPanelChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockChanged)
     Q_PROPERTY(QVariant currentDockContextMenuModel READ currentDockContextMenuModel NOTIFY currentDockChanged)
+    Q_PROPERTY(QVariant currentDockToolbarComponent READ currentDockToolbarComponent NOTIFY currentDockChanged)
 
     Q_PROPERTY(bool highlightingVisible READ highlightingVisible NOTIFY highlightingVisibleChanged)
     Q_PROPERTY(QRect highlightingRect READ highlightingRect NOTIFY highlightingVisibleChanged)
@@ -60,11 +61,12 @@ public:
     QVariantList tabs() const;
 
     QQmlComponent* titleBar() const;
-    bool titleBarVisible() const;
+    bool titleBarAllowed() const;
     bool isHorizontalPanel() const;
     QObject* navigationSection() const;
     QString currentDockUniqueName() const;
     QVariant currentDockContextMenuModel() const;
+    QVariant currentDockToolbarComponent() const;
 
     bool highlightingVisible() const;
     QRect highlightingRect() const;
@@ -78,7 +80,7 @@ signals:
     void frameChanged(QQuickItem* frame);
     void tabsChanged();
     void titleBarChanged();
-    void titleBarVisibleChanged(bool visible);
+    void titleBarAllowedChanged(bool visible);
     void isHorizontalPanelChanged();
     void navigationSectionChanged();
     void currentDockChanged();
@@ -88,7 +90,7 @@ private:
     bool eventFilter(QObject* watched, QEvent* event);
 
     void listenChangesInFrame();
-    void setTitleBarVisible(bool visible);
+    void setTitleBarAllowed(bool allowed);
     void setIsHorizontalPanel(bool is);
 
     KDDockWidgets::DockWidgetBase* currentDockWidget() const;
@@ -102,7 +104,7 @@ private:
 
     KDDockWidgets::Frame* m_frame = nullptr;
     QQmlComponent* m_titleBar = nullptr;
-    bool m_titleBarVisible = false;
+    bool m_titleBarAllowed = false;
     bool m_isHorizontalPanel = false;
     QObject* m_navigationSection = nullptr;
 };
