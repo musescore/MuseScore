@@ -70,7 +70,7 @@ public:
     TieJumpPoint* findJumpPoint(const String& id);
     void toggleJumpPoint(const String& id);
 
-    void addTieToScore(TieJumpPoint* jumpPoint);
+    void undoAddTieToScore(TieJumpPoint* jumpPoint);
     void undoRemoveTieFromScore(TieJumpPoint* jumpPoint);
 
     std::vector<TieJumpPoint*>::iterator begin() { return m_jumpPoints.begin(); }
