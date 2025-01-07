@@ -990,8 +990,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>406</width>
-                <height>374</height>
+                <width>631</width>
+                <height>710</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2339,8 +2339,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>685</width>
-             <height>298</height>
+             <width>737</width>
+             <height>731</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3857,11 +3857,23 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>383</width>
-             <height>294</height>
+             <width>635</width>
+             <height>720</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QGroupBox" name="groupBox_accidentals">
               <property name="title">
@@ -4077,8 +4089,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>239</width>
-                <height>593</height>
+                <width>616</width>
+                <height>882</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -4939,11 +4951,23 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>595</width>
-             <height>508</height>
+             <width>635</width>
+             <height>720</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QGroupBox" name="groupBox_barlines">
               <property name="title">
@@ -5722,11 +5746,23 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>405</width>
-             <height>597</height>
+             <width>620</width>
+             <height>787</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_67">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QGroupBox" name="groupBox_rests">
               <property name="title">
@@ -6609,8 +6645,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>363</width>
-                <height>386</height>
+                <width>578</width>
+                <height>527</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -8189,11 +8225,23 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>471</width>
-             <height>508</height>
+             <width>635</width>
+             <height>720</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QGroupBox" name="groupBox_dynamic_hairpin">
               <property name="title">
@@ -11586,8 +11634,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>469</width>
-             <height>484</height>
+             <width>696</width>
+             <height>731</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -13077,8 +13125,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>384</width>
-                <height>422</height>
+                <width>631</width>
+                <height>710</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
@@ -13829,8 +13877,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>363</width>
-                <height>550</height>
+                <width>533</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
