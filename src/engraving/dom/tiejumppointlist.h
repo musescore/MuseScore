@@ -1,3 +1,25 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2025 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #pragma once
 #include "global/types/string.h"
 
@@ -22,6 +44,8 @@ public:
     bool active() const { return m_active; }
     void setActive(bool v) { m_active = v; }
     void undoSetActive(bool v);
+
+    // Stores the list that this end point belongs to. This is needed to find the start tie from an endpoint
     void setJumpPointList(TieJumpPointList* jumpPointList) { m_jumpPointList = jumpPointList; }
     TieJumpPointList* jumpPointList() { return m_jumpPointList; }
 
@@ -41,7 +65,8 @@ private:
 class TieJumpPointList
 {
 public:
-    TieJumpPointList() = default;
+    TieJumpPointList(Note* note)
+        : m_note(note) {}
     ~TieJumpPointList();
 
     void add(TieJumpPoint* item);
@@ -49,8 +74,7 @@ public:
     size_t size() const { return m_jumpPoints.size(); }
     bool empty() const { return m_jumpPoints.empty(); }
 
-    void setStartTie(Tie* startTie) { m_startTie = startTie; }
-    Tie* startTie() const { return m_startTie; }
+    Tie* startTie() const;
 
     TieJumpPoint* findJumpPoint(const String& id);
     void toggleJumpPoint(const String& id);
@@ -65,6 +89,6 @@ public:
 
 private:
     std::vector<TieJumpPoint*> m_jumpPoints;
-    Tie* m_startTie = nullptr;
+    Note* m_note = nullptr;
 };
 }

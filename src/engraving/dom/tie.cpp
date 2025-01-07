@@ -457,14 +457,14 @@ bool Tie::isCrossStaff() const
            || (endChord && (endChord->staffMove() != 0 || endChord->vStaffIdx() != staff));
 }
 
-Tie* Tie::changeTieType(Tie* oldTie, Note* endNote)
+void Tie::changeTieType(Tie* oldTie, Note* endNote)
 {
     // Replaces oldTie with an outgoing partial tie if no endNote is specified.  Otherwise replaces oldTie with a regular tie
     Note* startNote = oldTie->startNote();
     bool addPartialTie = !endNote;
     Score* score = startNote ? startNote->score() : nullptr;
     if (!score) {
-        return nullptr;
+        return;
     }
 
     TranslatableString undoCmd = addPartialTie ? TranslatableString("engraving", "Replace full tie with partial tie")
@@ -494,8 +494,6 @@ Tie* Tie::changeTieType(Tie* oldTie, Note* endNote)
     score->undoAddElement(newTie);
 
     score->endCmd();
-
-    return newTie;
 }
 
 void Tie::updateStartTieOnRemoval()
