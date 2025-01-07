@@ -95,7 +95,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
     if (pitchValues.front().pitch != 0 && !noteTiedBack) {
         BendDataCollector::BendSegment seg;
         seg.startTime = seg.endTime = 0;
-        seg.pitchDiff = pitchValues.front().pitch;
+        seg.startPitch = 0;
+        seg.endPitch = pitchValues.front().pitch;
 
         bendSegments.push_back(seg);
     }
@@ -106,7 +107,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
             if (!bendSegments.empty()) {
                 BendDataCollector::BendSegment& lastSeg = bendSegments.back();
                 lastSeg.endTime = pitchValues[i + 1].time;
-                lastSeg.pitchDiff = pitchValues[i + 1].pitch - pitchValues[i].pitch;
+                lastSeg.startPitch = pitchValues[i].pitch;
+                lastSeg.endPitch = pitchValues[i + 1].pitch;
             }
 
             continue;
@@ -116,7 +118,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
             BendDataCollector::BendSegment seg;
             seg.startTime = pitchValues[i].time;
             seg.endTime = pitchValues[i + 1].time;
-            seg.pitchDiff = pitchValues[i + 1].pitch - pitchValues[i].pitch;
+            seg.startPitch = pitchValues[i].pitch;
+            seg.endPitch = pitchValues[i + 1].pitch;
             bendSegments.push_back(seg);
         } else {
             if (previousPitchDiff != PitchDiff::SAME || bendSegments.empty()) {
@@ -130,7 +133,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
                 lastSeg.endTime = pitchValues[i + 1].time;
             }
 
-            bendSegments.back().pitchDiff = pitchValues[i + 1].pitch - pitchValues[i].pitch;
+            bendSegments.back().startPitch = pitchValues[i].pitch;
+            bendSegments.back().endPitch = pitchValues[i + 1].pitch;
         }
 
         previousPitchDiff = currentPitchDiff;
@@ -146,7 +150,7 @@ BendDataCollector::ImportedBendInfo fillBendInfo(const Note* note, const PitchVa
     info.note = note;
 
     for (const auto& bs : info.segments) {
-        if (bs.pitchDiff != 0 && bs.startTime != bs.endTime) {
+        if (bs.pitchDiff() != 0 && bs.startTime != bs.endTime) {
             info.pitchChangesAmount++;
         }
     }
@@ -161,7 +165,7 @@ static bool isSlightBend(const BendDataCollector::ImportedBendInfo& importedInfo
     }
 
     for (const auto& seg : importedInfo.segments) {
-        if (seg.pitchDiff == 25) {
+        if (seg.pitchDiff() == 25) {
             return true;
         }
     }
@@ -215,7 +219,7 @@ static void fillPrebendData(BendDataContext& bendDataCtx, const BendDataCollecto
 
     BendDataContext::BendNoteData prebendNoteData;
     prebendNoteData.type = GuitarBendType::PRE_BEND;
-    prebendNoteData.quarterTones = firstSeg.pitchDiff / 25;
+    prebendNoteData.quarterTones = firstSeg.endPitch / 25;
 
     prebendChordData.noteDataByPitch[note->pitch()] = std::move(prebendNoteData);
 }
@@ -260,7 +264,7 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
         bendChordData.startTick = currentTick;
         BendDataContext::BendNoteData bendNoteData;
         bendNoteData.type = GuitarBendType::BEND;
-        bendNoteData.quarterTones = seg.pitchDiff / 25;
+        bendNoteData.quarterTones = seg.endPitch / 25;
         bendChordData.noteDataByPitch[note->pitch()] = std::move(bendNoteData);
 
         currentTick += tickDuration;
@@ -356,7 +360,7 @@ static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, cons
     if (isFirstPrebend(importedInfo)) {
         addFullChordDuration(bendDataCtx, importedInfo);
         startIndex = 1;
-        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff == 0) {
+        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff() == 0) {
             startIndex = 2;
         }
     }
@@ -388,7 +392,7 @@ static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataColl
     if (isFirstPrebend(importedInfo)) {
         fillPrebendData(bendDataCtx, importedInfo);
         startIndex = 1;
-        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff == 0) {
+        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff() == 0) {
             startIndex = 2;
         }
     }

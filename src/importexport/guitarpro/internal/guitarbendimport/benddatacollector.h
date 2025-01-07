@@ -45,7 +45,10 @@ public:
         int startTime = -1;
         int middleTime = -1;
         int endTime = -1;
-        int pitchDiff = -1;
+        int startPitch = -1;
+        int endPitch = -1;
+
+        int pitchDiff() const { return endPitch - startPitch; }
     };
 
     struct ImportedBendInfo {

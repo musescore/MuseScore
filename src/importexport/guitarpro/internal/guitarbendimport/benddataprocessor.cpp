@@ -166,6 +166,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
 
         const BendDataContext::BendNoteData& bendNoteData = bendInfoIt->second;
         Note* startNote = startChordNotes[noteIndex];
+
         int pitch = bendNoteData.quarterTones / 2;
 
         if (bendNoteData.type == GuitarBendType::PRE_BEND) {
@@ -198,7 +199,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             }
 
             QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-            bend->setEndNotePitch(startNote->pitch() + pitch, quarterOff);
+            bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + pitch, quarterOff);
             bend->setStartTimeFactor(bendNoteData.startFactor);
             bend->setEndTimeFactor(bendNoteData.endFactor);
         }
