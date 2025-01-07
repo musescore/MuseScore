@@ -121,10 +121,6 @@ DropArea {
 
         accessible.visualItem: footerFocusBorder
         accessible.enabled: footerNavCtrl.enabled
-
-        onTriggered: {
-            // TODO: trigger context menu (not yet implemented)
-        }
     }
 
     Rectangle {
@@ -188,6 +184,8 @@ DropArea {
                 id: padContentComponent
 
                 PercussionPanelPadContent {
+                    id: padContent
+
                     padModel: root.padModel
                     panelMode: root.panelMode
                     useNotationPreview: root.useNotationPreview
@@ -195,6 +193,13 @@ DropArea {
                     footerHeight: prv.footerHeight
 
                     padSwapActive: dragHandler.active
+
+                    Connections {
+                        target: footerNavCtrl
+                        function onTriggered() {
+                            padContent.openFooterContextMenu()
+                        }
+                    }
                 }
             }
 

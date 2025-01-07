@@ -88,7 +88,7 @@ void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter, qr
 
     params.drawStaff = true;
 
-    painter.fillRect(params.rect, configuration()->scoreInversionColor());
+    painter.fillRect(params.rect, configuration()->noteBackgroundColor());
 
     EngravingItemPreviewPainter::paintPreview(m_item.get(), params);
 }

@@ -37,6 +37,13 @@ Column {
 
     property bool padSwapActive: false
 
+    function openFooterContextMenu() {
+        if (!root.padModel) {
+            return
+        }
+        menuLoader.toggleOpened(root.padModel.footerContextMenuItems)
+    }
+
     Item {
         id: mainContentArea
 
@@ -154,6 +161,17 @@ Column {
 
         color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
 
+        MouseArea {
+            id: footerMouseArea
+
+            anchors.fill: parent
+            enabled: root.panelMode !== PanelMode.EDIT_LAYOUT
+
+            onClicked: {
+                root.openFooterContextMenu()
+            }
+        }
+
         StyledTextLabel {
             id: shortcutLabel
 
@@ -189,6 +207,14 @@ Column {
             color: ui.theme.fontPrimaryColor
 
             text: Boolean(root.padModel) ? root.padModel.midiNote : ""
+        }
+
+        StyledMenuLoader {
+            id: menuLoader
+
+            onHandleMenuItem: function(itemId) {
+                root.padModel.handleMenuItem(itemId)
+            }
         }
     }
 }

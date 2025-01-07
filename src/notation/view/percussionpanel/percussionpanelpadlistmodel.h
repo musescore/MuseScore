@@ -73,16 +73,19 @@ public:
     int numPads() const { return m_padModels.count(); }
 
     void setDrumset(const engraving::Drumset* drumset);
-    engraving::Drumset* drumset() const { return m_drumset; }
+    const engraving::Drumset* drumset() const { return m_drumset; }
 
     QList<PercussionPanelPadModel*> padList() const { return m_padModels; }
 
     mu::engraving::Drumset constructDefaultLayout(const engraving::Drumset* templateDrumset) const;
+    int nextAvailableIndex(int pitch) const; //! NOTE: This may be equal to m_padModels.size()
+    int nextAvailablePitch(int pitch) const;
 
+    void focusFirstActivePad();
     void focusLastActivePad();
 
     muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
-    muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
+    muse::async::Channel<PercussionPanelPadModel::PadAction, int /*pitch*/> padActionRequested() const { return m_padActionRequestChannel; }
 
 signals:
     void numPadsChanged();
@@ -103,6 +106,8 @@ private:
     PercussionPanelPadModel* createPadModelForPitch(int pitch);
     int createModelIndexForPitch(int pitch) const;
 
+    int getModelIndexForPitch(int pitch) const;
+
     void movePad(int fromIndex, int toIndex);
 
     muse::RetVal<muse::Val> openPadSwapDialog();
@@ -116,6 +121,6 @@ private:
     int m_padSwapStartIndex = -1;
 
     muse::async::Notification m_hasActivePadsChanged;
-    muse::async::Channel<int /*pitch*/> m_triggeredChannel;
+    muse::async::Channel<PercussionPanelPadModel::PadAction, int /*pitch*/> m_padActionRequestChannel;
 };
 }
