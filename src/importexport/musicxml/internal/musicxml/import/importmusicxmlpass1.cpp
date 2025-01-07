@@ -2246,7 +2246,7 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String
     if (color.isValid()) {
         pg->color = color;
     }
-    pg->column = n;
+    pg->column = static_cast<size_t>(n);
     pgs[n] = pg;
 }
 
