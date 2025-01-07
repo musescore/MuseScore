@@ -25,7 +25,7 @@ SVG_TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://ww
 </svg>"""
 
 def create_svg(percent):
-    return SVG_TEMPLATE.replace("{{PERCENT}}", str(percent) + '%')
+    return SVG_TEMPLATE.replace("{{PERCENT}}", str(percent))
 
 def extract_coverage(data):
     lines = data.split("\n")

@@ -3,10 +3,11 @@ name: 'Check: Unit Tests (utest)'
 on:
   pull_request:
   workflow_dispatch:
-    code_coverage:
-      description: 'Enable code coverage'
-      required: false
-      default: 'false'
+    inputs:
+      code_coverage:
+        description: 'Enable code coverage'
+        required: false
+        default: 'false'
   schedule:
     - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
 
