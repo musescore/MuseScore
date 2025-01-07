@@ -816,19 +816,28 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>
 {
     const InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
-    for (const InstrumentGroup* g : instrumentGroups) {
-        for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            for (const String& name : nameList) {
-                if (name.isEmpty() || it->useDrumset != useDrumset) {
+
+    for (String name : nameList) {
+        if (name.isEmpty()) {
+            continue;
+        }
+
+        if (!caseSensitive) {
+            name = name.toLower();
+        }
+        StaffName instrName(name);
+
+        for (const InstrumentGroup* g : instrumentGroups) {
+            for (const InstrumentTemplate* it : g->instrumentTemplates) {
+                if (it->useDrumset != useDrumset) {
                     continue;
                 }
+
                 String trackName = it->trackName;
                 StaffNameList longNames = it->longNames;
                 StaffNameList shortNames = it->shortNames;
-                String instrName = name;
 
                 if (!caseSensitive) {
-                    instrName = instrName.toLower();
                     trackName = trackName.toLower();
                     for (StaffName& n : longNames) {
                         n.setName(n.name().toLower());
@@ -839,9 +848,9 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>
                 }
 
                 int matchStrength = 0
-                                    + (4 * (trackName == instrName ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                                    + (2 * (muse::contains(longNames, StaffName(instrName)) ? 1 : 0))
-                                    + (1 * (muse::contains(shortNames, StaffName(instrName)) ? 1 : 0)); // least weight to short name
+                                    + (4 * (trackName == name ? 1 : 0)) // most weight to track name since there are fewer duplicates
+                                    + (2 * (muse::contains(longNames, instrName) ? 1 : 0))
+                                    + (1 * (muse::contains(shortNames, instrName) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 assert(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
