@@ -103,9 +103,9 @@ void NotationViewInputController::init()
             m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
         });
 
-        dispatcher()->reg(this, "notation-popup-menu", [this]() {
-            if (auto selection = viewInteraction()->selection()) {
-                togglePopupForItemIfSupports(selection->element());
+        dispatcher()->reg(this, "notation-popup-menu", [this](const ActionData& args) {
+            if (EngravingItem* el = args.arg<EngravingItem*>()) {
+                togglePopupForItemIfSupports(el);
             }
         });
 
@@ -137,7 +137,7 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (AbstractElementPopupModel::supportsPopup(type)) {
+        if (AbstractElementPopupModel::supportsPopup(selectedItem)) {
             m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
         }
     });
@@ -1231,7 +1231,7 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
 
     ElementType type = item->type();
 
-    if (AbstractElementPopupModel::supportsPopup(type)) {
+    if (AbstractElementPopupModel::supportsPopup(item)) {
         m_view->toggleElementPopup(type, item->canvasBoundingRect());
     }
 }

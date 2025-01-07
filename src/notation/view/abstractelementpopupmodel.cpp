@@ -21,6 +21,7 @@
  */
 
 #include "abstractelementpopupmodel.h"
+#include "internal/partialtiepopupmodel.h"
 #include "log.h"
 
 using namespace mu::notation;
@@ -30,6 +31,8 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::CAPO, PopupModelType::TYPE_CAPO },
     { mu::engraving::ElementType::STRING_TUNINGS, PopupModelType::TYPE_STRING_TUNINGS },
     { mu::engraving::ElementType::SOUND_FLAG, PopupModelType::TYPE_SOUND_FLAG },
+    { mu::engraving::ElementType::TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
+    { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE }
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -37,6 +40,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
     { PopupModelType::TYPE_CAPO, { mu::engraving::ElementType::CAPO } },
     { PopupModelType::TYPE_STRING_TUNINGS, { mu::engraving::ElementType::STRING_TUNINGS } },
     { PopupModelType::TYPE_SOUND_FLAG, { mu::engraving::ElementType::SOUND_FLAG, mu::engraving::ElementType::STAFF_TEXT } },
+    { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
@@ -54,9 +58,23 @@ QRect AbstractElementPopupModel::itemRect() const
     return m_itemRect;
 }
 
-bool AbstractElementPopupModel::supportsPopup(const engraving::ElementType& elementType)
+bool AbstractElementPopupModel::supportsPopup(const EngravingItem* element)
 {
-    return modelTypeFromElement(elementType) != PopupModelType::TYPE_UNDEFINED;
+    if (!element) {
+        return false;
+    }
+
+    const PopupModelType modelType = modelTypeFromElement(element->type());
+    if (modelType == PopupModelType::TYPE_UNDEFINED) {
+        return false;
+    }
+
+    switch (modelType) {
+    case PopupModelType::TYPE_PARTIAL_TIE:
+        return PartialTiePopupModel::canOpen(element);
+    default:
+        return true;
+    }
 }
 
 PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::ElementType& elementType)

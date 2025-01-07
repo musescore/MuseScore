@@ -53,6 +53,7 @@ Item {
             case Notation.TYPE_CAPO: return capoComp
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
             case Notation.TYPE_SOUND_FLAG: return soundFlagComp
+            case Notation.TYPE_PARTIAL_TIE: return partialTieComp
             }
 
             return null
@@ -71,7 +72,9 @@ Item {
     function show(elementType, elementRect) {
         close()
 
-        var popup = loader.loadPopup(prv.componentByType(elementType), elementRect)
+        var component = prv.componentByType(elementType)
+
+        var popup = loader.loadPopup(component, elementRect)
         popup.open()
     }
 
@@ -148,6 +151,12 @@ Item {
     Component {
         id: soundFlagComp
         SoundFlagPopup {
+        }
+    }
+
+    Component {
+        id: partialTieComp
+        PartialTiePopup {
         }
     }
 }

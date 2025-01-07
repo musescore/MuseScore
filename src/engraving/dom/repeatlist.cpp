@@ -90,6 +90,15 @@ bool RepeatSegment::containsMeasure(Measure const* const m) const
     return false;
 }
 
+bool RepeatSegment::endsWithMeasure(Measure const* const m) const
+{
+    if (m_measureList.empty()) {
+        return false;
+    }
+
+    return m_measureList.back() == m;
+}
+
 bool RepeatSegment::isEmpty() const
 {
     return m_measureList.empty();
@@ -149,7 +158,7 @@ int RepeatList::ticks() const
 //   update
 //---------------------------------------------------------
 
-void RepeatList::update(bool expand)
+void RepeatList::update(bool expand, bool updateTies)
 {
     if (!m_scoreChanged && expand == m_expanded) {
         return;
@@ -162,6 +171,10 @@ void RepeatList::update(bool expand)
     }
 
     m_scoreChanged = false;
+
+    if (updateTies) {
+        m_score->undoRemoveStaleTieJumpPoints();
+    }
 }
 
 //---------------------------------------------------------

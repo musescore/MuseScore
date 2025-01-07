@@ -134,6 +134,7 @@ public:
     // Move
     void movePitch(MoveDirection d, PitchMode mode) override;
     void nudge(MoveDirection d, bool quickly) override;
+    void nudgeAnchors(MoveDirection) override;
     void moveChordRestToStaff(MoveDirection d) override;
     void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;

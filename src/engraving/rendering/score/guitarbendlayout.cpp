@@ -188,10 +188,10 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
     item->mutldata()->setVertexPoint(vertex);
 
     if (item->isSingleBeginType()) {
-        startNote->addLineAttachPoint(item->pos(), bend);
+        startNote->addStartLineAttachPoint(item->pos(), bend);
     }
     if (item->isSingleEndType()) {
-        endNote->addLineAttachPoint(item->pos() + item->pos2(), bend);
+        endNote->addEndLineAttachPoint(item->pos() + item->pos2(), bend);
     }
 
     PainterPath path;

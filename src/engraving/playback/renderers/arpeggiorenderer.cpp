@@ -117,7 +117,7 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
         }
 
         NominalNoteCtx noteCtx(note, ctx);
-        if (note->tieFor()) {
+        if (note->tieForNonPartial()) {
             noteCtx.duration = tiedNotesTotalDuration(ctx.score, note, noteCtx.duration, ctx.positionTickOffset);
         }
 

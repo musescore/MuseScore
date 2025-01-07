@@ -267,4 +267,14 @@ Segment* SegmentList::last(ElementFlag flags) const
     }
     return nullptr;
 }
+
+Segment* SegmentList::last(SegmentType types) const
+{
+    for (Segment* s = m_last; s; s = s->prev()) {
+        if (s->segmentType() & types) {
+            return s;
+        }
+    }
+    return nullptr;
+}
 }

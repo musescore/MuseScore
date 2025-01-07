@@ -21,11 +21,22 @@
  */
 import QtQuick 2.15
 
+import Muse.Ui 1.0
+
 Item {
     id: container
 
     // Useful for static context menus
     property var items: []
+
+
+    property NavigationSection notationViewNavigationSection: null
+    property int navigationOrderStart: 0
+
+    property alias closeMenuOnSelection: contextMenuLoader.closeMenuOnSelection
+    property alias opensUpward: contextMenuLoader.opensUpward
+    property alias focusOnOpened: contextMenuLoader.focusOnOpened
+    property alias item: contextMenuLoader.item
 
     signal handleMenuItem(string itemId)
     signal opened()
@@ -35,6 +46,13 @@ Item {
     //  next(depending on the limitation) to the pressed position.
     width: 0
     height: 0
+
+    onNotationViewNavigationSectionChanged: function() {
+        contextMenuLoader.item.navigationSectionOverride = container.notationViewNavigationSection
+    }
+    onNavigationOrderStartChanged: function() {
+        contextMenuLoader.item.navigationOrderStart = container.navigationOrderStart
+    }
 
     function show(position: point, items) {
         if (!items) {

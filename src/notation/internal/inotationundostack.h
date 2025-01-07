@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
-#define MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
+#pragma once
 
 #include "async/notification.h"
 #include "async/channel.h"
@@ -51,6 +50,8 @@ public:
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
 
+    virtual void mergeCommands(const size_t startIdx) = 0;
+
     virtual bool isStackClean() const = 0;
 
     virtual void lock() = 0;
@@ -70,5 +71,3 @@ public:
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;
 }
-
-#endif // MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H

@@ -45,6 +45,7 @@
 #include "keysig.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
+#include "marker.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "measurenumber.h"
@@ -942,7 +943,6 @@ void Measure::remove(EngravingItem* e)
     case ElementType::JUMP:
         setRepeatJump(false);
     // fall through
-
     case ElementType::MARKER:
     case ElementType::HBOX:
         if (!el().remove(e)) {
@@ -3068,6 +3068,38 @@ bool Measure::prevIsOneMeasureRepeat(staff_idx_t staffIdx) const
     return prevMeasure()->isOneMeasureRepeat(staffIdx);
 }
 
+ChordRest* Measure::lastChordRest(track_idx_t track) const
+{
+    for (const Segment* seg = last(); seg; seg = seg->prev()) {
+        if (!seg->isChordRestType()) {
+            continue;
+        }
+        ChordRest* cr = seg->cr(track);
+        if (!cr) {
+            continue;
+        }
+
+        return cr;
+    }
+    return nullptr;
+}
+
+ChordRest* Measure::firstChordRest(track_idx_t track) const
+{
+    for (const Segment* seg = first(); seg; seg = seg->next()) {
+        if (!seg->isChordRestType()) {
+            continue;
+        }
+        ChordRest* cr = seg->cr(track);
+        if (!cr) {
+            continue;
+        }
+
+        return cr;
+    }
+    return nullptr;
+}
+
 //-------------------------------------------------------------------
 //   userStretch
 //-------------------------------------------------------------------
@@ -3243,6 +3275,24 @@ bool Measure::endBarLineVisible() const
 {
     const BarLine* bl = endBarLine();
     return bl ? bl->visible() : true;
+}
+
+const BarLine* Measure::startBarLine() const
+{
+    // search barline segment:
+    Segment* s = first();
+    while (s && !(s->isStartRepeatBarLineType() || s->isBeginBarLineType())) {
+        s = s->next();
+    }
+    // search first element
+    if (s) {
+        for (const EngravingItem* e : s->elist()) {
+            if (e) {
+                return toBarLine(e);
+            }
+        }
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PROPERTYVALUE_H
-#define MU_ENGRAVING_PROPERTYVALUE_H
+#pragma once
 
 #include <memory>
 #include <cassert>
@@ -107,6 +106,7 @@ enum class P_TYPE {
     SLUR_STYLE_TYPE,
     NOTELINE_PLACEMENT_TYPE,
     LYRICS_DASH_SYSTEM_START_TYPE,
+    PARTIAL_SPANNER_DIRECTION,
 
     VOICE_ASSIGNMENT,
     AUTO_ON_OFF,
@@ -292,6 +292,9 @@ public:
 
     PropertyValue(const LyricsDashSystemStart& v)
         : m_type(P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE), m_data(make_data<LyricsDashSystemStart>(v)) {}
+
+    PropertyValue(const PartialSpannerDirection& v)
+        : m_type(P_TYPE::PARTIAL_SPANNER_DIRECTION), m_data(make_data<PartialSpannerDirection>(v)) {}
 
     PropertyValue(const VoiceAssignment& v)
         : m_type(P_TYPE::VOICE_ASSIGNMENT), m_data(make_data<VoiceAssignment>(v)) {}
@@ -491,5 +494,3 @@ inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const mu::engra
     s << "property(not implemented log output)";
     return s;
 }
-
-#endif // MU_ENGRAVING_PROPERTYVALUE_H

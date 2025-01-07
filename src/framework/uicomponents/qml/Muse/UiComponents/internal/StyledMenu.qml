@@ -32,6 +32,9 @@ MenuView {
 
     property alias model: view.model
 
+    property NavigationSection navigationSectionOverride: null
+    property int navigationOrderStart: 0
+
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
     property bool hasSiblingMenus: loader.hasSiblingMenus
 
@@ -134,9 +137,9 @@ MenuView {
 
         property NavigationPanel navigationPanel: NavigationPanel {
             name: "StyledMenu"
-            section: content.navigationSection
             direction: NavigationPanel.Vertical
-            order: 1
+            section: root.navigationSectionOverride ?? content.navigationSection
+            order: root.navigationOrderStart
 
             accessible.name: root.accessibleName
 

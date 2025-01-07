@@ -32,9 +32,11 @@ import "internal/SoundFlag"
 StyledPopupView {
     id: root
 
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-    property int navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
+    property alias notationViewNavigationSection: navPanel.section
+    property alias navigationOrderStart: navPanel.order
+    readonly property alias navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
+
+    property QtObject model: soundFlagModel
 
     contentWidth: content.width
     contentHeight: content.childrenRect.height

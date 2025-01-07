@@ -112,8 +112,9 @@ public:
 
     void updateRepeatListTempo();
     void updateRepeatList();
+
     const RepeatList& repeatList() const override;
-    const RepeatList& repeatList(bool expandRepeats) const override;
+    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const override;
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }

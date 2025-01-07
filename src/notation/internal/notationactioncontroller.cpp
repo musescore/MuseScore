@@ -29,6 +29,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
+#include "view/abstractelementpopupmodel.h"
 
 #include "translation.h"
 #include "log.h"
@@ -192,14 +193,14 @@ void NotationActionController::init()
     registerMoveSelectionAction("next-system", MoveSelectionType::System, MoveDirection::Right);
     registerMoveSelectionAction("prev-system", MoveSelectionType::System, MoveDirection::Left);
 
-    registerAction("notation-move-right", &Controller::move, MoveDirection::Right, false);
-    registerAction("notation-move-left", &Controller::move, MoveDirection::Left, false);
+    registerAction("notation-move-right", &Controller::move, MoveDirection::Right, false, &Controller::isNotEditingOrHasPopup);
+    registerAction("notation-move-left", &Controller::move, MoveDirection::Left, false, &Controller::isNotEditingOrHasPopup);
     registerAction("notation-move-right-quickly", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
     registerAction("notation-move-left-quickly", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
-    registerAction("pitch-up", &Controller::move, MoveDirection::Up, false);
-    registerAction("pitch-down", &Controller::move, MoveDirection::Down, false);
-    registerAction("pitch-up-octave", &Controller::move, MoveDirection::Up, true);
-    registerAction("pitch-down-octave", &Controller::move, MoveDirection::Down, true);
+    registerAction("pitch-up", &Controller::move, MoveDirection::Up, false, &Controller::isNotEditingOrHasPopup);
+    registerAction("pitch-down", &Controller::move, MoveDirection::Down, false, &Controller::isNotEditingOrHasPopup);
+    registerAction("pitch-up-octave", &Controller::move, MoveDirection::Up, true, &Controller::isNotEditingOrHasPopup);
+    registerAction("pitch-down-octave", &Controller::move, MoveDirection::Down, true, &Controller::isNotEditingOrHasPopup);
     registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &Controller::hasSelection);
     registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &Controller::hasSelection);
 
@@ -1015,6 +1016,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->moveLyrics(direction);
         } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulationFamily())) {
             interaction->nudge(direction, quickly);
+        } else if (selectedElement && selectedElement->hasGrips()) {
+            interaction->nudgeAnchors(direction);
         } else if (interaction->noteInput()->isNoteInputMode()
                    && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
@@ -1070,6 +1073,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
 
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
+        } else if (selectedElement && selectedElement->hasGrips()) {
+            interaction->nudgeAnchors(direction);
         } else {
             if (interaction->selection()->isNone()) {
                 interaction->selectFirstElement(false);
@@ -1525,7 +1530,7 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
     }
 
     if (elementHasPopup(element)) {
-        dispatcher()->dispatch("notation-popup-menu");
+        dispatcher()->dispatch("notation-popup-menu", ActionData::make_arg1<EngravingItem*>(element));
         return;
     }
 
@@ -1777,7 +1782,7 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Engr
 
 bool NotationActionController::measureNavigationAvailable() const
 {
-    return isNotEditingElement() || textNavigationAvailable();
+    return isNotEditingOrHasPopup() || textNavigationAvailable();
 }
 
 bool NotationActionController::toggleLayoutBreakAvailable() const
@@ -2122,13 +2127,9 @@ const mu::engraving::Harmony* NotationActionController::editedChordSymbol() cons
     return toHarmony(text);
 }
 
-bool NotationActionController::elementHasPopup(EngravingItem* e)
+bool NotationActionController::elementHasPopup(const EngravingItem* e) const
 {
-    if (e->isHarpPedalDiagram()) {
-        return true;
-    }
-
-    return false;
+    return AbstractElementPopupModel::supportsPopup(e);
 }
 
 bool NotationActionController::canUndo() const
@@ -2168,6 +2169,17 @@ bool NotationActionController::isEditingElement() const
 bool NotationActionController::isNotEditingElement() const
 {
     return !isEditingElement();
+}
+
+bool NotationActionController::isNotEditingOrHasPopup() const
+{
+    const EngravingItem* element = selectedElement();
+
+    if (!element) {
+        return isNotEditingElement();
+    }
+
+    return elementHasPopup(element) || isNotEditingElement();
 }
 
 bool NotationActionController::isToggleVisibleAllowed() const

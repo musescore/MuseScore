@@ -38,6 +38,8 @@ class Tie;
 class TremoloTwoChord;
 enum class Grip;
 class Note;
+class PartialTie;
+class PartialTieSegment;
 }
 
 namespace muse::draw {
@@ -50,8 +52,8 @@ class SlurTieLayout
 public:
     static SpannerSegment* layoutSystem(Slur* item, System* system, LayoutContext& ctx);
 
-    static TieSegment* tieLayoutFor(Tie* item, System* system);
-    static TieSegment* tieLayoutBack(Tie* item, System* system, LayoutContext& ctx);
+    static TieSegment* layoutTieFor(Tie* item, System* system);
+    static TieSegment* layoutTieBack(Tie* item, System* system, LayoutContext& ctx);
     static void resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies);
 
     static void computeUp(Slur* slur, LayoutContext& ctx);
@@ -104,11 +106,17 @@ private:
     static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
 
     static void addLineAttachPoints(TieSegment* segment);
+    static void addLineAttachPoints(PartialTieSegment* segment);
 
     static void calculateIsInside(Tie* item);
 
     static LaissezVibSegment* createLaissezVibSegment(LaissezVib* item);
     static void calculateLaissezVibX(LaissezVibSegment* segment, SlurTiePos& sPos, bool smufl);
     static void calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos& sPos);
+
+    static PartialTieSegment* createPartialTieSegment(PartialTie* item);
+    static PartialTieSegment* layoutPartialTie(PartialTie* item);
+
+    static void setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos);
 };
 }

@@ -29,9 +29,12 @@ import MuseScore.NotationScene 1.0
 StyledPopupView {
     id: root
 
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-    property int navigationOrderEnd: capoSettingsNavPanel.order
+    property alias notationViewNavigationSection: capoSettingsNavPanel.section
+    property alias navigationOrderStart: capoSettingsNavPanel.order
+    readonly property alias navigationOrderEnd: capoSettingsNavPanel.order
+
+    property QtObject model: capoModel
+
 
     contentWidth: content.width
     contentHeight: content.height
@@ -71,8 +74,6 @@ StyledPopupView {
             id: capoSettingsNavPanel
             name: "CapoSettings"
             direction: NavigationPanel.Vertical
-            section: root.notationViewNavigationSection
-            order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Capo settings")
         }
 

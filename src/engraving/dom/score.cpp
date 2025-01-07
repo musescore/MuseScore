@@ -5741,7 +5741,10 @@ void Score::connectTies(bool silent)
                 }
                 // connect a tie without end note
                 Tie* tie = n->tieFor();
-                if (tie && !tie->endNote()) {
+                if (tie) {
+                    tie->updatePossibleJumpPoints();
+                }
+                if (tie && !tie->isPartialTie() && !tie->endNote()) {
                     Note* nnote;
                     if (m_mscVersion <= 114) {
                         nnote = searchTieNote114(n);
@@ -6073,7 +6076,11 @@ void Score::updateChannel()
 
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }
 const RepeatList& Score::repeatList()  const { return m_masterScore->repeatList(); }
-const RepeatList& Score::repeatList(bool expandRepeats)  const { return m_masterScore->repeatList(expandRepeats); }
+const RepeatList& Score::repeatList(bool expandRepeats, bool updateTies)  const
+{
+    return m_masterScore->repeatList(expandRepeats, updateTies);
+}
+
 TempoMap* Score::tempomap() const { return m_masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return m_masterScore->sigmap(); }
 //QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }

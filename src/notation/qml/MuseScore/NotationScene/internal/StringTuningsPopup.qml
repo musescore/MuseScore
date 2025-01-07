@@ -29,9 +29,12 @@ import MuseScore.NotationScene 1.0
 StyledPopupView {
     id: root
 
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-    property int navigationOrderEnd: navPanel.order
+    property alias notationViewNavigationSection: navPanel.section
+    property alias navigationOrderStart: navPanel.order
+    readonly property alias navigationOrderEnd: navPanel.order
+
+    property QtObject model: stringTuningsModel
+
 
     contentWidth: content.width
     contentHeight: content.height
