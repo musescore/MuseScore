@@ -135,7 +135,7 @@ public:
     TieJumpPoint* jumpPoint() const { return m_jumpPoint; }
     Tie* startTie() const;
 
-    static Tie* changeTieType(Tie* oldTie, Note* endNote = nullptr);
+    static void changeTieType(Tie* oldTie, Note* endNote = nullptr);
 
 protected:
     Tie(const ElementType& type, EngravingItem* parent = nullptr);

@@ -1,3 +1,25 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2025 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "tiejumppointlist.h"
 
 #include "barline.h"
@@ -154,6 +176,11 @@ void TieJumpPointList::clear()
     m_jumpPoints.clear();
 }
 
+Tie* TieJumpPointList::startTie() const
+{
+    return m_note ? m_note->tieFor() : nullptr;
+}
+
 TieJumpPoint* TieJumpPointList::findJumpPoint(const String& id)
 {
     for (TieJumpPoint* jumpPoint : m_jumpPoints) {
@@ -194,17 +221,18 @@ void TieJumpPointList::undoAddTieToScore(TieJumpPoint* jumpPoint)
 {
     Note* note = jumpPoint->note();
     Score* score = note ? note->score() : nullptr;
-    if (!m_startTie || !score) {
+    Tie* tie = startTie();
+    if (!tie || !score) {
         return;
     }
 
     if (jumpPoint->followingNote()) {
         // Remove partial tie and add full tie
-        if (!m_startTie->isPartialTie() || !toPartialTie(m_startTie)->isOutgoing()) {
+        if (!tie->isPartialTie() || !toPartialTie(tie)->isOutgoing()) {
             return;
         }
         jumpPoint->undoSetActive(true);
-        m_startTie = Tie::changeTieType(m_startTie, note);
+        Tie::changeTieType(tie, note);
         return;
     }
 
@@ -228,18 +256,19 @@ void TieJumpPointList::undoRemoveTieFromScore(TieJumpPoint* jumpPoint)
 {
     Note* note = jumpPoint->note();
     Score* score = note ? note->score() : nullptr;
-    if (!m_startTie || !score) {
+    Tie* tie = startTie();
+    if (!tie || !score) {
         return;
     }
 
     if (jumpPoint->followingNote()) {
         // Remove full tie and add partial tie
-        if (m_startTie->isPartialTie()) {
+        if (tie->isPartialTie()) {
             return;
         }
         jumpPoint->undoSetActive(false);
 
-        m_startTie = Tie::changeTieType(m_startTie);
+        Tie::changeTieType(tie);
         return;
     }
 
