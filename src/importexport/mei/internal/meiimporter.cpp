@@ -67,12 +67,14 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/trill.h"
 #include "engraving/dom/utils.h"
 
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/fingering.h"
 #include "thirdparty/libmei/lyrics.h"
 #include "thirdparty/libmei/shared.h"
+#include "thirdparty/libmei/midi.h"
 
 #include "thirdparty/pugixml.hpp"
 

@@ -3,10 +3,16 @@ name: 'Check: Unit Tests (utest)'
 on:
   pull_request:
   workflow_dispatch:
+    code_coverage:
+      description: 'Enable code coverage'
+      required: false
+      default: 'false'
+  schedule:
+    - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
 
 jobs:
   run_tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -34,22 +40,47 @@ jobs:
         sudo apt-get update && sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
+    - name: Free up disk space
+      run: |
+        sudo docker system prune -a -f
+        sudo rm -rf /usr/local/lib/android
+
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
     - name: Build
       run: |
         mkdir -p build.artifacts/env
-        bash ./buildscripts/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }}
+
+        ENABLE_CODE_COVERAGE='false'
+
+        if [ [ "${{ github.event_name }}" == "schedule" ] || [ ${{ inputs.code_coverage }} == 'true' ] ]; then
+          ENABLE_CODE_COVERAGE='true'
+        else
+          ENABLE_CODE_COVERAGE='false'
+        fi
+
+        bash ./buildscripts/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }} --enable_code_coverage ${ENABLE_CODE_COVERAGE}
         echo "============== ccache ==============="
         ccache -s
-    - name: Free up disk space
-      # After building, too little disk space is left. Remove unnecessary tools to free up disk space.
-      run: |
-        sudo docker system prune -a -f
-        sudo rm -rf /usr/local/lib/android
     - name: Run tests
       run: |
         bash ./buildscripts/ci/linux/runutests.sh
       env:
         ASAN_OPTIONS: "detect_leaks=0"
+
+    - name: Code coverage
+      if: github.event_name == 'schedule' || inputs.code_coverage == 'true'
+      run: |
+        lcov --capture --directory build.debug/ --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*/hb-*' '*/Qt/*' --output-file filtered_coverage.info
+
+        python3 buildscripts/ci/linux/tools/lcov_badger.py filtered_coverage.info coverage_badge.svg
+
+        S3_URL='s3://extensions.musescore.org/test/code_coverage/coverage_badge.svg'
+
+        bash ./buildscripts/ci/tools/s3_push_file.sh \
+          --s3_key '${{ secrets.S3_KEY }}' \
+          --s3_secret '${{ secrets.S3_SECRET }}' \
+          --s3_url "${S3_URL}" \
+          --file_path "coverage_badge.svg"

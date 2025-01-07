@@ -38,6 +38,7 @@ set(MODULE_SRC
 
 set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
+set(MODULE_USE_COVERAGE OFF)
 
 setup_module()
 
