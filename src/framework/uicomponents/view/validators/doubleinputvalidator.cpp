@@ -53,6 +53,10 @@ void DoubleInputValidator::fixup(QString& string) const
         }
     };
 
+    if (string.isEmpty()) {
+        string.append("0");
+    }
+
     if (string.startsWith(".")) {
         string.prepend("0");
     }
