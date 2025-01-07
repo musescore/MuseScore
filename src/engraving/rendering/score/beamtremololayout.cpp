@@ -1278,7 +1278,7 @@ int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std
 
 double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
-    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam->pagePos().x();
+    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam ? ldata->beam->pagePos().x() : 0.0;
     double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
 
     if (!cr->isChord() || !toChord(cr)->stem()) {
