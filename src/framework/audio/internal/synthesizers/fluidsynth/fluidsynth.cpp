@@ -179,7 +179,7 @@ bool FluidSynth::handleEvent(const midi::Event& event)
         if (event.index() == muse::midi::EXPRESSION_CONTROLLER) {
             ret = setExpressionLevel(event.data());
         } else {
-            ret = setControllerValue(event.channel(), event.index(), event.data());
+            ret = fluid_synth_cc(m_fluid->synth, event.channel(), event.index(), event.data());
         }
     } break;
     case Event::Opcode::ProgramChange: {
