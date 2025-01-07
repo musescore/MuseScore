@@ -51,7 +51,20 @@ ClefKeyTimeSigPageModel::ClefKeyTimeSigPageModel(QObject* parent)
                                          StyleId::timeSigCenterAcrossStaveGroup,
                                          StyleId::genCourtesyTimesig,
                                          StyleId::genKeysig,
-                                         StyleId::genCourtesyKeysig, })
+                                         StyleId::genCourtesyKeysig,
+                                         StyleId::courtesyChangesBeforeBarlineRepeats,
+                                         StyleId::courtesyChangesBeforeBarlineOtherJumps,
+                                         StyleId::placeClefsBeforeRepeats,
+                                         StyleId::changesBetweenEndStartRepeat,
+                                         StyleId::showCourtesiesRepeats,
+                                         StyleId::useParensRepeatCourtesies,
+                                         StyleId::showCourtesiesFinalBar,
+                                         StyleId::showCourtesiesOtherJumps,
+                                         StyleId::useParensOtherJumpCourtesies,
+                                         StyleId::showCourtesiesAfterCancellingRepeats,
+                                         StyleId::useParensRepeatCourtesiesAfterCancelling,
+                                         StyleId::showCourtesiesAfterCancellingOtherJumps,
+                                         StyleId::useParensOtherJumpCourtesiesAfterCancelling })
 {
 }
 
@@ -227,4 +240,69 @@ StyleItem* ClefKeyTimeSigPageModel::genKeysig() const
 StyleItem* ClefKeyTimeSigPageModel::genCourtesyKeysig() const
 {
     return styleItem(StyleId::genCourtesyKeysig);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::courtesyChangesBeforeBarlineRepeats() const
+{
+    return styleItem(StyleId::courtesyChangesBeforeBarlineRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::courtesyChangesBeforeBarlineOtherJumps() const
+{
+    return styleItem(StyleId::courtesyChangesBeforeBarlineOtherJumps);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::placeClefsBeforeRepeats() const
+{
+    return styleItem(StyleId::placeClefsBeforeRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::changesBetweenEndStartRepeat() const
+{
+    return styleItem(StyleId::changesBetweenEndStartRepeat);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesRepeats() const
+{
+    return styleItem(StyleId::showCourtesiesRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensRepeatCourtesies() const
+{
+    return styleItem(StyleId::useParensRepeatCourtesies);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesFinalBar() const
+{
+    return styleItem(StyleId::showCourtesiesFinalBar);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesOtherJumps() const
+{
+    return styleItem(StyleId::showCourtesiesOtherJumps);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensOtherJumpCourtesies() const
+{
+    return styleItem(StyleId::useParensOtherJumpCourtesies);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesAfterCancellingRepeats() const
+{
+    return styleItem(StyleId::showCourtesiesAfterCancellingRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensRepeatCourtesiesAfterCancelling() const
+{
+    return styleItem(StyleId::useParensRepeatCourtesiesAfterCancelling);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesAfterCancellingOtherJumps() const
+{
+    return styleItem(StyleId::showCourtesiesAfterCancellingOtherJumps);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensOtherJumpCourtesiesAfterCancelling() const
+{
+    return styleItem(StyleId::useParensOtherJumpCourtesiesAfterCancelling);
 }
