@@ -746,21 +746,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 
       Fraction ns   = ts->sig();
       Fraction tick = fm->tick();
-      TimeSig* lts  = staff(staffIdx)->timeSig(tick);
       if (local) {
             Fraction stretch = (ns / fm->timesig()).reduced();
             ts->setStretch(stretch);
-            }
-
-      Fraction stretch;
-      Fraction lsig;                // last signature
-      if (lts) {
-            stretch = lts->stretch();
-            lsig    = lts->sig();
-            }
-      else {
-            stretch.set(1,1);
-            lsig.set(4,4);          // set to default
             }
 
       int track    = staffIdx * VOICES;
