@@ -22,39 +22,14 @@
 
 #pragma once
 
-#include <engraving/types/pitchvalue.h>
-#include <engraving/types/types.h>
 #include <engraving/dom/types.h>
 
-#include "benddatacontext.h"
-
-namespace mu::engraving {
-class Note;
-class Chord;
-}
-
 namespace mu::iex::guitarpro {
-class BendDataCollector
+class BendChordDurationSplitter
 {
 public:
-
-    void storeBendData(mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
-    BendDataContext collectBendDataContext();
-
-    struct BendSegment {
-        int startTime = -1;
-        int middleTime = -1;
-        int endTime = -1;
-        int pitchDiff = -1;
-    };
-
-    struct ImportedBendInfo {
-        const mu::engraving::Note* note = nullptr;
-        int pitchChangesAmount = 0;
-        std::vector<BendSegment> segments;
-    };
-
-private:
-    std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::map<int /*pitch*/, ImportedBendInfo> > > m_bendInfoForNote;
+    static std::vector<mu::engraving::Fraction> findValidNoteSplit(const mu::engraving::Fraction& totalDuration,
+                                                                   const std::vector<mu::engraving::Fraction>& proportions,
+                                                                   int maxDenominator);
 };
 } // mu::iex::guitarpro

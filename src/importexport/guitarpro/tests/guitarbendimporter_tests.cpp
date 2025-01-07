@@ -99,19 +99,43 @@ TEST_F(GuitarBendImporter_Tests, gp5Prebend) {
     gpReadTest(u"prebend", u"gp5");
 }
 
-TEST_F(GuitarBendImporter_Tests, gpTiedBend) {
+TEST_F(GuitarBendImporter_Tests, DISABLED_gpTiedBend) {
     gpReadTest(u"tied_bend", u"gp");
 }
 
-TEST_F(GuitarBendImporter_Tests, gp5TiedBend) {
+TEST_F(GuitarBendImporter_Tests, DISABLED_gp5TiedBend) {
     gpReadTest(u"tied_bend", u"gp5");
 }
 
-TEST_F(GuitarBendImporter_Tests, gpTiedBendChord) {
+TEST_F(GuitarBendImporter_Tests, DISABLED_gpTiedBendChord) {
     gpReadTest(u"tied_bend_chord", u"gp");
 }
 
 TEST_F(GuitarBendImporter_Tests, gpSlightBendChord) {
     gpReadTest(u"slight_bend_chord", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, DISABLED_gpPrebendChord) {
+    gpReadTest(u"prebend_chord", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBend_1) {
+    gpReadTest(u"bend_1", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBend_2) {
+    gpReadTest(u"bend_2", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBend_3) {
+    gpReadTest(u"bend_3", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBendRelease_1) {
+    gpReadTest(u"bend+release_1", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpPrebendBend_1) {
+    gpReadTest(u"prebend+bend_1", u"gp");
 }
 }

@@ -33,7 +33,7 @@
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
-static void createGuitarBends(const BendDataContext& bendDataCtx, const mu::engraving::Chord* chord);
+static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord);
 
 BendDataProcessor::BendDataProcessor(mu::engraving::Score* score)
     : m_score(score)
@@ -57,73 +57,82 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
                 return;
             }
 
-            const Chord* mainChord = mainChordMeasure->findChord(mainTickFr, track);
-
+            Chord* mainChord = mainChordMeasure->findChord(mainTickFr, track);
             if (!mainChord) {
                 LOGE() << "bend import error : no valid chord for track " << track << ", tick " << mainTick;
                 return;
             }
 
+            Fraction newMainChordDuration = chordsDurations.front();
+            mainChord->setTicks(newMainChordDuration);
+            mainChord->setDurationType(TDuration(newMainChordDuration));
             Fraction currentTick = mainChord->tick() + mainChord->ticks();
             createGuitarBends(bendDataCtx, mainChord);
 
             for (size_t i = 1; i < chordsDurations.size(); i++) {
-                const Measure* currentMeasure = m_score->tick2measure(currentTick);
-                const Segment* curSegment = currentMeasure->findSegment(SegmentType::ChordRest, currentTick);
+                Measure* currentMeasure = m_score->tick2measure(currentTick);
+                if (!currentMeasure) {
+                    LOGE() << "bend import error : no valid measure for track " << track << ", tick " << currentTick;
+                    return;
+                }
 
+                Segment* curSegment = currentMeasure->findSegment(SegmentType::ChordRest, currentTick);
+                Chord* currentChord = nullptr;
+                Fraction currentChordDuration = chordsDurations[i];
                 if (curSegment) {
-                    // adding bend for existing chord
-                    const Measure* startMeasure = m_score->tick2measure(currentTick);
-
-                    if (!startMeasure) {
-                        LOGE() << "bend import error : no valid measure for track " << track << ", tick " << currentTick;
-                        return;
-                    }
-
-                    const Chord* existingChord = startMeasure->findChord(currentTick, track);
-
-                    if (!existingChord) {
+                    currentChord = currentMeasure->findChord(currentTick, track);
+                    if (!currentChord) {
                         LOGE() << "bend import error : no valid chord for track " << track << ", tick " << currentTick;
                         return;
                     }
-
-                    createGuitarBends(bendDataCtx, existingChord);
-                    currentTick += existingChord->ticks();
                 } else {
-                    // TODO: create new segment and new chord on it
-                    LOGE() << "bend wasn't added!";
+                    curSegment = currentMeasure->getSegment(SegmentType::ChordRest, currentTick);
+                    curSegment->setTicks(currentChordDuration);
+
+                    currentChord = Factory::createChord(m_score->dummy()->segment());
+                    currentChord->setTrack(track);
+                    currentChord->setTicks(currentChordDuration);
+                    currentChord->setDurationType(currentChordDuration);
+                    curSegment->add(currentChord);
+
+                    for (Note* note : mainChord->notes()) {
+                        Note* newChordNote = Factory::createNote(currentChord);
+                        newChordNote->setTrack(track);
+                        currentChord->add(newChordNote);
+                        newChordNote->setPitch(note->pitch());
+                        newChordNote->setTpcFromPitch();
+                    }
                 }
+
+                createGuitarBends(bendDataCtx, currentChord);
+                currentTick += currentChordDuration;
             }
         }
     }
 }
 
-static void createGuitarBends(const BendDataContext& bendDataCtx, const mu::engraving::Chord* chord)
+static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord)
 {
     Score* score = chord->score();
     int chordTicks = chord->tick().ticks();
 
     if (bendDataCtx.bendDataByEndTick.find(chord->track()) == bendDataCtx.bendDataByEndTick.end()) {
-        LOGE() << "bend import error: bends data on track " << chord->track() << " doesn't exist";
         return;
     }
 
     const auto& currentTrackData = bendDataCtx.bendDataByEndTick.at(chord->track());
     if (currentTrackData.find(chordTicks) == currentTrackData.end()) {
-        LOGE() << "bend import error: bends data on track " << chord->track() << " doesn't exist for tick " << chordTicks;
         return;
     }
 
     const BendDataContext::BendChordData& bendChordData = currentTrackData.at(chordTicks);
     const Measure* startMeasure = score->tick2measure(bendChordData.startTick);
-
     if (!startMeasure) {
         LOGE() << "bend import error : no valid measure for track " << chord->track() << ", tick " << bendChordData.startTick.ticks();
         return;
     }
 
-    const Chord* startChord = startMeasure->findChord(bendChordData.startTick, chord->track());
-
+    Chord* startChord = startMeasure->findChord(bendChordData.startTick, chord->track());
     if (!startChord) {
         LOGE() << "bend import error : no valid chord for track " << chord->track() << ", tick " << bendChordData.startTick.ticks();
         return;
@@ -146,13 +155,16 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, const mu::engr
         return l->pitch() < r->pitch();
     });
 
+    auto bendInfoIt = bendChordData.noteDataByPitch.begin();
     for (size_t noteIndex = 0; noteIndex < endChordNotes.size(); noteIndex++) {
         Note* note = endChordNotes[noteIndex];
-        if (bendChordData.noteDataByPitch.find(note->pitch()) == bendChordData.noteDataByPitch.end()) {
-            continue;
+
+        if (bendChordData.noteDataByPitch.size() <= noteIndex) {
+            LOGE() << "bend import error : bend data filled incorrectly, not all bends will be created";
+            return;
         }
 
-        const BendDataContext::BendNoteData& bendNoteData = bendChordData.noteDataByPitch.at(note->pitch());
+        const BendDataContext::BendNoteData& bendNoteData = bendInfoIt->second;
         Note* startNote = startChordNotes[noteIndex];
         int pitch = bendNoteData.quarterTones / 2;
 
@@ -212,6 +224,8 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, const mu::engr
 
             tiedNote = tie->endNote();
         }
+
+        bendInfoIt = std::next(bendInfoIt);
     }
 }
 } // namespace mu::iex::guitarpro

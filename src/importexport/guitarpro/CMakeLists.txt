@@ -47,6 +47,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacontext.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacollector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacollector.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendchorddurationsplitter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendchorddurationsplitter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddataprocessor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddataprocessor.h
 
