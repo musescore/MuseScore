@@ -538,7 +538,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(tieMidWidth,                                Spatium(.21)),
     styleDef(tieDottedWidth,                             Spatium(.10)),
     styleDef(minTieLength,                               Spatium(1.0)),
-    styleDef(minHangingTieLength,                        Spatium(1.0)),
+    styleDef(minHangingTieLength,                        Spatium(1.5)),
     styleDef(minStraightGlissandoLength,                 Spatium(1.2)),
     styleDef(minWigglyGlissandoLength,                   Spatium(2.0)),
     styleDef(slurMinDistance,                            Spatium(0.5)),
