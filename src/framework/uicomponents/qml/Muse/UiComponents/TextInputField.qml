@@ -319,6 +319,7 @@ FocusScope {
         height: parent.height
         width: clearTextButtonItem.visible ? parent.width - clearTextButtonItem.width : parent.width
 
+        enabled: root.enabled
         propagateComposedEvents: true
         hoverEnabled: true
         cursorShape: root.readOnly ? Qt.ArrowCursor : Qt.IBeamCursor

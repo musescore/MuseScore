@@ -52,8 +52,9 @@ Column {
 
         MouseArea {
             id: mouseArea
-
             anchors.fill: parent
+
+            enabled: mainContentArea.enabled
             hoverEnabled: true
 
             onPressed: {
