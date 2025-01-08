@@ -1484,4 +1484,22 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
 
     return measures;
 }
+
+bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure)
+{
+    const std::vector<Measure*> measures = findFollowingRepeatMeasures(endRepeatMeasure);
+    const Score* score = endRepeatMeasure->score();
+
+    for (const Measure* measure : measures) {
+        const SpannerMap::IntervalList& spanners = score->spannerMap().findOverlapping(measure->tick().ticks(), measure->endTick().ticks());
+
+        for (auto& spanner : spanners) {
+            if (spanner.value->isPartialLyricsLine() && spanner.start == measure->tick().ticks()) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 }

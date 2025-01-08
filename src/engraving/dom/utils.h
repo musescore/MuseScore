@@ -108,4 +108,5 @@ extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
 
 extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure);
 extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
+extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
 } // namespace mu::engraving

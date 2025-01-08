@@ -806,7 +806,7 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     }
 
     // Full dashes or melisma before a repeat - possibly with a partial dash/repeat on the other side of the repeat
-    if (endChordRest && hasFollowingJump) {
+    if (endChordRest && hasFollowingJump && !lyricsLine->nextLyrics()) {
         Measure* endMeasure = lyricsLine->findEndMeasure();
         // check if there is a partial lyrics line in a following measure
         if (repeatHasPartialLyricLine(endMeasure) || endChordRest == lyricsLine->startElement()) {
@@ -856,22 +856,4 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     }
 
     item->ryoffset() = endLyrics->offset().y();
-}
-
-bool LyricsLayout::repeatHasPartialLyricLine(const Measure* endRepeatMeasure)
-{
-    const std::vector<Measure*> measures = findFollowingRepeatMeasures(endRepeatMeasure);
-    const Score* score = endRepeatMeasure->score();
-
-    for (const Measure* measure : measures) {
-        const SpannerMap::IntervalList& spanners = score->spannerMap().findOverlapping(measure->tick().ticks(), measure->endTick().ticks());
-
-        for (auto& spanner : spanners) {
-            if (spanner.value->isPartialLyricsLine() && spanner.start == measure->tick().ticks()) {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }

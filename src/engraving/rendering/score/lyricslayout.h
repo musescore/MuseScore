@@ -85,8 +85,6 @@ private:
     static double lyricsLineStartX(const LyricsLineSegment* item);
     static double lyricsLineEndX(const LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);
     static void adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);
-
-    static bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
 };
 }
 #endif // MU_ENGRAVING_LYRICSLAYOUT_DEV_H

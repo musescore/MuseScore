@@ -80,6 +80,7 @@
 #include "engraving/dom/textedit.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/undo.h"
+#include "engraving/dom/utils.h"
 #include "engraving/compat/dummyelement.h"
 
 #include "engraving/rw/xmlreader.h"
@@ -6155,7 +6156,6 @@ void NotationInteraction::addMelisma()
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
-
     endEditText();
 
     // search next chord
@@ -6169,12 +6169,27 @@ void NotationInteraction::addMelisma()
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several underscores
-    Lyrics* fromLyrics = 0;
+    Lyrics* fromLyrics = nullptr;
+    PartialLyricsLine* prevPartialLyricsLine = nullptr;
     while (segment) {
         ChordRest* cr = toChordRest(segment->element(track));
         if (cr) {
             fromLyrics = cr->lyrics(verse, placement);
             if (fromLyrics) {
+                break;
+            }
+            // Check if there is a partial melisma to extend
+            auto spanners = score()->spannerMap().findOverlapping(cr->tick().ticks(), cr->endTick().ticks());
+            for (auto& spanner : spanners) {
+                if (!spanner.value->isPartialLyricsLine() || spanner.value->staffIdx() != cr->staffIdx()) {
+                    continue;
+                }
+                PartialLyricsLine* lyricsLine = toPartialLyricsLine(spanner.value);
+                if (lyricsLine->no() != verse || lyricsLine->placement() != placement || !lyricsLine->isEndMelisma()) {
+                    continue;
+                }
+
+                prevPartialLyricsLine = lyricsLine;
                 break;
             }
         }
@@ -6221,15 +6236,29 @@ void NotationInteraction::addMelisma()
     }
 
     // if a place for a new lyrics has been found, create a lyrics there
+    ChordRest* nextCR = toChordRest(nextSegment->element(track));
+
+    // Disallow melisma lines between non-adjacent repeat sections eg. 1st volta -> 2nd volta
+    if (nextCR && fromLyrics) {
+        Measure* toLyricsMeasure = nextCR->measure();
+        Measure* fromLyricsMeasure = fromLyrics->measure();
+
+        if (toLyricsMeasure != fromLyricsMeasure && fromLyricsMeasure->lastChordRest(track)->hasFollowingJumpItem()) {
+            const std::vector<Measure*> previousRepeats = findPreviousRepeatMeasures(toLyricsMeasure);
+            const bool inPrecedingRepeatSeg = muse::contains(previousRepeats, fromLyricsMeasure);
+            if (!previousRepeats.empty() && !inPrecedingRepeatSeg) {
+                return;
+            }
+        }
+    }
 
     score()->startCmd(TranslatableString("undoableAction", "Enter lyrics extension line"));
-    ChordRest* cr = toChordRest(nextSegment->element(track));
-    Lyrics* toLyrics = cr->lyrics(verse, placement);
-    bool newLyrics = (toLyrics == 0);
+    Lyrics* toLyrics = nextCR->lyrics(verse, placement);
+    bool newLyrics = (toLyrics == nullptr);
     if (!toLyrics) {
-        toLyrics = Factory::createLyrics(cr);
+        toLyrics = Factory::createLyrics(nextCR);
         toLyrics->setTrack(track);
-        toLyrics->setParent(cr);
+        toLyrics->setParent(nextCR);
 
         toLyrics->setNo(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
@@ -6247,6 +6276,7 @@ void NotationInteraction::addMelisma()
     } else if (toLyrics->syllabic() == LyricsSyllabic::END) {
         toLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::SINGLE));
     }
+
     if (fromLyrics) {
         // as we moved away from fromLyrics by an underscore,
         // it can be isolated or terminal but cannot have dashes after
@@ -6262,7 +6292,7 @@ void NotationInteraction::addMelisma()
         if (fromLyrics->segment()->tick() < endTick) {
             fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
         }
-    } else if (hasPrecedingRepeat) {
+    } else if (hasPrecedingRepeat && !prevPartialLyricsLine) {
         // No from lyrics - create incoming partial melisma
         PartialLyricsLine* melisma = Factory::createPartialLyricsLine(score()->dummy());
         melisma->setIsEndMelisma(true);
@@ -6274,6 +6304,10 @@ void NotationInteraction::addMelisma()
         melisma->setTrack2(initialCR->track());
 
         score()->undoAddElement(melisma);
+    } else if (prevPartialLyricsLine) {
+        const Fraction tickDiff = nextCR->tick() - prevPartialLyricsLine->tick2();
+        prevPartialLyricsLine->undoMoveEnd(tickDiff);
+        prevPartialLyricsLine->triggerLayout();
     }
     if (newLyrics) {
         score()->undoAddElement(toLyrics);

@@ -32,6 +32,7 @@
 #include "system.h"
 #include "textedit.h"
 #include "undo.h"
+#include "utils.h"
 
 #include "log.h"
 
@@ -323,6 +324,15 @@ void Lyrics::adjustPrevious()
             }
         }
     }
+}
+
+void Lyrics::setNeedRemoveInvalidSegments()
+{
+    // Allow "invalid" segments when there is a partial lyric line in a following repeat segment
+    if (chordRest()->hasFollowingJumpItem() && repeatHasPartialLyricLine(measure())) {
+        return;
+    }
+    m_needRemoveInvalidSegments = true;
 }
 
 //---------------------------------------------------------

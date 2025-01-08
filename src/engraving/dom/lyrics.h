@@ -80,7 +80,7 @@ public:
     void adjustPrevious();
 
     bool needRemoveInvalidSegments() const { return m_needRemoveInvalidSegments; }
-    void setNeedRemoveInvalidSegments() { m_needRemoveInvalidSegments = true; }
+    void setNeedRemoveInvalidSegments();
     void removeInvalidSegments();
 
     LyricsLine* separator() const { return m_separator; }
