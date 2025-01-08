@@ -38,7 +38,7 @@ class BendDataCollector
 {
 public:
 
-    void storeBendData(mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
+    void storeBendData(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
     BendDataContext collectBendDataContext();
 
     struct BendSegment {
@@ -58,6 +58,7 @@ public:
     };
 
 private:
-    std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::map<int /*pitch*/, ImportedBendInfo> > > m_bendInfoForNote;
+    std::unordered_map<mu::engraving::track_idx_t,
+                       std::map<int, std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> > > m_bendInfoForNote;
 };
 } // mu::iex::guitarpro

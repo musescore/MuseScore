@@ -40,7 +40,7 @@ struct BendDataContext {
 
     struct BendChordData {
         mu::engraving::Fraction startTick;
-        std::map<int /* pitch */, BendNoteData> noteDataByPitch;
+        std::map<int /* idx in chord */, BendNoteData> noteDataByIdx;
     };
 
     std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::vector<mu::engraving::Fraction> > > bendChordDurations;
