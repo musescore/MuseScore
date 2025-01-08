@@ -83,7 +83,7 @@ void Preferences::init(bool storeInMemoryOnly)
       _storeInMemoryOnly = storeInMemoryOnly;
 
 #if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE) && 0)
-      bool checkUpdateStartup = true;
+      bool checkUpdateStartup = false;
       bool checkExtensionsUpdateStartup = true;
 #else
       bool checkUpdateStartup = false;
@@ -241,7 +241,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY,               new IntPreference(6, false)},
             {PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,                new BoolPreference(false, false)},
             {PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,            new BoolPreference(false, false)},
-            {PREF_UI_APP_STARTUP_CHECKUPDATE,                      new BoolPreference(checkUpdateStartup, false)},
+            {PREF_UI_APP_STARTUP_CHECKUPDATE,                      new BoolPreference(checkUpdateStartup)},
             {PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE,          new BoolPreference(checkExtensionsUpdateStartup, false)},
             {PREF_UI_APP_STARTUP_SHOWNAVIGATOR,                    new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)},
