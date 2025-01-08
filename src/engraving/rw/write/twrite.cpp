@@ -794,7 +794,7 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE, Pid::SIZE_SPATIUM_DEPENDENT
     }) {
-        bool force = (item->isVBox() && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
+        bool force = ((item->isVBox() || item->isFBox()) && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
         writeProperty(item, xml, id, force);
     }
     writeItemProperties(item, xml, ctx);
@@ -823,7 +823,18 @@ void TWrite::write(const VBox* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const FBox* item, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<const Box*>(item), xml, ctx);
+    xml.startElement(item);
+
+    xml.tag("textScale", item->textScale());
+    xml.tag("diagramScale", item->diagramScale());
+    xml.tag("columnGap", item->columnGap().val());
+    xml.tag("rowGap", item->rowGap().val());
+    xml.tag("chordsPerRow", item->chordsPerRow());
+    xml.tag("horizontalAlign", static_cast<int>(item->contentHorizontallAlignment()));
+
+    writeProperties(static_cast<const Box*>(item), xml, ctx);
+
+    xml.endElement();
 }
 
 void TWrite::write(const TBox* item, XmlWriter& xml, WriteContext& ctx)

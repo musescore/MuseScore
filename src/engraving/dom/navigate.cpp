@@ -812,14 +812,16 @@ EngravingItem* Score::nextElement()
         }
         case ElementType::VBOX:
         case ElementType::HBOX:
-        case ElementType::TBOX: {
+        case ElementType::TBOX:
+        case ElementType::FBOX: {
             auto boxChildren = toChildPairsSet(e);
 
             EngravingItem* selectedElement = getSelectedElement();
 
             if ((selectedElement->type() == ElementType::VBOX
                  || selectedElement->type() == ElementType::HBOX
-                 || selectedElement->type() == ElementType::TBOX) && !boxChildren.empty()) {
+                 || selectedElement->type() == ElementType::TBOX
+                 || selectedElement->type() == ElementType::FBOX) && !boxChildren.empty()) {
                 return boxChildren.begin()->first;
             }
 
@@ -911,7 +913,8 @@ EngravingItem* Score::prevElement()
 
             if (previousElement->type() != ElementType::VBOX
                 && previousElement->type() != ElementType::HBOX
-                && previousElement->type() != ElementType::TBOX) {
+                && previousElement->type() != ElementType::TBOX
+                && previousElement->type() == ElementType::FBOX) {
                 return previousElement;
             }
 
@@ -1005,7 +1008,8 @@ EngravingItem* Score::prevElement()
         }
         case ElementType::VBOX:
         case ElementType::HBOX:
-        case ElementType::TBOX: {
+        case ElementType::TBOX:
+        case ElementType::FBOX: {
             auto boxChildren = toChildPairsSet(e);
 
             EngravingItem* selectedElement = getSelectedElement();

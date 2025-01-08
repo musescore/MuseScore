@@ -2345,6 +2345,8 @@ void SystemLayout::setMeasureHeight(System* system, double height, const LayoutC
             TLayout::layoutHBox2(toHBox(m), ctx);
         } else if (m->isTBox()) {
             TLayout::layoutTBox(toTBox(m), toTBox(m)->mutldata(), ctx);
+        } else if (m->isFBox()) {
+            TLayout::layoutFBox(toFBox(m), toFBox(m)->mutldata(), ctx);
         } else {
             LOGD("unhandled measure type %s", m->typeName());
         }

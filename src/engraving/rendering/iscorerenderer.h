@@ -56,6 +56,8 @@ class EngravingItem;
 
 class FiguredBassItem;
 
+class FretDiagram;
+
 class Harmony;
 
 class Image;
@@ -133,6 +135,7 @@ public:
                                    Clef*,
                                    Dynamic*,
                                    FiguredBassItem*,
+                                   FretDiagram*,
                                    Harmony*,
                                    Image*,
                                    KeySig*,
