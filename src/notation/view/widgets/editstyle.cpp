@@ -228,6 +228,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     setObjectName("EditStyle");
     setupUi(this);
+    resizeDialog();
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setModal(true);
 
@@ -1279,6 +1280,20 @@ void EditStyle::changeEvent(QEvent* event)
     QDialog::changeEvent(event);
     if (event->type() == QEvent::LanguageChange) {
         retranslate();
+    }
+}
+
+//---------------------------------------------------------
+//   resizeDialog
+//---------------------------------------------------------
+
+void EditStyle::resizeDialog()
+{
+    QScreen* screen = QGuiApplication::primaryScreen();
+    int screenHeight = screen->size().height();
+    int maximumHeight = static_cast<int>(0.9 * screenHeight);
+    if (this->height() > maximumHeight) {
+        this->resize(this->width(), maximumHeight);
     }
 }
 
