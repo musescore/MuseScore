@@ -154,18 +154,19 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
     std::sort(endChordNotes.begin(), endChordNotes.end(), [](Note* l, Note* r) {
         return l->pitch() < r->pitch();
     });
-
-    auto bendInfoIt = bendChordData.noteDataByPitch.begin();
     for (size_t noteIndex = 0; noteIndex < endChordNotes.size(); noteIndex++) {
+        Note* startNote = startChordNotes[noteIndex];
         Note* note = endChordNotes[noteIndex];
 
-        if (bendChordData.noteDataByPitch.size() <= noteIndex) {
-            LOGE() << "bend import error : bend data filled incorrectly, not all bends will be created";
-            return;
+        if (bendChordData.noteDataByIdx.find(noteIndex) == bendChordData.noteDataByIdx.end()) {
+            Tie* tie = Factory::createTie(score->dummy());
+            startNote->add(tie);
+            tie->setEndNote(note);
+            note->setTieBack(tie);
+            continue;
         }
 
-        const BendDataContext::BendNoteData& bendNoteData = bendInfoIt->second;
-        Note* startNote = startChordNotes[noteIndex];
+        const auto& bendNoteData = bendChordData.noteDataByIdx.at(noteIndex);
         int pitch = bendNoteData.quarterTones / 2;
 
         if (bendNoteData.type == GuitarBendType::PRE_BEND) {
@@ -198,7 +199,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             }
 
             QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-            bend->setEndNotePitch(startNote->pitch() + pitch, quarterOff);
+            bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + pitch, quarterOff);
             bend->setStartTimeFactor(bendNoteData.startFactor);
             bend->setEndTimeFactor(bendNoteData.endFactor);
         }
@@ -224,8 +225,6 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
 
             tiedNote = tie->endNote();
         }
-
-        bendInfoIt = std::next(bendInfoIt);
     }
 }
 } // namespace mu::iex::guitarpro

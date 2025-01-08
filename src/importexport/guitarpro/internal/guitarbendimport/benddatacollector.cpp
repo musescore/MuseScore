@@ -34,15 +34,16 @@ namespace mu::iex::guitarpro {
 constexpr int BEND_DIVISIONS = 60;
 
 static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo);
-static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo);
+static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo,
+                                int noteIndexInChord);
 static std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const PitchValues& pitchValues, bool noteTiedBack);
 static bool isSlightBend(const BendDataCollector::ImportedBendInfo& importedInfo);
 static BendDataCollector::ImportedBendInfo fillBendInfo(const Note* note, const PitchValues& pitchValues);
 
-void BendDataCollector::storeBendData(mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues)
+void BendDataCollector::storeBendData(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues)
 {
     if (!pitchValues.empty()) {
-        m_bendInfoForNote[note->track()][note->tick().ticks()][note->pitch()] = fillBendInfo(note, pitchValues);
+        m_bendInfoForNote[note->track()][note->tick().ticks()][note] = fillBendInfo(note, pitchValues);
     }
 }
 
@@ -61,8 +62,9 @@ BendDataContext BendDataCollector::collectBendDataContext()
 
     for (const auto& [track, trackInfo] : m_bendInfoForNote) {
         for (const auto& [tick, tickInfo] : trackInfo) {
-            for (const auto& [pitch, importedBendInfo] : tickInfo) {
-                fillBendDataForNote(bendDataCtx, importedBendInfo);
+            for (const auto& [note, importedBendInfo] : tickInfo) {
+                int idx = muse::indexOf(note->chord()->notes(), note);
+                fillBendDataForNote(bendDataCtx, importedBendInfo, idx);
             }
         }
     }
@@ -95,7 +97,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
     if (pitchValues.front().pitch != 0 && !noteTiedBack) {
         BendDataCollector::BendSegment seg;
         seg.startTime = seg.endTime = 0;
-        seg.pitchDiff = pitchValues.front().pitch;
+        seg.startPitch = 0;
+        seg.endPitch = pitchValues.front().pitch;
 
         bendSegments.push_back(seg);
     }
@@ -106,7 +109,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
             if (!bendSegments.empty()) {
                 BendDataCollector::BendSegment& lastSeg = bendSegments.back();
                 lastSeg.endTime = pitchValues[i + 1].time;
-                lastSeg.pitchDiff = pitchValues[i + 1].pitch - pitchValues[i].pitch;
+                lastSeg.startPitch = pitchValues[i].pitch;
+                lastSeg.endPitch = pitchValues[i + 1].pitch;
             }
 
             continue;
@@ -116,7 +120,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
             BendDataCollector::BendSegment seg;
             seg.startTime = pitchValues[i].time;
             seg.endTime = pitchValues[i + 1].time;
-            seg.pitchDiff = pitchValues[i + 1].pitch - pitchValues[i].pitch;
+            seg.startPitch = pitchValues[i].pitch;
+            seg.endPitch = pitchValues[i + 1].pitch;
             bendSegments.push_back(seg);
         } else {
             if (previousPitchDiff != PitchDiff::SAME || bendSegments.empty()) {
@@ -130,7 +135,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
                 lastSeg.endTime = pitchValues[i + 1].time;
             }
 
-            bendSegments.back().pitchDiff = pitchValues[i + 1].pitch - pitchValues[i].pitch;
+            bendSegments.back().startPitch = pitchValues[i].pitch;
+            bendSegments.back().endPitch = pitchValues[i + 1].pitch;
         }
 
         previousPitchDiff = currentPitchDiff;
@@ -146,7 +152,7 @@ BendDataCollector::ImportedBendInfo fillBendInfo(const Note* note, const PitchVa
     info.note = note;
 
     for (const auto& bs : info.segments) {
-        if (bs.pitchDiff != 0 && bs.startTime != bs.endTime) {
+        if (bs.pitchDiff() != 0 && bs.startTime != bs.endTime) {
             info.pitchChangesAmount++;
         }
     }
@@ -161,7 +167,7 @@ static bool isSlightBend(const BendDataCollector::ImportedBendInfo& importedInfo
     }
 
     for (const auto& seg : importedInfo.segments) {
-        if (seg.pitchDiff == 25) {
+        if (seg.pitchDiff() == 25) {
             return true;
         }
     }
@@ -169,7 +175,7 @@ static bool isSlightBend(const BendDataCollector::ImportedBendInfo& importedInfo
     return false;
 }
 
-void fillSlightBendData(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo)
+void fillSlightBendData(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo, int noteIndexInChord)
 {
     const Note* note = importedInfo.note;
     const Chord* chord = note->chord();
@@ -195,7 +201,7 @@ void fillSlightBendData(BendDataContext& bendDataCtx, const BendDataCollector::I
     slightBendNoteData.endFactor = (double)(firstSeg.endTime + 1) / BEND_DIVISIONS;
     slightBendNoteData.type = GuitarBendType::SLIGHT_BEND;
 
-    slightBendChordData.noteDataByPitch[note->pitch()] = std::move(slightBendNoteData);
+    slightBendChordData.noteDataByIdx[noteIndexInChord] = std::move(slightBendNoteData);
 }
 
 static bool isFirstPrebend(const BendDataCollector::ImportedBendInfo& importedInfo)
@@ -204,7 +210,7 @@ static bool isFirstPrebend(const BendDataCollector::ImportedBendInfo& importedIn
     return firstSeg.startTime == firstSeg.endTime;
 }
 
-static void fillPrebendData(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo)
+static void fillPrebendData(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo, int noteIndexInChord)
 {
     const Note* note = importedInfo.note;
     Fraction tick = note->tick();
@@ -215,13 +221,13 @@ static void fillPrebendData(BendDataContext& bendDataCtx, const BendDataCollecto
 
     BendDataContext::BendNoteData prebendNoteData;
     prebendNoteData.type = GuitarBendType::PRE_BEND;
-    prebendNoteData.quarterTones = firstSeg.pitchDiff / 25;
+    prebendNoteData.quarterTones = firstSeg.endPitch / 25;
 
-    prebendChordData.noteDataByPitch[note->pitch()] = std::move(prebendNoteData);
+    prebendChordData.noteDataByIdx[noteIndexInChord] = std::move(prebendNoteData);
 }
 
 static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo,
-                               size_t startIndex)
+                               size_t startIndex, int noteIndexInChord)
 {
     if (startIndex >= importedInfo.segments.size()) {
         return;
@@ -260,8 +266,8 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
         bendChordData.startTick = currentTick;
         BendDataContext::BendNoteData bendNoteData;
         bendNoteData.type = GuitarBendType::BEND;
-        bendNoteData.quarterTones = seg.pitchDiff / 25;
-        bendChordData.noteDataByPitch[note->pitch()] = std::move(bendNoteData);
+        bendNoteData.quarterTones = seg.endPitch / 25;
+        bendChordData.noteDataByIdx[noteIndexInChord] = std::move(bendNoteData);
 
         currentTick += tickDuration;
         currentIndex++;
@@ -356,7 +362,7 @@ static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, cons
     if (isFirstPrebend(importedInfo)) {
         addFullChordDuration(bendDataCtx, importedInfo);
         startIndex = 1;
-        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff == 0) {
+        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff() == 0) {
             startIndex = 2;
         }
     }
@@ -364,7 +370,7 @@ static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, cons
     splitBendChordDurations(bendDataCtx, importedInfo, startIndex);
 }
 
-static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo)
+static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo, int noteIndexInChord)
 {
     const Note* note = importedInfo.note;
     IF_ASSERT_FAILED(note) {
@@ -379,20 +385,20 @@ static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataColl
     }
 
     if (isSlightBend(importedInfo)) {
-        fillSlightBendData(bendDataCtx, importedInfo);
+        fillSlightBendData(bendDataCtx, importedInfo, noteIndexInChord);
         return;
     }
 
     size_t startIndex = 0;
 
     if (isFirstPrebend(importedInfo)) {
-        fillPrebendData(bendDataCtx, importedInfo);
+        fillPrebendData(bendDataCtx, importedInfo, noteIndexInChord);
         startIndex = 1;
-        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff == 0) {
+        if (importedInfo.segments.size() > 1 && importedInfo.segments[1].pitchDiff() == 0) {
             startIndex = 2;
         }
     }
 
-    fillNormalBendData(bendDataCtx, importedInfo, startIndex);
+    fillNormalBendData(bendDataCtx, importedInfo, startIndex, noteIndexInChord);
 }
 } // namespace mu::iex::guitarpro
