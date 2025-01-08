@@ -188,6 +188,9 @@ endif ()
 if (MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE)
     list(APPEND LINK_LIB iex_videoexport)
 endif ()
+if (MUE_BUILD_IMPEXP_TABLEDIT_MODULE)
+    list(APPEND LINK_LIB iex_tabledit)
+endif ()
 
 set (MSCORE_APPEND_SRC)
 
