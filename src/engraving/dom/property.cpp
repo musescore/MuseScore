@@ -135,6 +135,13 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::IMAGE_WIDTH,             false, "imageWidth",            P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "imageWidth") },
     { Pid::IMAGE_FRAMED,            false, "imageFramed",           P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "imageFramed") },
 
+    { Pid::FRET_FRAME_TEXT_SCALE,               false, "fretFrameTextScale",            P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "text scale") },
+    { Pid::FRET_FRAME_DIAGRAM_SCALE,            false, "fretFrameDiagramScale",         P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "diagram scale") },
+    { Pid::FRET_FRAME_COLUMN_GAP,               false, "fretFrameColumnGap",            P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "column gap") },
+    { Pid::FRET_FRAME_ROW_GAP,                  false, "fretFrameRowGap",               P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "row gap") },
+    { Pid::FRET_FRAME_CHORDS_PER_ROW,           false, "fretFrameChordsPerRow",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "chords per row") },
+    { Pid::FRET_FRAME_H_ALIGN,                  false, "fretFrameHorizontalAlign",      P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "horizontal alignment") },
+
     { Pid::SCALE,                   false, "scale",                 P_TYPE::SCALE,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "scale") },
     { Pid::LOCK_ASPECT_RATIO,       false, "lockAspectRatio",       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "aspect ratio locked") },
     { Pid::SIZE_IS_SPATIUM,         false, "sizeIsSpatium",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "size is spatium") },

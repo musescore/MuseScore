@@ -176,12 +176,67 @@ class FBox : public VBox
     DECLARE_CLASSOF(ElementType::FBOX)
 
 public:
-    FBox(System* parent)
-        : VBox(ElementType::FBOX, parent) {}
+    FBox(System* parent);
 
     FBox* clone() const override { return new FBox(*this); }
 
     void add(EngravingItem*) override;
+
+    // Score Tree functions
+    EngravingObject* scanParent() const override;
+    EngravingObjectList scanChildren() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
+
+    double textScale() const { return m_textScale; }
+    void setTextScale(double scale) { m_textScale = scale; }
+
+    double diagramScale() const { return m_diagramScale; }
+    void setDiagramScale(double scale) { m_diagramScale = scale; }
+
+    Spatium columnGap() const { return m_columnGap; }
+    void setColumnGap(Spatium gap) { m_columnGap = gap; }
+
+    Spatium rowGap() const { return m_rowGap; }
+    void setRowGap(Spatium gap) { m_rowGap = gap; }
+
+    int chordsPerRow() const { return m_chordsPerRow; }
+    void setChordsPerRow(int chords) { m_chordsPerRow = chords; }
+
+    AlignH contentHorizontallAlignment() const { return m_contentAlignmentH; }
+    void setContentHorizontallAlignment(AlignH alignment) { m_contentAlignmentH = alignment; }
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+
+    const std::vector<FretDiagram*> fretDiagrams() const { return m_fretDiagrams; }
+
+    void init();
+
+    struct LayoutData : public VBox::LayoutData {
+        double cellWidth = 0.0;
+        double cellHeight = 0.0;
+
+        double totalTableHeight = 0.0;
+        double totalTableWidth = 0.0;
+
+        double defaultMargins = 0.0;
+    };
+
+    DECLARE_LAYOUTDATA_METHODS(FBox)
+
+private:
+    void resolveContentRect();
+
+    std::vector<FretDiagram*> m_fretDiagrams;
+
+    double m_textScale = 0.0;
+    double m_diagramScale = 0.0;
+    Spatium m_columnGap;
+    Spatium m_rowGap;
+    int m_chordsPerRow = 0;
+
+    AlignH m_contentAlignmentH = AlignH::HCENTER;
 };
 
 //---------------------------------------------------------

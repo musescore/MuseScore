@@ -668,6 +668,8 @@ PointF EngravingItem::pagePos() const
             system = toSystem(explicitParent());
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->pagePos();
+        } else if (explicitParent()->isFBox()) {
+            return p + parentItem()->pagePos();
         } else {
             ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
         }
@@ -1608,8 +1610,9 @@ bool EngravingItem::isPlayable() const
     switch (type()) {
     case ElementType::NOTE:
     case ElementType::CHORD:
-    case ElementType::HARMONY:
         return true;
+    case ElementType::HARMONY:
+        return explicitParent() && explicitParent()->isSegment();
     default:
         return false;
     }

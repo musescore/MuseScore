@@ -1444,7 +1444,7 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
     }
 }
 
-void TLayout::layoutFBox(const FBox* item, EngravingItem::LayoutData* ldata, const LayoutContext& ctx)
+void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     const System* parentSystem = item->system();
@@ -1452,11 +1452,111 @@ void TLayout::layoutFBox(const FBox* item, EngravingItem::LayoutData* ldata, con
     LD_CONDITION(parentSystem->ldata()->isSetBbox());
 
     ldata->setPos(PointF());
-    ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), item->absoluteFromSpatium(item->boxHeight()));
-    layoutBaseBox(item, ldata, ctx);
+
+    const std::vector<FretDiagram*>& fretDiagrams = item->fretDiagrams();
+    if (fretDiagrams.empty()) {
+        return;
+    }
+
+    //! NOTE: layout fret diagrams and calculate sizes
+
+    const int totalDiagrams = fretDiagrams.size();
+    double maxFretDiagramHeight = 0.0;
+    double maxFretDiagramWidth = 0.0;
+
+    for (int i = 0; i < totalDiagrams; ++i) {
+        FretDiagram* fretDiagram = fretDiagrams[i];
+        if (!fretDiagram) {
+            continue;
+        }
+
+        fretDiagram->setUserMag(item->diagramScale());
+
+        Harmony* harmony = fretDiagram->harmony();
+        harmony->setUserMag(item->textScale());
+        harmony->render();
+
+        layoutItem(fretDiagram, const_cast<LayoutContext&>(ctx));
+
+        double height = fretDiagram->ldata()->bbox().height() + fretDiagram->harmony()->ldata()->harmonyHeight
+                        + ctx.conf().styleMM(Sid::harmonyFretDist);
+        double width = fretDiagram->ldata()->bbox().width();
+
+        maxFretDiagramHeight = std::max(maxFretDiagramHeight, height);
+        maxFretDiagramWidth = std::max(maxFretDiagramWidth, width);
+    }
+
+    //! NOTE: table view layout
+
+    double cellWidth = maxFretDiagramWidth;
+    double cellHeight = maxFretDiagramHeight;
+
+    ldata->cellWidth = cellWidth;
+    ldata->cellHeight = cellHeight;
+
+    const double spatium = item->spatium();
+
+    const int chordsPerRow = item->chordsPerRow();
+    const double rowGap = item->rowGap().val() * spatium;
+    const double columnGap = item->columnGap().val() * spatium;
+
+    const int rows = std::ceil(double(totalDiagrams) / double(chordsPerRow));
+    const int columns = std::min(totalDiagrams, chordsPerRow);
+
+    static constexpr double MARGINS = 8.0;
+    const double totalTableHeight = rows * cellHeight + (rows - 1) * rowGap + MARGINS;
+    const double totalTableWidth = cellWidth * columns + (columns - 1) * columnGap + MARGINS;
+
+    ldata->totalTableHeight = totalTableHeight;
+    ldata->totalTableWidth = totalTableWidth;
+
+    PropertyValue heightProperty = item->getProperty(Pid::BOX_HEIGHT);
+    PropertyValue heightDefaultProperty = item->propertyDefault(Pid::BOX_HEIGHT);
+
+    double boxHeight = totalTableHeight;
+    if (heightProperty.isValid() && heightProperty != heightDefaultProperty) {
+        boxHeight = item->absoluteFromSpatium(item->boxHeight());
+    }
+
+    ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), boxHeight);
+
+    AlignH alignH = item->contentHorizontallAlignment();
+    const double leftMargin = item->getProperty(Pid::LEFT_MARGIN).toDouble() * spatium;
+    const double rightMargin = item->getProperty(Pid::RIGHT_MARGIN).toDouble() * spatium;
+    const double topMargin = item->getProperty(Pid::TOP_MARGIN).toDouble() * spatium;
+    const double bottomMargin = item->getProperty(Pid::BOTTOM_MARGIN).toDouble() * spatium;
+
+    const double startX = alignH == AlignH::HCENTER
+                          ? (item->width() - totalTableWidth) / 2
+                          : alignH == AlignH::RIGHT ? item->width() - totalTableWidth : 0.0;
+    const double startY = !muse::RealIsNull(topMargin) ? topMargin : -bottomMargin;
+
+    for (int i = 0; i < totalDiagrams; ++i) {
+        FretDiagram* fretDiagram = fretDiagrams[i];
+        if (!fretDiagram) {
+            continue;
+        }
+
+        int row = i / chordsPerRow;
+        int col = i % chordsPerRow;
+
+        int itemsInRow = std::min(chordsPerRow, totalDiagrams - row * chordsPerRow);
+        double rowOffsetX = alignH == AlignH::HCENTER
+                            ? (totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap)) / 2
+                            : alignH == AlignH::RIGHT
+                            ? totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap) - rightMargin + spatium
+                            : leftMargin + spatium;
+
+        double x = startX + rowOffsetX + col * (cellWidth + columnGap);
+        double y = startY + row * (cellHeight + rowGap);
+
+        double fretDiagramX = x;
+        double fretDiagramY = y + fretDiagram->harmony()->ldata()->harmonyHeight + ctx.conf().styleMM(Sid::harmonyFretDist);
+        fretDiagram->mutldata()->setPos(PointF(fretDiagramX, fretDiagramY));
+    }
 }
 
-void TLayout::layoutTBox(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx)
+void TLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     const System* parentSystem = item->system();
@@ -2633,31 +2733,28 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 
     ldata->setShape(shape);
 
-    if (!item->explicitParent()->isSegment()) {
-        ldata->setPos(PointF());
-        return;
-    }
-
-    // We need to get the width of the notehead/rest in order to position the fret diagram correctly
-    Segment* pSeg = item->segment();
-    double noteheadWidth = 0;
-    if (pSeg->isChordRestType()) {
-        staff_idx_t idx = item->staff()->idx();
-        for (EngravingItem* e = pSeg->firstElementOfSegment(idx); e; e = pSeg->nextElementOfSegment(e, idx)) {
-            if (e->isRest()) {
-                const Rest* r = toRest(e);
-                LD_CONDITION(r->ldata()->sym.has_value());
-                noteheadWidth = item->symWidth(r->ldata()->sym());
-                break;
-            } else if (e->isNote()) {
-                Note* n = toNote(e);
-                noteheadWidth = n->headWidth();
-                break;
+    if (item->explicitParent()->isSegment()) {
+        // We need to get the width of the notehead/rest in order to position the fret diagram correctly
+        Segment* pSeg = item->segment();
+        double noteheadWidth = 0;
+        if (pSeg->isChordRestType()) {
+            staff_idx_t idx = item->staff()->idx();
+            for (EngravingItem* e = pSeg->firstElementOfSegment(idx); e; e = pSeg->nextElementOfSegment(e, idx)) {
+                if (e->isRest()) {
+                    const Rest* r = toRest(e);
+                    LD_CONDITION(r->ldata()->sym.has_value());
+                    noteheadWidth = item->symWidth(r->ldata()->sym());
+                    break;
+                } else if (e->isNote()) {
+                    Note* n = toNote(e);
+                    noteheadWidth = n->headWidth();
+                    break;
+                }
             }
         }
-    }
 
-    ldata->setPos((noteheadWidth - item->mainWidth()) / 2, -(ldata->shape().bottom() + item->styleP(Sid::fretY)));
+        ldata->setPos((noteheadWidth - item->mainWidth()) / 2, -(ldata->shape().bottom() + item->styleP(Sid::fretY)));
+    }
 
     if (item->autoplace()) {
         const Segment* s = toSegment(item->explicitParent());
@@ -2665,9 +2762,9 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
         LD_CONDITION(s->ldata()->isSetPos());
-    }
 
-    Autoplace::autoplaceSegmentElement(item, ldata);
+        Autoplace::autoplaceSegmentElement(item, ldata);
+    }
 
     Harmony* harmony = item->harmony();
     if (harmony) {

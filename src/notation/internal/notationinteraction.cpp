@@ -2052,12 +2052,14 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                                           || element->type() == ElementType::VBOX
                                           || element->type() == ElementType::HBOX
                                           || element->type() == ElementType::TBOX
+                                          || element->type() == ElementType::FBOX
                                           || element->type() == ElementType::MEASURE
                                           || element->type() == ElementType::BRACKET
                                           || (element->type() == ElementType::ACTION_ICON
                                               && (toActionIcon(element)->actionType() == mu::engraving::ActionIconType::VFRAME
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::HFRAME
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::TFRAME
+                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::FFRAME
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::STAFF_TYPE_CHANGE
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::MEASURE
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::BRACKETS));
@@ -4634,6 +4636,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
         case BoxType::Horizontal: return mu::engraving::ElementType::HBOX;
         case BoxType::Vertical: return mu::engraving::ElementType::VBOX;
         case BoxType::Text: return mu::engraving::ElementType::TBOX;
+        case BoxType::Fret: return mu::engraving::ElementType::FBOX;
         case BoxType::Measure: return mu::engraving::ElementType::MEASURE;
         case BoxType::Unknown: return mu::engraving::ElementType::INVALID;
         }
@@ -4651,6 +4654,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
         case BoxType::Horizontal: return TranslatableString("undoableAction", "Add horizontal frame");
         case BoxType::Vertical: return TranslatableString("undoableAction", "Add vertical frame");
         case BoxType::Text: return TranslatableString("undoableAction", "Add text frame");
+        case BoxType::Fret: return TranslatableString("undoableAction", "Add fretboard diagram legend");
         case BoxType::Measure: return TranslatableString("undoableAction", "Add %n measure(s)", nullptr, count);
         case BoxType::Unknown: break;
         }

@@ -134,6 +134,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/textframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.cpp

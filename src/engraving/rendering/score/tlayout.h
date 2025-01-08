@@ -215,7 +215,7 @@ public:
     static void layoutHBox2(HBox* item, const LayoutContext& ctx);
     static void layoutVBox(const VBox* item, VBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutTBox(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutBreath(const Breath* item, Breath::LayoutData* ldata, const LayoutConfiguration& conf);
