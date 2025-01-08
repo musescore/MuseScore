@@ -142,6 +142,15 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
         previousPitchDiff = currentPitchDiff;
     }
 
+    if (!bendSegments.empty() && bendSegments.back().endTime == BEND_DIVISIONS && bendSegments.back().pitchDiff() != 0) {
+        bendSegments.back().endTime = BEND_DIVISIONS - 1;
+        BendDataCollector::BendSegment extraSegment;
+        extraSegment.startTime = BEND_DIVISIONS - 1;
+        extraSegment.endTime = BEND_DIVISIONS;
+        extraSegment.startPitch = extraSegment.endPitch = bendSegments.back().endPitch;
+        bendSegments.push_back(extraSegment);
+    }
+
     return bendSegments;
 }
 

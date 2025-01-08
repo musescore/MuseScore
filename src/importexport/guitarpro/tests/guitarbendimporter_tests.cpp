@@ -131,6 +131,10 @@ TEST_F(GuitarBendImporter_Tests, gpBend_3) {
     gpReadTest(u"bend_3", u"gp");
 }
 
+TEST_F(GuitarBendImporter_Tests, gpBend_4) {
+    gpReadTest(u"bend_4", u"gp");
+}
+
 TEST_F(GuitarBendImporter_Tests, gpBendRelease_1) {
     gpReadTest(u"bend+release_1", u"gp");
 }
