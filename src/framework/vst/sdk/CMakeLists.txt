@@ -28,7 +28,7 @@ else()
     FetchContent_Declare(
         vst3sdk
         GIT_REPOSITORY https://github.com/steinbergmedia/vst3sdk.git
-        GIT_TAG v3.7.11_build_10
+        GIT_TAG v3.7.12_build_20
 
         # Hack: we don't want `vst3sdk`'s own CMakeLists.txt to be used, so we
         # tell CMake to go look for it in a non-existent folder.
@@ -133,6 +133,8 @@ set(VST_PLUGIN_INTERFACES_SRC
 
 set(VST_SDK_COMMON_SRC
     ${VST3_SDK_PATH}/public.sdk/source/common/commoniids.cpp
+    ${VST3_SDK_PATH}/public.sdk/source/common/commonstringconvert.cpp
+    ${VST3_SDK_PATH}/public.sdk/source/common/commonstringconvert.h
     ${VST3_SDK_PATH}/public.sdk/source/common/openurl.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/openurl.h
     ${VST3_SDK_PATH}/public.sdk/source/common/threadchecker.h
