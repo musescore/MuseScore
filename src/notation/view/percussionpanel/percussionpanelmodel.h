@@ -31,6 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
 #include "iinstrumentsrepository.h"
+#include "inotationconfiguration.h"
 
 #include "percussionpanelpadlistmodel.h"
 
@@ -54,6 +55,7 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
 
     Q_OBJECT
 

@@ -51,15 +51,18 @@ public:
 
     NoteInputState state() const override;
 
-    void startNoteInput(bool focusNotation = true) override;
+    void startNoteInput(NoteInputMethod method = NoteInputMethod::STEPTIME, bool focusNotation = true) override;
     void endNoteInput(bool resetState = false) override;
-    void toggleNoteInputMethod(NoteInputMethod method) override;
+
+    muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const override;
+    muse::async::Notification noteInputEnded() const override;
+
+    void setNoteInputMethod(NoteInputMethod method) override;
+
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) override;
     void removeNote(const muse::PointF& pos) override;
-    muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const override;
-    muse::async::Notification noteInputEnded() const override;
 
     void addTuplet(const TupletOptions& options) override;
 

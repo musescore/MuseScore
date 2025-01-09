@@ -441,7 +441,7 @@ void PercussionPanelModel::writePitch(int pitch)
 
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter percussion note"));
 
-    interaction()->noteInput()->startNoteInput(/*focusNotation*/ false);
+    interaction()->noteInput()->startNoteInput(configuration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
     score()->addMidiPitch(pitch, false, /*transpose*/ false);
     undoStack->commitChanges();

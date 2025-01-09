@@ -58,6 +58,7 @@ static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrec
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
+static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/defaultInputMethod");
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
@@ -175,6 +176,7 @@ void NotationConfiguration::init()
         fileSystem()->makePath(userStylesPath());
     }
 
+    settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(static_cast<int>(NoteInputMethod::STEPTIME)));
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->valueChanged(SELECTION_PROXIMITY).onReceive(this, [this](const Val& val) {
         m_selectionProximityChanged.send(val.toInt());
@@ -628,6 +630,16 @@ void NotationConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged() const
 {
     return engravingConfiguration()->partStyleFilePathChanged();
+}
+
+void NotationConfiguration::setDefaultNoteInputMethod(NoteInputMethod method)
+{
+    settings()->setSharedValue(DEFAULT_NOTE_INPUT_METHOD, Val(static_cast<int>(method)));
+}
+
+NoteInputMethod NotationConfiguration::defaultNoteInputMethod() const
+{
+    return static_cast<NoteInputMethod>(settings()->value(DEFAULT_NOTE_INPUT_METHOD).toInt());
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

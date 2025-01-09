@@ -50,7 +50,7 @@ static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 //---------------------------------------------------------
 
 enum class NoteEntryMethod : char {
-    UNKNOWN, STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
+    UNKNOWN, STEPTIME, BY_DURATION, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
 };
 
 //---------------------------------------------------------

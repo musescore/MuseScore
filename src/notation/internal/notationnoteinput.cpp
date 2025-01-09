@@ -89,7 +89,7 @@ NoteInputState NotationNoteInput::state() const
 }
 
 //! NOTE Copied from `void ScoreView::startNoteEntry()`
-void NotationNoteInput::startNoteInput(bool focusNotation)
+void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotation)
 {
     TRACEFUNC;
 
@@ -106,11 +106,6 @@ void NotationNoteInput::startNoteInput(bool focusNotation)
 
     mu::engraving::InputState& is = score()->inputState();
 
-    // Not strictly necessary, just for safety
-    if (is.noteEntryMethod() == mu::engraving::NoteEntryMethod::UNKNOWN) {
-        is.setNoteEntryMethod(mu::engraving::NoteEntryMethod::STEPTIME);
-    }
-
     Duration d(is.duration());
     if (!d.isValid() || d.isZero() || d.type() == DurationType::V_MEASURE) {
         is.setDuration(Duration(DurationType::V_QUARTER));
@@ -119,6 +114,7 @@ void NotationNoteInput::startNoteInput(bool focusNotation)
 
     is.setRest(false);
     is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(method);
 
     //! TODO Find out why.
     score()->setUpdateAll();
@@ -322,7 +318,17 @@ void NotationNoteInput::endNoteInput(bool resetState)
     updateInputState();
 }
 
-void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
+Channel</*focusNotation*/ bool> NotationNoteInput::noteInputStarted() const
+{
+    return m_noteInputStarted;
+}
+
+Notification NotationNoteInput::noteInputEnded() const
+{
+    return m_noteInputEnded;
+}
+
+void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
 {
     TRACEFUNC;
 
@@ -397,16 +403,6 @@ void NotationNoteInput::removeNote(const PointF& pos)
     notifyAboutStateChanged();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
-}
-
-Channel</*focusNotation*/ bool> NotationNoteInput::noteInputStarted() const
-{
-    return m_noteInputStarted;
-}
-
-Notification NotationNoteInput::noteInputEnded() const
-{
-    return m_noteInputEnded;
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)

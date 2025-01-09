@@ -85,6 +85,7 @@ void NotationActionController::init()
 
     registerAction("note-input", [this]() { toggleNoteInput(); });
     registerNoteInputAction("note-input-steptime", NoteInputMethod::STEPTIME);
+    registerNoteInputAction("note-input-by-duration", NoteInputMethod::BY_DURATION);
     registerNoteInputAction("note-input-rhythm", NoteInputMethod::RHYTHM);
     registerNoteInputAction("note-input-repitch", NoteInputMethod::REPITCH);
     registerNoteInputAction("note-input-realtime-auto", NoteInputMethod::REALTIME_AUTO);
@@ -710,7 +711,8 @@ void NotationActionController::resetState()
 void NotationActionController::toggleNoteInput()
 {
     TRACEFUNC;
-    auto noteInput = currentNotationNoteInput();
+
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
     }
@@ -718,7 +720,7 @@ void NotationActionController::toggleNoteInput()
     if (noteInput->isNoteInputMode()) {
         noteInput->endNoteInput();
     } else {
-        noteInput->startNoteInput();
+        noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
     }
 
     muse::ui::UiActionState state = actionRegister()->actionState("note-input");
@@ -729,19 +731,19 @@ void NotationActionController::toggleNoteInput()
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 {
     TRACEFUNC;
-    auto noteInput = currentNotationNoteInput();
+
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
     }
 
     if (!noteInput->isNoteInputMode()) {
-        noteInput->startNoteInput();
+        noteInput->startNoteInput(method);
     } else if (noteInput->state().method == method) {
         toggleNoteInput();
-        return;
+    } else {
+        noteInput->setNoteInputMethod(method);
     }
-
-    noteInput->toggleNoteInputMethod(method);
 }
 
 void NotationActionController::toggleNoteInputInsert()
@@ -756,13 +758,14 @@ void NotationActionController::toggleNoteInputInsert()
 void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
 {
     TRACEFUNC;
-    auto noteInput = currentNotationNoteInput();
+
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
     }
 
     if (!noteInput->isNoteInputMode()) {
-        noteInput->startNoteInput();
+        noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
     }
 
     noteInput->addNote(note, addingMode);
@@ -773,15 +776,19 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
 void NotationActionController::padNote(const Pad& pad)
 {
     TRACEFUNC;
-    auto noteInput = currentNotationNoteInput();
+
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
     }
 
     startNoteInputIfNeed();
-
     noteInput->padNote(pad);
-    if (currentNotationScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
+
+    const NoteInputState& state = noteInput->state();
+
+    if (state.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)
+        || state.usingNoteEntryMethod(NoteInputMethod::RHYTHM)) {
         playSelectedElement();
     }
 }
@@ -2065,18 +2072,19 @@ void NotationActionController::playSelectedElement(bool playChord)
 void NotationActionController::startNoteInputIfNeed()
 {
     TRACEFUNC;
-    auto interaction = currentNotationInteraction();
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    auto noteInput = interaction->noteInput();
+    INotationNoteInputPtr noteInput = interaction->noteInput();
     if (!noteInput) {
         return;
     }
 
     if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
-        noteInput->startNoteInput();
+        noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
     }
 }
 
