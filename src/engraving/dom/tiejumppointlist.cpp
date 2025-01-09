@@ -138,7 +138,7 @@ String TieJumpPoint::precedingJumpItemName() const
         }
     }
 
-    if (m_note->tieBack() && m_note->tieBack()->startNote()) {
+    if (m_followingNote) {
         //: Used at %1 in the string "Tie to %1 (m. %2)"
         return muse::mtrc("engraving", "next note", "partial tie menu");
     }
