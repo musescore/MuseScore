@@ -5251,9 +5251,6 @@ void ExportMusicXml::harpPedals(HarpPedalDiagram const* const hpd, staff_idx_t s
     directionTag(m_xml, m_attr, hpd);
     m_xml.startElement("direction-type");
     XmlWriter::Attributes harpPedalAttrs;
-    if (!hpd->isStyled(Pid::PLACEMENT)) {
-        harpPedalAttrs.push_back({ "placement", (hpd->placement() == PlacementV::BELOW) ? "below" : "above" });
-    }
     addColorAttr(hpd, harpPedalAttrs);
     if (!hpd->isDiagram()) {
         m_xml.startElement("harp-pedals", harpPedalAttrs);
