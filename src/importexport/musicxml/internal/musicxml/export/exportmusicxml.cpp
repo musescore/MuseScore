@@ -101,6 +101,7 @@
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/pickscrape.h"
 #include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/playtechannotation.h"
 #include "engraving/dom/rasgueado.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
@@ -385,6 +386,7 @@ public:
     void hairpin(Hairpin const* const hp, staff_idx_t staff, const Fraction& tick);
     void ottava(Ottava const* const ot, staff_idx_t staff, const Fraction& tick);
     void pedal(Pedal const* const pd, staff_idx_t staff, const Fraction& tick);
+    void playText(PlayTechAnnotation const* const annot, staff_idx_t staff);
     void textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick);
     void dynamic(Dynamic const* const dyn, staff_idx_t staff);
     void symbol(Symbol const* const sym, staff_idx_t staff);
@@ -466,6 +468,7 @@ private:
     TrillHash m_trillStart;
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
+    PlayingTechniqueType m_currPlayTechnique;
 };
 
 //---------------------------------------------------------
@@ -5103,6 +5106,46 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
 }
 
 //---------------------------------------------------------
+//   playText
+//---------------------------------------------------------
+
+void ExportMusicXml::playText(PlayTechAnnotation const* const annot, staff_idx_t staff)
+{
+    const int offset = calculateTimeDeltaInDivisions(annot->tick(), tick(), m_div);
+
+    if (annot->plainText() == "") {
+        // sometimes empty Texts are present, exporting would result
+        // in invalid MusicXML (as an empty direction-type would be created)
+        return;
+    }
+
+    directionTag(m_xml, m_attr, annot);
+    wordsMetronome(m_xml, m_score->style(), annot, offset);
+
+    const PlayingTechniqueType type = annot->techniqueType();
+    if (type == PlayingTechniqueType::Pizzicato) {
+        m_xml.tag("sound", { { "pizzicato", "yes" } });
+    } else if ((type != PlayingTechniqueType::Pizzicato) && (m_currPlayTechnique == PlayingTechniqueType::Pizzicato)) {
+        m_xml.tag("sound", { { "pizzicato", "no" } });
+    } else if ((type != PlayingTechniqueType::Undefined) && (type != PlayingTechniqueType::Natural)) {
+        m_xml.startElement("sound");
+        m_xml.startElement("play");
+        if (type == PlayingTechniqueType::Mute) {
+            m_xml.tag("mute", "on");
+        } else if (type == PlayingTechniqueType::Open) {
+            m_xml.tag("mute", "off");
+        } else {
+            m_xml.tag("other-play", { { "type", TConv::toXml(type) } }, TConv::userName(type).translated());
+        }
+        m_xml.endElement();
+        m_xml.endElement();
+    }
+    m_currPlayTechnique = type;
+
+    directionETag(m_xml, staff);
+}
+
+//---------------------------------------------------------
 //   words
 //---------------------------------------------------------
 
@@ -6493,8 +6536,9 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->symbol(toSymbol(e), sstaff);
     } else if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
-    } else if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isStaffText()
-               || e->isTripletFeel() || e->isText()
+    } else if (e->isPlayTechAnnotation()) {
+        exp->playText(toPlayTechAnnotation(e), sstaff);
+    } else if (e->isCapo() || e->isStringTunings() || e->isStaffText() || e->isTripletFeel() || e->isText()
                || e->isExpression() || (e->isInstrumentChange() && e->visible()) || e->isSticking()) {
         exp->words(toTextBase(e), sstaff);
     } else if (e->isDynamic()) {

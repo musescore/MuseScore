@@ -3464,7 +3464,13 @@ void MusicXmlParserDirection::direction(const String& partId,
             }
         } else {
             if (!m_wordsText.empty() || !m_metroText.empty()) {
-                const PlayingTechniqueType technique = getPlayingTechnique();
+                PlayingTechniqueType technique = PlayingTechniqueType::Undefined;
+                if (!m_play.empty()) {
+                    technique = TConv::fromXml(m_play.toAscii().constChar(), PlayingTechniqueType::Undefined);
+                    m_play.clear();
+                } else {
+                    technique = getPlayingTechnique();
+                }
                 isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty() && placement() == u"below";
                 if (isExpressionText) {
                     t = Factory::createExpression(m_score->dummy()->segment());
@@ -3583,7 +3589,7 @@ void MusicXmlParserDirection::direction(const String& partId,
             }
         }
 
-        if (!m_dynaVelocity.isEmpty()) {
+        if (!m_dynaVelocity.empty()) {
             int dynaValue = round(m_dynaVelocity.toDouble() * 0.9);
             if (dynaValue > 127) {
                 dynaValue = 127;
@@ -3948,7 +3954,43 @@ void MusicXmlParserDirection::sound()
     m_tpoSound = m_e.doubleAttribute("tempo");
     m_dynaVelocity = m_e.attribute("dynamics");
 
-    m_e.skipCurrentElement();
+    const String pizz = m_e.attribute("pizzicato");
+    if (pizz == u"yes") {
+        m_play = u"pizzicato";
+    } else if (pizz == u"no") {
+        m_play = u"natural";
+    }
+
+    while (m_e.readNextStartElement()) {
+        if (m_e.name() == "play") {
+            play();
+        } else {
+            skipLogCurrElem();
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   play
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/direction/sound/play node.
+ */
+
+void MusicXmlParserDirection::play()
+{
+    while (m_e.readNextStartElement()) {
+        if (m_e.name() == "mute") {
+            const String muted = m_e.readText();
+            m_play = (muted == u"off") ? u"open" : u"mute";
+        } else if (m_e.name() == "other-play") {
+            m_play = m_e.attribute("type");
+            m_e.skipCurrentElement();
+        } else {
+            skipLogCurrElem();
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -7434,7 +7476,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
     Fraction offset;
-    if (!placement.isEmpty()) {
+    if (!placement.empty()) {
         ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
         ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         ha->resetProperty(Pid::OFFSET);
