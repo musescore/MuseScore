@@ -69,7 +69,7 @@ public:
     String screenReaderInfo() const override;
 
     void setIsDiagram(bool diagram);
-    bool isDiagram() { return m_isDiagram; }
+    bool isDiagram() const { return m_isDiagram; }
 
     std::array<PedalPosition, HARP_STRING_NO> getPedalState() const { return m_pedalState; }
     void setPedalState(std::array<PedalPosition, HARP_STRING_NO> state);
