@@ -5262,10 +5262,10 @@ void ExportMusicXml::harpPedals(HarpPedalDiagram const* const hpd, staff_idx_t s
             m_xml.endElement();
         }
         m_xml.endElement();
-        m_xml.endElement();
     } else {
         m_xml.tag("words", harpPedalAttrs, hpd->plainText());
     }
+    m_xml.endElement();
     const int offset = calculateTimeDeltaInDivisions(hpd->tick(), tick(), m_div);
     if (offset) {
         m_xml.tag("offset", offset);
