@@ -158,7 +158,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
         Note* startNote = startChordNotes[noteIndex];
         Note* note = endChordNotes[noteIndex];
 
-        if (bendChordData.noteDataByIdx.find(noteIndex) == bendChordData.noteDataByIdx.end()) {
+        if (bendChordData.noteDataByIdx.find(static_cast<int>(noteIndex)) == bendChordData.noteDataByIdx.end()) {
             Tie* tie = Factory::createTie(score->dummy());
             startNote->add(tie);
             tie->setEndNote(note);
@@ -166,7 +166,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             continue;
         }
 
-        const auto& bendNoteData = bendChordData.noteDataByIdx.at(noteIndex);
+        const auto& bendNoteData = bendChordData.noteDataByIdx.at(static_cast<int>(noteIndex));
 
         if (bendNoteData.type == GuitarBendType::PRE_BEND) {
             int pitch = bendNoteData.quarterTones / 2;
