@@ -279,6 +279,15 @@ muse::async::Channel<muse::io::path_t> NotationConfigurationStub::partStyleFileP
     return ch;
 }
 
+void NotationConfigurationStub::setDefaultNoteInputMethod(NoteInputMethod)
+{
+}
+
+NoteInputMethod NotationConfigurationStub::defaultNoteInputMethod() const
+{
+    return NoteInputMethod::UNKNOWN;
+}
+
 bool NotationConfigurationStub::isMidiInputEnabled() const
 {
     return false;

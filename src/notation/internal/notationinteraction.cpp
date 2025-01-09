@@ -4386,10 +4386,10 @@ void NotationInteraction::putRestToSelection()
     }
 
     if (!m_noteInput->isNoteInputMode()) {
-        m_noteInput->startNoteInput();
+        m_noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
     }
 
-    if (is.usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+    if (is.usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || is.usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
         m_noteInput->padNote(Pad::REST);
     } else {
         putRest(is.duration());

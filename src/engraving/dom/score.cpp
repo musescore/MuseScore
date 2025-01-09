@@ -3218,7 +3218,7 @@ void Score::padToggle(Pad p, const EditData& ed)
         // rest flag
         //
         if (noteEntryMode()) {
-            if (usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+            if (usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
                 switch (oldDots) {
                 case 1:
                     padToggle(Pad::DOT, ed);

@@ -2061,6 +2061,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Toggle note input mode: default (step-time)"),
              IconCode::Code::EDIT
              ),
+    UiAction("note-input-by-duration",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Input by duration"),
+             TranslatableString("action", "Toggle note input mode: input by duration"),
+             IconCode::Code::STAR // TODO
+             ),
     UiAction("note-input-rhythm",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

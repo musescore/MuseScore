@@ -859,7 +859,7 @@ void NotationBraille::toggleMode()
     case BrailleMode::Undefined:
     case BrailleMode::Navigation:
         setMode(BrailleMode::BrailleInput);
-        interaction()->noteInput()->startNoteInput();
+        interaction()->noteInput()->startNoteInput(notationConfiguration()->defaultNoteInputMethod());
         stateTitle = muse::trc("notation", "Note input mode");
         break;
     case BrailleMode::BrailleInput:

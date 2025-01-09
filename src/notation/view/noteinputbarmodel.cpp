@@ -47,6 +47,7 @@ static const ActionCode TUPLET_ACTION_CODE("tuplet");
 
 static const std::vector<std::pair<ActionCode, NoteInputMethod> > noteInputModeActions = {
     { "note-input-steptime", NoteInputMethod::STEPTIME },
+    { "note-input-by-duration", NoteInputMethod::BY_DURATION },
     { "note-input-rhythm", NoteInputMethod::RHYTHM },
     { "note-input-repitch", NoteInputMethod::REPITCH },
     { "note-input-realtime-auto", NoteInputMethod::REALTIME_AUTO },
