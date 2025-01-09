@@ -83,7 +83,8 @@ struct MusicXmlPartGroup {
     int start = 0;
     engraving::BracketType type = engraving::BracketType::NO_BRACKET;
     bool barlineSpan = false;
-    int column = 0;
+    muse::draw::Color color;
+    size_t column = 0;
 };
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
 typedef std::map<muse::String, engraving::Part*> PartMap;

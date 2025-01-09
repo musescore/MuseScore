@@ -1419,6 +1419,10 @@ void MusicXmlParserPass1::scorePartwise()
         if (pg->type != BracketType::NO_BRACKET && !isRedundantBracket(staff, pg->type, stavesSpan)) {
             staff->setBracketType(pg->column, pg->type);
             staff->setBracketSpan(pg->column, stavesSpan);
+            if ((staff->brackets().size() > pg->column) && pg->color.isValid()) {
+                BracketItem* bracketItem = staff->brackets().at(pg->column);
+                bracketItem->setColor(pg->color);
+            }
             // add part to set (skip implicit bracket later)
             if (pg->span == 1) {
                 partSet.insert(il.at(pg->start));
@@ -2207,7 +2211,7 @@ typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
  to generate the brackets.
  */
 
-static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String& s, bool barlineSpan)
+static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String& s, bool barlineSpan, Color color)
 {
     //LOGD("partGroupStart number=%d part=%d symbol=%s", n, p, muPrintable(s));
 
@@ -2239,7 +2243,10 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String
     pg->start = p;
     pg->barlineSpan = barlineSpan,
     pg->type = bracketType;
-    pg->column = n;
+    if (color.isValid()) {
+        pg->color = color;
+    }
+    pg->column = static_cast<size_t>(n);
     pgs[n] = pg;
 }
 
@@ -2289,6 +2296,7 @@ void MusicXmlParserPass1::partGroup(const int scoreParts,
     }
     String symbol;
     String type = m_e.attribute("type");
+    Color symbolColor;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "group-name") {
@@ -2296,6 +2304,7 @@ void MusicXmlParserPass1::partGroup(const int scoreParts,
         } else if (m_e.name() == "group-abbreviation") {
             symbol = m_e.readText();
         } else if (m_e.name() == "group-symbol") {
+            symbolColor = Color::fromString(m_e.attribute("color"));
             symbol = m_e.readText();
         } else if (m_e.name() == "group-barline") {
             if (m_e.readText() == "no") {
@@ -2307,7 +2316,7 @@ void MusicXmlParserPass1::partGroup(const int scoreParts,
     }
 
     if (type == "start") {
-        partGroupStart(partGroups, number, scoreParts, symbol, barlineSpan);
+        partGroupStart(partGroups, number, scoreParts, symbol, barlineSpan, symbolColor);
     } else if (type == "stop") {
         partGroupStop(partGroups, number, scoreParts, partGroupList);
     } else {
