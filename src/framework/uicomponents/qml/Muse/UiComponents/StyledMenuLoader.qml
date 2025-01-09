@@ -73,7 +73,7 @@ Loader {
         accessibleName: loader.accessibleName
 
         onHandleMenuItem: function(itemId) {
-            if (loader.closeMenuOnSelections) {
+            if (loader.closeMenuOnSelection) {
                 itemMenu.close()
             }
             Qt.callLater(loader.handleMenuItem, itemId)
