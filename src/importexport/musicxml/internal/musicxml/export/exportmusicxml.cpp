@@ -425,7 +425,7 @@ private:
     void keysigTimesig(const Measure* m, const Part* p);
     void chordAttributes(Chord* chord, Notations& notations, Technical& technical, TrillHash& trillStart, TrillHash& trillStop);
     void wavyLineStartStop(const ChordRest* cr, Notations& notations, Ornaments& ornaments, TrillHash& trillStart, TrillHash& trillStop);
-    void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const staff_idx_t nrStavesInPart,
+    void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const size_t nrStavesInPart,
                const MeasurePrintContext& mpc);
     void measureLayout(const double distance);
     void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
@@ -7168,7 +7168,7 @@ static bool hasPageBreak(const System* const system)
  */
 
 void ExportMusicXml::print(const Measure* const m, const int partNr, const int firstStaffOfPart,
-                           const staff_idx_t nrStavesInPart, const MeasurePrintContext& mpc)
+                           const size_t nrStavesInPart, const MeasurePrintContext& mpc)
 {
     const MeasureBase* const prevSysMB = lastMeasureBase(mpc.prevSystem);
 
