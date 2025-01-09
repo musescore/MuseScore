@@ -1384,7 +1384,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         { u"stopped",                SymId::brassMuteClosed },
         { u"snap-pizzicato",         SymId::pluckedSnapPizzicatoAbove },
         { u"heel",                   SymId::keyboardPedalHeel1 },
-        { u"toe",                    SymId::keyboardPedalToe1 },
+        { u"toe",                    SymId::keyboardPedalToe2 },
         { u"fingernails",            SymId::pluckedWithFingernails },
         { u"brass-bend",             SymId::brassBend },
         { u"flip",                   SymId::brassFlip },
@@ -8081,6 +8081,16 @@ void MusicXmlParserNotations::articulations()
             artic.setSubType(String::fromAscii(m_e.name().ascii()));
             m_notations.push_back(artic);
             m_e.skipCurrentElement();  // skip but don't log
+        } else if (m_e.name() == "other-articulation") {
+            const String smufl = m_e.attribute("smufl");
+
+            if (!smufl.empty()) {
+                SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+                Notation artic = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                                  m_e.attributes(), u"articulations", id);
+                m_notations.push_back(artic);
+            }
+            m_e.skipCurrentElement();  // skip but don't log
         } else {
             skipLogCurrElem();
         }
@@ -8179,6 +8189,8 @@ void MusicXmlParserNotations::technical()
             harmonic();
         } else if (m_e.name() == "harmon-mute") {
             harmonMute();
+        } else if (m_e.name() == "hole") {
+            hole();
         } else if (m_e.name() == "other-technical") {
             otherTechnical();
         } else {
@@ -8189,7 +8201,18 @@ void MusicXmlParserNotations::technical()
 
 void MusicXmlParserNotations::otherTechnical()
 {
-    String text = m_e.readText();
+    const String smufl = m_e.attribute("smufl");
+
+    if (!smufl.empty()) {
+        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                             m_e.attributes(), u"technical", id);
+        m_notations.push_back(notation);
+        m_e.skipCurrentElement();
+        return;
+    }
+
+    const String text = m_e.readText();
 
     if (text == u"z") {
         // Buzz roll
@@ -8264,6 +8287,43 @@ void MusicXmlParserNotations::harmonMute()
         }
     }
     m_notations.push_back(Notation::notationWithAttributes(u"harmon-closed", attributes, u"technical", mute));
+}
+
+//---------------------------------------------------------
+//   hole
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/notations/technical/hole node.
+ */
+
+void MusicXmlParserNotations::hole()
+{
+    engraving::SymId hole = SymId::noSym;
+    const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
+    while (m_e.readNextStartElement()) {
+        if (m_e.name() == "hole-closed") {
+            const String location = m_e.attribute("location");
+            const String value = m_e.readText();
+            if (value == "yes") {
+                hole = SymId::windClosedHole;
+            } else if (value == "no") {
+                hole = SymId::windOpenHole;
+            } else if (value == "half") {
+                if (location == "bottom") {
+                    hole = SymId::windHalfClosedHole2;
+                } else if (location == "right") {
+                    hole = SymId::windHalfClosedHole1;
+                } else {
+                    m_logger->logError(String(u"unsupported hole-closed location '%1'").arg(location), &m_e);
+                    hole = SymId::windHalfClosedHole3;
+                }
+            }
+        } else {
+            m_e.skipCurrentElement();
+        }
+    }
+    m_notations.push_back(Notation::notationWithAttributes(u"hole-closed", attributes, u"technical", hole));
 }
 
 //---------------------------------------------------------
