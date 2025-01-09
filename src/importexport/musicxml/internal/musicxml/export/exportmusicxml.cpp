@@ -5252,7 +5252,7 @@ void ExportMusicXml::harpPedals(HarpPedalDiagram const* const hpd, staff_idx_t s
     m_xml.startElement("direction-type");
     XmlWriter::Attributes harpPedalAttrs;
     addColorAttr(hpd, harpPedalAttrs);
-    if (!hpd->isDiagram()) {
+    if (hpd->isDiagram()) {
         m_xml.startElement("harp-pedals", harpPedalAttrs);
         const std::vector <String> pedalSteps = { u"D", u"C", u"B", u"E", u"F", u"G", u"A" };
         for (size_t idx = 0; idx < pedalSteps.size(); idx++) {
