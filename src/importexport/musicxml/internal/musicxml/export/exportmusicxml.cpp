@@ -5255,16 +5255,20 @@ void ExportMusicXml::harpPedals(HarpPedalDiagram const* const hpd, staff_idx_t s
         harpPedalAttrs.push_back({ "placement", (hpd->placement() == PlacementV::BELOW) ? "below" : "above" });
     }
     addColorAttr(hpd, harpPedalAttrs);
-    m_xml.startElement("harp-pedals", harpPedalAttrs);
-    const std::vector <String> pedalSteps = { u"D", u"C", u"B", u"E", u"F", u"G", u"A" };
-    for (size_t idx = 0; idx < pedalSteps.size(); idx++) {
-        m_xml.startElement("pedal-tuning");
-        m_xml.tag("pedal-step", pedalSteps.at(idx));
-        m_xml.tag("pedal-alter", static_cast<int>(hpd->getPedalState().at(idx)) - 1);
+    if (!hpd->isDiagram()) {
+        m_xml.startElement("harp-pedals", harpPedalAttrs);
+        const std::vector <String> pedalSteps = { u"D", u"C", u"B", u"E", u"F", u"G", u"A" };
+        for (size_t idx = 0; idx < pedalSteps.size(); idx++) {
+            m_xml.startElement("pedal-tuning");
+            m_xml.tag("pedal-step", pedalSteps.at(idx));
+            m_xml.tag("pedal-alter", static_cast<int>(hpd->getPedalState().at(idx)) - 1);
+            m_xml.endElement();
+        }
         m_xml.endElement();
+        m_xml.endElement();
+    } else {
+        m_xml.tag("words", harpPedalAttrs, hpd->plainText());
     }
-    m_xml.endElement();
-    m_xml.endElement();
     const int offset = calculateTimeDeltaInDivisions(hpd->tick(), tick(), m_div);
     if (offset) {
         m_xml.tag("offset", offset);
