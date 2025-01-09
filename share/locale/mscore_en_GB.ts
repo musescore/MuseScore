@@ -12422,9 +12422,9 @@ Get %2help%3 with the programme or %4contribute%5 to its development.</translati
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="169"/>
-        <source>Copyright &amp;copy; 1999-2023 MuseScore BVBA and others.
+        <source>Copyright &amp;copy; 1999-2025 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
-        <translation>Copyright &amp;copy; 1999-2023 MuseScore BVBA and others.
+        <translation>Copyright &amp;copy; 1999-2025 MuseScore BVBA and others.
 Published under the %1GNU General Public Licence version 2%2.</translation>
     </message>
     <message>

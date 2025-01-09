@@ -166,7 +166,7 @@ AboutBoxDialog::AboutBoxDialog()
                        "<a href=\"https://www.musescore.org/contribute\">", "</a>");
       visitAndDonateString += "\n\n";
 #endif
-      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2023 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 2%2.")
+      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2025 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 2%2.")
                   .arg("<a href=\"https://www.gnu.org/licenses/old-licenses/gpl-2.0.html\">", "</a>");
       finalString.replace("\n", "<br/>");
       copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>").arg(finalString));
