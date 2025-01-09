@@ -234,8 +234,8 @@ void DynamicExpressionDragGroup::startDrag(EditData& ed)
 
 RectF DynamicExpressionDragGroup::drag(EditData& ed)
 {
-    RectF r = static_cast<EngravingItem*>(m_dynamic)->drag(ed);
-    r.unite(static_cast<EngravingItem*>(m_expression)->drag(ed));
+    RectF r = m_dynamic->drag(ed);
+    r.unite(m_expression->drag(ed));
 
     m_dynamic->triggerLayout();
     m_expression->triggerLayout();

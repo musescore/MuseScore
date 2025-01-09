@@ -257,9 +257,6 @@ void AbstractMenuModel::setItem(int index, MenuItem* item)
 MenuItem& AbstractMenuModel::item(MenuItemList& items, const QString& itemId)
 {
     for (MenuItem* menuItem : items) {
-        if (!menuItem) {
-            continue;
-        }
         if (menuItem->id() == itemId) {
             return *menuItem;
         }

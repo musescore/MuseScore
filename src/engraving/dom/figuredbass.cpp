@@ -787,7 +787,7 @@ void FiguredBass::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
         Fraction endTick = newSeg->tick() + m_ticks;
         for (Segment* seg = newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->tick() <= endTick;
              seg = seg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-            nextFB = (FiguredBass*)(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
+            nextFB = toFiguredBass(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
             if (nextFB) {
                 break;
             }
