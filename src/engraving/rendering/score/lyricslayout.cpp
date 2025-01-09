@@ -774,7 +774,7 @@ double LyricsLayout::lyricsLineStartX(const LyricsLineSegment* item)
 
     // Partial melisma or dashes
     if (lyricsLine->isPartialLyricsLine()) {
-        const Measure* measure = lyricsLine->findEndMeasure();
+        const Measure* measure = lyricsLine->findStartMeasure();
         return measure->firstNoteRestSegmentX(leading);
     }
 
