@@ -96,7 +96,8 @@ struct RenderingContext {
 };
 
 inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPositionOffset,
-                                          const muse::mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx)
+                                          const muse::mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
+                                          const muse::mpe::ArticulationMap& articulations = {})
 {
     int chordPosTick = chord->tick().ticks();
     int chordDurationTicks = chord->actualTicks().ticks();
@@ -118,7 +119,7 @@ inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPosi
                          bps,
                          timeSignatureFraction,
                          playbackCtx->persistentArticulationType(chordPosTickWithOffset),
-                         {},
+                         articulations,
                          score,
                          profile,
                          playbackCtx);
