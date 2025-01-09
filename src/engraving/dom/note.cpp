@@ -2515,6 +2515,7 @@ void Note::setTieBack(Tie* t)
 {
     if (m_tieBack && t && m_tieBack->jumpPoint()) {
         t->setJumpPoint(m_tieBack->jumpPoint());
+        m_tieBack->setJumpPoint(nullptr);
     }
     m_tieBack = t;
 }
