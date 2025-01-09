@@ -424,7 +424,7 @@ private:
     void keysigTimesig(const Measure* m, const Part* p);
     void chordAttributes(Chord* chord, Notations& notations, Technical& technical, TrillHash& trillStart, TrillHash& trillStop);
     void wavyLineStartStop(const ChordRest* cr, Notations& notations, Ornaments& ornaments, TrillHash& trillStart, TrillHash& trillStop);
-    void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart,
+    void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const size_t nrStavesInPart,
                const MeasurePrintContext& mpc);
     void measureLayout(const double distance);
     void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
@@ -7250,7 +7250,7 @@ static bool hasPageBreak(const System* const system)
  */
 
 void ExportMusicXml::print(const Measure* const m, const int partNr, const int firstStaffOfPart,
-                           const int nrStavesInPart, const MeasurePrintContext& mpc)
+                           const size_t nrStavesInPart, const MeasurePrintContext& mpc)
 {
     const MeasureBase* const prevSysMB = lastMeasureBase(mpc.prevSystem);
 
@@ -7332,15 +7332,21 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
             }
 
             // Staff layout elements.
-            for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
+            for (staff_idx_t staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
                 // calculate distance between this and previous staff using the bounding boxes
-                const int staffNr = firstStaffOfPart + staffIdx;
-                const RectF& prevBbox = system->staff(staffNr - 1)->bbox();
+                const staff_idx_t staffNr = firstStaffOfPart + staffIdx;
+                const staff_idx_t prevStaffNr = system->prevVisibleStaff(staffNr);
+                if (prevStaffNr == muse::nidx) {
+                    continue;
+                }
+                const RectF& prevBbox = system->staff(prevStaffNr)->bbox();
                 const double staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
 
-                m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
-                m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
-                m_xml.endElement();
+                if (staffDist > 0) {
+                    m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
+                    m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
+                    m_xml.endElement();
+                }
             }
 
             // Measure layout elements.
@@ -8321,7 +8327,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 
     m_xml.startElementRaw(measureTag);
 
-    print(m, partIndex, staffCount, static_cast<int>(staves), mpc);
+    print(m, partIndex, staffCount, staves, mpc);
 
     m_attr.start();
 
