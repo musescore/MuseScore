@@ -5932,16 +5932,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         }
 
         // next, try going to next/prev grace note chord in the same group as the current
-        auto graceChordList = [](Chord* ch) {
-            Chord* parentChord = ch->isGrace() ? toChord(ch->explicitParent()) : ch;
-            std::vector<Chord*> chords = { parentChord };
-            GraceNotesGroup gnBefore = parentChord->graceNotesBefore();
-            GraceNotesGroup gnAfter = parentChord->graceNotesAfter();
-            chords.insert(chords.begin(), gnBefore.begin(), gnBefore.end());
-            chords.insert(chords.end(), gnAfter.begin(), gnAfter.end());
-            return chords;
-        };
-        std::vector<Chord*> chordList = graceChordList(ch);
+        std::vector<Chord*> chordList = ch->allGraceChordsOfMainChord();
 
         if (!el && ch != (back ? chordList.front() : chordList.back())) {
             for (auto it = chordList.begin(); it != chordList.end(); ++it) {
@@ -5966,7 +5957,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
             for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
                 EngravingItem* e = seg->element(track);
                 if (e && e->isChord()) {
-                    std::vector<Chord*> targetChordList = graceChordList(toChord(e));
+                    std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
                     Chord* targetChord = back ? targetChordList.back() : targetChordList.front();
                     el = back ? targetChord->notes().front() : targetChord->notes().back();
                     break;
@@ -5985,7 +5976,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
                 for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
                     EngravingItem* e = seg->element(track);
                     if (e && e->isChord()) {
-                        std::vector<Chord*> targetChordList = graceChordList(toChord(e));
+                        std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
                         Chord* targetChord = back ? targetChordList.back() : targetChordList.front();
                         el = back ? targetChord->notes().front() : targetChord->notes().back();
                         break;

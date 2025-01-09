@@ -2554,6 +2554,21 @@ Chord* Chord::graceNoteAt(size_t idx) const
 }
 
 //---------------------------------------------------------
+//   allGraceChordsOfMainChord
+//   returns a list containing all grace notes (chords) attached to the main chord and the main chord itself, in order
+//---------------------------------------------------------
+std::vector<Chord*> Chord::allGraceChordsOfMainChord()
+{
+    Chord* mainChord = isGrace() ? toChord(explicitParent()) : this;
+    std::vector<Chord*> chords = { mainChord };
+    GraceNotesGroup gnBefore = mainChord->graceNotesBefore();
+    GraceNotesGroup gnAfter = mainChord->graceNotesAfter();
+    chords.insert(chords.begin(), gnBefore.begin(), gnBefore.end());
+    chords.insert(chords.end(), gnAfter.begin(), gnAfter.end());
+    return chords;
+}
+
+//---------------------------------------------------------
 //   setShowStemSlashInAdvance
 //---------------------------------------------------------
 
