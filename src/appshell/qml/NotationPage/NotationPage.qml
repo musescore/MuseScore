@@ -547,19 +547,13 @@ DockPage {
                 navigationSection: percussionPanel.navigationSection
                 contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
 
-                // TODO: #22050 needed for this
-                /*
-
                 Component.onCompleted: {
-                    percussionPanel.contextMenuModel = contextMenuModel
                     percussionPanel.toolbarComponent = toolbarComponent
                 }
 
                 Component.onDestruction: {
-                    percussionPanel.contextMenuModel = null
                     percussionPanel.toolbarComponent = null
                 }
-                */
             }
         }
     ]

@@ -36,17 +36,14 @@ Item {
 
     anchors.fill: parent
 
-    //TODO: #22050 needed for this
-    /*
     property Component toolbarComponent: PercussionPanelToolBar {
-        navigation.section: root.navigationSection
-        navigation.order: root.contentNavigationPanelOrderStart
+        navigationSection: root.navigationSection
+        navigationOrderStart: root.contentNavigationPanelOrderStart
 
-        model: percussionPanelModel
+        model: percModel
 
         panelWidth: root.width
     }
-    */
 
     Component.onCompleted: {
         padGrid.model.init()
@@ -69,23 +66,6 @@ Item {
         }
     }
 
-    // TODO: Will live inside percussion panel until #22050 is implemented
-    PercussionPanelToolBar {
-        id: toolbar
-
-        anchors.top: parent.top
-
-        width: parent.width
-        height: 36
-
-        navigationSection: root.navigationSection
-        navigationOrderStart: root.contentNavigationPanelOrderStart
-
-        model: percModel
-
-        panelWidth: root.width
-    }
-
     StyledIconLabel {
         id: soundTitleIcon
 
@@ -105,10 +85,9 @@ Item {
         id: soundTitleLabel
 
         anchors {
-            top: toolbar.bottom
-            right: parent.right
+            top: root.top
+            right: root.right
 
-            topMargin: 8
             bottomMargin: 8
             rightMargin: 16
         }
@@ -151,7 +130,7 @@ Item {
 
                 name: "PercussionPanelDeleteRowButtons"
                 section: root.navigationSection
-                order: toolbar.navigationOrderEnd + 3
+                order: padFootersNavPanel.order + 1
 
                 enabled: deleteButtonsColumn.visible
             }
@@ -258,7 +237,7 @@ Item {
 
                     name: "PercussionPanelPads"
                     section: root.navigationSection
-                    order: toolbar.navigationOrderEnd + 1
+                    order: root.contentNavigationPanelOrderStart + 2 // +2 for toolbar
 
                     onNavigationEvent: function(event) {
                         gridPrv.onNavigationEvent(event)
@@ -270,7 +249,7 @@ Item {
 
                     name: "PercussionPanelFooters"
                     section: root.navigationSection
-                    order: toolbar.navigationOrderEnd + 2
+                    order: padsNavPanel.order + 1
 
                     enabled: percModel.currentPanelMode !== PanelMode.EDIT_LAYOUT
 
@@ -395,7 +374,7 @@ Item {
 
                 name: "PercussionPanelAddRowButton"
                 section: root.navigationSection
-                order: toolbar.navigationOrderEnd + 4
+                order: deleteButtonsPanel.order + 1
 
                 enabled: addRowButton.visible
             }

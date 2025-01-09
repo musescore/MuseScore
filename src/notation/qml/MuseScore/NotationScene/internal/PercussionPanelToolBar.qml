@@ -34,7 +34,6 @@ Item {
 
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 1
-    readonly property int navigationOrderEnd: rightSideNavPanel.order
 
     QtObject {
         id: prv
@@ -49,7 +48,7 @@ Item {
         id: centralNavPanel
         name: "PercussionPanelToolBarCentral"
         section: root.navigationSection
-        order: root.navigationOrderStart + 1
+        order: root.navigationOrderStart
     }
 
     Row {
