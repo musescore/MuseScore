@@ -6239,6 +6239,7 @@ void NotationInteraction::addMelisma()
     ChordRest* nextCR = toChordRest(nextSegment->element(track));
 
     // Disallow melisma lines between non-adjacent repeat sections eg. 1st volta -> 2nd volta
+    // Instead, try to add partial melisma line
     if (nextCR && fromLyrics) {
         Measure* toLyricsMeasure = nextCR->measure();
         Measure* fromLyricsMeasure = fromLyrics->measure();
@@ -6247,7 +6248,7 @@ void NotationInteraction::addMelisma()
             const std::vector<Measure*> previousRepeats = findPreviousRepeatMeasures(toLyricsMeasure);
             const bool inPrecedingRepeatSeg = muse::contains(previousRepeats, fromLyricsMeasure);
             if (!previousRepeats.empty() && !inPrecedingRepeatSeg) {
-                return;
+                fromLyrics = nullptr;
             }
         }
     }
