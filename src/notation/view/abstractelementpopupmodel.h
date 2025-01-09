@@ -50,6 +50,7 @@ public:
         TYPE_CAPO,
         TYPE_STRING_TUNINGS,
         TYPE_SOUND_FLAG,
+        TYPE_DYNAMIC,
         TYPE_PARTIAL_TIE
     };
     Q_ENUM(PopupModelType)
