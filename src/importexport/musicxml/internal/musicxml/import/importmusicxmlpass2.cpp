@@ -1389,7 +1389,20 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         { u"brass-bend",             SymId::brassBend },
         { u"flip",                   SymId::brassFlip },
         { u"smear",                  SymId::brassSmear },
-        { u"open",                   SymId::brassMuteOpen }
+        { u"open",                   SymId::brassMuteOpen },
+
+        { u"belltree", SymId::handbellsBelltree },
+        { u"damp", SymId::handbellsDamp3 },
+        { u"echo", SymId::handbellsEcho1 },
+        { u"gyro", SymId::handbellsGyro },
+        { u"hand martellato", SymId::handbellsHandMartellato },
+        { u"mallet lift", SymId::handbellsMalletLft },
+        { u"mallet table", SymId::handbellsMalletBellOnTable },
+        { u"martellato", SymId::handbellsMartellato },
+        { u"martellato lift", SymId::handbellsMartellatoLift },
+        { u"muted martellato", SymId::handbellsMutedMartellato },
+        { u"pluck lift", SymId::handbellsPluckLift },
+        { u"swing", SymId::handbellsSwing }
     };
 
     auto it = map.find(mxmlName);
@@ -8187,6 +8200,11 @@ void MusicXmlParserNotations::technical()
             m_notations.push_back(notation);
         } else if (m_e.name() == "harmonic") {
             harmonic();
+        } else if (m_e.name() == "handbell") {
+            const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
+            convertArticulationToSymId(m_e.readText(), id);
+            m_notations.push_back(Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                                   attributes, u"technical", id));
         } else if (m_e.name() == "harmon-mute") {
             harmonMute();
         } else if (m_e.name() == "hole") {
