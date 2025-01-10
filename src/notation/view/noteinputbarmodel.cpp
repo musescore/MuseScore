@@ -199,7 +199,7 @@ void NoteInputBarModel::updateNoteInputState()
 void NoteInputBarModel::updateNoteInputModeState()
 {
     bool isNoteInput = isNoteInputMode();
-    NoteInputMethod currInputMethod = noteInputState().method;
+    NoteInputMethod currInputMethod = noteInputState().noteEntryMethod();
 
     for (int i = 0; i < rowCount(); ++i) {
         MenuItem& item = this->item(i);
@@ -220,7 +220,7 @@ void NoteInputBarModel::updateNoteDotState()
         "pad-dot4"
     };
 
-    int durationDots = noteInputState().duration.dots();
+    int durationDots = noteInputState().duration().dots();
 
     for (const ActionCode& actionCode: dotActions) {
         updateItemStateChecked(findItem(actionCode), durationDots == NotationUiActions::actionDotCount(actionCode));
@@ -261,7 +261,7 @@ void NoteInputBarModel::updateNoteAccidentalState()
         "sharp2"
     };
 
-    AccidentalType accidentalType = noteInputState().accidentalType;
+    AccidentalType accidentalType = noteInputState().accidentalType();
 
     for (const ActionCode& actionCode: accidentalActions) {
         updateItemStateChecked(findItem(actionCode), accidentalType == NotationUiActions::actionAccidentalType(actionCode));
@@ -372,7 +372,7 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
     }
 
     if (isNoteInputMode()) {
-        return static_cast<int>(noteInputState().currentVoiceIndex);
+        return static_cast<int>(noteInputState().voice());
     }
 
     if (selection()->isNone()) {
@@ -410,7 +410,7 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
     }
 
     if (isNoteInputMode()) {
-        return noteInputState().articulationIds;
+        return mu::engraving::splitArticulations(noteInputState().articulationIds());
     }
 
     if (selection()->isNone()) {
@@ -461,7 +461,7 @@ bool NoteInputBarModel::resolveRestSelected() const
     }
 
     if (isNoteInputMode()) {
-        return noteInputState().isRest;
+        return noteInputState().rest();
     }
 
     if (selection()->isNone() || selection()->isRange()) {
@@ -486,7 +486,7 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
     }
 
     if (isNoteInputMode()) {
-        return noteInputState().duration.type();
+        return noteInputState().duration().type();
     }
 
     if (selection()->isNone() || selection()->isRange()) {
@@ -731,9 +731,15 @@ bool NoteInputBarModel::isNoteInputMode() const
     return noteInput() ? noteInput()->isNoteInputMode() : false;
 }
 
-NoteInputState NoteInputBarModel::noteInputState() const
+const NoteInputState& NoteInputBarModel::noteInputState() const
 {
-    return noteInput() ? noteInput()->state() : NoteInputState();
+    INotationNoteInputPtr input = noteInput();
+    if (!input) {
+        static const NoteInputState dummyState;
+        return dummyState;
+    }
+
+    return input->state();
 }
 
 const ChordRest* NoteInputBarModel::elementToChordRest(const EngravingItem* element) const

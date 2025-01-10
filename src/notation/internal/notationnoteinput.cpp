@@ -66,26 +66,9 @@ bool NotationNoteInput::isNoteInputMode() const
     return score()->inputState().noteEntryMode();
 }
 
-NoteInputState NotationNoteInput::state() const
+const NoteInputState& NotationNoteInput::state() const
 {
-    const mu::engraving::InputState& inputState = score()->inputState();
-
-    NoteInputState noteInputState;
-    noteInputState.method = inputState.noteEntryMethod();
-    noteInputState.duration = inputState.duration();
-    noteInputState.accidentalType = inputState.accidentalType();
-    noteInputState.articulationIds = articulationIds();
-    noteInputState.withSlur = inputState.slur() != nullptr;
-    noteInputState.currentVoiceIndex = inputState.voice();
-    noteInputState.currentTrack = inputState.track();
-    noteInputState.currentString = inputState.string();
-    noteInputState.drumset = inputState.drumset();
-    noteInputState.isRest = inputState.rest();
-    noteInputState.staffGroup = inputState.staffGroup();
-    noteInputState.staff = score()->staff(mu::engraving::track2staff(inputState.track()));
-    noteInputState.segment = inputState.segment();
-
-    return noteInputState;
+    return score()->inputState();
 }
 
 //! NOTE Copied from `void ScoreView::startNoteEntry()`
@@ -679,12 +662,6 @@ void NotationNoteInput::notifyAboutNoteInputStarted(bool focusNotation)
 void NotationNoteInput::notifyAboutNoteInputEnded()
 {
     m_noteInputEnded.notify();
-}
-
-std::set<SymbolId> NotationNoteInput::articulationIds() const
-{
-    const mu::engraving::InputState& inputState = score()->inputState();
-    return mu::engraving::splitArticulations(inputState.articulationIds());
 }
 
 void NotationNoteInput::doubleNoteInputDuration()

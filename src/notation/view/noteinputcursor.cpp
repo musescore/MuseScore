@@ -31,10 +31,10 @@ void NoteInputCursor::paint(muse::draw::Painter* painter)
         return;
     }
 
-    NoteInputState state = noteInput->state();
+    const NoteInputState& state = noteInput->state();
     RectF cursorRect = noteInput->cursorRect();
 
-    Color fillColor = configuration()->selectionColor(state.currentVoiceIndex);
+    Color fillColor = configuration()->selectionColor(state.voice());
     Color cursorRectColor = fillColor;
     cursorRectColor.setAlpha(configuration()->cursorOpacity());
     painter->fillRect(cursorRect, cursorRectColor);
@@ -44,12 +44,13 @@ void NoteInputCursor::paint(muse::draw::Painter* painter)
     Color lineColor = fillColor;
     painter->fillRect(leftLine, lineColor);
 
-    if (state.staffGroup == StaffGroup::TAB) {
-        const StaffType* staffType = state.staff ? state.staff->staffType() : nullptr;
+    if (state.staffGroup() == StaffGroup::TAB) {
+        const Staff* staff = state.staff();
+        const StaffType* staffType = staff ? staff->staffType() : nullptr;
 
         if (staffType) {
-            staffType->drawInputStringMarks(painter, state.currentString,
-                                            configuration()->selectionColor(state.currentVoiceIndex), cursorRect);
+            staffType->drawInputStringMarks(painter, state.string(),
+                                            configuration()->selectionColor(state.voice()), cursorRect);
         }
     }
 }

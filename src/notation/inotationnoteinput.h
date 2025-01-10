@@ -35,7 +35,7 @@ public:
 
     virtual bool isNoteInputMode() const = 0;
 
-    virtual NoteInputState state() const = 0;
+    virtual const NoteInputState& state() const = 0;
 
     virtual void startNoteInput(NoteInputMethod method = NoteInputMethod::STEPTIME, bool focusNotation = true) = 0;
     virtual void endNoteInput(bool resetState = false) = 0;
