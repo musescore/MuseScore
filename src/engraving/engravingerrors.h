@@ -50,7 +50,12 @@ enum class Err {
     IgnoreError = 2012
 };
 
-inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = "")
+inline muse::Ret make_ret(Err err, const muse::String& text)
+{
+    return muse::Ret(static_cast<int>(err), text.toStdString());
+}
+
+inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = {})
 {
     muse::String text;
 
