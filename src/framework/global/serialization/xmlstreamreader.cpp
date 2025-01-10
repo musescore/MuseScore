@@ -474,6 +474,10 @@ double XmlStreamReader::readDouble(bool* ok)
 
 int64_t XmlStreamReader::lineNumber() const
 {
+    if (!m_xml->doc.Error() && m_xml->node) {
+        return m_xml->node->GetLineNum();
+    }
+
     return m_xml->doc.ErrorLineNum();
 }
 
