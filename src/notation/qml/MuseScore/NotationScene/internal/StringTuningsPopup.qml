@@ -75,6 +75,12 @@ StyledPopupView {
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "String tunings settings")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         StyledTextLabel {
@@ -135,6 +141,12 @@ StyledPopupView {
             section: root.notationViewNavigationSection
             order: navPanel.order + 1
             accessible.name: qsTrc("notation", "Strings")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         GridLayout {

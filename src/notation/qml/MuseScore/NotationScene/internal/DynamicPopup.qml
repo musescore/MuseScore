@@ -55,6 +55,12 @@ StyledPopupView {
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Dynamics Popup")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         function goToPreviousPage() {

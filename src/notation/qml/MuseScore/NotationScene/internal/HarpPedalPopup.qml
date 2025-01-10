@@ -122,6 +122,12 @@ StyledPopupView {
             name: "PedalSettings"
             direction: NavigationPanel.Vertical
             accessible.name: qsTrc("notation", "Pedal settings buttons")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         // Accidental symbols
@@ -266,6 +272,12 @@ StyledPopupView {
             direction: NavigationPanel.Horizontal
             order: pedalSettingsNavPanel.order + 1
             accessible.name: qsTrc("notation", "Diagram type buttons")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         RoundedRadioButton {
