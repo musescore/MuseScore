@@ -643,6 +643,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::dynamicsSize,            true,  dynamicsSize,               resetDynamicsSize },
         { StyleId::dynamicsOverrideFont,    false, dynamicsOverrideFont,       0 },
         { StyleId::dynamicsFont,            false, dynamicsFont,               0 },
+        { StyleId::dynamicsUseExpressionFont, false, dynamicsUseExpressionFont, 0 },
 
         { StyleId::dynamicsHairpinVoiceBasedPlacement, false, dynamicsAndHairpinPos, resetDynamicsAndHairpinPos },
         { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff, false, dynamicsAndHairpinsCenterOnGrandStaff, 0 },
@@ -1091,6 +1092,10 @@ EditStyle::EditStyle(QWidget* parent)
     });
     connect(dynamicsAndHairpinPos, &QComboBox::currentIndexChanged, dynamicsAndHairpinsAboveOnVocalStaves, [=]() {
         dynamicsAndHairpinsAboveOnVocalStaves->setEnabled(dynamicsAndHairpinPos->currentIndex() != int(DirectionV::UP));
+    });
+
+    connect(dynamicsFontChoose, &QRadioButton::toggled, dynamicsFont, [=]() {
+        dynamicsFont->setEnabled(dynamicsFontChoose->isChecked());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleName, IconCode::Code::UNDO);

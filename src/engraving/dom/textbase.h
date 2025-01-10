@@ -219,7 +219,6 @@ public:
 public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
-    mutable String text;
 
     TextFragment() = default;
     TextFragment(const String& s);
@@ -227,14 +226,22 @@ public:
     TextFragment(const TextFragment& f);
 
     TextFragment& operator =(const TextFragment& f);
-
     bool operator ==(const TextFragment& f) const;
 
-    TextFragment split(int column);
+    virtual std::shared_ptr<TextFragment> clone() { return std::make_shared<TextFragment>(*this); }
+
+    String text() const { return m_text; }
+    virtual void setText(String text) { m_text = text; }
+    virtual void appendText(String text) { m_text += text; }
+
+    std::shared_ptr<TextFragment> split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
+
+private:
+    String m_text;
 };
 
 //---------------------------------------------------------
@@ -251,9 +258,9 @@ public:
     bool operator !=(const TextBlock& x) const { return m_fragments != x.m_fragments; }
     void draw(muse::draw::Painter*, const TextBase*) const;
     void layout(const TextBase*);
-    const std::list<TextFragment>& fragments() const { return m_fragments; }
-    std::list<TextFragment>& fragments() { return m_fragments; }
-    std::list<TextFragment> fragmentsWithoutEmpty();
+    const std::list<std::shared_ptr<TextFragment> >& fragments() const { return m_fragments; }
+    std::list<std::shared_ptr<TextFragment> >& fragments() { return m_fragments; }
+    std::list<std::shared_ptr<TextFragment> > fragmentsWithoutEmpty();
     const Shape& shape() const { return m_shape; }
     const RectF& boundingRect() const { return m_shape.bbox(); }
     RectF boundingRect(int col1, int col2, const TextBase*) const;
@@ -267,8 +274,8 @@ public:
     TextBlock split(int column, TextCursor* cursor);
     double xpos(size_t col, const TextBase*) const;
     const CharFormat* formatAt(int) const;
-    const TextFragment* fragment(int col) const;
-    std::list<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
+    const std::shared_ptr<TextFragment> fragment(int col) const;
+    std::list<std::shared_ptr<TextFragment> >::iterator fragment(int column, int* rcol, int* ridx);
     double y() const { return m_y; }
     void setY(double val) { m_y = val; }
     double lineSpacing() const { return m_lineSpacing; }
@@ -280,7 +287,7 @@ public:
 private:
     void simplify();
 
-    std::list<TextFragment> m_fragments;
+    std::list<std::shared_ptr<TextFragment> > m_fragments;
     double m_y = 0.0;
     double m_lineSpacing = 0.0;
     Shape m_shape;
@@ -382,7 +389,7 @@ public:
     int subtype() const override;
     TranslatableString subtypeUserName() const override;
 
-    std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
+    std::list<std::shared_ptr<TextFragment> > fragmentList() const;   // for MusicXML formatted export
 
     static bool validateText(String& s);
     bool inHexState() const { return m_hexState >= 0; }

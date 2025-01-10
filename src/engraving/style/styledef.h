@@ -710,6 +710,7 @@ enum class Sid {
 
     dynamicsOverrideFont,
     dynamicsFont,
+    dynamicsUseExpressionFont,
     dynamicsSize,
     dynamicsPlacement,
     dynamicsPosAbove,
