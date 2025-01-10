@@ -252,6 +252,8 @@ private:
 
     void paintBackground(const muse::RectF& rect, muse::draw::Painter* painter);
 
+    bool shouldPaintNoteInputCursor() const;
+
     muse::PointF canvasCenter() const;
     std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
 
