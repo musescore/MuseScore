@@ -144,8 +144,11 @@ bool MeiImporter::read(const muse::io::path_t& path)
             // Keep a global flag since we are going to read them only if mei@xml:id is given with LastEID
             m_hasMuseScoreIds = true;
             String valStr = xmlIdStr.remove(u"mscore-");
-            // The  mei@xml:id store the LastEID
-            m_score->masterScore()->getEID()->init(valStr.toInt());
+            // The  mei@xml:id store the score EID
+            EID eid = EID::fromStdString(valStr.toStdString());
+            if (eid.isValid()) {
+                m_score->setEID(eid);
+            }
         } else {
             // Keep it as a seed
             m_score->setMetaTag(u"xml:id", xmlIdStr);
@@ -276,7 +279,11 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
     } else {
         chordRest = Factory::createChord(segment);
     }
-    this->readXmlId(chordRest, meiElement.m_xmlId);
+
+    // Do not use single note xml:id / EID for the ChordRest
+    if (!dynamic_cast<const libmei::Note*>(&meiElement)) {
+        this->readXmlId(chordRest, meiElement.m_xmlId);
+    }
 
     if (m_startIdChordRests.count(meiElement.m_xmlId)) {
         m_startIdChordRests[meiElement.m_xmlId] = chordRest;
@@ -1937,6 +1944,8 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     } else {
         // Support for non MEI-Basic accid and accid.ges encoded in <note> - this is not academic...
         meiAccid.Read(noteNode);
+        // Remove the xml:id read from the note in that case
+        meiAccid.m_xmlId = "";
     }
 
     Staff* staff = m_score->staff(track2staff(track));

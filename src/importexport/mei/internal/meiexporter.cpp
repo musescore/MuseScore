@@ -135,7 +135,11 @@ bool MeiExporter::write(std::string& meiData)
         // Option to use MuseScore Ids has priority
         if (useMuseScoreIds) {
             std::stringstream xmlId;
-            xmlId << "mscore-" << m_score->masterScore()->getEID()->lastID();
+            EID eid = m_score->masterScore()->eid();
+            if (!eid.isValid()) {
+                eid = m_score->masterScore()->assignNewEID();
+            }
+            xmlId << "mscore-" << eid.toStdString();
             m_mei.append_attribute("xml:id") = xmlId.str().c_str();
         }
         // Otherwise check if we have a metaTag
@@ -2554,7 +2558,11 @@ std::string MeiExporter::getXmlIdFor(const EngravingItem* item, const char c)
     const bool useMuseScoreIds = configuration()->meiUseMuseScoreIds();
 
     if (useMuseScoreIds) {
-        return "mscore-" + item->eid().toStdString();
+        EID eid = item->eid();
+        if (!eid.isValid()) {
+            eid = item->assignNewEID();
+        }
+        return "mscore-" + eid.toStdString();
     } else if (m_uids->hasUid(item)) {
         return m_uids->uid(item);
     }
