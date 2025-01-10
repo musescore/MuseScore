@@ -261,7 +261,7 @@ void PercussionPanelModel::setUpConnections()
     }
 
     const INotationNoteInputPtr noteInput = interaction()->noteInput();
-    updatePadModels(noteInput->state().drumset);
+    updatePadModels(noteInput->state().drumset());
     setEnabled(m_padListModel->hasActivePads());
 
     noteInput->stateChanged().onNotify(this, [this, updatePadModels]() {
@@ -270,7 +270,7 @@ void PercussionPanelModel::setUpConnections()
             return;
         }
         const INotationNoteInputPtr ni = interaction()->noteInput();
-        updatePadModels(ni->state().drumset);
+        updatePadModels(ni->state().drumset());
     });
 
     m_padListModel->hasActivePadsChanged().onNotify(this, [this]() {
@@ -458,11 +458,11 @@ void PercussionPanelModel::playPitch(int pitch)
         return;
     }
 
-    const NoteInputState inputState = interaction()->noteInput()->state();
+    const NoteInputState& inputState = interaction()->noteInput()->state();
     std::shared_ptr<Chord> chord = PercussionUtilities::getDrumNoteForPreview(m_padListModel->drumset(), pitch);
 
-    chord->setParent(inputState.segment);
-    chord->setTrack(inputState.currentTrack);
+    chord->setParent(inputState.segment());
+    chord->setTrack(inputState.track());
 
     playbackController()->playElements({ chord.get() });
 }
@@ -507,14 +507,14 @@ InstrumentTrackId PercussionPanelModel::currentTrackId() const
         return InstrumentTrackId();
     }
 
-    const NoteInputState inputState = interaction()->noteInput()->state();
-    const Staff* staff = inputState.staff;
+    const NoteInputState& inputState = interaction()->noteInput()->state();
+    const Staff* staff = inputState.staff();
 
-    if (!staff || !staff->part() || !inputState.segment) {
+    if (!staff || !staff->part() || !inputState.segment()) {
         return InstrumentTrackId();
     }
 
-    return { staff->part()->id(), staff->part()->instrumentId(inputState.segment->tick()) };
+    return { staff->part()->id(), staff->part()->instrumentId(inputState.segment()->tick()) };
 }
 
 std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel::getCurrentInstrumentAndPart() const
@@ -523,17 +523,17 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
         return { nullptr, nullptr };
     }
 
-    NoteInputState inputState = interaction()->noteInput()->state();
+    const NoteInputState& inputState = interaction()->noteInput()->state();
 
-    const Staff* staff = inputState.staff;
+    const Staff* staff = inputState.staff();
 
     Part* part = staff ? staff->part() : nullptr;
 
-    if (!inputState.segment) {
+    if (!inputState.segment()) {
         return { nullptr, part };
     }
 
-    Instrument* inst = part ? part->instrument(inputState.segment->tick()) : nullptr;
+    Instrument* inst = part ? part->instrument(inputState.segment()->tick()) : nullptr;
 
     return { inst, part };
 }

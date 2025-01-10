@@ -331,7 +331,7 @@ void NotationMidiInput::doExtendCurrentNote()
 
 NoteInputMethod NotationMidiInput::noteInputMethod() const
 {
-    return m_notationInteraction->noteInput()->state().method;
+    return m_notationInteraction->noteInput()->state().noteEntryMethod();
 }
 
 bool NotationMidiInput::isRealtime() const

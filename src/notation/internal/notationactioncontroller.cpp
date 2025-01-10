@@ -739,7 +739,7 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 
     if (!noteInput->isNoteInputMode()) {
         noteInput->startNoteInput(method);
-    } else if (noteInput->state().method == method) {
+    } else if (noteInput->state().usingNoteEntryMethod(method)) {
         toggleNoteInput();
     } else {
         noteInput->setNoteInputMethod(method);
@@ -748,7 +748,7 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 
 void NotationActionController::toggleNoteInputInsert()
 {
-    if (currentNotationNoteInput()->state().method != NoteInputMethod::TIMEWISE) {
+    if (!currentNotationNoteInput()->state().usingNoteEntryMethod(NoteInputMethod::TIMEWISE)) {
         toggleNoteInputMethod(NoteInputMethod::TIMEWISE);
     } else {
         toggleNoteInputMethod(NoteInputMethod::STEPTIME);
@@ -1026,7 +1026,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         } else if (selectedElement && selectedElement->hasGrips()) {
             interaction->nudgeAnchors(direction);
         } else if (interaction->noteInput()->isNoteInputMode()
-                   && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
+                   && interaction->noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
                 interaction->movePitch(direction, PitchMode::OCTAVE);
             }
@@ -1196,7 +1196,7 @@ Fraction NotationActionController::resolvePastingScale(const INotationInteractio
     case PastingType::Double: return Fraction(2, 1);
     case PastingType::Special:
         Fraction scale = DEFAULT_SCALE;
-        Fraction duration = interaction->noteInput()->state().duration.fraction();
+        Fraction duration = interaction->noteInput()->state().duration().fraction();
 
         if (duration.isValid() && !duration.isZero()) {
             scale = duration * 4;
@@ -1285,7 +1285,7 @@ void NotationActionController::addSlur()
         return;
     }
 
-    if (noteInput->isNoteInputMode() && noteInput->state().withSlur) {
+    if (noteInput->isNoteInputMode() && noteInput->state().slur()) {
         noteInput->resetSlur();
     } else {
         interaction->addSlurToSelection();

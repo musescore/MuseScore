@@ -236,22 +236,7 @@ enum class PastingType {
     Special
 };
 
-struct NoteInputState
-{
-    NoteInputMethod method = NoteInputMethod::UNKNOWN;
-    Duration duration;
-    AccidentalType accidentalType = AccidentalType::NONE;
-    std::set<SymbolId> articulationIds;
-    bool isRest = false;
-    bool withSlur = false;
-    engraving::voice_idx_t currentVoiceIndex = 0;
-    engraving::track_idx_t currentTrack = 0;
-    int currentString = 0;
-    Drumset* drumset = nullptr;
-    StaffGroup staffGroup = StaffGroup::STANDARD;
-    const Staff* staff = nullptr;
-    Segment* segment = nullptr;
-};
+using NoteInputState = mu::engraving::InputState;
 
 enum class NoteFilter
 {

@@ -495,8 +495,8 @@ void NotationBraille::setKeys(const QString& sequence)
         NoteName prevNoteName = NoteName::C;
         int prevNoteOctave = -1; // unknown octave
 
-        if (Segment* seg = interaction()->noteInput()->state().segment) {
-            const track_idx_t track = interaction()->noteInput()->state().currentTrack;
+        if (const Segment* seg = interaction()->noteInput()->state().segment()) {
+            const track_idx_t track = interaction()->noteInput()->state().track();
             Chord* prevChord = nullptr;
 
             for (Segment* s = seg->prev1(SegmentType::ChordRest); s; s = s->prev1(SegmentType::ChordRest)) {

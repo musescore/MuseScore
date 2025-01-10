@@ -105,7 +105,7 @@ private:
     DurationType resolveCurrentDurationType() const;
 
     bool isNoteInputMode() const;
-    NoteInputState noteInputState() const;
+    const NoteInputState& noteInputState() const;
 
     const ChordRest* elementToChordRest(const EngravingItem* element) const;
 };

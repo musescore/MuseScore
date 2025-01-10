@@ -40,6 +40,7 @@ class Score;
 class Segment;
 class Selection;
 class Slur;
+class Staff;
 
 // no ordinal for the visual repres. of string
 // (topmost in TAB varies according to visual order and presence of bass strings)
@@ -77,6 +78,8 @@ public:
     Segment* lastSegment() const { return m_lastSegment; }
     void setLastSegment(Segment* s) { m_lastSegment = s; }
 
+    Staff* staff() const;
+
     Drumset* drumset() const;
 
     int drumNote() const { return m_drumNote; }
@@ -112,7 +115,7 @@ public:
     AccidentalType accidentalType() const { return m_accidentalType; }
     void setAccidentalType(AccidentalType val) { m_accidentalType = val; }
 
-    std::set<SymId> articulationIds() const { return m_articulationIds; }
+    const std::set<SymId>& articulationIds() const { return m_articulationIds; }
     void setArticulationIds(const std::set<SymId>& ids) { m_articulationIds = ids; }
 
     Slur* slur() const { return m_slur; }

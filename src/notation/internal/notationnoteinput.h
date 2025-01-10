@@ -49,7 +49,7 @@ public:
 
     bool isNoteInputMode() const override;
 
-    NoteInputState state() const override;
+    const NoteInputState& state() const override;
 
     void startNoteInput(NoteInputMethod method = NoteInputMethod::STEPTIME, bool focusNotation = true) override;
     void endNoteInput(bool resetState = false) override;
@@ -100,8 +100,6 @@ private:
     void notifyNoteAddedChanged();
     void notifyAboutNoteInputStarted(bool focusNotation = true);
     void notifyAboutNoteInputEnded();
-
-    std::set<SymbolId> articulationIds() const;
 
     const IGetScore* m_getScore = nullptr;
     INotationInteraction* m_interaction = nullptr;

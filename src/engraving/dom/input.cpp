@@ -50,6 +50,15 @@ bool InputState::isValid() const
 //   drumset
 //---------------------------------------------------------
 
+Staff* InputState::staff() const
+{
+    if (!m_segment || m_track == muse::nidx) {
+        return nullptr;
+    }
+
+    return m_segment->score()->staff(mu::engraving::track2staff(m_track));
+}
+
 Drumset* InputState::drumset() const
 {
     if (!m_segment || m_track == muse::nidx) {

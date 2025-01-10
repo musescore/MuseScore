@@ -155,12 +155,12 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
         m_instrumentKey.tick = context.element->tick();
         m_originDrumset = *instrument->drumset();
     } else {
-        NoteInputState state = m_notation->interaction()->noteInput()->state();
-        const Staff* staff = m_notation->elements()->msScore()->staff(track2staff(state.currentTrack));
+        const NoteInputState& state = m_notation->interaction()->noteInput()->state();
+        const Staff* staff = state.staff();
         m_instrumentKey.instrumentId = staff ? staff->part()->instrumentId().toQString() : QString();
         m_instrumentKey.partId = staff ? staff->part()->id() : ID();
-        m_instrumentKey.tick = state.segment ? state.segment->tick() : Fraction(-1, 1);
-        m_originDrumset = state.drumset ? *state.drumset : Drumset();
+        m_instrumentKey.tick = state.segment() ? state.segment()->tick() : Fraction(-1, 1);
+        m_originDrumset = state.drumset() ? *state.drumset() : Drumset();
     }
 
     m_editedDrumset = m_originDrumset;
