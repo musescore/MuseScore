@@ -43,6 +43,7 @@ public:
     virtual muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const = 0;
     virtual muse::async::Notification noteInputEnded() const = 0;
 
+    virtual bool usingNoteInputMethod(NoteInputMethod method) const = 0;
     virtual void setNoteInputMethod(NoteInputMethod method) = 0;
 
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;

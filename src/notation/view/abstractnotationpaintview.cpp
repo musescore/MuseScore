@@ -604,7 +604,10 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     bool isPrinting = publishMode() || m_inputController->readonly();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
 
-    m_noteInputCursor->paint(painter);
+    if (shouldPaintNoteInputCursor()) {
+        m_noteInputCursor->paint(painter);
+    }
+
     m_loopInMarker->paint(painter);
     m_loopOutMarker->paint(painter);
 
@@ -660,6 +663,16 @@ void AbstractNotationPaintView::paintBackground(const RectF& rect, muse::draw::P
     } else {
         painter->drawTiledPixmap(rect, wallpaper, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
     }
+}
+
+bool AbstractNotationPaintView::shouldPaintNoteInputCursor() const
+{
+    INotationNoteInputPtr noteInput = notationNoteInput();
+    if (!noteInput || !noteInput->isNoteInputMode()) {
+        return false;
+    }
+
+    return !noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION);
 }
 
 PointF AbstractNotationPaintView::canvasCenter() const

@@ -315,6 +315,8 @@ private:
     void apply();
     void rollback();
 
+    void showShadowNoteAtPosition(mu::engraving::ShadowNote& note, mu::engraving::Position& pos, bool noteheadOnly = false);
+
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
@@ -368,10 +370,17 @@ private:
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
     double currentScaling(muse::draw::Painter* painter) const;
+
+    std::vector<mu::engraving::Position> inputPositions() const;
+
+    bool shouldDrawInputPreview() const;
+    void drawInputPreview(muse::draw::Painter* painter);
+
     void drawAnchorLines(muse::draw::Painter* painter);
     void drawTextEditMode(muse::draw::Painter* painter);
     void drawSelectionRange(muse::draw::Painter* painter);
     void drawGripPoints(muse::draw::Painter* painter);
+
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
 

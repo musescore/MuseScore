@@ -306,6 +306,11 @@ Notification NotationNoteInput::noteInputEnded() const
     return m_noteInputEnded;
 }
 
+bool NotationNoteInput::usingNoteInputMethod(NoteInputMethod method) const
+{
+    return score()->usingNoteEntryMethod(method);
+}
+
 void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
 {
     TRACEFUNC;

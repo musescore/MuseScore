@@ -333,6 +333,10 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
 
 void NotationInteraction::paint(Painter* painter)
 {
+    if (shouldDrawInputPreview()) {
+        drawInputPreview(painter);
+    }
+
     score()->renderer()->drawItem(score()->shadowNote(), painter);
 
     drawAnchorLines(painter);
@@ -365,7 +369,14 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
         return false;
     }
 
-    Staff* staff = score()->staff(position.staffIdx);
+    showShadowNoteAtPosition(shadowNote, position);
+    return true;
+}
+
+void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, Position& position, bool noteheadOnly)
+{
+    const mu::engraving::InputState& inputState = score()->inputState();
+    const Staff* staff = score()->staff(position.staffIdx);
     const mu::engraving::Instrument* instr = staff->part()->instrument();
 
     mu::engraving::Segment* segment = position.segment;
@@ -430,15 +441,17 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
         }
 
-        shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY,
-                            inputState.accidentalType(), inputState.articulationIds());
+        if (noteheadOnly) {
+            shadowNote.setState(symNotehead, TDuration(), false, segmentSkylineTopY, segmentSkylineBottomY);
+        } else {
+            shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY,
+                                inputState.accidentalType(), inputState.articulationIds());
+        }
     }
 
     score()->renderer()->layoutItem(&shadowNote);
 
     shadowNote.setPos(position.pos);
-
-    return true;
 }
 
 void NotationInteraction::hideShadowNote()
@@ -2628,6 +2641,57 @@ double NotationInteraction::currentScaling(Painter* painter) const
 {
     qreal guiScaling = configuration()->guiScaling();
     return painter->worldTransform().m11() / guiScaling;
+}
+
+std::vector<Position> NotationInteraction::inputPositions() const
+{
+    std::vector<Position> result;
+
+    const mu::engraving::InputState& is = score()->inputState();
+    const EngravingItem* selectedItem = score()->selection().element();
+    const staff_idx_t staffIdx = track2staff(is.track());
+    const Staff* staff = score()->staff(staffIdx);
+    const Fraction tick = is.tick();
+
+    const double lineDist = staff->staffType(tick)->lineDistance().val()
+                            * (staff->isTabStaff(tick) ? 1 : .5)
+                            * staff->staffMag(tick)
+                            * score()->style().spatium();
+
+    const SysStaff* sysStaff = is.segment()->system()->staff(staffIdx);
+
+    Position pos;
+    pos.segment = is.segment();
+    pos.staffIdx = staffIdx;
+
+    if (selectedItem && selectedItem->isNote()) {
+        pos.line = toNote(selectedItem)->line();
+    } else {
+        pos.line = ((staff->lines(tick) - 1) / 2) * 2;
+    }
+
+    const double y = sysStaff->y() + pos.line * lineDist;
+    pos.pos = PointF(pos.segment->x(), y) + pos.segment->measure()->canvasPos();
+
+    result.push_back(pos);
+
+    return result;
+}
+
+bool NotationInteraction::shouldDrawInputPreview() const
+{
+    return m_noteInput->isNoteInputMode() && m_noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION);
+}
+
+void NotationInteraction::drawInputPreview(Painter* painter)
+{
+    ShadowNote shadowNote(score());
+    std::vector<Position> positions = inputPositions();
+
+    for (Position& pos : positions) {
+        showShadowNoteAtPosition(shadowNote, pos, true /*noteheadOnly*/);
+        score()->renderer()->drawItem(&shadowNote, painter);
+    }
 }
 
 void NotationInteraction::drawAnchorLines(Painter* painter)

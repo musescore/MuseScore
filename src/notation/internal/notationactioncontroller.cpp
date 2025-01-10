@@ -739,7 +739,7 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 
     if (!noteInput->isNoteInputMode()) {
         noteInput->startNoteInput(method);
-    } else if (noteInput->state().usingNoteEntryMethod(method)) {
+    } else if (noteInput->usingNoteInputMethod(method)) {
         toggleNoteInput();
     } else {
         noteInput->setNoteInputMethod(method);
@@ -748,7 +748,7 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 
 void NotationActionController::toggleNoteInputInsert()
 {
-    if (!currentNotationNoteInput()->state().usingNoteEntryMethod(NoteInputMethod::TIMEWISE)) {
+    if (!currentNotationNoteInput()->usingNoteInputMethod(NoteInputMethod::TIMEWISE)) {
         toggleNoteInputMethod(NoteInputMethod::TIMEWISE);
     } else {
         toggleNoteInputMethod(NoteInputMethod::BY_NOTE_NAME);
@@ -785,10 +785,8 @@ void NotationActionController::padNote(const Pad& pad)
     startNoteInputIfNeed();
     noteInput->padNote(pad);
 
-    const NoteInputState& state = noteInput->state();
-
-    if (state.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)
-        || state.usingNoteEntryMethod(NoteInputMethod::RHYTHM)) {
+    if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
+        || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM)) {
         playSelectedElement();
     }
 }

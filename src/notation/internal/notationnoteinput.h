@@ -57,6 +57,7 @@ public:
     muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const override;
     muse::async::Notification noteInputEnded() const override;
 
+    bool usingNoteInputMethod(NoteInputMethod method) const override;
     void setNoteInputMethod(NoteInputMethod method) override;
 
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
