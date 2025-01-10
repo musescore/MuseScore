@@ -65,7 +65,7 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
+    muse::Ret readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;

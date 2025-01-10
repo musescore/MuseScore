@@ -3419,7 +3419,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+Ret Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
     if (out) {
@@ -3444,7 +3444,10 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!readScore206(score, e, ctx)) {
-                return Err::FileBadFormat;
+                if (e.error() == muse::XmlStreamReader::CustomError) {
+                    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
+                }
+                return make_ret(Err::FileBadFormat, e.errorString());
             }
 
             if (ctx.overrideSpatium() && out) {
@@ -3504,7 +3507,7 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     compat::CompatUtils::doCompatibilityConversions(score->masterScore());
 
-    return Err::NoError;
+    return make_ok();
 }
 
 bool Read206::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)

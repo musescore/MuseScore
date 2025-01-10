@@ -59,7 +59,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::read410;
 
-Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
+muse::Ret Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
 {
     ReadContext ctx(score);
     if (data) {
@@ -93,9 +93,9 @@ Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         } else if (tag == "Score") {
             if (!readScore410(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
-                    return Err::FileCriticallyCorrupted;
+                    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
                 }
-                return Err::FileBadFormat;
+                return make_ret(Err::FileBadFormat, e.errorString());
             }
         } else if (tag == "museScore") {
             // pass
@@ -116,7 +116,7 @@ Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         data->settingsCompat = ctx.settingCompat();
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
