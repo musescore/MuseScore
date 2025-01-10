@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SLUR_H
-#define MU_ENGRAVING_SLUR_H
+#pragma once
 
 #include "slurtie.h"
 
@@ -38,15 +37,16 @@ class SlurSegment final : public SlurTieSegment
     OBJECT_ALLOCATOR(engraving, SlurSegment)
     DECLARE_CLASSOF(ElementType::SLUR_SEGMENT)
 
+    M_PROPERTY2(double, extraHeight, setExtraHeight, 0.0)
+    M_PROPERTY2(PointF, endPointOff1, setEndPointOff1, PointF(0.0, 0.0))
+    M_PROPERTY2(PointF, endPointOff2, setEndPointOff2, PointF(0.0, 0.0))
+
 public:
     SlurSegment(System* parent);
     SlurSegment(const SlurSegment& ss);
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
     int subtype() const override { return static_cast<int>(spanner()->type()); }
-
-    double extraHeight() const { return m_extraHeight; }
-    void setExtraHeight(double h) { m_extraHeight = h; }
 
     bool isEdited() const;
     bool isEndPointsEdited() const;
@@ -57,20 +57,12 @@ public:
 
     Slur* slur() const { return toSlur(spanner()); }
 
-    const PointF& endPointOff1() const { return m_endPointOff1; }
-    const PointF& endPointOff2() const { return m_endPointOff2; }
-    void setEndPointOff1(const PointF& p) { m_endPointOff1 = p; }
-    void setEndPointOff2(const PointF& p) { m_endPointOff2 = p; }
-
     double endWidth() const override;
     double midWidth() const override;
     double dottedWidth() const override;
 
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
-    double m_extraHeight = 0.0;
-    PointF m_endPointOff1 = PointF(0.0, 0.0);
-    PointF m_endPointOff2 = PointF(0.0, 0.0);
 };
 
 //---------------------------------------------------------
@@ -95,14 +87,22 @@ public:
         }
     };
 
+    /// temporary HACK for correct guitar pro import
+    enum ConnectedElement {
+        NONE,
+        GLISSANDO,
+        HAMMER_ON
+    };
+
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }
 
     void setTrack(track_idx_t val) override;
 
-    int sourceStemArrangement() const { return m_sourceStemArrangement; }
-    void setSourceStemArrangement(int v) { m_sourceStemArrangement = v; }
+    PropertyValue getProperty(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
@@ -112,43 +112,28 @@ public:
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
     bool isCrossStaff();
-    bool isOverBeams();
-    bool stemSideForBeam(bool start);
-    bool stemSideStartForBeam() { return stemSideForBeam(true); }
-    bool stemSideEndForBeam() { return stemSideForBeam(false); }
     const StemFloated& stemFloated() const { return m_stemFloated; }
     StemFloated& stemFloated() { return m_stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 
     static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
-    static bool isDirectionMixture(Chord* c1, Chord* c2);
 
     double scalingFactor() const override;
 
-    /// temporary HACK for correct guitar pro import
-    enum ConnectedElement {
-        NONE,
-        GLISSANDO,
-        HAMMER_ON
-    };
-
-    void setConnectedElement(ConnectedElement el) { m_connectedElement = el; }
-    ConnectedElement connectedElement() const { return m_connectedElement; }
-
+    void undoSetIncoming(bool incoming);
+    void undoSetOutgoing(bool outgoing);
+    bool isIncoming() const;
+    bool isOutgoing() const;
 private:
+    M_PROPERTY2(int, sourceStemArrangement, setSourceStemArrangement, -1)
+    M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
+    M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::NONE)
 
     friend class Factory;
     Slur(EngravingItem* parent);
     Slur(const Slur&);
 
-    void slurPosChord(SlurTiePos*);
-
-    int m_sourceStemArrangement = -1;
-
     StemFloated m_stemFloated; // end point position is attached to stem but floated towards the note
-
-    ConnectedElement m_connectedElement = ConnectedElement::NONE;
 };
 } // namespace mu::engraving
-#endif

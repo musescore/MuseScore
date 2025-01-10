@@ -4001,7 +4001,10 @@ bool TRead::readProperties(Slur* s, XmlReader& e, ReadContext& ctx)
     if (tag == "stemArr") {
         s->setSourceStemArrangement(e.readInt());
         return true;
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::PARTIAL_SPANNER_DIRECTION)) {
+        return true;
     }
+
     return readProperties(static_cast<SlurTie*>(s), e, ctx);
 }
 

@@ -2556,6 +2556,11 @@ void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
     if (ctx.clipboardmode()) {
         xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
     }
+
+    // We don't know if the paste destination has the correct repeat structure for partial slurs to be permitted
+    if (!ctx.clipboardmode()) {
+        writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+    }
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }

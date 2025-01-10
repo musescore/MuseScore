@@ -229,7 +229,7 @@ void Tie::updatePossibleJumpPoints()
 
     tieJumpPoints()->clear();
 
-    if (!startNote()->hasFollowingJumpItem()) {
+    if (!chord->hasFollowingJumpItem()) {
         return;
     }
 

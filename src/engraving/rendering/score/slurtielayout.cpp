@@ -111,8 +111,11 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     p2 = sPos.p2;
     bool constrainLeftAnchor = false;
 
+    const bool incomingPartialSlur = item->isIncoming();
+    const bool outgoingPartialSlur = item->isOutgoing();
+
     // start anchor, either on the start chordrest or at the beginning of the system
-    if (sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::BEGIN) {
+    if ((sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::BEGIN) && !incomingPartialSlur) {
         Chord* sc = item->startCR()->isChord() ? toChord(item->startCR()) : nullptr;
 
         // on chord
@@ -152,9 +155,10 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                 }
             }
         }
-    } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE) {
+    } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE || incomingPartialSlur) {
         // beginning of system
-        ChordRest* firstCr = system->firstChordRest(item->track2());
+        Measure* measure = item->startCR()->measure();
+        ChordRest* firstCr = incomingPartialSlur ? measure->firstChordRest(item->track()) : system->firstChordRest(item->track2());
         double y = p1.y();
         if (firstCr && firstCr == item->endCR()) {
             constrainLeftAnchor = true;
@@ -169,12 +173,13 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                 y += continuedSlurOffsetY * (item->up() ? -1 : 1);
             }
         }
-        p1 = PointF(system->firstNoteRestSegmentX(true), y);
 
-        // adjust for ties at the end of the system
-        ChordRest* cr = system->firstChordRest(item->track());
+        double segmentX = incomingPartialSlur ? measure->firstNoteRestSegmentX(true) : system->firstNoteRestSegmentX(true);
+        p1 = PointF(segmentX, y);
+
+        // adjust for ties at the start of the system
+        ChordRest* cr = incomingPartialSlur ? measure->firstChordRest(item->track()) : system->firstChordRest(item->track());
         if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick) {
-            // TODO: can ties go to or from rests?
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
@@ -187,6 +192,9 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                 }
             }
             if (tie) {
+                if (tie->isPartialTie()) {
+                    p1.rx() = endPoint.rx();
+                }
                 if (item->up() && tie->up()) {
                     if (endPoint.y() - p1.y() < tieClearance) {
                         p1.ry() = endPoint.y() - tieClearance;
@@ -201,7 +209,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     }
 
     // end anchor
-    if (sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::END) {
+    if ((sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::END) && !outgoingPartialSlur) {
         Chord* ec = item->endCR()->isChord() ? toChord(item->endCR()) : nullptr;
 
         // on chord
@@ -236,7 +244,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         }
     } else {
         // at end of system
-        ChordRest* lastCr = system->lastChordRest(item->track());
+        Measure* measure = item->endCR()->measure();
+        ChordRest* lastCr = outgoingPartialSlur ? measure->lastChordRest(item->track()) : system->lastChordRest(item->track());
         double y = p1.y();
         if (lastCr && lastCr == item->startCR()) {
             y += 0.25 * item->spatium() * (item->up() ? -1 : 1);
@@ -255,22 +264,33 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             }
         }
 
-        p2 = PointF(system->endingXForOpenEndedLines(), y);
+        double endingX = outgoingPartialSlur ? measure->endingXForOpenEndedLines() : system->endingXForOpenEndedLines();
+        p2 = PointF(endingX, y);
 
         // adjust for ties at the end of the system
-        ChordRest* cr = system->lastChordRest(item->track());
+        ChordRest* cr = outgoingPartialSlur ? measure->lastChordRest(item->track()) : system->lastChordRest(item->track());
 
         if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick) {
-            // TODO: can ties go to or from rests?
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
             Tie* tieFor = c->notes()[0]->tieFor();
-            if (tieFor && !tieFor->isInside() && tieFor->up() == item->up()) {
+            if (tieFor && (!tieFor->isInside() || outgoingPartialSlur) && tieFor->up() == item->up()) {
                 // there is a tie that starts on this chordrest
                 if (!tieFor->segmentsEmpty()) { //Checks is spanner segment exists
                     tie = tieFor;
                     endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
+                }
+
+                if (outgoingPartialSlur && tie->type() == ElementType::TIE && tie->nsegments() == 1) {
+                    // For partial slurs ending midway through a tie, get top of the tie shape at the slur's end X
+                    const TieSegment* tieSeg = tie->frontSegment();
+                    const Shape tieShape = tieSeg->shape().translate(tieSeg->pos());
+                    if (item->up() && tie->up()) {
+                        endPoint.ry() = p2.y() + tieShape.topDistance(p2);
+                    } else if (!item->up() && !tie->up()) {
+                        endPoint.ry() = p2.y() - tieShape.bottomDistance(p2);
+                    }
                 }
             }
             if (tie) {
@@ -398,10 +418,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             sa1 = SlurAnchor::STEM;
         }
         if (scr->up() == ecr->up() && scr->up() == item->up()) {
-            if (stem1 && !item->stemSideStartForBeam()) {
+            if (stem1 && !stemSideStartForBeam(item)) {
                 sa1 = SlurAnchor::STEM;
             }
-            if (stem2 && !item->stemSideEndForBeam()) {
+            if (stem2 && !stemSideEndForBeam(item)) {
                 sa2 = SlurAnchor::STEM;
             }
         } else if (ecr->segment()->system() != scr->segment()->system()) {
@@ -1309,6 +1329,75 @@ double SlurTieLayout::computeAdjustmentStep(int upSign, double spatium, double s
     }
 
     return step;
+}
+
+bool SlurTieLayout::stemSideForBeam(Slur* slur, bool start)
+{
+    // determines if the anchor point is exempted from the stem inset due to beams or tremolos.
+    if (!slur) {
+        return false;
+    }
+
+    ChordRest* cr = start ? slur->startCR() : slur->endCR();
+    Chord* c = toChord(cr);
+    bool adjustForBeam = cr && cr->beam() && cr->up() == slur->up();
+    if (start) {
+        adjustForBeam = adjustForBeam && cr->beam()->elements().back() != cr;
+    } else {
+        adjustForBeam = adjustForBeam && cr->beam()->elements().front() != cr;
+    }
+    if (adjustForBeam) {
+        return true;
+    }
+
+    bool adjustForTrem = false;
+    TremoloTwoChord* trem = c ? c->tremoloTwoChord() : nullptr;
+    adjustForTrem = trem && trem->up() == slur->up();
+    if (start) {
+        adjustForTrem = adjustForTrem && trem->chord2() != c;
+    } else {
+        adjustForTrem = adjustForTrem && trem->chord1() != c;
+    }
+    return adjustForTrem;
+}
+
+bool SlurTieLayout::isOverBeams(Slur* slur)
+{
+    // returns true if all the chords spanned by the slur are beamed, and all beams are on the same side of the slur
+    const ChordRest* startCR = slur->startCR();
+    const ChordRest* endCR = slur->endCR();
+    if (!startCR || !endCR) {
+        return false;
+    }
+    if (startCR->track() != endCR->track()
+        || startCR->tick() >= endCR->tick()) {
+        return false;
+    }
+    size_t track = startCR->track();
+    Segment* seg = startCR->segment();
+    while (seg && seg->tick() <= endCR->tick()) {
+        if (!seg->isChordRestType()
+            || !seg->elist().at(track)
+            || !seg->elist().at(track)->isChordRest()) {
+            return false;
+        }
+        ChordRest* cr = toChordRest(seg->elist().at(track));
+        bool hasBeam = cr->beam() && cr->up() == slur->up();
+        bool hasTrem = false;
+        if (cr->isChord()) {
+            Chord* c = toChord(cr);
+            hasTrem = c->tremoloTwoChord() && c->up() == slur->up();
+        }
+        if (!(hasBeam || hasTrem)) {
+            return false;
+        }
+        if ((!seg->next() || seg->next()->isEndBarLineType()) && seg->measure()->nextMeasure()) {
+            seg = seg->measure()->nextMeasure()->first();
+        } else {
+            seg = seg->next();
+        }
+    }
+    return true;
 }
 
 void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp)
@@ -2524,7 +2613,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     shoulderH = sqrt(d / 4) * _spatium;
 
     static constexpr double shoulderReduction = 0.75;
-    if (slurSeg->slur()->isOverBeams()) {
+    if (isOverBeams(slurSeg->slur())) {
         shoulderH *= shoulderReduction;
     }
     shoulderH -= shoulderOffset.y();

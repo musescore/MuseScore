@@ -684,7 +684,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     firstChordRest->score()->undoAddElement(slur);
     SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
     ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    if (firstChordRest == secondChordRest) {
+    if (firstChordRest == secondChordRest && !(slur->isOutgoing() || slur->isIncoming())) {
         ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->style().spatium(), 0.0));
     }
     slur->add(ss);
@@ -2055,11 +2055,12 @@ Tie* Score::cmdToggleTie()
         bool shouldTieListSelection = noteList.size() == 2;
         for (Note* n : noteList) {
             tie = n->tieFor();
+            Chord* chord = n->chord();
             if (tie) {
                 undoRemoveElement(tie);
                 tie = nullptr;
                 shouldTieListSelection = false;
-            } else if (n->hasFollowingJumpItem()) {
+            } else if (chord->hasFollowingJumpItem()) {
                 // Create outgoing partial tie
                 tie = createAndAddTie(n, nullptr);
                 shouldTieListSelection = false;
@@ -2915,7 +2916,6 @@ void Score::deleteItem(EngravingItem* el)
                 tie->updateStartTieOnRemoval();
             }
         }
-
         undoRemoveElement(el);
     }
     break;
@@ -3832,42 +3832,6 @@ void Score::cmdFullMeasureRest()
     } else {
         deselectAll();
     }
-}
-
-//---------------------------------------------------------
-//   addLyrics
-//    called from Keyboard Accelerator & menu
-//---------------------------------------------------------
-
-Lyrics* Score::addLyrics()
-{
-    EngravingItem* el = selection().element();
-    if (el == 0 || (!el->isNote() && !el->isLyrics() && !el->isRest())) {
-        MScore::setError(MsError::NO_LYRICS_SELECTED);
-        return 0;
-    }
-    ChordRest* cr;
-    if (el->isNote()) {
-        cr = toNote(el)->chord();
-        if (cr->isGrace()) {
-            cr = toChordRest(cr->explicitParent());
-        }
-    } else if (el->isLyrics()) {
-        cr = toLyrics(el)->chordRest();
-    } else if (el->isRest()) {
-        cr = toChordRest(el);
-    } else {
-        return 0;
-    }
-
-    int no = int(cr->lyrics().size());
-    Lyrics* lyrics = Factory::createLyrics(cr);
-    lyrics->setTrack(cr->track());
-    lyrics->setParent(cr);
-    lyrics->setNo(no);
-    undoAddElement(lyrics);
-    select(lyrics, SelectType::SINGLE, 0);
-    return lyrics;
 }
 
 std::vector<Hairpin*> Score::addHairpins(HairpinType type)
@@ -7188,12 +7152,40 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
     }
 }
 
+void Score::doUndoResetPartialSlur(Slur* slur)
+{
+    const size_t undoIdx = undoStack()->currentIndex();
+    if (!slur->startCR()->hasPrecedingJumpItem() && slur->isIncoming()) {
+        startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
+        slur->undoSetIncoming(false);
+        endCmd();
+    }
+
+    if (!slur->endCR()->hasFollowingJumpItem() && slur->isOutgoing()) {
+        startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
+        slur->undoSetOutgoing(false);
+        endCmd();
+    }
+
+    if (undoIdx != undoStack()->currentIndex()) {
+        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    }
+}
+
 void Score::undoRemoveStaleTieJumpPoints()
 {
     size_t tracks = nstaves() * VOICES;
     Measure* m = firstMeasure();
     if (!m) {
         return;
+    }
+
+    for (auto& interval : spanner()) {
+        Spanner* sp = interval.second;
+        if (!sp || !sp->isSlur()) {
+            continue;
+        }
+        doUndoResetPartialSlur(toSlur(sp));
     }
 
     SegmentType st = SegmentType::ChordRest;

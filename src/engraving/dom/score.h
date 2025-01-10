@@ -804,12 +804,10 @@ public:
 
     void connectTies(bool silent = false);
     void undoRemoveStaleTieJumpPoints();
-    void doUndoRemoveStaleTieJumpPoints(Tie* tie);
 
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
-    Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
     void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
@@ -1079,6 +1077,9 @@ private:
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
     void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
     void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
+
+    void doUndoRemoveStaleTieJumpPoints(Tie* tie);
+    void doUndoResetPartialSlur(Slur* slur);
 
     void deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
                                              const SelectionFilter& filter);

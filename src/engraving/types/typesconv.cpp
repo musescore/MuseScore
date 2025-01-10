@@ -493,7 +493,8 @@ AutoOnOff TConv::fromXml(const AsciiStringView& str, AutoOnOff def)
 static const std::vector<Item<PartialSpannerDirection> > PARTIAL_SPANNER_DIRECTION = {
     { PartialSpannerDirection::NONE,     "none" },
     { PartialSpannerDirection::OUTGOING, "outgoing" },
-    { PartialSpannerDirection::INCOMING, "incoming" }
+    { PartialSpannerDirection::INCOMING, "incoming" },
+    { PartialSpannerDirection::BOTH,     "both" }
 };
 
 AsciiStringView TConv::toXml(PartialSpannerDirection v)

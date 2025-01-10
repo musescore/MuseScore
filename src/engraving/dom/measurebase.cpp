@@ -694,6 +694,16 @@ int MeasureBase::measureIndex() const
     return -1;
 }
 
+bool MeasureBase::isBefore(const EngravingItem* other) const
+{
+    if (other->isMeasureBase()) {
+        const MeasureBase* otherMb = toMeasureBase(other);
+        return isBefore(otherMb);
+    }
+
+    return EngravingItem::isBefore(other);
+}
+
 bool MeasureBase::isBefore(const MeasureBase* other) const
 {
     Fraction otherTick = other->tick();
