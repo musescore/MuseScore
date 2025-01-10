@@ -229,12 +229,11 @@ void Tie::updatePossibleJumpPoints()
 
     const Note* note = toNote(parentItem());
     const Chord* chord = note->chord();
+    const Measure* measure = chord->measure();
 
     if (!chord->hasFollowingJumpItem()) {
         return;
     }
-
-    const Measure* measure = chord->measure();
 
     int jumpPointIdx = 0;
 
