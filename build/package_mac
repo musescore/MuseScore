@@ -1,21 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 APPNAME=mscore
 LONG_NAME="MuseScore"
 LONGER_NAME="MuseScore 3"
 VERSION=0
+DEVELOPER_NAME="MuseScore"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --long_name) LONG_NAME="$2"; shift ;;
         --longer_name) LONGER_NAME="$2"; shift ;;
-        --version) VERSION=$2; shift ;;
+        --version) VERSION="$2"; shift ;;
+        --developer_name) DEVELOPER_NAME="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
-if [ $VERSION -eq 0 ]; then 
+if [ "$VERSION" == "0" ]; then 
     SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
     VERSION=$(cmake -P "$SCRIPT_DIR/../config.cmake" | sed -n -e "s/^.*VERSION  *//p")
 fi    
@@ -23,6 +25,7 @@ fi
 echo "LONG_NAME: $LONG_NAME"
 echo "LONGER_NAME: $LONGER_NAME"
 echo "VERSION: $VERSION"
+echo "DEVELOPER_NAME: $DEVELOPER_NAME"
 
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.tiff
@@ -92,20 +95,7 @@ function change_rpath() {
    done
 }
 
-function change_rpath_QWebEngine() {
-   for P in `otool -L $1 | awk '{print $1}'`
-   do
-      if [[ "$P" == *@rpath* ]]
-      then
-         PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../../../../../../..,g')
-         FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-         install_name_tool -change $P $PSLASH $1
-      fi
-   done
-}
-
-
-rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+rm -f ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 #tip: increase the size if error on copy or macdeployqt
 hdiutil create -size 800m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
@@ -151,9 +141,6 @@ macdeployqt ${VOLUME}/${APPNAME}.app
 # fix the libs, qt5.6 has @rpath...
 BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 change_rpath $BIN_FILE
-# fix the QWebEngineProcess, qt5.9 has @rpath...
-WebEngineProcess=${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
-change_rpath_QWebEngine $WebEngineProcess
 
 # Workaround:
 # fix Homebrew libraries with hard coded absolute path, see QTBUG-56814
@@ -182,7 +169,6 @@ do
 done
 
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
-otool -L ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
 
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
@@ -209,11 +195,9 @@ CODE_PATHS=(
 #codesign
 echo "Codesign"
 # `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
-find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --force --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
+find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --force --options runtime --deep -s "Developer ID Application: ${DEVELOPER_NAME}" '{}' ';'
 # Sign code in other (more conventional) locations
-codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../build/macosx_entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${CODE_PATHS[@]}"
-# Sign QtWebEngine application for MacOS Catalina
-codesign --force --verify --verbose --options runtime --entitlements "${WORKING_DIRECTORY}/../build/qtwebengineprocess.entitlements" --deep --sign "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess"
+codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../build/macosx_entitlements.plist" --deep -s "Developer ID Application: ${DEVELOPER_NAME}" "${CODE_PATHS[@]}"
 echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"

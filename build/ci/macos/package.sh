@@ -6,11 +6,13 @@ trap 'echo Package failed; exit 1' ERR
 ARTIFACTS_DIR="build.artifacts"
 SIGN_CERTIFICATE_ENCRYPT_SECRET="''"
 SIGN_CERTIFICATE_PASSWORD="''"
+DEVELOPER_NAME="MuseSore"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --signsecret) SIGN_CERTIFICATE_ENCRYPT_SECRET="$2"; shift ;;
         --signpass) SIGN_CERTIFICATE_PASSWORD="$2"; shift ;;
+        --developer_name) DEVELOPER_NAME="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -75,7 +77,7 @@ if [ "$BUILD_MODE" == "stable" ]; then
   PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 fi
 
-build/package_mac --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
+build/package_mac --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION" --developer_name "$DEVELOPER_NAME"
 
 DMGFILE="$(ls applebuild/*.dmg)"
 echo "DMGFILE: $DMGFILE"
