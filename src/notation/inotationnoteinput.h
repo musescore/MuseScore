@@ -37,7 +37,7 @@ public:
 
     virtual const NoteInputState& state() const = 0;
 
-    virtual void startNoteInput(NoteInputMethod method = NoteInputMethod::STEPTIME, bool focusNotation = true) = 0;
+    virtual void startNoteInput(NoteInputMethod method = NoteInputMethod::BY_NOTE_NAME, bool focusNotation = true) = 0;
     virtual void endNoteInput(bool resetState = false) = 0;
 
     virtual muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const = 0;

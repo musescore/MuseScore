@@ -51,7 +51,7 @@ public:
 
     const NoteInputState& state() const override;
 
-    void startNoteInput(NoteInputMethod method = NoteInputMethod::STEPTIME, bool focusNotation = true) override;
+    void startNoteInput(NoteInputMethod method = NoteInputMethod::BY_NOTE_NAME, bool focusNotation = true) override;
     void endNoteInput(bool resetState = false) override;
 
     muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const override;

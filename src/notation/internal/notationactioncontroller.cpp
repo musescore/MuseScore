@@ -84,7 +84,7 @@ void NotationActionController::init()
     registerAction("notation-escape", &Controller::resetState, &Controller::isNotationPage);
 
     registerAction("note-input", [this]() { toggleNoteInput(); });
-    registerNoteInputAction("note-input-steptime", NoteInputMethod::STEPTIME);
+    registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
     registerNoteInputAction("note-input-by-duration", NoteInputMethod::BY_DURATION);
     registerNoteInputAction("note-input-rhythm", NoteInputMethod::RHYTHM);
     registerNoteInputAction("note-input-repitch", NoteInputMethod::REPITCH);
@@ -751,7 +751,7 @@ void NotationActionController::toggleNoteInputInsert()
     if (!currentNotationNoteInput()->state().usingNoteEntryMethod(NoteInputMethod::TIMEWISE)) {
         toggleNoteInputMethod(NoteInputMethod::TIMEWISE);
     } else {
-        toggleNoteInputMethod(NoteInputMethod::STEPTIME);
+        toggleNoteInputMethod(NoteInputMethod::BY_NOTE_NAME);
     }
 }
 

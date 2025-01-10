@@ -170,7 +170,7 @@
     <seq>I</seq>
     </SC>
   <SC>
-    <key>note-input</key>
+    <key>note-input-by-note-name</key>
     <seq>N</seq>
     <autorepeat>0</autorepeat>
     </SC>

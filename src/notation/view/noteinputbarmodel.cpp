@@ -43,7 +43,7 @@ static const ActionCode CROSS_STAFF_BEAMING_CODE("cross-staff-beaming");
 static const ActionCode TUPLET_ACTION_CODE("tuplet");
 
 static const std::unordered_map<ActionCode, NoteInputMethod> NOTE_INPUT_METHOD_ACTIONS {
-    { "note-input-steptime", NoteInputMethod::STEPTIME },
+    { "note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME },
     { "note-input-by-duration", NoteInputMethod::BY_DURATION },
     { "note-input-rhythm", NoteInputMethod::RHYTHM },
     { "note-input-repitch", NoteInputMethod::REPITCH },

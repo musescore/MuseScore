@@ -51,7 +51,7 @@ static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 //---------------------------------------------------------
 
 enum class NoteEntryMethod : char {
-    UNKNOWN, STEPTIME, BY_DURATION, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
+    UNKNOWN, BY_NOTE_NAME, BY_DURATION, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
 };
 
 //---------------------------------------------------------
@@ -144,7 +144,7 @@ private:
     Segment* m_segment = nullptr; // current segment
 
     bool m_noteEntryMode = false;
-    NoteEntryMethod m_noteEntryMethod = NoteEntryMethod::STEPTIME;
+    NoteEntryMethod m_noteEntryMethod = NoteEntryMethod::BY_NOTE_NAME;
 
     TDuration m_duration = DurationType::V_INVALID; // currently duration
     bool m_rest = false; // rest mode

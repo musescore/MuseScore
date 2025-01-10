@@ -176,7 +176,7 @@ void NotationConfiguration::init()
         fileSystem()->makePath(userStylesPath());
     }
 
-    settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(static_cast<int>(NoteInputMethod::STEPTIME)));
+    settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(static_cast<int>(NoteInputMethod::BY_PITCH)));
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->valueChanged(SELECTION_PROXIMITY).onReceive(this, [this](const Val& val) {
         m_selectionProximityChanged.send(val.toInt());
