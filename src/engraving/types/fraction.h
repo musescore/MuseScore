@@ -258,10 +258,24 @@ public:
     static constexpr Fraction eps() { return Fraction(1, Constants::DIVISION * 4); }
 
     muse::String toString() const { return muse::String(u"%1/%2").arg(m_numerator, m_denominator); }
-    static Fraction fromString(const muse::String& str)
+    static Fraction fromString(const muse::String& str, bool* ok = nullptr)
     {
         const size_t i = str.indexOf(u'/');
-        return (i == muse::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
+        if (i == muse::nidx) {
+            return Fraction(str.toInt(ok), 1);
+        }
+
+        int numerator = str.left(i).toInt(ok);
+        if (ok && !*ok) {
+            return Fraction();
+        }
+
+        int denominator = str.mid(i + 1).toInt(ok);
+        if (ok && !*ok) {
+            return Fraction();
+        }
+
+        return Fraction(numerator, denominator);
     }
 
     constexpr double toDouble() const { return static_cast<double>(m_numerator) / static_cast<double>(m_denominator); }
