@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
-  <programVersion>4.4.4</programVersion>
-  <programRevision>2232670</programRevision>
-  <LastEID>66</LastEID>
+<museScore version="4.50">
+  <programVersion>4.5.0</programVersion>
+  <programRevision></programRevision>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -130,19 +129,15 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>21474836503</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>30064771097</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>38654705779</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>51539607572</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -152,7 +147,6 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>55834574979</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -164,10 +158,8 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>64424509555</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>77309411348</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>2</fret>
@@ -182,13 +174,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>85899346035</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>98784247828</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -198,7 +188,6 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>103079215235</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -209,10 +198,8 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>111669149811</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>124554051604</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -231,13 +218,11 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>137438953587</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>150323855380</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -247,7 +232,6 @@
                   <guitarBendType>2</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.25</bendEndTimeFactor>
-                  <eid>154618822787</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -258,10 +242,8 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>163208757363</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>176093659156</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -276,10 +258,8 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>180388626547</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>193273528340</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -289,7 +269,6 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>197568495747</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
