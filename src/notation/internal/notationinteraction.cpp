@@ -5254,11 +5254,11 @@ void NotationInteraction::flipHairpinsType(Dynamic* selDyn)
 
     startEdit(TranslatableString("undoableAction", "Change hairpin type"));
 
-    if (selDyn->leftHairpin()) {
-        Hairpin* leftHp = selDyn->leftHairpin();
+    if (Hairpin* leftHp = selDyn->leftHairpin()) {
         const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
-
-        if (!(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP) && !leftHp->isLineType()) {
+        if (startDyn
+            && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
+            && !leftHp->isLineType()) {
             if (int(startDyn->dynamicType()) > int(selDyn->dynamicType())) {
                 leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
             } else {
@@ -5267,11 +5267,11 @@ void NotationInteraction::flipHairpinsType(Dynamic* selDyn)
         }
     }
 
-    if (selDyn->rightHairpin()) {
-        Hairpin* rightHp = selDyn->rightHairpin();
+    if (Hairpin* rightHp = selDyn->rightHairpin()) {
         const Dynamic* endDyn = rightHp->dynamicSnappedAfter();
-
-        if (!(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP) && !rightHp->isLineType()) {
+        if (endDyn
+            && !(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP)
+            && !rightHp->isLineType()) {
             if (int(endDyn->dynamicType()) > int(selDyn->dynamicType())) {
                 rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
             } else {
