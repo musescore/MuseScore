@@ -139,7 +139,8 @@ bool MeiExporter::write(std::string& meiData)
             if (!eid.isValid()) {
                 eid = m_score->masterScore()->assignNewEID();
             }
-            xmlId << "mscore-" << eid.toStdString();
+            String eidStr = String::fromStdString(eid.toStdString().c_str());
+            xmlId << "mscore-" << eidStr.replace('/', '.').replace('+', '-').toStdString();
             m_mei.append_attribute("xml:id") = xmlId.str().c_str();
         }
         // Otherwise check if we have a metaTag
@@ -2562,7 +2563,8 @@ std::string MeiExporter::getXmlIdFor(const EngravingItem* item, const char c)
         if (!eid.isValid()) {
             eid = item->assignNewEID();
         }
-        return "mscore-" + eid.toStdString();
+        String eidStr = String::fromStdString(eid.toStdString().c_str());
+        return "mscore-" + eidStr.replace('/', '.').replace('+', '-').toStdString();
     } else if (m_uids->hasUid(item)) {
         return m_uids->uid(item);
     }
