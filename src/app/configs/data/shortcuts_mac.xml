@@ -171,7 +171,7 @@
     <seq>I</seq>
     </SC>
   <SC>
-    <key>note-input</key>
+    <key>note-input-by-pitch</key>
     <seq>N</seq>
     <autorepeat>0</autorepeat>
     </SC>
