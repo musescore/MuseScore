@@ -25,6 +25,7 @@
 #include "iengravingfont.h"
 #include "types/symnames.h"
 
+#include "anchors.h"
 #include "mscoreview.h"
 #include "navigate.h"
 #include "score.h"
@@ -104,7 +105,7 @@ void TextBase::editInsertText(TextCursor* cursor, const String& s)
 //   startEdit
 //---------------------------------------------------------
 
-void TextBase::startEdit(EditData& ed)
+void TextBase::startEditTextual(EditData& ed)
 {
     std::shared_ptr<TextEditData> ted = std::make_shared<TextEditData>(this);
     ted->e = this;
@@ -134,7 +135,7 @@ void TextBase::startEdit(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void TextBase::endEdit(EditData& ed)
+void TextBase::endEditTextual(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     IF_ASSERT_FAILED(ted && ted->cursor()) {
@@ -284,7 +285,7 @@ void TextBase::insertText(EditData& ed, const String& s)
     score()->undo(new InsertText(cursor, s), &ed);
 }
 
-bool TextBase::isEditAllowed(EditData& ed) const
+bool TextBase::isTextualEditAllowed(EditData& ed) const
 {
     // Keep this method closely in sync with TextBase::edit()!
 
@@ -402,7 +403,7 @@ bool TextBase::isEditAllowed(EditData& ed) const
 //   edit
 //---------------------------------------------------------
 
-bool TextBase::edit(EditData& ed)
+bool TextBase::editTextual(EditData& ed)
 {
     // Keep this method closely in sync with TextBase::isEditAllowed()!
 
@@ -739,21 +740,6 @@ void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
     cursor->movePosition(op);
     score()->addRefresh(canvasBoundingRect());
     score()->update();
-}
-
-void TextBase::startEditNonTextual(EditData& ed)
-{
-    EngravingItem::startEdit(ed);
-}
-
-bool TextBase::editNonTextual(EditData& ed)
-{
-    return EngravingItem::edit(ed);
-}
-
-void TextBase::endEditNonTextual(EditData& ed)
-{
-    EngravingItem::endEdit(ed);
 }
 
 //---------------------------------------------------------

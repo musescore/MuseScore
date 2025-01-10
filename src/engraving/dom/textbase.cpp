@@ -42,6 +42,7 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include "anchors.h"
 #include "barline.h"
 #include "box.h"
 #include "dynamic.h"
@@ -51,6 +52,7 @@
 #include "page.h"
 #include "score.h"
 #include "textedit.h"
+#include "textline.h"
 #include "undo.h"
 
 #include "log.h"
@@ -1723,6 +1725,7 @@ TextBase::TextBase(const TextBase& st)
     m_voiceAssignment = st.m_voiceAssignment;
     m_direction = st.m_direction;
     m_centerBetweenStaves = st.m_centerBetweenStaves;
+    m_anchorToEndOfPrevious = st.m_anchorToEndOfPrevious;
 
     size_t n = m_elementStyle->size() + TEXT_STYLE_SIZE;
     delete[] m_propertyFlagsList;
@@ -3212,6 +3215,273 @@ void TextBase::initTextStyleType(TextStyleType tid)
     }
 }
 
+void TextBase::startEdit(EditData& ed)
+{
+    if (ed.editTextualProperties) {
+        startEditTextual(ed);
+    } else {
+        startEditNonTextual(ed);
+    }
+}
+
+bool TextBase::isEditAllowed(EditData& ed) const
+{
+    if (ed.editTextualProperties) {
+        return isTextualEditAllowed(ed);
+    } else {
+        return isNonTextualEditAllowed(ed);
+    }
+}
+
+bool TextBase::edit(EditData& ed)
+{
+    if (ed.editTextualProperties) {
+        return editTextual(ed);
+    } else {
+        return editNonTextual(ed);
+    }
+}
+
+void TextBase::endEdit(EditData& ed)
+{
+    if (ed.editTextualProperties) {
+        endEditTextual(ed);
+    } else {
+        endEditNonTextual(ed);
+    }
+}
+
+void TextBase::editDrag(EditData& ed)
+{
+    Segment* segment = explicitParent() ? toSegment(parent()) : nullptr;
+    if (!segment) {
+        return EngravingItem::editDrag(ed);
+    }
+
+    ElementEditDataPtr eed = ed.getData(this);
+    if (!eed) {
+        return;
+    }
+
+    EditTimeTickAnchors::updateAnchors(this, track());
+
+    KeyboardModifiers km = ed.modifiers;
+    if (km & (ShiftModifier | ControlModifier)) {
+        return;
+    }
+
+    staff_idx_t si = staffIdx();
+    Segment* newSeg = nullptr;     // don't prefer any segment while dragging, just snap to the closest
+    static constexpr double spacingFactor = 0.5;
+    score()->dragPosition(canvasPos(), &si, &newSeg, spacingFactor, allowTimeAnchor());
+    if (newSeg && (newSeg != segment || staffIdx() != si)) {
+        undoMoveSegment(newSeg, newSeg->tick() - segment->tick());
+        double deltaX = newSeg->pageX() - segment->pageX();
+        PointF offsetShift = PointF(deltaX, 0.0);
+        shiftInitOffset(ed, offsetShift);
+    }
+}
+
+void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
+{
+    ElementEditDataPtr eedThis = ed.getData(this);
+    eedThis->initOffset -= offsetShift;
+
+    if (EngravingItem* itemBefore = ldata()->itemSnappedBefore()) {
+        if (itemBefore->isTextBase()) {
+            ElementEditDataPtr eedBefore = ed.getData(itemBefore);
+            if (eedBefore) {
+                eedBefore->initOffset -= offsetShift;
+            }
+        }
+    }
+
+    if (EngravingItem* itemAfter = ldata()->itemSnappedAfter()) {
+        if (itemAfter->isTextBase()) {
+            ElementEditDataPtr eedAfter = ed.getData(itemAfter);
+            if (eedAfter) {
+                eedAfter->initOffset -= offsetShift;
+            }
+        }
+    }
+}
+
+void TextBase::startEditNonTextual(EditData& ed)
+{
+    EngravingItem::startEdit(ed);
+}
+
+bool TextBase::editNonTextual(EditData& ed)
+{
+    if (!hasParentSegment()) {
+        return EngravingItem::edit(ed);
+    }
+
+    if (ed.key == Key_Shift) {
+        if (ed.isKeyRelease) {
+            score()->hideAnchors();
+        } else {
+            EditTimeTickAnchors::updateAnchors(this, track());
+        }
+        triggerLayout();
+        return true;
+    }
+
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
+    bool leftRightKey = ed.key == Key_Left || ed.key == Key_Right;
+    bool altMod = ed.modifiers & AltModifier;
+    bool shiftMod = ed.modifiers & ShiftModifier;
+
+    bool changeAnchorType = shiftMod && altMod && leftRightKey;
+    if (changeAnchorType) {
+        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
+    }
+    bool doesntNeedMoveSeg = changeAnchorType && ((ed.key == Key_Left && anchorToEndOfPrevious())
+                                                  || (ed.key == Key_Right && !anchorToEndOfPrevious()));
+    if (doesntNeedMoveSeg) {
+        checkMeasureBoundariesAndMoveIfNeed();
+        return true;
+    }
+
+    bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
+    if (moveSeg) {
+        bool moved = moveSegment(ed);
+        EditTimeTickAnchors::updateAnchors(this, track());
+        checkMeasureBoundariesAndMoveIfNeed();
+        return moved;
+    }
+
+    if (shiftMod) {
+        return false;
+    }
+
+    if (!nudge(ed)) {
+        return false;
+    }
+
+    triggerLayout();
+    return true;
+}
+
+void TextBase::endEditNonTextual(EditData& ed)
+{
+    EngravingItem::endEdit(ed);
+}
+
+bool TextBase::isNonTextualEditAllowed(EditData& ed) const
+{
+    static const std::set<KeyboardKey> ARROW_KEYS {
+        Key_Left,
+        Key_Right,
+        Key_Up,
+        Key_Down
+    };
+
+    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
+}
+
+void TextBase::checkMeasureBoundariesAndMoveIfNeed()
+{
+    assert(hasParentSegment());
+
+    /* TextBase elements are always assigned to a ChordRest segment if available at this tick,
+     * EXCEPT if we are at a measure boundary. In this case, if anchorToEndOfPrevious()
+     * we must assign to a TimeTick segment at the end of previous measure, otherwise to a
+     * ChordRest segment at the start of the next measure. */
+
+    Segment* curSeg = toSegment(parent());
+    Fraction curTick = curSeg->tick();
+    Measure* curMeasure = curSeg->measure();
+    Measure* prevMeasure = curMeasure->prevMeasure();
+    bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious();
+    bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious() && prevMeasure;
+
+    if (!needMoveToPrevious && !needMoveToNext) {
+        return;
+    }
+
+    Segment* newSeg = nullptr;
+    if (needMoveToPrevious) {
+        newSeg = prevMeasure->findSegment(SegmentType::TimeTick, curSeg->tick());
+        if (!newSeg) {
+            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(), staffIdx());
+            EditTimeTickAnchors::updateLayout(prevMeasure);
+            newSeg = anchor->segment();
+        }
+    } else {
+        newSeg = curSeg->next1(SegmentType::ChordRest);
+    }
+
+    if (newSeg && newSeg->tick() == curTick) {
+        undoMoveSegment(newSeg, Fraction(0, 1));
+    }
+}
+
+bool TextBase::moveSegment(const EditData& ed)
+{
+    assert(hasParentSegment());
+
+    bool forward = ed.key == Key_Right;
+    if (!(ed.modifiers & AltModifier)) {
+        if (anchorToEndOfPrevious()) {
+            undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
+            if (forward) {
+                return true;
+            }
+        }
+    }
+
+    Segment* curSeg = toSegment(parent());
+    IF_ASSERT_FAILED(curSeg) {
+        return false;
+    }
+
+    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
+    if (!newSeg) {
+        return false;
+    }
+
+    undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
+
+    return true;
+}
+
+void TextBase::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
+{
+    score()->undoChangeParent(this, newSeg, staffIdx());
+    moveSnappedItems(newSeg, tickDiff);
+}
+
+void TextBase::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
+{
+    if (EngravingItem* itemAfter = ldata()->itemSnappedAfter()) {
+        if (itemAfter->isTextBase() && itemAfter->parent() != newSeg) {
+            score()->undoChangeParent(itemAfter, newSeg, itemAfter->staffIdx());
+            toTextBase(itemAfter)->moveSnappedItems(newSeg, tickDiff);
+        } else if (itemAfter->isTextLineBaseSegment()) {
+            TextLineBase* textLine = ((TextLineBaseSegment*)itemAfter)->textLineBase();
+            if (textLine->tick() != newSeg->tick()) {
+                textLine->undoMoveStart(tickDiff);
+            }
+        }
+    }
+
+    if (EngravingItem* itemBefore = ldata()->itemSnappedBefore()) {
+        if (itemBefore->isTextBase() && itemBefore->parent() != newSeg) {
+            score()->undoChangeParent(itemBefore, newSeg, itemBefore->staffIdx());
+            toTextBase(itemBefore)->moveSnappedItems(newSeg, tickDiff);
+        } else if (itemBefore->isTextLineSegment()) {
+            TextLineBase* textLine = ((TextLineBaseSegment*)itemBefore)->textLineBase();
+            if (textLine->tick2() != newSeg->tick()) {
+                textLine->undoMoveEnd(tickDiff);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   editCut
 //---------------------------------------------------------
@@ -3244,6 +3514,31 @@ void TextBase::editCopy(EditData& ed)
     TextCursor* cursor = ted->cursor();
     ted->selectedText = cursor->selectedText(true);
     ted->selectedPlainText = cursor->selectedText(false);
+}
+
+bool TextBase::nudge(const EditData& ed)
+{
+    bool ctrlMod = ed.modifiers & ControlModifier;
+    double step = spatium() * (ctrlMod ? MScore::nudgeStep10 : MScore::nudgeStep);
+    PointF addOffset = PointF();
+    switch (ed.key) {
+    case Key_Up:
+        addOffset = PointF(0.0, -step);
+        break;
+    case Key_Down:
+        addOffset = PointF(0.0, step);
+        break;
+    case Key_Left:
+        addOffset = PointF(-step, 0.0);
+        break;
+    case Key_Right:
+        addOffset = PointF(step, 0.0);
+        break;
+    default:
+        return false;
+    }
+    undoChangeProperty(Pid::OFFSET, offset() + addOffset, PropertyFlags::UNSTYLED);
+    return true;
 }
 
 //---------------------------------------------------------
@@ -3320,7 +3615,7 @@ void TextBase::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
     }
 
     p->translate(-pos);
-    p->setPen(Pen(configuration()->formattingColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
+    p->setPen(Pen(configuration()->frameColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
     double m = spatium();
