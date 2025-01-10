@@ -271,7 +271,7 @@ public:
     bool control(bool textEditing = false) const;
     bool shift() const { return modifiers & ShiftModifier; }
     bool isStartEndGrip() const { return curGrip == Grip::START || curGrip == Grip::END; }
-    bool hasCurrentGrip() { return curGrip != Grip::NO_GRIP; }
+    bool hasCurrentGrip() const { return curGrip != Grip::NO_GRIP; }
 
 private:
     std::list<std::shared_ptr<ElementEditData> > m_data;
