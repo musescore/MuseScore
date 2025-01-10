@@ -132,14 +132,14 @@ Item {
             navigation.order: Boolean(itemModel) ? itemModel.order : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
-                if (menuLoader.isMenuOpened || hasMenu) {
+                if (menuLoader.isMenuOpened || btn.hasMenu) {
                     toggleMenuOpened()
                 } else {
                     handleMenuItem()
                 }
             }
 
-            mouseArea.acceptedButtons: hasMenu && itemModel.isMenuSecondary
+            mouseArea.acceptedButtons: btn.hasMenu
                                        ? Qt.LeftButton | Qt.RightButton
                                        : Qt.LeftButton
 
@@ -153,9 +153,8 @@ Item {
 
             onClicked: function(mouse) {
                 if (menuLoader.isMenuOpened // If already menu open, close it
-                        || (hasMenu // Or if can open menu
-                            && (!itemModel.isMenuSecondary // And _should_ open menu
-                                || mouse.button === Qt.RightButton))) {
+                        || (btn.hasMenu // Or if can open menu
+                            && mouse.button === Qt.RightButton)) {
                     toggleMenuOpened()
                     return
                 }
@@ -179,10 +178,6 @@ Item {
 
                     btn.toggleMenuOpened()
                 }
-            }
-
-            FlatButtonMenuIndicatorTriangle {
-                visible: Boolean(itemModel) && itemModel.isMenuSecondary
             }
 
             StyledMenuLoader {
