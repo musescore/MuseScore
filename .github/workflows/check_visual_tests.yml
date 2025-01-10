@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       do_run: ${{ steps.output_data.outputs.do_run }}
-      reference_sha: ${{ steps.output_data.outputs.reference_sha }}
+      reference_ref: ${{ steps.output_data.outputs.reference_ref }}
       artifact_name: ${{ steps.output_data.outputs.artifact_name }}
     steps:
     - name: Cancel Previous Runs
@@ -18,8 +18,6 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
     - name: "Configure workflow"
       run: |
         bash ./buildscripts/ci/tools/make_build_number.sh
@@ -31,29 +29,29 @@ jobs:
       if: github.event_name == 'pull_request'
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
+        REFERENCE_REF: ${{ github.event.pull_request.base.ref }}
       run: |
-        REFERENCE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} HEAD)
-        if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
-        echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
+        if [ -z "$REFERENCE_REF" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        echo "REFERENCE_REF=$REFERENCE_REF" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
         echo "PR_INFO= ${{ github.event.pull_request.number }} ${pull_request_title}" >> $GITHUB_ENV
     - name: Get reference commit for push commit
       if: github.event_name == 'push'
       run: |
-        REFERENCE_SHA=${{ github.event.before }}
-        if [[ -z "$REFERENCE_SHA" || "$REFERENCE_SHA" == 0000000000000000000000000000000000000000 ]]; then 
+        REFERENCE_REF=${{ github.event.before }}
+        if [[ -z "$REFERENCE_REF" || "$REFERENCE_REF" == 0000000000000000000000000000000000000000 ]]; then 
           DO_RUN='false' 
         else 
           DO_RUN='true'
         fi
-        echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
+        echo "REFERENCE_REF=$REFERENCE_REF" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
         echo "PR_INFO=" >> $GITHUB_ENV
     - id: output_data
       name: Output workflow data
       run: |
         echo "do_run=${DO_RUN}" | tee -a $GITHUB_OUTPUT
-        echo "reference_sha=${REFERENCE_SHA}" | tee -a $GITHUB_OUTPUT
+        echo "reference_ref=${REFERENCE_REF}" | tee -a $GITHUB_OUTPUT
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"VTests Comparison ${BUILD_NUMBER}${PR_INFO}")"
         echo "artifact_name=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_OUTPUT
 
@@ -102,7 +100,7 @@ jobs:
     - name: Clone repository and checkout reference commit
       uses: actions/checkout@v4
       with:
-        ref: ${{ needs.setup.outputs.reference_sha }}
+        ref: ${{ needs.setup.outputs.reference_ref }}
 
     - name: Get ccache timestamp
       run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
