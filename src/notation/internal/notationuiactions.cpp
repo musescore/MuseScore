@@ -2850,7 +2850,14 @@ const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
     static ToolConfig config;
     if (!config.isValid()) {
         config.items = {
-            { "note-input", true },
+            { "note-input-steptime", true },
+            { "note-input-by-duration", true },
+            { "note-input-rhythm", false },
+            { "note-input-repitch", false },
+            { "note-input-realtime-auto", false },
+            { "note-input-realtime-manual", false },
+            { "note-input-timewise", false },
+            { "", true },
             { "pad-note-1024", false },
             { "pad-note-512", false },
             { "pad-note-256", false },
