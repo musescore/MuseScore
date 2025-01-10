@@ -61,7 +61,7 @@ public:
     BeatsPerSecond tempo() const { return m_tempo; }
     double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
-    bool isRelative() { return m_isRelative; }
+    bool isRelative() const { return m_isRelative; }
     void setRelative(double v) { m_isRelative = true; m_relative = v; }
 
     bool isNormal() const { return m_tempoTextType == TempoTextType::NORMAL; }
