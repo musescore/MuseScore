@@ -34,6 +34,7 @@ using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
 static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord);
+static void removeReduntantChords(const BendDataContext& bendDataCtx, const mu::engraving::Score* score);
 
 BendDataProcessor::BendDataProcessor(mu::engraving::Score* score)
     : m_score(score)
@@ -85,6 +86,10 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
                         LOGE() << "bend import error : no valid chord for track " << track << ", tick " << currentTick;
                         return;
                     }
+
+                    curSegment->setTicks(currentChordDuration);
+                    currentChord->setTicks(currentChordDuration);
+                    currentChord->setDurationType(currentChordDuration);
                 } else {
                     curSegment = currentMeasure->getSegment(SegmentType::ChordRest, currentTick);
                     curSegment->setTicks(currentChordDuration);
@@ -109,6 +114,8 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
             }
         }
     }
+
+    removeReduntantChords(bendDataCtx, m_score);
 }
 
 static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord)
@@ -223,6 +230,30 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             }
 
             tiedNote = tie->endNote();
+        }
+    }
+}
+
+static void removeReduntantChords(const BendDataContext& bendDataCtx, const mu::engraving::Score* score)
+{
+    for (const auto& [track, trackInfo] : bendDataCtx.reduntantChordTicks) {
+        for (const Fraction& tick : trackInfo) {
+            const Measure* currentMeasure = score->tick2measure(tick);
+            if (!currentMeasure) {
+                LOGE() << "bend import error : couldn't remove invalid chord, no valid measure for track " << track << ", tick " << tick;
+                continue;
+            }
+
+            Segment* curSegment = currentMeasure->findSegment(SegmentType::ChordRest, tick);
+            Chord* currentChord = currentMeasure->findChord(tick, track);
+
+            if (!curSegment || !currentChord) {
+                LOGE() << "bend import error : couldn't remove invalid chord, segment or chord was null for track " << track << ", tick " <<
+                    tick;
+                continue;
+            }
+
+            curSegment->remove(currentChord);
         }
     }
 }

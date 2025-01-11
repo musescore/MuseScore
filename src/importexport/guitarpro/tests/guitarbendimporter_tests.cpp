@@ -99,14 +99,7 @@ TEST_F(GuitarBendImporter_Tests, gp5Prebend) {
     gpReadTest(u"prebend", u"gp5");
 }
 
-TEST_F(GuitarBendImporter_Tests, DISABLED_gpTiedBend) {
-    gpReadTest(u"tied_bend", u"gp");
-}
-
-TEST_F(GuitarBendImporter_Tests, DISABLED_gp5TiedBend) {
-    gpReadTest(u"tied_bend", u"gp5");
-}
-
+// TODO: primary staff is ok, in linked staff notes are mixed
 TEST_F(GuitarBendImporter_Tests, DISABLED_gpTiedBendChord) {
     gpReadTest(u"tied_bend_chord", u"gp");
 }
@@ -115,6 +108,7 @@ TEST_F(GuitarBendImporter_Tests, gpSlightBendChord) {
     gpReadTest(u"slight_bend_chord", u"gp");
 }
 
+// TODO: primary staff is ok, in linked staff notes are mixed
 TEST_F(GuitarBendImporter_Tests, DISABLED_gpPrebendChord) {
     gpReadTest(u"prebend_chord", u"gp");
 }
@@ -141,5 +135,21 @@ TEST_F(GuitarBendImporter_Tests, gpBendRelease_1) {
 
 TEST_F(GuitarBendImporter_Tests, gpPrebendBend) {
     gpReadTest(u"prebend+bend", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpTiedBend_1) {
+    gpReadTest(u"tied_bend_1", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpTiedPrebendBend) {
+    gpReadTest(u"tied_prebend+bend", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBendRelease2Notes) {
+    gpReadTest(u"bend_release_2_notes", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBendRelease3Notes) {
+    gpReadTest(u"bend_release_3_notes", u"gp");
 }
 }

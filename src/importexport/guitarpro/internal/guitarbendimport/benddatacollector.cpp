@@ -33,7 +33,8 @@ using namespace mu::engraving;
 namespace mu::iex::guitarpro {
 constexpr int BEND_DIVISIONS = 60;
 
-static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo);
+static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, Fraction totalDuration,
+                                              const BendDataCollector::ImportedBendInfo& importedInfo);
 static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo,
                                 int noteIndexInChord);
 static std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const PitchValues& pitchValues, bool noteTiedBack);
@@ -51,11 +52,65 @@ BendDataContext BendDataCollector::collectBendDataContext()
 {
     BendDataContext bendDataCtx;
 
+    std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::vector<const Chord*> > > tiedNotesAfterBend;
     for (const auto& [track, trackInfo] : m_bendInfoForNote) {
-        for (const auto& [tick, tickInfo] : trackInfo) {
-            if (!tickInfo.empty()) {
-                // TODO: now using the top note of chord to fill durations
-                fillChordDurationsFromBendDiagram(bendDataCtx, tickInfo.begin()->second);
+        for (const auto& [mainTick, tickInfo] : trackInfo) {
+            // now using the top note of chord to fill durations
+            const Note* currentNote = tickInfo.begin()->first;
+            auto& currentTickTiedChords = tiedNotesAfterBend[track][mainTick];
+            currentTickTiedChords.push_back(currentNote->chord());
+            const Tie* tieFor = currentNote->tieFor();
+
+            bool deleteLastTiedChord = true;
+            while (tieFor) {
+                currentNote = tieFor->endNote();
+
+                IF_ASSERT_FAILED(currentNote) {
+                    LOGE() << "invalid tie encountered while importing guitar bend";
+                    break;
+                }
+
+                if (trackInfo.find(currentNote->tick().ticks()) != trackInfo.end()) {
+                    deleteLastTiedChord = false;
+                    break;
+                }
+
+                tiedNotesAfterBend[track][mainTick].push_back(currentNote->chord());
+                tieFor = currentNote->tieFor();
+            }
+
+            for (size_t i = 1; i < currentTickTiedChords.size(); i++) {
+                if (i != currentTickTiedChords.size() - 1 || deleteLastTiedChord) {
+                    bendDataCtx.reduntantChordTicks[track].insert(currentTickTiedChords[i]->tick());
+                }
+            }
+        }
+    }
+
+    for (const auto& [track, trackInfo] : tiedNotesAfterBend) {
+        const auto& importedInfoForTrack = m_bendInfoForNote.at(track);
+        for (const auto& [mainTick, chords] : trackInfo) {
+            const auto& importedInfoForTick = importedInfoForTrack.at(mainTick);
+            const Chord* lastChord = chords.back();
+            Fraction totalDuration = lastChord->tick() - Fraction::fromTicks(mainTick) + lastChord->actualTicks();
+            if (!importedInfoForTick.empty()) {
+                fillChordDurationsFromBendDiagram(bendDataCtx, totalDuration, importedInfoForTick.begin()->second);
+            }
+        }
+    }
+
+    for (const auto& [track, trackInfo] : bendDataCtx.bendChordDurations) {
+        if (bendDataCtx.reduntantChordTicks.find(track) == bendDataCtx.reduntantChordTicks.end()) {
+            continue;
+        }
+
+        for (const auto& [mainTick, durations] : trackInfo) {
+            Fraction currentTick = Fraction::fromTicks(mainTick);
+            bendDataCtx.reduntantChordTicks.at(track).erase(currentTick);
+
+            for (const Fraction& duration : durations) {
+                currentTick += duration;
+                bendDataCtx.reduntantChordTicks.at(track).erase(currentTick);
             }
         }
     }
@@ -305,17 +360,14 @@ static int getMaxDenominatorForSplit(const Fraction& duration)
     return denominator * 2;
 }
 
-static std::vector<Fraction> splittedDurations(const BendDataCollector::ImportedBendInfo& importedInfo, size_t startIndex)
+static std::vector<Fraction> splittedDurations(const BendDataCollector::ImportedBendInfo& importedInfo, Fraction totalDuration,
+                                               size_t startIndex)
 {
-    const Note* note = importedInfo.note;
-    const Chord* chord = note->chord();
     const auto& bendSegments = importedInfo.segments;
 
     std::vector<Fraction> proportions;
 
-    // TODO: Fraction duration = chord->endTickIncludingTied() - chord->tick();
-    Fraction duration = chord->actualTicks();
-    const int maxDenominator = getMaxDenominatorForSplit(duration / 4);
+    const int maxDenominator = getMaxDenominatorForSplit(totalDuration / 4);
 
     for (size_t i = startIndex; i < bendSegments.size(); i++) {
         const auto& seg = bendSegments[i];
@@ -333,10 +385,11 @@ static std::vector<Fraction> splittedDurations(const BendDataCollector::Imported
         proportions.push_back(lastProportion);
     }
 
-    return BendChordDurationSplitter::findValidNoteSplit(chord->actualTicks(), proportions, maxDenominator);
+    return BendChordDurationSplitter::findValidNoteSplit(totalDuration, proportions, maxDenominator);
 }
 
-static void splitBendChordDurations(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo,
+static void splitBendChordDurations(BendDataContext& bendDataCtx, Fraction totalDuration,
+                                    const BendDataCollector::ImportedBendInfo& importedInfo,
                                     size_t startIndex)
 {
     if (startIndex >= importedInfo.segments.size()) {
@@ -344,10 +397,11 @@ static void splitBendChordDurations(BendDataContext& bendDataCtx, const BendData
     }
 
     const Chord* chord = importedInfo.note->chord();
-    bendDataCtx.bendChordDurations[chord->track()][chord->tick().ticks()] = splittedDurations(importedInfo, startIndex);
+    bendDataCtx.bendChordDurations[chord->track()][chord->tick().ticks()] = splittedDurations(importedInfo, totalDuration, startIndex);
 }
 
-static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo)
+static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, Fraction totalDuration,
+                                              const BendDataCollector::ImportedBendInfo& importedInfo)
 {
     const Note* note = importedInfo.note;
     IF_ASSERT_FAILED(note) {
@@ -376,7 +430,7 @@ static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, cons
         }
     }
 
-    splitBendChordDurations(bendDataCtx, importedInfo, startIndex);
+    splitBendChordDurations(bendDataCtx, totalDuration, importedInfo, startIndex);
 }
 
 static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo, int noteIndexInChord)
