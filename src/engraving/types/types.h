@@ -746,7 +746,7 @@ enum class OrnamentShowAccidental {
     ALWAYS,
 };
 
-enum class PartialSpannerDirection : char {
+enum class PartialSpannerDirection : signed char {
     NONE = -1,
     INCOMING,
     OUTGOING,
