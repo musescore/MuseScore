@@ -10490,9 +10490,9 @@ Această acțiune nu va șterge niciuna din partiturile tale.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
-        <source>Copyright © 1999-2024 MuseScore Limited.
+        <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>Copyright © 1999-2024 MuseScore Limited.
+        <translation>Copyright © 1999-2025 MuseScore Limited.
 Publicat sub licența &lt;a href=&quot;%1&quot;&gt;GNU General Public License versiunea 3&lt;/a&gt;.</translation>
     </message>
     <message>

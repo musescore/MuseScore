@@ -69,7 +69,7 @@ elseif(OS_IS_MAC)
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${CMAKE_BUILD_NUMBER})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2024 MuseScore Limited. Published under the GNU General Public License version 3.")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2025 MuseScore Limited. Published under the GNU General Public License version 3.")
 
     set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
     if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)

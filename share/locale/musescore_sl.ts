@@ -10487,7 +10487,7 @@ Vaši notni zapisi bodo vsi ohranjeni.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
-        <source>Copyright © 1999-2024 MuseScore Limited.
+        <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
         <translation>Avtorske pravice © 1999–2024 MuseScore Limited.
 Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt;/a&gt;.</translation>

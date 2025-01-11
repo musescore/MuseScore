@@ -1,5 +1,5 @@
 MuseScore Studio, free and open source music notation software
-Copyright (C) 1999-2024 MuseScore Limited and others
+Copyright (C) 1999-2025 MuseScore Limited and others
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License version 3 as published
