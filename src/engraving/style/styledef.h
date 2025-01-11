@@ -1819,7 +1819,7 @@ using StyleIdSet = std::unordered_set<Sid>;
 //   VerticalAlignRange
 //---------------------------------------------------------
 
-enum class VerticalAlignRange {
+enum class VerticalAlignRange : unsigned char {
     SEGMENT, MEASURE, SYSTEM
 };
 

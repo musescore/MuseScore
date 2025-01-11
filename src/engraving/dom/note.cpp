@@ -1642,7 +1642,7 @@ class NoteEditData : public ElementEditData
 {
     OBJECT_ALLOCATOR(engraving, NoteEditData)
 public:
-    enum EditMode {
+    enum EditMode : unsigned char {
         EditMode_ChangePitch = 0,
         EditMode_AddSpacing,
         EditMode_Undefined,

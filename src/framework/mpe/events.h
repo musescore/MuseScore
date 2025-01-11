@@ -290,7 +290,7 @@ private:
 };
 
 struct PlaybackParam {
-    enum Type {
+    enum Type : signed char {
         Undefined = -1,
         SoundPreset,
         PlayingTechnique,

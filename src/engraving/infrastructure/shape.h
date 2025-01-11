@@ -68,7 +68,7 @@ class Shape
 {
 public:
 
-    enum class Type {
+    enum class Type : unsigned char {
         Fixed,      // fixed size, like just bbox
 //        FixedX,     // not implemented (reserved)
 //        FixedY,     // not implemented (reserved)

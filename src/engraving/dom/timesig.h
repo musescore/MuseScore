@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TIMESIG_H
-#define MU_ENGRAVING_TIMESIG_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -34,7 +33,7 @@ class Segment;
 //   TimeSigType
 //---------------------------------------------------------
 
-enum class TimeSigType : char {
+enum class TimeSigType : unsigned char {
     NORMAL,              // use sz/sn text
     FOUR_FOUR,           // common time (4/4)
     ALLA_BREVE,          // cut time (2/2)
@@ -167,4 +166,3 @@ private:
     bool m_largeParentheses = false;
 };
 } // namespace mu::engraving
-#endif

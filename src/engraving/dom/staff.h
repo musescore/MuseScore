@@ -48,7 +48,7 @@ class Score;
 class StaffType;
 class TimeSig;
 
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //    Staff
@@ -60,7 +60,7 @@ class Staff final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Staff)
 
 public:
-    enum class HideMode {
+    enum class HideMode : unsigned char {
         AUTO, ALWAYS, NEVER, INSTRUMENT
     };
 

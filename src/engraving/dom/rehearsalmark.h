@@ -36,7 +36,7 @@ class RehearsalMark final : public TextBase
     DECLARE_CLASSOF(ElementType::REHEARSAL_MARK)
 
 public:
-    enum class Type {
+    enum class Type : unsigned char {
         Main = 0,
         Additional
     };

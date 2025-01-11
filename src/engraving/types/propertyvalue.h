@@ -38,7 +38,7 @@ namespace mu::engraving {
 class Groups;
 class TDuration;
 
-enum class P_TYPE {
+enum class P_TYPE : unsigned char {
     UNDEFINED = 0,
     // Base
     BOOL,

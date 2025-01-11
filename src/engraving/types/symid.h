@@ -20,11 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SYMID_H
-#define MU_ENGRAVING_SYMID_H
+#pragma once
 
 namespace mu::engraving {
-enum class SmuflAnchorId {
+enum class SmuflAnchorId : unsigned char {
     stemDownNW,
     stemUpSE,
     stemDownSW,
@@ -38,5 +37,3 @@ enum class SmuflAnchorId {
 
 #include "symid_p.h"
 }
-
-#endif // MU_ENGRAVING_SYMID_H

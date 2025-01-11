@@ -36,8 +36,8 @@ class Segment;
 struct Spring;
 class Measure;
 class System;
-enum class ElementType;
-enum class KerningType;
+enum class ElementType : unsigned char;
+enum class KerningType : unsigned char;
 }
 
 namespace mu::engraving::rendering::score {

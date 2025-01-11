@@ -181,13 +181,13 @@ enum class StaffTypes : signed char {
     TAB_DEFAULT = StaffTypes::TAB_6COMMON,
 };
 
-enum class ShowTiedFret {
+enum class ShowTiedFret : unsigned char {
     TIE_AND_FRET,
     TIE,
     NONE,
 };
 
-enum class ParenthesizeTiedFret {
+enum class ParenthesizeTiedFret : unsigned char {
     START_OF_SYSTEM,
     START_OF_MEASURE,
     NEVER,

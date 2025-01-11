@@ -33,8 +33,8 @@ class Factory;
 class Skyline;
 class System;
 class Beam;
-enum class ActionIconType;
-enum class SpannerSegmentType;
+enum class ActionIconType : signed char;
+enum class SpannerSegmentType : unsigned char;
 
 struct TremAnchor {
     ChordRest* chord1 = nullptr;

@@ -53,7 +53,7 @@ class Spanner;
 class StaffType;
 class StretchedBend;
 class NoteEditData;
-enum class AccidentalType;
+enum class AccidentalType : unsigned char;
 
 static constexpr int MAX_DOTS = 4;
 
@@ -140,7 +140,7 @@ class Note final : public EngravingItem
     DECLARE_CLASSOF(ElementType::NOTE)
 
 public:
-    enum class SlideType {
+    enum class SlideType : unsigned char {
         Undefined = 0,
         UpToNote,
         DownToNote,
@@ -148,7 +148,7 @@ public:
         DownFromNote
     };
 
-    enum DisplayFretOption {
+    enum DisplayFretOption : signed char {
         Hide = -1,
         NoHarmonic,
         NaturalHarmonic,

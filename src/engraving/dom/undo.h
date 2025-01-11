@@ -95,7 +95,7 @@ class SystemLock;
 class Text;
 class TremoloBar;
 
-enum class PlayEventType : char;
+enum class PlayEventType : unsigned char;
 
 #define UNDO_TYPE(t) CommandType type() const override { return t; }
 #define UNDO_NAME(a) const char* name() const override { return a; }
@@ -112,7 +112,7 @@ protected:
     void appendChildren(UndoCommand*);
 
 public:
-    enum class Filter {
+    enum class Filter : unsigned char {
         TextEdit,
         AddElement,
         AddElementLinked,

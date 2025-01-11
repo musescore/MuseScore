@@ -39,7 +39,7 @@
 // ---------------------------------------------------------------------------------------
 
 namespace mu::engraving {
-enum class Key;
+enum class Key : signed char;
 class Staff;
 class Score;
 class TDuration;

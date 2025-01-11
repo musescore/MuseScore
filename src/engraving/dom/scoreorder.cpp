@@ -302,7 +302,7 @@ int ScoreOrder::instrumentSortingIndex(const String& instrumentId, bool isSolois
     static const String SoloistsGroup(u"<soloists>");
     static const String UnsortedGroup(u"<unsorted>");
 
-    enum class Priority {
+    enum class Priority : unsigned char {
         Undefined,
         Unsorted,
         UnsortedGroup,

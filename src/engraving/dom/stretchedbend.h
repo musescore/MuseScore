@@ -59,7 +59,7 @@ public:
         double width = 0;
     };
 
-    enum class BendSegmentType {
+    enum class BendSegmentType : signed char {
         NO_TYPE = -1,
         LINE_UP,
         CURVE_UP,

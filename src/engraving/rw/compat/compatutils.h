@@ -33,7 +33,7 @@ class Score;
 class MasterScore;
 class Excerpt;
 class Dynamic;
-enum class DynamicType : char;
+enum class DynamicType : unsigned char;
 }
 
 namespace mu::engraving::compat {

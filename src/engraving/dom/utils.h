@@ -43,7 +43,7 @@ class Tuplet;
 class Volta;
 struct NoteVal;
 
-enum class Key;
+enum class Key : signed char;
 
 extern RectF handleRect(const PointF& pos);
 

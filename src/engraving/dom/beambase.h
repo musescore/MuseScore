@@ -28,7 +28,7 @@ namespace mu::engraving {
 class Beam;
 class TremoloTwoChord;
 
-enum class BeamType {
+enum class BeamType : unsigned char {
     INVALID,
     BEAM,
     TREMOLO
@@ -46,7 +46,7 @@ struct BeamFragment {
     double py2[2];
 };
 
-enum class ChordBeamAnchorType {
+enum class ChordBeamAnchorType : unsigned char {
     Start, End, Middle
 };
 

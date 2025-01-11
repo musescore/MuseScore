@@ -34,7 +34,7 @@ namespace mu::engraving {
 //   @P play       bool         play tremolo bar
 //---------------------------------------------------------
 
-enum class TremoloBarType {
+enum class TremoloBarType : unsigned char {
     DIP = 0,
     DIVE,
     RELEASE_UP,

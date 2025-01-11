@@ -43,7 +43,7 @@ struct OttavaE {
 //   OttavaType
 //---------------------------------------------------------
 
-enum class OttavaType : char {
+enum class OttavaType : unsigned char {
     OTTAVA_8VA,
     OTTAVA_8VB,
     OTTAVA_15MA,
