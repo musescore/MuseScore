@@ -141,7 +141,7 @@ bool MeiImporter::read(const muse::io::path_t& path)
         hasRootXmlId = true;
         String xmlIdStr = String(xmlId.value());
         if (xmlIdStr.startsWith(u"mscore-")) {
-            // Keep a global flag since we are going to read them only if mei@xml:id is given with LastEID
+            // Keep a global flag since we are going to read them only if mei@xml:id is given with mscore EID
             m_hasMuseScoreIds = true;
             String valStr = xmlIdStr.remove(u"mscore-").replace('.', '/').replace('-', '+');
             // The  mei@xml:id store the score EID
