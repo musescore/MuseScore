@@ -35,12 +35,12 @@ class Chord;
 class ChordRest;
 class Beam;
 class TremoloTwoChord;
-enum class ActionIconType;
-enum class SpannerSegmentType;
-enum class ChordBeamAnchorType;
+enum class ActionIconType : signed char;
+enum class SpannerSegmentType : char;
+enum class ChordBeamAnchorType : char;
 }
 
-enum class SlopeConstraint
+enum class SlopeConstraint : char
 {
     NO_CONSTRAINT,
     FLAT,

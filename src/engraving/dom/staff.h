@@ -48,7 +48,7 @@ class Score;
 class StaffType;
 class TimeSig;
 
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //    Staff
