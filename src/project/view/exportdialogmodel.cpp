@@ -553,6 +553,21 @@ void ExportDialogModel::setMeiExportLayout(bool exportLayout)
     emit meiExportLayoutChanged(exportLayout);
 }
 
+bool ExportDialogModel::meiUseMuseScoreIds() const
+{
+    return meiConfiguration()->meiUseMuseScoreIds();
+}
+
+void ExportDialogModel::setMeiUseMuseScoreIds(bool useMuseScoreIds)
+{
+    if (useMuseScoreIds == meiUseMuseScoreIds()) {
+        return;
+    }
+
+    meiConfiguration()->setMeiUseMuseScoreIds(useMuseScoreIds);
+    emit meiUseMuseScoreIdsChanged(useMuseScoreIds);
+}
+
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
     QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {

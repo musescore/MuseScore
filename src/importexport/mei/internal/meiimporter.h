@@ -198,11 +198,17 @@ private:
     void extendLyrics();
     void setOrnamentAccid(engraving::Ornament* ornament, const Convert::OrnamStruct& ornamSt);
 
+    /** Read the xmlId and process it appropriately */
+    void readXmlId(engraving::EngravingItem* item, const std::string& meiUID);
+
     /** The Score pointer */
     engraving::Score* m_score = nullptr;
 
     /** The uid register */
     UIDRegister* m_uids;
+
+    /** A flag indicating the file has MuseScore EIDs as xml:ids */
+    bool m_hasMuseScoreIds;
 
     engraving::Fraction m_ticks;
     int m_lastMeasureN;
