@@ -10488,9 +10488,9 @@ Bu işlem partisyonlarınızın hiçbirini silmez.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
-        <source>Copyright © 1999-2024 MuseScore Limited.
+        <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>Telif Hakkı © 1999-2024 MuseScore Limited&apos;e aittir.
+        <translation>Telif Hakkı © 1999-2025 MuseScore Limited&apos;e aittir.
 &lt;a href=&quot;%1&quot;&gt;GNU Genel Kamu Lisansı sürüm 3&lt;/a&gt; kapsamında yayınlanmıştır.</translation>
     </message>
     <message>

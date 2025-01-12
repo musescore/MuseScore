@@ -10486,9 +10486,9 @@ This action will not delete any of your scores.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
-        <source>Copyright © 1999-2024 MuseScore Limited.
+        <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>版權所有 © 1999-2024 MuseScore 有限公司。
+        <translation>版權所有 © 1999-2025 MuseScore 有限公司。
 按照 &lt;a href=&quot;%1&quot;&gt;GNU開源許可第3版本&lt;/a&gt;發行。</translation>
     </message>
     <message>
