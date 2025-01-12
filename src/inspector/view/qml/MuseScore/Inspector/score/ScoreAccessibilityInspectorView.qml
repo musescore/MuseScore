@@ -39,16 +39,18 @@ InspectorSectionView {
         width: parent.width
         spacing: 8
 
-        Text {
-            text: qsTr("Score style preset")
-            color: ui.theme.fontPrimaryColor
+        StyledTextLabel {
+            width: parent.width
+            text: qsTrc("inspector", "Score style preset")
+            horizontalAlignment: Text.AlignLeft
         }
 
         StyledDropdown {
             id: scoreStylePreset
             width: parent.width
-            currentIndex: root.model ? root.model.currentStylePresetIndex : -1
+
             model: root.model ? root.model.possibleStylePresets : null
+            currentIndex: root.model ? root.model.currentStylePresetIndex : -1
 
             Component.onCompleted: {
                 root.model.updateCurrentStylePreset()
