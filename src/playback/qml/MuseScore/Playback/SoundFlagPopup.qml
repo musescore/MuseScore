@@ -36,8 +36,6 @@ StyledPopupView {
     property alias navigationOrderStart: navPanel.order
     readonly property alias navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
 
-    readonly property alias model: soundFlagModel
-
     contentWidth: content.width
     contentHeight: content.childrenRect.height
     onContentHeightChanged: {

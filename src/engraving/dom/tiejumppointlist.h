@@ -23,7 +23,6 @@
 #pragma once
 #include "global/types/string.h"
 
-using muse::String;
 namespace mu::engraving {
 class Note;
 class Tie;
@@ -40,7 +39,7 @@ public:
     Note* note() const { return m_note; }
     Tie* endTie() const;
     bool followingNote() const { return m_followingNote; }
-    const String& id() const { return m_id; }
+    const muse::String& id() const { return m_id; }
     bool active() const { return m_active; }
     void setActive(bool v) { m_active = v; }
     void undoSetActive(bool v);
@@ -49,13 +48,13 @@ public:
     void setJumpPointList(TieJumpPointList* jumpPointList) { m_jumpPointList = jumpPointList; }
     TieJumpPointList* jumpPointList() { return m_jumpPointList; }
 
-    const String menuTitle() const;
+    const muse::String menuTitle() const;
 
 private:
-    String precedingJumpItemName() const;
+    muse::String precedingJumpItemName() const;
     Note* m_note = nullptr;
     bool m_active = false;
-    String m_id;
+    muse::String m_id;
     TieJumpPointList* m_jumpPointList = nullptr;
     bool m_followingNote = false;
 };
@@ -76,8 +75,8 @@ public:
 
     Tie* startTie() const;
 
-    TieJumpPoint* findJumpPoint(const String& id);
-    void toggleJumpPoint(const String& id);
+    TieJumpPoint* findJumpPoint(const muse::String& id);
+    void toggleJumpPoint(const muse::String& id);
 
     void undoAddTieToScore(TieJumpPoint* jumpPoint);
     void undoRemoveTieFromScore(TieJumpPoint* jumpPoint);

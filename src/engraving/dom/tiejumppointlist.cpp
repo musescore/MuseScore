@@ -68,10 +68,9 @@ const String TieJumpPoint::menuTitle() const
 {
     const Measure* measure = m_note->findMeasure();
     const int measureNo = measure ? measure->no() + 1 : 0;
-    const String measureStr = String::fromStdString(std::to_string(measureNo));
 
     //: %1 represents the preceding jump item eg. coda. %2 represents the measure number
-    return muse::mtrc("engraving", "Tie to %1 (m. %2)").arg(precedingJumpItemName(), measureStr);
+    return muse::mtrc("engraving", "Tie to %1 (m. %2)").arg(precedingJumpItemName(), String::number(measureNo));
 }
 
 String TieJumpPoint::precedingJumpItemName() const
