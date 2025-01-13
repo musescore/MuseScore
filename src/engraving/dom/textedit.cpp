@@ -393,6 +393,13 @@ bool TextBase::isTextualEditAllowed(EditData& ed) const
         if (ed.key == Key_Minus) {
             return true;
         }
+
+#if defined(Q_OS_WIN)
+        // Allow accented characters to be input with AltGr and Ctrl+Alt (both are treated the same in Windows)
+        if (ed.key >= Key_nobreakspace && ed.key <= Key_ydiaeresis) {
+            return true;
+        }
+#endif
     }
 
     // At least on non-macOS, sometimes ed.s is not empty even if Ctrl is pressed
