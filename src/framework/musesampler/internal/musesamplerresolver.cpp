@@ -68,14 +68,8 @@ InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioRe
 
     while (auto instrument = libHandler->getNextInstrument(instrumentList)) {
         int instrumentId = libHandler->getInstrumentId(instrument);
-        String internalName = String::fromUtf8(libHandler->getInstrumentName(instrument));
-        String internalCategory = String::fromUtf8(libHandler->getInstrumentCategory(instrument));
-        String instrumentSoundId = String::fromUtf8(libHandler->getMpeSoundId(instrument));
 
-        if (resourceMeta.attributeVal(u"playbackSetupData") == instrumentSoundId
-            && resourceMeta.attributeVal(u"museCategory") == internalCategory
-            && resourceMeta.attributeVal(u"museName") == internalName
-            && resourceMeta.attributeVal(u"museUID") == String::fromStdString(std::to_string(instrumentId))) {
+        if (resourceMeta.attributeVal(u"museUID") == String::number(instrumentId)) {
             return { instrumentId, instrument };
         }
     }
@@ -168,7 +162,7 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
         }
 
         AudioResourceMeta meta;
-        meta.id = buildMuseInstrumentId(internalCategory, internalName, instrumentId).toStdString();
+        meta.id = std::to_string(instrumentId);
         meta.type = AudioResourceType::MuseSamplerSoundPack;
         meta.vendor = "MuseSounds";
         meta.attributes = {
@@ -313,7 +307,7 @@ std::vector<Instrument> MuseSamplerResolver::instruments() const
         JsonObject obj = doc.rootObject();
 
         Instrument instrument;
-        instrument.id = buildMuseInstrumentId(instrument.category, instrument.name, id);
+        instrument.id = String::number(id);
         instrument.soundId = String::fromUtf8(m_libHandler->getMpeSoundId(msInstrument));
         instrument.musicXmlId = String::fromUtf8(m_libHandler->getMusicXmlSoundId(msInstrument));
         instrument.name = obj.value("FriendlyName").toString();
@@ -341,14 +335,4 @@ void MuseSamplerResolver::loadSoundPresetAttributes(SoundPresetAttributes& attri
             attributes.emplace(PLAYING_TECHNIQUES_ATTRIBUTE, std::move(articulation));
         }
     }
-}
-
-String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const
-{
-    StringList list;
-    list.append(category);
-    list.append(name);
-    list.append(String::fromStdString(std::to_string(uniqueId)));
-
-    return list.join(u"\\");
 }
