@@ -35,11 +35,9 @@ StyledPopupView {
     contentWidth: content.width
     contentHeight: content.height
 
-    property alias notationViewNavigationSection: partialTieNavPanel.section
-    property alias navigationOrderStart: partialTieNavPanel.order
-    readonly property alias navigationOrderEnd: partialTieNavPanel.order
-
-    readonly property alias model: partialTiePopupModel
+    property NavigationSection notationViewNavigationSection: null
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: tieMenuList.navigation.order
 
     showArrow: false
 
@@ -81,13 +79,6 @@ StyledPopupView {
             }
         }
 
-        NavigationPanel {
-            id: partialTieNavPanel
-            name: "PartialTieMenu"
-            direction: NavigationPanel.Vertical
-            accessible.name: qsTrc("notation", "Partial tie menu items")
-        }
-
         StyledListView {
             id: tieMenuList
 
@@ -100,6 +91,9 @@ StyledPopupView {
             arrowControlsAvailable: false
 
             model: partialTiePopupModel.items
+
+            navigation.section: notationViewNavigationSection
+            navigation.order: navigationOrderStart
 
             visible: true
 
@@ -121,6 +115,9 @@ StyledPopupView {
                 hoverHitColor: ui.theme.accentColor
                 anchors.left: parent ? parent.left : undefined
                 anchors.right: parent ? parent.right : undefined
+
+                navigation.panel: tieMenuList.navigation
+                navigation.row: model.index
 
                 onClicked: {
                     partialTiePopupModel.toggleItemChecked(modelData.id)

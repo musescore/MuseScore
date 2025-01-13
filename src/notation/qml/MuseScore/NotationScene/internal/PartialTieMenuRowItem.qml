@@ -44,6 +44,11 @@ ListItemBlank {
         return result
     }
 
+    id: rowDelegate
+
+    required property var modelData
+    required property var model
+
     RowLayout {
         id: rowLayout
 
@@ -59,7 +64,7 @@ ListItemBlank {
             id: checkIcon
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: 16
-            iconCode: modelData.checked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+            iconCode: rowDelegate.modelData.checked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
         }
 
         StyledTextLabel {
@@ -67,7 +72,7 @@ ListItemBlank {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignLeft
 
-            text: modelData.title
+            text: rowDelegate.modelData.title
 
             textFormat: Text.RichText
         }
