@@ -1074,6 +1074,7 @@ private:
     void selectRange(EngravingItem* e, staff_idx_t staffIdx);
 
     muse::Ret putNote(const Position&, bool replace);
+    void handleOverlappingChordRest(InputState& inputState);
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
