@@ -61,6 +61,7 @@ public:
     static double computePadding(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2);
     static double computeVerticalClearance(const EngravingItem* item1, const EngravingItem* item2, double spatium);
+    static void centerTimeSigIfNeeded(System* system);
 
 private:
     struct HorizontalSpacingContext {
@@ -107,6 +108,7 @@ private:
     static bool stopCheckingPreviousSegments(const SegmentPosition& prev, const SegmentPosition& curSegPos);
     static void checkLyricsAgainstLeftMargin(Segment* segment, double& x, HorizontalSpacingContext& ctx);
     static void checkLyricsAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
+    static void checkLargeTimeSigAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
     static void moveRightAlignedSegments(std::vector<SegmentPosition>& placedSegments, const HorizontalSpacingContext& ctx);
 
     static double chordRestSegmentNaturalWidth(Segment* segment, HorizontalSpacingContext& ctx);

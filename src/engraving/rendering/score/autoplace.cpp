@@ -84,6 +84,10 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             return itemsShouldIgnoreEachOther(item, skylineItem);
         });
 
+        if (filteredSkyline.elements().empty()) {
+            return;
+        }
+
         double d = above ? filteredSkyline.minDistanceToShapeAbove(shape, minSkylineHorizontalClearance)
                    : filteredSkyline.minDistanceToShapeBelow(shape, minSkylineHorizontalClearance);
 
@@ -437,6 +441,10 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
 {
     ElementType type1 = itemToAutoplace->type();
     ElementType type2 = itemInSkyline->type();
+
+    if (type1 == ElementType::TIMESIG) {
+        return type2 != ElementType::KEYSIG;
+    }
 
     if (type1 == type2) {
         // Items of same type should ignore each other in most cases

@@ -36,6 +36,7 @@ public:
     virtual PropertyValue defaultStyleValue(const StyleId& styleId) const = 0;
     virtual void setStyleValue(const StyleId& styleId, const PropertyValue& newValue) = 0;
     virtual void resetStyleValue(const StyleId& styleId) = 0;
+    virtual void resetStyleValues(const std::vector<StyleId>& styleIds) = 0;
 
     virtual bool canApplyToAllParts() const = 0;
     virtual void applyToAllParts() = 0;

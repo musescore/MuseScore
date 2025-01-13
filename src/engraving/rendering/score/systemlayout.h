@@ -63,6 +63,7 @@ public:
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
     static void centerElementsBetweenStaves(const System* system);
+    static void centerBigTimeSigsAcrossStaves(const System* system);
 
     static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
 

@@ -71,6 +71,15 @@ void NotationStyle::resetStyleValue(const StyleId& styleId)
     m_styleChanged.notify();
 }
 
+void NotationStyle::resetStyleValues(const std::vector<StyleId>& styleIds)
+{
+    for (StyleId id : styleIds) {
+        score()->resetStyleValue(id);
+    }
+    score()->update();
+    m_styleChanged.notify();
+}
+
 bool NotationStyle::canApplyToAllParts() const
 {
     return !score()->isMaster(); // In parts only

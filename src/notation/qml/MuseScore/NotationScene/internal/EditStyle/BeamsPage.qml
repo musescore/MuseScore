@@ -156,25 +156,11 @@ StyleDialogPage {
                 }
             }
 
-            Rectangle {
-                id: frenchStyleBeamFrame
-                width: 200
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-
-                color: "#ffffff"
-                border.color: ui.theme.strokeColor
-                radius: ui.theme.borderWidth
-
-                Image {
-                    width: Math.min(62, parent.width)
-                    mipmap: true
-                    sourceSize.width: 240
-                    sourceSize.height: 240
-                    anchors.centerIn: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: beamsPageModel.frenchStyleBeams.value ? "beam_style_french.svg" : "beam_style_regular.svg"
-                }
+            StyledImage {
+                forceWidth: 140
+                forceHeight: 52
+                verticalPadding: 12
+                source: beamsPageModel.frenchStyleBeams.value ? "beam_style_french.svg" : "beam_style_regular.svg"
             }
         }
     }

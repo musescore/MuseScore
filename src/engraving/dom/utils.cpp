@@ -1161,7 +1161,7 @@ Segment* skipTuplet(Tuplet* tuplet)
 //    replace ascii with bravura symbols
 //---------------------------------------------------------
 
-SymIdList timeSigSymIdsFromString(const String& string)
+SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyle)
 {
     static const std::map<Char, SymId> dict = {
         { 43,    SymId::timeSigPlusSmall },             // '+'
@@ -1194,9 +1194,53 @@ SymIdList timeSigSymIdsFromString(const String& string)
         { 59674, SymId::mensuralProlation11 },
     };
 
+    static const std::map<Char, SymId> dictLarge = {
+        { 43,    SymId::timeSigPlusSmallLarge },             // '+'
+        { 48,    SymId::timeSig0Large },                     // '0'
+        { 49,    SymId::timeSig1Large },                     // '1'
+        { 50,    SymId::timeSig2Large },                     // '2'
+        { 51,    SymId::timeSig3Large },                     // '3'
+        { 52,    SymId::timeSig4Large },                     // '4'
+        { 53,    SymId::timeSig5Large },                     // '5'
+        { 54,    SymId::timeSig6Large },                     // '6'
+        { 55,    SymId::timeSig7Large },                     // '7'
+        { 56,    SymId::timeSig8Large },                     // '8'
+        { 57,    SymId::timeSig9Large },                     // '9'
+        { 67,    SymId::timeSigCommonLarge },                // 'C'
+        { 40,    SymId::timeSigParensLeftSmallLarge },       // '('
+        { 41,    SymId::timeSigParensRightSmallLarge },      // ')'
+        { 162,   SymId::timeSigCutCommonLarge },             // '¢'
+        { 189,   SymId::timeSigFractionHalfLarge },
+        { 189,   SymId::timeSigFractionQuarterLarge },
+    };
+
+    static const std::map<Char, SymId> dictNarrow = {
+        { 43,    SymId::timeSigPlusSmallNarrow },             // '+'
+        { 48,    SymId::timeSig0Narrow },                     // '0'
+        { 49,    SymId::timeSig1Narrow },                     // '1'
+        { 50,    SymId::timeSig2Narrow },                     // '2'
+        { 51,    SymId::timeSig3Narrow },                     // '3'
+        { 52,    SymId::timeSig4Narrow },                     // '4'
+        { 53,    SymId::timeSig5Narrow },                     // '5'
+        { 54,    SymId::timeSig6Narrow },                     // '6'
+        { 55,    SymId::timeSig7Narrow },                     // '7'
+        { 56,    SymId::timeSig8Narrow },                     // '8'
+        { 57,    SymId::timeSig9Narrow },                     // '9'
+        { 67,    SymId::timeSigCommonNarrow },                // 'C'
+        { 40,    SymId::timeSigParensLeftSmallNarrow },       // '('
+        { 41,    SymId::timeSigParensRightSmallNarrow },      // ')'
+        { 162,   SymId::timeSigCutCommonNarrow },             // '¢'
+        { 189,   SymId::timeSigFractionHalfNarrow },
+        { 188,   SymId::timeSigFractionQuarterNarrow },
+    };
+
     SymIdList list;
     for (size_t i = 0; i < string.size(); ++i) {
-        SymId sym = muse::value(dict, string.at(i), SymId::noSym);
+        SymId sym = muse::value(
+            timeSigStyle == TimeSigStyle::NARROW ? dictNarrow
+            : timeSigStyle == TimeSigStyle::LARGE ? dictLarge
+            : dict,
+            string.at(i), SymId::noSym);
         if (sym != SymId::noSym) {
             list.push_back(sym);
         }

@@ -395,6 +395,13 @@ void PageLayout::collectPage(LayoutContext& ctx)
         SystemLayout::centerElementsBetweenStaves(system);
     }
 
+    if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES
+        && ctx.conf().styleB(Sid::timeSigCenterAcrossStaveGroup)) {
+        for (const System* system : page->systems()) {
+            SystemLayout::centerBigTimeSigsAcrossStaves(system);
+        }
+    }
+
     page->invalidateBspTree();
 }
 

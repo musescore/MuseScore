@@ -30,6 +30,7 @@ Item {
     property int iconMode: !iconImage.isEmpty ? IncrementalPropertyControl.Left : IncrementalPropertyControl.Hidden
     property int iconBackgroundSize: 20
     property alias icon: iconImage.iconCode
+    property alias prefixIcon: textInputField.hintIcon
 
     property alias isIndeterminate: textInputField.isIndeterminate
     property alias currentValue: textInputField.currentText
