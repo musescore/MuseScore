@@ -19,30 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+#pragma once
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+#include <QObject>
 
-TextInputField {
+namespace muse::ui {
+class QmlDataFormatter : public QObject
+{
+    Q_OBJECT
+public:
+    explicit QmlDataFormatter(QObject* parent = nullptr);
 
-    id: root
-
-    property real currentValue: 0.0
-
-    property real max: 10000.0
-    property real min: -10000.0
-    property int decimals: 2
-
-    currentText: ui.df.formatReal(root.currentValue, root.decimals)
-
-    validator: DoubleInputValidator {
-        top: root.max
-        bottom: root.min
-        decimal: root.decimals
-    }
-
-    onTextEdited: function(newTextValue) {
-        root.currentValue = parseFloat(newTextValue)
-    }
+    Q_INVOKABLE QString formatReal(double value, int decimals = 2) const;
+};
 }
