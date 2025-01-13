@@ -205,3 +205,43 @@ void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& 
         }
     }
 }
+
+void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
+{
+    if (!measure->repeatStart()) {
+        return;
+    }
+
+    Segment* blSeg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
+    Segment* ksSeg = measure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    Segment* tsSeg = measure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+
+    if (!blSeg || (!ksSeg && !tsSeg)) {
+        return;
+    }
+
+    Segment* s1 = nullptr; // leftmost, could be null if there only a time sig or only a key sig
+    Segment* s2 = nullptr;
+    Segment* s3 = nullptr; // rightmost
+
+    std::vector<Segment*> segments;
+    if (ctx.conf().styleB(Sid::changesBetweenEndStartRepeat)) {
+        s3 = blSeg;
+        s2 = tsSeg ? tsSeg : ksSeg;
+        s1 = tsSeg ? ksSeg : nullptr;
+    } else {
+        s3 = tsSeg ? tsSeg : ksSeg;
+        s2 = ksSeg ? ksSeg : blSeg;
+        s1 = ksSeg ? blSeg : nullptr;
+    }
+
+    if (s2->next() != s3) {
+        measure->segments().remove(s2);
+        measure->segments().insert(s2, s3);
+    }
+
+    if (s1 && s1->next() != s2) {
+        measure->segments().remove(s1);
+        measure->segments().insert(s1, s2);
+    }
+}
