@@ -1778,7 +1778,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(defaultsVersion,                            Constants::MSC_VERSION),
     styleDef(courtesyChangesBeforeBarlineRepeats,        true),
     styleDef(courtesyChangesBeforeBarlineOtherJumps,     true),
-    styleDef(placeClefsBeforeRepeats,                    true),
+    styleDef(placeClefsBeforeRepeats,                    false),
     styleDef(changesBetweenEndStartRepeat,               true),
     styleDef(showCourtesiesRepeats,                      true),
     styleDef(useParensRepeatCourtesies,                  true),

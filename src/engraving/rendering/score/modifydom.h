@@ -41,6 +41,7 @@ public:
     static void cmdUpdateNotes(const Measure* measure, const DomAccessor& dom);
     static void createStems(const Measure* measure, LayoutContext& ctx);
     static void setTrackForChordGraceNotes(Measure* measure, const DomAccessor& dom);
+    static void sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx);
 };
 }
 

@@ -995,6 +995,8 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         ctx.mutDom().undoRemoveElement(seg);
     }
 
+    ModifyDom::sortMeasureBeginSegments(measure, ctx);
+
     for (Segment& s : measure->segments()) {
         if (s.isEndBarLineType()) {
             continue;
@@ -1616,7 +1618,8 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
         if (seg) {
             Segment* s1 = nullptr;
             Segment* s2 = nullptr;
-            if (m->repeatEnd() && clefToBarlinePosition != ClefToBarlinePosition::BEFORE) {
+            if (m->repeatEnd() && !ctx.conf().styleB(Sid::placeClefsBeforeRepeats)
+                && clefToBarlinePosition != ClefToBarlinePosition::BEFORE) {
                 s1 = seg;
                 s2 = clefSeg;
             } else {
