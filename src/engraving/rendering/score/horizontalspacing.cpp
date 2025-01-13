@@ -1507,6 +1507,8 @@ void HorizontalSpacing::computeHangingLineWidth(const Segment* firstSeg, const S
     const Measure* crMeasure = crSeg->measure();
     const size_t ntracks = crSeg->score()->ntracks();
 
+    std::vector<double> tieLengths;
+
     for (track_idx_t track = 0; track < ntracks; track++) {
         // Hanging lines only occur at start or end of a measure
         const ChordRest* cr = incoming ? crMeasure->firstChordRest(track) : crMeasure->lastChordRest(track);
@@ -1542,9 +1544,7 @@ void HorizontalSpacing::computeHangingLineWidth(const Segment* firstSeg, const S
                 }
 
                 double minLength = 0.0;
-                if (attachedLine->isTie()) {
-                    minLength = style.styleMM(Sid::minHangingTieLength);
-                } else if (attachedLine->isGlissando()) {
+                if (attachedLine->isGlissando()) {
                     bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
                     minLength = straight ? style.styleMM(Sid::minStraightGlissandoLength)
                                 : style.styleMM(Sid::minWigglyGlissandoLength);
@@ -1561,10 +1561,32 @@ void HorizontalSpacing::computeHangingLineWidth(const Segment* firstSeg, const S
                 const double lineEndPointX = incoming ? lineNoteEndPos : lineSegEndPos;
                 const double lineLength = lineEndPointX - lineStartPointX;
 
+                if (attachedLine->isTie()) {
+                    tieLengths.push_back(lineLength);
+                    continue;
+                }
+
                 if (lineLength < minLength) {
                     width += minLength - lineLength;
                 }
             }
+        }
+    }
+
+    if (tieLengths.empty()) {
+        return;
+    }
+
+    const double maxLength = *std::max_element(tieLengths.begin(), tieLengths.end());
+    const double oldWidth = width;
+    for (double& tieLength : tieLengths) {
+        // Adjust for new width
+        tieLength += width - oldWidth;
+        const double minLength = muse::RealIsEqual(tieLength, maxLength) ? style.styleMM(Sid::minHangingTieLength) : style.styleMM(
+            Sid::minTieLength);
+
+        if (tieLength < minLength) {
+            width += minLength - tieLength;
         }
     }
 }
