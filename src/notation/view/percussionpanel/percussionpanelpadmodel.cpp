@@ -83,13 +83,14 @@ const QVariant PercussionPanelPadModel::notationPreviewItemVariant() const
 
 QList<QVariantMap> PercussionPanelPadModel::footerContextMenuItems() const
 {
-    static constexpr int duplicatePadIcon = static_cast<int>(IconCode::Code::COPY);
+    // static constexpr int duplicatePadIcon = static_cast<int>(IconCode::Code::COPY);
     static constexpr int deletePadIcon = static_cast<int>(IconCode::Code::DELETE_TANK);
     static constexpr int definePadShortcutIcon = static_cast<int>(IconCode::Code::SHORTCUTS);
 
     QList<QVariantMap> menuItems = {
-        { { "id", DUPLICATE_PAD_CODE }, { "title", muse::qtrc("global", "Duplicate") },
-            { "icon", duplicatePadIcon }, { "enabled", true } },
+        //! NOTE: Disabled for now - will be re-introduced with new percussion mapping system...
+        // { { "id", DUPLICATE_PAD_CODE }, { "title", muse::qtrc("global", "Duplicate") },
+        //     { "icon", duplicatePadIcon }, { "enabled", true } },
 
         { { "id", DELETE_PAD_CODE }, { "title", muse::qtrc("global", "Delete") },
             { "icon", deletePadIcon }, { "enabled", true } },

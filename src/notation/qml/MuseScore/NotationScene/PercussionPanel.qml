@@ -34,6 +34,8 @@ Item {
     property NavigationSection navigationSection: null
     property int contentNavigationPanelOrderStart: 1
 
+    signal resizeRequested(var newWidth, var newHeight)
+
     anchors.fill: parent
 
     property Component toolbarComponent: PercussionPanelToolBar {
@@ -47,6 +49,8 @@ Item {
 
     Component.onCompleted: {
         padGrid.model.init()
+        var newHeight = (padGrid.numRows * padGrid.cellHeight) + (soundTitleLabel.height * 2)
+        root.resizeRequested(root.width, newHeight)
     }
 
     PercussionPanelModel {
@@ -324,6 +328,11 @@ Item {
                                     return
                                 }
                                 pad.padNavigation.requestActive()
+                            }
+
+                            function onNumPadsChanged() {
+                                var newHeight = (padGrid.numRows * padGrid.cellHeight) + (soundTitleLabel.height * 2)
+                                root.resizeRequested(root.width, newHeight)
                             }
                         }
                     }
