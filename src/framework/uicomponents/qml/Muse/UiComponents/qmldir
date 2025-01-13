@@ -31,6 +31,7 @@ ProgressButton 1.0 ProgressButton.qml
 RadioButtonGroup 1.0 RadioButtonGroup.qml
 RoundedRadioButton 1.0 RoundedRadioButton.qml
 RoundedRectangle 1.0 RoundedRectangle.qml
+RealInputField 1.0 RealInputField.qml
 SearchField 1.0 SearchField.qml
 SelectMultipleDirectoriesDialog 1.0 SelectMultipleDirectoriesDialog.qml
 SeparatorLine 1.0 SeparatorLine.qml

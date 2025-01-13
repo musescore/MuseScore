@@ -93,5 +93,6 @@
         <file>qml/Muse/UiComponents/TextInputArea.qml</file>
         <file>qml/Muse/UiComponents/StyledViewScrollAndZoomArea.qml</file>
         <file>qml/Muse/UiComponents/internal/ViewScrollBar.qml</file>
+        <file>qml/Muse/UiComponents/RealInputField.qml</file>
     </qresource>
 </RCC>
