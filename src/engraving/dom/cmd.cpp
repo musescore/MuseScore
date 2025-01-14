@@ -3440,15 +3440,15 @@ bool Score::canInsertClef(ClefType type) const
         return false;
     }
 
-    const Staff* staff = this->staff(inputTrack() / VOICES);
-    const ChordRest* cr = inputState().cr();
+    const Staff* staff = this->staff(m_is.track() / VOICES);
+    const ChordRest* cr = m_is.cr();
 
     return staff && cr;
 }
 
 void Score::cmdInsertClef(ClefType type)
 {
-    undoChangeClef(staff(inputTrack() / VOICES), inputState().cr(), type);
+    undoChangeClef(staff(m_is.track() / VOICES), m_is.cr(), type);
 }
 
 //---------------------------------------------------------
