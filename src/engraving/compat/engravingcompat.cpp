@@ -203,7 +203,9 @@ void EngravingCompat::replaceEmptyCRSegmentsWithTimeTick(MasterScore* masterScor
                 if (segmentHasNoChordRest(segment)) {
                     measure->remove(segment);
                     Segment* timeTickSegment = measure->getSegmentR(SegmentType::TimeTick, segment->rtick());
-                    for (EngravingItem* annotation : segment->annotations()) {
+                    // Create copy, because `segment->annotations()` is modified within the loop
+                    std::vector<EngravingItem*> annotations = segment->annotations();
+                    for (EngravingItem* annotation : annotations) {
                         segment->remove(annotation);
                         annotation->setParent(timeTickSegment);
                         timeTickSegment->add(annotation);
