@@ -204,18 +204,6 @@ echo "ninja version"
 $ninja_dir/ninja --version
 
 ##########################################################################
-# OTHER
-##########################################################################
-# TODO: https://github.com/musescore/MuseScore/issues/11689
-#echo "Get VST"
-#vst_dir=$BUILD_TOOLS/vst
-#if [[ ! -d "$vst_dir" ]]; then
-#  wget -q --show-progress -O $BUILD_TOOLS/vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z"
-#  7z x -y $BUILD_TOOLS/vst_sdk.7z -o"$vst_dir"
-#fi
-#echo export VST3_SDK_PATH="$vst_dir/VST3_SDK" >> $ENV_FILE
-
-##########################################################################
 # POST INSTALL
 ##########################################################################
 

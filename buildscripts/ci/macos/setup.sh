@@ -48,10 +48,4 @@ mkdir -p $QT_PATH
 7z x -y qt.7z -o$QT_PATH
 rm qt.7z
 
-# VST SDK
-echo "Download VST SDK"
-wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z"
-7z x -y vst_sdk.7z -o"$HOME/vst"
-echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >> $GITHUB_ENV
-
 echo "Setup script done"
