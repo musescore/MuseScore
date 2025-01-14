@@ -2417,7 +2417,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Ключы, ключ. знакі і такт. памеры</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
@@ -2768,7 +2768,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3930"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Тактавыя памеры</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3936"/>
@@ -2906,7 +2906,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4366"/>
         <source>Key signature to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Ад ключ. знака да такт. памера:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4386"/>
@@ -2952,7 +2952,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4547"/>
         <source>Barline to key signature:</source>
-        <translation type="unfinished"/>
+        <translation>Ад такт. рысы да ключ. знака:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4570"/>
@@ -2987,7 +2987,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4652"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Скінуць значэнне &quot;Водступ зьлева ад ключ. знака&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4678"/>
@@ -3007,12 +3007,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4760"/>
         <source>Clef to key signature:</source>
-        <translation type="unfinished"/>
+        <translation>Ад ключа да ключ. знака:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4770"/>
         <source>Key signature to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Ад ключ. знака да такт. рысы:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4796"/>
@@ -3027,7 +3027,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4819"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Скінуць значэнне &quot;Ад ключ. знака да такт. памеру&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4845"/>
@@ -3067,7 +3067,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5384"/>
         <source>Use double barlines before key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Ужываць падвойныя тактавыя рысы перад ключавымі знакамі</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5390"/>
@@ -3322,7 +3322,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4972"/>
         <source>Clef/key signature to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Ад ключа або ключ. знака да першай ноты:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4985"/>
@@ -4702,7 +4702,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4097"/>
         <source>♮ in key signatures</source>
-        <translation type="unfinished"/>
+        <translation>♮ у ключавых знаках</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5108"/>
@@ -5107,7 +5107,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Restore</source>
-        <translation type="unfinished"/>
+        <translation>Аднавіць</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
@@ -5589,7 +5589,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="120"/>
         <source>In selection</source>
-        <translation type="unfinished"/>
+        <translation>У вылучэнні</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="130"/>
@@ -5599,7 +5599,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="136"/>
         <source>Replace selection</source>
-        <translation type="unfinished"/>
+        <translation>Замяніць вылучэнне</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="146"/>
@@ -5614,7 +5614,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="163"/>
         <source>Subtract from selection</source>
-        <translation type="unfinished"/>
+        <translation>Выкінуць з вылучанага</translation>
     </message>
 </context>
 <context>
@@ -5662,7 +5662,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="117"/>
         <source>In selection</source>
-        <translation type="unfinished"/>
+        <translation>У вылучэнні</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="75"/>
@@ -5702,7 +5702,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="189"/>
         <source>Replace selection</source>
-        <translation type="unfinished"/>
+        <translation>Замяніць вылучэнне</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="199"/>
@@ -5717,7 +5717,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="216"/>
         <source>Subtract from selection</source>
-        <translation type="unfinished"/>
+        <translation>Выкінуць з вылучанага</translation>
     </message>
 </context>
 <context>
@@ -5800,7 +5800,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="41"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>Стварыць тактавы памер</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
@@ -6731,7 +6731,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="321"/>
         <source>Past&amp;e</source>
-        <translation type="unfinished"/>
+        <translation>Уставіць</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="328"/>
@@ -6757,12 +6757,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="358"/>
         <source>Select &amp;all</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць усё</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="364"/>
         <source>Select sectio&amp;n</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць сэкцыю</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="370"/>
@@ -6832,19 +6832,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="655"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="656"/>
         <source>Insert one measure before selection</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць адзін такт перад вылучаным</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="662"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
         <source>Insert measures before selection…</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць такты перад вылучаным</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="668"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
         <source>Insert measures after selection…</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць такты пасьля вылучанага</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="674"/>
@@ -7187,7 +7187,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="53"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="54"/>
         <source>Time signature properties…</source>
-        <translation type="unfinished"/>
+        <translation>Уласьцьівасьці тактавага памеру...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
@@ -7219,18 +7219,18 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="227"/>
         <source>Add previous chord to selection</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць папярэдні акорд да вылучанага</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1487"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1488"/>
         <source>Select to beginning of measure</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць да пачатку такта</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="221"/>
         <source>Add next chord to selection</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць наступны акорд да вылучанага</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="239"/>
@@ -7263,17 +7263,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="102"/>
         <source>Select next element in score</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць наступны элемэнт партытуры</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="114"/>
         <source>Select next chord / move text right</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць наступны акорд / пасунуць тэкст управа</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="120"/>
         <source>Select previous chord / move text left</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць папярэдні акорд / пасунуць тэкст улева</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="126"/>
@@ -7283,32 +7283,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="138"/>
         <source>Select note/rest above</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць ноту/паўзу зьверху</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="144"/>
         <source>Select note/rest below</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць ноту/паўзу зьнізу</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="150"/>
         <source>Select top note in chord</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць верхнюю ноту ў акордзе</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="156"/>
         <source>Select bottom note in chord</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць ніжнюю ноту ў акордзе</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="174"/>
         <source>Move selected note/rest to staff above</source>
-        <translation type="unfinished"/>
+        <translation>Пасунуць вылучаную ноту/паўзу ў вышэйшы нотны стан</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="180"/>
         <source>Move selected note/rest to staff below</source>
-        <translation type="unfinished"/>
+        <translation>Пасунуць вылучаную ноту/паўзу ў ніжэйшы нотны стан</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="186"/>
@@ -7438,7 +7438,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
         <source>Copy/paste: swap with clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Капіяваць/уставіць: абмяняць у буфэру абмену</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="359"/>
@@ -7453,22 +7453,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="371"/>
         <source>Select similar elements</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць падобныя элемэнты</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="377"/>
         <source>Select similar elements on the same staff</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць падобныя элемэнты на тым самым нотны радку</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="383"/>
         <source>Select similar elements in the selected range</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць падобныя элемэнты ў вылучаным абсягу</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="389"/>
         <source>Select similar elements with more options…</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць падобныя элемэнты з дадатковымі опцыямі...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="395"/>
@@ -7518,7 +7518,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="450"/>
         <source>Delete selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Выдаліць вылучаныя такты</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
@@ -7608,7 +7608,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <source>Split measure before selected note/rest</source>
-        <translation type="unfinished"/>
+        <translation>Падзяліць такт перад вылучанай нотай/паўзай</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
@@ -8022,19 +8022,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1493"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1494"/>
         <source>Select to end of measure</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць да канца такта</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1499"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1500"/>
         <source>Select to beginning of line</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць да пачатку лініі</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1505"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1506"/>
         <source>Select to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць да канца лініі</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1511"/>
@@ -8051,22 +8051,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1523"/>
         <source>Add staff above to selection</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць нотны стан над вылучаным</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1524"/>
         <source>Add to selection: staff above</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць да вылучанага: нотны стан зьверху</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1529"/>
         <source>Add staff below to selection</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць нотны стан пад вылучаным</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1530"/>
         <source>Add to selection: staff below</source>
-        <translation type="unfinished"/>
+        <translation>Дадаць да вылучанага: нотны стан зьнізу</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1547"/>
@@ -8311,18 +8311,18 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1972"/>
         <source>Make selected element(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>Зрабіць вылучаны(я) элемэнт(ы) бачным(і)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1978"/>
         <source>Make selected element(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>Зрабіць вылучаны(я) элемэнт(ы) нябачным(і)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1983"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1984"/>
         <source>Toggle automatic placement for selected elements</source>
-        <translation type="unfinished"/>
+        <translation>Аўтаматычна пераключаць палажэнне вылучаных элемэнтаў</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
@@ -8778,7 +8778,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="340"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="341"/>
         <source>Paste special</source>
-        <translation type="unfinished"/>
+        <translation>Спэцыяльная ўстаўка</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
@@ -8835,7 +8835,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="53"/>
         <source>Restart</source>
-        <translation type="unfinished"/>
+        <translation>Перазапуск</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="58"/>
@@ -9000,12 +9000,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="99"/>
         <source>Restore the &amp;default layout</source>
-        <translation type="unfinished"/>
+        <translation>Аднавіць прадвызначаны лэйаўт.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the default layout</source>
-        <translation type="unfinished"/>
+        <translation>Аднавіць прадвызначаны лэйаўт</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
@@ -9290,7 +9290,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="108"/>
         <source>Select previous element in score</source>
-        <translation type="unfinished"/>
+        <translation>Вылучыць папярэдні элемэнт у партытуры</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="132"/>
@@ -9335,7 +9335,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
         <source>Remove selected ran&amp;ge</source>
-        <translation type="unfinished"/>
+        <translation>Выдаліць вылучаны абсяг</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
@@ -9405,12 +9405,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <source>&amp;Split measure before selected note/rest</source>
-        <translation type="unfinished"/>
+        <translation>Падзяліць такт перад вылучанай нотай/паўзай</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="649"/>
         <source>&amp;Join selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Злучыць вылучаныя такты</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="692"/>
@@ -10358,27 +10358,27 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="340"/>
         <source>Would you like to restart MuseScore Studio now?</source>
-        <translation type="unfinished"/>
+        <translation>Ці хочаш ты перазапусьціць MuseScore Studio зараз?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="341"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"/>
+        <translation>Каб зьмены запрацавалі, трэба перазапусьціць MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="346"/>
         <source>Restart</source>
-        <translation type="unfinished"/>
+        <translation>Перазапуск</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="190"/>
         <source>The previous session quit unexpectedly.</source>
-        <translation type="unfinished"/>
+        <translation>Апошні сэанс завяршыўся нечакана.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="191"/>
         <source>Do you want to restore the session?</source>
-        <translation type="unfinished"/>
+        <translation>Ці жадаеш ты аднавіць сэанс?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
@@ -10423,7 +10423,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountPage.qml" line="75"/>
         <source>Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Уліковыя запісы</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="40"/>
@@ -10536,7 +10536,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="32"/>
         <source>Getting started</source>
-        <translation type="unfinished"/>
+        <translation>Распачынаем</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="191"/>
@@ -10566,7 +10566,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
         <source>Let’s get started by choosing a theme.</source>
-        <translation type="unfinished"/>
+        <translation>Для пачатку выбярайма тэму.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="56"/>
@@ -10845,7 +10845,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="34"/>
         <source>Restart audio and MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>Перазапуск аўдыё- ды MIDI-прылад</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="30"/>
@@ -10956,7 +10956,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
         <source>Restart required</source>
-        <translation type="unfinished"/>
+        <translation>Патрэбны перазапуск</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="42"/>
@@ -11605,7 +11605,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountInfoButton.qml" line="42"/>
         <source>My accounts</source>
-        <translation type="unfinished"/>
+        <translation>Мае ўліковыя запісы</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="178"/>
@@ -12652,7 +12652,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
         <source>Selection</source>
-        <translation type="unfinished"/>
+        <translation>Вылучэнне</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
@@ -13604,7 +13604,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="208"/>
         <source>selected</source>
-        <translation type="unfinished"/>
+        <translation>вылучана</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="460"/>
@@ -18349,7 +18349,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="78"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="123"/>
         <source>Open selected</source>
-        <translation type="unfinished"/>
+        <translation>Адкрыць вылучанае</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="204"/>
@@ -19613,7 +19613,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="81"/>
         <source>Delete selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Выдаліць вылучаныя такты</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
@@ -19855,7 +19855,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="93"/>
         <source>You have multiple brackets selected. Select a single bracket to edit its settings.</source>
-        <translation type="unfinished"/>
+        <translation>Ты вылучыў некалькі дужак. Вылучы адну, каб зьмяніць ейныя парамэтры.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="49"/>
@@ -20005,7 +20005,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="200"/>
         <source>You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.</source>
-        <translation type="unfinished"/>
+        <translation>Ты вылучыў некалькі дыяґрамаў ґрыфу. Вылучы адну дыяґраму, каб зьмяніць ейныя парамэтры.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="57"/>
@@ -20760,7 +20760,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="254"/>
         <source>Generate key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Згенэраваць ключавыя знакі</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="48"/>
@@ -20791,7 +20791,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
         <source>Time signature properties</source>
-        <translation type="unfinished"/>
+        <translation>Уласьцівасьці тактавага памеру</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="57"/>
@@ -20831,7 +20831,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="151"/>
         <source>You have multiple tremolo bars selected. Select a single one to edit its settings.</source>
-        <translation type="unfinished"/>
+        <translation>Ты вылучыў некалькі тактаў з трэмала. Вылучы толькі адзін, каб зьмяніць ягоныя парамэтры.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="49"/>
@@ -21844,17 +21844,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="85"/>
         <source>Move selected staves up</source>
-        <translation type="unfinished"/>
+        <translation>Пасунуць вылучаныя нотныя станы дагары</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="103"/>
         <source>Move selected staves down</source>
-        <translation type="unfinished"/>
+        <translation>Пасунуць вылучаныя нотныя станы дадолу</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="121"/>
         <source>Remove selected staves</source>
-        <translation type="unfinished"/>
+        <translation>Выдаліць вылучаныя нотныя станы</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="174"/>
@@ -22105,7 +22105,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="58"/>
         <source>Another operation on this language has already been started</source>
-        <translation type="unfinished"/>
+        <translation>Ужо пачалася іншая апэрацыя над гэтаю моваю</translation>
     </message>
 </context>
 <context>
@@ -22139,7 +22139,7 @@ pickup measure</source>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="167"/>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="213"/>
         <source>Get started</source>
-        <translation type="unfinished"/>
+        <translation>Распачынаем</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="186"/>
@@ -22169,7 +22169,11 @@ pickup measure</source>
 Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore. 
 
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!</source>
-        <translation type="unfinished"/>
+        <translation>Вітаем цябе у курсе &quot;Майстэрства MuseScore&quot; — найпоўным рэсурсе для вывучэння найбольш папулярнага ў свеце праграмнага забеспячэння для нотапісу! Мяне завуць Марк Сабатэлля, і я дапамагаю распрацоўваць, падтрымліваць і прасоўваць MuseScore з моманту яго першага выпуску больш за дзесяць гадоў таму.
+
+Незалежна ад таго, ці толькі ты пачынаеш працаваць з нотнай праграмаю, ці ўжо з’яўляесься дасведчаным карыстальнікам, які імкнецца асвоіць перадавыя тэхнікі выканання і прайгравання, мой асноўны онлайн-курс &quot;Майстэрства MuseScore&quot; ахоплівае ўсё, што трэба ведаць, каб атрымаць максімум ад MuseScore.
+
+Акрамя таго, курс &quot;Майстэрства MuseScore&quot; мае падтрымліваючую супольнасць музыкантаў, дзе ёсьць абмеркаванні, прамыя трансьляцыі і іншыя звязаныя курсы і сэрвісы, якія дапамогуць табе ствараць найлепшую музыку. Скарыстайся магчымасьцю навучацца MuseScore ад аднаго з самых выбітных экспэртаў!</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="96"/>
@@ -22254,12 +22258,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="83"/>
         <source>After selection</source>
-        <translation type="unfinished"/>
+        <translation>Пасьля вылучанага</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="84"/>
         <source>Before selection</source>
-        <translation type="unfinished"/>
+        <translation>Перад вылучаным</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="85"/>
@@ -22492,7 +22496,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="138"/>
         <source>List selection</source>
-        <translation type="unfinished"/>
+        <translation>Сьпіс вылучанага</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="183"/>
@@ -23284,12 +23288,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="77"/>
         <source>No staff selected</source>
-        <translation type="unfinished"/>
+        <translation>Няма вылучанага нотнага стану</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="78"/>
         <source>Please select one or more staves and retry</source>
-        <translation type="unfinished"/>
+        <translation>Калі ласка, вылучы адзін або некалькі нотных станаў</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="81"/>
@@ -23382,7 +23386,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="126"/>
         <source>Cannot paste in local time signature</source>
-        <translation type="unfinished"/>
+        <translation>Нельга ўставіць у бягучы тактавы памер</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="129"/>
@@ -23423,7 +23427,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="150"/>
         <source>This key signature cannot be deleted</source>
-        <translation type="unfinished"/>
+        <translation>Гэты тактавы памер немагчыма выдаліць</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="151"/>
@@ -25292,7 +25296,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Тактавыя памеры</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1724"/>
@@ -25323,7 +25327,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>Стварыць тактавы памер</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="99"/>
@@ -25378,7 +25382,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="839"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
-        <translation type="unfinished"/>
+        <translation>Ці хочаш ты вярнуць прадвызначаныя наладкі гэтай палітры? Усе зьмены гэтай палітры згубяцца.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="901"/>
@@ -27301,12 +27305,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="296"/>
         <source>Allow multiple selection</source>
-        <translation type="unfinished"/>
+        <translation>Дазволіць шматлікія вылучэнні</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="309"/>
         <source>Apply selection to all staves</source>
-        <translation type="unfinished"/>
+        <translation>Ужыць вылучанае да ўсіх нотных станаў.</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
@@ -27350,7 +27354,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
         <location filename="../../src/project/internal/notationproject.cpp" line="85"/>
         <source>Untitled score</source>
-        <translation type="unfinished"/>
+        <translation>Безназоўная партытура</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="82"/>
@@ -27397,7 +27401,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
         <source>Search recent scores</source>
-        <translation type="unfinished"/>
+        <translation>Шукаць нядаўнія партытуры</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="143"/>
@@ -27407,7 +27411,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="162"/>
         <source>My online scores</source>
-        <translation type="unfinished"/>
+        <translation>Мае онлайнавыя партытуры</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="177"/>
@@ -27433,7 +27437,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation type="unfinished"/>
+        <translation>Дзеянні з партытурамі</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
@@ -27738,7 +27742,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="79"/>
         <source>Scores list</source>
-        <translation type="unfinished"/>
+        <translation>Сьпіс партытур</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
@@ -27775,7 +27779,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
         <source>Publish your finished scores on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Апублікаваць гатовую партытуру на MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
@@ -27820,7 +27824,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
         <source>You don’t have any online scores yet</source>
-        <translation type="unfinished"/>
+        <translation>У цябе пакуль няма онлайнавых партытур</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
@@ -27840,7 +27844,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
         <source>Unable to load online scores</source>
-        <translation type="unfinished"/>
+        <translation>Не магчыма спампаваць онлайнавыя партытуры</translation>
     </message>
     <message>
         <source>Please check your internet connection or try again later.</source>
@@ -27854,7 +27858,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="88"/>
         <source>Recent scores list</source>
-        <translation type="unfinished"/>
+        <translation>Сьпіс нядаўніх партытур</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresGridView.qml" line="32"/>
@@ -27864,7 +27868,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="35"/>
         <source>Online scores list</source>
-        <translation type="unfinished"/>
+        <translation>Сьпіс онлайнавых партытур</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="153"/>
@@ -28007,7 +28011,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="67"/>
         <source>Select parts to export</source>
-        <translation type="unfinished"/>
+        <translation>Вылучы партыі, якія трэба экспартаваць</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="95"/>
@@ -28723,7 +28727,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="83"/>
         <source>Not selected</source>
-        <translation type="unfinished"/>
+        <translation>Ня вылучана</translation>
     </message>
 </context>
 <context>
@@ -28917,7 +28921,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="100"/>
         <source>selection</source>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - selection&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>Вылучэнне</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
@@ -29468,14 +29472,14 @@ failed.</source>
         <source>selected</source>
         <comment>selectedState</comment>
         <extracomment>Describes the state of a ui item that is the chosen option in a list of options</extracomment>
-        <translation type="unfinished"/>
+        <translation>вылучана</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="83"/>
         <source>not selected</source>
         <comment>selectedState</comment>
         <extracomment>Describes the state of a ui item that is not the chosen option in a list of options</extracomment>
-        <translation type="unfinished"/>
+        <translation>ня вылучана</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="92"/>
@@ -29691,7 +29695,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="153"/>
         <source>Restore defaults</source>
-        <translation type="unfinished"/>
+        <translation>Аднавіць прадвызначанае</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="154"/>

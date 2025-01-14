@@ -27494,7 +27494,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1754"/>
         <source>File “%1” is corrupted and cannot be opened</source>
-        <translation>Het bestand “%1” bestaat niet of is corrupt en kan niet worden geopend.</translation>
+        <translation>Het bestand “%1” is corrupt en kan niet worden geopend.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1755"/>
