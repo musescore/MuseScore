@@ -31,11 +31,13 @@ using namespace muse::audio;
 
 static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/audio/sampleRate");
 static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/mp3Bitrate");
+static const Settings::Key EXPORT_SELECTION_ONLY_KEY("iex_audioexport", "export/audio/selectionOnly");
 
 void AudioExportConfiguration::init()
 {
     settings()->setDefaultValue(EXPORT_SAMPLE_RATE_KEY, Val(44100));
     settings()->setDefaultValue(EXPORT_MP3_BITRATE, Val(128));
+    settings()->setDefaultValue(EXPORT_SELECTION_ONLY_KEY, Val(false));
 }
 
 int AudioExportConfiguration::exportMp3Bitrate() const
@@ -73,6 +75,16 @@ const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
 {
     static const std::vector<int> rates { 32000, 44100, 48000 };
     return rates;
+}
+
+bool AudioExportConfiguration::selectionOnly() const
+{
+    return settings()->value(EXPORT_SELECTION_ONLY_KEY).toBool();
+}
+
+void AudioExportConfiguration::setSelectionOnly(bool flag)
+{
+    settings()->setSharedValue(EXPORT_SELECTION_ONLY_KEY, Val(flag));
 }
 
 samples_t AudioExportConfiguration::exportBufferSize() const

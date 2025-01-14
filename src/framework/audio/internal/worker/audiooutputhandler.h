@@ -61,8 +61,8 @@ public:
     async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     async::Promise<AudioSignalChanges> masterSignalChanges() const override;
 
-    async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
-                                        const SoundTrackFormat& format) override;
+    async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format,
+                                        const secs_t startPosition = 0, const msecs_t duration = 0) override;
     void abortSavingAllSoundTracks() override;
 
     Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
