@@ -646,6 +646,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
     QVariant defaultPropertyValue;
 
     bool isUndefined = false;
+    bool isEnabled = true;
 
     for (const mu::engraving::EngravingItem* element : elements) {
         IF_ASSERT_FAILED(element) {
@@ -654,6 +655,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
 
         QVariant elementCurrentValue = valueFromElementUnits(pid, element->getProperty(pid), element);
         QVariant elementDefaultValue = valueFromElementUnits(pid, element->propertyDefault(pid), element);
+        mu::engraving::Sid elementStyleId = element->getPropertyStyle(pid);
 
         bool isPropertySupportedByElement = elementCurrentValue.isValid();
 
@@ -672,8 +674,9 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
         }
 
         isUndefined = propertyValue != elementCurrentValue;
+        isEnabled = !((styleId != elementStyleId) || (propertyValue != elementCurrentValue));
 
-        if (isUndefined) {
+        if ((isUndefined) || (!isEnabled)) {
             break;
         }
     }
@@ -683,6 +686,8 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
     propertyItem->setIsEnabled(propertyValue.isValid());
 
     if (isUndefined) {
+        propertyValue = QVariant();
+    } else if (!isEnabled) {
         propertyValue = QVariant();
     }
 
