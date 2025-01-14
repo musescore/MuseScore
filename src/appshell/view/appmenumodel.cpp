@@ -772,7 +772,10 @@ MenuItemList AppMenuModel::makePluginsItems()
     MenuItemList pluginsWithoutCategories;
     for (const Manifest& m : enabledExtensions) {
         std::string categoryStr = m.category.toStdString();
-        if (muse::contains(categories, categoryStr)) {
+        if (!categoryStr.empty()) {
+            if (!muse::contains(categories, categoryStr)) {
+                categories[categoryStr] = TranslatableString("extensions", m.category);
+            }
             MenuItemList& items = categoriesMap[categoryStr];
             addMenuItems(items, m);
         } else {
