@@ -302,7 +302,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         select(lastTiedNote);
     } else if (!is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         Segment* seg = setNoteRest(
-            is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false, {}, /* rhythmic */ false,
+            is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
             externalInputState);
         if (seg) {
             note = toChord(seg->element(track))->upNote();

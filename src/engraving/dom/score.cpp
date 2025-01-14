@@ -3225,19 +3225,33 @@ void Score::padToggle(Pad p, const EditData& ed)
                     break;
                 }
 
-                NoteVal nval;
-                DirectionV stemDirection = DirectionV::AUTO;
                 if (m_is.rest()) {
                     // Enter a rest
-                    nval = NoteVal();
+                    setNoteRest(m_is.segment(), m_is.track(), NoteVal(), m_is.duration().fraction());
+                    m_is.moveToNextInputPos();
                 } else {
                     EngravingItem* e = selection().element();
-                    if (e && e->isNote()) {
+                    const std::set<int>& inputPitches = m_is.notePitches();
+
+                    if (!inputPitches.empty()) {
+                        const ChordRest* cr = m_is.cr();
+                        bool addToChord = cr && cr->isChord() && cr->durationType() == m_is.duration();
+
+                        for (int pitch : inputPitches) {
+                            NoteVal nval(pitch);
+                            addPitch(nval, addToChord);
+                            addToChord = true;
+                        }
+                    } else if (e && e->isNote()) {
                         // use same pitch etc. as previous note
                         Note* n = toNote(e);
-                        nval = n->noteVal();
-                        stemDirection = n->chord()->stemDirection();
+                        DirectionV stemDirection = n->chord()->stemDirection();
+                        setNoteRest(m_is.segment(), m_is.track(), n->noteVal(), m_is.duration().fraction(),
+                                    stemDirection, false, m_is.articulationIds());
+                        m_is.moveToNextInputPos();
                     } else {
+                        NoteVal nval;
+
                         // enter a reasonable default note
                         Staff* s = staff(m_is.track() / VOICES);
                         Fraction tick = m_is.tick();
@@ -3263,10 +3277,12 @@ void Score::padToggle(Pad p, const EditData& ed)
                             int line = ((s->lines(tick) - 1) / 2) * 2;
                             nval = NoteVal(line2pitch(line, clef, key));
                         }
+
+                        setNoteRest(m_is.segment(), m_is.track(), nval, m_is.duration().fraction(),
+                                    DirectionV::AUTO, false, m_is.articulationIds());
+                        m_is.moveToNextInputPos();
                     }
                 }
-                setNoteRest(m_is.segment(), m_is.track(), nval, m_is.duration().fraction(), stemDirection, false, m_is.articulationIds());
-                m_is.moveToNextInputPos();
             } else {
                 m_is.setRest(false);
             }

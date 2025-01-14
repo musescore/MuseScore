@@ -83,7 +83,7 @@ private:
     void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
     void toggleNoteInputInsert();
-    void addNote(NoteName note, NoteAddingMode addingMode);
+    void handleNoteAction(NoteName note, NoteAddingMode addingMode);
     void padNote(const Pad& pad);
     void putNote(const muse::actions::ActionData& args);
     void removeNote(const muse::actions::ActionData& args);

@@ -24,6 +24,7 @@
 #include "log.h"
 
 #include <memory>
+#include <limits>
 #include <QRectF>
 #include <QPainter>
 #include <QClipboard>
@@ -82,6 +83,7 @@
 #include "engraving/dom/undo.h"
 #include "engraving/dom/utils.h"
 #include "engraving/compat/dummyelement.h"
+#include "engraving/dom/utils.h"
 
 #include "engraving/rw/xmlreader.h"
 #include "engraving/rw/rwregister.h"
@@ -369,11 +371,16 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
         return false;
     }
 
-    showShadowNoteAtPosition(shadowNote, position);
+    ShadowNoteParams params;
+    params.duration = inputState.duration();
+    params.accidentalType = inputState.accidentalType();
+    params.articulationIds = inputState.articulationIds();
+
+    showShadowNoteAtPosition(shadowNote, params, position);
     return true;
 }
 
-void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, Position& position, bool noteheadOnly)
+void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, const ShadowNoteParams& params, Position& position)
 {
     const mu::engraving::InputState& inputState = score()->inputState();
     const Staff* staff = score()->staff(position.staffIdx);
@@ -399,7 +406,7 @@ void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, Posit
     position.pos.rx() -= qMin(relX - score()->style().styleMM(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
 
     mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
-    mu::engraving::NoteHeadType noteHead = inputState.duration().headType();
+    mu::engraving::NoteHeadType noteHead = params.duration.headType();
     int line = position.line;
 
     if (instr->useDrumset()) {
@@ -426,13 +433,13 @@ void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, Posit
     shadowNote.setLineIndex(line);
 
     mu::engraving::SymId symNotehead;
-    mu::engraving::TDuration duration(inputState.duration());
 
     if (inputState.rest()) {
-        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(mu::engraving::gpaletteScore->dummy()->segment(), duration.type());
-        rest->setTicks(duration.fraction());
-        symNotehead = rest->getSymbol(inputState.duration().type(), 0, staff->lines(position.segment->tick()));
-        shadowNote.setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);
+        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(
+            mu::engraving::gpaletteScore->dummy()->segment(), params.duration.type());
+        rest->setTicks(params.duration.fraction());
+        symNotehead = rest->getSymbol(params.duration.type(), 0, staff->lines(position.segment->tick()));
+        shadowNote.setState(symNotehead, params.duration, true, segmentSkylineTopY, segmentSkylineBottomY);
         delete rest;
     } else {
         if (mu::engraving::NoteHeadGroup::HEAD_CUSTOM == noteheadGroup) {
@@ -441,12 +448,8 @@ void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, Posit
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
         }
 
-        if (noteheadOnly) {
-            shadowNote.setState(symNotehead, TDuration(), false, segmentSkylineTopY, segmentSkylineBottomY);
-        } else {
-            shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY,
-                                inputState.accidentalType(), inputState.articulationIds());
-        }
+        shadowNote.setState(symNotehead, params.duration, false, segmentSkylineTopY, segmentSkylineBottomY,
+                            params.accidentalType, params.articulationIds);
     }
 
     score()->renderer()->layoutItem(&shadowNote);
@@ -2647,33 +2650,39 @@ std::vector<Position> NotationInteraction::inputPositions() const
 {
     std::vector<Position> result;
 
-    const mu::engraving::InputState& is = score()->inputState();
-    const EngravingItem* selectedItem = score()->selection().element();
-    const staff_idx_t staffIdx = track2staff(is.track());
-    const Staff* staff = score()->staff(staffIdx);
+    const InputState& is = score()->inputState();
+
+    Position pos;
+    pos.segment = is.segment();
+    pos.staffIdx = track2staff(is.track());
+
+    const Staff* staff = score()->staff(pos.staffIdx);
     const Fraction tick = is.tick();
+
+    const Key key = staff->key(tick);
+    const ClefType clef = staff->clef(tick);
+    const SysStaff* sysStaff = is.segment()->system()->staff(pos.staffIdx);
 
     const double lineDist = staff->staffType(tick)->lineDistance().val()
                             * (staff->isTabStaff(tick) ? 1 : .5)
                             * staff->staffMag(tick)
                             * score()->style().spatium();
 
-    const SysStaff* sysStaff = is.segment()->system()->staff(staffIdx);
+    const PointF measurePos = pos.segment->measure()->canvasPos();
 
-    Position pos;
-    pos.segment = is.segment();
-    pos.staffIdx = staffIdx;
+    for (int pitch : is.notePitches()) {
+        const int tpc = mu::engraving::pitch2tpc(pitch, key, Prefer::NEAREST);
+        pos.line = mu::engraving::relStep(pitch, tpc, clef);
 
-    if (selectedItem && selectedItem->isNote()) {
-        pos.line = toNote(selectedItem)->line();
-    } else {
-        pos.line = ((staff->lines(tick) - 1) / 2) * 2;
+        const double y = sysStaff->y() + pos.line * lineDist;
+        pos.pos = PointF(is.segment()->x(), y) + measurePos;
+
+        result.push_back(pos);
     }
 
-    const double y = sysStaff->y() + pos.line * lineDist;
-    pos.pos = PointF(pos.segment->x(), y) + pos.segment->measure()->canvasPos();
-
-    result.push_back(pos);
+    std::sort(result.begin(), result.end(), [](const Position& p1, const Position& p2) {
+        return p1.line < p2.line;
+    });
 
     return result;
 }
@@ -2685,13 +2694,67 @@ bool NotationInteraction::shouldDrawInputPreview() const
 
 void NotationInteraction::drawInputPreview(Painter* painter)
 {
-    ShadowNote shadowNote(score());
     std::vector<Position> positions = inputPositions();
+    if (positions.empty()) {
+        return;
+    }
+
+    std::vector<ShadowNote*> notes;
+    notes.reserve(positions.size());
+
+    const InputState& is = score()->inputState();
+
+    ShadowNoteParams params;
+    params.duration = is.rest() ? is.duration() : TDuration();
 
     for (Position& pos : positions) {
-        showShadowNoteAtPosition(shadowNote, pos, true /*noteheadOnly*/);
-        score()->renderer()->drawItem(&shadowNote, painter);
+        ShadowNote* note = new ShadowNote(score());
+        showShadowNoteAtPosition(*note, params, pos);
+        notes.push_back(note);
     }
+
+    const bool isUp = !is.rest() && notes.front()->computeUp();
+    bool isLeft = isUp;
+    int prevLine = INT_MAX;
+
+    auto correctNotePositionIfNeed = [&](ShadowNote* note) {
+        if (positions.size() == 1) {
+            return;
+        }
+
+        const bool conflict = std::abs(prevLine - note->lineIndex()) < 2;
+        prevLine = note->lineIndex();
+
+        if (conflict || (isUp != isLeft)) {
+            isLeft = !isLeft;
+        }
+
+        if (isUp == isLeft) {
+            return;
+        }
+
+        const RectF noteheadBbox = note->symBbox(note->noteheadSymbol());
+
+        if (isLeft) {
+            note->move(PointF(-noteheadBbox.width(), 0.));
+        } else {
+            note->move(PointF(noteheadBbox.width(), 0.));
+        }
+    };
+
+    if (isUp) {
+        for (auto it = notes.rbegin(); it != notes.rend(); ++it) {
+            correctNotePositionIfNeed(*it);
+            score()->renderer()->drawItem(*it, painter);
+        }
+    } else {
+        for (auto it = notes.begin(); it != notes.end(); ++it) {
+            correctNotePositionIfNeed(*it);
+            score()->renderer()->drawItem(*it, painter);
+        }
+    }
+
+    DeleteAll(notes);
 }
 
 void NotationInteraction::drawAnchorLines(Painter* painter)

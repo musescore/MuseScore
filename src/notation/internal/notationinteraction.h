@@ -315,7 +315,13 @@ private:
     void apply();
     void rollback();
 
-    void showShadowNoteAtPosition(mu::engraving::ShadowNote& note, mu::engraving::Position& pos, bool noteheadOnly = false);
+    struct ShadowNoteParams {
+        mu::engraving::TDuration duration;
+        mu::engraving::AccidentalType accidentalType = mu::engraving::AccidentalType::NONE;
+        std::set<SymId> articulationIds;
+    };
+
+    void showShadowNoteAtPosition(mu::engraving::ShadowNote& note, const ShadowNoteParams& params, mu::engraving::Position& pos);
 
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);

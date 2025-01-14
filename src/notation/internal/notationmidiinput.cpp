@@ -118,10 +118,16 @@ void NotationMidiInput::doProcessEvents()
     }
 
     std::vector<const Note*> notes;
+    bool isNoteInput = isNoteInputMode();
+
+    if (isNoteInput && isInputByDuration()) {
+        addNoteEventsToInputState();
+        return;
+    }
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const muse::midi::Event& event = m_eventsQueue.at(i);
-        Note* note = isNoteInputMode() ? addNoteToScore(event) : makeNote(event);
+        Note* note = isNoteInput ? addNoteToScore(event) : makeNote(event);
         if (note) {
             notes.push_back(note);
         }
@@ -143,6 +149,26 @@ void NotationMidiInput::doProcessEvents()
 
         playbackController()->playElements(notesItems);
         m_notesReceivedChannel.send(notes);
+    }
+
+    m_eventsQueue.clear();
+    m_processTimer.stop();
+}
+
+void NotationMidiInput::addNoteEventsToInputState()
+{
+    std::set<int> pitches;
+    bool useWrittenPitch = configuration()->midiUseWrittenPitch().val;
+
+    for (const muse::midi::Event& event : m_eventsQueue) {
+        if (event.opcode() == muse::midi::Event::Opcode::NoteOn) {
+            mu::engraving::NoteVal val = score()->noteVal(event.note(), useWrittenPitch);
+            pitches.insert(val.pitch);
+        }
+    }
+
+    if (!pitches.empty()) {
+        m_notationInteraction->noteInput()->setPitchesToInput(pitches);
     }
 
     m_eventsQueue.clear();
@@ -347,6 +373,11 @@ bool NotationMidiInput::isRealtimeAuto() const
 bool NotationMidiInput::isRealtimeManual() const
 {
     return noteInputMethod() == NoteInputMethod::REALTIME_MANUAL;
+}
+
+bool NotationMidiInput::isInputByDuration() const
+{
+    return noteInputMethod() == NoteInputMethod::BY_DURATION;
 }
 
 bool NotationMidiInput::isNoteInputMode() const

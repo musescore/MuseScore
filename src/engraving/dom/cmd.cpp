@@ -4921,60 +4921,35 @@ void Score::cmdUnsetVisible()
     }
 }
 
-//---------------------------------------------------------
-//   cmdAddPitch
-///   insert note or add note to chord
-//    c d e f g a b entered:
-//---------------------------------------------------------
-
-void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
+int Score::resolveInputOctave(int note, bool addFlag) const
 {
-    InputState& is = inputState();
-    if (is.track() == muse::nidx) {          // invalid state
-        return;
+    const InputState& is = inputState();
+    if (!is.isValid()) {
+        return -1;
     }
-    if (is.segment() == 0) {
-        LOGD("cannot enter notes here (no chord rest at current position)");
-        return;
-    }
-    is.setRest(false);
+
     const Drumset* ds = is.drumset();
+
     int octave = 4;
     if (ds) {
         char note1 = "CDEFGAB"[note];
         int pitch = -1;
-        int voice = 0;
         for (int i = 0; i < 127; ++i) {
             if (!ds->isValid(i)) {
                 continue;
             }
             if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
                 pitch = i;
-                voice = ds->voice(i);
                 break;
             }
         }
         if (pitch == -1) {
             LOGD("  shortcut %c not defined in drumset", note1);
-            return;
+            return -1;
         }
-        is.setDrumNote(pitch);
-        is.setTrack(trackZeroVoice(is.track()) + voice);
+
         octave = pitch / 12;
-        if (is.segment()) {
-            Segment* seg = is.segment();
-            while (seg) {
-                if (seg->element(is.track())) {
-                    break;
-                }
-                seg = seg->prev(SegmentType::ChordRest);
-            }
-            if (seg) {
-                is.setSegment(seg);
-            } else {
-                is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
-            }
-        }
+
     } else {
         static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
 
@@ -5027,10 +5002,52 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             }
         }
     }
-    ed.view()->startNoteEntryMode();
+
+    return octave;
+}
+
+//---------------------------------------------------------
+//   cmdAddPitch
+///   insert note or add note to chord
+//    c d e f g a b entered:
+//---------------------------------------------------------
+void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
+{
+    InputState& is = inputState();
+    if (!is.isValid()) {
+        LOGD("cannot enter notes here (no chord rest at current position)");
+        return;
+    }
+
+    is.setRest(false);
+
+    int octave = resolveInputOctave(note, addFlag);
+
+    const Drumset* ds = is.drumset();
+    if (ds) {
+        int pitch = octave * 12;
+        is.setDrumNote(pitch);
+        is.setTrack(is.track() + ds->voice(pitch));
+
+        if (is.segment()) {
+            Segment* seg = is.segment();
+            while (seg) {
+                if (seg->element(is.track())) {
+                    break;
+                }
+                seg = seg->prev(SegmentType::ChordRest);
+            }
+            if (seg) {
+                is.setSegment(seg);
+            } else {
+                is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
+            }
+        }
+    }
 
     int step = octave * 7 + note;
-    cmdAddPitch(step,  addFlag, insert);
+    cmdAddPitch(step, addFlag, insert);
+
     ed.view()->adjustCanvasPosition(is.cr());
 }
 

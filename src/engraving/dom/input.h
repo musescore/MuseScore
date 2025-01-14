@@ -85,6 +85,10 @@ public:
     int drumNote() const { return m_drumNote; }
     void setDrumNote(int v) { m_drumNote = v; }
 
+    // Used in the input-by-duration mode
+    const std::set<int>& notePitches() const { return m_notePitches; }
+    void setNotePitches(const std::set<int>& v) { m_notePitches = v; }
+
     voice_idx_t voice() const { return m_track == muse::nidx ? 0 : (m_track % VOICES); }
     void setVoice(voice_idx_t v);
     track_idx_t track() const { return m_track; }
@@ -139,6 +143,8 @@ private:
 
     int m_drumNote = -1;
     int m_string = VISUAL_INVALID_STRING_INDEX; // visual string selected for input (TAB staves only)
+
+    std::set<int> m_notePitches;
 
     Segment* m_lastSegment = nullptr;
     Segment* m_segment = nullptr; // current segment
