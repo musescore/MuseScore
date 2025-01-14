@@ -1574,63 +1574,122 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
         seg->createShapes();
     }
 
+    setClefBarLinePosition(m, isLastMeasureInSystem, ctx);
+}
+
+void MeasureLayout::setClefBarLinePosition(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx)
+{
+    const size_t nstaves  = ctx.dom().nstaves();
+    Measure* nextMeasure  = m->nextMeasure();
+    Segment* endBarlineSeg = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
+    Segment* startRepeatSeg = nextMeasure && nextMeasure->repeatStart()
+                              ? nextMeasure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1)) : nullptr;
+    bool sectionBreakHideCourtesy = false;
+    if (LayoutBreak* sectionBreakElement = m->sectionBreakElement()) {
+        sectionBreakHideCourtesy = !sectionBreakElement->showCourtesy();
+    }
+
     // set relative position of end barline and clef
     // if end repeat, clef goes after, otherwise clef goes before
+    bool clefInNextMeasure = false;
     Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
+    if (!clefSeg && nextMeasure) {
+        clefSeg = nextMeasure->findSegmentR(SegmentType::Clef, Fraction(0, 1));
+        clefInNextMeasure = true;
+    }
     ClefToBarlinePosition clefToBarlinePosition = ClefToBarlinePosition::AUTO;
-    if (clefSeg) {
-        int visibleInt = 0;
-        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            if (!ctx.dom().staff(staffIdx)->show()) {
-                continue;
-            }
-            track_idx_t track = staffIdx * VOICES;
-            Clef* clef = toClef(clefSeg->element(track));
-            if (clef) {
-                clefToBarlinePosition = clef->clefToBarlinePosition();
-                bool showCourtesy = ctx.conf().styleB(Sid::genCourtesyClef) && clef->showCourtesy();         // normally show a courtesy clef
-                // check if the measure is the last measure of the system or the last measure before a frame
-                bool lastMeasure = isLastMeasureInSystem || (nm ? !(m->next() == nm) : true);
-                if (!nm || hideCourtesy || (lastMeasure && !showCourtesy)) {
-                    // hide the courtesy clef in the final measure of a section,
-                    // or if the measure is the final measure of a system
-                    // and the score style or the clef style is set to "not show courtesy clef",
-                    // or if the clef is at the end of the very last measure of the score
-                    clef->clear();
-                    clefSeg->createShape(staffIdx);
-                    if (visibleInt == 0) {
-                        visibleInt = 1;
-                    }
-                } else {
-                    TLayout::layoutClef(clef, clef->mutldata(), ctx.conf());
-                    clefSeg->createShape(staffIdx);
-                    visibleInt = 2;
-                }
-            }
+    if (!clefSeg) {
+        return;
+    }
+
+    int visibleInt = 0;
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (!ctx.dom().staff(staffIdx)->show()) {
+            continue;
         }
-        if (visibleInt == 2) {         // there is at least one visible clef in the clef segment
-            clefSeg->setVisible(true);
-        } else if (visibleInt == 1) {  // all (courtesy) clefs in the clef segment are not visible
-            clefSeg->setVisible(false);
-        } else { // should never happen
-            LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
+
+        track_idx_t track = staffIdx * VOICES;
+        Clef* clef = toClef(clefSeg->element(track));
+        if (!clef) {
+            continue;
         }
-        if (seg) {
-            Segment* s1 = nullptr;
-            Segment* s2 = nullptr;
-            if (m->repeatEnd() && !ctx.conf().styleB(Sid::placeClefsBeforeRepeats)
-                && clefToBarlinePosition != ClefToBarlinePosition::BEFORE) {
-                s1 = seg;
-                s2 = clefSeg;
-            } else {
-                s1 = clefSeg;
-                s2 = seg;
+
+        clefToBarlinePosition = clef->clefToBarlinePosition();
+        bool showCourtesy = ctx.conf().styleB(Sid::genCourtesyClef) && clef->showCourtesy();             // normally show a courtesy clef
+        // check if the measure is the last measure of the system or the last measure before a frame
+        bool lastMeasure = isLastMeasureInSystem || (nextMeasure ? !(m->next() == nextMeasure) : true);
+        if (!nextMeasure || sectionBreakHideCourtesy || (lastMeasure && !showCourtesy)) {
+            // hide the courtesy clef in the final measure of a section, or if the measure is the final measure of a system
+            // and the score style or the clef style is set to "not show courtesy clef",
+            // or if the clef is at the end of the very last measure of the score
+            clef->clear();
+            clefSeg->createShape(staffIdx);
+            if (visibleInt == 0) {
+                visibleInt = 1;
             }
-            if (s1->next() != s2) {
-                m->segments().remove(s1);
-                m->segments().insert(s1, s2);
-            }
+        } else {
+            TLayout::layoutClef(clef, clef->mutldata(), ctx.conf());
+            clefSeg->createShape(staffIdx);
+            visibleInt = 2;
         }
+    }
+
+    if (visibleInt == 2) {         // there is at least one visible clef in the clef segment
+        clefSeg->setVisible(true);
+    } else if (visibleInt == 1) {  // all (courtesy) clefs in the clef segment are not visible
+        clefSeg->setVisible(false);
+    } else { // should never happen
+        LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
+        return;
+    }
+
+    if (!endBarlineSeg) {
+        return;
+    }
+
+    Segment* s1 = nullptr;
+    Segment* s2 = nullptr;
+
+    if (clefToBarlinePosition == ClefToBarlinePosition::AUTO) {
+        clefToBarlinePosition = startRepeatSeg && !ctx.conf().styleB(Sid::placeClefsBeforeRepeats)
+                                ? ClefToBarlinePosition::AFTER : ClefToBarlinePosition::BEFORE;
+    }
+
+    const bool betweenRepeats = ctx.conf().styleB(Sid::changesBetweenEndStartRepeat);
+    if (clefToBarlinePosition == ClefToBarlinePosition::BEFORE) {
+        // Place before end barline
+        s1 = clefSeg;
+        s2 = endBarlineSeg;
+    } else if (clefToBarlinePosition == ClefToBarlinePosition::AFTER && !betweenRepeats && startRepeatSeg) {
+        // Place after begin barline
+        s1 = clefSeg;
+        s2 = startRepeatSeg->nextEnabled();
+    } else if (clefToBarlinePosition == ClefToBarlinePosition::AFTER && betweenRepeats) {
+        // Place after end barline
+        if (clefInNextMeasure) {
+            // Move clef segment to previous measure
+            // This should be the last segment in the measure
+            clefSeg->setParent(m);
+            clefSeg->setRtick(endBarlineSeg->rtick());
+            nextMeasure->segments().remove(clefSeg);
+            m->segments().push_back(clefSeg);
+            return;
+        }
+        s1 = endBarlineSeg;
+        s2 = clefSeg;
+    }
+
+    if (!s1 || !s2) {
+        return;
+    }
+
+    if (s1->next() != s2 && s1 != s2) {
+        Measure* m1 = s1->measure();
+        Measure* m2 = s2->measure();
+        s1->setParent(m2);
+        s1->setRtick(s2->rtick());
+        m1->segments().remove(s1);
+        m2->segments().insert(s1, s2);
     }
 }
 
@@ -2004,12 +2063,13 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
 void MeasureLayout::removeSystemTrailer(Measure* m)
 {
     for (Segment* seg = m->last(); seg != m->first(); seg = seg->prev()) {
-        if (seg->isTimeTickType()) {
-            continue;
-        }
-        if (!seg->trailer()) {
+        if (seg->isChordRestType()) {
             break;
         }
+        if (seg->isTimeTickType() || !seg->trailer()) {
+            continue;
+        }
+
         if (seg->enabled()) {
             seg->setEnabled(false);
         }
