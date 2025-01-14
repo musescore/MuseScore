@@ -30,6 +30,7 @@ class ChordSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * isStemless READ isStemless CONSTANT)
+    Q_PROPERTY(PropertyItem * isReversedHook READ isReversedHook CONSTANT)
     Q_PROPERTY(PropertyItem * showStemSlash READ showStemSlash CONSTANT)
     Q_PROPERTY(PropertyItem * combineVoice READ combineVoice CONSTANT)
 
@@ -40,6 +41,7 @@ public:
     explicit ChordSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* isStemless() const;
+    PropertyItem* isReversedHook() const;
     PropertyItem* showStemSlash() const;
     PropertyItem* combineVoice() const;
 
@@ -63,9 +65,10 @@ private:
     void updateShowStemSlashVisible();
     void updateShowStemSlashEnabled();
 
-    PropertyItem* m_isStemless = nullptr;
-    PropertyItem* m_showStemSlash = nullptr;
-    PropertyItem* m_combineVoice = nullptr;
+    PropertyItem* m_isStemless     = nullptr;
+    PropertyItem* m_isHookReversed = nullptr;
+    PropertyItem* m_showStemSlash  = nullptr;
+    PropertyItem* m_combineVoice   = nullptr;
 
     bool m_showStemSlashVisible = false;
     bool m_showStemSlashEnabled = false;

@@ -159,6 +159,15 @@ FocusableItem {
 
                 spacing: 12
 
+                PropertyCheckBox {
+                    text: qsTrc("inspector", "Reversed hook")
+                    propertyItem: root.chordModel ? root.chordModel.isReverseHook : null
+
+                    navigationName: "Reversed hook"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: root.navigationRowStart + 1
+                }
+
                 Item {
                     height: childrenRect.height
                     width: parent.width
