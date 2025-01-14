@@ -1683,7 +1683,7 @@ Measure* EngravingItem::findMeasure()
     } else if (explicitParent()) {
         return parentItem()->findMeasure();
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -1708,7 +1708,7 @@ MeasureBase* EngravingItem::findMeasureBase()
     } else if (explicitParent()) {
         return parentItem()->findMeasureBase();
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -1720,6 +1720,21 @@ const MeasureBase* EngravingItem::findMeasureBase() const
 {
     EngravingItem* e = const_cast<EngravingItem*>(this);
     return e->findMeasureBase();
+}
+
+//---------------------------------------------------------
+//   findChordRest
+//---------------------------------------------------------
+
+ChordRest* EngravingItem::findChordRest()
+{
+    if (isChordRest()) {
+        return toChordRest(this);
+    } else if (explicitParent()) {
+        return parentItem()->findChordRest();
+    } else {
+        return nullptr;
+    }
 }
 
 //---------------------------------------------------------
