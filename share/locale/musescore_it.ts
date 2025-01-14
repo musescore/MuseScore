@@ -1720,7 +1720,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="64"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="259"/>
         <source>Score</source>
-        <translation>Partitura </translation>
+        <translation>Partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="69"/>
@@ -10618,7 +10618,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then be sure to check out our free Muse Sounds playback library on musescore.org.</source>
-        <translation>Se decidi di annullare, assicurati di consultare la nostra libreria di riproduzione gratuita Muse Sounds su musescore.org.</translation>
+        <translation>Se scegli di annullare, assicurati di consultare la nostra libreria di riproduzione gratuita Muse Sounds su musescore.org.</translation>
     </message>
 </context>
 <context>

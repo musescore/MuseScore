@@ -13007,7 +13007,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
         <source>Time tick anchor</source>
-        <translation type="unfinished"/>
+        <translation>時鐘節拍錨點</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
@@ -18428,7 +18428,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/global/dataformatter.cpp" line="103"/>
         <source>%n byte(s)</source>
         <extracomment>Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>%n字節</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
@@ -21963,7 +21963,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="136"/>
         <source>traits</source>
-        <translation type="unfinished"/>
+        <translation>性狀</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="67"/>
@@ -25165,12 +25165,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1737"/>
         <source>Cm</source>
-        <translation type="unfinished"/>
+        <translation>Cm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
         <source>C7</source>
-        <translation type="unfinished"/>
+        <translation>C7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
@@ -25180,12 +25180,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1741"/>
         <source>Dm</source>
-        <translation type="unfinished"/>
+        <translation>Dm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1742"/>
         <source>D7</source>
-        <translation type="unfinished"/>
+        <translation>D7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
@@ -25195,12 +25195,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1745"/>
         <source>Em</source>
-        <translation type="unfinished"/>
+        <translation>Em</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1746"/>
         <source>E7</source>
-        <translation type="unfinished"/>
+        <translation>E7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
@@ -25210,12 +25210,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1749"/>
         <source>Fm</source>
-        <translation type="unfinished"/>
+        <translation>Fm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1750"/>
         <source>F7</source>
-        <translation type="unfinished"/>
+        <translation>F7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
@@ -25225,12 +25225,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1753"/>
         <source>Gm</source>
-        <translation type="unfinished"/>
+        <translation>Gm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
         <source>G7</source>
-        <translation type="unfinished"/>
+        <translation>G7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
@@ -25240,12 +25240,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1757"/>
         <source>Am</source>
-        <translation type="unfinished"/>
+        <translation>Am</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
         <source>A7</source>
-        <translation type="unfinished"/>
+        <translation>A7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
@@ -25255,12 +25255,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1761"/>
         <source>Bm</source>
-        <translation type="unfinished"/>
+        <translation>Bm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1762"/>
         <source>B7</source>
-        <translation type="unfinished"/>
+        <translation>B7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1993"/>

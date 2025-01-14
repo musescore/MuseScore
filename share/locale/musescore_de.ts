@@ -5178,7 +5178,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="72"/>
         <source>a</source>
-        <translation>a</translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="52"/>

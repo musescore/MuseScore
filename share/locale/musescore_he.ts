@@ -23549,7 +23549,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarcustomisemodel.cpp" line="234"/>
         <source>Separator line</source>
-        <translation>קו מפקיד</translation>
+        <translation>קו מפריד</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/colorlabel.cpp" line="109"/>

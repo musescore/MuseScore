@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="651"/>
         <source>Interval from written to sounding pitch</source>
-        <translation>Интервал между написанным и звучащим строем</translation>
+        <translation>Интервал между написанным и звучащим строями</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="654"/>
@@ -1484,7 +1484,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="570"/>
         <source>Continuous</source>
-        <translation>Непрерывные</translation>
+        <translation>Непрерывная</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="592"/>
@@ -2417,7 +2417,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Ключи, знаки и размеры</translation>
+        <translation>Ключи, знаки и тактовые размеры</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
@@ -2798,7 +2798,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="593"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation>Скрыть, если только один инструмент</translation>
+        <translation>Скрыть название, если только один инструмент</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="602"/>
@@ -3238,7 +3238,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
         <source>Dash</source>
-        <translation>пунктир</translation>
+        <translation>Штрих</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11677"/>
@@ -3375,7 +3375,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5249"/>
         <source>Thick barline distance:</source>
-        <translation>Отступ жирной тактовой черты:</translation>
+        <translation>Расстояние от тонкой до жирной тактовой черты:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5259"/>
@@ -3410,12 +3410,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5341"/>
         <source>Repeat barline to dots distance:</source>
-        <translation>Расстояние от линии репризы до точек:</translation>
+        <translation>Расстояние от тактовой черты до точек в репризе:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5351"/>
         <source>Double barline distance:</source>
-        <translation>Отступ двойной тактовой черты:</translation>
+        <translation>Промежуток в двойной тактовой черте:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5364"/>
@@ -3505,22 +3505,22 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5981"/>
         <source>H-bar horizontal stroke thickness:</source>
-        <translation>H-такты в основном (часть) оркестровые паузы ), другая часть - число вверху H-такта)</translation>
+        <translation>Толщина горизонтального штриха многотактовой паузы:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6020"/>
         <source>H-bar margin within barlines:</source>
-        <translation>Отступ H-такта между тактовыми чертами:</translation>
+        <translation>Отступ от тактовых черт:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6062"/>
         <source>H-bar vertical stroke thickness:</source>
-        <translation>H-такты в основном (часть) оркестровые паузы ), другая часть - число вверху H-такта)</translation>
+        <translation>Толщина вертикального штриха многотактовой паузы:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6101"/>
         <source>H-bar vertical stroke height:</source>
-        <translation>H-такты в основном (часть) оркестровые паузы ), другая часть - число вверху H-такта)</translation>
+        <translation>Высота вертикального штриха многотактовой паузы:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6165"/>
@@ -3535,17 +3535,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6257"/>
         <source>Show extenders on 4-measure repeats</source>
-        <translation>Показывать удлинители при 4-тактовых репризах</translation>
+        <translation>Показывать расширители при 4-тактовых повторах</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6277"/>
         <source>Number consecutive measure repeats</source>
-        <translation>Нумеровать последовательные повторы такта</translation>
+        <translation>Нумеровать последующие тактовые повторы</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6286"/>
         <source>Every</source>
-        <translation>Каждый</translation>
+        <translation>Каждые</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6306"/>
@@ -3595,7 +3595,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6677"/>
         <source>Avoid staves</source>
-        <translation>Недопустимые нотные станы</translation>
+        <translation>Вне нотоносцев</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6687"/>
@@ -3657,7 +3657,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6837"/>
         <source>Bracket</source>
-        <translation>Акколада</translation>
+        <translation>Скобка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6842"/>
@@ -3668,19 +3668,19 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6853"/>
         <source>Brackets</source>
-        <translation>Акколады</translation>
+        <translation>Скобки</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6859"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
-        <translation>Толщина акколады:</translation>
+        <translation>Толщина скобки:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6891"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
-        <translation>Высота загиба акколады:</translation>
+        <translation>Высота загиба скобки:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6910"/>
@@ -3719,7 +3719,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8771"/>
         <source>Ottavas</source>
-        <translation>Октавы</translation>
+        <translation>Знаки переноса октав</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
@@ -3749,13 +3749,13 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10052"/>
         <source>Text lines</source>
-        <translation>Текстовые строки</translation>
+        <translation>Линии с текстом нотоносца</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10200"/>
         <source>System text lines</source>
-        <translation>Строки с текстом системы</translation>
+        <translation>Линии с текстом системы</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
@@ -3799,7 +3799,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3243"/>
         <source>Bracket type:</source>
         <comment>Bracket type for measure number ranges for multi-measure rests</comment>
-        <translation>Тип акколады:</translation>
+        <translation>Тип скобки:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3867"/>
@@ -3816,7 +3816,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6821"/>
         <source>Bracket type:</source>
         <comment>Bracket type for tuplets</comment>
-        <translation>Тип акколады:</translation>
+        <translation>Тип скобки:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7015"/>
@@ -3851,7 +3851,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7165"/>
         <source>Distance before head of first note:</source>
-        <translation>Расстояние перед головкой первой ноты:</translation>
+        <translation>Расстояние до головки первой ноты:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7184"/>
@@ -3878,8 +3878,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7314"/>
         <source>Distance to note:</source>
-        <translation>Расстояние до ноты:
-</translation>
+        <translation>Расстояние до ноты:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7364"/>
@@ -3890,7 +3889,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7466"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7665"/>
         <source>Dotted line thickness:</source>
-        <translation>Толщина точечной линии:</translation>
+        <translation>Толщина пунктирной линии:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7508"/>
@@ -3946,7 +3945,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7498"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7697"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation>Сбросить значение «Толщина точечной линии»</translation>
+        <translation>Сбросить значение «Толщина пунктирной линии»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7826"/>
@@ -4081,7 +4080,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8891"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9331"/>
         <source>Dashed</source>
-        <translation>Пунктирная</translation>
+        <translation>Штриховая</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8682"/>
@@ -4095,14 +4094,14 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8901"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9341"/>
         <source>Dash-dotted</source>
-        <translation>Штрих-пунктир</translation>
+        <translation>Штрих-пунктирная</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8692"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8906"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9346"/>
         <source>Dash-dot-dotted</source>
-        <translation>Штрих-двойной пунктир</translation>
+        <translation>Штрих-пунктирная с двумя точками</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8700"/>
@@ -4369,7 +4368,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12425"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14200"/>
         <source>pt</source>
-        <translation>pt</translation>
+        <translation>пт</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12441"/>
@@ -4418,7 +4417,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11962"/>
         <source>Extension line</source>
-        <translation>Линия распева</translation>
+        <translation>Удлинительная линия</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
@@ -4637,7 +4636,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6251"/>
         <source>Measure repeats</source>
-        <translation>Повторы тактов</translation>
+        <translation>Тактовые повторы</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
@@ -4805,12 +4804,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13547"/>
         <source>Simple</source>
-        <translation>Добавить ноту %1 в аккорд</translation>
+        <translation>Упрощённая </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13668"/>
         <source>Common</source>
-        <translation>Обычный</translation>
+        <translation>Обычная</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13571"/>
@@ -4825,7 +4824,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13507"/>
         <source>Rasgueado</source>
-        <translation>Расгеадо</translation>
+        <translation>Расгуэадо</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13887"/>
@@ -5027,7 +5026,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="840"/>
         <source>Show ‘1’ on 1-measure repeats</source>
-        <translation>Показывать «1» при повторах одного такта</translation>
+        <translation>Показывать «1» при 1-тактовых повторах</translation>
     </message>
 </context>
 <context>
@@ -5181,7 +5180,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="72"/>
         <source>a</source>
-        <translation>Ля</translation>
+        <translation>a</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="52"/>
@@ -5935,77 +5934,77 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="57"/>
         <source>C♭ major / A♭ minor</source>
-        <translation>До-бемоль мажор / ля-бемоль минор</translation>
+        <translation>До ♭ мажор / Ля ♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="62"/>
         <source>G♭ major / E♭ minor</source>
-        <translation>Соль-бемоль мажор / ми-бемоль минор</translation>
+        <translation>Соль ♭ мажор / Ми ♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="67"/>
         <source>D♭ major / B♭ minor</source>
-        <translation>Ре-бемоль мажор / си-бемоль минор</translation>
+        <translation>Ре ♭ мажор / Си ♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="72"/>
         <source>A♭ major / F minor</source>
-        <translation>Ля-бемоль мажор / фа минор</translation>
+        <translation>Ля ♭ мажор / Фа минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="77"/>
         <source>E♭ major / C minor</source>
-        <translation>Ми-бемоль мажор / до минор</translation>
+        <translation>Ми ♭ мажор / До минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="82"/>
         <source>B♭ major / G minor</source>
-        <translation>Си-бемоль мажор / соль минор</translation>
+        <translation>Си ♭ мажор / Соль минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="87"/>
         <source>F major / D minor</source>
-        <translation>Фа мажор / ре минор</translation>
+        <translation>Фа мажор / Ре минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="92"/>
         <source>C major / A minor</source>
-        <translation>До мажор / ля минор</translation>
+        <translation>До мажор / Ля минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="97"/>
         <source>G major / E minor</source>
-        <translation>Соль мажор / ми минор</translation>
+        <translation>Соль мажор / Ми минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="102"/>
         <source>D major / B minor</source>
-        <translation>Ре мажор / си минор</translation>
+        <translation>Ре мажор / Си минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="107"/>
         <source>A major / F♯ minor</source>
-        <translation>Ля мажор / фа-диез минор</translation>
+        <translation>Ля мажор / Фа ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="112"/>
         <source>E major / C♯ minor</source>
-        <translation>Ми мажор / до-диез минор</translation>
+        <translation>Ми мажор / До ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="117"/>
         <source>B major / G♯ minor</source>
-        <translation>Си мажор / соль-диез минор</translation>
+        <translation>Си мажор / Соль ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="122"/>
         <source>F♯ major / D♯ minor</source>
-        <translation>Фа-диез мажор / ре-диез минор</translation>
+        <translation>Фа ♯ мажор / Ре ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="127"/>
         <source>C♯ major / A♯ minor</source>
-        <translation>До-диез мажор / ля-диез минор</translation>
+        <translation>До ♯ мажор / Ля ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="135"/>
@@ -6298,7 +6297,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="197"/>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="225"/>
         <source>Bracket</source>
-        <translation>Акколада</translation>
+        <translation>Скобка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="215"/>
@@ -6355,7 +6354,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="98"/>
         <source>Drop two</source>
         <extracomment>2nd note an octave down</extracomment>
-        <translation>Спустить вторую ноту вниз</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="103"/>
@@ -6793,7 +6792,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="486"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="487"/>
         <source>Unroll repeats</source>
-        <translation>Развернуть репризы</translation>
+        <translation>Развернуть повторы</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="504"/>
@@ -6940,7 +6939,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2362"/>
         <source>Cross-staff beaming</source>
-        <translation>Общее рёбро крест-накрест между нотоносцами</translation>
+        <translation>Общее ребро крест-накрест между нотоносцами</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2368"/>
@@ -7458,7 +7457,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="371"/>
         <source>Select similar elements</source>
-        <translation>Выбрать схожие элементы</translation>
+        <translation>Выделить схожие элементы</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="377"/>
@@ -7948,12 +7947,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1383"/>
         <source>&amp;Nonuplet</source>
-        <translation>&amp;Новемоль</translation>
+        <translation>&amp;Ноноль</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
         <source>Enter tuplet: nonuplet</source>
-        <translation>Добавить мультиоль: новемоль</translation>
+        <translation>Добавить мультиоль: ноноль</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
@@ -8216,12 +8215,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1719"/>
         <source>Add extension line</source>
-        <translation>Добавить линию распева</translation>
+        <translation>Добавить удлиняющую линию</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1720"/>
         <source>Lyrics: enter extension line</source>
-        <translation>Вокальный текст: ввести линию распева</translation>
+        <translation>Вокальный текст: ввести удлиняющую линию</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1732"/>
@@ -8449,7 +8448,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2260"/>
         <source>Toggle duration dot: quadruple</source>
-        <translation>Вкл./выкл. точку длительности: четверная</translation>
+        <translation>Вкл./выкл. точку длительности: четвертная</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2267"/>
@@ -8793,7 +8792,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1217"/>
         <source>Add tied note to chord</source>
-        <translation>Добавить слигованную ноту в аккорд</translation>
+        <translation>Добавить привязанную ноту в аккорд</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2341"/>
@@ -9345,12 +9344,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>Вкл./выкл. ритмическую нотацию</translation>
+        <translation>Вкл./выкл. ритмическую слэш-нотацию</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation>Переключить ритмическую нотацию</translation>
+        <translation>Вкл./выкл. ритмическую слэш-нотацию</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
@@ -9370,7 +9369,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="492"/>
         <source>Copy &amp;lyrics to clipboard</source>
-        <translation>Скопировать &amp;либретто в буфер обмена</translation>
+        <translation>Скопировать &amp;вокальный текст в буфер обмена</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="498"/>
@@ -9946,7 +9945,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
         <source>Toggle multimeasure rests</source>
-        <translation>Многотактовые паузы вкл./выкл.</translation>
+        <translation>Вкл./выкл. многотактовые паузы </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1965"/>
@@ -9962,7 +9961,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2008"/>
         <source>Toggle note input mode</source>
-        <translation>Переключить режим ввода нот</translation>
+        <translation>Вкл./выкл. режим ввода нот</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
@@ -10088,12 +10087,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
         <source>Previous beat (Chord symbol)</source>
-        <translation>Предыдущая доля (аккордовый символ)</translation>
+        <translation>Предыдущая доля (Символ аккорда)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
         <source>Next beat (Chord symbol)</source>
-        <translation>Следующая доля (аккордовый символ)</translation>
+        <translation>Следующая доля (Символ аккорда) </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1731"/>
@@ -10486,7 +10485,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="131"/>
         <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
-        <translation>Чтобы узнать порядок использования персональных данных предлагаем ознакомиться с &lt;a href=&quot;%1&quot;&gt;политикой обеспечения конфиденциальности&lt;/a&gt;.</translation>
+        <translation>Чтобы узнать порядок использования персональных данных предлагаем ознакомиться с &lt;a href=&quot;%1&quot;&gt;политикой конфиденциальности&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
@@ -10514,7 +10513,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
         <source>A human-readable summary is available:</source>
-        <translation>Доступна человекочитаемая сводка:</translation>
+        <translation>Доступна удобочитаемая сводка: </translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/aboutmodel.cpp" line="41"/>
@@ -11468,7 +11467,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="40"/>
         <source>Import MEI layout</source>
-        <translation>Загрузить макет MEI</translation>
+        <translation>Импорт макета MEI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
@@ -11639,7 +11638,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation>Будет создан zip-файл с информацией о вашей инсталляции MuseScore Studio, чтобы помочь разработчикам продиагностировать проблемы, с которыми вы могли столкнуться. Вы можете ознакомиться с содержимым этого файла перед отправкой.</translation>
+        <translation>Это создаст ZIP-файл с информацией о ваших настройках MuseScore Studio, чтобы помочь разработчикам диагностировать любые возникающие у вас проблемы. Вы можете ознакомиться с содержимым этого файла перед отправкой.</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
@@ -11709,7 +11708,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="513"/>
         <source>Nonuplet</source>
-        <translation>Новемоль</translation>
+        <translation>Ноноль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="517"/>
@@ -12005,7 +12004,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <location filename="../../src/engraving/types/typesconv.cpp" line="1422"/>
         <source>triple ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>тройной ♭</translation>
+        <translation>тройной бемоль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1417"/>
@@ -12035,7 +12034,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <location filename="../../src/engraving/types/typesconv.cpp" line="1392"/>
         <source>triple ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>тройной ♯</translation>
+        <translation>тройной диез</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/rest.cpp" line="748"/>
@@ -16028,7 +16027,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="423"/>
         <source>Dashed</source>
-        <translation>Пунктирная</translation>
+        <translation>Штриховая</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="425"/>
@@ -19638,7 +19637,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="69"/>
         <source>Bracket type</source>
-        <translation>Тип акколады</translation>
+        <translation>Тип скобки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="57"/>
@@ -19658,7 +19657,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
-        <translation>Акколады</translation>
+        <translation>Скобки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
@@ -20308,7 +20307,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="83"/>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="80"/>
         <source>Dashed</source>
-        <translation>Пунктирная</translation>
+        <translation>Штриховая</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="84"/>
@@ -20319,7 +20318,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="101"/>
         <source>Dash</source>
-        <translation>пунктир</translation>
+        <translation>Штрих</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="123"/>
@@ -21195,7 +21194,7 @@ pickup measure</source>
         <location filename="../../src/inspector/models/notation/brackets/bracketsettingsmodel.cpp" line="37"/>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="81"/>
         <source>Bracket</source>
-        <translation>Акколада</translation>
+        <translation>Скобки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/clefs/clefsettingsmodel.cpp" line="33"/>
@@ -21359,7 +21358,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="79"/>
         <source>Wide dashed</source>
-        <translation>Широкий пунктир</translation>
+        <translation>Широкая штриховая</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
@@ -23206,7 +23205,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="191"/>
         <source>Ottavas</source>
-        <translation>Октавы</translation>
+        <translation>Знаки переноса октав</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="197"/>
@@ -23857,7 +23856,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="782"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1274"/>
         <source>Ratio</source>
-        <translation>Ratio</translation>
+        <translation>Соотношение</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="783"/>
@@ -23878,7 +23877,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="787"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1278"/>
         <source>Bracket</source>
-        <translation>Акколада</translation>
+        <translation>Скобка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="788"/>
@@ -23909,13 +23908,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="191"/>
         <source>Continuous</source>
         <extracomment>line style</extracomment>
-        <translation>Непрерывные</translation>
+        <translation>Непрерывная</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="193"/>
         <source>Dashed</source>
         <extracomment>line style</extracomment>
-        <translation>Пунктирная</translation>
+        <translation>Штриховая</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="195"/>
