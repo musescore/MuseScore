@@ -693,12 +693,7 @@ public:
     void setLoopBoundaryTick(LoopBoundaryType type, Fraction tick);
 
     bool noteEntryMode() const { return inputState().noteEntryMode(); }
-    void setNoteEntryMode(bool val) { inputState().setNoteEntryMode(val); }
-    NoteEntryMethod noteEntryMethod() const { return inputState().noteEntryMethod(); }
-    void setNoteEntryMethod(NoteEntryMethod m) { inputState().setNoteEntryMethod(m); }
     bool usingNoteEntryMethod(NoteEntryMethod m) { return inputState().usingNoteEntryMethod(m); }
-    Fraction inputPos() const;
-    track_idx_t inputTrack() const { return inputState().track(); }
     const InputState& inputState() const { return m_is; }
     InputState& inputState() { return m_is; }
     void setInputState(const InputState& st) { m_is = st; }
