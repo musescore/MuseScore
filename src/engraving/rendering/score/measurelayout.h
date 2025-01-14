@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MEASURELAYOUT_DEV_H
-#define MU_ENGRAVING_MEASURELAYOUT_DEV_H
+#pragma once
 
 #include "../layoutoptions.h"
 #include "layoutcontext.h"
@@ -85,7 +84,6 @@ private:
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
 
-    //
     static void moveToNextMeasure(LayoutContext& ctx);
     static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
     static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
@@ -95,5 +93,3 @@ private:
     static void setClefBarLinePosition(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_MEASURELAYOUT_DEV_H
