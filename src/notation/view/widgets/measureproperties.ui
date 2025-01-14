@@ -68,9 +68,6 @@
              </property>
             </column>
             <item row="0" column="0">
-             <property name="text">
-              <string>a</string>
-             </property>
              <property name="checkState">
               <enum>Unchecked</enum>
              </property>
