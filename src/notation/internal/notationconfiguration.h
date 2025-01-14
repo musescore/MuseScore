@@ -119,8 +119,15 @@ public:
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
 
-    bool isAutomaticallyPanEnabled() const override;
-    void setIsAutomaticallyPanEnabled(bool enabled) override;
+    bool isAutomaticallyPanInInputModeEnabled() const override;
+    void setIsAutomaticallyPanInInputModeEnabled(bool enabled) override;
+
+    bool isAutomaticallyPanDuringPlaybackEnabled() const override;
+    void setIsAutomaticallyPanDuringPlaybackEnabled(bool enabled) override;
+    muse::async::Notification isAutomaticallyPanDuringPlaybackChanged() const override;
+
+    bool isAutomaticallyPanOtherwiseEnabled() const override;
+    void setIsAutomaticallyPanOtherwiseEnabled(bool enabled) override;
 
     bool isSmoothPanning() const override;
     void setIsSmoothPanning(bool value) override;
@@ -239,6 +246,7 @@ private:
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Notification m_scoreOrderListPathsChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
+    muse::async::Notification m_isAutoPanDuringPlaybackChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;

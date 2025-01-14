@@ -1369,7 +1369,7 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
         return;
     }
 
-    if (configuration()->isAutomaticallyPanEnabled()) {
+    if (configuration()->isAutomaticallyPanDuringPlaybackEnabled()) {
         if ((notation()->viewMode() == engraving::LayoutMode::LINE) && configuration()->isSmoothPanning()
             && adjustCanvasPositionSmoothPan(newCursorRect)) {
             return;

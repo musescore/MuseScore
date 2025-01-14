@@ -5030,7 +5030,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
 
     int step = octave * 7 + note;
     cmdAddPitch(step,  addFlag, insert);
-    ed.view()->adjustCanvasPosition(is.cr());
+    ed.view()->adjustCanvasPosition(is.cr(), CanvasMoveCause::SelectionChange);
 }
 
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)

@@ -104,8 +104,15 @@ public:
     MOCK_METHOD(bool, isMidiInputEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMidiInputEnabled, (bool), (override));
 
-    MOCK_METHOD(bool, isAutomaticallyPanEnabled, (), (const, override));
-    MOCK_METHOD(void, setIsAutomaticallyPanEnabled, (bool), (override));
+    MOCK_METHOD(bool, isAutomaticallyPanInInputModeEnabled, (), (const, override));
+    MOCK_METHOD(void, setIsAutomaticallyPanInInputModeEnabled, (bool), (override));
+
+    MOCK_METHOD(bool, isAutomaticallyPanDuringPlaybackEnabled, (), (const, override));
+    MOCK_METHOD(void, setIsAutomaticallyPanDuringPlaybackEnabled, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, isAutomaticallyPanDuringPlaybackChanged, (), (const, override));
+
+    MOCK_METHOD(bool, isAutomaticallyPanOtherwiseEnabled, (), (const, override));
+    MOCK_METHOD(void, setIsAutomaticallyPanOtherwiseEnabled, (bool), (override));
 
     MOCK_METHOD(bool, isSmoothPanning, (), (const, override));
     MOCK_METHOD(void, setIsSmoothPanning, (bool), (override));

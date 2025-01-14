@@ -146,7 +146,7 @@ void NotationNoteInput::startNoteInput(bool focusNotation)
     notifyAboutNoteInputStarted(focusNotation);
     notifyAboutStateChanged();
 
-    m_interaction->showItem(el);
+    m_interaction->showItem(el, CanvasMoveCause::InputAction);
 }
 
 EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
@@ -652,7 +652,7 @@ void NotationNoteInput::apply()
     m_undoStack->commitChanges();
 
     if (mu::engraving::ChordRest* chordRest = score()->inputState().cr()) {
-        m_interaction->showItem(chordRest);
+        m_interaction->showItem(chordRest, CanvasMoveCause::InputAction);
     }
 }
 
