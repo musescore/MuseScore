@@ -141,7 +141,7 @@ void NotationMidiInput::doProcessEvents()
             notesItems.push_back(note);
         }
 
-        playbackController()->playElements(notesItems);
+        playbackController()->playElements(notesItems, true);
         m_notesReceivedChannel.send(notes);
     }
 

@@ -118,6 +118,7 @@ public:
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
+    muse::async::Notification isMidiInputEnabledChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
@@ -226,6 +227,8 @@ public:
     void resetStyleDialogPageIndices() override;
 
 private:
+    muse::async::Notification m_isMidiInputEnabledChanged;
+
     muse::io::path_t firstScoreOrderListPath() const;
     void setFirstScoreOrderListPath(const muse::io::path_t& path);
 

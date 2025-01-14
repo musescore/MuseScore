@@ -30,15 +30,32 @@ BaseSection {
 
     title: qsTrc("appshell/preferences", "Note input")
 
+    property alias enableMidiInput: enableMidiInputBox.checked
     property alias advanceToNextNote: advanceToNextNoteBox.checked
     property alias colorNotes: colorNotesBox.checked
     property alias warnGuitarBends: warnBendsBox.checked
     property alias delayBetweenNotes: delayBetweenNotesControl.currentValue
 
+    signal enableMidiInputChangeRequested(bool midi)
     signal advanceToNextNoteChangeRequested(bool advance)
     signal colorNotesChangeRequested(bool color)
     signal warnGuitarBendsChangeRequested(bool warn)
     signal delayBetweenNotesChangeRequested(int delay)
+
+    CheckBox {
+        id: enableMidiInputBox
+        width: parent.width
+
+        text: qsTrc("action", "Enable MIDI input")
+
+        navigation.name: "EnableMidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
+        onClicked: {
+            root.enableMidiInputChangeRequested(!checked)
+        }
+    }
 
     CheckBox {
         id: advanceToNextNoteBox
