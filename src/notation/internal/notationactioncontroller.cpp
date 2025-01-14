@@ -755,7 +755,7 @@ void NotationActionController::toggleNoteInputInsert()
     }
 }
 
-void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
+void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode addingMode)
 {
     TRACEFUNC;
 
@@ -766,6 +766,13 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
 
     if (!noteInput->isNoteInputMode()) {
         noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
+    }
+
+    if (addingMode == NoteAddingMode::NextChord) {
+        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+            noteInput->setNoteToInput(note);
+            return;
+        }
     }
 
     noteInput->addNote(note, addingMode);
@@ -2235,7 +2242,10 @@ void NotationActionController::registerNoteInputAction(const ActionCode& code, N
 
 void NotationActionController::registerNoteAction(const ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
 {
-    registerAction(code, [this, noteName, addingMode]() { addNote(noteName, addingMode); }, &NotationActionController::isStandardStaff);
+    registerAction(code, [this, noteName, addingMode]()
+    {
+        handleNoteAction(noteName, addingMode);
+    }, &NotationActionController::isStandardStaff);
 }
 
 void NotationActionController::registerPadNoteAction(const ActionCode& code, Pad padding)

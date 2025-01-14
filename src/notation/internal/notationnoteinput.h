@@ -75,6 +75,10 @@ public:
     void doubleNoteInputDuration() override;
     void halveNoteInputDuration() override;
 
+    // Used in the input-by-duration mode
+    void setNoteToInput(NoteName note) override;
+    void setPitchesToInput(const std::set<int>& pitches) override;
+
     void setAccidental(AccidentalType accidentalType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
     void setDrumNote(int note) override;
@@ -92,6 +96,8 @@ private:
     mu::engraving::Score* score() const;
 
     EngravingItem* resolveNoteInputStartPosition() const;
+
+    void setupInputNote();
 
     void startEdit(const muse::TranslatableString& actionName);
     void apply();

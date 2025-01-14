@@ -32,6 +32,7 @@
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/utils.h"
 
 #include "mscoreerrorscontroller.h"
 #include "scorecallbacks.h"
@@ -98,6 +99,10 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
     is.setRest(false);
     is.setNoteEntryMode(true);
     is.setNoteEntryMethod(method);
+
+    if (is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
+        setupInputNote();
+    }
 
     const Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
     switch (staff->staffType(is.tick())->group()) {
@@ -267,6 +272,28 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     return el;
 }
 
+void NotationNoteInput::setupInputNote()
+{
+    mu::engraving::InputState& is = score()->inputState();
+    const EngravingItem* selectedItem = score()->selection().element();
+    int pitch = -1;
+
+    if (selectedItem && selectedItem->isNote()) {
+        pitch = toNote(selectedItem)->noteVal().pitch;
+    } else {
+        const Staff* staff = is.staff();
+        const Fraction tick = is.tick();
+        const int line = staff->middleLine(is.tick());
+        const ClefType clef = staff->clef(tick);
+        const Key key = staff->key(tick);
+        pitch = mu::engraving::line2pitch(line, clef, key);
+    }
+
+    if (pitch != -1) {
+        is.setNotePitches({ pitch });
+    }
+}
+
 void NotationNoteInput::endNoteInput(bool resetState)
 {
     TRACEFUNC;
@@ -290,6 +317,7 @@ void NotationNoteInput::endNoteInput(bool resetState)
         is.setTrack(muse::nidx);
         is.setString(-1);
         is.setSegment(nullptr);
+        is.setNotePitches({});
     }
 
     notifyAboutNoteInputEnded();
@@ -362,6 +390,12 @@ Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
     Ret ret = score()->putNote(pos, replace, insert);
     apply();
 
+    if (ret) {
+        if (usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+            setupInputNote();
+        }
+    }
+
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
 
@@ -386,6 +420,30 @@ void NotationNoteInput::removeNote(const PointF& pos)
     notifyAboutStateChanged();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+}
+
+void NotationNoteInput::setNoteToInput(NoteName note)
+{
+    TRACEFUNC;
+
+    const int noteIdx = static_cast<int>(note);
+    const int octave = score()->resolveInputOctave(noteIdx, false);
+    const int step = octave * mu::engraving::STEP_DELTA_OCTAVE + noteIdx;
+    const int pitch = mu::engraving::step2pitch(step) + octave * mu::engraving::PITCH_DELTA_OCTAVE;
+
+    setPitchesToInput({ pitch });
+}
+
+void NotationNoteInput::setPitchesToInput(const std::set<int>& pitches)
+{
+    TRACEFUNC;
+
+    if (score()->inputState().notePitches() == pitches) {
+        return;
+    }
+
+    score()->inputState().setNotePitches(pitches);
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
