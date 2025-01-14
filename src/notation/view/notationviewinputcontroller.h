@@ -68,7 +68,6 @@ public:
     virtual muse::RectF fromLogical(const muse::RectF& r) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
-    virtual void showShadowNote(const muse::PointF& pos) = 0;
 
     virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
     virtual void hideContextMenu() = 0;
@@ -119,6 +118,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* event);
     void mouseDoubleClickEvent(QMouseEvent* event);
     void hoverMoveEvent(QHoverEvent* event);
+    void hoverLeaveEvent(QHoverEvent* event);
     bool shortcutOverrideEvent(QKeyEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
