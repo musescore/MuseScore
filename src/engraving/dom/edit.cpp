@@ -1317,6 +1317,9 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
     }
     Segment* s = nm->undoGetSegment(SegmentType::TimeSig, nm->tick());
     for (size_t i = 0; i < nstaves(); ++i) {
+        if (staffIdx != muse::nidx && i != staffIdx) {
+            continue;
+        }
         if (!s->element(i * VOICES)) {
             TimeSig* ots = staff(i)->timeSig(nm->tick());
             if (ots) {
