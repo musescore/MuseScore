@@ -7308,7 +7308,7 @@
             </Instrument>
             <Instrument id="drumset">
                   <family>drums</family>
-                  <!--Drums for the basic drumset are hard-coded in instrument.cpp for some reason.-->
+                  <!--Drums are hard-coded in drumset.cpp to initialize MIDI and playback systems at startup before instruments.xml is loaded.-->
                   <trackName>Large Drum Kit</trackName>
                   <longName>Drum Kit</longName>
                   <shortName>D. Kit</shortName>
