@@ -73,6 +73,10 @@ public:
     SymId flagSym() const;
     AccidentalType accidentalType() const;
     const std::set<SymId>& articulationIds() const;
+
+    int drumNotePitch() const { return m_drumNotePitch; }
+    void setDrumNotePitch(int pitch) { m_drumNotePitch = pitch; }
+
     double segmentSkylineBottomY() const;
     double segmentSkylineTopY() const;
 
@@ -87,6 +91,8 @@ private:
     bool m_isRest = false;
     AccidentalType m_accidentalType = AccidentalType::NONE;
     std::set<SymId> m_articulationIds;
+
+    int m_drumNotePitch = -1;
 
     double m_segmentSkylineTopY = 0.0;
     double m_segmentSkylineBottomY = 0.0;

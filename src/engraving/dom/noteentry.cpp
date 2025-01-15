@@ -36,6 +36,7 @@
 #include "part.h"
 #include "range.h"
 #include "score.h"
+#include "shadownote.h"
 #include "slur.h"
 #include "staff.h"
 #include "stringdata.h"
@@ -393,6 +394,12 @@ Ret Score::putNote(const Position& p, bool replace)
     m_is.setTrack(p.staffIdx * VOICES + m_is.voice());
     m_is.setSegment(s);
 
+    const ShadowNote* sn = shadowNote();
+    if (sn && sn->visible() && sn->drumNotePitch() > -1) {
+        m_is.setDrumNote(sn->drumNotePitch());
+        m_is.setVoice(sn->voice());
+    }
+
     if (mu::engraving::Excerpt* excerpt = score()->excerpt()) {
         const TracksMap& tracks = excerpt->tracksMapping();
 
@@ -452,10 +459,8 @@ Ret Score::putNote(const Position& p, bool replace)
 
     expandVoice();
 
-    ChordRest* cr = m_is.cr();
-
     // If there's an overlapping ChordRest at the current input position, shorten it...
-    if (!cr) {
+    if (!m_is.cr()) {
         MasterScore* ms = masterScore();
         ChordRest* prevCr = m_is.segment()->nextChordRest(m_is.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
         if (prevCr && prevCr->endTick() > m_is.tick()) {
@@ -480,6 +485,8 @@ Ret Score::putNote(const Position& p, bool replace)
             m_is = inputStateToRestore;
         }
     }
+
+    ChordRest* cr = m_is.cr();
 
     auto checkTied = [&](){
         if (!cr || !cr->isChord()) {
