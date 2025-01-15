@@ -158,7 +158,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
         Note* startNote = startChordNotes[noteIndex];
         Note* note = endChordNotes[noteIndex];
 
-        if (bendChordData.noteDataByIdx.find(noteIndex) == bendChordData.noteDataByIdx.end()) {
+        if (bendChordData.noteDataByIdx.find(static_cast<int>(noteIndex)) == bendChordData.noteDataByIdx.end()) {
             Tie* tie = Factory::createTie(score->dummy());
             startNote->add(tie);
             tie->setEndNote(note);
@@ -166,8 +166,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             continue;
         }
 
-        const auto& bendNoteData = bendChordData.noteDataByIdx.at(noteIndex);
-        int pitch = bendNoteData.quarterTones / 2;
+        const auto& bendNoteData = bendChordData.noteDataByIdx.at(static_cast<int>(noteIndex));
 
         if (bendNoteData.type == GuitarBendType::PRE_BEND) {
             int pitch = bendNoteData.quarterTones / 2;
@@ -176,10 +175,10 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
             QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
             bend->setEndNotePitch(note->pitch(), quarterOff);
-            Note* startNote = bend->startNote();
-            if (startNote) {
-                startNote->setPitch(note->pitch() - pitch);
-                startNote->setTpcFromPitch();
+            Note* bendStartNote = bend->startNote();
+            if (bendStartNote) {
+                bendStartNote->setPitch(note->pitch() - pitch);
+                bendStartNote->setTpcFromPitch();
             }
         } else if (bendNoteData.type == GuitarBendType::SLIGHT_BEND) {
             GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
@@ -199,6 +198,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             }
 
             QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+            int pitch = bendNoteData.quarterTones / 2;
             bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + pitch, quarterOff);
             bend->setStartTimeFactor(bendNoteData.startFactor);
             bend->setEndTimeFactor(bendNoteData.endFactor);
