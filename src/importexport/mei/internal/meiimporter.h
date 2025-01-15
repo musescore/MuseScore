@@ -50,7 +50,7 @@ class Score;
 class Spanner;
 class Tuplet;
 class VBox;
-enum class NoteType;
+enum class NoteType : unsigned char;
 enum class TimeSigType : char;
 struct ClefTypeList;
 }

@@ -31,7 +31,7 @@
 namespace mu::engraving {
 class Glissando;
 class Note;
-enum class GlissandoType;
+enum class GlissandoType : char;
 
 //---------------------------------------------------------
 //   @@ GlissandoSegment
