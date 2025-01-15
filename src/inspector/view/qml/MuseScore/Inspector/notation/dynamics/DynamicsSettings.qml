@@ -116,18 +116,18 @@ Column {
                 ]
             }
 
-            FrameSettings {
-                id: frameSettings
+            BorderSettings {
+                id: borderSettings
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: dynamicAlignmentGroup.navigationRowEnd + 1
 
-                frameType: root.model ? root.model.frameType : null
-                frameBorderColor: root.model ? root.model.frameBorderColor : null
-                frameFillColor: root.model ? root.model.frameFillColor : null
-                frameThickness: root.model ? root.model.frameThickness : null
-                frameMargin: root.model ? root.model.frameMargin : null
-                frameCornerRadius: root.model ? root.model.frameCornerRadius : null
+                borderType: root.model ? root.model.borderType : null
+                borderColor: root.model ? root.model.borderColor : null
+                borderFillColor: root.model ? root.model.borderFillColor : null
+                borderThickness: root.model ? root.model.borderThickness : null
+                borderMargin: root.model ? root.model.borderMargin : null
+                borderCornerRadius: root.model ? root.model.borderCornerRadius : null
             }
         }
     }

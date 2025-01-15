@@ -280,13 +280,13 @@ struct Align {
     AlignV vertical = AlignV::TOP;
 
     Align() = default;
-    Align(AlignH ah, AlignV av)
-        : horizontal(ah), vertical(av) {}
+    Align(AlignH ah, AlignV av) : horizontal(ah), vertical(av) {
+    }
 
-    Align(AlignH a)
-        : horizontal(a) {}
-    Align(AlignV a)
-        : vertical(a) {}
+    Align(AlignH a) : horizontal(a) {
+    }
+    Align(AlignV a) : vertical(a) {
+    }
 
     inline Align& operator =(AlignH a) { horizontal = a; return *this; }
     inline Align& operator =(AlignV a) { vertical = a; return *this; }
@@ -375,8 +375,8 @@ struct DurationTypeWithDots
     DurationType type = DurationType::V_INVALID;
     int dots = 0;
     DurationTypeWithDots() = default;
-    DurationTypeWithDots(DurationType t, int d = 0)
-        : type(t), dots(d) {}
+    DurationTypeWithDots(DurationType t, int d = 0) : type(t), dots(d) {
+    }
 
     inline bool operator ==(const DurationTypeWithDots& other) const { return other.type == type && other.dots == dots; }
 };
@@ -714,8 +714,8 @@ struct OrnamentInterval
     IntervalType type = IntervalType::AUTO;
 
     OrnamentInterval() = default;
-    OrnamentInterval(IntervalStep s, IntervalType t)
-        : step(s), type(t) {}
+    OrnamentInterval(IntervalStep s, IntervalType t) : step(s), type(t) {
+    }
 
     inline bool operator ==(const OrnamentInterval& interval) const { return step == interval.step && type == interval.type; }
     inline bool operator !=(const OrnamentInterval& interval) const { return !operator ==(interval); }
