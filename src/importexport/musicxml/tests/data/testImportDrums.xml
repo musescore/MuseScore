@@ -63,6 +63,7 @@
   </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>64</divisions>
         <time print-object="yes">
