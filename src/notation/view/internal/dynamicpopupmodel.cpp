@@ -25,6 +25,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
 #include "engraving/types/symnames.h"
+#include "engraving/types/typesconv.h"
 
 #include "log.h"
 
@@ -136,6 +137,7 @@ void DynamicPopupModel::init()
         for (const DynamicPopupModel::PageItem& item : page) {
             QVariantMap variantMap {
                 { "text", xmlTextToQString(Dynamic::dynamicText(item.dynType).toStdString(), engravingFont) },
+                { "accessibleName", TConv::userName(item.dynType).translated().toQString() },
                 { "width", item.width },
                 { "offset", item.offset },
                 { "type", item.itemType }

@@ -90,6 +90,12 @@ StyledPopupView {
                 section: root.notationViewNavigationSection
                 order: root.navigationOrderStart
                 accessible.name: qsTrc("playback", "Sound flag settings")
+
+                onNavigationEvent: function(event) {
+                    if (event.type === NavigationEvent.Escape) {
+                        root.close()
+                    }
+                }
             }
 
             StyledIconLabel {
@@ -155,6 +161,10 @@ StyledPopupView {
 
             navigationPanelSection: root.notationViewNavigationSection
             navigationPanelOrderStart: navPanel.order + 1
+
+            onCloseRequested: {
+                root.close()
+            }
         }
     }
 }

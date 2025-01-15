@@ -51,10 +51,40 @@ StyledPopupView {
         NavigationPanel {
             id: dynamicsNavPanel
             name: "DynamicsPopup"
-            direction: NavigationPanel.Vertical
+            direction: NavigationPanel.Horizontal
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Dynamics Popup")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
+        }
+
+        function goToPreviousPage() {
+            if (currentPage > 0) {
+                currentPage--
+            } else {
+                currentPage = dynamicModel.pages.length - 1
+            }
+
+            Qt.callLater(requestNavigationActive, dynamicRepeater.count - 1)
+        }
+
+        function goToNextPage() {
+            if (currentPage < dynamicModel.pages.length - 1) {
+                currentPage++
+            } else {
+                currentPage = 0
+            }
+
+            Qt.callLater(requestNavigationActive, 0)
+        }
+
+        function requestNavigationActive(index) {
+            dynamicRepeater.itemAt(index).navigation.requestActive()
         }
 
         FlatButton {
@@ -70,11 +100,7 @@ StyledPopupView {
             }
 
             onClicked: {
-                if (currentPage > 0) {
-                    currentPage--
-                } else {
-                    currentPage = dynamicModel.pages.length - 1
-                }
+                content.goToPreviousPage()
             }
         }
 
@@ -84,6 +110,7 @@ StyledPopupView {
 
         Repeater {
             id: dynamicRepeater
+
             model: dynamicModel.pages[currentPage]
 
             delegate: FlatButton {
@@ -96,6 +123,35 @@ StyledPopupView {
                 contentItem: modelData.type === DynamicPopupModel.Dynamic ? dynamicComp :
                                 modelData.type === DynamicPopupModel.Crescendo ? crescHairpinComp :
                                 modelData.type === DynamicPopupModel.Decrescendo ? dimHairpinComp : null
+
+                navigation.panel: dynamicsNavPanel
+                navigation.order: index
+                accessible.name: modelData.accessibleName
+                navigation.onNavigationEvent: function(event) {
+                    switch (event.type) {
+                    case NavigationEvent.Up:
+                    case NavigationEvent.Left: {
+                        if (index == 0) {
+                            content.goToPreviousPage()
+
+                            event.accepted = true
+                        }
+
+                        break
+                    }
+
+                    case NavigationEvent.Right:
+                    case NavigationEvent.Down: {
+                        if (index == dynamicRepeater.count - 1) {
+                            content.goToNextPage()
+
+                            event.accepted = true
+                        }
+
+                        break
+                    }
+                    }
+                }
 
                 Component {
                     id: dynamicComp
@@ -191,11 +247,7 @@ StyledPopupView {
             }
 
             onClicked: {
-                if (currentPage < dynamicModel.pages.length - 1) {
-                    currentPage++
-                } else {
-                    currentPage = 0
-                }
+                content.goToNextPage()
             }
         }
     }

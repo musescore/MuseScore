@@ -75,6 +75,12 @@ StyledPopupView {
             name: "CapoSettings"
             direction: NavigationPanel.Vertical
             accessible.name: qsTrc("notation", "Capo settings")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         StyledTextLabel {
