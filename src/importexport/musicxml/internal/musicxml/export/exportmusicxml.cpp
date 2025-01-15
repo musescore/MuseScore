@@ -349,6 +349,7 @@ struct MeasurePrintContext final
     bool scoreStart = true;
     bool pageStart = true;
     bool systemStart = true;
+    size_t pageNumber = 0;
     const Measure* prevMeasure = nullptr;
     const System* prevSystem = nullptr;
     const System* lastSystemPrevPage = nullptr;
@@ -7300,10 +7301,9 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
         }
     }
 
-    if (mpc.pageStart && m->system()) {
-        const int pageNumber = m->system()->page()->no() + 1 + m->score()->pageNumberOffset();
+    if (mpc.pageStart) {
         if (exportBreaksType != IMusicXmlConfiguration::MusicXmlExportBreaksType::No) {
-            attributes.push_back({ "page-number", pageNumber });
+            attributes.push_back({ "page-number", mpc.pageNumber });
         }
     }
 
@@ -8532,6 +8532,7 @@ void ExportMusicXml::writeParts()
         for (size_t pageIndex = 0; pageIndex < pages.size(); ++pageIndex) {
             const Page* page = pages.at(pageIndex);
             mpc.pageStart = true;
+            mpc.pageNumber = page->no() + 1 + m_score->pageNumberOffset();
             const auto& systems = page->systems();
 
             for (int systemIndex = 0; systemIndex < static_cast<int>(systems.size()); ++systemIndex) {
