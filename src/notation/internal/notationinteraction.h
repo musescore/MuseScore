@@ -64,9 +64,11 @@ public:
     INotationNoteInputPtr noteInput() const override;
 
     // Shadow note
+    mu::engraving::ShadowNote* shadowNote() const override;
     bool showShadowNote(const muse::PointF& pos) override;
     void hideShadowNote() override;
     muse::RectF shadowNoteRect() const override;
+    muse::async::Notification shadowNoteChanged() const override;
 
     // Visibility
     void toggleVisible() override;
@@ -436,6 +438,8 @@ private:
     INotationUndoStackPtr m_undoStack;
 
     INotationNoteInputPtr m_noteInput = nullptr;
+
+    muse::async::Notification m_shadowNoteChanged;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
     muse::async::Notification m_selectionChanged;

@@ -31,6 +31,8 @@
 #include "commonscene/commonscenetypes.h"
 #include "abstractelementpopupmodel.h"
 
+#include "engraving/dom/shadownote.h"
+
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -1012,6 +1014,10 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
     }
 
     m_view->showShadowNote(pos);
+
+    if (event->modifiers() == Qt::ShiftModifier) {
+        updateShadowNotePopupVisibility();
+    }
 }
 
 bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
@@ -1036,6 +1042,8 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
             dispatcher()->dispatch("edit-text");
             event->accept();
         }
+    } else if (event->key() == Qt::Key_Shift) {
+        updateShadowNotePopupVisibility();
     }
 }
 
@@ -1044,6 +1052,7 @@ void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_Shift) {
         viewInteraction()->editElement(event);
     }
+    updateShadowNotePopupVisibility(/*forceHide*/ true);
 }
 
 void NotationViewInputController::inputMethodEvent(QInputMethodEvent* event)
@@ -1231,6 +1240,19 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     if (AbstractElementPopupModel::supportsPopup(item)) {
         m_view->toggleElementPopup(type, item->canvasBoundingRect());
     }
+}
+
+void NotationViewInputController::updateShadowNotePopupVisibility(bool forceHide)
+{
+    const mu::engraving::ShadowNote* shadowNote = viewInteraction()->shadowNote();
+    if (forceHide || !shadowNote || !AbstractElementPopupModel::supportsPopup(shadowNote)) {
+        m_view->hideElementPopup(ElementType::SHADOW_NOTE);
+        return;
+    }
+
+    RectF noteHeadRect = shadowNote->symBbox(shadowNote->noteheadSymbol());
+    noteHeadRect.translate(shadowNote->canvasPos().x(), shadowNote->canvasPos().y());
+    m_view->showElementPopup(ElementType::SHADOW_NOTE, noteHeadRect);
 }
 
 EngravingItem* NotationViewInputController::resolveStartPlayableElement() const
