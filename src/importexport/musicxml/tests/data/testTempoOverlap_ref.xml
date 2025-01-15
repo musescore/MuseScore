@@ -58,6 +58,7 @@
     </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -243,7 +244,7 @@
         </note>
       </measure>
     <measure number="10">
-      <print new-system="yes"/>
+      <print new-system="yes" page-number="2"/>
       <direction placement="above">
         <direction-type>
           <words>Voice</words>
@@ -382,6 +383,7 @@
     </part>
   <part id="P2">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -784,7 +786,7 @@
         </note>
       </measure>
     <measure number="10">
-      <print new-system="yes"/>
+      <print new-system="yes" page-number="2"/>
       <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
@@ -1080,6 +1082,7 @@
     </part>
   <part id="P3">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -1260,7 +1263,7 @@
         </note>
       </measure>
     <measure number="10">
-      <print new-system="yes"/>
+      <print new-system="yes" page-number="2"/>
       <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">

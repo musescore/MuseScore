@@ -78,8 +78,8 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="218.46">
-      <print>
+    <measure number="1" width="224.87">
+      <print page-number="1">
         <system-layout>
           <system-margins>
             <left-margin>50</left-margin>
