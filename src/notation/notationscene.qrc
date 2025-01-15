@@ -68,5 +68,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/IconAndTextButtonSelector.qml</file>
         <file>qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTiePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PartialTieMenuRowItem.qml</file>
     </qresource>
 </RCC>

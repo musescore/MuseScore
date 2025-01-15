@@ -30,7 +30,7 @@ import MuseScore.NotationScene 1.0
 StyledPopupView {
     id: root
 
-    property QtObject model: harpModel
+    readonly property alias model: harpModel
 
     property variant pedalState: harpModel.pedalState
 

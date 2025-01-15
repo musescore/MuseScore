@@ -36,6 +36,7 @@
 #include "pitchspelling.h"
 #include "symbol.h"
 #include "tie.h"
+#include "tiejumppointlist.h"
 #include "types.h"
 
 namespace mu::engraving {

@@ -343,6 +343,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/textlinebase.h
     ${CMAKE_CURRENT_LIST_DIR}/tie.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tie.h
+    ${CMAKE_CURRENT_LIST_DIR}/tiejumppointlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tiejumppointlist.h
     ${CMAKE_CURRENT_LIST_DIR}/tiemap.h
     ${CMAKE_CURRENT_LIST_DIR}/timesig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timesig.h
