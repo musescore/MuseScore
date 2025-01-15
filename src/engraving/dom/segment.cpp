@@ -2779,6 +2779,10 @@ bool Segment::goesBefore(const Segment* nextSegment) const
 {
     bool thisIsClef = isClefType();
     bool nextIsClef = nextSegment->isClefType();
+    bool thisIsKeySigAnnounce = isKeySigAnnounceType() && isRepeatCourtesy();
+    bool nextIsKeySigAnnounce = nextSegment->isKeySigAnnounceType() && nextSegment->isRepeatCourtesy();
+    bool thisIsTimeSigAnnounce = isTimeSigAnnounceType() && isRepeatCourtesy();
+    bool nextIsTimeSigAnnounce = nextSegment->isTimeSigAnnounceType() && nextSegment->isRepeatCourtesy();
     bool thisIsBarline = isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
     bool nextIsBarline = nextSegment->isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
 
@@ -2802,6 +2806,13 @@ bool Segment::goesBefore(const Segment* nextSegment) const
             }
         }
         return clefPos == ClefToBarlinePosition::AFTER;
+    }
+
+    if (thisIsKeySigAnnounce && nextIsBarline) {
+        return true;
+    }
+    if (thisIsTimeSigAnnounce && nextIsBarline) {
+        return true;
     }
 
     return segmentType() < nextSegment->segmentType();

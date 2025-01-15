@@ -170,6 +170,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
             }
 
+            if (m->repeatEnd() && ctx.conf().styleB(Sid::showCourtesiesRepeats)) {
+                // NEEDS A BETTER CHECK
+                MeasureLayout::addRepeatCourtesies(m, ctx);
+            }
+
             MeasureLayout::updateGraceNotes(m, ctx);
 
             curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);

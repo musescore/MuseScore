@@ -84,6 +84,8 @@ class Segment final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Segment)
     DECLARE_CLASSOF(ElementType::SEGMENT)
 
+    M_PROPERTY2(bool, isRepeatCourtesy, setIsRepeatCourtesy, false);
+
 protected:
     EngravingItem* getElement(staff_idx_t staff) const;       //??
 
