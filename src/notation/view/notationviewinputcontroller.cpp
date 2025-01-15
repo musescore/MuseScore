@@ -1006,8 +1006,8 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
         return;
     }
 
-    PointF oldPos = m_view->toLogical(event->oldPosF());
-    PointF pos = m_view->toLogical(event->position());
+    const PointF oldPos = m_view->toLogical(event->oldPosF());
+    const PointF pos = m_view->toLogical(event->position());
 
     if (oldPos == pos) {
         return;
@@ -1045,13 +1045,17 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     } else if (event->key() == Qt::Key_Shift) {
         updateShadowNotePopupVisibility();
     }
+
+    updateShadowNotePopupVisibility();
 }
 
 void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Shift) {
-        viewInteraction()->editElement(event);
+    if (event->key() != Qt::Key_Shift) {
+        return;
     }
+
+    viewInteraction()->editElement(event);
     updateShadowNotePopupVisibility(/*forceHide*/ true);
 }
 

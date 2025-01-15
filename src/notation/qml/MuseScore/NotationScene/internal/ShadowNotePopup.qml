@@ -40,7 +40,7 @@ StyledPopupView {
     openPolicies: PopupView.NoActivateFocus
 
     padding: 0 // The popup will "steal" mouse events if the padding overlaps with the shadow note area
-    margins: 0
+    margins: 6
 
     signal elementRectChanged(var elementRect)
 
@@ -74,11 +74,7 @@ StyledPopupView {
 
         Component {
             id: percussionContent
-
-            Rectangle { // Placeholder...
-                color: "red"
-                width: 200
-                height: 50
+            PercussionNotePopupContent {
             }
         }
     }

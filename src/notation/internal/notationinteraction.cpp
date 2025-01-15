@@ -393,22 +393,37 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
     qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
     position.pos.rx() -= qMin(relX - score()->style().styleMM(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
 
-    mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     mu::engraving::NoteHeadType noteHead = inputState.duration().headType();
     int line = position.line;
 
-    if (instr->useDrumset()) {
-        const mu::engraving::Drumset* ds  = instr->drumset();
-        int pitch = inputState.drumNote();
-        if (pitch >= 0 && ds->isValid(pitch)) {
-            line = ds->line(pitch);
-            noteheadGroup = ds->noteHead(pitch);
-        }
-    }
-
+    mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     voice_idx_t voice = 0;
-    if (inputState.drumNote() != -1 && inputState.drumset() && inputState.drumset()->isValid(inputState.drumNote())) {
-        voice = inputState.drumset()->voice(inputState.drumNote());
+    int drumNotePitch = -1;
+
+    if (instr->useDrumset()) {
+        const Drumset* ds = instr->drumset();
+
+        const int startPitch = shadowNote.drumNotePitch() > -1 ? shadowNote.drumNotePitch() : 0;
+        int pitch = startPitch;
+        do {
+            if (ds->isValid(pitch) && ds->line(pitch) == line) {
+                noteheadGroup = ds->noteHead(pitch);
+                voice = ds->voice(pitch);
+                drumNotePitch = pitch;
+                break;
+            }
+            ++pitch;
+            if (pitch >= mu::engraving::DRUM_INSTRUMENTS) {
+                // Wrap around
+                pitch = 0;
+            }
+        } while (pitch != startPitch);
+        if (drumNotePitch < 0) {
+            shadowNote.setVisible(false);
+            shadowNote.setDrumNotePitch(drumNotePitch);
+            m_shadowNoteChanged.notify();
+            return false;
+        }
     } else {
         voice = inputState.voice();
     }
@@ -419,6 +434,7 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
     shadowNote.setStaffIdx(position.staffIdx);
     shadowNote.setVoice(voice);
     shadowNote.setLineIndex(line);
+    shadowNote.setDrumNotePitch(drumNotePitch);
 
     mu::engraving::SymId symNotehead;
     mu::engraving::TDuration duration(inputState.duration());
