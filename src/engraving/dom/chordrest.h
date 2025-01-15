@@ -87,10 +87,6 @@ public:
     virtual double upPos()   const = 0;
     virtual double downPos() const = 0;
 
-    int line(bool up) const { return up ? upLine() : downLine(); }
-    int line() const { return ldata()->up ? upLine() : downLine(); }
-    virtual int upLine() const = 0;
-    virtual int downLine() const = 0;
     virtual PointF stemPos() const = 0;
     virtual double stemPosX() const = 0;
     virtual PointF stemPosBeam() const = 0;

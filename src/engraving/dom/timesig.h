@@ -119,8 +119,8 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
-    void initElementStyle(const ElementStyle*);
-    void styleChanged();
+    void initElementStyle(const ElementStyle*) override;
+    void styleChanged() override;
     Sid getPropertyStyle(Pid id) const override;
 
     bool showOnThisStaff() const;

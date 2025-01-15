@@ -110,8 +110,6 @@ public:
 
     DeadSlapped* deadSlapped() const { return m_deadSlapped; }
 
-    int upLine() const override;
-    int downLine() const override;
     PointF stemPos() const override;
     double stemPosX() const override;
     PointF stemPosBeam() const override;

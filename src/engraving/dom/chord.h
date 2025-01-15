@@ -190,8 +190,10 @@ public:
 
     Chord* graceNoteAt(size_t idx) const;
 
-    int upLine() const override;
-    int downLine() const override;
+    int line(bool up) const { return up ? upLine() : downLine(); }
+    int line() const { return ldata()->up ? upLine() : downLine(); }
+    int upLine() const;
+    int downLine() const;
     PointF stemPos() const override;            ///< page coordinates
     PointF stemPosBeam() const override;        ///< page coordinates
     double stemPosX() const override;
