@@ -317,10 +317,8 @@ ThemeList UiConfiguration::themes() const
 QStringList UiConfiguration::possibleFontFamilies() const
 {
     QStringList allFonts = QFontDatabase::families();
-    QStringList smuflFonts
-        = { "Bravura", "Campania", "Edwin", "Finale Broadway", "Finale Maestro", "Gootville", "Leland", "MScore", "MuseJazz", "Petaluma" };
-    for (const QString& font : smuflFonts) {
-        allFonts.removeAll(font);
+    for (const QString& fontFamily : m_nonTextFonts) {
+        allFonts.removeAll(fontFamily);
     }
     return allFonts;
 }
@@ -489,6 +487,11 @@ void UiConfiguration::setBodyFontSize(int size)
 muse::async::Notification UiConfiguration::fontChanged() const
 {
     return m_fontChanged;
+}
+
+void UiConfiguration::setNonTextFonts(const QStringList& fontFamilies)
+{
+    m_nonTextFonts = fontFamilies;
 }
 
 std::string UiConfiguration::iconsFontFamily() const

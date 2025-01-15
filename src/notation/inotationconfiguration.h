@@ -111,6 +111,10 @@ public:
     virtual muse::io::path_t partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const muse::io::path_t& path) = 0;
 
+    virtual muse::io::path_t userMusicFontsPath() const = 0;
+    virtual void setUserMusicFontsPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> userMusicFontsPathChanged() const = 0;
+
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
 
