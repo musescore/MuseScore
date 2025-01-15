@@ -85,7 +85,7 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
 extern int compareNotesPos(const Note* n1, const Note* n2);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
-extern SymIdList timeSigSymIdsFromString(const String&);
+extern SymIdList timeSigSymIdsFromString(const String&, TimeSigStyle timeSigStyle = TimeSigStyle::NORMAL);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
 
 extern double yStaffDifference(const System* system1, const System* system2, staff_idx_t staffIdx1);

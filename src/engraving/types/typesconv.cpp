@@ -461,6 +461,52 @@ TieDotsPlacement TConv::fromXml(const AsciiStringView& str, TieDotsPlacement def
     return findTypeByXmlTag<TieDotsPlacement>(TIE_DOTS_PLACEMENT, str, def);
 }
 
+static const std::vector<Item<TimeSigPlacement> > TIMESIG_PLACEMENT = {
+    { TimeSigPlacement::NORMAL, "normal" },
+    { TimeSigPlacement::ABOVE_STAVES, "aboveStaves" },
+    { TimeSigPlacement::ACROSS_STAVES, "acrossStaves" }
+};
+static const std::vector<Item<TimeSigStyle> > TIMESIG_STYLE = {
+    { TimeSigStyle::NORMAL, "normal" },
+    { TimeSigStyle::NARROW, "narrow" },
+    { TimeSigStyle::LARGE, "large" }
+};
+static const std::vector<Item<TimeSigVSMargin> > TIMESIG_MARGIN = {
+    { TimeSigVSMargin::HANG_INTO_MARGIN, "hangIntoMargin" },
+    { TimeSigVSMargin::RIGHT_ALIGN_TO_BARLINE, "rightAlignToBarline" },
+    { TimeSigVSMargin::CREATE_SPACE, "createSpace" },
+};
+
+AsciiStringView TConv::toXml(TimeSigPlacement timeSigPos)
+{
+    return findXmlTagByType<TimeSigPlacement>(TIMESIG_PLACEMENT, timeSigPos);
+}
+
+TimeSigPlacement TConv::fromXml(const AsciiStringView& str, TimeSigPlacement def)
+{
+    return findTypeByXmlTag<TimeSigPlacement>(TIMESIG_PLACEMENT, str, def);
+}
+
+AsciiStringView TConv::toXml(TimeSigStyle timeSigStyle)
+{
+    return findXmlTagByType<TimeSigStyle>(TIMESIG_STYLE, timeSigStyle);
+}
+
+TimeSigStyle TConv::fromXml(const AsciiStringView& str, TimeSigStyle def)
+{
+    return findTypeByXmlTag<TimeSigStyle>(TIMESIG_STYLE, str, def);
+}
+
+AsciiStringView TConv::toXml(TimeSigVSMargin timeSigVSMargin)
+{
+    return findXmlTagByType<TimeSigVSMargin>(TIMESIG_MARGIN, timeSigVSMargin);
+}
+
+TimeSigVSMargin TConv::fromXml(const AsciiStringView& str, TimeSigVSMargin def)
+{
+    return findTypeByXmlTag<TimeSigVSMargin>(TIMESIG_MARGIN, str, def);
+}
+
 static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {
     { VoiceAssignment::ALL_VOICE_IN_INSTRUMENT, "allInInstrument" },
     { VoiceAssignment::ALL_VOICE_IN_STAFF,      "allInStaff" },

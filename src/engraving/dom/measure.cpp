@@ -3193,7 +3193,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
 
             // first CR found; back up to previous segment
             seg = seg->prevActive();
-            while (seg && seg->allElementsInvisible()) {
+            while (seg && (seg->allElementsInvisible() || seg->hasTimeSigAboveStaves())) {
                 seg = seg->prevActive();
             }
             if (seg) {

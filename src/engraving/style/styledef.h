@@ -181,7 +181,6 @@ enum class Sid {
     keysigLeftMargin,
     ambitusMargin,
     timesigLeftMargin,
-    timesigScale,
 
     midClefKeyRightMargin,
     clefKeyRightMargin,
@@ -195,6 +194,29 @@ enum class Sid {
 
     clefBarlineDistance,
     timesigBarlineDistance,
+
+    timeSigPlacement,
+
+    timeSigCenterOnBarline,
+    timeSigVSMarginCentered,
+    timeSigVSMarginNonCentered,
+    timeSigCenterAcrossStaveGroup,
+
+    timeSigNormalStyle,
+    timeSigNormalScale,
+    timeSigNormalScaleLock,
+    timeSigNormalNumDist,
+    timeSigNormalY,
+    timeSigAboveStyle,
+    timeSigAboveScale,
+    timeSigAboveScaleLock,
+    timeSigAboveNumDist,
+    timeSigAboveY,
+    timeSigAcrossStyle,
+    timeSigAcrossScale,
+    timeSigAcrossScaleLock,
+    timeSigAcrossNumDist,
+    timeSigAcrossY,
 
     useStraightNoteFlags,
     stemWidth,

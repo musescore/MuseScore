@@ -1121,7 +1121,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     }
 
     for (Segment* seg = startSeg; seg && seg->tick() <= endSeg->tick(); seg = seg->next1enabled()) {
-        if (seg->isType(SegmentType::BarLineType) || seg->isBreathType()) {
+        if (seg->isType(SegmentType::BarLineType) || seg->isBreathType() || seg->hasTimeSigAboveStaves()) {
             continue;
         }
         segShapes.add(getSegmentShape(slurSeg, seg, startCR, endCR));

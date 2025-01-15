@@ -168,7 +168,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(ambitusMargin,                              Spatium(0.5)),
 
     styleDef(timesigLeftMargin,                          Spatium(0.63)),
-    styleDef(timesigScale,                               ScaleF(1.0, 1.0)),
     styleDef(midClefKeyRightMargin,                      Spatium(1.0)),
     styleDef(clefKeyRightMargin,                         Spatium(0.8)),
     styleDef(clefKeyDistance,                            Spatium(0.75)),
@@ -181,6 +180,30 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(clefBarlineDistance,                        Spatium(0.5)),
     styleDef(timesigBarlineDistance,                     Spatium(0.5)),
+
+    styleDef(timeSigPlacement,                           TimeSigPlacement::NORMAL),
+
+    styleDef(timeSigCenterOnBarline,                     true),
+    styleDef(timeSigVSMarginCentered,                    TimeSigVSMargin::HANG_INTO_MARGIN),
+    styleDef(timeSigVSMarginNonCentered,                 TimeSigVSMargin::RIGHT_ALIGN_TO_BARLINE),
+    styleDef(timeSigCenterAcrossStaveGroup,              false),
+
+    styleDef(timeSigNormalStyle,                         TimeSigStyle::NORMAL),
+    styleDef(timeSigNormalScale,                         ScaleF(1.0, 1.0)),
+    styleDef(timeSigNormalScaleLock,                     true),
+    styleDef(timeSigNormalNumDist,                       Spatium(0.0)),
+    styleDef(timeSigNormalY,                             Spatium(0.0)),
+    styleDef(timeSigAboveStyle,                          TimeSigStyle::NORMAL),
+    styleDef(timeSigAboveScale,                          ScaleF(2.0, 2.0)),
+    styleDef(timeSigAboveScaleLock,                      true),
+    styleDef(timeSigAboveNumDist,                        Spatium(0.1)),
+    styleDef(timeSigAboveY,                              Spatium(-1.0)),
+    styleDef(timeSigAcrossStyle,                         TimeSigStyle::NARROW),
+    styleDef(timeSigAcrossScale,                         ScaleF(4.0, 4.0)),
+    styleDef(timeSigAcrossScaleLock,                     true),
+    styleDef(timeSigAcrossNumDist,                       Spatium(0.1)),
+    styleDef(timeSigAcrossY,                             Spatium(0.0)),
+
     styleDef(useStraightNoteFlags,                       false),
     styleDef(stemWidth,                                  Spatium(0.10)),
     styleDef(shortenStem,                                true),

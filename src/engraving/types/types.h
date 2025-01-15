@@ -1089,6 +1089,24 @@ enum class TieDotsPlacement {
     AFTER_DOTS
 };
 
+enum class TimeSigPlacement : char {
+    NORMAL,
+    ABOVE_STAVES,
+    ACROSS_STAVES
+};
+
+enum class TimeSigStyle : char {
+    NORMAL,
+    NARROW,
+    LARGE
+};
+
+enum class TimeSigVSMargin : char {
+    HANG_INTO_MARGIN,
+    RIGHT_ALIGN_TO_BARLINE,
+    CREATE_SPACE,
+};
+
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------

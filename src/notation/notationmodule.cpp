@@ -89,6 +89,7 @@
 #include "view/styledialog/fretboardspagemodel.h"
 #include "view/styledialog/glissandosectionmodel.h"
 #include "view/styledialog/notelinesectionmodel.h"
+#include "view/styledialog/clefkeytimesigpagemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -208,6 +209,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<FretboardsPageModel>("MuseScore.NotationScene", 1, 0, "FretboardsPageModel");
     qmlRegisterType<GlissandoSectionModel>("MuseScore.NotationScene", 1, 0, "GlissandoSectionModel");
     qmlRegisterType<NoteLineSectionModel>("MuseScore.NotationScene", 1, 0, "NoteLineSectionModel");
+    qmlRegisterType<ClefKeyTimeSigPageModel>("MuseScore.NotationScene", 1, 0, "ClefKeyTimeSigPageModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 

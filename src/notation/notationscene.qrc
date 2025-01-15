@@ -55,6 +55,7 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-ON.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleSpinboxWithReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml</file>
         <file>qml/MuseScore/NotationScene/PercussionPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml</file>
@@ -68,5 +69,12 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/IconAndTextButtonSelector.qml</file>
         <file>qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTiePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-above_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-across_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-hang.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-right_align.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-on_all_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-create_space.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyledImage.qml</file>
     </qresource>
 </RCC>

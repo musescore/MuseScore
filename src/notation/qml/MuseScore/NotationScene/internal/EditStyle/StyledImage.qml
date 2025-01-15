@@ -26,44 +26,32 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-ColumnLayout{
-    id: column
+Rectangle {
+    id: root
 
-    required property StyleItem styleItem
-    required property string imageON
-    required property string imageOFF
+    property double horizontalPadding: 8
+    property double verticalPadding: 8
 
-    property alias text: toggleText.text
+    property double forceWidth: 0
+    property double forceHeight: 0
+    property alias source: image.source
 
-    RowLayout {
-        spacing: 15
+    width: image.width + 2 * horizontalPadding
+    height: image.height + 2 * verticalPadding
 
-        StyledImage {
-            forceWidth: 100
-            forceHeight: 80
-            horizontalPadding: 12
-            verticalPadding: 10
+    color: "#ffffff"
+    border.color: ui.theme.strokeColor
+    radius: 3
 
-            source: toggleButton.checked ? imageON : imageOFF
-        }
-
-        RowLayout {
-            id: toggle
-
-            ToggleButton {
-                id: toggleButton
-                checked: styleItem.value === true
-                onToggled: {
-                    styleItem.value = !styleItem.value
-                }
-            }
-
-            StyledTextLabel {
-                id : toggleText
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
-            }
-        }
+    Image {
+        id: image
+        width: forceWidth != 0 ? forceWidth : forceHeight != 0 ? sourceSize.width * (forceHeight / sourceSize.height) : sourceSize.width
+        height: forceHeight != 0 ? forceHeight : forceWidth != 0 ? sourceSize.height * (forceWidth / sourceSize.width) : sourceSize.height
+        anchors.centerIn: parent
+        mipmap: true
+        fillMode: Image.PreserveAspectFit
+        opacity: enabled ? 1.0 : 0.2
     }
-
 }
+
+

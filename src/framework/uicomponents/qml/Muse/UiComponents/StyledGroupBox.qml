@@ -32,11 +32,12 @@ GroupBox {
     spacing: 4
 
     background: Rectangle {
-        x: root.leftInset
-        y: root.topInset + root.implicitLabelHeight + root.spacing
+        y: root.label && root.label.visible
+           ? root.topInset + root.implicitLabelHeight + root.spacing
+           : root.topInset
 
-        width: root.width - x - root.rightInset
-        height: root.height - y - root.bottomInset
+        width: parent.width
+        height: root.height - y
 
         color: ui.theme.backgroundPrimaryColor
         border.color: ui.theme.strokeColor

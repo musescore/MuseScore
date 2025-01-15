@@ -252,5 +252,14 @@ public:
 
     static const TranslatableString& userName(ScoreStylePreset v);
     static String translatedUserName(ScoreStylePreset v);
+
+    static AsciiStringView toXml(TimeSigPlacement timeSigPos);
+    static TimeSigPlacement fromXml(const AsciiStringView& str, TimeSigPlacement def);
+
+    static AsciiStringView toXml(TimeSigStyle timeSigStyle);
+    static TimeSigStyle fromXml(const AsciiStringView& str, TimeSigStyle def);
+
+    static AsciiStringView toXml(TimeSigVSMargin timeSigVSMargin);
+    static TimeSigVSMargin fromXml(const AsciiStringView& str, TimeSigVSMargin def);
 };
 }

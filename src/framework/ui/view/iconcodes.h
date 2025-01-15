@@ -471,6 +471,16 @@ public:
         NO_BREAK = 0xF486,
         SYSTEM_LOCK = 0xF487,
 
+        TIMESIG_STANDARD = 0XF488,
+        TIMESIG_NARROW = 0xF489,
+        TIMESIG_SANSSERIF = 0xF48A,
+
+        ALIGN_LEFT = 0xF48B,
+        ALIGN_HORIZONTAL_CENTER = 0xF48C,
+
+        ALIGN_TOP = 0xF48E,
+        ALIGN_VERTICAL_CENTER = 0xF48F,
+
         NONE = 0xFFFF
     };
 

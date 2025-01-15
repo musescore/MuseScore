@@ -895,14 +895,15 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 
     for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         const Staff* staff = dom.staff(staffIdx);
-        if (!staff->show()) {
-            continue;
-        }
 
         track_idx_t startTrack = staffIdx * VOICES;
         track_idx_t endTrack  = startTrack + VOICES;
 
         for (const Segment& segment : measure->segments()) {
+            if (!staff->show() && !segment.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+                continue;
+            }
+
             SegmentLayout::layoutMeasureIndependentElements(segment, startTrack, ctx);
 
             if (!segment.isJustType(SegmentType::ChordRest)) {
@@ -1254,7 +1255,9 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
 
     double x1 = 0.0;
     while (s1) {
-        x1 = std::max(x1, s1->x() + s1->minRight());
+        if (!s1->hasTimeSigAboveStaves() && !s1->allElementsInvisible()) {
+            x1 = std::max(x1, s1->x() + s1->minRight());
+        }
         s1 = s1->prevActive();
     }
 
@@ -1899,6 +1902,10 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                         s->setTrailer(true);
                     }
                     ts->setFrom(nts);
+                    if (ts->isStyled(Pid::SCALE)) {
+                        // If this courtesyTimeSig was previously disabled its scale style may have not been updated
+                        ts->setScale(ts->propertyDefault(Pid::SCALE).value<ScaleF>());
+                    }
                     TLayout::layoutTimeSig(ts, ts->mutldata(), ctx);
                     //s->createShape(track / VOICES);
                 }
