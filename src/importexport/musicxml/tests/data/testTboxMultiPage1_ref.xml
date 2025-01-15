@@ -30,6 +30,7 @@
     </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -108,7 +109,7 @@
         </note>
       </measure>
     <measure number="7">
-      <print new-page="yes"/>
+      <print new-page="yes" page-number="2"/>
       <direction placement="above">
         <direction-type>
           <words valign="top" font-size="12">Tbox 5</words>
