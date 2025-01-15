@@ -356,7 +356,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     for (const auto& art : noteEvent.expressionCtx().articulations) {
         auto ms_art = convertArticulationType(art.first);
 
-        if (art.first == ArticulationType::Pedal) {
+        if (art.first == ArticulationType::Pedal || art.first == ArticulationType::LetRing) {
             // Pedal on:
             m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp, 1.0);
             // Pedal off:

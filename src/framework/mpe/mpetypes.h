@@ -192,6 +192,7 @@ enum class ArticulationType {
     SoftAccent,
 
     LaissezVibrer,
+    LetRing,
 
     Subito,
 

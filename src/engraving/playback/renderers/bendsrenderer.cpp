@@ -207,7 +207,8 @@ RenderingContext BendsRenderer::buildRenderingContext(const Note* note, const Re
     }
 
     RenderingContext ctx = engraving::buildRenderingCtx(chord, initialCtx.positionTickOffset,
-                                                        initialCtx.profile, initialCtx.playbackCtx);
+                                                        initialCtx.profile, initialCtx.playbackCtx,
+                                                        initialCtx.commonArticulations);
 
     if (note->isGrace()) {
         GraceNotesMetaParser::parse(note->chord(), ctx, ctx.commonArticulations);
