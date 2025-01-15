@@ -39,18 +39,20 @@ public:
     virtual ~IInteractiveProvider() = default;
 
     virtual RetVal<Val> question(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                                 int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) = 0;
+                                 int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
+                                 const std::string& dialogTitle = "") = 0;
 
     virtual RetVal<Val> info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                             int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) = 0;
+                             int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
+                             const std::string& dialogTitle = "") = 0;
 
     virtual RetVal<Val> warning(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
                                 const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                                const IInteractive::Options& options = {}) = 0;
+                                const IInteractive::Options& options = {}, const std::string& dialogTitle = "") = 0;
 
     virtual RetVal<Val> error(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
                               const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                              const IInteractive::Options& options = {}) = 0;
+                              const IInteractive::Options& options = {}, const std::string& dialogTitle = "") = 0;
 
     virtual Ret showProgress(const std::string& title, Progress* progress) = 0;
 

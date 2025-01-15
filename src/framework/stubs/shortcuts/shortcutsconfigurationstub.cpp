@@ -56,3 +56,9 @@ bool ShortcutsConfigurationStub::advanceToNextNoteOnKeyRelease() const
 void ShortcutsConfigurationStub::setAdvanceToNextNoteOnKeyRelease(bool)
 {
 }
+
+async::Channel<bool> ShortcutsConfigurationStub::advanceToNextNoteOnKeyReleaseChanged() const
+{
+    static async::Channel<bool> ch;
+    return ch;
+}

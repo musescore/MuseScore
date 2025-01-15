@@ -164,6 +164,12 @@ void NotationConfigurationStub::setSelectionProximity(int)
 {
 }
 
+muse::async::Channel<int> NotationConfigurationStub::selectionProximityChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
+}
+
 ZoomType NotationConfigurationStub::defaultZoomType() const
 {
     return ZoomType::PageWidth;
@@ -180,6 +186,12 @@ int NotationConfigurationStub::defaultZoom() const
 
 void NotationConfigurationStub::setDefaultZoom(int)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::defaultZoomChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 QList<int> NotationConfigurationStub::possibleZoomPercentageList() const
@@ -204,6 +216,12 @@ int NotationConfigurationStub::mouseZoomPrecision() const
 
 void NotationConfigurationStub::setMouseZoomPrecision(int)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::mouseZoomPrecisionChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 std::string NotationConfigurationStub::fontFamily() const
@@ -240,6 +258,12 @@ void NotationConfigurationStub::setDefaultStyleFilePath(const muse::io::path_t&)
 {
 }
 
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::defaultStyleFilePathChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
+    return ch;
+}
+
 muse::io::path_t NotationConfigurationStub::partStyleFilePath() const
 {
     return muse::io::path_t();
@@ -247,6 +271,12 @@ muse::io::path_t NotationConfigurationStub::partStyleFilePath() const
 
 void NotationConfigurationStub::setPartStyleFilePath(const muse::io::path_t&)
 {
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::partStyleFilePathChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
+    return ch;
 }
 
 bool NotationConfigurationStub::isMidiInputEnabled() const
@@ -359,6 +389,12 @@ void NotationConfigurationStub::setColorNotesOutsideOfUsablePitchRange(bool)
 {
 }
 
+muse::async::Channel<bool> NotationConfigurationStub::colorNotesOutsideOfUsablePitchRangeChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 int NotationConfigurationStub::delayBetweenNotesInRealTimeModeMilliseconds() const
 {
     return 100;
@@ -368,6 +404,12 @@ void NotationConfigurationStub::setDelayBetweenNotesInRealTimeModeMilliseconds(i
 {
 }
 
+muse::async::Channel<int> NotationConfigurationStub::delayBetweenNotesInRealTimeModeMillisecondsChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
+}
+
 int NotationConfigurationStub::notePlayDurationMilliseconds() const
 {
     return 100;
@@ -375,6 +417,12 @@ int NotationConfigurationStub::notePlayDurationMilliseconds() const
 
 void NotationConfigurationStub::setNotePlayDurationMilliseconds(int)
 {
+}
+
+muse::async::Channel<int> NotationConfigurationStub::notePlayDurationMillisecondsChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
 }
 
 void NotationConfigurationStub::setTemplateModeEnabled(std::optional<bool>)
@@ -542,4 +590,10 @@ muse::io::path_t NotationConfigurationStub::styleFileImportPath() const
 
 void NotationConfigurationStub::setStyleFileImportPath(const muse::io::path_t&)
 {
+}
+
+muse::async::Channel<std::string> NotationConfigurationStub::styleFileImportPathChanged() const
+{
+    static muse::async::Channel<std::string> ch;
+    return ch;
 }

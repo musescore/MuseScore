@@ -24,6 +24,7 @@
 
 #include <string>
 
+#include "async/channel.h"
 #include "modularity/imoduleinterface.h"
 
 namespace mu::iex::ove {
@@ -36,6 +37,7 @@ public:
 
     virtual std::string importOvertureCharset() const = 0;
     virtual void setImportOvertureCharset(const std::string& charset) = 0;
+    virtual muse::async::Channel<std::string> importOvertureCharsetChanged() const = 0;
 };
 }
 

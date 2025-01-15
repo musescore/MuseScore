@@ -50,9 +50,11 @@ public:
 
     muse::io::path_t defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> defaultStyleFilePathChanged() const override;
 
     muse::io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
 
     SizeF defaultPageSize() const override;
 
@@ -83,6 +85,7 @@ public:
 
     bool dynamicsApplyToAllVoices() const override;
     void setDynamicsApplyToAllVoices(bool v) override;
+    muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const override;
 
     muse::async::Notification scoreInversionChanged() const override;
 
@@ -122,10 +125,13 @@ public:
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
+    muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
     muse::async::Channel<Color> m_frameColorChanged;
     muse::async::Channel<Color> m_invisibleColorChanged;
     muse::async::Channel<Color> m_unlinkedColorChanged;
+    muse::async::Channel<muse::io::path_t> m_defaultStyleFilePathChanged;
+    muse::async::Channel<muse::io::path_t> m_partStyleFilePathChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 

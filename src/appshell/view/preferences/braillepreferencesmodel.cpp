@@ -32,6 +32,21 @@ BraillePreferencesModel::BraillePreferencesModel(QObject* parent)
 {
 }
 
+void BraillePreferencesModel::load()
+{
+    brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
+        emit braillePanelEnabledChanged(braillePanelEnabled());
+    });
+
+    brailleConfiguration()->intervalDirectionChanged().onNotify(this, [this]() {
+        emit intervalDirectionChanged(intervalDirection());
+    });
+
+    brailleConfiguration()->brailleTableChanged().onNotify(this, [this]() {
+        emit brailleTableChanged(brailleTable());
+    });
+}
+
 bool BraillePreferencesModel::braillePanelEnabled() const
 {
     return brailleConfiguration()->braillePanelEnabled();

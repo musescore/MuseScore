@@ -64,9 +64,14 @@ void LanguagesService::init()
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     setCurrentLanguage(languageCode.val);
 
-    languageCode.ch.onReceive(this, [this](const QString&) {
+    // Remember the active language code so the "Restart required" text can go away if the language
+    // is changed and later reverted in the same session. Cannot use m_currentLanguage.code
+    // because m_currentLanguage holds the effective language: if the language code is "system",
+    // m_currentLanguage will hold "en-us" for example (whatever the system is set to).
+    QString activeLanguageCode = languageCode.val;
+    languageCode.ch.onReceive(this, [this, activeLanguageCode](const QString& newLanguageCode) {
         //! NOTE To change the language at the moment, a restart is required
-        m_needRestartToApplyLanguageChange = true;
+        m_needRestartToApplyLanguageChange = newLanguageCode != activeLanguageCode;
         m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
     });
 

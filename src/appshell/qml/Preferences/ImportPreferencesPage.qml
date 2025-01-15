@@ -42,6 +42,7 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         ImportStyleSection {
+            id: importStyleSection
             styleFileImportPath: importPreferencesModel.styleFileImportPath
             fileChooseTitle: importPreferencesModel.styleChooseTitle()
             filePathFilter: importPreferencesModel.stylePathFilter()
@@ -144,5 +145,9 @@ PreferencesPage {
                 importPreferencesModel.meiImportLayout = meiImportLayout
             }
         }
+    }
+
+    function reset() {
+        importStyleSection.reset()
     }
 }
