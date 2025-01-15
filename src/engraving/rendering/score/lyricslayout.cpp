@@ -297,7 +297,6 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 {
     const bool isPartialLyricsLine = item->isPartialLyricsLineSegment();
     LyricsLine* lyricsLine = item->lyricsLine();
-    // Lyrics* startLyrics = lyricsLine->lyrics();
 
     ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
     Lyrics* endLyrics = nullptr;
