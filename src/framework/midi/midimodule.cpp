@@ -35,8 +35,8 @@
 using namespace muse::midi;
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-#include "internal/platform/lin/alsamidioutport.h"
-#include "internal/platform/lin/alsamidiinport.h"
+#include "internal/platform/lin/linuxmidioutport.h"
+#include "internal/platform/lin/linuxmidiinport.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/win/winmidioutport.h"
 #include "internal/platform/win/winmidiinport.h"
@@ -57,19 +57,19 @@ void MidiModule::registerExports()
 {
     m_configuration = std::make_shared<MidiConfiguration>();
 
-    #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    m_midiOutPort = std::make_shared<AlsaMidiOutPort>();
-    m_midiInPort = std::make_shared<AlsaMidiInPort>();
-    #elif defined(Q_OS_WIN)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    m_midiOutPort = std::make_shared<LinuxMidiOutPort>();
+    m_midiInPort = std::make_shared<LinuxMidiInPort>();
+#elif defined(Q_OS_WIN)
     m_midiOutPort = std::make_shared<WinMidiOutPort>();
     m_midiInPort = std::make_shared<WinMidiInPort>();
-    #elif defined(Q_OS_MACOS)
+#elif defined(Q_OS_MACOS)
     m_midiOutPort = std::make_shared<CoreMidiOutPort>();
     m_midiInPort = std::make_shared<CoreMidiInPort>();
-    #else
+#else
     m_midiOutPort = std::make_shared<DummyMidiOutPort>();
     m_midiInPort = std::make_shared<DummyMidiInPort>();
-    #endif
+#endif
 
     ioc()->registerExport<IMidiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IMidiOutPort>(moduleName(), m_midiOutPort);
@@ -86,8 +86,8 @@ void MidiModule::onInit(const IApplication::RunMode& mode)
     m_configuration->init();
 
     if (mode == IApplication::RunMode::GuiApp) {
-        m_midiOutPort->init();
         m_midiInPort->init();
+        m_midiOutPort->init();
     }
 }
 
