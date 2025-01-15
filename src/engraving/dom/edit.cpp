@@ -1201,12 +1201,6 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
     Measure* nm  = nullptr;
     LayoutBreak* sectionBreak = nullptr;
 
-    // disable local time sig modifications in linked staves
-    if (staffIdx != muse::nidx && masterScore()->excerpts().size() > 0) {
-        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
-        return false;
-    }
-
     //
     // split into Measure segments fm-lm
     //
@@ -1379,10 +1373,15 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 startStaffIdx = staffIdx;
                 endStaffIdx = startStaffIdx + 1;
             } else {
-                // TODO: get index for this score
-                LOGD("cmdAddTimeSig: unable to write local time signature change to linked score");
-                startStaffIdx = 0;
-                endStaffIdx = 0;
+                const Staff* thisStaff = staff(staffIdx);
+                const Staff* linkedStaff = thisStaff->findLinkedInScore(score);
+                if (linkedStaff) {
+                    startStaffIdx = linkedStaff->idx();
+                    endStaffIdx = startStaffIdx + 1;
+                } else {
+                    startStaffIdx = 0;
+                    endStaffIdx = 0;
+                }
             }
         } else {
             startStaffIdx = 0;
@@ -1458,7 +1457,9 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
         // we will only add time signatures if this succeeds
         // this means, however, that the rewrite cannot depend on the time signatures being in place
         if (mf) {
-            if (!mScore->rewriteMeasures(mf, ns, local ? staffIdx : muse::nidx)) {
+            auto staffIdxRangeOnMaster = getStaffIdxRange(mScore);
+            if (staffIdxRangeOnMaster.second != staffIdxRangeOnMaster.first
+                && !mScore->rewriteMeasures(mf, ns, local ? staffIdxRangeOnMaster.first : muse::nidx)) {
                 undoStack()->activeCommand()->unwind();
                 return;
             }
@@ -1517,11 +1518,6 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
 
 void Score::cmdRemoveTimeSig(TimeSig* ts)
 {
-    if (ts->isLocal() && masterScore()->excerpts().size() > 0) {
-        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS);
-        return;
-    }
-
     Measure* m = ts->measure();
     Segment* s = ts->segment();
 
