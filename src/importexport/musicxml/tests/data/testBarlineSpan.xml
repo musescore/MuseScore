@@ -89,6 +89,7 @@
     </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -230,6 +231,7 @@
     </part>
   <part id="P2">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -496,6 +498,7 @@
     </part>
   <part id="P3">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -637,6 +640,7 @@
     </part>
   <part id="P4">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>

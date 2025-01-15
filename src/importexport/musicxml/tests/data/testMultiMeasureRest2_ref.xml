@@ -35,6 +35,7 @@
     </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <barline location="left">
         <bar-style>heavy-light</bar-style>
         <repeat direction="forward"/>
