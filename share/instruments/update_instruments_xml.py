@@ -34,6 +34,7 @@ import argparse
 import csv
 import io
 import os
+import re
 import requests
 import sys
 import xml.etree.ElementTree as ET
@@ -53,6 +54,8 @@ sheet_ids = {
     'GS_Drum_Kits':             '1103601299',
     'GM+GS_Percussion':         '1216482735',
 }
+
+standard_drumset_id = 'drumset'
 
 parser = argparse.ArgumentParser(description='Fetch the latest spreadsheet and generate instruments.xml.')
 parser.add_argument('-c', '--cached', action='store_true', help='Use cached version instead of downloading')
@@ -293,7 +296,7 @@ for group in groups.values():
         to_subelement(el, instrument, 'transpDia', 'transposeDiatonic')
         to_subelement(el, instrument, 'transpChr', 'transposeChromatic')
 
-        if instrument['id'] in drumsets:
+        if instrument['id'] != standard_drumset_id and instrument['id'] in drumsets:
             for drum in drumsets[instrument['id']].values():
                 pitch = drum['pitch']
                 d_el = ET.SubElement(el, 'Drum')
@@ -498,3 +501,73 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
     ordersTree = ET.parse('orders.xml')
     for order in ordersTree.getroot().findall('Order'):
         add_translatable_string(f, 'engraving/scoreorder', order.find('name').text)
+
+def direction(tag):
+    if tag == '1': return 'UP'
+    if tag == '2': return 'DOWN'
+    return 'AUTO'
+
+def noteheadgroup(tag):
+    if tag == 'altbrevis':
+        return 'HEAD_BREVIS_ALT'
+
+    if re.match(r'^[a-h](-sharp|-flat)?-name$', tag):
+        tag = tag[:-5] # remove '-name' from end of tag
+
+    return 'HEAD_' + tag.upper().replace('-', '_')
+
+def shortcut(tag):
+    if tag == null or not tag:
+        return '0'
+    return 'Key_' + tag
+
+# Generate the standard drumset. This must be hard-coded in C++ to ensure it's
+# available at startup when systems are initialized (engraving, playback, MIDI
+# & MusicXML import), which happens prior to instruments.xml being loaded.
+standard_drumset_cpp_path = '../../src/engraving/dom/drumset.cpp'
+gen_code = ''
+
+for drum in drumsets[standard_drumset_id].values():
+    pitch = drum['pitch']
+
+    gen_code += f"""
+    // {drum['drum']}
+    smDrumset->drum({pitch}) = DrumInstrument(
+        TConv::userName(DrumNum({pitch})),
+        NoteHeadGroup::{noteheadgroup(drum['head'])},
+        /*line*/ {drum['line']},
+        DirectionV::{direction(drum['stem'])},
+        /*panelRow*/ {drum['row']},
+        /*panelColumn*/ {drum['col']},
+        /*voice*/ {drum['voice']},
+        /*shortcut*/ {shortcut(drum['shortcut'])});
+"""
+
+with open(standard_drumset_cpp_path, newline='\n', encoding='utf-8') as file:
+    old_code = file.read()
+
+old_lines = old_code.split('\n')
+begin_line = -1
+end_line = -1
+new_code = ''
+
+for num, line in enumerate(old_lines, 1):
+    if 'BEGIN GENERATED CODE' in line:
+        begin_line = num
+        break
+
+assert begin_line > 0
+
+for num, line in enumerate(old_lines[begin_line:], 1):
+    if 'END GENERATED CODE' in line:
+        end_line = begin_line + num
+        break
+
+assert end_line > begin_line
+
+new_code = '\n'.join(old_lines[:begin_line]) + f'\n{gen_code}\n' + '\n'.join(old_lines[end_line-1:])
+
+if new_code != old_code:
+    eprint('Writing ' + standard_drumset_cpp_path)
+    with open(standard_drumset_cpp_path, 'w', newline='\n', encoding='utf-8') as file:
+        file.write(new_code)
