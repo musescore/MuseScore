@@ -57,6 +57,9 @@ public:
     Q_INVOKABLE void addOrChangeDynamic(int page, int index);
     Q_INVOKABLE void addHairpinToDynamic(ItemType itemType);
 
+    Q_INVOKABLE void showPreview(int page, int index);
+    Q_INVOKABLE void hidePreview();
+
     QString fontFamily() const;
     QVariantList pages() const;
 

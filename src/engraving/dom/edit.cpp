@@ -769,6 +769,15 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         chordRest->undoAddAnnotation(textBox);
         break;
     }
+    case TextStyleType::DYNAMICS: {
+        ChordRest* chordRest = chordOrRest(destinationElement);
+        if (!chordRest) {
+            break;
+        }
+        textBox = Factory::createDynamic(dummy()->segment());
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
     case TextStyleType::EXPRESSION: {
         ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
@@ -948,15 +957,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         textBox = tempoText;
         undoAddElement(textBox);
-        break;
-    }
-    case TextStyleType::DYNAMICS: {
-        ChordRest* chordRest = chordOrRest(destinationElement);
-        if (!chordRest) {
-            break;
-        }
-        textBox = Factory::createDynamic(dummy()->segment());
-        chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::HARP_PEDAL_DIAGRAM:
@@ -3948,6 +3948,35 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
     hairpin->setTick2(endTick);
 
     hairpin->setVoiceAssignment(dynamic->voiceAssignment());
+
+    undoAddElement(hairpin);
+}
+
+void Score::addHairpinOnGripDrag(Hairpin* hairpin, Dynamic* dynamic, const PointF& pos, Grip grip)
+{
+    track_idx_t track = dynamic->track();
+    hairpin->setTrack(track);
+    hairpin->setTrack2(track);
+
+    Segment* seg = nullptr;
+    double spacingFactor = 0.5;
+    staff_idx_t staffIndex = dynamic->staffIdx();
+
+    // Find segment of type ChordRest or TimeTick near cursor postion
+    dragPosition(pos, &staffIndex, &seg, spacingFactor, hairpin->allowTimeAnchor());
+
+    switch (grip) {
+    case Grip::LEFT:
+        hairpin->setTick(seg ? seg->tick() : dynamic->segment()->prev1ChordRestOrTimeTick()->tick());
+        hairpin->setTick2(dynamic->tick());
+        break;
+    case Grip::RIGHT:
+        hairpin->setTick(dynamic->tick());
+        hairpin->setTick2(seg ? seg->tick() : dynamic->segment()->next1ChordRestOrTimeTick()->tick());
+        break;
+    default:
+        break;
+    }
 
     undoAddElement(hairpin);
 }
