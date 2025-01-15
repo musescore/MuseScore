@@ -817,10 +817,11 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t
     assert(!(endSegment && !startSegment));
 
     m_startSegment  = startSegment;
-    m_endSegment    = endSegment;
+    m_endSegment = endSegment;
     m_activeSegment = endSegment;
-    m_staffStart    = staffStart;
-    m_staffEnd      = staffEnd;
+    m_staffStart = staffStart;
+    m_staffEnd = staffEnd;
+    m_activeTrack = staff2track(staffStart);
 
     if (m_state == SelState::RANGE) {
         m_score->setSelectionChanged(true);
@@ -844,8 +845,9 @@ void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staf
     m_plannedTick1 = tick1;
     m_plannedTick2 = tick2;
     m_startSegment = m_endSegment = m_activeSegment = nullptr;
-    m_staffStart    = staffStart;
-    m_staffEnd      = staffEnd;
+    m_staffStart = staffStart;
+    m_staffEnd = staffEnd;
+    m_activeTrack = staff2track(staffStart);
 
     if (m_state == SelState::RANGE) {
         m_score->setSelectionChanged(true);

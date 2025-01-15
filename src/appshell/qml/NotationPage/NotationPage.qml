@@ -554,6 +554,10 @@ DockPage {
                 Component.onDestruction: {
                     percussionPanel.toolbarComponent = null
                 }
+
+                onResizeRequested: function(newWidth, newHeight) {
+                    percussionPanel.resize(newWidth, newHeight)
+                }
             }
         }
     ]

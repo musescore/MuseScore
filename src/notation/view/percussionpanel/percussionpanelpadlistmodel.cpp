@@ -192,8 +192,9 @@ mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const
     QList<int /*pitch*/> noTemplateFound;
 
     for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
-        if (!defaultLayout.isValid(pitch)) {
-            // We aren't currently using this pitch, doesn't matter if it's valid in the template..
+        if (defaultDrumset->isValid(pitch) && !defaultLayout.isValid(pitch)) {
+            // Pitch was deleted - restore it...
+            defaultLayout.drum(pitch) = defaultDrumset->drum(pitch);
             continue;
         }
         //! NOTE: Pitch + drum name isn't exactly the most robust identifier, but this will probably change with the new percussion ID system
@@ -351,7 +352,7 @@ PercussionPanelPadModel* PercussionPanelPadListModel::createPadModelForPitch(int
     PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
     model->setPadName(m_drumset->name(pitch));
 
-    const QString shortcut = m_drumset->shortcut(pitch) ? QChar(m_drumset->shortcut(pitch)) : QString("-");
+    const QString shortcut = m_drumset->shortcut(pitch) ? QChar(m_drumset->shortcut(pitch)) : QChar('\0');
     model->setKeyboardShortcut(shortcut);
 
     model->setPitch(pitch);
