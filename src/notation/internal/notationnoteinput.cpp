@@ -99,11 +99,6 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
     is.setNoteEntryMode(true);
     is.setNoteEntryMethod(method);
 
-    //! TODO Find out why.
-    score()->setUpdateAll();
-    score()->update();
-    //! ---
-
     const Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
     switch (staff->staffType(is.tick())->group()) {
     case mu::engraving::StaffGroup::STANDARD:
