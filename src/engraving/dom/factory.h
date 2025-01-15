@@ -146,6 +146,9 @@ public:
     static PartialTie* createPartialTie(Note* parent, bool isAccessibleEnabled = true);
     static PartialTie* copyPartialTie(const PartialTie& src);
 
+    static PartialLyricsLine* createPartialLyricsLine(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static PartialLyricsLine* copyPartialLyricsLine(const PartialLyricsLine& src);
+
     static Rest* createRest(Segment* parent, bool isAccessibleEnabled = true);
     static Rest* createRest(Segment* parent, const TDuration& t, bool isAccessibleEnabled = true);
     static Rest* copyRest(const Rest& src, bool link = false);

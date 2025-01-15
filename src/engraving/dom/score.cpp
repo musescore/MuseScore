@@ -1535,6 +1535,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
     case ElementType::PICK_SCRAPE:
+    case ElementType::PARTIAL_LYRICSLINE:
     {
         Spanner* spanner = toSpanner(element);
         if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE) {
@@ -1722,6 +1723,7 @@ void Score::removeElement(EngravingItem* element)
     case ElementType::LET_RING:
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::PALM_MUTE:
+    case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:

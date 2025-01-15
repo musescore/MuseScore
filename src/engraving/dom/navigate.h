@@ -20,17 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_NAVIGATE_H
-#define MU_ENGRAVING_NAVIGATE_H
+#pragma once
+#include "types.h"
 
 namespace mu::engraving {
 class ChordRest;
 class Lyrics;
+class Segment;
 
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
 extern ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
 extern ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace = false, bool skipMeasureRepeatRests = true);
+extern Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement);
 extern Lyrics* prevLyrics(const Lyrics* lyrics);
 extern Lyrics* nextLyrics(const Lyrics* lyrics);
 } // namespace mu::engraving
-#endif

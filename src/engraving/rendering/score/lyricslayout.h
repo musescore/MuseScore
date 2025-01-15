@@ -65,7 +65,7 @@ private:
     static void layoutMelismaLine(LyricsLineSegment* item);
     static void layoutDashes(LyricsLineSegment* item);
 
-    static Lyrics* findNextLyrics(ChordRest* endChordRest, int verseNumber);
+    static Lyrics* findNextLyrics(const ChordRest* endChordRest, int verseNumber);
 
     static void computeVerticalPositions(staff_idx_t staffIdx, System* system, LayoutContext& ctx);
     static void collectLyricsVerses(staff_idx_t staffIdx, System* system, LyricsVersesMap& lyricsVersesAbove,
@@ -81,6 +81,10 @@ private:
 
     static void addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
                              const LyricsVersesMap& lyricsVersesBelow);
+
+    static double lyricsLineStartX(const LyricsLineSegment* item);
+    static double lyricsLineEndX(const LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);
+    static void adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);
 };
 }
 #endif // MU_ENGRAVING_LYRICSLAYOUT_DEV_H

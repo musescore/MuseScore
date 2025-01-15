@@ -248,6 +248,8 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::VOLTA_SEGMENT,        "VoltaSegment",         muse::TranslatableString("engraving", "Volta segment") },
     { ElementType::PEDAL_SEGMENT,        "PedalSegment",         muse::TranslatableString("engraving", "Pedal segment") },
     { ElementType::LYRICSLINE_SEGMENT,   "LyricsLineSegment",    muse::TranslatableString("engraving", "Extension line segment") },
+    { ElementType::PARTIAL_LYRICSLINE_SEGMENT,   "PartialLyricsLineSegment",    muse::TranslatableString("engraving",
+                                                                                                         "Partial extension line segment") },
     { ElementType::GLISSANDO_SEGMENT,    "GlissandoSegment",     muse::TranslatableString("engraving", "Glissando segment") },
     { ElementType::NOTELINE_SEGMENT,     "NoteLineSegment",      muse::TranslatableString("engraving", "Note-anchored line segment") },
     { ElementType::LAYOUT_BREAK,         "LayoutBreak",          muse::TranslatableString("engraving", "Layout break") },
@@ -280,6 +282,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::TEXTLINE_BASE,        "TextLineBase",         muse::TranslatableString("engraving", "Text line base") },    // remove
     { ElementType::NOTELINE,             "NoteLine",             muse::TranslatableString("engraving", "Note-anchored line") },
     { ElementType::LYRICSLINE,           "LyricsLine",           muse::TranslatableString("engraving", "Extension line") },
+    { ElementType::PARTIAL_LYRICSLINE,   "PartialLyricsLine",    muse::TranslatableString("engraving", "Partial extension line") },
     { ElementType::GLISSANDO,            "Glissando",            muse::TranslatableString("engraving", "Glissando") },
     { ElementType::BRACKET,              "Bracket",              muse::TranslatableString("engraving", "Bracket") },
     { ElementType::SEGMENT,              "Segment",              muse::TranslatableString("engraving", "Segment") },

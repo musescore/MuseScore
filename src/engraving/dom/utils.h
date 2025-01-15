@@ -34,6 +34,7 @@ class EngravingItem;
 class KeySig;
 class Note;
 class Rest;
+class Measure;
 class Score;
 class Segment;
 class System;
@@ -104,4 +105,8 @@ extern bool isFirstSystemKeySig(const KeySig* ks);
 extern String bendAmountToString(int fulls, int quarts);
 
 extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
+
+extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure);
+extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
+extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
 } // namespace mu::engraving
