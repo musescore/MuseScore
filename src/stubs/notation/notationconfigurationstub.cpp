@@ -297,6 +297,15 @@ void NotationConfigurationStub::setIsMidiInputEnabled(bool)
 {
 }
 
+bool NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKey() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setStartNoteInputAtSelectionWhenPressingMidiKey(bool)
+{
+}
+
 bool NotationConfigurationStub::isAutomaticallyPanEnabled() const
 {
     return false;

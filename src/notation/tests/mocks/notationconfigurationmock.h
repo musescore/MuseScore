@@ -112,6 +112,9 @@ public:
     MOCK_METHOD(bool, isMidiInputEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMidiInputEnabled, (bool), (override));
 
+    MOCK_METHOD(bool, startNoteInputAtSelectionWhenPressingMidiKey, (), (const, override));
+    MOCK_METHOD(void, setStartNoteInputAtSelectionWhenPressingMidiKey, (bool), (override));
+
     MOCK_METHOD(bool, isAutomaticallyPanEnabled, (), (const, override));
     MOCK_METHOD(void, setIsAutomaticallyPanEnabled, (bool), (override));
 

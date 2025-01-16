@@ -59,9 +59,11 @@ private:
 
     void doProcessEvents();
 
+    void startNoteInputIfNeed();
+
     void addNoteEventsToInputState();
     Note* addNoteToScore(const muse::midi::Event& e);
-    Note* makeNote(const muse::midi::Event& e);
+    Note* makePreviewNote(const muse::midi::Event& e);
 
     void enableMetronome();
     void disableMetronome();

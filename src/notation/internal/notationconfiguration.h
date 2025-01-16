@@ -127,6 +127,9 @@ public:
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
 
+    bool startNoteInputAtSelectionWhenPressingMidiKey() const override;
+    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) override;
+
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
 

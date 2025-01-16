@@ -122,6 +122,9 @@ public:
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
 
+    virtual bool startNoteInputAtSelectionWhenPressingMidiKey() const = 0;
+    virtual void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) = 0;
+
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
 
