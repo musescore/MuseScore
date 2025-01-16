@@ -177,7 +177,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
 {
     if (!interaction()) {
         //! NOTE: Can happen if we close the project while editing the layout...
-        m_padListModel->setDrumset(nullptr);
+        setDrumset(nullptr);
         setCurrentPanelMode(m_panelModeToRestore);
         return;
     }
@@ -189,7 +189,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     Part* part = instAndPart.second;
 
     if (discardChanges) {
-        m_padListModel->setDrumset(inst ? inst->drumset() : nullptr);
+        setDrumset(inst ? inst->drumset() : nullptr);
         setCurrentPanelMode(m_panelModeToRestore);
         return;
     }
@@ -251,7 +251,7 @@ void PercussionPanelModel::setUpConnections()
             finishEditing(/*discardChanges*/ true);
         }
 
-        m_padListModel->setDrumset(drumset);
+        setDrumset(drumset);
         updateSoundTitle(currentTrackId());
     };
 
@@ -306,6 +306,21 @@ void PercussionPanelModel::setUpConnections()
         }
         updateSoundTitle(trackId);
     });
+}
+
+void PercussionPanelModel::setDrumset(engraving::Drumset* drumset)
+{
+    m_padListModel->setDrumset(drumset);
+
+    // If drumset contained drums with undefined values for panelRow/panelColumn, m_padListModel will have
+    // assigned them now (see PercussionPanelPadListModel::load). In this case, we should update the score's
+    // drumset so that it matches the one in the panel...
+
+    const std::pair<Instrument*, Part*> instAndPart = getCurrentInstrumentAndPart();
+    Instrument* inst = instAndPart.first;
+    if (inst && inst->drumset() != m_padListModel->drumset()) {
+        inst->setDrumset(m_padListModel->drumset());
+    }
 }
 
 void PercussionPanelModel::updateSoundTitle(const InstrumentTrackId& trackId)
@@ -509,6 +524,10 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
     const Staff* staff = inputState.staff;
 
     Part* part = staff ? staff->part() : nullptr;
+
+    if (!inputState.segment) {
+        return { nullptr, part };
+    }
 
     Instrument* inst = part ? part->instrument(inputState.segment->tick()) : nullptr;
 
