@@ -35,6 +35,7 @@
 #include "system.h"
 #include "tempo.h"
 #include "undo.h"
+#include "rendering/score/autoplace.h"
 
 #include "log.h"
 
@@ -100,6 +101,16 @@ const std::vector<Dyn> Dynamic::DYN_LIST = {
     { DynamicType::S,       112, -18, true, "<sym>dynamicSforzando</sym>" },
     { DynamicType::Z,       80, 0,    true, "<sym>dynamicZ</sym>" },
     { DynamicType::N,       49, -48,  true, "<sym>dynamicNiente</sym>" }
+};
+
+const static std::vector<std::pair<const String, const Char> > coreDynamics = {
+    { u"dynamicPiano", 'p' },
+    { u"dynamicForte", 'f' },
+    { u"dynamicZ", 'z' },
+    { u"dynamicSforzando", 's' },
+    { u"dynamicRinforzando", 'r' },
+    { u"dynamicMezzo", 'm' },
+    { u"dynamicNiente", 'n' },
 };
 
 //---------------------------------------------------------
@@ -672,6 +683,21 @@ Dyn Dynamic::dynInfo(DynamicType type)
     return DYN_LIST[static_cast<int>(type)];
 }
 
+String Dynamic::xmlToText(String xml)
+{
+    String text;
+    for (size_t i = 0; i < xml.size(); i++) {
+        Char ch = xml.at(i);
+        auto jt = std::find_if(coreDynamics.begin(), coreDynamics.end(), [ch](auto coreDynamic) {
+            return ch == coreDynamic.second;
+        });
+        if (jt != coreDynamics.end()) {
+            text += u"<sym>" + jt->first + u"</sym>";
+        }
+    }
+    return text;
+}
+
 //---------------------------------------------------------
 //   gripsCount
 //---------------------------------------------------------
@@ -721,5 +747,48 @@ std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
         return { pp + rightOffset };
     } else {
         return {};
+    }
+}
+
+void Dynamic::styleChanged()
+{
+    mutldata()->layoutInvalid = true;
+    TextBase::styleChanged();
+}
+
+bool Dynamic::useExpressionTextStyle() const
+{
+    return score()->style().styleB(Sid::dynamicsOverrideFont) && score()->style().styleB(Sid::dynamicsUseExpressionTextStyle)
+           && !cursor()->editing();
+}
+
+void Dynamic::startEdit(EditData& ed)
+{
+    using rendering::score::Autoplace;
+    TextBase::startEdit(ed);
+    if (ed.editTextualProperties && score()->style().styleB(Sid::dynamicsOverrideFont)
+        && score()->style().styleB(Sid::dynamicsUseExpressionTextStyle)) {
+        CharFormat oldFormat = *cursor()->format();
+        resetFormatting();
+        mutldata()->layoutInvalid = true;
+        renderer()->layoutItem(this);
+        if (autoplace()) {
+            Autoplace::autoplaceSegmentElement(this, mutldata());
+        }
+        cursor()->setFormat(oldFormat);
+    }
+}
+
+void Dynamic::endEdit(EditData& ed)
+{
+    using rendering::score::Autoplace;
+    TextBase::endEdit(ed);
+    if (ed.editTextualProperties && score()->style().styleB(Sid::dynamicsOverrideFont)
+        && score()->style().styleB(Sid::dynamicsUseExpressionTextStyle)) {
+        mutldata()->layoutInvalid = true;
+        renderer()->layoutItem(this);
+        if (autoplace()) {
+            Autoplace::autoplaceSegmentElement(this, mutldata());
+        }
     }
 }

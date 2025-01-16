@@ -625,14 +625,15 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance,
           resetAutoplaceHairpinDynamicsDistance },
 
-        { StyleId::dynamicsPosAbove,        false, dynamicsPosAbove,           resetDynamicsPosAbove },
-        { StyleId::dynamicsPosBelow,        false, dynamicsPosBelow,           resetDynamicsPosBelow },
-        { StyleId::dynamicsMinDistance,     false, dynamicsMinDistance,        resetDynamicsMinDistance },
-        { StyleId::avoidBarLines,           false, avoidBarLines,              resetAvoidBarLines },
-        { StyleId::snapToDynamics,          false, snapExpression,             resetSnapExpression },
-        { StyleId::dynamicsSize,            true,  dynamicsSize,               resetDynamicsSize },
-        { StyleId::dynamicsOverrideFont,    false, dynamicsOverrideFont,       0 },
-        { StyleId::dynamicsFont,            false, dynamicsFont,               0 },
+        { StyleId::dynamicsPosAbove,               false, dynamicsPosAbove,               resetDynamicsPosAbove },
+        { StyleId::dynamicsPosBelow,               false, dynamicsPosBelow,               resetDynamicsPosBelow },
+        { StyleId::dynamicsMinDistance,            false, dynamicsMinDistance,            resetDynamicsMinDistance },
+        { StyleId::avoidBarLines,                  false, avoidBarLines,                  resetAvoidBarLines },
+        { StyleId::snapToDynamics,                 false, snapExpression,                 resetSnapExpression },
+        { StyleId::dynamicsSize,                   true,  dynamicsSize,                   resetDynamicsSize },
+        { StyleId::dynamicsOverrideFont,           false, dynamicsOverrideFont,           0 },
+        { StyleId::dynamicsFont,                   false, dynamicsFont,                   0 },
+        { StyleId::dynamicsUseExpressionTextStyle, false, dynamicsUseExpressionTextStyle, 0 },
 
         { StyleId::dynamicsHairpinVoiceBasedPlacement, false, dynamicsAndHairpinPos, resetDynamicsAndHairpinPos },
         { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff, false, dynamicsAndHairpinsCenterOnGrandStaff, 0 },
@@ -1109,6 +1110,10 @@ EditStyle::EditStyle(QWidget* parent)
     });
     connect(dynamicsAndHairpinPos, &QComboBox::currentIndexChanged, dynamicsAndHairpinsAboveOnVocalStaves, [=]() {
         dynamicsAndHairpinsAboveOnVocalStaves->setEnabled(dynamicsAndHairpinPos->currentIndex() != int(DirectionV::UP));
+    });
+
+    connect(dynamicsFontChoose, &QRadioButton::toggled, dynamicsFont, [=]() {
+        dynamicsFont->setEnabled(dynamicsFontChoose->isChecked());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleName, IconCode::Code::UNDO);
