@@ -60,6 +60,8 @@ static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/mySt
 
 static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/defaultInputMethod");
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
+static const Settings::Key START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY(module_name,
+                                                                                "score/startNoteInputAtSelectionWhenPressingMidiKey");
 static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
 static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
@@ -182,6 +184,7 @@ void NotationConfiguration::init()
         m_selectionProximityChanged.send(val.toInt());
     });
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
+    settings()->setDefaultValue(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY, Val(true));
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
@@ -650,6 +653,16 @@ bool NotationConfiguration::isMidiInputEnabled() const
 void NotationConfiguration::setIsMidiInputEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
+}
+
+bool NotationConfiguration::startNoteInputAtSelectionWhenPressingMidiKey() const
+{
+    return settings()->value(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY).toBool();
+}
+
+void NotationConfiguration::setStartNoteInputAtSelectionWhenPressingMidiKey(bool value)
+{
+    settings()->setSharedValue(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY, Val(value));
 }
 
 bool NotationConfiguration::isAutomaticallyPanEnabled() const

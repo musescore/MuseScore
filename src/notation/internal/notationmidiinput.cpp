@@ -118,6 +118,8 @@ void NotationMidiInput::doProcessEvents()
     }
 
     std::vector<const Note*> notes;
+
+    startNoteInputIfNeed();
     bool isNoteInput = isNoteInputMode();
 
     if (isNoteInput && isInputByDuration()) {
@@ -127,7 +129,7 @@ void NotationMidiInput::doProcessEvents()
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const muse::midi::Event& event = m_eventsQueue.at(i);
-        Note* note = isNoteInput ? addNoteToScore(event) : makeNote(event);
+        Note* note = isNoteInput ? addNoteToScore(event) : makePreviewNote(event);
         if (note) {
             notes.push_back(note);
         }
@@ -153,6 +155,19 @@ void NotationMidiInput::doProcessEvents()
 
     m_eventsQueue.clear();
     m_processTimer.stop();
+}
+
+void NotationMidiInput::startNoteInputIfNeed()
+{
+    if (isNoteInputMode()) {
+        return;
+    }
+
+    if (configuration()->startNoteInputAtSelectionWhenPressingMidiKey()) {
+        if (!score()->selection().isNone()) {
+            dispatcher()->dispatch("note-input");
+        }
+    }
 }
 
 void NotationMidiInput::addNoteEventsToInputState()
@@ -249,7 +264,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
     return note;
 }
 
-Note* NotationMidiInput::makeNote(const muse::midi::Event& e)
+Note* NotationMidiInput::makePreviewNote(const muse::midi::Event& e)
 {
     if (e.opcode() == muse::midi::Event::Opcode::NoteOff || e.velocity() == 0) {
         return nullptr;
@@ -260,21 +275,18 @@ Note* NotationMidiInput::makeNote(const muse::midi::Event& e)
         return nullptr;
     }
 
-    if (score->selection().isNone()) {
-        return nullptr;
-    }
-
     const mu::engraving::InputState& inputState = score->inputState();
-    if (!inputState.cr()) {
-        return nullptr;
-    }
+    Segment* seg = inputState.lastSegment() ? inputState.lastSegment() : score->dummy()->segment();
 
-    Chord* chord = engraving::Factory::createChord(inputState.lastSegment());
-    chord->setParent(inputState.lastSegment());
+    Chord* chord = engraving::Factory::createChord(seg);
+    chord->setParent(seg);
+
+    const ChordRest* cr = inputState.cr();
+    const mu::engraving::staff_idx_t staffIdx = cr ? engraving::track2staff(cr->track()) : 0;
 
     Note* note = engraving::Factory::createNote(chord);
     note->setParent(chord);
-    note->setStaffIdx(engraving::track2staff(inputState.cr()->track()));
+    note->setStaffIdx(staffIdx);
 
     engraving::NoteVal nval = score->noteVal(e.note(), configuration()->midiUseWrittenPitch().val);
     note->setNval(nval);
