@@ -43,6 +43,9 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         NoteInputSection {
+            noteInputMethods: noteInputModel.noteInputMethods()
+            defaultNoteInputMethod: noteInputModel.defaultNoteInputMethod
+
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
             warnGuitarBends: noteInputModel.warnGuitarBends
@@ -50,6 +53,10 @@ PreferencesPage {
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
+
+            onDefaultNoteInputMethodChangeRequested: function(method) {
+                noteInputModel.defaultNoteInputMethod = method
+            }
 
             onAdvanceToNextNoteChangeRequested: function(advance) {
                 noteInputModel.advanceToNextNoteOnKeyRelease = advance

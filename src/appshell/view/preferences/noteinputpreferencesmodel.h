@@ -31,11 +31,15 @@
 #include "shortcuts/ishortcutsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
+#include "ui/iuiactionsregister.h"
 
 namespace mu::appshell {
 class NoteInputPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
+
+    Q_PROPERTY(
+        int defaultNoteInputMethod READ defaultNoteInputMethod WRITE setDefaultNoteInputMethod NOTIFY defaultNoteInputMethodChanged)
 
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
@@ -59,11 +63,16 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
     muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
     muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
+
+    Q_INVOKABLE QVariantList noteInputMethods() const;
+
+    int defaultNoteInputMethod() const;
 
     bool advanceToNextNoteOnKeyRelease() const;
     bool colorNotesOutsideOfUsablePitchRange() const;
@@ -78,6 +87,7 @@ public:
     bool dynamicsApplyToAllVoices() const;
 
 public slots:
+    void setDefaultNoteInputMethod(int value);
     void setAdvanceToNextNoteOnKeyRelease(bool value);
     void setColorNotesOutsideOfUsablePitchRange(bool value);
     void setWarnGuitarBends(bool value);
@@ -89,6 +99,7 @@ public slots:
     void setDynamicsApplyToAllVoices(bool value);
 
 signals:
+    void defaultNoteInputMethodChanged(int value);
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
     void colorNotesOutsideOfUsablePitchRangeChanged(bool value);
     void warnGuitarBendsChanged(bool value);
