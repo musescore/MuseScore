@@ -301,7 +301,7 @@ public:
     void getLocation() override;
     void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) override;
 
-    void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
+    void showItem(const mu::engraving::EngravingItem* item, CanvasMoveCause cause, int staffIndex = -1) override;
     muse::async::Channel<ShowItemRequest> showItemRequested() const override;
 
     void setGetViewRectFunc(const std::function<muse::RectF()>& func) override;

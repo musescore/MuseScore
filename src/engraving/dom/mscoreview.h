@@ -67,7 +67,7 @@ public:
 
     const std::vector<EngravingItem*> elementsAt(const PointF&) const;
     EngravingItem* elementNear(const PointF& pos) const;
-    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
+    virtual void adjustCanvasPosition(const EngravingItem*, CanvasMoveCause, int /*staffIdx*/ = -1) {}
 
 protected:
     Score* m_score = nullptr;

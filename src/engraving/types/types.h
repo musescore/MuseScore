@@ -1192,6 +1192,12 @@ enum class LayoutFlag : char {
 };
 
 typedef muse::Flags<LayoutFlag> LayoutFlags;
+
+enum CanvasMoveCause {
+    InputAction,          // Note or text input
+    SelectionChange,      // E.g. arrow keys
+    ExplicitNavigation    // E.g. Ctrl+End
+};
 } // mu::engraving
 
 template<>
