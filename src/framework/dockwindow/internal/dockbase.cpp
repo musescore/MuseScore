@@ -530,6 +530,25 @@ void DockBase::setFramePanelOrder(int order)
     frameVisualItem->setProperty("titleBarNavigationPanelOrder", order);
 }
 
+void DockBase::setTitleBarHeight(int height)
+{
+    if (!m_dockWidget) {
+        return;
+    }
+
+    auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
+    if (!frame) {
+        return;
+    }
+
+    QQuickItem* frameVisualItem = frame->visualItem();
+    if (!frameVisualItem) {
+        return;
+    }
+
+    frameVisualItem->setProperty("titleBarDefaultHeight", height);
+}
+
 void DockBase::resetToDefault()
 {
     setVisible(m_defaultVisibility);

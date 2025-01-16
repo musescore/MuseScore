@@ -42,6 +42,8 @@ Rectangle {
     readonly property bool hasSingleTab: frameModel.titleBarAllowed && frameModel.tabs.length === 1 && frameModel.isHorizontalPanel
     readonly property bool hasTabBar: frameModel.titleBarAllowed && (frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
 
+    property int titleBarDefaultHeight: 34
+
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
 
@@ -82,7 +84,7 @@ Rectangle {
 
         anchors.top: parent.top
         width: parent.width
-        height: visible ? 34 : 0
+        height: visible ? titleBarDefaultHeight : 0
 
         visible: root.hasTitleBar
 
