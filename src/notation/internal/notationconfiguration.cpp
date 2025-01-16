@@ -103,6 +103,18 @@ static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style
 
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
+static const std::string BY_NOTE_NAME_INPUT_METHOD("BY_NOTE_NAME");
+
+static const std::map<NoteInputMethod, std::string> NOTE_INPUT_METHOD_TO_STR {
+    { NoteInputMethod::BY_NOTE_NAME, BY_NOTE_NAME_INPUT_METHOD },
+    { NoteInputMethod::BY_DURATION, "BY_DURATION" },
+    { NoteInputMethod::REPITCH, "REPITCH" },
+    { NoteInputMethod::RHYTHM, "RHYTHM" },
+    { NoteInputMethod::REALTIME_AUTO, "REALTIME_AUTO" },
+    { NoteInputMethod::REALTIME_MANUAL, "REALTIME_MANUAL" },
+    { NoteInputMethod::TIMEWISE, "TIMEWISE" },
+};
+
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
@@ -178,7 +190,7 @@ void NotationConfiguration::init()
         fileSystem()->makePath(userStylesPath());
     }
 
-    settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(static_cast<int>(NoteInputMethod::BY_PITCH)));
+    settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(BY_NOTE_NAME_INPUT_METHOD));
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->valueChanged(SELECTION_PROXIMITY).onReceive(this, [this](const Val& val) {
         m_selectionProximityChanged.send(val.toInt());
@@ -635,14 +647,16 @@ async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged
     return engravingConfiguration()->partStyleFilePathChanged();
 }
 
-void NotationConfiguration::setDefaultNoteInputMethod(NoteInputMethod method)
-{
-    settings()->setSharedValue(DEFAULT_NOTE_INPUT_METHOD, Val(static_cast<int>(method)));
-}
-
 NoteInputMethod NotationConfiguration::defaultNoteInputMethod() const
 {
-    return static_cast<NoteInputMethod>(settings()->value(DEFAULT_NOTE_INPUT_METHOD).toInt());
+    std::string str = settings()->value(DEFAULT_NOTE_INPUT_METHOD).toString();
+    return muse::key(NOTE_INPUT_METHOD_TO_STR, str, NoteInputMethod::BY_NOTE_NAME);
+}
+
+void NotationConfiguration::setDefaultNoteInputMethod(NoteInputMethod method)
+{
+    std::string str = muse::value(NOTE_INPUT_METHOD_TO_STR, method);
+    settings()->setSharedValue(DEFAULT_NOTE_INPUT_METHOD, Val(str));
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

@@ -70,6 +70,35 @@ void NoteInputPreferencesModel::load()
     });
 }
 
+QVariantList NoteInputPreferencesModel::noteInputMethods() const
+{
+    using Method = mu::notation::NoteInputMethod;
+
+    std::vector<std::pair<muse::actions::ActionCode, Method > > noteInputActions {
+        { "note-input-by-note-name", Method::BY_NOTE_NAME },
+        { "note-input-by-duration", Method::BY_DURATION },
+    };
+
+    QVariantList methods;
+
+    for (const auto& pair : noteInputActions) {
+        const muse::ui::UiAction& action = uiActionsRegister()->action(pair.first);
+
+        QVariantMap method;
+        method["value"] = static_cast<int>(pair.second);
+        method["text"] = action.title.qTranslatedWithoutMnemonic();
+
+        methods.emplace_back(std::move(method));
+    }
+
+    return methods;
+}
+
+int NoteInputPreferencesModel::defaultNoteInputMethod() const
+{
+    return static_cast<int>(notationConfiguration()->defaultNoteInputMethod());
+}
+
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
     return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();
@@ -113,6 +142,16 @@ bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
 bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
 {
     return engravingConfiguration()->dynamicsApplyToAllVoices();
+}
+
+void NoteInputPreferencesModel::setDefaultNoteInputMethod(int value)
+{
+    if (value == defaultNoteInputMethod()) {
+        return;
+    }
+
+    notationConfiguration()->setDefaultNoteInputMethod(static_cast<mu::notation::NoteInputMethod>(value));
+    emit defaultNoteInputMethodChanged(value);
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)

@@ -30,15 +30,35 @@ BaseSection {
 
     title: qsTrc("appshell/preferences", "Note input")
 
+    property alias noteInputMethods: defaultNoteInputMethodDropdown.model
+    property int defaultNoteInputMethod: 0
+
     property alias advanceToNextNote: advanceToNextNoteBox.checked
     property alias colorNotes: colorNotesBox.checked
     property alias warnGuitarBends: warnBendsBox.checked
     property alias delayBetweenNotes: delayBetweenNotesControl.currentValue
 
+    signal defaultNoteInputMethodChangeRequested(int method)
     signal advanceToNextNoteChangeRequested(bool advance)
     signal colorNotesChangeRequested(bool color)
     signal warnGuitarBendsChangeRequested(bool warn)
     signal delayBetweenNotesChangeRequested(int delay)
+
+    ComboBoxWithTitle {
+        id: defaultNoteInputMethodDropdown
+
+        title: qsTrc("appshell/preferences", "Default input mode")
+
+        currentIndex: defaultNoteInputMethodDropdown.indexOfValue(root.defaultNoteInputMethod)
+
+        navigation.name: "DefaultNoteInputMethodDropdown"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
+        onValueEdited: function(newIndex, newValue) {
+            root.defaultNoteInputMethodChangeRequested(newValue)
+        }
+    }
 
     CheckBox {
         id: advanceToNextNoteBox
@@ -48,7 +68,7 @@ BaseSection {
 
         navigation.name: "AdvanceToNextNoteBox"
         navigation.panel: root.navigation
-        navigation.row: 0
+        navigation.row: defaultNoteInputMethodDropdown.model.length
 
         onClicked: {
             root.advanceToNextNoteChangeRequested(!checked)
@@ -63,7 +83,7 @@ BaseSection {
 
         navigation.name: "ColorNotesBox"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: advanceToNextNoteBox.navigation.row + 1
 
         onClicked: {
             root.colorNotesChangeRequested(!checked)
@@ -78,7 +98,7 @@ BaseSection {
 
         navigation.name: "WarnBendBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: colorNotesBox.navigation.row + 1
 
         onClicked: {
             root.warnGuitarBendsChangeRequested(!checked)
@@ -97,7 +117,7 @@ BaseSection {
 
         navigation.name: "DelayBetweenNotesControl"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: warnBendsBox.navigation.row + 1
 
         onValueEdited: function(newValue) {
             root.delayBetweenNotesChangeRequested(newValue)
