@@ -29,9 +29,6 @@ import MuseScore.NotationScene 1.0
 
 StyledPopupView {
     id: root
-
-    readonly property alias model: harpModel
-
     property variant pedalState: harpModel.pedalState
 
     property alias notationViewNavigationSection: pedalSettingsNavPanel.section
@@ -279,7 +276,7 @@ StyledPopupView {
             Layout.leftMargin: 30
             Layout.fillWidth: true
 
-            checked: model.isDiagram
+            checked: harpModel.isDiagram
             text: qsTrc("notation", "Diagram")
 
             navigation.name: "diagramButton"
@@ -288,7 +285,7 @@ StyledPopupView {
             navigation.accessible.name: qsTrc("notation", "Diagram")
 
             onToggled: {
-                model.setIsDiagram(true)
+                harpModel.setIsDiagram(true)
             }
         }
 
@@ -302,7 +299,7 @@ StyledPopupView {
             Layout.bottomMargin: 15
             Layout.fillWidth: true
 
-            checked: !model.isDiagram
+            checked: !harpModel.isDiagram
             text: qsTrc("notation", "Text")
 
             navigation.name: "textButton"
@@ -311,7 +308,7 @@ StyledPopupView {
             navigation.accessible.name: qsTrc("notation", "Text")
 
             onToggled: {
-                model.setIsDiagram(false)
+                harpModel.setIsDiagram(false)
             }
         }
     }

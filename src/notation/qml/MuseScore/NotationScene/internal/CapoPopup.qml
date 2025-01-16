@@ -33,8 +33,6 @@ StyledPopupView {
     property alias navigationOrderStart: capoSettingsNavPanel.order
     readonly property alias navigationOrderEnd: capoSettingsNavPanel.order
 
-    readonly property alias model: capoModel
-
 
     contentWidth: content.width
     contentHeight: content.height

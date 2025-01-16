@@ -549,7 +549,7 @@ NoteHeadGroup NoteHead::headGroup() const
 //---------------------------------------------------------
 
 Note::Note(Chord* ch)
-    : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE), m_jumpPoints(this)
+    : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE)
 {
     m_playEvents.push_back(NoteEvent());      // add default play event
 }
@@ -599,7 +599,7 @@ std::vector<const Note*> Note::compoundNotes() const
 }
 
 Note::Note(const Note& n, bool link)
-    : EngravingItem(n), m_jumpPoints(this)
+    : EngravingItem(n)
 {
     if (link) {
         score()->undo(new Link(this, const_cast<Note*>(&n)));
