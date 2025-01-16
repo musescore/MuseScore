@@ -2181,7 +2181,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
         attrs = { { "symbol", "common" } };
     } else if (st == TimeSigType::ALLA_BREVE) {
         attrs = { { "symbol", "cut" } };
-    } else if (tsig->denominatorString().empty()) {
+    } else if (!ns.empty() && tsig->denominatorString().empty()) {
         attrs = { { "symbol", "single-number" } };
     }
     if (!tsig->visible()) {
