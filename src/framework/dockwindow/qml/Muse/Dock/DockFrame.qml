@@ -82,7 +82,7 @@ Rectangle {
 
         anchors.top: parent.top
         width: parent.width
-        height: visible ? 34 : 0
+        height: visible ? implicitHeight : 0
 
         visible: root.hasTitleBar
 
