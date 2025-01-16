@@ -1924,13 +1924,15 @@ EngravingItem* Note::drop(EditData& data)
             GuitarBendType type = (toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
                                   ? GuitarBendType::PRE_BEND : GuitarBendType::GRACE_NOTE_BEND;
             GuitarBend* guitarBend = score()->addGuitarBend(type, this);
-            Note* note = guitarBend->startNote();
-            IF_ASSERT_FAILED(note) {
-                LOGE() << "not valid start note of the bend";
-                break;
-            }
+            if (guitarBend) {
+                Note* note = guitarBend->startNote();
+                IF_ASSERT_FAILED(note) {
+                    LOGE() << "not valid start note of the bend";
+                    break;
+                }
 
-            score()->select(note, SelectType::SINGLE, 0);
+                score()->select(note, SelectType::SINGLE, 0);
+            }
             break;
         }
         case ActionIconType::SLIGHT_BEND:
