@@ -17,18 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "exampleview.h"
+#include "icons.h"
+#include "musescore.h"
 #include "timesigproperties.h"
+
 #include "libmscore/timesig.h"
 #include "libmscore/mcursor.h"
-#include "libmscore/durationtype.h"
 #include "libmscore/score.h"
-#include "libmscore/chord.h"
 #include "libmscore/measure.h"
 #include "libmscore/part.h"
-#include "exampleview.h"
-#include "menus.h"
-#include "musescore.h"
-#include "icons.h"
 
 namespace Ms {
 
@@ -50,8 +48,8 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zText->setText(timesig->numeratorString());
       nText->setText(timesig->denominatorString());
       // set validators for numerator and denominator strings
-      // which only accept '+', '(', ')', digits and some time symb conventional representations
-      QRegExp rx("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
+      // which only accepts '(', ')', '*' (and 'x', 'X', '×'), '+', '-', '/' (and '÷'), digits, '=', and some time symb conventional representations
+      QRegExp rx("[()\\*+\\-/0-9=COXcox\\x00A2\\x00BD\\x00BC\\x00D7\\x00D8\\x00F7\\xE910-\\xE91A]*");
       QValidator *validator = new QRegExpValidator(rx, this);
       zText->setValidator(validator);
       nText->setValidator(validator);
@@ -96,15 +94,17 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
             Icons icon;
             };
       static const std::vector<ProlatioTable> prolatioList = {
-            { SymId::mensuralProlation1,  Icons::timesig_prolatio01_ICON },  // tempus perfectum, prol. perfecta
-            { SymId::mensuralProlation2,  Icons::timesig_prolatio02_ICON },  // tempus perfectum, prol. imperfecta
-            { SymId::mensuralProlation3,  Icons::timesig_prolatio03_ICON },  // tempus perfectum, prol. imperfecta, dimin.
-            { SymId::mensuralProlation4,  Icons::timesig_prolatio04_ICON },  // tempus perfectum, prol. perfecta, dimin.
-            { SymId::mensuralProlation5,  Icons::timesig_prolatio05_ICON },  // tempus imperf. prol. perfecta
-            { SymId::mensuralProlation7,  Icons::timesig_prolatio07_ICON },  // tempus imperf., prol. imperfecta, reversed
-            { SymId::mensuralProlation8,  Icons::timesig_prolatio08_ICON },  // tempus imperf., prol. perfecta, dimin.
-            { SymId::mensuralProlation10, Icons::timesig_prolatio10_ICON },  // tempus imperf., prol imperfecta, dimin., reversed
-            { SymId::mensuralProlation11, Icons::timesig_prolatio11_ICON },  // tempus inperf., prol. perfecta, reversed
+            { SymId::mensuralProlation1,  Icons::timesig_prolatio01_ICON },  // Tempus perfectum cum prolatione perfecta (9/8)
+            { SymId::mensuralProlation2,  Icons::timesig_prolatio02_ICON },  // Tempus perfectum cum prolatione imperfecta (3/4)
+            { SymId::mensuralProlation3,  Icons::timesig_prolatio03_ICON },  // Tempus perfectum cum prolatione imperfecta diminution 1 (3/8)
+            { SymId::mensuralProlation4,  Icons::timesig_prolatio04_ICON },  // Tempus perfectum cum prolatione perfecta diminution 2 (9/16)
+            { SymId::mensuralProlation5,  Icons::timesig_prolatio05_ICON },  // Tempus imperfectum cum prolatione perfecta (6/8)
+            //{ SymId::mensuralProlation6,  Icons::timesig_prolatio06_ICON },  // Tempus imperfectum cum prolatione imperfecta (2/4)
+            { SymId::mensuralProlation7,  Icons::timesig_prolatio07_ICON },  // Tempus imperfectum cum prolatione imperfecta diminution 1 (2/2)
+            { SymId::mensuralProlation8,  Icons::timesig_prolatio08_ICON },  // Tempus imperfectum cum prolatione imperfecta diminution 2 (6/16)
+            //{ SymId::mensuralProlation9,  Icons::timesig_prolatio09_ICON },  // Tempus imperfectum cum prolatione imperfecta diminution 3 (2/2)
+            { SymId::mensuralProlation10, Icons::timesig_prolatio10_ICON },  // Tempus imperfectum cum prolatione imperfecta diminution 4
+            { SymId::mensuralProlation11, Icons::timesig_prolatio11_ICON },  // Tempus imperfectum cum prolatione imperfecta diminution 5
             };
 
       ScoreFont* scoreFont = gscore->scoreFont();
