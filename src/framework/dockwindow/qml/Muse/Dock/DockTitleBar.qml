@@ -40,7 +40,7 @@ Item {
     signal handleContextMenuItemRequested(string itemId)
 
     width: parent.width
-    height: visible ? heightWhenVisible : 0
+    implicitHeight: titleBarLoader.implicitHeight
 
     visible: Boolean(titleBarCpp)
 
@@ -69,7 +69,7 @@ Item {
 
             anchors.fill: parent
             implicitWidth: rowLayout.implicitWidth
-            implicitHeight: rowLayout.implicitHeight
+            implicitHeight: rowLayout.implicitHeight + rowLayout.anchors.topMargin + rowLayout.anchors.bottomMargin
 
             property NavigationPanel navigationPanel
             property int navigationOrder
@@ -84,6 +84,8 @@ Item {
             RowLayout {
                 id: rowLayout
                 anchors.fill: parent
+                anchors.topMargin: 2
+                anchors.bottomMargin: 2
                 anchors.leftMargin: 12
                 anchors.rightMargin: 12
 
