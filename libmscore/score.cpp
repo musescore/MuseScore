@@ -35,6 +35,7 @@
 #include "keysig.h"
 #include "layoutbreak.h"
 #include "line.h"
+#include "log.h"
 #include "lyrics.h"
 #include "measure.h"
 #include "mscore.h"
@@ -4379,6 +4380,9 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
 
 ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
       {
+      IF_ASSERT_FAILED(cr)
+          return nullptr;
+
       auto newCR = cr;
       auto currentMeasure = cr->measure();
       auto currentSystem = currentMeasure->system() ? currentMeasure->system() : currentMeasure->coveringMMRestOrThis()->system();
@@ -4396,6 +4400,8 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
                   currentSystem = destinationMeasure->system()
                                   ? destinationMeasure->system()
                                   : destinationMeasure->coveringMMRestOrThis()->system();
+                  if (!currentSystem)
+                        return cr;
                   if ((destinationMeasure = currentSystem->firstMeasure()))
                         if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false)))
                               cr = newCR;
