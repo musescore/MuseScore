@@ -1208,6 +1208,9 @@ SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyl
         { 162,   SymId::timeSigCutCommon },             // '¢'
         { 189,   SymId::timeSigFractionHalf },
         { 188,   SymId::timeSigFractionQuarter },
+        { 88,    SymId::timeSigMultiply },              // 'X'
+        { 120,   SymId::timeSigMultiply },              // 'x'
+        { 215,   SymId::timeSigMultiply },              // '×'
         { 59664, SymId::mensuralProlation1 },
         { 79,    SymId::mensuralProlation2 },           // 'O'
         { 59665, SymId::mensuralProlation2 },
@@ -1239,6 +1242,9 @@ SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyl
         { 162,   SymId::timeSigCutCommonLarge },             // '¢'
         { 189,   SymId::timeSigFractionHalfLarge },
         { 189,   SymId::timeSigFractionQuarterLarge },
+        { 88,    SymId::timeSigMultiplyLarge },              // 'X'
+        { 120,   SymId::timeSigMultiplyLarge },              // 'x'
+        { 215,   SymId::timeSigMultiplyLarge },              // '×'
     };
 
     static const std::map<Char, SymId> dictNarrow = {
@@ -1259,6 +1265,9 @@ SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyl
         { 162,   SymId::timeSigCutCommonNarrow },             // '¢'
         { 189,   SymId::timeSigFractionHalfNarrow },
         { 188,   SymId::timeSigFractionQuarterNarrow },
+        { 88,    SymId::timeSigMultiplyNarrow },              // 'X'
+        { 120,   SymId::timeSigMultiplyNarrow },              // 'x'
+        { 215,   SymId::timeSigMultiplyNarrow },              // '×'
     };
 
     SymIdList list;
