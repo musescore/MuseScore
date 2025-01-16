@@ -546,7 +546,7 @@ void DockBase::setTitleBarHeight(int height)
         return;
     }
 
-    frameVisualItem->setProperty("titleBarDefaultHeight", height);
+    frameVisualItem->setProperty("titleBarHeight", height);
 }
 
 void DockBase::resetToDefault()

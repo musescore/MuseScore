@@ -36,13 +36,12 @@ Rectangle {
     readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
     readonly property int nonContentsHeight: titleBar.height + tabBar.height + stackLayout.anchors.topMargin
     property int titleBarNavigationPanelOrder: 1
+    property int titleBarHeight: 34
     //! ---
 
     readonly property bool hasTitleBar: frameModel.titleBarAllowed && !(frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
     readonly property bool hasSingleTab: frameModel.titleBarAllowed && frameModel.tabs.length === 1 && frameModel.isHorizontalPanel
     readonly property bool hasTabBar: frameModel.titleBarAllowed && (frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
-
-    property int titleBarDefaultHeight: 34
 
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
@@ -84,7 +83,7 @@ Rectangle {
 
         anchors.top: parent.top
         width: parent.width
-        height: visible ? titleBarDefaultHeight : 0
+        height: visible ? titleBarHeight : 0
 
         visible: root.hasTitleBar
 
