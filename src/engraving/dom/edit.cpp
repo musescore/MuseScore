@@ -707,20 +707,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (destinationElement && destinationElement->isVBox()) {
             frame = toMeasureBase(destinationElement);
         } else {
-            MeasureBase* linkedFrame = nullptr;
-            for (Score* score : scoreList()) {
-                MeasureBase* titleFrame = score->first();
-                if (!titleFrame || !titleFrame->isVBox()) {
-                    titleFrame = score->insertBox(ElementType::VBOX, titleFrame);
-                }
-                if (!linkedFrame) {
-                    linkedFrame = titleFrame;
-                } else {
-                    score->undo(new Link(titleFrame, linkedFrame));
-                }
-                if (score == this->score()) {
-                    frame = titleFrame;
-                }
+            frame = first();
+            if (!frame || !frame->isBox()) {
+                frame = insertBox(ElementType::VBOX, frame);
             }
         }
 
