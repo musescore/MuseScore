@@ -31,7 +31,7 @@ StyledDialogView {
     property alias type: mainPanel.type
 
     property alias dialogTitle: root.title
-    property alias title: mainPanel.title
+    property alias contentTitle: mainPanel.title
     property alias text: mainPanel.text
     property alias textFormat: mainPanel.textFormat
     property string detailedText: ""
