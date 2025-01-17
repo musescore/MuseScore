@@ -465,8 +465,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("pitch-spell",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Respell &pitches"),
-             TranslatableString("action", "Respell pitches")
+             TranslatableString("action", "&Optimize enharmonic spelling"),
+             TranslatableString("action", "Optimize enharmonic spelling")
              ),
     UiAction("reset-groupings",
              mu::context::UiCtxProjectOpened,
