@@ -66,6 +66,7 @@ public:
     // Used in the input-by-duration mode
     virtual void setNoteToInput(NoteName note) = 0;
     virtual void setPitchesToInput(const std::set<int>& pitches) = 0;
+    virtual void moveInputPitches(bool up, PitchMode mode) = 0;
 
     virtual void setAccidental(AccidentalType accidentalType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
