@@ -75,12 +75,15 @@ public:
 
     int selectionProximity() const override;
     void setSelectionProximity(int proximity)  override;
+    muse::async::Channel<int> selectionProximityChanged() const override;
 
     ZoomType defaultZoomType() const override;
     void setDefaultZoomType(ZoomType zoomType)  override;
 
     int defaultZoom() const override;
     void setDefaultZoom(int zoomPercentage)  override;
+
+    muse::async::Notification defaultZoomChanged() const override;
 
     QList<int> possibleZoomPercentageList() const override;
 
@@ -89,6 +92,7 @@ public:
 
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision)  override;
+    muse::async::Notification mouseZoomPrecisionChanged() const override;
 
     std::string fontFamily() const override;
     int fontSize() const override;
@@ -99,9 +103,11 @@ public:
 
     muse::io::path_t defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const muse::io::path_t& path)  override;
+    muse::async::Channel<muse::io::path_t> defaultStyleFilePathChanged() const override;
 
     muse::io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const muse::io::path_t& path)  override;
+    muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled)  override;
@@ -135,12 +141,15 @@ public:
 
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value)  override;
+    muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const override;
 
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)  override;
+    muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const override;
 
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs)  override;
+    muse::async::Channel<int> notePlayDurationMillisecondsChanged() const override;
 
     void setTemplateModeEnabled(std::optional<bool> enabled) override;
     void setTestModeEnabled(std::optional<bool> enabled) override;
@@ -192,6 +201,7 @@ public:
 
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path)  override;
+    muse::async::Channel<std::string> styleFileImportPathChanged() const override;
 };
 }
 

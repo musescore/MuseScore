@@ -30,25 +30,31 @@ namespace muse {
 class InteractiveMock : public IInteractive
 {
 public:
-    MOCK_METHOD(Result, question, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&),
-                (const, override));
-    MOCK_METHOD(Result, question, (const std::string&, const Text&, const ButtonDatas&, int, const Options&), (const, override));
+    MOCK_METHOD(Result, question, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&,
+                                   const std::string&), (const, override));
+    MOCK_METHOD(Result, question, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                   const std::string&), (const, override));
 
     MOCK_METHOD(ButtonData, buttonData, (Button), (const, override));
 
-    MOCK_METHOD(Result, info, (const std::string&, const std::string&, const Buttons&, int, const Options&), (const, override));
-    MOCK_METHOD(Result, info, (const std::string&, const Text&, const ButtonDatas&, int, const Options&), (const, override));
+    MOCK_METHOD(Result, info, (const std::string&, const std::string&, const Buttons&, int, const Options&,
+                               const std::string&), (const, override));
+    MOCK_METHOD(Result, info, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                               const std::string&), (const, override));
 
-    MOCK_METHOD(Result, warning, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&),
-                (const, override));
-    MOCK_METHOD(Result, warning, (const std::string&, const Text&, const ButtonDatas&, int, const Options&), (const, override));
-    MOCK_METHOD(Result, warning, (const std::string&, const Text&, const std::string&, const ButtonDatas&, int, const Options&),
-                (const, override));
+    MOCK_METHOD(Result, warning, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&,
+                                  const std::string&), (const, override));
+    MOCK_METHOD(Result, warning, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                  const std::string&), (const, override));
+    MOCK_METHOD(Result, warning, (const std::string&, const Text&, const std::string&, const ButtonDatas&, int, const Options&,
+                                  const std::string&), (const, override));
 
-    MOCK_METHOD(Result, error, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&), (const, override));
-    MOCK_METHOD(Result, error, (const std::string&, const Text&, const ButtonDatas&, int, const Options&), (const, override));
-    MOCK_METHOD(Result, error, (const std::string&, const Text&, const std::string&, const ButtonDatas&, int, const Options&),
-                (const, override));
+    MOCK_METHOD(Result, error, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&,
+                                const std::string&), (const, override));
+    MOCK_METHOD(Result, error, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                const std::string&), (const, override));
+    MOCK_METHOD(Result, error, (const std::string&, const Text&, const std::string&, const ButtonDatas&, int, const Options&,
+                                const std::string&), (const, override));
 
     MOCK_METHOD(Ret, showProgress, (const std::string&, Progress*), (const, override));
 

@@ -34,9 +34,11 @@ public:
 
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
+    muse::async::Channel<bool> playChordWhenEditingChanged() const override;
 
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
+    muse::async::Channel<bool> playHarmonyWhenEditingChanged() const override;
 
     PlaybackCursorType cursorType() const override;
 

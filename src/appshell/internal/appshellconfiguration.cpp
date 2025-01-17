@@ -63,7 +63,14 @@ void AppShellConfiguration::init()
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
 
     settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(StartupModeType::StartEmpty));
+    settings()->valueChanged(STARTUP_MODE_TYPE).onReceive(this, [this](const Val&) {
+        m_startupModeTypeChanged.notify();
+    });
+
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
+    settings()->valueChanged(STARTUP_SCORE_PATH).onReceive(this, [this](const Val&) {
+        m_startupScorePathChanged.notify();
+    });
 
     fileSystem()->makePath(sessionDataPath());
 }
@@ -88,6 +95,11 @@ void AppShellConfiguration::setStartupModeType(StartupModeType type)
     settings()->setSharedValue(STARTUP_MODE_TYPE, Val(type));
 }
 
+async::Notification AppShellConfiguration::startupModeTypeChanged() const
+{
+    return m_startupModeTypeChanged;
+}
+
 muse::io::path_t AppShellConfiguration::startupScorePath() const
 {
     return settings()->value(STARTUP_SCORE_PATH).toString();
@@ -96,6 +108,11 @@ muse::io::path_t AppShellConfiguration::startupScorePath() const
 void AppShellConfiguration::setStartupScorePath(const muse::io::path_t& scorePath)
 {
     settings()->setSharedValue(STARTUP_SCORE_PATH, Val(scorePath.toStdString()));
+}
+
+async::Notification AppShellConfiguration::startupScorePathChanged() const
+{
+    return m_startupScorePathChanged;
 }
 
 muse::io::path_t AppShellConfiguration::userDataPath() const
@@ -213,7 +230,7 @@ void AppShellConfiguration::rollbackSettings()
     settings()->rollbackTransaction();
 }
 
-void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges) const
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges)
 {
     settings()->reset(keepDefaultSettings, notifyAboutChanges);
 }

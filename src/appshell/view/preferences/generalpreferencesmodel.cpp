@@ -45,6 +45,14 @@ void GeneralPreferencesModel::load()
     languagesService()->needRestartToApplyLanguageChangeChanged().onReceive(this, [this](bool need) {
         setIsNeedRestart(need);
     });
+
+    configuration()->startupModeTypeChanged().onNotify(this, [this]() {
+        emit startupModesChanged();
+    });
+
+    configuration()->startupScorePathChanged().onNotify(this, [this]() {
+        emit startupModesChanged();
+    });
 }
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
@@ -244,6 +252,5 @@ void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
     }
 
     configuration()->setStartupScorePath(scorePath);
-
     emit startupModesChanged();
 }

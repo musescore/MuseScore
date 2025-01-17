@@ -41,6 +41,7 @@ public:
 
     virtual bool useRemoteControl() const = 0;
     virtual void setUseRemoteControl(bool value) = 0;
+    virtual async::Channel<bool> useRemoteControlChanged() const = 0;
 
     virtual MidiDeviceID midiInputDeviceId() const = 0;
     virtual void setMidiInputDeviceId(const MidiDeviceID& deviceId) = 0;
@@ -52,6 +53,7 @@ public:
 
     virtual bool useMIDI20Output() const = 0;
     virtual void setUseMIDI20Output(bool use) = 0;
+    virtual async::Channel<bool> useMIDI20OutputChanged() const = 0;
 };
 }
 

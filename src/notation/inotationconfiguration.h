@@ -83,12 +83,14 @@ public:
 
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proximity) = 0;
+    virtual muse::async::Channel<int> selectionProximityChanged() const = 0;
 
     virtual ZoomType defaultZoomType() const = 0;
     virtual void setDefaultZoomType(ZoomType zoomType) = 0;
 
     virtual int defaultZoom() const = 0;
     virtual void setDefaultZoom(int zoomPercentage) = 0;
+    virtual muse::async::Notification defaultZoomChanged() const = 0;
 
     virtual QList<int> possibleZoomPercentageList() const = 0;
 
@@ -97,6 +99,7 @@ public:
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
+    virtual muse::async::Notification mouseZoomPrecisionChanged() const = 0;
 
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
@@ -107,9 +110,11 @@ public:
 
     virtual muse::io::path_t defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> defaultStyleFilePathChanged() const = 0;
 
     virtual muse::io::path_t partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const = 0;
 
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
@@ -146,15 +151,19 @@ public:
 
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
+    virtual muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const = 0;
 
     virtual bool warnGuitarBends() const = 0;
     virtual void setWarnGuitarBends(bool value) = 0;
+    virtual muse::async::Channel<bool> warnGuitarBendsChanged() const = 0;
 
     virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
+    virtual muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const = 0;
 
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
+    virtual muse::async::Channel<int> notePlayDurationMillisecondsChanged() const = 0;
 
     virtual void setTemplateModeEnabled(std::optional<bool> enabled) = 0;
     virtual void setTestModeEnabled(std::optional<bool> enabled) = 0;
@@ -211,6 +220,7 @@ public:
 
     virtual muse::io::path_t styleFileImportPath() const = 0;
     virtual void setStyleFileImportPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<std::string> styleFileImportPathChanged() const = 0;
 
     virtual int styleDialogLastPageIndex() const = 0;
     virtual void setStyleDialogLastPageIndex(int value) = 0;

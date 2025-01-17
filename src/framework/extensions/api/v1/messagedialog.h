@@ -85,7 +85,7 @@ signals:
 
 private:
 
-    void doOpen(const QString& title, const QString& text, const QString& detailed, const QVariantList& buttons);
+    void doOpen(const QString& contentTitle, const QString& text, const QString& detailed, const QVariantList& buttons);
 
     QString m_text;
     bool m_visible = false;

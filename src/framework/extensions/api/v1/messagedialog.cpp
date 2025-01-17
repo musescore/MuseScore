@@ -26,7 +26,7 @@ using namespace muse::extensions::apiv1;
 MessageDialog::MessageDialog(QObject* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this)) {}
 
-void MessageDialog::doOpen(const QString& title, const QString& text, const QString& detailed, const QVariantList& buttons)
+void MessageDialog::doOpen(const QString& contentTitle, const QString& text, const QString& detailed, const QVariantList& buttons)
 {
     //! NOTE Minimum compatibility for the current ones to work.
     //! It would be nice to change a lot of things.
@@ -38,7 +38,7 @@ void MessageDialog::doOpen(const QString& title, const QString& text, const QStr
 
     // info
     if (btns.size() <= 1) {
-        interactive()->error(title.toStdString(), text.toStdString(), detailed.toStdString());
+        interactive()->error(contentTitle.toStdString(), text.toStdString(), detailed.toStdString());
         emit accepted();
     }
     //
@@ -49,7 +49,7 @@ void MessageDialog::doOpen(const QString& title, const QString& text, const QStr
             txt += detailed.toStdString();
         }
 
-        IInteractive::Result res = interactive()->question(title.toStdString(), txt, btns);
+        IInteractive::Result res = interactive()->question(contentTitle.toStdString(), txt, btns);
 
         if (res.standardButton() == IInteractive::Button::Ok) {
             emit accepted();

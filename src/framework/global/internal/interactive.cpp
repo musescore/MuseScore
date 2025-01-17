@@ -73,18 +73,19 @@ static QString filterToString(const std::vector<std::string>& filter)
 
 #endif
 
-IInteractive::Result Interactive::question(const std::string& title, const std::string& text,
+IInteractive::Result Interactive::question(const std::string& contentTitle, const std::string& text,
                                            const Buttons& buttons,
                                            const Button& def,
-                                           const Options& options) const
+                                           const Options& options,
+                                           const std::string& dialogTitle) const
 {
-    return question(title, Text(text), buttonDataList(buttons), int(def), options);
+    return question(contentTitle, Text(text), buttonDataList(buttons), int(def), options, dialogTitle);
 }
 
-IInteractive::Result Interactive::question(const std::string& title, const Text& text, const ButtonDatas& btns, int defBtn,
-                                           const Options& options) const
+IInteractive::Result Interactive::question(const std::string& contentTitle, const Text& text, const ButtonDatas& btns, int defBtn,
+                                           const Options& options, const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->question(title, text, btns, defBtn, options));
+    return standardDialogResult(provider()->question(contentTitle, text, btns, defBtn, options, dialogTitle));
 }
 
 IInteractive::ButtonData Interactive::buttonData(Button b) const
@@ -124,58 +125,60 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     return ButtonData(int(b), "");
 }
 
-IInteractive::Result Interactive::info(const std::string& title, const std::string& text, const Buttons& buttons,
+IInteractive::Result Interactive::info(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                                        int defBtn,
-                                       const Options& options) const
+                                       const Options& options,
+                                       const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->info(title, text, buttonDataList(buttons), defBtn, options));
+    return standardDialogResult(provider()->info(contentTitle, text, buttonDataList(buttons), defBtn, options, dialogTitle));
 }
 
-IInteractive::Result Interactive::info(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn,
-                                       const Options& options) const
+IInteractive::Result Interactive::info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                                       const Options& options, const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->info(title, text, buttons, defBtn, options));
+    return standardDialogResult(provider()->info(contentTitle, text, buttons, defBtn, options, dialogTitle));
 }
 
-Interactive::Result Interactive::warning(const std::string& title, const std::string& text, const Buttons& buttons, const Button& defBtn,
-                                         const Options& options) const
+Interactive::Result Interactive::warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                         const Button& defBtn, const Options& options, const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->warning(title, text, {}, buttonDataList(buttons), int(defBtn), options));
+    return standardDialogResult(provider()->warning(contentTitle, text, {}, buttonDataList(buttons), int(defBtn), options, dialogTitle));
 }
 
-IInteractive::Result Interactive::warning(const std::string& title, const Text& text, const ButtonDatas& buttons,
+IInteractive::Result Interactive::warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
                                           int defBtn,
-                                          const Options& options) const
+                                          const Options& options,
+                                          const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->warning(title, text, {}, buttons, defBtn, options));
+    return standardDialogResult(provider()->warning(contentTitle, text, {}, buttons, defBtn, options, dialogTitle));
 }
 
-IInteractive::Result Interactive::warning(const std::string& title, const Text& text, const std::string& detailedText,
+IInteractive::Result Interactive::warning(const std::string& contentTitle, const Text& text, const std::string& detailedText,
                                           const ButtonDatas& buttons, int defBtn,
-                                          const Options& options) const
+                                          const Options& options, const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->warning(title, text, detailedText, buttons, defBtn, options));
+    return standardDialogResult(provider()->warning(contentTitle, text, detailedText, buttons, defBtn, options, dialogTitle));
 }
 
-IInteractive::Result Interactive::error(const std::string& title, const std::string& text,
+IInteractive::Result Interactive::error(const std::string& contentTitle, const std::string& text,
                                         const Buttons& buttons, const Button& defBtn,
-                                        const Options& options) const
+                                        const Options& options, const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->error(title, text, {}, buttonDataList(buttons), int(defBtn), options));
+    return standardDialogResult(provider()->error(contentTitle, text, {}, buttonDataList(buttons), int(defBtn), options, dialogTitle));
 }
 
-IInteractive::Result Interactive::error(const std::string& title, const Text& text,
+IInteractive::Result Interactive::error(const std::string& contentTitle, const Text& text,
                                         const ButtonDatas& buttons, int defBtn,
-                                        const Options& options) const
+                                        const Options& options, const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->error(title, text, {}, buttons, defBtn, options));
+    return standardDialogResult(provider()->error(contentTitle, text, {}, buttons, defBtn, options, dialogTitle));
 }
 
-IInteractive::Result Interactive::error(const std::string& title, const Text& text, const std::string& detailedText,
+IInteractive::Result Interactive::error(const std::string& contentTitle, const Text& text, const std::string& detailedText,
                                         const ButtonDatas& buttons, int defBtn,
-                                        const Options& options) const
+                                        const Options& options, const std::string& dialogTitle) const
 {
-    return standardDialogResult(provider()->error(title, text, detailedText, buttons, defBtn, options));
+    return standardDialogResult(provider()->error(contentTitle, text, detailedText, buttons, defBtn, options, dialogTitle));
 }
 
 Ret Interactive::showProgress(const std::string& title, Progress* progress) const

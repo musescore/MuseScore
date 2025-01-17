@@ -100,6 +100,19 @@ void ScorePreferencesModel::load()
     };
 
     endResetModel();
+
+    notationConfiguration()->scoreOrderListPathsChanged().onNotify(this, [this]() {
+        setPath(DefaultFileType::FirstScoreOrderList, firstScoreOrderListPath());
+        setPath(DefaultFileType::SecondScoreOrderList, secondScoreOrderListPath());
+    });
+
+    notationConfiguration()->defaultStyleFilePathChanged().onReceive(this, [this](const io::path_t& val) {
+        setPath(DefaultFileType::Style, val.toQString());
+    });
+
+    notationConfiguration()->partStyleFilePathChanged().onReceive(this, [this](const io::path_t& val) {
+        setPath(DefaultFileType::PartStyle, val.toQString());
+    });
 }
 
 void ScorePreferencesModel::savePath(ScorePreferencesModel::DefaultFileType fileType, const QString& path)

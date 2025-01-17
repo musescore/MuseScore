@@ -296,6 +296,12 @@ void ProjectConfigurationStub::setGenerateAudioTimePeriodType(GenerateAudioTimeP
 {
 }
 
+muse::async::Channel<int> ProjectConfigurationStub::generateAudioTimePeriodTypeChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
+}
+
 int ProjectConfigurationStub::numberOfSavesToGenerateAudio() const
 {
     return 1;
@@ -303,6 +309,12 @@ int ProjectConfigurationStub::numberOfSavesToGenerateAudio() const
 
 void ProjectConfigurationStub::setNumberOfSavesToGenerateAudio(int)
 {
+}
+
+muse::async::Channel<int> ProjectConfigurationStub::numberOfSavesToGenerateAudioChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
 }
 
 muse::io::path_t ProjectConfigurationStub::temporaryMp3FilePathTemplate() const

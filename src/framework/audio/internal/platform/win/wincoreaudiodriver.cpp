@@ -82,7 +82,6 @@ void copyWavFormat(WAVEFORMATEXTENSIBLE& dest, const WAVEFORMATEX* src) noexcept
 static void logError(HRESULT hr);
 
 static WinCoreData* s_data = nullptr;
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
 static IAudioDriver::Spec s_activeSpec;
 static HRESULT s_lastError = S_OK;
 

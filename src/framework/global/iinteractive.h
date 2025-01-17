@@ -145,40 +145,47 @@ public:
     };
     DECLARE_FLAGS(Options, Option)
 
-    virtual Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                            const Options& options = {}) const = 0;
+    virtual Result question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                            const Button& def = Button::NoButton, const Options& options = {},
+                            const std::string& dialogTitle = "") const = 0;
 
-    virtual Result question(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                            const Options& options = {}) const = 0;
+    virtual Result question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                            int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
 
     virtual ButtonData buttonData(Button b) const = 0;
 
     // info
-    virtual Result info(const std::string& title, const std::string& text, const Buttons& buttons = {}, int defBtn = int(Button::NoButton),
-                        const Options& options = {}) const = 0;
+    virtual Result info(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
+                        int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
 
-    virtual Result info(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
-                        const Options& options = {}) const = 0;
+    virtual Result info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                        int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
 
     // warning
-    virtual Result warning(const std::string& title, const std::string& text, const Buttons& buttons = {},
-                           const Button& def = Button::NoButton, const Options& options = { WithIcon }) const = 0;
+    virtual Result warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
+                           const Button& def = Button::NoButton, const Options& options = { WithIcon },
+                           const std::string& dialogTitle = "") const = 0;
 
-    virtual Result warning(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
-                           const Options& options = { WithIcon }) const = 0;
+    virtual Result warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                           const std::string& dialogTitle = "") const = 0;
 
-    virtual Result warning(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
-                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const = 0;
+    virtual Result warning(const std::string& contentTitle, const Text& text, const std::string& detailedText,
+                           const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                           const std::string& dialogTitle = "") const = 0;
 
     // error
-    virtual Result error(const std::string& title, const std::string& text, const Buttons& buttons = {},
-                         const Button& def = Button::NoButton, const Options& options = { WithIcon }) const = 0;
+    virtual Result error(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
+                         const Button& def = Button::NoButton, const Options& options = { WithIcon },
+                         const std::string& dialogTitle = "") const = 0;
 
-    virtual Result error(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
-                         const Options& options = { WithIcon }) const = 0;
+    virtual Result error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                         int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                         const std::string& dialogTitle = "") const = 0;
 
-    virtual Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
-                         int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const = 0;
+    virtual Result error(const std::string& contentTitle, const Text& text, const std::string& detailedText,
+                         const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                         const std::string& dialogTitle = "") const = 0;
 
     // progress
     virtual Ret showProgress(const std::string& title, Progress* progress) const = 0;

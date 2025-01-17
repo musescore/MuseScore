@@ -34,8 +34,6 @@ using namespace winrt;
 using namespace muse;
 using namespace muse::audio;
 
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
-
 inline int refTimeToSamples(const REFERENCE_TIME& t, double sampleRate) noexcept
 {
     return sampleRate * ((double)t) * 0.0000001;

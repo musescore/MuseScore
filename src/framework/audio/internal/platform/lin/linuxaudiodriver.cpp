@@ -34,8 +34,6 @@
 #include "log.h"
 #include "runtime.h"
 
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
-
 using namespace muse;
 using namespace muse::audio;
 

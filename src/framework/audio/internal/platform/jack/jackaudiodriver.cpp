@@ -33,8 +33,6 @@
 #include "log.h"
 #include "runtime.h"
 
-static constexpr char JACK_DEFAULT_DEVICE_ID[] = "default";
-
 using namespace muse::audio;
 
 struct JackData
@@ -88,7 +86,7 @@ void jackCleanup()
 
 JackAudioDriver::JackAudioDriver()
 {
-    m_deviceId = JACK_DEFAULT_DEVICE_ID;
+    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 JackAudioDriver::~JackAudioDriver()
@@ -226,7 +224,7 @@ bool JackAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 
 bool JackAudioDriver::resetToDefaultOutputDevice()
 {
-    return selectOutputDevice(JACK_DEFAULT_DEVICE_ID);
+    return selectOutputDevice(DEFAULT_DEVICE_ID);
 }
 
 async::Notification JackAudioDriver::outputDeviceChanged() const
@@ -237,7 +235,7 @@ async::Notification JackAudioDriver::outputDeviceChanged() const
 AudioDeviceList JackAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ JACK_DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
+    devices.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
     return devices;
 }
