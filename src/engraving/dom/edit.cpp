@@ -6636,6 +6636,31 @@ void Score::removeLayoutBreaksOnAddSystemLock(const SystemLock* lock)
     }
 }
 
+void Score::removeSystemLocksOnRemoveMeasures(const MeasureBase* m1, const MeasureBase* m2)
+{
+    std::vector<const SystemLock*> allSysLocks = systemLocks()->allLocks();
+    for (const SystemLock* lock : allSysLocks) {
+        MeasureBase* lockStart = lock->startMB();
+        MeasureBase* lockEnd = lock->endMB();
+        bool lockStartIsInRange = lockStart->isAfterOrEqual(m1) && lockStart->isBeforeOrEqual(m2);
+        bool lockEndIsInRange = lockEnd->isAfterOrEqual(m1) && lockEnd->isBeforeOrEqual(m2);
+        if (lockStartIsInRange || lockEndIsInRange) {
+            undoRemoveSystemLock(lock);
+        }
+        if (lockStartIsInRange && !lockEndIsInRange) {
+            MeasureBase* newLockStart = m2->nextMeasure();
+            if (newLockStart) {
+                undoAddSystemLock(new SystemLock(newLockStart, lockEnd));
+            }
+        } else if (!lockStartIsInRange && lockEndIsInRange) {
+            MeasureBase* newLockEnd = m1->prevMeasure();
+            if (newLockEnd) {
+                undoAddSystemLock(new SystemLock(lockStart, newLockEnd));
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   undoAddCR
 //---------------------------------------------------------
@@ -7128,6 +7153,8 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
             }
         }
     }
+
+    removeSystemLocksOnRemoveMeasures(m1, m2);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }
