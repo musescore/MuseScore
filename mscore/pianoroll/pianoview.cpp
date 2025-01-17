@@ -600,10 +600,8 @@ void PianoView::drawNoteBlock(QPainter* p, PianoItem* block)
 
 QRect PianoView::boundingRect(Note* note, bool applyEvents)
       {
-      for (NoteEvent& e : note->playEvents()) {
-            QRect bounds = boundingRect(note, &e, applyEvents);
-            return bounds;
-            }
+      if (note->playEvents().size())
+            return boundingRect(note, &note->playEvents().first(), applyEvents);
       return QRect();
       }
 
