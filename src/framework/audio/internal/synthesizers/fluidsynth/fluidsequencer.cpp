@@ -130,8 +130,13 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             destination[timestampTo].emplace(std::move(noteOff));
 
-            appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, midi::SUSTAIN_PEDAL_CONTROLLER);
-            appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES, channelIdx);
+            for (const auto& pair : noteEvent.expressionCtx().articulations) {
+                if (muse::contains(PEDAL_CC_SUPPORTED_TYPES, pair.first)) {
+                    appendControlSwitch(destination, noteEvent, pair.second.meta, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx);
+                } else if (muse::contains(BEND_SUPPORTED_TYPES, pair.first)) {
+                    appendPitchBend(destination, noteEvent, pair.second.meta, channelIdx);
+                }
+            }
         }
     }
 }
@@ -150,62 +155,33 @@ void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mp
 }
 
 void FluidSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                         const mpe::ArticulationTypeSet& appliableTypes, const int midiControlIdx)
+                                         const mpe::ArticulationMeta& artMeta,
+                                         const int midiControlIdx, const channel_t channelIdx)
 {
-    mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
-
-    for (const mpe::ArticulationType type : appliableTypes) {
-        if (noteEvent.expressionCtx().articulations.contains(type)) {
-            currentType = type;
-            break;
-        }
-    }
-
-    if (currentType == mpe::ArticulationType::Undefined) {
-        return;
-    }
-
-    const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
-    const ArticulationMeta& articulationMeta = articulationData.meta;
-
     midi::Event start(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
     start.setIndex(midiControlIdx);
+    start.setChannel(channelIdx);
     start.setData(127);
 
     destination[noteEvent.arrangementCtx().actualTimestamp].emplace(std::move(start));
 
     midi::Event end(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
     end.setIndex(midiControlIdx);
+    end.setChannel(channelIdx);
     end.setData(0);
 
-    destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(std::move(end));
+    destination[artMeta.timestamp + artMeta.overallDuration].emplace(std::move(end));
 }
 
 void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                     const mpe::ArticulationTypeSet& appliableTypes, const channel_t channelIdx)
+                                     const mpe::ArticulationMeta& artMeta, const channel_t channelIdx)
 {
     if (noteEvent.pitchCtx().pitchCurve.empty()) {
         return;
     }
 
-    timestamp_t pitchBendTimestampFrom = 0;
-    duration_t pitchBendDuration = 0;
-
-    for (const auto& art : noteEvent.expressionCtx().articulations) {
-        if (muse::contains(appliableTypes, art.first)) {
-            const ArticulationMeta& articulationMeta = art.second.meta;
-            pitchBendTimestampFrom = articulationMeta.timestamp;
-            pitchBendDuration = articulationMeta.overallDuration;
-            break;
-        }
-    }
-
-    if (pitchBendDuration == 0) {
-        return;
-    }
-
     const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
-    const timestamp_t pitchBendTimestampTo = std::min(pitchBendTimestampFrom + pitchBendDuration, noteTimestampTo);
+    const timestamp_t pitchBendTimestampTo = std::min(artMeta.timestamp + artMeta.overallDuration, noteTimestampTo);
 
     midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
     event.setChannel(channelIdx);
@@ -224,8 +200,8 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
         int currBendValue = pitchBendLevel(currIt->second);
         int nextBendValue = pitchBendLevel(nextIt->second);
 
-        timestamp_t currTime = pitchBendTimestampFrom + pitchBendDuration * percentageToFactor(currIt->first);
-        timestamp_t nextTime = pitchBendTimestampFrom + pitchBendDuration * percentageToFactor(nextIt->first);
+        timestamp_t currTime = artMeta.timestamp + artMeta.overallDuration * percentageToFactor(currIt->first);
+        timestamp_t nextTime = artMeta.timestamp + artMeta.overallDuration * percentageToFactor(nextIt->first);
 
         Interpolation::Point p0 = makePoint(currTime, currBendValue);
         Interpolation::Point p1 = makePoint(nextTime, currBendValue);
