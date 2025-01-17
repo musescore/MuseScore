@@ -136,7 +136,7 @@ macro(setup_module)
         endif()
     endif()
 
-    if (MUE_COMPILE_USE_UNITY)
+    if (MUSE_COMPILE_USE_UNITY)
         if (MODULE_USE_UNITY)
             set_target_properties(${MODULE} PROPERTIES UNITY_BUILD ON)
         else()
