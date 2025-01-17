@@ -53,8 +53,6 @@ public:
                                  const PointF& diff = PointF());
 
     static void doAutoplace(const Articulation* item, Articulation::LayoutData* ldata);
-
-private:
     static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
 };
 }

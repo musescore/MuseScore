@@ -2772,7 +2772,7 @@ bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element,
     for (const ShapeElement& skylineElement : skylineLine.elements()) {
         const EngravingItem* skylineItem = skylineElement.item();
         if (!skylineItem || skylineItem == element || skylineItem->parent() == element
-            || skylineItem == element->ldata()->itemSnappedAfter() || skylineItem == element->ldata()->itemSnappedBefore()) {
+            || Autoplace::itemsShouldIgnoreEachOther(element, skylineItem)) {
             continue;
         }
         bool intersectHorizontally = elemShapeRight > skylineElement.left() && elemShapeLeft < skylineElement.right();
