@@ -505,19 +505,7 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
 
 bool EngravingItem::isTopSystemObject() const
 {
-    if (!systemFlag()) {
-        return false; // non system object
-    }
-    if ((isSpanner() || isSpannerSegment() || isTimeSig()) && track() != 0) {
-        return false;
-    }
-    if (!m_links) {
-        return true; // a system object, but not one with any linked clones
-    }
-    // this is part of a link ecosystem, see if we're the main one
-    EngravingObject* mainElement = m_links->mainElement();
-    return track() == 0
-           && (mainElement->score() != score() || !toEngravingItem(mainElement)->enabled());
+    return systemFlag() && track() == 0;
 }
 
 staff_idx_t EngravingItem::vStaffIdx() const
