@@ -361,6 +361,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("slash-fill"),
         makeMenuItem("slash-rhythm"),
         makeSeparator(),
+        makeMenuItem("enh-both"),
+        makeMenuItem("enh-current"),
         makeMenuItem("pitch-spell"),
         makeMenuItem("reset-groupings"),
         makeMenuItem("resequence-rehearsal-marks"),
