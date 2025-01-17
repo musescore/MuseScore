@@ -5923,23 +5923,24 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
 
         // first, try going to prev/next note in the current chord
         if (origNote != (back ? notes.back() : notes.front())) {
-            for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
-                if (*it == origNote) {
-                    el = back ? *(it + 1) : *(it - 1);
-                    break;
-                }
+            auto it = std::find(notes.begin(), notes.end(), origNote);
+            if (it != notes.end()) {
+                el = back ? *std::next(it) : *std::prev(it);
             }
         }
 
         // next, try going to next/prev grace note chord in the same group as the current
-        std::vector<Chord*> chordList = ch->allGraceChordsOfMainChord();
+        const std::vector<Chord*> chordList = ch->allGraceChordsOfMainChord();
 
         if (!el && ch != (back ? chordList.front() : chordList.back())) {
-            for (auto it = chordList.begin(); it != chordList.end(); ++it) {
-                if (*it == ch) {
-                    Chord* targetChord = back ? *(it - 1) : *(it + 1);
-                    el = back ? targetChord->notes().front() : targetChord->notes().back();
-                    break;
+            auto it = std::find(chordList.begin(), chordList.end(), ch);
+            if (it != chordList.end()) {
+                if (back) {
+                    const Chord* targetChord = *std::prev(it);
+                    el = targetChord->notes().front();
+                } else {
+                    const Chord* targetChord = *std::next(it);
+                    el = targetChord->notes().back();
                 }
             }
         }
@@ -5957,9 +5958,14 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
             for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
                 EngravingItem* e = seg->element(track);
                 if (e && e->isChord()) {
-                    std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
-                    Chord* targetChord = back ? targetChordList.back() : targetChordList.front();
-                    el = back ? targetChord->notes().front() : targetChord->notes().back();
+                    const std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
+                    if (back) {
+                        Chord* targetChord = targetChordList.back();
+                        el = targetChord->notes().front();
+                    } else {
+                        Chord* targetChord = targetChordList.front();
+                        el = targetChord->notes().back();
+                    }
                     break;
                 }
             }
@@ -5976,9 +5982,14 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
                 for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
                     EngravingItem* e = seg->element(track);
                     if (e && e->isChord()) {
-                        std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
-                        Chord* targetChord = back ? targetChordList.back() : targetChordList.front();
-                        el = back ? targetChord->notes().front() : targetChord->notes().back();
+                        const std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
+                        if (back) {
+                            Chord* targetChord = targetChordList.back();
+                            el = targetChord->notes().front();
+                        } else {
+                            Chord* targetChord = targetChordList.front();
+                            el = targetChord->notes().back();
+                        }
                         break;
                     }
                 }

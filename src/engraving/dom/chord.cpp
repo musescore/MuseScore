@@ -2561,8 +2561,8 @@ std::vector<Chord*> Chord::allGraceChordsOfMainChord()
 {
     Chord* mainChord = isGrace() ? toChord(explicitParent()) : this;
     std::vector<Chord*> chords = { mainChord };
-    GraceNotesGroup gnBefore = mainChord->graceNotesBefore();
-    GraceNotesGroup gnAfter = mainChord->graceNotesAfter();
+    const GraceNotesGroup& gnBefore = mainChord->graceNotesBefore();
+    const GraceNotesGroup& gnAfter = mainChord->graceNotesAfter();
     chords.insert(chords.begin(), gnBefore.begin(), gnBefore.end());
     chords.insert(chords.end(), gnAfter.begin(), gnAfter.end());
     return chords;
