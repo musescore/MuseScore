@@ -446,6 +446,50 @@ void NotationNoteInput::setPitchesToInput(const std::set<int>& pitches)
     notifyAboutStateChanged();
 }
 
+void NotationNoteInput::moveInputPitches(bool up, PitchMode mode)
+{
+    TRACEFUNC;
+
+    mu::engraving::InputState& is = score()->inputState();
+    IF_ASSERT_FAILED(is.isValid()) {
+        return;
+    }
+
+    std::set<int> newPitches;
+
+    for (int pitch : is.notePitches()) {
+        int newPitch = pitch;
+
+        switch (mode) {
+        case PitchMode::CHROMATIC:
+            newPitch += up ? 1 : -1;
+            break;
+        case PitchMode::DIATONIC: {
+            const Fraction tick = is.tick();
+            const Staff* staff = is.staff();
+            const Key key = staff->key(tick);
+            const ClefType clef = staff->clef(tick);
+
+            const int tpc = mu::engraving::pitch2tpc(pitch, key, mu::engraving::Prefer::NEAREST);
+            const int oldLine = mu::engraving::relStep(pitch, tpc, clef);
+            const int newLine = oldLine + (up ? -1 : 1);
+            const int step = mu::engraving::absStep(newLine, clef);
+            const int octave = step / mu::engraving::STEP_DELTA_OCTAVE;
+
+            newPitch = mu::engraving::step2pitch(step) + octave * mu::engraving::PITCH_DELTA_OCTAVE;
+        } break;
+        case PitchMode::OCTAVE:
+            newPitch += up ? mu::engraving::PITCH_DELTA_OCTAVE : -mu::engraving::PITCH_DELTA_OCTAVE;
+            break;
+        }
+
+        newPitch = std::clamp(newPitch, 0, 127);
+        newPitches.insert(newPitch);
+    }
+
+    setPitchesToInput(newPitches);
+}
+
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     TRACEFUNC;

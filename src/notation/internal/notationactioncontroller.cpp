@@ -431,8 +431,8 @@ void NotationActionController::init()
                    &Controller::isNotNoteInputMode);
     registerAction("top-staff", &Interaction::selectTopStaff, PlayMode::PlayChord);
     registerAction("empty-trailing-measure", &Interaction::selectEmptyTrailingMeasure);
-    registerAction("pitch-up-diatonic", &Interaction::movePitch, MoveDirection::Up, PitchMode::DIATONIC, PlayMode::PlayNote);
-    registerAction("pitch-down-diatonic", &Interaction::movePitch, MoveDirection::Down, PitchMode::DIATONIC, PlayMode::PlayNote);
+    registerAction("pitch-up-diatonic", &Controller::movePitchDiatonic, MoveDirection::Up, false);
+    registerAction("pitch-down-diatonic", &Controller::movePitchDiatonic, MoveDirection::Down, false);
 
     registerAction("repeat-sel", &Controller::repeatSelection);
 
@@ -1030,12 +1030,20 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->nudge(direction, quickly);
         } else if (selectedElement && selectedElement->hasGrips()) {
             interaction->nudgeAnchors(direction);
-        } else if (interaction->noteInput()->isNoteInputMode()
-                   && interaction->noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
-            if (quickly) {
-                interaction->movePitch(direction, PitchMode::OCTAVE);
+        } else if (interaction->noteInput()->isNoteInputMode()) {
+            if (interaction->noteInput()->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+                const bool up = direction == MoveDirection::Up;
+                if (quickly) {
+                    interaction->noteInput()->moveInputPitches(up, PitchMode::OCTAVE);
+                } else {
+                    interaction->noteInput()->moveInputPitches(up, PitchMode::DIATONIC); // TODO
+                }
+            } else if (interaction->noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
+                if (quickly) {
+                    interaction->movePitch(direction, PitchMode::OCTAVE);
+                }
+                interaction->moveSelection(direction, MoveSelectionType::String);
             }
-            interaction->moveSelection(direction, MoveSelectionType::String);
             return;
         } else if (interaction->selection()->isNone()) {
             interaction->selectFirstElement(false);
@@ -1100,6 +1108,25 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     }
 
     playSelectedElement(playChord);
+}
+
+void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (noteInput->isNoteInputMode()) {
+        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+            noteInput->moveInputPitches(direction == MoveDirection::Up, PitchMode::DIATONIC);
+            return;
+        }
+    }
+
+    interaction->movePitch(direction, PitchMode::DIATONIC);
+    playSelectedElement(PlayMode::PlayNote);
 }
 
 void NotationActionController::moveWithinChord(MoveDirection direction)

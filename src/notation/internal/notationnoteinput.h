@@ -78,6 +78,7 @@ public:
     // Used in the input-by-duration mode
     void setNoteToInput(NoteName note) override;
     void setPitchesToInput(const std::set<int>& pitches) override;
+    void moveInputPitches(bool up, PitchMode mode) override;
 
     void setAccidental(AccidentalType accidentalType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
