@@ -90,7 +90,7 @@ void Settings::load()
     m_items = readItems();
 }
 
-void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
+void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges, bool notifyOtherInstances)
 {
     m_settings->clear();
 
@@ -127,6 +127,13 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
         Channel<Val>& channel = findChannel(*it);
         channel.send(Val());
     }
+
+    UNUSED(notifyOtherInstances);
+#ifdef MUSE_MODULE_MULTIINSTANCES
+    if (notifyOtherInstances && multiInstancesProvider()) {
+        multiInstancesProvider()->settingsReset();
+    }
+#endif
 }
 
 static Val compat_QVariantToVal(const QVariant& var)

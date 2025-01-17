@@ -230,9 +230,9 @@ void AppShellConfiguration::rollbackSettings()
     settings()->rollbackTransaction();
 }
 
-void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges)
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges, bool notifyOtherInstances) const
 {
-    settings()->reset(keepDefaultSettings, notifyAboutChanges);
+    settings()->reset(keepDefaultSettings, notifyAboutChanges, notifyOtherInstances);
 }
 
 muse::io::paths_t AppShellConfiguration::sessionProjectsPaths() const
