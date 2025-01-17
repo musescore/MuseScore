@@ -50,12 +50,15 @@ jobs:
       run: |
         bash ./buildscripts/ci/linux/setup.sh
     - name: Build
+      env:
+        GITHUB_EVENT_NAME: ${{ github.event_name }}
+        CODE_COVERAGE: ${{ inputs.code_coverage }}
       run: |
         mkdir -p build.artifacts/env
 
         ENABLE_CODE_COVERAGE='false'
 
-        if [ [ "${{ github.event_name }}" == "schedule" ] || [ ${{ inputs.code_coverage }} == 'true' ] ]; then
+        if [[ "$GITHUB_EVENT_NAME" == "schedule" || "$CODE_COVERAGE" == "true" ]]; then
           ENABLE_CODE_COVERAGE='true'
         else
           ENABLE_CODE_COVERAGE='false'
@@ -73,7 +76,7 @@ jobs:
     - name: Code coverage
       if: github.event_name == 'schedule' || inputs.code_coverage == 'true'
       run: |
-        lcov --capture --directory build.debug/ --output-file coverage.info
+        lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*/hb-*' '*/Qt/*' --output-file filtered_coverage.info
 
         python3 buildscripts/ci/linux/tools/lcov_badger.py filtered_coverage.info coverage_badge.svg

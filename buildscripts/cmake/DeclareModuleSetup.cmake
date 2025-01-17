@@ -182,8 +182,9 @@ macro(setup_module)
     )
 
     if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE AND MODULE_USE_COVERAGE)
-        target_compile_options(${MODULE} PRIVATE --coverage)
-        target_link_options(${MODULE} PRIVATE --coverage)
+        set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
+        target_compile_options(${MODULE} PRIVATE ${COVERAGE_FLAGS})
+        target_link_options(${MODULE} PRIVATE -lgcov --coverage)
     endif()
 
     if (NOT ${MODULE} MATCHES muse_global AND MODULE_LINK_GLOBAL)
@@ -192,6 +193,6 @@ macro(setup_module)
 
     set(MODULE_LINK ${CMAKE_DL_LIBS} ${QT_LIBRARIES} ${MODULE_LINK})
 
-    target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} )
+    target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS})
 
 endmacro()
