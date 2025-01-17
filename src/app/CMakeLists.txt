@@ -271,6 +271,13 @@ add_executable(MuseScoreStudio
 
 set_target_properties(MuseScoreStudio PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
 
+if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE)
+    set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
+    set(COVERAGE_LINK_FLAGS -lgcov --coverage)
+    target_compile_options(MuseScoreStudio PRIVATE ${COVERAGE_FLAGS})
+    target_link_options(MuseScoreStudio PRIVATE ${COVERAGE_LINK_FLAGS})
+endif()
+
 if (OS_IS_MAC)
     set_target_properties(MuseScoreStudio PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/macOS/Info.plist.in
@@ -299,7 +306,7 @@ endif(OS_IS_WASM)
 ###########################################
 
 if (NOT CC_IS_EMSCRIPTEN)
-    target_link_libraries(MuseScoreStudio ${LINK_LIB} )
+    target_link_libraries(MuseScoreStudio ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
 else()
     target_link_libraries(MuseScoreStudio PRIVATE ${QT_LIBRARIES})
 
