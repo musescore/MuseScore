@@ -16,7 +16,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-static const double tack[] = {
+static const double metronomeTack[] = {
   -0.0019836426, 0.0097045898, 0.019165039, 0.028594971, 0.036102295,
    0.040679932, 0.040649414, 0.036560059, 0.029693604, 0.016967773,
    0.0057067871, -0.008026123, -0.021453857, -0.026153564,
@@ -522,7 +522,7 @@ static const double tack[] = {
    -0.001739502, -0.002166748, 0
    };
 
-static const double tick[] = {
+static const double metronomeTick[] = {
   0.002166748, 0.0023193359, 0.001739502, 0.002166748, 0.0021362305,
   0.0018615723, 0.0020446777, 0.002166748, 0.0019836426, 0.0022277832,
   0.0018310547, 0.0023803711, 0.0022277832, 0.001953125, 0.0022888184,
@@ -1205,6 +1205,6 @@ static const double tick[] = {
   -3.0517578e-05, -3.0517578e-05, 0,
   };
 
-static const unsigned tickLength = sizeof(tick) / sizeof(*tick);
-static const unsigned tackLength = sizeof(tack) / sizeof(*tack);
+static const unsigned tickLength = sizeof(metronomeTick) / sizeof(*metronomeTick);
+static const unsigned tackLength = sizeof(metronomeTack) / sizeof(*metronomeTack);
 

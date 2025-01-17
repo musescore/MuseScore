@@ -667,7 +667,7 @@ void Seq::metronome(unsigned n, float* p, bool force)
             int idx = tickLength - tickRemain;
             int nn = n < tickRemain ? n : tickRemain;
             for (int i = 0; i < nn; ++i) {
-                  qreal v = tick[idx] * tickVolume * metronomeVolume;
+                  qreal v = metronomeTick[idx] * tickVolume * metronomeVolume;
                   *p++ += v;
                   *p++ += v;
                   ++idx;
@@ -678,7 +678,7 @@ void Seq::metronome(unsigned n, float* p, bool force)
             int idx = tackLength - tackRemain;
             int nn = n < tackRemain ? n : tackRemain;
             for (int i = 0; i < nn; ++i) {
-                  qreal v = tack[idx] * tackVolume * metronomeVolume;
+                  qreal v = metronomeTack[idx] * tackVolume * metronomeVolume;
                   *p++ += v;
                   *p++ += v;
                   ++idx;
