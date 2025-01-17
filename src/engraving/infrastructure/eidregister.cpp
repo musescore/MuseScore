@@ -44,6 +44,10 @@ void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 
     inserted = m_itemToEid.emplace(const_cast<EngravingObject*>(item), eid).second;
     assert(inserted);
+
+#ifdef NDEBUG
+    UNUSED(inserted);
+#endif
 }
 
 EngravingObject* EIDRegister::itemFromEID(const EID& eid) const

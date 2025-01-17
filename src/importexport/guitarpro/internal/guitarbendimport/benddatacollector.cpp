@@ -63,7 +63,7 @@ BendDataContext BendDataCollector::collectBendDataContext()
     for (const auto& [track, trackInfo] : m_bendInfoForNote) {
         for (const auto& [tick, tickInfo] : trackInfo) {
             for (const auto& [note, importedBendInfo] : tickInfo) {
-                int idx = muse::indexOf(note->chord()->notes(), note);
+                int idx = static_cast<int>(muse::indexOf(note->chord()->notes(), note));
                 fillBendDataForNote(bendDataCtx, importedBendInfo, idx);
             }
         }

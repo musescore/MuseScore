@@ -1105,11 +1105,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
 
     ASSERT_EQ(result.size(), 1);
     ASSERT_EQ(result.begin()->second.size(), 1);
-    mpe::NoteEvent noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
-    EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
-    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, nominalPitchLevel);
-    EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, QUARTER_NOTE_DURATION + glissandoNoteDuration); // A4 + 1st glissando note
+    mpe::NoteEvent resultingNoteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
+    EXPECT_EQ(resultingNoteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(resultingNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+    EXPECT_EQ(resultingNoteEvent.pitchCtx().nominalPitchLevel, nominalPitchLevel);
+    EXPECT_EQ(resultingNoteEvent.arrangementCtx().nominalDuration, QUARTER_NOTE_DURATION + glissandoNoteDuration); // A4 + 1st glissando note
 
     // [GIVEN] Tied A4 with discrete glissando
     chord = findChord(score, 1440, 0);
@@ -2350,11 +2350,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
     // [THEN] Note event has normal duration and standard articulation (no tremolo)
     ASSERT_EQ(result.size(), 1);
     ASSERT_EQ(result.begin()->second.size(), 1);
-    mpe::NoteEvent noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
-    EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
-    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
-    EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, HALF_NOTE_DURATION);
+    mpe::NoteEvent resultingNoteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
+    EXPECT_EQ(resultingNoteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(resultingNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+    EXPECT_EQ(resultingNoteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
+    EXPECT_EQ(resultingNoteEvent.arrangementCtx().nominalDuration, HALF_NOTE_DURATION);
 
     // [GIVEN] Chord of the 2nd tied note (with tremolo)
     chord = findChord(score, 2880);

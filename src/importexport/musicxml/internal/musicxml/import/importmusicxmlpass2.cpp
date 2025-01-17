@@ -8157,9 +8157,9 @@ void MusicXmlParserNotations::articulations()
             const String smufl = m_e.attribute("smufl");
 
             if (!smufl.empty()) {
-                SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+                SymId sid = SymNames::symIdByName(smufl, SymId::noSym);
                 Notation artic = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                                  m_e.attributes(), u"articulations", id);
+                                                                  m_e.attributes(), u"articulations", sid);
                 m_notations.push_back(artic);
             }
             m_e.skipCurrentElement();  // skip but don't log

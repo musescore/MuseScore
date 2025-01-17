@@ -950,9 +950,10 @@ PlaybackContextPtr PlaybackModel::playbackCtx(const InstrumentTrackId& trackId)
 
 void PlaybackModel::applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries)
 {
-    if (const Tie* tie = note->tieFor()) {
+    const Tie* tie;
+    if (tie = note->tieFor()) {
         applyTieTickBoundaries(tie, tickBoundaries);
-    } else if (const Tie* tie = note->tieBack()) {
+    } else if (tie = note->tieBack()) {
         applyTieTickBoundaries(tie, tickBoundaries);
     }
 }
