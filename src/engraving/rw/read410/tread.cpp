@@ -3304,6 +3304,8 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
             TRead::readProperty(b, e, ctx, Pid::START_WITH_MEASURE_ONE);
         } else if (tag == "firstSystemIndentation") {
             TRead::readProperty(b, e, ctx, Pid::FIRST_SYSTEM_INDENTATION);
+        } else if (tag == "showCourtesySig") {
+            TRead::readProperty(b, e, ctx, Pid::SHOW_COURTESY);
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }

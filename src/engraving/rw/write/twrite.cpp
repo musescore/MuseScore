@@ -2138,7 +2138,7 @@ void TWrite::write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(item, xml, ctx);
 
     for (auto id :
-         { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION }) {
+         { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION, Pid::SHOW_COURTESY }) {
         writeProperty(item, xml, id);
     }
 

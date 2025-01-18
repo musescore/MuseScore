@@ -1970,6 +1970,21 @@ bool Measure::isFinalMeasureOfSection() const
     return false;
 }
 
+LayoutBreak* Measure::isFinalMeasureOfSection()
+{
+    const MeasureBase* mb = static_cast<const MeasureBase*>(this);
+
+    do {
+        if (LayoutBreak* sectionBreak = mb->sectionBreakElement()) {
+            return sectionBreak;
+        }
+
+        mb = mb->next();
+    } while (mb && !mb->isMeasure());           // loop until reach next actual measure or end of score
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   isAnacrusis
 //---------------------------------------------------------
