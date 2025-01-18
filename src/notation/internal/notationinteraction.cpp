@@ -1113,7 +1113,11 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_editData.element->editDrag(m_dragData.ed);
 
         if (m_editData.element->isDynamic()) {
-            addHairpinOnGripDrag(toDynamic(m_editData.element));
+            // When the dynamic has no left grip, the right grip will have index zero, a.k.a. Grip::LEFT.
+            // TODO: refactor all code that works with Grips, so that this is not necessary
+            Dynamic* dynamic = toDynamic(m_editData.element);
+            bool isLeftGrip = dynamic->hasLeftGrip() ? m_editData.curGrip == Grip::LEFT : false;
+            addHairpinOnGripDrag(toDynamic(m_editData.element), isLeftGrip);
         }
     } else {
         if (m_editData.element) {
@@ -4369,39 +4373,35 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     apply();
 }
 
-void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic)
+void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic, bool isLeftGrip)
 {
+    startEdit(TranslatableString("undoableAction", "Add hairpin"));
+
     const PointF pos = m_dragData.ed.pos;
-    Hairpin* pin = Factory::createHairpin(score()->dummy()->segment());
+    Hairpin* hairpin = score()->addHairpinToDynamicOnGripDrag(dynamic, isLeftGrip, pos);
 
-    // Right grip
-    if (dynamic->rightDragOffset() >= pin->spatium() * 0.8) {
-        pin->setHairpinType(HairpinType::CRESC_HAIRPIN);
-
-        startEdit(TranslatableString("undoableAction", "Add hairpin"));
-        score()->addHairpinOnGripDrag(pin, dynamic, pos, Grip::RIGHT);
-        apply();
-
-        dynamic->resetRightDragOffset(); // Reset grip offset to zero after drawing the hairpin
-
-        LineSegment* segment = pin->frontSegment();
-        select({ segment });
-        startEditGrip(segment, Grip::END);
+    if (!hairpin) {
+        rollback();
+        return;
     }
 
-    // Left grip
-    if (abs(dynamic->leftDragOffset()) >= pin->spatium() * 0.8) {
-        pin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
+    apply();
 
-        startEdit(TranslatableString("undoableAction", "Add hairpin"));
-        score()->addHairpinOnGripDrag(pin, dynamic, pos, Grip::LEFT);
-        apply();
+    // Reset grip offset to zero after drawing the hairpin
+    dynamic->resetRightDragOffset();
 
-        dynamic->resetLeftDragOffset(); // Reset grip offset to zero after drawing the hairpin
+    IF_ASSERT_FAILED(!hairpin->segmentsEmpty()) {
+        return;
+    }
 
-        LineSegment* segment = pin->frontSegment();
+    if (isLeftGrip) {
+        LineSegment* segment = hairpin->frontSegment();
         select({ segment });
         startEditGrip(segment, Grip::START);
+    } else {
+        LineSegment* segment = hairpin->backSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::END);
     }
 }
 
