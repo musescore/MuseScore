@@ -29,6 +29,8 @@ namespace muse::ui {
 class StubPlatformTheme : public IPlatformTheme
 {
 public:
+    ~StubPlatformTheme() override;
+
     void startListening() override;
     void stopListening() override;
 
