@@ -1,0 +1,107 @@
+name: Bug report
+description: Report crashes or incorrect behaviour of existing functionality in MuseScore 3 Evolution.
+type: Bug
+body:
+  - type: dropdown
+    id: label
+    attributes:
+      label: Issue type
+      description: What kind of issue are you experiencing?
+      options:
+        - Choose option...
+        - Crash or freeze
+        - Engraving bug (incorrect score rendering)
+        - UX/Interaction bug (incorrect behaviour)
+        - UI bug (incorrect info or interface appearance)
+        - Accessibility issue (e.g. for keyboard-only or screen reader users)
+        - General playback bug
+        - Cloud issue (opening, saving, logging in/out)
+        - Opening/saving issue
+        - Import/export issue
+        - File corruption
+        - Other type of issue
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Description with steps to reproduce
+      description: Please also describe the actual (current) and expected behaviour
+      placeholder: |
+        1. go to ...
+        2. then click on ...
+        3. then ...
+        Actual behaviour:
+        Expected behaviour:
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting files, videos and screenshots
+      description: |
+        * For crashes: a short screen recording (ideally 20sec or less)
+        * For engraving issues: one or more screenshots (or a short screen recording, 20sec or less) showing the problem and, where possible, the expected outcome
+        * For playback issues: 
+          * A short screen recording with audio of a minimal reproducible example 
+          * A score containing the problem (please upload as a .zip file)
+          * Examples comparing both MS Basic and Muse Sounds (where applicable)
+        * For UI/interaction and all other issues: a short screen recording (ideally 20sec or less) and files (where applicable; please upload as a .zip file).
+      placeholder: |
+        Click into this text box and paste your files, videos and screenshots here.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: What is the latest version of MuseScore 3 Evolution where this issue is present?
+      description: |
+        You can copy the info from the Help > About dialog in MuseScore 3 Evolution. 
+        If you can, please also check whether this issue is still present in the _latest_ [nightly build](https://github.com/Jojo-Schmitz/MuseScore/actions)
+    validations:
+      required: true
+  - type: dropdown
+    id: regression
+    attributes:
+      label: Regression
+      description: Did this work before? Older versions of MuseScore 3 Evolution can be found [here](https://github.com/Jojo-Schmitz/MuseScore/actions).
+      options:
+        - Choose option...
+        - No.
+        - Yes, this used to work in MuseScore 3.x and now is broken
+        - Yes, this works in MuseScore 4.x
+        - Yes, this works in a previosus version and is broken in the nightly builds
+        - I was unable to check
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      description: What OS does this bug occur on?
+      placeholder: Windows 11, macOS 13, Ubuntu 22.04, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Further information which may be relevant to this bug
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: "Before submitting your bug report, please make sure the following requirements are met:"
+      options:
+        - label: "This report follows the [guidelines](https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues) for reporting bugs and issues"
+          required: true
+        - label: "I have verified that this issue has not been logged before, by searching the [issue tracker](https://github.com/Jojo-Schmitz/MuseScore/issues) for similar issues"
+          required: true
+        - label: "I have attached all requested files and information to this report"
+          required: true
+        - label: "I have attempted to identify the root problem as concisely as possible, and have used minimal reproducible examples where possible"
+          required: true
+  - type: markdown
+    attributes:
+      value: If an issue does not meet these requirements, it may be closed without investigation.
