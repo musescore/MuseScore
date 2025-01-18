@@ -121,6 +121,7 @@ public:
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void editDrag(EditData& editData) override;
+    void endEditDrag(EditData&) override;
     void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
     Hairpin* leftHairpin() const { return m_leftHairpin; }

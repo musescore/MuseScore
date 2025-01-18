@@ -540,7 +540,7 @@ void Dynamic::editDrag(EditData& ed)
     // Right grip (when two grips/when single grip)
     if ((int(ed.curGrip) == 1 && hasLeftGrip && hasRightGrip) || (int(ed.curGrip) == 0 && !hasLeftGrip && hasRightGrip)) {
         m_rightDragOffset += ed.evtDelta.x();
-        if (rightDragOffset() < 0) {
+        if (m_rightDragOffset < 0) {
             m_rightDragOffset = 0;
         }
         return;
@@ -549,13 +549,20 @@ void Dynamic::editDrag(EditData& ed)
     // Left grip (when two grips or single grip)
     if (int(ed.curGrip) == 0 && hasLeftGrip) {
         m_leftDragOffset += ed.evtDelta.x();
-        if (leftDragOffset() > 0) {
+        if (m_leftDragOffset > 0) {
             m_leftDragOffset = 0;
         }
         return;
     }
 
     TextBase::editDrag(ed);
+}
+
+void Dynamic::endEditDrag(EditData& ed)
+{
+    m_leftDragOffset = m_rightDragOffset = 0.0;
+
+    TextBase::endEditDrag(ed);
 }
 
 //---------------------------------------------------------
