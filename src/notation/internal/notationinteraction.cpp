@@ -1445,12 +1445,12 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     switch (et) {
     case ElementType::TEXTLINE:
         systemStavesOnly = m_dropData.ed.dropElement->systemFlag();
-    // fall-thru
+        [[fallthrough]];
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
         systemStavesOnly = systemStavesOnly || !(m_dropData.ed.modifiers & Qt::ControlModifier);
-    // fall-thru
+        [[fallthrough]];
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::PEDAL:
@@ -1469,7 +1469,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::FSYMBOL:
     case ElementType::IMAGE:
         applyUserOffset = true;
-    // fall-thru
+        [[fallthrough]];
     case ElementType::DYNAMIC:
     case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
@@ -1550,17 +1550,21 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         resetDropElement();
         break;
     }
+
+    EngravingItem* elementToSelect = m_dropData.ed.dropElement;
     m_dropData.ed.dropElement = nullptr;
     m_dropData.ed.pos = PointF();
     m_dropData.ed.modifiers = {};
-    setDropTarget(nullptr);         // this also resets dropRectangle and dropAnchor
+
+    setDropTarget(nullptr); // this also resets dropRectangle and dropAnchor
     apply();
-    // update input cursor position (must be done after layout)
-//    if (noteEntryMode()) {
-//        moveCursor();
-//    }
+
     if (accepted) {
         notifyAboutDropChanged();
+
+        if (elementToSelect) {
+            selectAndStartEditIfNeeded(elementToSelect);
+        }
     }
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
