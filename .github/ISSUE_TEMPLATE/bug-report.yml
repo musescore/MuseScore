@@ -1,5 +1,6 @@
 name: Bug report
 description: Report crashes or incorrect behaviour of existing functionality in MuseScore Studio.
+type: Bug
 body:
   - type: dropdown
     id: label
@@ -26,7 +27,7 @@ body:
     id: steps
     attributes:
       label: Description with steps to reproduce
-      description: Please also describe the actual (current) and expected behaviour 
+      description: Please also describe the actual (current) and expected behaviour
       placeholder: |
         1. go to ...
         2. then click on ...
@@ -68,11 +69,11 @@ body:
       options:
         - Choose option...
         - No.
-        - Yes, this used to work in MuseScore 3.x and now is broken 
+        - Yes, this used to work in MuseScore 3.x and now is broken
         - Yes, this used to work in a previous version of MuseScore 4.x
         - Yes, this works in the latest released version and is broken in the nightly builds
         - I was unable to check
-    validations: 
+    validations:
       required: true
   - type: input
     id: os
@@ -80,7 +81,7 @@ body:
       label: Operating system
       description: What OS does this bug occur on?
       placeholder: Windows 11, macOS 13, Ubuntu 22.04, etc.
-    validations: 
+    validations:
       required: true
   - type: textarea
     id: context
