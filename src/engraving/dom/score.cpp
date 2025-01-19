@@ -3525,7 +3525,7 @@ void Score::selectAdd(EngravingItem* e)
 static Segment* findElementStartSegment(Score* score, EngravingItem* e)
 {
     if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
-        if (ancestor->isChordRestType()) {
+        if (ancestor->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
             return ancestor;
         }
     }
@@ -3556,6 +3556,16 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
     if (e->isSpanner() || e->isSpannerSegment()) {
         Spanner* sp = e->isSpanner() ? toSpanner(e) : toSpannerSegment(e)->spanner();
         return score->tick2segmentMM(sp->tick2(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+    }
+
+    if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
+        if (ancestor->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+            return ancestor;
+        }
+    }
+
+    if (Segment* seg = score->tick2segmentMM(e->tick(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        return seg;
     }
 
     return def;
