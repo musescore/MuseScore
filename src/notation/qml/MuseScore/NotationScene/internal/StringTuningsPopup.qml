@@ -33,9 +33,6 @@ StyledPopupView {
     property alias navigationOrderStart: navPanel.order
     readonly property alias navigationOrderEnd: navPanel.order
 
-    property QtObject model: stringTuningsModel
-
-
     contentWidth: content.width
     contentHeight: content.height
 

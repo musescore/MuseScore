@@ -21,7 +21,6 @@
  */
 import QtQuick 2.15
 
-import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
 import "internal"
@@ -38,13 +37,6 @@ Loader {
     property StyledMenu menu: loader.item as StyledMenu
     property Item menuAnchorItem: null
     property bool hasSiblingMenus: false
-    property bool closeMenuOnSelection: true
-    property bool focusOnOpened: true
-
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-
-    property bool opensUpward: false
 
     property alias isMenuOpened: loader.active
 
@@ -73,9 +65,7 @@ Loader {
         accessibleName: loader.accessibleName
 
         onHandleMenuItem: function(itemId) {
-            if (loader.closeMenuOnSelection) {
-                itemMenu.close()
-            }
+            itemMenu.close()
             Qt.callLater(loader.handleMenuItem, itemId)
         }
 
@@ -92,9 +82,7 @@ Loader {
         }
 
         onOpened: {
-            if (focusOnOpened) {
-                focusOnOpenedMenuTimer.start()
-            }
+            focusOnOpenedMenuTimer.start()
         }
     }
 
@@ -144,8 +132,6 @@ Loader {
         }
 
         menu.closeSubMenu()
-
-        menu.setOpensUpward(loader.opensUpward)
 
         if (x !== -1) {
             menu.x = x

@@ -36,6 +36,7 @@
 #include "pitchspelling.h"
 #include "symbol.h"
 #include "tie.h"
+#include "tiejumppointlist.h"
 #include "types.h"
 
 namespace mu::engraving {
@@ -574,6 +575,6 @@ private:
     String m_fretString;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
-    TieJumpPointList m_jumpPoints;
+    TieJumpPointList m_jumpPoints { this };
 };
 } // namespace mu::engraving

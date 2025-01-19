@@ -1900,6 +1900,9 @@ static Tie* createAndAddTie(Note* startNote, Note* endNote)
     tie->setTrack(startNote->track());
     tie->setTick(startNote->chord()->segment()->tick());
     if (endNote) {
+        if (endNote->tieBack()) {
+            score->undoRemoveElement(endNote->tieBack());
+        }
         tie->setEndNote(endNote);
         tie->setTicks(endNote->chord()->segment()->tick() - startNote->chord()->segment()->tick());
     }

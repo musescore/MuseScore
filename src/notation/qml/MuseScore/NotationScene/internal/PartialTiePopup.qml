@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,20 +32,16 @@ StyledPopupView {
     id: root
     margins: 0
 
-    property alias notationViewNavigationSection: partialTieNavPanel.section
-    property alias navigationOrderStart: partialTieNavPanel.order
-    readonly property alias navigationOrderEnd: partialTieNavPanel.order
+    contentWidth: content.width
+    contentHeight: content.height
 
-    property QtObject model: partialTiePopupModel
+    property NavigationSection notationViewNavigationSection: null
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: tieMenuList.navigation.order
 
     showArrow: false
 
-    onOpened: {
-        tieMenuLoader.show(Qt.point(0, 0))
-    }
-
     onClosed: {
-        tieMenuLoader.close()
         partialTiePopupModel.onClosed()
     }
 
@@ -53,26 +49,23 @@ StyledPopupView {
 
     function updatePosition() {
         const opensUp = partialTiePopupModel.tieDirection
-        const popupHeight = tieMenuLoader.item.height + root.margins * 2 + root.padding * 2
+        const popupHeight = content.height + root.margins * 2 + root.padding * 2
         root.x = partialTiePopupModel.dialogPosition.x - root.parent.x
         root.y = partialTiePopupModel.dialogPosition.y - root.parent.y - (opensUp ? popupHeight : 0)
         root.setOpensUpward(opensUp)
+
+        tieMenuList.calculateWidth()
     }
 
-    contentWidth: tieMenuLoader.width
-    contentHeight: tieMenuLoader.childrenRect.height
+    Component.onCompleted: {
+        partialTiePopupModel.init()
+    }
 
-    ContextMenuLoader {
-        id: tieMenuLoader
-        closeMenuOnSelection: false
-        focusOnOpened: false
-        opensUpward: root.opensUpward
-
-        items: partialTiePopupModel.items
-
-        onHandleMenuItem: function(itemId) {
-            partialTiePopupModel.toggleItemChecked(itemId)
-        }
+    Column {
+        id: content
+        width: tieMenuList.width
+        height: tieMenuList.height
+        spacing: 0
 
         PartialTiePopupModel {
             id: partialTiePopupModel
@@ -82,26 +75,53 @@ StyledPopupView {
             }
 
             onItemsChanged: function() {
-                tieMenuLoader.show(Qt.point(0, 0))
+                tieMenuList.model = partialTiePopupModel.items
             }
         }
 
-        Component.onCompleted: {
-            partialTiePopupModel.init()
-        }
+        StyledListView {
+            id: tieMenuList
 
-        NavigationPanel {
-            id: partialTieNavPanel
-            name: "PartialTieMenu"
-            direction: NavigationPanel.Vertical
-            accessible.name: qsTrc("notation", "Partial tie menu items")
+            property int itemHeight: 32
 
-            onSectionChanged: function() {
-                tieMenuLoader.notationViewNavigationSection = section
+            implicitWidth: contentItem.childrenRect.width
+            height: itemHeight * count
+
+            spacing: 0
+            arrowControlsAvailable: false
+
+            model: partialTiePopupModel.items
+
+            navigation.section: notationViewNavigationSection
+            navigation.order: navigationOrderStart
+
+            visible: true
+
+            function calculateWidth() {
+                var result = 0
+                for (var item in tieMenuList.contentItem.children) {
+                    var row = tieMenuList.contentItem.children[item];
+                    if (!(row instanceof ListItemBlank)) {
+                        continue
+                    }
+                    result = Math.max(result, tieMenuList.contentItem.children[item].calculateWidth())
+                }
+
+                tieMenuList.width = result
             }
 
-            onOrderChanged: function() {
-                tieMenuLoader.navigationOrderStart = order
+            delegate: PartialTieMenuRowItem {
+                implicitHeight: tieMenuList.itemHeight
+                hoverHitColor: ui.theme.accentColor
+                anchors.left: parent ? parent.left : undefined
+                anchors.right: parent ? parent.right : undefined
+
+                navigation.panel: tieMenuList.navigation
+                navigation.row: model.index
+
+                onClicked: {
+                    partialTiePopupModel.toggleItemChecked(modelData.id)
+                }
             }
         }
     }
