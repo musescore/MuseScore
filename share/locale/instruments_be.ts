@@ -1593,10 +1593,6 @@
         <translation>Гай-гэт</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Званы</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Бразготкі</translation>

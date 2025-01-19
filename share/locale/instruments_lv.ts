@@ -1593,10 +1593,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Zvani</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Kamanu zvaniņi</translation>

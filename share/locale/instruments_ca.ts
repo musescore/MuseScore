@@ -1593,10 +1593,6 @@
         <translation>Xarleston</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Campanes</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Cascavell</translation>
@@ -4659,11 +4655,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Con. BD </source>
-        <comment>Concert Bass Drum</comment>
-        <translation type="vanished">Bom.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>Caixa Piccolo</translation>
@@ -4765,11 +4756,6 @@
         <source>Tam</source>
         <comment>Tam-Tam</comment>
         <translation>Tam</translation>
-    </message>
-    <message>
-        <source>Be.</source>
-        <comment>Bells</comment>
-        <translation type="vanished">Be.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
@@ -5999,16 +5985,6 @@
         <translation>Vl. T.</translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">Vla. d. g.</translation>
-    </message>
-    <message>
-        <source>Vne.</source>
-        <comment>Violone</comment>
-        <translation type="vanished">Vló.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6297,10 +6273,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1422"/>
         <source>5-str. Electric Bass</source>
         <translation>Baix elèctric 5 cordes</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Viola de gamba (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
@@ -6929,19 +6901,6 @@
         <translation>Viola Tenor</translation>
     </message>
     <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">Viola de gamba</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">Viola de gamba (Tab)</translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">Vla. d. g.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Baryton</source>
         <translation>Baríton</translation>
@@ -6951,10 +6910,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation>Bar.</translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">Violó</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

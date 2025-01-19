@@ -1554,15 +1554,6 @@
         <translation>Kon. Bt.</translation>
     </message>
     <message>
-        <source>Ride Bell</source>
-        <translation type="vanished">Ride Bell</translation>
-    </message>
-    <message>
-        <source>Ri. Be.</source>
-        <comment>Ride Bell</comment>
-        <translation type="vanished">Ri. Be.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1044"/>
         <source>Snare Drum</source>
         <translation>Snare Drum</translation>
@@ -1606,10 +1597,6 @@
         <location filename="../instruments/instrumentsxml.h" line="961"/>
         <source>Hi-hat</source>
         <translation>Hi-Hat</translation>
-    </message>
-    <message>
-        <source>Bells</source>
-        <translation type="vanished">Glocken</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
@@ -4674,11 +4661,6 @@
         <translation>G-Vn.</translation>
     </message>
     <message>
-        <source>Con. BD </source>
-        <comment>Concert Bass Drum</comment>
-        <translation type="vanished">Kon. Bt.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>Piccolo Snare</translation>
@@ -4780,11 +4762,6 @@
         <source>Tam</source>
         <comment>Tam-Tam</comment>
         <translation>Tam</translation>
-    </message>
-    <message>
-        <source>Be.</source>
-        <comment>Bells</comment>
-        <translation type="vanished">Gl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
@@ -6014,16 +5991,6 @@
         <translation>T.ga.</translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">Ga.</translation>
-    </message>
-    <message>
-        <source>Vne.</source>
-        <comment>Violone</comment>
-        <translation type="vanished">D Vne.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6314,10 +6281,6 @@
         <translation>5-stg. elektrischer Bass</translation>
     </message>
     <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Gambe (Tabulatur)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
         <source>Archlute</source>
         <translation>Erzlaute</translation>
@@ -6326,11 +6289,6 @@
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>B♭ Fife</source>
         <translation>B Schwegel</translation>
-    </message>
-    <message>
-        <source>Con. BD</source>
-        <comment>Concert Bass Drum</comment>
-        <translation type="vanished">Kon. BD</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1226"/>
@@ -6943,19 +6901,6 @@
         <translation>Tenorgambe</translation>
     </message>
     <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">Gambe</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">Gambe (Tab)</translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">Ga.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Baryton</source>
         <translation>Baryton</translation>
@@ -6965,10 +6910,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation>Bary.</translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">Violone</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

@@ -1593,10 +1593,6 @@
         <translation>Контра чинела</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Звона</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Прапорци</translation>
@@ -4762,11 +4758,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Be.</source>
-        <comment>Bells</comment>
-        <translation type="vanished">Звон.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
         <source>Sle. Be.</source>
         <comment>Sleigh Bells</comment>
@@ -5994,11 +5985,6 @@
         <translation>Виол Т.</translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">Виол</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6287,10 +6273,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1422"/>
         <source>5-str. Electric Bass</source>
         <translation>Бас — Електрични, 5-жичани</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Виол (Таблатура)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
@@ -6917,19 +6899,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1536"/>
         <source>Tenor Viol</source>
         <translation>Виол — Тенор</translation>
-    </message>
-    <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">Виол</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">Виол (Таб)</translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">Виол</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>

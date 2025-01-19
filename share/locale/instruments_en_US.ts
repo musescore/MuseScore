@@ -4655,11 +4655,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Con. BD </source>
-        <comment>Concert Bass Drum</comment>
-        <translation type="vanished">Con. B.D.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation type="unfinished"></translation>

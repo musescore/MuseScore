@@ -1593,10 +1593,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Çanlar</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation type="unfinished"></translation>
@@ -6279,10 +6275,6 @@
         <translation>5-Tel. Elektro Bas</translation>
     </message>
     <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Viola da gamba (Tablatür)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
         <source>Archlute</source>
         <translation>Ut</translation>
@@ -6909,14 +6901,6 @@
         <translation>Tenor Viol</translation>
     </message>
     <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">Viola da gamba</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">Viola da gamba (Tab)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Baryton</source>
         <translation>Bariton</translation>
@@ -6926,10 +6910,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">Viyolonsel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

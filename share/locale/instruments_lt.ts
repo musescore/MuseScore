@@ -1593,10 +1593,6 @@
         <translation>Haihetas</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Varpai</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation type="unfinished"></translation>
@@ -6279,10 +6275,6 @@
         <translation>5-stygė bosinė el. gitara</translation>
     </message>
     <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Viola da gamba (tabulatūra)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
         <source>Archlute</source>
         <translation>Archliutnia</translation>
@@ -6918,10 +6910,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">Violonas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

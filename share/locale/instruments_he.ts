@@ -1593,10 +1593,6 @@
         <translation>היי האט</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">פעמונים</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>פעמוני מזחלת</translation>
@@ -6279,10 +6275,6 @@
         <translation>בס חשמלית 5 מיתרים</translation>
     </message>
     <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">ויולה דה גמבה (טאבלטורה)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
         <source>Archlute</source>
         <translation type="unfinished"></translation>
@@ -6909,14 +6901,6 @@
         <translation>ויאול טנור</translation>
     </message>
     <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">ויולה דה גמבה</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">ויולה דה גמבה (טאבלטורה)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Baryton</source>
         <translation>בריטון</translation>
@@ -6926,10 +6910,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">ויולונה</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

@@ -1593,10 +1593,6 @@
         <translation>Хай-хет</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Колокола</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Бубенцы</translation>
@@ -4660,11 +4656,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Con. BD </source>
-        <comment>Concert Bass Drum</comment>
-        <translation type="vanished">Конц. Бол. Б</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>Малый барабан-пикколо</translation>
@@ -4766,11 +4757,6 @@
         <source>Tam</source>
         <comment>Tam-Tam</comment>
         <translation>Там</translation>
-    </message>
-    <message>
-        <source>Be.</source>
-        <comment>Bells</comment>
-        <translation type="vanished">Берда</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
@@ -6000,16 +5986,6 @@
         <translation>Алт. вла.</translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">Вла. д .г</translation>
-    </message>
-    <message>
-        <source>Vne.</source>
-        <comment>Violone</comment>
-        <translation type="vanished">Влне.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6298,10 +6274,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1422"/>
         <source>5-str. Electric Bass</source>
         <translation>5-стр. Электрическая бас-гитара</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Виола да гамба (Табулатура)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
@@ -6930,19 +6902,6 @@
         <translation>Альтовая виола</translation>
     </message>
     <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">Виола да гамба</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">Виола да гамба (Таб)</translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">Вла. д .г</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Baryton</source>
         <translation>Баритон</translation>
@@ -6952,10 +6911,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation>Бар.</translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">Виолоне</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

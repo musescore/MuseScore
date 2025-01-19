@@ -1593,10 +1593,6 @@
         <translation>Pratos de Choque</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Sinos</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Sinos de Trenó</translation>
@@ -4762,11 +4758,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Be.</source>
-        <comment>Bells</comment>
-        <translation type="vanished">Si.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
         <source>Sle. Be.</source>
         <comment>Sleigh Bells</comment>
@@ -5994,11 +5985,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">Vla. d. g.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6287,10 +6273,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1422"/>
         <source>5-str. Electric Bass</source>
         <translation>Baixo Elétrico de 5 cordas</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Viola da gamba (Tablatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
@@ -6917,19 +6899,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1536"/>
         <source>Tenor Viol</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">Viola da gamba</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">Viola da gamba (Tab)</translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">Vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>

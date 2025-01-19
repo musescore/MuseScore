@@ -1593,10 +1593,6 @@
         <translation>踩鈸</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">鈴鐺</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>雪橇鈴</translation>
@@ -4659,11 +4655,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Con. BD </source>
-        <comment>Concert Bass Drum</comment>
-        <translation type="vanished">Con. BD </translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>高音小鼓</translation>
@@ -4765,11 +4756,6 @@
         <source>Tam</source>
         <comment>Tam-Tam</comment>
         <translation>鑼</translation>
-    </message>
-    <message>
-        <source>Be.</source>
-        <comment>Bells</comment>
-        <translation type="vanished">Be.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
@@ -5999,16 +5985,6 @@
         <translation>T. Vl.</translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">Vla. d. g.</translation>
-    </message>
-    <message>
-        <source>Vne.</source>
-        <comment>Violone</comment>
-        <translation type="vanished">Vne.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6297,10 +6273,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1422"/>
         <source>5-str. Electric Bass</source>
         <translation>5弦電貝斯</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">低音提琴 (指法譜)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
@@ -6929,19 +6901,6 @@
         <translation>次中音古提琴</translation>
     </message>
     <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">低音古提琴</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">低音提琴（指法譜）</translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">Vla. d. g.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Baryton</source>
         <translation>巴里通琴</translation>
@@ -6951,10 +6910,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation>Bary.</translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">低音提琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

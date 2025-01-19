@@ -1593,10 +1593,6 @@
         <translation>Pedalni čineli</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Zvonci</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Kraguljčki</translation>
@@ -4762,11 +4758,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Be.</source>
-        <comment>Bells</comment>
-        <translation type="vanished">Be.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="966"/>
         <source>Sle. Be.</source>
         <comment>Sleigh Bells</comment>
@@ -5994,16 +5985,6 @@
         <translation>T. Vl.</translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">Vla. d. g.</translation>
-    </message>
-    <message>
-        <source>Vne.</source>
-        <comment>Violone</comment>
-        <translation type="vanished">Vne.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6918,11 +6899,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1536"/>
         <source>Tenor Viol</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">Vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>

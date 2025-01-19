@@ -1593,10 +1593,6 @@
         <translation>Hajtka</translation>
     </message>
     <message>
-        <source>Bells</source>
-        <translation type="vanished">Zvony</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Sleigh Bells</source>
         <translation>Roľničky</translation>
@@ -6279,10 +6275,6 @@
         <translation>5-strunová elektrická basgitara</translation>
     </message>
     <message>
-        <source>Viola da gamba (Tablature)</source>
-        <translation type="vanished">Viola da gamba (tabulatúra)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
         <source>Archlute</source>
         <translation type="unfinished"></translation>
@@ -6909,14 +6901,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">Viola da gamba</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">Viola da gamba (tab)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Baryton</source>
         <translation>Barytón</translation>
@@ -6926,10 +6910,6 @@
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Violone</source>
-        <translation type="vanished">Violón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1559"/>

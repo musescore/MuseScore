@@ -5985,11 +5985,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
-        <translation type="vanished">ვ-ლა. დ. გ.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1560"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
@@ -6904,19 +6899,6 @@
         <location filename="../instruments/instrumentsxml.h" line="1536"/>
         <source>Tenor Viol</source>
         <translation>ტენორ ვიოლინო</translation>
-    </message>
-    <message>
-        <source>Viola da gamba</source>
-        <translation type="vanished">ვიოლა და გამბა</translation>
-    </message>
-    <message>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="vanished">ვიოლა და გამბა (ტაბ)</translation>
-    </message>
-    <message>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="vanished">ვ-ლა. დ. გ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
