@@ -29,6 +29,7 @@
 #include <engraving/dom/note.h>
 #include <engraving/dom/score.h>
 #include <engraving/dom/tie.h>
+#include <engraving/dom/tuplet.h>
 
 using namespace mu::engraving;
 
@@ -68,8 +69,10 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
             mainChord->setTicks(newMainChordDuration);
             mainChord->setDurationType(TDuration(newMainChordDuration));
             Fraction currentTick = mainChord->tick() + mainChord->ticks();
+            Fraction currentActualTick = mainChord->tick() + mainChord->actualTicks();
             createGuitarBends(bendDataCtx, mainChord);
 
+            Tuplet* tuplet = mainChord->tuplet();
             for (size_t i = 1; i < chordsDurations.size(); i++) {
                 Measure* currentMeasure = m_score->tick2measure(currentTick);
                 if (!currentMeasure) {
@@ -77,9 +80,11 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
                     return;
                 }
 
-                Segment* curSegment = currentMeasure->findSegment(SegmentType::ChordRest, currentTick);
+                Segment* curSegment = currentMeasure->findSegment(SegmentType::ChordRest, currentActualTick);
                 Chord* currentChord = nullptr;
                 Fraction currentChordDuration = chordsDurations[i];
+                Fraction actualDuration = (tuplet ? currentChordDuration / tuplet->ratio() : currentChordDuration);
+
                 if (curSegment) {
                     currentChord = currentMeasure->findChord(currentTick, track);
                     if (!currentChord) {
@@ -87,17 +92,18 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
                         return;
                     }
 
-                    curSegment->setTicks(currentChordDuration);
                     currentChord->setTicks(currentChordDuration);
                     currentChord->setDurationType(currentChordDuration);
                 } else {
-                    curSegment = currentMeasure->getSegment(SegmentType::ChordRest, currentTick);
-                    curSegment->setTicks(currentChordDuration);
-
+                    curSegment = currentMeasure->getSegment(SegmentType::ChordRest, currentActualTick);
                     currentChord = Factory::createChord(m_score->dummy()->segment());
                     currentChord->setTrack(track);
                     currentChord->setTicks(currentChordDuration);
                     currentChord->setDurationType(currentChordDuration);
+                    if (tuplet) {
+                        tuplet->add(currentChord);
+                    }
+
                     curSegment->add(currentChord);
 
                     for (Note* note : mainChord->notes()) {
@@ -111,6 +117,7 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
 
                 createGuitarBends(bendDataCtx, currentChord);
                 currentTick += currentChordDuration;
+                currentActualTick += actualDuration;
             }
         }
     }

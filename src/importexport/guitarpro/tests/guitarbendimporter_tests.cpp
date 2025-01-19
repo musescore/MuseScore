@@ -160,4 +160,8 @@ TEST_F(GuitarBendImporter_Tests, gpBendRelease3Notes) {
 TEST_F(GuitarBendImporter_Tests, gpBendsCombinations) {
     gpReadTest(u"bends_combinations", u"gp");
 }
+
+TEST_F(GuitarBendImporter_Tests, gpTuples1Bend) {
+    gpReadTest(u"tuples_1_bend", u"gp");
+}
 }

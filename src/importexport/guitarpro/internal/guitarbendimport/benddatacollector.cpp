@@ -25,6 +25,7 @@
 #include <engraving/dom/note.h>
 #include <engraving/dom/score.h>
 #include <engraving/dom/tie.h>
+#include <engraving/dom/tuplet.h>
 
 #include "bendchorddurationsplitter.h"
 
@@ -93,7 +94,7 @@ BendDataContext BendDataCollector::collectBendDataContext()
         for (const auto& [mainTick, chords] : trackInfo) {
             const auto& importedInfoForTick = importedInfoForTrack.at(mainTick);
             const Chord* lastChord = chords.back();
-            Fraction totalDuration = lastChord->tick() - Fraction::fromTicks(mainTick) + lastChord->actualTicks();
+            Fraction totalDuration = lastChord->tick() - Fraction::fromTicks(mainTick) + lastChord->ticks();
             if (!importedInfoForTick.empty()) {
                 fillChordDurationsFromBendDiagram(bendDataCtx, totalDuration, importedInfoForTick.begin()->second);
             }
@@ -247,7 +248,7 @@ void fillSlightBendData(BendDataContext& bendDataCtx, const BendDataCollector::I
     Fraction tick = chord->tick();
 
     std::vector<Fraction> bendDurations;
-    Fraction duration = chord->actualTicks();
+    Fraction duration = chord->ticks();
     bendDurations.push_back(duration);
 
     bendDataCtx.bendChordDurations[note->track()][tick.ticks()] = std::move(bendDurations);
@@ -302,6 +303,11 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
     const Chord* chord = note->chord();
     const Fraction chordStartTick = chord->tick();
     const auto& durations = bendDataCtx.bendChordDurations;
+    Fraction ratio = Fraction(1, 1);
+
+    if (const Tuplet* tuplet = chord->tuplet()) {
+        ratio = tuplet->ratio();
+    }
 
     size_t currentIndex = startIndex;
     if (durations.find(chord->track()) == durations.end()) {
@@ -325,7 +331,7 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
             break;
         }
 
-        Fraction tickDuration = tickDurations[i];
+        Fraction tickDuration = tickDurations[i] / ratio;
 
         const auto& seg = importedInfo.segments[currentIndex];
 
@@ -347,7 +353,7 @@ static void addFullChordDuration(BendDataContext& bendDataCtx, const BendDataCol
     Fraction tick = chord->tick();
 
     std::vector<Fraction> bendDurations;
-    Fraction duration = chord->actualTicks();
+    Fraction duration = chord->ticks();
     bendDurations.push_back(duration);
     bendDataCtx.bendChordDurations[chord->track()][tick.ticks()] = std::move(bendDurations);
 }
