@@ -141,6 +141,10 @@ TEST_F(GuitarBendImporter_Tests, gpTiedBend_1) {
     gpReadTest(u"tied_bend_1", u"gp");
 }
 
+TEST_F(GuitarBendImporter_Tests, gpTiedBend_2) {
+    gpReadTest(u"tied_bend_2", u"gp");
+}
+
 TEST_F(GuitarBendImporter_Tests, gpTiedPrebendBend) {
     gpReadTest(u"tied_prebend+bend", u"gp");
 }
@@ -151,5 +155,9 @@ TEST_F(GuitarBendImporter_Tests, gpBendRelease2Notes) {
 
 TEST_F(GuitarBendImporter_Tests, gpBendRelease3Notes) {
     gpReadTest(u"bend_release_3_notes", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBendsCombinations) {
+    gpReadTest(u"bends_combinations", u"gp");
 }
 }

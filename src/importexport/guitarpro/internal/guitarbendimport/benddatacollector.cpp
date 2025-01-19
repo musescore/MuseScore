@@ -72,6 +72,7 @@ BendDataContext BendDataCollector::collectBendDataContext()
 
                 if (trackInfo.find(currentNote->tick().ticks()) != trackInfo.end()) {
                     deleteLastTiedChord = false;
+                    bendDataCtx.chordTicksForTieBack[track].insert(currentNote->tick());
                     break;
                 }
 
@@ -319,10 +320,12 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
 
     Fraction currentTick = chordStartTick;
 
-    for (const auto& tickDuration : tickDurations) {
+    for (size_t i = 0; i < tickDurations.size() - 1; i++) {
         if (currentIndex >= importedInfo.segments.size()) {
             break;
         }
+
+        Fraction tickDuration = tickDurations[i];
 
         const auto& seg = importedInfo.segments[currentIndex];
 
