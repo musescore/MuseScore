@@ -5103,6 +5103,8 @@ void ScoreView::cmdRepeatSelection()
             bool filtered = score()->selection().hasTemporaryFilter();
             if (endSegment->segmentType() != SegmentType::ChordRest)
                   endSegment = endSegment->next1(SegmentType::ChordRest);
+            if (!endSegment)
+                  return;
             auto e = (filtered && endSegment->element(eTrack)) ? endSegment->element(eTrack) : endSegment->element(staffTrack);
             if (e) {
                   auto cr = toChordRest(e);
