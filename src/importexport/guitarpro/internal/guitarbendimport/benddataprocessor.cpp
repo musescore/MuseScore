@@ -197,10 +197,10 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
 
                 // TODO: adapt to creating ties for each note if needed (now only checking up note)
                 Note* endNote = chord->upNote();
-                Note* startNote = prevChord->upNote();
+                Note* prevStartNote = prevChord->upNote();
 
                 Tie* tie = Factory::createTie(chord->score()->dummy());
-                startNote->add(tie);
+                prevStartNote->add(tie);
                 tie->setEndNote(endNote);
                 endNote->setTieBack(tie);
 

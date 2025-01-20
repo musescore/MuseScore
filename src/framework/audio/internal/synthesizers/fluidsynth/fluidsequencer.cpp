@@ -99,8 +99,8 @@ const ChannelMap& FluidSequencer::channels() const
 
 void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
 {
-    for (const auto& pair : changes) {
-        for (const mpe::PlaybackEvent& event : pair.second) {
+    for (const auto& changesPair : changes) {
+        for (const mpe::PlaybackEvent& event : changesPair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
             }
@@ -130,11 +130,11 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             destination[timestampTo].emplace(std::move(noteOff));
 
-            for (const auto& pair : noteEvent.expressionCtx().articulations) {
-                if (muse::contains(PEDAL_CC_SUPPORTED_TYPES, pair.first)) {
-                    appendControlSwitch(destination, noteEvent, pair.second.meta, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx);
-                } else if (muse::contains(BEND_SUPPORTED_TYPES, pair.first)) {
-                    appendPitchBend(destination, noteEvent, pair.second.meta, channelIdx);
+            for (const auto& articulationsPair : noteEvent.expressionCtx().articulations) {
+                if (muse::contains(PEDAL_CC_SUPPORTED_TYPES, articulationsPair.first)) {
+                    appendControlSwitch(destination, noteEvent, articulationsPair.second.meta, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx);
+                } else if (muse::contains(BEND_SUPPORTED_TYPES, articulationsPair.first)) {
+                    appendPitchBend(destination, noteEvent, articulationsPair.second.meta, channelIdx);
                 }
             }
         }
