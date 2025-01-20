@@ -43,10 +43,9 @@ ECHO "BUILD_WIN_PORTABLE: %BUILD_WIN_PORTABLE%"
 XCOPY "C:\musescore_dependencies" %CD% /E /I /Y
 ECHO "Finished copy dependencies"
 
-
-SET "QT_DIR=C:\Qt\6.2.4"
-SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
+SET "QT_DIR=C:\Qt\6.2.11"
 SET "JACK_DIR=C:\Program Files (x86)\Jack"
+SET "PATH=%QT_DIR%\bin;%JACK_DIR%;%PATH%"
 
 :: At the moment not compiling yet.
 SET BUILD_VST=ON 
