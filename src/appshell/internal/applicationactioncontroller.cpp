@@ -342,7 +342,8 @@ void ApplicationActionController::revertToFactorySettings()
 
     static constexpr bool KEEP_DEFAULT_SETTINGS = false;
     static constexpr bool NOTIFY_ABOUT_CHANGES = false;
-    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES);
+    static constexpr bool NOTIFY_OTHER_INSTANCES = false;
+    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES, NOTIFY_OTHER_INSTANCES);
 
     title = muse::trc("appshell", "Would you like to restart MuseScore Studio now?");
     question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
