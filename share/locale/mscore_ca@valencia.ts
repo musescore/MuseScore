@@ -9196,64 +9196,75 @@ By default, they will be placed such as that their right end are at the same lev
         <translation>Inspector de salt de secció</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="57"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="56"/>
         <source>Section Break</source>
         <translation>Salt de secció</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="88"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="133"/>
         <source>Measure number one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="121"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="104"/>
         <source>Pause:</source>
         <translation>Pausa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="137"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="153"/>
         <source>Reset &apos;Long instrument names&apos; value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="150"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="179"/>
         <source>Reset &apos;Measure number one&apos; value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="163"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="166"/>
         <source>Reset &apos;First system indentation&apos; value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="176"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="120"/>
         <source>Long instrument names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="199"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="140"/>
         <source>First system indentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="206"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="97"/>
         <source>Start new section with:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="189"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="87"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="192"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="90"/>
         <source>s</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="114"/>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="205"/>
         <source>Reset &apos;Pause&apos; value</source>
         <translation>Restableix el valor &apos;Pausa&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="212"/>
+        <source>Hide courtesy clefs,
+time and key signatures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="226"/>
+        <source>Reset &apos;Hide courtesy clefs, time and key signatures&apos; value</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13071,13 +13082,13 @@ en obrir el fitxer
 <context>
     <name>Ms::Inspector</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="126"/>
-        <location filename="../../mscore/inspector/inspector.cpp" line="135"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="121"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="130"/>
         <source>Inspector</source>
         <translation>Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="136"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="131"/>
         <source>Inspector Subwindow</source>
         <translation>Subfinestra de l&apos;inspector</translation>
     </message>
@@ -13085,23 +13096,23 @@ en obrir el fitxer
 <context>
     <name>Ms::InspectorAccidental</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1054"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1050"/>
         <source>None</source>
         <comment>no accidental bracket type</comment>
         <translation>Cap</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1055"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1051"/>
         <source>Parenthesis</source>
         <translation>Parèntesi </translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1056"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1052"/>
         <source>Bracket</source>
         <translation>Claudàtor</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1057"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1053"/>
         <source>Brace</source>
         <translation>Clau</translation>
     </message>
@@ -13109,12 +13120,12 @@ en obrir el fitxer
 <context>
     <name>Ms::InspectorArticulation</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="656"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="652"/>
         <source>Ornament</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="656"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="652"/>
         <source>Articulation</source>
         <translation>Articulació</translation>
     </message>
@@ -13168,12 +13179,12 @@ en obrir el fitxer
 <context>
     <name>Ms::InspectorCaesura</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1333"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1329"/>
         <source>Caesura</source>
         <translation>Cesura</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1333"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1329"/>
         <source>Breath</source>
         <translation>Respiració</translation>
     </message>
@@ -13252,57 +13263,57 @@ en obrir el fitxer
 <context>
     <name>Ms::InspectorKeySig</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="988"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="984"/>
         <source>Unknown</source>
         <translation>Desconegut</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="989"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="985"/>
         <source>None</source>
         <translation>Cap</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="990"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="986"/>
         <source>Major</source>
         <translation>Major</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="991"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="987"/>
         <source>Minor</source>
         <translation>Menor</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="992"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="988"/>
         <source>Dorian</source>
         <translation>Dòric</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="993"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="989"/>
         <source>Phrygian</source>
         <translation>Frigi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="994"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="990"/>
         <source>Lydian</source>
         <translation>Lidi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="995"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="991"/>
         <source>Mixolydian</source>
         <translation>Mixolidi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="996"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="992"/>
         <source>Aeolian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="993"/>
         <source>Ionian</source>
         <translation>Jònic</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="994"/>
         <source>Locrian</source>
         <translation>Locri</translation>
     </message>
@@ -13319,32 +13330,32 @@ en obrir el fitxer
 <context>
     <name>Ms::InspectorRest</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="766"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="762"/>
         <source>Select</source>
         <translation>Selecciona</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="781"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="777"/>
         <source>Dot 1</source>
         <translation>Punts 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="784"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="780"/>
         <source>Dot 2</source>
         <translation>Punts 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="787"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="783"/>
         <source>Dot 3</source>
         <translation>Punts 3</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="794"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="790"/>
         <source>Dot 4</source>
         <translation>Punts 4</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="797"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="793"/>
         <source>Tuplet</source>
         <translation>Grup irregular</translation>
     </message>
@@ -13352,12 +13363,12 @@ en obrir el fitxer
 <context>
     <name>Ms::InspectorSlurTie</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1286"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1282"/>
         <source>Slur</source>
         <translation>Lligadura d&apos;expressió</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1286"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1282"/>
         <source>Tie</source>
         <translation>Lligadura</translation>
     </message>
@@ -14831,7 +14842,7 @@ Voleu restaurar la sessió?</translation>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="39"/>
         <source>Upload Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hi ha hagut un error de pujada.</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="40"/>
@@ -16023,7 +16034,7 @@ d&apos;estil %1: %2 </translation>
         <translation>Seleccioneu el grup irregular complet i torneu a provar l&apos;ordre</translation>
     </message>
     <message>
-        <location filename="../../libmscore/score.cpp" line="2260"/>
+        <location filename="../../libmscore/score.cpp" line="2261"/>
         <source>Clone paste error: insufficient staves available at given position</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21397,13 +21408,13 @@ Visiteu la %1pàgina web del MuseScore %2 per a obtindre&apos;n l&apos;última v
         <translation>compàs en %1/%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1145"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1141"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
         <translation>Per damunt</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1146"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1142"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
         <translation>Per davall</translation>

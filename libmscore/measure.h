@@ -231,7 +231,7 @@ class Measure final : public MeasureBase {
       bool isRepeatMeasure(const Staff* staff) const;
       bool visible(int staffIdx) const;
       bool stemless(int staffIdx) const;
-      bool isFinalMeasureOfSection() const;
+      LayoutBreak* nextSectionBreak() const;
       bool isAnacrusis() const;
       bool isFirstInSystem() const;
       bool isFirstInSection() const;

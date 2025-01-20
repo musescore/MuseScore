@@ -37,6 +37,7 @@ LayoutBreak::LayoutBreak(Score* score)
       _startWithLongNames = false;
       _startWithMeasureOne = false;
       _firstSystemIndentation = false;
+      _showCourtesy = false;
       _layoutBreakType = Type(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
       initElementStyle(&sectionBreakStyle);
@@ -45,6 +46,7 @@ LayoutBreak::LayoutBreak(Score* score)
       resetProperty(Pid::START_WITH_LONG_NAMES);
       resetProperty(Pid::START_WITH_MEASURE_ONE);
       resetProperty(Pid::FIRST_SYSTEM_INDENTATION);
+      resetProperty(Pid::SHOW_COURTESY);
       lw = spatium() * 0.3;
       }
 
@@ -57,6 +59,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
       _startWithLongNames     = lb._startWithLongNames;
       _startWithMeasureOne    = lb._startWithMeasureOne;
       _firstSystemIndentation = lb._firstSystemIndentation;
+      _showCourtesy           = lb._showCourtesy;
       layout0();
       }
 
@@ -69,7 +72,7 @@ void LayoutBreak::write(XmlWriter& xml) const
       xml.stag(this);
       Element::writeProperties(xml);
 
-      for (auto id : { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION })
+      for (auto id : { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION, Pid::SHOW_COURTESY })
             writeProperty(xml, id);
 
       xml.etag();
@@ -93,6 +96,8 @@ void LayoutBreak::read(XmlReader& e)
                   readProperty(e, Pid::START_WITH_MEASURE_ONE);
             else if (tag == "firstSystemIndentation")
                   readProperty(e, Pid::FIRST_SYSTEM_INDENTATION);
+            else if (tag == "showCourtesySig")
+                  readProperty(e, Pid::SHOW_COURTESY);
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -259,6 +264,8 @@ QVariant LayoutBreak::getProperty(Pid propertyId) const
                   return _startWithMeasureOne;
             case Pid::FIRST_SYSTEM_INDENTATION:
                   return _firstSystemIndentation;
+            case Pid::SHOW_COURTESY:
+                  return _showCourtesy;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -285,6 +292,9 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::FIRST_SYSTEM_INDENTATION:
                   setFirstSystemIndentation(v.toBool());
+                  break;
+            case Pid::SHOW_COURTESY:
+                  setShowCourtesy(v.toBool());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -321,6 +331,8 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
                   return true;
             case Pid::FIRST_SYSTEM_INDENTATION:
                   return true;
+            case Pid::SHOW_COURTESY:
+                  return false;
             default:
                   return Element::propertyDefault(id);
             }

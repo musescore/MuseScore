@@ -38,11 +38,12 @@ class LayoutBreak final : public Element {
       qreal lw;
       QPainterPath path;
       QPainterPath path2;
-      qreal _pause;
-      bool _startWithLongNames;
-      bool _startWithMeasureOne;
-      bool _firstSystemIndentation;
-      Type _layoutBreakType;
+      qreal _pause = 0.0;
+      bool _startWithLongNames = false;
+      bool _startWithMeasureOne = false;
+      bool _firstSystemIndentation = false;
+      bool _showCourtesy = false;
+      Type _layoutBreakType = LayoutBreak::Type::NOBREAK;
 
       void draw(QPainter*) const override;
       void layout0();
@@ -73,6 +74,8 @@ class LayoutBreak final : public Element {
       void setStartWithMeasureOne(bool v)    { _startWithMeasureOne = v;       }
       bool firstSystemIndentation() const    { return _firstSystemIndentation; }
       void setFirstSystemIndentation(bool v) { _firstSystemIndentation = v;    }
+      bool showCourtesy() const              { return _showCourtesy;           }
+      void setShowCourtesy(bool v)           { _showCourtesy = v;              }
 
       bool isPageBreak() const    { return _layoutBreakType == PAGE;    }
       bool isLineBreak() const    { return _layoutBreakType == LINE;    }

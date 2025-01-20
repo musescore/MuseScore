@@ -2575,25 +2575,18 @@ bool Measure::stemless(int staffIdx) const
       return staff->stemless(tick()) || _mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
       }
 
-//---------------------------------------------------------
-//   isFinalMeasureOfSection
-//    returns true if this measure is final actual measure of a section
-//    takes into consideration fact that subsequent measures base objects
-//    may have section break before encountering next actual measure
-//---------------------------------------------------------
-
-bool Measure::isFinalMeasureOfSection() const
+LayoutBreak* Measure::nextSectionBreak() const
       {
       const MeasureBase* mb = static_cast<const MeasureBase*>(this);
 
       do {
-            if (mb->sectionBreak())
-                  return true;
+            if (LayoutBreak* sectionBreak = mb->sectionBreakElement())
+                  return sectionBreak;
 
             mb = mb->next();
             } while (mb && !mb->isMeasure());   // loop until reach next actual measure or end of score
 
-      return false;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -3993,7 +3986,9 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks());
       Measure* nm  = nextMeasure();
       qreal blw    = 0.0;
-
+      bool hideCourtesy = false;
+      if (LayoutBreak* sectionBreakElement = nextSectionBreak())
+            hideCourtesy = !sectionBreakElement->showCourtesy();
 #if 0
 #ifndef NDEBUG
       computeMinWidth();
@@ -4020,7 +4015,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             //  create the courtesy key sig.
             //
 
-            bool show = score()->styleB(Sid::genCourtesyKeysig) && !isFinalMeasureOfSection() && nm;
+            bool show = score()->styleB(Sid::genCourtesyKeysig) && !hideCourtesy && nm;
 
             setHasCourtesyKeySig(false);
 
@@ -4118,7 +4113,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         bool showCourtesy = score()->genCourtesyClef() && clef->showCourtesy(); // normally show a courtesy clef
                         // check if the measure is the last measure of the system or the last measure before a frame
                         bool lastMeasure = isLastMeasureInSystem || (nm ? !(next() == nm) : true);
-                        if (!nm || isFinalMeasureOfSection() || (lastMeasure && !showCourtesy)) {
+                        if (!nm || hideCourtesy || (lastMeasure && !showCourtesy)) {
                               // hide the courtesy clef in the final measure of a section, or if the measure is the final measure of a system
                               // and the score style or the clef style is set to "not show courtesy clef",
                               // or if the clef is at the end of the very last measure of the score
@@ -4427,14 +4422,16 @@ void Measure::addSystemHeader(bool isFirstSystem)
 void Measure::addSystemTrailer(Measure* nm)
       {
       Fraction _rtick = ticks();
-      bool isFinalMeasure = isFinalMeasureOfSection();
+      bool hideCourtesy  = false;
+      if (LayoutBreak* sectionBreakElement = nextSectionBreak())
+            hideCourtesy  = !sectionBreakElement->showCourtesy();
 
       // locate a time sig. in the next measure and, if found,
       // check if it has court. sig. turned off
       TimeSig* ts = nullptr;
       bool showCourtesySig = false;
       Segment* s = findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
-      if (nm && score()->genCourtesyTimesig() && !isFinalMeasure && !score()->floatMode()) {
+      if (nm && score()->genCourtesyTimesig() && !hideCourtesy  && !score()->floatMode()) {
             Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0,1));
             if (tss) {
                   int nstaves = score()->nstaves();
