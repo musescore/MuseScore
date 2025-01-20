@@ -573,12 +573,10 @@ std::vector<EngravingItem*> NotationInteraction::hitElements(const PointF& pos, 
             return false;
         }
 
-        if (!element->isInteractionAvailable()) {
-            return false;
-        }
-
         if (element->isSoundFlag()) {
             return !toSoundFlag(element)->shouldHide();
+        } else if (!element->isInteractionAvailable()) {
+            return false;
         }
 
         return true;
