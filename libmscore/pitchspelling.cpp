@@ -14,13 +14,13 @@
 //  algorithmus from Emilios Cambouropoulos as published in:
 //  "Automatic Pitch Spelling: From Numbers to Sharps and Flats"
 
-#include "note.h"
-#include "key.h"
-#include "pitchspelling.h"
-#include "staff.h"
 #include "chord.h"
-#include "score.h"
+#include "key.h"
+#include "note.h"
 #include "part.h"
+#include "pitchspelling.h"
+#include "score.h"
+#include "staff.h"
 #include "utils.h"
 
 #include "audio/midi/event.h"
@@ -432,7 +432,7 @@ static const int enharmonicSpelling[15][34] = {
 //As  f  c  g  d  a  e  b
          1, 1, 1, 1, 1, 1, // bb
       1, 1, 0, 0, 0, 0, 0, // b
-      0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 1, 1, 1, 1,
       0, 1, 1, 1, 1, 1, 1, // #
       1, 1, 1, 1, 1, 1, 1  // ##
       },
