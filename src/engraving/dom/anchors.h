@@ -27,22 +27,23 @@
 #include "score.h"
 
 namespace mu::engraving {
+class Factory;
+
 class EditTimeTickAnchors
 {
 public:
     static void updateAnchors(const EngravingItem* item, track_idx_t track);
+    static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
     static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
     static void updateLayout(Measure* measure);
-
-private:
-    static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
 };
 
 class TimeTickAnchor : public EngravingItem
 {
-public:
     TimeTickAnchor(Segment* parent);
+    friend class Factory;
 
+public:
     Segment* segment() const { return toSegment(parentItem()); }
 
     TimeTickAnchor* clone() const override { return new TimeTickAnchor(*this); }

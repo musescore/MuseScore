@@ -305,7 +305,7 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
 
 bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
-    assert(dst->isChordRestType());
+    assert(dst->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE));
 
     Score* score = dst->score();
     ReadContext ctx(score);

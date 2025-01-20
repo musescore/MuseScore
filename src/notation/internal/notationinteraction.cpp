@@ -1507,6 +1507,85 @@ bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardMo
     return false;
 }
 
+static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t* staffIdx, Segment** segment)
+{
+    IF_ASSERT_FAILED(score && staffIdx && segment) {
+        return;
+    }
+
+    static constexpr double spacingFactor = 0.5;
+    static constexpr bool useTimeAnchors = true;
+
+    // First, get an approximate location
+    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
+    if (*staffIdx == muse::nidx || !*segment) {
+        return;
+    }
+
+    // Determine the measures range
+    Fraction startTick = (*segment)->tick();
+    Fraction endTick = startTick + tickLength;
+
+    Measure* startMeasure = (*segment)->measure();
+    if (!startMeasure) {
+        return;
+    }
+
+    Measure* endMeasure = score->tick2measure(endTick);
+    if (!endMeasure) {
+        endMeasure = score->lastMeasure();
+
+        if (!endMeasure) {
+            return;
+        }
+    }
+
+    IF_ASSERT_FAILED(startMeasure == endMeasure || startMeasure->isBefore(endMeasure)) {
+        return;
+    }
+
+    // Add time tick anchors throughout these measures
+    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        EditTimeTickAnchors::updateAnchors(toMeasure(mb), *staffIdx);
+    }
+
+    // Get precise location using the newly created time tick anchors
+    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
+    if (*staffIdx == muse::nidx || !*segment) {
+        return;
+    }
+
+    startTick = (*segment)->tick();
+    endTick = startTick + tickLength;
+
+    score->setShowAnchors(ShowAnchors(0, *staffIdx, startTick, endTick,
+                                      startMeasure->tick(), endMeasure->endTick()));
+
+    // Invalidate BSP tree of affected pages
+    System* lastSeenSystem = nullptr;
+    Page* lastSeenPage = nullptr;
+    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+        System* s = mb->system();
+        if (!s || s == lastSeenSystem) {
+            continue;
+        }
+
+        lastSeenSystem = s;
+
+        Page* p = s->page();
+        if (!p || p == lastSeenPage) {
+            continue;
+        }
+
+        lastSeenPage = p;
+
+        p->invalidateBspTree();
+    }
+}
+
 bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
@@ -1517,11 +1596,8 @@ bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
 
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
-    static constexpr double spacingFactor = 0.5;
-    static constexpr bool useTimeAnchors = true;
 
-    score()->dragPosition(pos, &staffIdx, &segment, spacingFactor, useTimeAnchors);
-
+    dropRangePosition(score(), pos, rdd.tickLength, &staffIdx, &segment);
     if (staffIdx == muse::nidx || !segment) {
         return false;
     }
@@ -1822,11 +1898,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
 
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
-    static constexpr double spacingFactor = 0.5;
-    static constexpr bool useTimeAnchors = true;
 
-    score()->dragPosition(pos, &staffIdx, &segment, spacingFactor, useTimeAnchors);
-
+    dropRangePosition(score(), pos, rdd.tickLength, &staffIdx, &segment);
     if (staffIdx == muse::nidx || !segment) {
         return false;
     }
@@ -2587,6 +2660,7 @@ bool NotationInteraction::notesHaveActiculation(const std::vector<Note*>& notes,
 //! NOTE Copied from ScoreView::dragLeaveEvent
 void NotationInteraction::endDrop()
 {
+    score()->hideAnchors();
     score()->setUpdateAll();
     setDropTarget(nullptr);
     resetDropData();
