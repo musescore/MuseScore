@@ -168,4 +168,8 @@ TEST_F(GuitarBendImporter_Tests, gpTuples1Bend) {
 TEST_F(GuitarBendImporter_Tests, gpTuplesTiedBends) {
     gpReadTest(u"tuples_tied_bends", u"gp");
 }
+
+TEST_F(GuitarBendImporter_Tests, gpDottedDurations) {
+    gpReadTest(u"dotted_durations", u"gp");
+}
 }
