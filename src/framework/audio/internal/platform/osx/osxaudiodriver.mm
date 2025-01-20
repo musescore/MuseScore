@@ -33,7 +33,6 @@ typedef AudioDeviceID OSXAudioDeviceID;
 
 using namespace muse;
 using namespace muse::audio;
-static constexpr char DEFAULT_DEVICE_ID[] = "Systems default";
 
 struct OSXAudioDriver::Data {
     Spec format;
