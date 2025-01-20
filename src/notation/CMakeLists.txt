@@ -134,6 +134,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationruler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationruler.h
     ${CMAKE_CURRENT_LIST_DIR}/view/loopmarker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/loopmarker.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.cpp

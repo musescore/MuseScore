@@ -83,6 +83,7 @@ void AbstractNotationPaintView::load()
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>();
+    m_ruler = std::make_unique<NotationRuler>(iocContext());
 
     m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn, iocContext());
     m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut, iocContext());
@@ -604,8 +605,14 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     bool isPrinting = publishMode() || m_inputController->readonly();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
 
-    if (shouldPaintNoteInputCursor()) {
-        m_noteInputCursor->paint(painter);
+    INotationNoteInputPtr noteInput = notationNoteInput();
+
+    if (noteInput->isNoteInputMode()) {
+        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+            m_ruler->paint(painter, noteInput->state());
+        } else {
+            m_noteInputCursor->paint(painter);
+        }
     }
 
     m_loopInMarker->paint(painter);
@@ -663,16 +670,6 @@ void AbstractNotationPaintView::paintBackground(const RectF& rect, muse::draw::P
     } else {
         painter->drawTiledPixmap(rect, wallpaper, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
     }
-}
-
-bool AbstractNotationPaintView::shouldPaintNoteInputCursor() const
-{
-    INotationNoteInputPtr noteInput = notationNoteInput();
-    if (!noteInput || !noteInput->isNoteInputMode()) {
-        return false;
-    }
-
-    return !noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION);
 }
 
 PointF AbstractNotationPaintView::canvasCenter() const
