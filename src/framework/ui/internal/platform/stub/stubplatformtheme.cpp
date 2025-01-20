@@ -25,8 +25,6 @@
 using namespace muse::ui;
 using namespace muse::async;
 
-StubPlatformTheme::~StubPlatformTheme() = default;
-
 void StubPlatformTheme::startListening()
 {
 }
