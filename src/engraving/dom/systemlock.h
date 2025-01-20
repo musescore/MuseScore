@@ -58,7 +58,7 @@ public:
 
     const SystemLock* lockStartingAt(const MeasureBase* mb) const;
     const SystemLock* lockContaining(const MeasureBase* mb) const;
-    std::vector<const SystemLock*> locksContainedInRange(const MeasureBase* start, const MeasureBase* end);
+    std::vector<const SystemLock*> locksContainedInRange(const MeasureBase* start, const MeasureBase* end) const;
 
     std::vector<const SystemLock*> allLocks() const;
 

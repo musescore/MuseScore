@@ -6661,6 +6661,79 @@ void Score::removeSystemLocksOnRemoveMeasures(const MeasureBase* m1, const Measu
     }
 }
 
+void Score::updateSystemLocksOnDisableMMRests()
+{
+    // NOTE: this can be done before layout for the full score
+    // because we already know where the mmRests are.
+
+    assert(!style().styleB(Sid::createMultiMeasureRests));
+
+    std::vector<const SystemLock*> allLocks = m_systemLocks.allLocks();
+    for (const SystemLock* lock : allLocks) {
+        MeasureBase* startMB = lock->startMB();
+        MeasureBase* endMB = lock->endMB();
+        bool startIsMMRest = startMB->isMeasure() && toMeasure(startMB)->isMMRest();
+        bool endIsMMRest = endMB->isMeasure() && toMeasure(endMB)->isMMRest();
+        if (startIsMMRest || endIsMMRest) {
+            undoRemoveSystemLock(lock);
+            MeasureBase* newStartMeas = startMB;
+            MeasureBase* newEndMeas = endMB;
+            if (startIsMMRest) {
+                newStartMeas = toMeasure(startMB)->mmRestFirst();
+            }
+            if (endIsMMRest) {
+                newEndMeas = toMeasure(endMB)->mmRestLast();
+            }
+            undoAddSystemLock(new SystemLock(newStartMeas, newEndMeas));
+        }
+    }
+}
+
+void Score::updateSystemLocksOnCreateMMRests(Measure* first, Measure* last)
+{
+    // NOTE: this must be done during layout as the mmRests get created.
+
+    for (const SystemLock* lock : systemLocks()->locksContainedInRange(first, last)) {
+        // These locks are inside the range of the mmRest so remove them
+        undoRemoveSystemLock(lock);
+    }
+
+    const SystemLock* lockOnFirst = systemLocks()->lockContaining(first);
+    const SystemLock* lockOnLast = systemLocks()->lockContaining(last);
+
+    if (lockOnFirst) {
+        MeasureBase* startMB = lockOnFirst->startMB();
+        MeasureBase* endMB = lockOnFirst->endMB();
+
+        if (startMB->isBefore(first)) {
+            if (endMB->isBeforeOrEqual(last)) {
+                endMB = first->mmRest();
+            } else {
+                return;
+            }
+        } else {
+            startMB = first->mmRest();
+        }
+
+        if (startMB != lockOnFirst->startMB() || endMB != lockOnFirst->endMB()) {
+            undoRemoveSystemLock(lockOnFirst);
+            undoAddSystemLock(new SystemLock(startMB, endMB));
+        }
+    }
+
+    if (!lockOnLast || lockOnLast == lockOnFirst) {
+        return;
+    }
+
+    MeasureBase* startMB = lockOnLast->startMB();
+    MeasureBase* endMB = lockOnLast->endMB();
+    assert(startMB->isAfter(first) && endMB->isAfter(last));
+
+    undoRemoveSystemLock(lockOnLast);
+    startMB = last->nextMM();
+    undoAddSystemLock(new SystemLock(startMB, endMB));
+}
+
 //---------------------------------------------------------
 //   undoAddCR
 //---------------------------------------------------------
