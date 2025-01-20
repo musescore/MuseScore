@@ -100,23 +100,66 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            </Dynamic>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Rest>
+            <linkedMain/>
+            <durationType>half</durationType>
+            </Rest>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <noStem>1</noStem>
+            <Note>
+              <linkedMain/>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                </Accidental>
+              <Symbol>
+                <name>noteheadParenthesisLeft</name>
+                </Symbol>
+              <Symbol>
+                <name>noteheadParenthesisRight</name>
+                </Symbol>
+              <pitch>58</pitch>
+              <tpc>12</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>1</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <linkedMain/>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
           <Chord>
             <linkedMain/>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
               <linkedMain/>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              <fret>2</fret>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                </Accidental>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>3</fret>
               <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
@@ -132,43 +175,12 @@
                     </location>
                   </next>
                 </Spanner>
-              </Note>
-            <Note>
-              <linkedMain/>
-              <Spanner type="Tie">
-                <Tie>
-                  <linkedMain/>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>3/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              </Note>
-            <Note>
-              <linkedMain/>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              <fret>5</fret>
-              <string>1</string>
               <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>0</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <linkedMain/>
-                  <anchor>3</anchor>
-                  </GuitarBend>
-                <next>
+                <prev>
                   <location>
-                    <fractions>3/8</fractions>
+                    <grace>0</grace>
                     </location>
-                  </next>
+                  </prev>
                 </Spanner>
               </Note>
             </Chord>
@@ -179,11 +191,11 @@
               <linkedMain/>
               <Accidental>
                 <role>1</role>
-                <subtype>accidentalQuarterToneSharpArrowDown</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              <fret>2</fret>
+              <pitch>58</pitch>
+              <tpc>12</tpc>
+              <fret>4</fret>
               <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
@@ -193,37 +205,62 @@
                   </prev>
                 </Spanner>
               </Note>
+            </Chord>
+          <BarLine>
+            <linkedMain/>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Dynamic>
+            <subtype>mp</subtype>
+            <velocity>64</velocity>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <dots>1</dots>
+            <durationType>half</durationType>
             <Note>
               <linkedMain/>
-              <Spanner type="Tie">
-                <prev>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <linkedMain/>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
                   <location>
-                    <fractions>-3/8</fractions>
+                    <fractions>3/4</fractions>
                     </location>
-                  </prev>
+                  </next>
                 </Spanner>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
               </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
             <Note>
               <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
-              <fret>5</fret>
+              <fret>6</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
-                    <fractions>-3/8</fractions>
+                    <fractions>-3/4</fractions>
                     </location>
                   </prev>
                 </Spanner>
               </Note>
             </Chord>
-          <Rest>
-            <linkedMain/>
-            <durationType>half</durationType>
-            </Rest>
           </voice>
         </Measure>
       </Staff>
@@ -236,6 +273,41 @@
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
+          <Rest>
+            <linked>
+              </linked>
+            <durationType>half</durationType>
+            </Rest>
+          <Chord>
+            <linked>
+              </linked>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <noStem>1</noStem>
+            <Note>
+              <linked>
+                </linked>
+              <pitch>58</pitch>
+              <tpc>12</tpc>
+              <fret>3</fret>
+              <string>2</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>1</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <linked>
+                    </linked>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
           <Chord>
             <linked>
               </linked>
@@ -244,9 +316,9 @@
             <Note>
               <linked>
                 </linked>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              <fret>2</fret>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>3</fret>
               <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
@@ -260,52 +332,15 @@
                 <next>
                   <location>
                     <fractions>3/8</fractions>
-                    <notes>2</notes>
                     </location>
                   </next>
                 </Spanner>
-              </Note>
-            <Note>
-              <linked>
-                </linked>
-              <Spanner type="Tie">
-                <Tie>
-                  <linked>
-                    </linked>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>3/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              </Note>
-            <Note>
-              <linked>
-                </linked>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              <fret>5</fret>
-              <string>1</string>
               <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>0</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <linked>
-                    </linked>
-                  <anchor>3</anchor>
-                  </GuitarBend>
-                <next>
+                <prev>
                   <location>
-                    <fractions>3/8</fractions>
-                    <notes>-2</notes>
+                    <grace>0</grace>
                     </location>
-                  </next>
+                  </prev>
                 </Spanner>
               </Note>
             </Chord>
@@ -316,69 +351,88 @@
             <Note>
               <linked>
                 </linked>
+              <visible>1</visible>
               <Accidental>
                 <role>1</role>
-                <subtype>accidentalQuarterToneSharpArrowDown</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <visible>0</visible>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <visible>0</visible>
                 </Symbol>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              <fret>5</fret>
-              <string>1</string>
+              <pitch>58</pitch>
+              <tpc>12</tpc>
+              <fret>3</fret>
+              <string>2</string>
               <ghost>1</ghost>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
                     <fractions>-3/8</fractions>
-                    <notes>2</notes>
-                    </location>
-                  </prev>
-                </Spanner>
-              </Note>
-            <Note>
-              <linked>
-                </linked>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-3/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              </Note>
-            <Note>
-              <linked>
-                </linked>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>2</fret>
-              <string>2</string>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    <fractions>-3/8</fractions>
-                    <notes>-2</notes>
                     </location>
                   </prev>
                 </Spanner>
               </Note>
             </Chord>
-          <Rest>
+          <BarLine>
             <linked>
               </linked>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <linked>
+              </linked>
+            <dots>1</dots>
             <durationType>half</durationType>
-            </Rest>
+            <Note>
+              <linked>
+                </linked>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <linked>
+                    </linked>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <fractions>3/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <linked>
+              </linked>
+            <durationType>quarter</durationType>
+            <Note>
+              <linked>
+                </linked>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <fractions>-3/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
