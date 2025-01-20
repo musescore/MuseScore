@@ -89,12 +89,27 @@ BendDataContext BendDataCollector::collectBendDataContext()
         }
     }
 
+    auto isPowerOfTwo = [](int n) {
+        return n > 0 && (n & (n - 1)) == 0;
+    };
+
     for (const auto& [track, trackInfo] : tiedNotesAfterBend) {
         const auto& importedInfoForTrack = m_bendInfoForNote.at(track);
         for (const auto& [mainTick, chords] : trackInfo) {
             const auto& importedInfoForTick = importedInfoForTrack.at(mainTick);
             const Chord* lastChord = chords.back();
-            Fraction totalDuration = lastChord->tick() - Fraction::fromTicks(mainTick) + lastChord->ticks();
+            Fraction totalDuration = lastChord->tick() - Fraction::fromTicks(mainTick) + lastChord->actualTicks();
+            if (Tuplet* tuplet = lastChord->tuplet()) {
+                totalDuration *= tuplet->ratio();
+            }
+
+            totalDuration.reduce();
+            IF_ASSERT_FAILED(!totalDuration.negative() && isPowerOfTwo(totalDuration.denominator())) {
+                LOGE() << "bend import error: duration is wrong for track " << track << ", tick " << mainTick << "(" <<
+                    totalDuration.numerator() << " / " << totalDuration.denominator() << ")";
+                continue;
+            }
+
             if (!importedInfoForTick.empty()) {
                 fillChordDurationsFromBendDiagram(bendDataCtx, totalDuration, importedInfoForTick.begin()->second);
             }
@@ -324,8 +339,13 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
 
     const auto& tickDurations = trackDurations.at(chordStartTick.ticks());
 
-    Fraction currentTick = chordStartTick;
+    if (tickDurations.empty()) {
+        LOGE() << "bend import error : chord durations are empty for track " << chord->track() << " tick " <<
+            chordStartTick.ticks();
+        return;
+    }
 
+    Fraction currentTick = chordStartTick;
     for (size_t i = 0; i < tickDurations.size() - 1; i++) {
         if (currentIndex >= importedInfo.segments.size()) {
             break;
