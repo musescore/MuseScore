@@ -882,7 +882,7 @@ MuseScore {
 
     FileIO {
         id: fileIO
-        source: Qt.resolvedUrl("tuningPluginData.json").toString().replace("file:///", ""); 
+        source: fileIO.homePath()+"/Documents/MuseScore4/Plugins/tuningPluginData.json" //Qt.resolvedUrl("tuningPluginData.json").toString().replace("file:///", ""); 
     }   
 
     function addTemperament() {
