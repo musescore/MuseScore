@@ -41,6 +41,9 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         int defaultNoteInputMethod READ defaultNoteInputMethod WRITE setDefaultNoteInputMethod NOTIFY defaultNoteInputMethodChanged)
 
+    Q_PROPERTY(bool midiInputEnabled READ midiInputEnabled WRITE setMidiInputEnabled NOTIFY midiInputEnabledChanged)
+    Q_PROPERTY(
+        bool startNoteInputAtSelectionWhenPressingMidiKey READ startNoteInputAtSelectionWhenPressingMidiKey WRITE setStartNoteInputAtSelectionWhenPressingMidiKey NOTIFY startNoteInputAtSelectionWhenPressingMidiKeyChanged)
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
     Q_PROPERTY(
@@ -74,9 +77,9 @@ public:
 
     int defaultNoteInputMethod() const;
 
+    bool midiInputEnabled() const;
+    bool startNoteInputAtSelectionWhenPressingMidiKey() const;
     bool advanceToNextNoteOnKeyRelease() const;
-    bool colorNotesOutsideOfUsablePitchRange() const;
-    bool warnGuitarBends() const;
     int delayBetweenNotesInRealTimeModeMilliseconds() const;
 
     bool playNotesWhenEditing() const;
@@ -86,29 +89,44 @@ public:
 
     bool dynamicsApplyToAllVoices() const;
 
+    bool colorNotesOutsideOfUsablePitchRange() const;
+    bool warnGuitarBends() const;
+
 public slots:
     void setDefaultNoteInputMethod(int value);
+
+    void setMidiInputEnabled(bool value);
+    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value);
     void setAdvanceToNextNoteOnKeyRelease(bool value);
-    void setColorNotesOutsideOfUsablePitchRange(bool value);
-    void setWarnGuitarBends(bool value);
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delay);
+
     void setPlayNotesWhenEditing(bool value);
     void setNotePlayDurationMilliseconds(int duration);
     void setPlayChordWhenEditing(bool value);
     void setPlayChordSymbolWhenEditing(bool value);
+
     void setDynamicsApplyToAllVoices(bool value);
+
+    void setColorNotesOutsideOfUsablePitchRange(bool value);
+    void setWarnGuitarBends(bool value);
 
 signals:
     void defaultNoteInputMethodChanged(int value);
+
+    void midiInputEnabledChanged(bool value);
+    void startNoteInputAtSelectionWhenPressingMidiKeyChanged(bool value);
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
-    void colorNotesOutsideOfUsablePitchRangeChanged(bool value);
-    void warnGuitarBendsChanged(bool value);
     void delayBetweenNotesInRealTimeModeMillisecondsChanged(int delay);
+
     void playNotesWhenEditingChanged(bool value);
     void notePlayDurationMillisecondsChanged(int duration);
     void playChordWhenEditingChanged(bool value);
     void playChordSymbolWhenEditingChanged(bool value);
+
     void dynamicsApplyToAllVoicesChanged(bool value);
+
+    void colorNotesOutsideOfUsablePitchRangeChanged(bool value);
+    void warnGuitarBendsChanged(bool value);
 };
 }
 

@@ -191,12 +191,25 @@ void NotationConfiguration::init()
     }
 
     settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(BY_NOTE_NAME_INPUT_METHOD));
+    settings()->valueChanged(DEFAULT_NOTE_INPUT_METHOD).onReceive(this, [this](const Val&) {
+        m_defaultNoteInputMethodChanged.notify();
+    });
+
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->valueChanged(SELECTION_PROXIMITY).onReceive(this, [this](const Val& val) {
         m_selectionProximityChanged.send(val.toInt());
     });
+
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
+    settings()->valueChanged(IS_MIDI_INPUT_ENABLED).onReceive(this, [this](const Val&) {
+        m_isMidiInputEnabledChanged.notify();
+    });
+
     settings()->setDefaultValue(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY, Val(true));
+    settings()->valueChanged(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY).onReceive(this, [this](const Val&) {
+        m_startNoteInputAtSelectionWhenPressingMidiKeyChanged.notify();
+    });
+
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
@@ -659,6 +672,11 @@ void NotationConfiguration::setDefaultNoteInputMethod(NoteInputMethod method)
     settings()->setSharedValue(DEFAULT_NOTE_INPUT_METHOD, Val(str));
 }
 
+async::Notification NotationConfiguration::defaultNoteInputMethodChanged() const
+{
+    return m_defaultNoteInputMethodChanged;
+}
+
 bool NotationConfiguration::isMidiInputEnabled() const
 {
     return settings()->value(IS_MIDI_INPUT_ENABLED).toBool();
@@ -669,6 +687,11 @@ void NotationConfiguration::setIsMidiInputEnabled(bool enabled)
     settings()->setSharedValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
 }
 
+async::Notification NotationConfiguration::isMidiInputEnabledChanged() const
+{
+    return m_isMidiInputEnabledChanged;
+}
+
 bool NotationConfiguration::startNoteInputAtSelectionWhenPressingMidiKey() const
 {
     return settings()->value(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY).toBool();
@@ -677,6 +700,11 @@ bool NotationConfiguration::startNoteInputAtSelectionWhenPressingMidiKey() const
 void NotationConfiguration::setStartNoteInputAtSelectionWhenPressingMidiKey(bool value)
 {
     settings()->setSharedValue(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY, Val(value));
+}
+
+async::Notification NotationConfiguration::startNoteInputAtSelectionWhenPressingMidiKeyChanged() const
+{
+    return m_startNoteInputAtSelectionWhenPressingMidiKeyChanged;
 }
 
 bool NotationConfiguration::isAutomaticallyPanEnabled() const

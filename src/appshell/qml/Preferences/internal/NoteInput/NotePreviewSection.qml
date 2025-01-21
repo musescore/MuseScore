@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,10 +24,12 @@ import QtQuick 2.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
+import "../../internal"
+
 BaseSection {
     id: root
 
-    property alias playNotesWhenEditing: playNotesBox.checked
+    property alias playNotesWhenEditing: playNotesToggle.checked
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
@@ -37,26 +39,40 @@ BaseSection {
     signal playChordSymbolWhenEditingChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
 
-    CheckBox {
-        id: playNotesBox
+    title: qsTrc("appshell/preferences", "Note preview")
+
+    Row {
         width: parent.width
+        height: playNotesToggle.height
 
-        text: qsTrc("appshell/preferences", "Play notes when editing")
-        font: ui.theme.bodyBoldFont
+        spacing: 6
 
-        navigation.name: "PlayNotesBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
+        ToggleButton {
+            id: playNotesToggle
 
-        onClicked: {
-            root.playNotesWhenEditingChangeRequested(!checked)
+            navigation.name: "PlayNotesToggle"
+            navigation.panel: root.navigation
+            navigation.row: 0
+
+            onToggled: {
+                root.playNotesWhenEditingChangeRequested(!checked)
+            }
+        }
+
+        StyledTextLabel {
+            height: parent.height
+
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+
+            text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
         }
     }
 
     IncrementalPropertyControlWithTitle {
         id: notePlayDurationControl
 
-        title: qsTrc("appshell/preferences", "Default duration:")
+        title: qsTrc("appshell/preferences", "Playback duration:")
 
         enabled: root.playNotesWhenEditing
 
@@ -96,7 +112,7 @@ BaseSection {
         id: playChordSymbolBox
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Play chord symbol when editing")
+        text: qsTrc("appshell/preferences", "Play chord symbols and Nashville numbers")
 
         enabled: root.playNotesWhenEditing
 
