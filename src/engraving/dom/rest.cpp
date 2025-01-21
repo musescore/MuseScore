@@ -648,26 +648,6 @@ double Rest::intrinsicMag() const
 }
 
 //---------------------------------------------------------
-//   upLine
-//---------------------------------------------------------
-
-int Rest::upLine() const
-{
-    double _spatium = spatium();
-    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
-}
-
-//---------------------------------------------------------
-//   downLine
-//---------------------------------------------------------
-
-int Rest::downLine() const
-{
-    double _spatium = spatium();
-    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
-}
-
-//---------------------------------------------------------
 //   stemPos
 //    point to connect stem
 //---------------------------------------------------------
