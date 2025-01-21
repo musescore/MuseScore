@@ -180,6 +180,10 @@ void NotationConfiguration::init()
         m_selectionProximityChanged.send(val.toInt());
     });
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
+    settings()->valueChanged(IS_MIDI_INPUT_ENABLED).onReceive(this, [this](const Val&) {
+        m_isMidiInputEnabledChanged.notify();
+    });
+
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));

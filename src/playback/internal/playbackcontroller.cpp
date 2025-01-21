@@ -737,9 +737,8 @@ void PlaybackController::toggleMetronome()
 
 void PlaybackController::toggleMidiInput()
 {
-    bool midiInputEnabled = notationConfiguration()->isMidiInputEnabled();
-    notationConfiguration()->setIsMidiInputEnabled(!midiInputEnabled);
-    notifyActionCheckedChanged(MIDI_ON_CODE);
+    bool wasMidiInputEnabled = notationConfiguration()->isMidiInputEnabled();
+    notationConfiguration()->setIsMidiInputEnabled(!wasMidiInputEnabled);
 }
 
 void PlaybackController::setMidiUseWrittenPitch(bool useWrittenPitch)
