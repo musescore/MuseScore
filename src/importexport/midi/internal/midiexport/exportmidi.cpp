@@ -24,6 +24,7 @@
 
 #include "engraving/dom/key.h"
 #include "engraving/dom/lyrics.h"
+#include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
@@ -400,6 +401,35 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                             track.insert(CompatMidiRender::tick(context, tick), ev);
                         }
                     }
+                }
+            }
+        }
+        
+        // Export RehearsalMarks as Markers
+        for (const RepeatSegment *rs : m_score->repeatList()) {
+            int startTick = rs->tick;
+            int endTick = startTick + rs->len();
+            int tickOffset = rs->utick - rs->tick;
+
+            for (Segment* seg = rs->firstMeasure()->first(); seg && seg->tick().ticks() < endTick; seg = seg->next1()) {
+                for (EngravingItem* e : seg->annotations()) {
+                    if (e->type() == ElementType::REHEARSAL_MARK) {
+                        RehearsalMark* r = toRehearsalMark(e);
+                        muse::ByteArray rText = r->plainText().toUtf8();
+                        size_t len = rText.size() + 1;
+                        unsigned char *data = new unsigned char[len];
+
+                        memcpy(data, rText.constData(), len);
+
+                        MidiEvent ev;
+                        ev.setType(ME_META);
+                        ev.setMetaType(META_MARKER);
+                        ev.setEData(data);
+                        ev.setLen(static_cast<int>(len));
+
+                        int tick = r->segment()->tick().ticks() + tickOffset;
+                        track.insert(CompatMidiRender::tick(context, tick), ev);
+                    }                        
                 }
             }
         }
