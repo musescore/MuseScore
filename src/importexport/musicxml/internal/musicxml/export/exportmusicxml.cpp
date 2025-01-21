@@ -7428,11 +7428,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                     m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
                     m_xml.endElement();
                 } else {
-                    m_xml.startElement("staff-details", { { "number", staffIdx + 1 }, { "print-object", "no" } });
-                    Part* part = m_score->parts().at(partNr);
-                    Staff* staff = part->staff(staffIdx);
-                    m_xml.tag("staff-lines", staff->lines(m->tick()));
-                    m_xml.endElement();
+                    m_xml.tag("staff-details", { { "number", staffIdx + 1 }, { "print-object", "no" } });
                 }
             }
 
