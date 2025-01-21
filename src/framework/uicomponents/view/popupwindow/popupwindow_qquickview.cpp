@@ -136,6 +136,9 @@ void PopupWindow_QQuickView::forceActiveFocus()
         return;
     }
 
+    m_view->setFlags(m_view->flags() & (~Qt::WindowDoesNotAcceptFocus));
+    m_view->requestActivate();
+
     QQuickItem* rootObject = m_view->rootObject();
     if (!rootObject) {
         return;
