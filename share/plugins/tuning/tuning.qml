@@ -30,7 +30,7 @@ MuseScore {
     categoryCode: "playback"
     thumbnailName: "modal_tuning.png"
     
-    width: 780
+    width: 800
     height: 640
 
     // set true if customisations are made to the tuning
@@ -557,7 +557,7 @@ MuseScore {
         var j = (currentPureTone - currentRoot + 12) % 12;
         var pureNoteAdjustment = table.offsets[j];
         var finalOffset = offset - pureNoteAdjustment;
-        var tweakFinalOffset = finalOffset + parseFloat(tweakValue.text);
+        var tweakFinalOffset = finalOffset + parseFloat(tweakValue.currentText);
         return tweakFinalOffset
     }
 
@@ -581,12 +581,12 @@ MuseScore {
     }
 
     function getFinalOffset(textField) {
-        return parseFloat(textField.text)
+        return parseFloat(textField.currentText)
     }
 
     function recalculate(tuning) {        
         for (var i=0; i<12; i++) {
-            finalOffsets.itemAt(i*7 % 12).children[1].text = tuning(i).toFixed(1)
+            finalOffsets.itemAt(i*7 % 12).children[1].currentText = tuning(i).toFixed(1)
         }           
     }
 
@@ -660,7 +660,7 @@ MuseScore {
     }
 
     function checkCurrentTweak() {
-        tweakValue.text = currentTweak.toFixed(1)
+        tweakValue.currentText = currentTweak.toFixed(1)
     }
 
     function checkCurrentPureTone() {
@@ -697,12 +697,12 @@ MuseScore {
 
     function tweaked() {        
         setModified(true)
-        setCurrentTweak(parseFloat(tweakValue.text))
+        setCurrentTweak(parseFloat(tweakValue.currentText))
         recalculate(getTuning())        
     }
 
     function editingFinishedFor(textField) {
-        var newText = textField.text
+        var newText = textField.currentText
         if (textField.previousText != newText) {
             setModified(true) 
             textField.previousText = newText
@@ -734,7 +734,7 @@ MuseScore {
         anchors.leftMargin:20
         anchors.topMargin: 60
         GroupBox {                 
-            width:280
+            width:260
             height: 530
             ButtonGroup { id: tempGroup }   
 
@@ -785,7 +785,7 @@ MuseScore {
         anchors.top: parent.top
         anchors.topMargin: 60
         anchors.margins: 20
-        x: 330
+        x: 310
         GroupBox {
             //title: "Advanced"
             ColumnLayout {
@@ -829,19 +829,20 @@ MuseScore {
                 }
 
                 GroupBox {
-                    title: "Pure note offset"
-                    RowLayout {
-                        TextField {
-                            Layout.maximumWidth: 40
-                            id: tweakValue
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "tweak"
-                            onEditingFinished: { tweaked() }
-                        }
+                    title: "Pure note offset"                    
+                    TextInputField {
+                        Layout.maximumWidth: 40
+                        id: tweakValue
+                        currentText: "0.0"                            
+                        validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                        property var previousText: "0.0"
+                        property var name: "tweak"
+                        onTextEditingFinished:  function (newText) {
+                                                    currentText = newText;
+                                                    tweaked() 
+                                                }
                     }
+                    
                 }
 
                 GroupBox {
@@ -858,13 +859,15 @@ MuseScore {
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: modelData
                                 }
-                                TextField{
-                                    width: 40   
-                                    text: "0.0"
-                                    readOnly: false
+                                TextInputField{
+                                    width: 50   
+                                    currentText: "0.0"                                    
                                     validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
                                     property var previousText: "0.0"                                    
-                                    onEditingFinished: { editingFinishedFor(finalOffsets.itemAt(index).children[1]) }
+                                    onTextEditingFinished: function (newText) {
+                                                                currentText = newText;
+                                                                editingFinishedFor(finalOffsets.itemAt(index).children[1]) 
+                                                            }                                    
                                 }
                             }
                         }
@@ -956,8 +959,7 @@ MuseScore {
                     text: "Temperament name:"
                 }
                 TextField {                
-                    id: customTempName
-                    //focus: true
+                    id: customTempName                    
                 }
             }
             FlatButton {
@@ -987,7 +989,7 @@ MuseScore {
                         "pure": currentPureTone                        
                     } 
         for (var i=0; i<12; i++) {
-            entry.offsets.push( finalOffsets.itemAt(i).children[1].text )
+            entry.offsets.push( finalOffsets.itemAt(i).children[1].currentText )
         }
 
         switch (tabBar.currentIndex) {
