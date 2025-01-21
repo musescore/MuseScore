@@ -123,12 +123,15 @@ public:
 
     NoteInputMethod defaultNoteInputMethod() const override;
     void setDefaultNoteInputMethod(NoteInputMethod method) override;
+    muse::async::Notification defaultNoteInputMethodChanged() const override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
+    muse::async::Notification isMidiInputEnabledChanged() const override;
 
     bool startNoteInputAtSelectionWhenPressingMidiKey() const override;
     void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) override;
+    muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
@@ -250,6 +253,10 @@ private:
 
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
+
+    muse::async::Notification m_defaultNoteInputMethodChanged;
+    muse::async::Notification m_isMidiInputEnabledChanged;
+    muse::async::Notification m_startNoteInputAtSelectionWhenPressingMidiKeyChanged;
 
     muse::async::Notification m_defaultZoomChanged;
     muse::async::Notification m_mouseZoomPrecisionChanged;

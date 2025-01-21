@@ -288,6 +288,12 @@ NoteInputMethod NotationConfigurationStub::defaultNoteInputMethod() const
     return NoteInputMethod::UNKNOWN;
 }
 
+muse::async::Notification NotationConfigurationStub::defaultNoteInputMethodChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::isMidiInputEnabled() const
 {
     return false;
@@ -297,6 +303,12 @@ void NotationConfigurationStub::setIsMidiInputEnabled(bool)
 {
 }
 
+muse::async::Notification NotationConfigurationStub::isMidiInputEnabledChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKey() const
 {
     return false;
@@ -304,6 +316,12 @@ bool NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKey() c
 
 void NotationConfigurationStub::setStartNoteInputAtSelectionWhenPressingMidiKey(bool)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKeyChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 bool NotationConfigurationStub::isAutomaticallyPanEnabled() const
