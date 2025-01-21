@@ -25,6 +25,7 @@
 
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/utils.h"
+#include "engraving/dom/factory.h"
 
 #include "audio/audioutils.h"
 #include "audio/devtools/inputlag.h"
@@ -347,6 +348,28 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
     }
 
     notationPlayback()->triggerEventsForItems(elementsForPlaying);
+}
+
+void PlaybackController::playPitches(const std::set<int>& pitches, const staff_idx_t staffIdx, const Segment* segment)
+{
+    Segment* seg = const_cast<Segment*>(segment);
+    Chord* chord = engraving::Factory::createChord(seg);
+    chord->setParent(seg);
+
+    std::vector<const EngravingItem*> notes;
+
+    for (int pitch : pitches) {
+        Note* note = engraving::Factory::createNote(chord);
+        note->setParent(chord);
+        note->setStaffIdx(staffIdx);
+        note->setNval(engraving::NoteVal(pitch));
+        notes.push_back(note);
+    }
+
+    playElements(notes);
+
+    delete chord;
+    DeleteAll(notes);
 }
 
 void PlaybackController::playMetronome(int tick)

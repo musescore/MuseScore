@@ -771,6 +771,8 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
     if (addingMode == NoteAddingMode::NextChord) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
             noteInput->setNoteToInput(note);
+            const NoteInputState& state = noteInput->state();
+            playbackController()->playPitches(state.notePitches(), state.staffIdx(), state.segment());
             return;
         }
     }
@@ -1038,6 +1040,10 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
                 } else {
                     interaction->noteInput()->moveInputPitches(up, PitchMode::DIATONIC); // TODO
                 }
+
+                const NoteInputState& state = interaction->noteInput()->state();
+                playbackController()->playPitches(state.notePitches(), state.staffIdx(), state.segment());
+                return;
             } else if (interaction->noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
                 if (quickly) {
                     interaction->movePitch(direction, PitchMode::OCTAVE);

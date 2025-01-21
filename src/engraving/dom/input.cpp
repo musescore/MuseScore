@@ -59,6 +59,11 @@ Staff* InputState::staff() const
     return m_segment->score()->staff(mu::engraving::track2staff(m_track));
 }
 
+staff_idx_t InputState::staffIdx() const
+{
+    return mu::engraving::track2staff(m_track);
+}
+
 Drumset* InputState::drumset() const
 {
     if (!m_segment || m_track == muse::nidx) {
