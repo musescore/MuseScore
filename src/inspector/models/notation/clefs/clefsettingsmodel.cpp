@@ -39,7 +39,7 @@ void ClefSettingsModel::createProperties()
 {
     m_shouldShowCourtesy = buildPropertyItem(mu::engraving::Pid::SHOW_COURTESY);
     m_clefToBarlinePosition = buildPropertyItem(mu::engraving::Pid::CLEF_TO_BARLINE_POS);
-    updateIsClefToBarPosAvailable();
+    updatePropertiesAvailable();
 }
 
 void ClefSettingsModel::requestElements()
@@ -51,7 +51,7 @@ void ClefSettingsModel::loadProperties()
 {
     loadPropertyItem(m_shouldShowCourtesy);
     loadPropertyItem(m_clefToBarlinePosition);
-    updateIsClefToBarPosAvailable();
+    updatePropertiesAvailable();
 }
 
 void ClefSettingsModel::resetProperties()
@@ -75,6 +75,11 @@ bool ClefSettingsModel::isClefToBarPosAvailable() const
     return m_isClefToBarPosAvailable;
 }
 
+bool ClefSettingsModel::isCourtesyClefAvailable() const
+{
+    return m_isCourtesyClefAvailable;
+}
+
 void ClefSettingsModel::setIsClefToBarPosAvailable(bool available)
 {
     if (available == m_isClefToBarPosAvailable) {
@@ -85,15 +90,33 @@ void ClefSettingsModel::setIsClefToBarPosAvailable(bool available)
     emit isClefToBarPosAvailableChanged(available);
 }
 
-void ClefSettingsModel::updateIsClefToBarPosAvailable()
+void ClefSettingsModel::setIsCourtesyClefAvailable(bool available)
 {
-    bool available = true;
+    if (available == m_isCourtesyClefAvailable) {
+        return;
+    }
+
+    m_isCourtesyClefAvailable = available;
+    emit isCourtesyClefAvailableChanged(available);
+}
+
+void ClefSettingsModel::updatePropertiesAvailable()
+{
+    bool hasHeaderClef = false;
+    bool hasCourtesyClef = false;
     for (mu::engraving::EngravingItem* item : m_elementList) {
-        if (static_cast<mu::engraving::Clef*>(item)->segment()->isHeaderClefType()) {
-            available = false;
+        mu::engraving::Segment* clefSeg = static_cast<mu::engraving::Clef*>(item)->segment();
+        if (clefSeg->isHeaderClefType()) {
+            hasHeaderClef = true;
+        } else if (clefSeg->isClefRepeatAnnounceType()) {
+            hasCourtesyClef = true;
+        }
+
+        if (hasHeaderClef && hasCourtesyClef) {
             break;
         }
     }
 
-    setIsClefToBarPosAvailable(available);
+    setIsClefToBarPosAvailable(!(hasHeaderClef || hasCourtesyClef));
+    setIsCourtesyClefAvailable(!hasCourtesyClef);
 }

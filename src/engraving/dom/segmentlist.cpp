@@ -84,6 +84,12 @@ void SegmentList::check()
         case SegmentType::BarLine:
         case SegmentType::ChordRest:
         case SegmentType::Breath:
+        case SegmentType::ClefRepeatAnnounce:
+        case SegmentType::TimeSigRepeatAnnounce:
+        case SegmentType::KeySigRepeatAnnounce:
+        case SegmentType::ClefStartRepeatAnnounce:
+        case SegmentType::TimeSigStartRepeatAnnounce:
+        case SegmentType::KeySigStartRepeatAnnounce:
         case SegmentType::EndBarLine:
         case SegmentType::TimeSigAnnounce:
         case SegmentType::KeySigAnnounce:

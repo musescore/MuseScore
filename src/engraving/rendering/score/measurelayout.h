@@ -30,6 +30,7 @@ class MeasureBase;
 class Score;
 class Segment;
 class StaffLines;
+enum class CourtesySegmentPosition : char;
 }
 
 namespace mu::engraving::rendering::score {
@@ -63,6 +64,7 @@ public:
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
     static void removeSystemTrailer(Measure* m);
     static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
+    static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
 
     static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
 
@@ -93,8 +95,11 @@ private:
 
     static void setClefBarLinePosition(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 
-    static void setCourtesyTimeSig(Measure* m, const Segment* actualSigSeg, Segment* courtesySigSeg, const bool isRepeatCourtesy,
-                                   LayoutContext& ctx);
-    static void setCourtesyKeySig(Measure* m, const Staff* staff, Segment* courtesySigSeg, const bool isRepeatCourtesy, LayoutContext& ctx);
+    static void setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                   const CourtesySegmentPosition segPosition, LayoutContext& ctx);
+    static void setCourtesyKeySig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                  const CourtesySegmentPosition segPosition, LayoutContext& ctx);
+    static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                const CourtesySegmentPosition segPosition, LayoutContext& ctx);
 };
 }

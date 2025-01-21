@@ -902,7 +902,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         track_idx_t endTrack  = startTrack + VOICES;
 
         for (const Segment& segment : measure->segments()) {
-            if (!staff->show() && !segment.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+            if (!staff->show() && !segment.isType(SegmentType::TimeSigType)) {
                 continue;
             }
 
@@ -1246,15 +1246,16 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
     for (s1 = firstCrSeg->prevActive(); s1 && s1->allElementsInvisible(); s1 = s1->prevActive()) {
     }
     Segment* s2;
-    if (modernMMRest) {
-        for (s2 = firstCrSeg->nextActive(); s2; s2 = s2->nextActive()) {
-            if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
-                break;
-            }
+
+    for (s2 = firstCrSeg->nextActive(); s2; s2 = s2->nextActive()) {
+        if (modernMMRest && !s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
+            break;
         }
-    } else {
-        // Ignore any stuff before the end bar line (such as courtesy clefs)
-        s2 = measure->findSegment(SegmentType::EndBarLine, measure->endTick());
+
+        if (!modernMMRest && (s2->isClefRepeatAnnounceType() || s2->isTimeSigRepeatAnnounceType() || s2->isKeySigRepeatAnnounceType()
+                              || s2->isEndBarLineType()) && s2->element(staffIdx * VOICES)) {
+            break;
+        }
     }
 
     double x1 = 0.0;
@@ -1455,7 +1456,8 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
             //  Don't change barlines at the end of a section break,
             //  and don't create courtesy key/time signatures.
             bool hasKeySig = false;
-            const bool showCourtesyKeySig = isLastMeasureInSystem && ctx.conf().styleB(Sid::genCourtesyKeysig);
+            const bool showCourtesyKeySig = (isLastMeasureInSystem && ctx.conf().styleB(Sid::genCourtesyKeysig))
+                                            || (m->repeatJump() && ctx.conf().styleB(Sid::showCourtesiesOtherJumps));
 
             Fraction tick = m->endTick();
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -1490,7 +1492,8 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
 
             bool hasTimeSig = false;
             bool hasCourtesyTimeSig = false;
-            bool showCourtesyTimeSig = isLastMeasureInSystem && ctx.conf().styleB(Sid::genCourtesyTimesig);
+            bool showCourtesyTimeSig = (isLastMeasureInSystem && ctx.conf().styleB(Sid::genCourtesyTimesig))
+                                       || (m->repeatJump() && ctx.conf().styleB(Sid::showCourtesiesOtherJumps));
 
             Segment* timeSigSeg = nextMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
             if (timeSigSeg) {
@@ -1684,141 +1687,271 @@ void MeasureLayout::setClefBarLinePosition(Measure* m, bool isLastMeasureInSyste
     }
 }
 
-void MeasureLayout::setCourtesyTimeSig(Measure* m, const Segment* actualSigSeg, Segment* courtesySigSeg, const bool isRepeatCourtesy,
-                                       LayoutContext& ctx)
+void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                       const CourtesySegmentPosition segPosition, LayoutContext& ctx)
 {
-    const Fraction endRTick = m->ticks();
+    // Find original element
     const size_t nstaves = ctx.dom().nstaves();
+    const Fraction courtesySigRTick = courtesySigTick - m->tick();
+    const Measure* prevMeasure = m->prevMeasure();
 
-    // if due, create a new courtesy time signature for each staff
-    if (!courtesySigSeg) {
-        courtesySigSeg  = Factory::createSegment(m, SegmentType::TimeSigAnnounce, endRTick);
-        courtesySigSeg->setTrailer(true);
-        courtesySigSeg->setIsRepeatCourtesy(isRepeatCourtesy);
-        m->add(courtesySigSeg);
-    }
+    const bool isTrailer = segPosition == CourtesySegmentPosition::TRAILER;
+    const bool isContinuationCourtesy = segPosition == CourtesySegmentPosition::AFTER_REPEAT;
+    const SegmentType courtesySegType
+        = isTrailer ? SegmentType::TimeSigAnnounce : (isContinuationCourtesy ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::
+                                                      TimeSigRepeatAnnounce);
 
-    courtesySigSeg->setEnabled(true);
-
+    const bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyTimeSig()
+                                        && !m->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    Segment* courtesySigSeg = m->findSegmentR(courtesySegType, courtesySigRTick);
     for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
-        const TimeSig* actualTimeSig = toTimeSig(actualSigSeg->element(track));
-        if (!actualTimeSig) {
+        const Staff* staff = ctx.dom().staff(track2staff(track));
+        const TimeSig* actualTimeSig = staff->timeSig(refSigTick);
+        const TimeSig* curTimeSig = staff->timeSig(courtesySigTick - Fraction::eps());
+        if (!actualTimeSig || !curTimeSig) {
             continue;
         }
-        TimeSig* courtesyTimeSig = toTimeSig(courtesySigSeg->element(track));
+
+        const bool sigsDifferent = actualTimeSig->sig() != curTimeSig->sig();
+
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : sigsDifferent;
+        const bool show = actualTimeSig && actualTimeSig->showCourtesySig() && needsCourtesy;
+
+        if (!show) {
+            // Remove any existing courtesy signatures
+            if (courtesySigSeg) {
+                courtesySigSeg->setEnabled(false);
+                m->setHasCourtesyTimeSig(false);
+            }
+            continue;
+        }
+
+        // Create a segment if one doesn't already exist
+        if (!courtesySigSeg) {
+            courtesySigSeg  = Factory::createSegment(m, courtesySegType, courtesySigRTick);
+            m->add(courtesySigSeg);
+            m->setTrailer(isTrailer);
+        }
+        m->setHasCourtesyTimeSig(true);
+        courtesySigSeg->setTrailer(isTrailer);
+        courtesySigSeg->setEnabled(true);
+
+        // Find courtesy element or create if it doesn't exist
+        TimeSig* courtesyTimeSig = nullptr;
+        EngravingItem* timeSigElem = courtesySigSeg->element(track);
+        if (timeSigElem && timeSigElem->isTimeSig()) {
+            courtesyTimeSig = toTimeSig(timeSigElem);
+        }
+
         if (!courtesyTimeSig) {
             courtesyTimeSig = Factory::createTimeSig(courtesySigSeg);
             courtesyTimeSig->setTrack(track);
             courtesyTimeSig->setGenerated(true);
             courtesyTimeSig->setParent(courtesySigSeg);
-            ctx.mutDom().undoAddElement(courtesyTimeSig);
-            courtesySigSeg->setTrailer(true);
+            courtesySigSeg->add(courtesyTimeSig);
         }
+
+        // Layout & create shapes
         courtesyTimeSig->setFrom(actualTimeSig);
         if (courtesyTimeSig->isStyled(Pid::SCALE)) {
             // If this courtesyTimeSig was previously disabled its scale style may have not been updated
             courtesyTimeSig->setScale(courtesyTimeSig->propertyDefault(Pid::SCALE).value<ScaleF>());
         }
+
         TLayout::layoutTimeSig(courtesyTimeSig, courtesyTimeSig->mutldata(), ctx);
     }
-    courtesySigSeg->createShapes();
+    if (courtesySigSeg && courtesySigSeg->enabled()) {
+        courtesySigSeg->createShapes();
+    }
 }
 
-void MeasureLayout::setCourtesyKeySig(Measure* m, const Staff* staff, Segment* courtesySigSeg, const bool isRepeatCourtesy,
-                                      LayoutContext& ctx)
+void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                      const CourtesySegmentPosition segPosition, LayoutContext& ctx)
 {
-    const bool show = m->hasCourtesyKeySig() || isRepeatCourtesy;
-    const bool staffIsPitchedAtNextMeas = m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick());
-    const track_idx_t track = staff->idx() * VOICES;
-    const Fraction endRTick = m->ticks();
+    // Find original element
+    const size_t nstaves = ctx.dom().nstaves();
+    const Fraction courtesySigRTick = courtesySigTick - m->tick();
+    const Measure* prevMeasure = m->prevMeasure();
 
-    if (!show) {
-        // remove any existing courtesy key signatures
-        if (courtesySigSeg) {
-            courtesySigSeg->setEnabled(false);
+    const bool isTrailer = segPosition == CourtesySegmentPosition::TRAILER;
+    const bool isContinuationCourtesy = segPosition == CourtesySegmentPosition::AFTER_REPEAT;
+    const SegmentType courtesySegType
+        = isTrailer ? SegmentType::KeySigAnnounce : (isContinuationCourtesy ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::
+                                                     KeySigRepeatAnnounce);
+
+    const bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyKeySig()
+                                        && !m->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    Segment* courtesySigSeg = m->findSegmentR(courtesySegType, courtesySigRTick);
+    for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
+        const Staff* staff = ctx.dom().staff(track2staff(track));
+        const Fraction refSigElementTick = staff->currentKeyTick(refSigTick);
+        const Measure* refMeasure = ctx.dom().tick2measure(refSigElementTick);
+        const Segment* actualKeySigSeg
+            = refMeasure ? refMeasure->findSegmentR(SegmentType::KeySig, refSigElementTick - refMeasure->tick()) : nullptr;
+        const EngravingItem* el = actualKeySigSeg ? actualKeySigSeg->element(track) : nullptr;
+        const KeySig* actualKeySig = el ? toKeySig(el) : nullptr;
+        if (!actualKeySig) {
+            continue;
         }
-        return;
-    }
 
-    if (!courtesySigSeg) {
-        courtesySigSeg = Factory::createSegment(m, SegmentType::KeySigAnnounce, endRTick);
-        courtesySigSeg->setTrailer(true);
-        courtesySigSeg->setIsRepeatCourtesy(isRepeatCourtesy);
-        m->add(courtesySigSeg);
-    }
+        const KeySigEvent refKey = staff->keySigEvent(refSigTick);
+        // Get info from correct tick for repeats
+        const bool sigsDifferent = staff->key(m->tick()) != refKey.key();
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : sigsDifferent;
+        const bool staffIsPitchedAtNextMeas = ctx.dom().lastMeasure() == m
+                                              || (m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick()));
+        const bool show = actualKeySig && actualKeySig->showCourtesy() && staffIsPitchedAtNextMeas && needsCourtesy;
 
-    KeySig* courtesyKeySig = nullptr;
-    EngravingItem* keySigElem = courtesySigSeg->element(track);
-    if (keySigElem && keySigElem->isKeySig()) {
-        courtesyKeySig = toKeySig(keySigElem);
-    }
+        if (!show) {
+            // Remove any existing courtesy signatures
+            if (courtesySigSeg) {
+                courtesySigSeg->setEnabled(false);
+                m->setHasCourtesyKeySig(false);
+            }
+            continue;
+        }
 
-    const KeySigEvent key2 = staff->keySigEvent(m->endTick());
-    const bool needsCourtesy = staff->key(m->tick()) != key2.key() || isRepeatCourtesy;
+        // Create a segment if one doesn't already exist
+        if (!courtesySigSeg) {
+            courtesySigSeg = Factory::createSegment(m, courtesySegType, courtesySigRTick);
+            m->add(courtesySigSeg);
+            m->setTrailer(isTrailer);
+        }
+        m->setHasCourtesyKeySig(true);
+        courtesySigSeg->setTrailer(isTrailer);
+        courtesySigSeg->setEnabled(true);
 
-    if (staffIsPitchedAtNextMeas && needsCourtesy) {
+        // Find courtesy element or create if it doesn't exist
+        KeySig* courtesyKeySig = nullptr;
+        EngravingItem* keySigElem = courtesySigSeg->element(track);
+        if (keySigElem && keySigElem->isKeySig()) {
+            courtesyKeySig = toKeySig(keySigElem);
+        }
+
         if (!courtesyKeySig) {
             courtesyKeySig = Factory::createKeySig(courtesySigSeg);
             courtesyKeySig->setTrack(track);
             courtesyKeySig->setGenerated(true);
             courtesyKeySig->setParent(courtesySigSeg);
             courtesySigSeg->add(courtesyKeySig);
-            courtesySigSeg->setTrailer(true);
         }
-        courtesyKeySig->setKeySigEvent(key2);
+        courtesyKeySig->setKeySigEvent(refKey);
+
+        // Layout & create shapes
         TLayout::layoutKeySig(courtesyKeySig, courtesyKeySig->mutldata(), ctx.conf());
-        courtesySigSeg->setEnabled(true);
-    } else {     /// !staffIsPitchedAtNextMeas || !needsCourtesy
-        if (courtesyKeySig) {
-            courtesySigSeg->remove(courtesyKeySig);
+    }
+
+    if (courtesySigSeg && courtesySigSeg->enabled()) {
+        courtesySigSeg->createShapes();
+    }
+}
+
+void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, const Fraction& courtesyClefTick,
+                                    const CourtesySegmentPosition segPosition, LayoutContext& ctx)
+{
+    // Find original element
+    const size_t nstaves = ctx.dom().nstaves();
+    const Fraction courtesyClefRTick = courtesyClefTick - m->tick();
+    const Measure* prevMeasure = m->prevMeasure();
+
+    const bool isTrailer = segPosition == CourtesySegmentPosition::TRAILER;
+    const bool isContinuationCourtesy = segPosition == CourtesySegmentPosition::AFTER_REPEAT;
+    const SegmentType courtesySegType
+        = isTrailer ? SegmentType::Clef : (isContinuationCourtesy ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce);
+
+    const Segment* prevCourtesySegment
+        = prevMeasure ? prevMeasure->findSegmentR(SegmentType::ClefRepeatAnnounce, prevMeasure->ticks()) : nullptr;
+    bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyClef()
+                                  && !m->findSegmentR(SegmentType::Clef,
+                                                      Fraction(0, 1)) && prevCourtesySegment && prevCourtesySegment->enabled();
+    Segment* courtesyClefSeg = m->findSegmentR(courtesySegType, courtesyClefRTick);
+    for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
+        const Staff* staff = ctx.dom().staff(track2staff(track));
+        const Fraction refClefElementTick = staff->currentClefTick(refClefTick);
+        const Measure* refMeasure = ctx.dom().tick2measure(refClefElementTick);
+        Segment* actualClefSeg
+            = refMeasure ? refMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
+                                                    refClefElementTick - refMeasure->tick()) : nullptr;
+        if (!actualClefSeg && refMeasure && refMeasure->prevMeasure()) {
+            // Check previous measure
+            Measure* prevMeasure = refMeasure->prevMeasure();
+            actualClefSeg
+                = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, refClefElementTick - prevMeasure->tick());
         }
+        const EngravingItem* el = actualClefSeg ? actualClefSeg->element(track) : nullptr;
+        const Clef* actualClef = el ? toClef(el) : nullptr;
+        if (!actualClef && !isContinuationCourtesy) {
+            continue;
+        }
+
+        // Clef changes apply on a staff by staff basis so only apply if present
+        if (isContinuationCourtesy && !(prevCourtesySegment && prevCourtesySegment->elementAt(track))) {
+            continue;
+        }
+
+        const ClefType refClef = staff->clef(refClefTick);
+        const bool clefsMatch = staff->clef(m->tick()) != refClef;
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : clefsMatch;
+        const bool show = actualClef && actualClef->showCourtesy() && needsCourtesy;
+
+        if (!show) {
+            continue;
+        }
+
+        // Create a segment if one doesn't already exist
+        if (!courtesyClefSeg) {
+            courtesyClefSeg = Factory::createSegment(m, courtesySegType, courtesyClefRTick);
+            m->add(courtesyClefSeg);
+            courtesyClefSeg->setTrailer(false);
+        }
+        m->setHasCourtesyClef(true);
+        courtesyClefSeg->setEnabled(true);
+
+        // Find courtesy element or create if it doesn't exist
+        Clef* courtesyClef = nullptr;
+        EngravingItem* clefElem = courtesyClefSeg->element(track);
+        if (clefElem && clefElem->isClef()) {
+            courtesyClef = toClef(clefElem);
+        }
+
+        if (!courtesyClef) {
+            courtesyClef = Factory::createClef(courtesyClefSeg);
+            courtesyClef->setTrack(track);
+            courtesyClef->setGenerated(true);
+            courtesyClef->setSmall(true);
+            courtesyClef->setParent(courtesyClefSeg);
+            courtesyClef->setClefType(actualClef->clefType());
+            courtesyClefSeg->add(courtesyClef);
+        }
+
+        // Layout & create shapes
+        TLayout::layoutClef(courtesyClef, courtesyClef->mutldata(), ctx.conf());
+    }
+
+    if (courtesyClefSeg && courtesyClefSeg->enabled()) {
+        courtesyClefSeg->createShapes();
     }
 }
 
 void MeasureLayout::addRepeatCourtesies(Measure* m, LayoutContext& ctx)
 {
-    // Get measure list
     const std::vector<Measure*> measures = findFollowingRepeatMeasures(m);
-
     if (measures.empty()) {
         return;
     }
 
-    const Fraction endTick = m->ticks();
-    for (Measure* meas : measures) {
-        for (staff_idx_t idx = 0; idx < ctx.dom().nstaves(); idx++) {
-            const Staff* staff = ctx.dom().staff(idx);
-
-            // Time sigs
-            const TimeSig* actualTimeSig = staff->timeSig(meas->tick());
-            Segment* courtesyTimeSigSeg = nullptr;
-
-            bool showCourtesyTimeSig = false;
-            if (actualTimeSig && actualTimeSig->showCourtesySig()) {
-                const Segment* actualSigSeg = actualTimeSig->segment();
-                courtesyTimeSigSeg = m->findSegmentR(SegmentType::TimeSigAnnounce, endTick);
-
-                showCourtesyTimeSig = true;
-                setCourtesyTimeSig(m, actualSigSeg, courtesyTimeSigSeg, true, ctx);
-            }
-
-            if (!showCourtesyTimeSig && courtesyTimeSigSeg) {
-                courtesyTimeSigSeg->setEnabled(false);
-            }
-
-            // Key sigs
-            Segment* keySigSeg = meas->findSegmentR(SegmentType::KeySig, Fraction(0, 0));
-            KeySig* actualKeySig = nullptr;
-            actualKeySig = keySigSeg ? toKeySig(keySigSeg->element(idx * VOICES)) : nullptr;
-
-            if (actualKeySig && actualKeySig->showCourtesy()) {
-                Segment* courtesyKeySigSeg = m->findSegmentR(SegmentType::KeySigAnnounce, endTick);
-                setCourtesyKeySig(m, staff, courtesyKeySigSeg, true, ctx);
-            }
-
-            // Clefs
-        }
+    for (Measure* repeatStartMeasure : measures) {
+        setCourtesyTimeSig(m, repeatStartMeasure->tick(), m->endTick(), CourtesySegmentPosition::BEFORE_REPEAT, ctx);
+        setCourtesyKeySig(m, repeatStartMeasure->tick(), m->endTick(), CourtesySegmentPosition::BEFORE_REPEAT, ctx);
+        setCourtesyClef(m, repeatStartMeasure->tick(), m->endTick(), CourtesySegmentPosition::BEFORE_REPEAT, ctx);
     }
+}
+
+void MeasureLayout::addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx)
+{
+    setCourtesyTimeSig(m, m->tick(), m->tick(), CourtesySegmentPosition::AFTER_REPEAT, ctx);
+    setCourtesyKeySig(m, m->tick(), m->tick(), CourtesySegmentPosition::AFTER_REPEAT, ctx);
+    setCourtesyClef(m, m->tick(), m->tick(), CourtesySegmentPosition::AFTER_REPEAT, ctx);
 }
 
 Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff* staff, LayoutContext& ctx)
@@ -2052,7 +2185,6 @@ void MeasureLayout::removeSystemHeader(Measure* m)
 
 void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)
 {
-    const Fraction rtick = m->ticks();
     const size_t nstaves = ctx.dom().nstaves();
     bool systemBreakHideCourtesy = false;
     if (LayoutBreak* sectionBreakElement = m->sectionBreakElement()) {
@@ -2061,41 +2193,18 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
 
     // locate a time sig. in the next measure and, if found,
     // check if it has court. sig. turned off
-    bool showCourtesySig = false;
-    Segment* courtesyTimeSigSeg = m->findSegmentR(SegmentType::TimeSigAnnounce, rtick);
-    if (courtesyTimeSigSeg) {
-        courtesyTimeSigSeg->setTrailer(true);
-    }
     if (nm && ctx.conf().styleB(Sid::genCourtesyTimesig) && !systemBreakHideCourtesy && !ctx.conf().isFloatMode()) {
-        const Segment* actualSigSeg = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
-        if (actualSigSeg) {
-            TimeSig* actualTimeSig = nullptr;
-            for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
-                actualTimeSig = toTimeSig(actualSigSeg->element(track));
-                if (actualTimeSig) {
-                    break;
-                }
-            }
-            if (actualTimeSig && actualTimeSig->showCourtesySig()) {
-                showCourtesySig = true;
-                setCourtesyTimeSig(m, actualSigSeg, courtesyTimeSigSeg, false, ctx);
-            }
-        }
-    }
-    if (!showCourtesySig && courtesyTimeSigSeg) {
-        // remove any existing time signatures
-        courtesyTimeSigSeg->setEnabled(false);
+        setCourtesyTimeSig(m, nm->tick(), m->endTick(), CourtesySegmentPosition::TRAILER, ctx);
     }
 
     // courtesy key signatures, clefs
-    Segment* courtesyKeySigSeg = m->findSegmentR(SegmentType::KeySigAnnounce, rtick);
+    if (nm && ctx.conf().styleB(Sid::genCourtesyKeysig)) {
+        setCourtesyKeySig(m, nm->tick(), m->endTick(), CourtesySegmentPosition::TRAILER, ctx);
+    }
 
     Segment* courtesyClefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
-
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         const track_idx_t track = staffIdx * VOICES;
-        const Staff* staff = ctx.dom().staff(staffIdx);
-        setCourtesyKeySig(m, staff, courtesyKeySigSeg, false, ctx);
 
         if (courtesyClefSeg) {
             Clef* courtesyClef = toClef(courtesyClefSeg->element(track));
@@ -2103,9 +2212,6 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                 courtesyClef->setSmall(true);
             }
         }
-    }
-    if (courtesyKeySigSeg) {
-        courtesyKeySigSeg->createShapes();
     }
     if (courtesyClefSeg) {
         courtesyClefSeg->createShapes();
@@ -2126,6 +2232,7 @@ void MeasureLayout::removeSystemTrailer(Measure* m)
 
         if (seg->enabled()) {
             seg->setEnabled(false);
+            seg->setTrailer(false);
         }
     }
     m->setTrailer(false);

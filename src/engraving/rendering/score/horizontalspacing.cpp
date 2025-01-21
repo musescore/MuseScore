@@ -1331,7 +1331,7 @@ void HorizontalSpacing::centerTimeSigIfNeeded(System* system)
 
     for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (Segment& seg : measure->segments()) {
-            if (!seg.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+            if (!seg.isType(SegmentType::TimeSigType)) {
                 continue;
             }
             Segment* prevBarlineSeg = nullptr;
