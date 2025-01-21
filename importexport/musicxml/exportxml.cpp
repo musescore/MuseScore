@@ -331,6 +331,7 @@ class ExportMusicXml {
       int div;
       double millimeters;
       int tenths;
+      QVector<int> _hiddenStaves;
       TrillHash _trillStart;
       TrillHash _trillStop;
       MxmlInstrumentMap instrMap;
@@ -6731,6 +6732,10 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                         const int prevStaffNr = system->prevVisibleStaff(staffNr);
                         if (prevStaffNr == -1)
                               continue;
+                        if (!system->staff(staffNr)->show()) {
+                              _hiddenStaves.push_back(staffIdx);
+                              continue;
+                              }
                         const QRectF& prevBbox = system->staff(prevStaffNr)->bbox();
                         const qreal staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
 
@@ -6739,6 +6744,8 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                               _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
                               _xml.etag();
                               }
+                        else
+                              _hiddenStaves.push_back(staffIdx);
                         }
 
                   _xml.etag();
@@ -7175,27 +7182,38 @@ static void clampMusicXmlOctave(int& octave)
  Write the staff details for \a part to \a xml.
  */
 
-static void writeStaffDetails(XmlWriter& xml, const Part* part)
+static void writeStaffDetails(XmlWriter& xml, const Part* part, const QVector<int> hiddenStaves)
       {
       const Instrument* instrument = part->instrument();
-      int staves = part->nstaves();
+      const int staves = part->nstaves();
 
       // staff details
-      // TODO: decide how to handle linked regular / TAB staff
-      //       currently exported as a two staff part ...
       for (int i = 0; i < staves; i++) {
             Staff* st = part->staff(i);
             const qreal staffMag = st->mag(Fraction(0, 1));
+            bool hidden = false;
+            if (!st->show())
+                  hidden = true;
+            else {
+                  for (int staffIdx : hiddenStaves) {
+                        if (i == staffIdx)
+                              hidden = true;
+                        }
+                  }
             const QColor lineColor = st->color(Fraction(0, 1));
             const bool invis = st->invisible(Fraction(0, 1));
             const bool needsLineDetails = invis || lineColor != MScore::defaultColor;
             if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !qFuzzyCompare(staffMag, 1.0)
-                || !st->show() || needsLineDetails) {
+                || hidden  || needsLineDetails) {
                   QString details = "staff-details";
                   if (staves > 1)
                         details += QString(" number=\"%1\"").arg(i+1);
-                  if (!st->show())
+                  if (hidden) {
                         details += " print-object=\"no\"";
+                        if (st->cutaway())
+                              details += " print-spacing=\"yes\"";
+                        }
+
                   xml.stag(details);
                   if (st->links() && st->links()->contains(part->staff(i - 1)))
                         xml.tag("staff-type", "alternate");
@@ -7667,9 +7685,23 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 
       // output attributes with the first actual measure (pickup or regular) only
       if (isFirstActualMeasure) {
-            writeStaffDetails(_xml, part);
+            writeStaffDetails(_xml, part, _hiddenStaves);
             writeInstrumentDetails(part->instrument(), _score->styleB(Sid::concertPitch));
             }
+      else {
+            for (size_t staffIdx : _hiddenStaves) {
+                _attr.doAttr(_xml, true);
+                QString attributes;
+                if (staves > 1)
+                      attributes = QString( "number=\"%1\"").arg(staffIdx + 1);
+                attributes += " print-object=\"no\"";
+                if (part->staff(staffIdx)->cutaway())
+                      attributes += " print-spacing=\"yes\"";
+                _xml.tag("staff-details", attributes);
+                _attr.doAttr(_xml, false);
+                }
+            }
+      _hiddenStaves.clear();
 
       // output attribute at start of measure: measure-style
       measureStyle(_xml, _attr, m);
