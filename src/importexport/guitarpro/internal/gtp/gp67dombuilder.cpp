@@ -102,7 +102,11 @@ void GP67DomBuilder::buildGPScore(XmlDomNode* scoreNode)
         } else if (nodeName == u"Instructions" || nodeName == u"Notices") {
             // Currently we ignore score unrelated texts
         } else if (nodeName == u"MultiVoice") {
-            score->setMultiVoice(currentNode.toElement().text().toInt());
+            /// gp saves the value "1>" instead of "1"
+            String multiVoiceString = currentNode.toElement().text();
+            if (!multiVoiceString.empty()) {
+                score->setMultiVoice(String(multiVoiceString[0]).toInt());
+            }
         } else if (sUnusedNodes.find(nodeName) != sUnusedNodes.end()) {
             // Ignored nodes, which specify unused specifics (e.g. default layout, footers e.t.c.)
         }
