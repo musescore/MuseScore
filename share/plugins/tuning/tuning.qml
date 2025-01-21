@@ -31,10 +31,7 @@ MuseScore {
     thumbnailName: "modal_tuning.png"
     
     width: 800
-    height: 640
-
-    // set true if customisations are made to the tuning
-    property var modified: false;
+    height: 640    
 
     /**
      * See http://leware.net/temper/temper.htm and specifically http://leware.net/temper/cents.htm
@@ -419,8 +416,7 @@ MuseScore {
     property var westernTemperamentsLength: 36
     property var middleEasternTemperamentsLength: 24
 
-    property var currentTemperament: westernTemperaments[0];
-    property var currentTab: 0 ;
+    property var currentTemperament: westernTemperaments[0];    
     property var currentRoot: 0;
     property var currentPureTone: 0;
     property var currentTweak: 0.0;
@@ -588,126 +584,44 @@ MuseScore {
         for (var i=0; i<12; i++) {
             finalOffsets.itemAt(i*7 % 12).children[1].currentText = tuning(i).toFixed(1)
         }           
-    }
-
-    function setCurrentTemperament(temperament) {        
-        currentTemperament = temperament
-        checkCurrentTemperament()            
-    }
-
-    function checkCurrentTemperament() {
-        var idx;
-        switch (currentTab) {
-        case 0:
-            idx = westernTemperaments.indexOf(currentTemperament);
-            westernListView.itemAtIndex(idx).checked = true;
-            break;
-        case 1:
-            idx = middleEasternTemperaments.indexOf(currentTemperament);
-            middleEasternListView.itemAtIndex(idx).checked = true;
-            break;
-        }        
-    }
-
-    function lookupTemperament(temperamentName) {
-        switch (currentTab) {
-        case 0:
-            westernTemperaments.find(function (x) {
-                return x.name === temperamentName;
-            });
-            break;
-        case 1:
-            middleEasternTemperaments.find(function (x) {
-                return x.name === temperamentName;
-            });
-            break;
-        }      
-    }
-
-    function setCurrentTab(tab) {        
-        currentTab = tab
-        checkCurrentTab()           
-    }
-    
-    function checkCurrentTab() {
-        switch (currentTab){
-            case 0:
-                westernTab.checked = true
-                break
-            case 1:
-                middleEasternTab.checked = true
-                break
-        } 
-    }
-    
-    function setCurrentRoot(root) {        
-        currentRoot = root
-        checkCurrentRoot()            
-    }
-
-    function checkCurrentRoot() {
-        rootNotes.itemAt(currentRoot).checked=true 
-    }
-
-    function setCurrentPureTone(pureTone) {        
-        currentPureTone = pureTone
-        checkCurrentPureTone()            
-    }
-
-    function setCurrentTweak(tweak) {        
-        currentTweak = tweak
-        checkCurrentTweak()            
-    }
-
-    function checkCurrentTweak() {
-        tweakValue.currentText = currentTweak.toFixed(1)
-    }
-
-    function checkCurrentPureTone() {
-        pureTones.itemAt(currentPureTone).checked=true         
-    }
-
-    function setModified(state) {        
-        modified = state            
-    }
+    }    
 
     function temperamentClicked(temperament) {        
-        setCurrentTab(tabBar.currentIndex)
-        setCurrentTemperament(temperament)
-        setCurrentRoot(currentTemperament.root)
-        setCurrentPureTone(currentTemperament.pure)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())        
+        currentTemperament = temperament
+        currentRoot = temperament.root            
+        currentPureTone = temperament.pure         
+        currentTweak = 0.0
+
+        rootNotes.itemAt(currentRoot).checked=true 
+        pureTones.itemAt(currentPureTone).checked=true
+        tweakValue.currentText = currentTweak.toFixed(1)
+        
+        recalculate(getTuning())      
     }
 
     function rootNoteClicked(note) {        
-        setModified(true)
-        setCurrentRoot(note)
-        setCurrentPureTone(note)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())        
+        currentRoot = note        
+        currentPureTone = note
+        currentTweak = 0.0
+
+        pureTones.itemAt(currentPureTone).checked=true
+        tweakValue.currentText = currentTweak.toFixed(1)
+        
+        recalculate(getTuning())       
     }
 
     function pureToneClicked(note) {        
-        setModified(true)
-        setCurrentPureTone(note)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())        
+        currentPureTone = note
+        currentTweak = 0.0
+        tweakValue.currentText = currentTweak.toFixed(1)
+        recalculate(getTuning())       
     }
 
-    function tweaked() {        
-        setModified(true)
-        setCurrentTweak(parseFloat(tweakValue.currentText))
+    function tweaked() {  
+        currentTweak = parseFloat(tweakValue.currentText)
+        tweakValue.currentText = currentTweak.toFixed(1) 
         recalculate(getTuning())        
-    }
-
-    function editingFinishedFor(textField) {
-        var newText = textField.currentText
-        if (textField.previousText != newText) {
-            setModified(true) 
-            textField.previousText = newText
-        }
-    }
+    }    
 
     StyledTabBar {
         id:tabBar
@@ -834,11 +748,14 @@ MuseScore {
                         Layout.maximumWidth: 40
                         id: tweakValue
                         currentText: "0.0"                            
-                        validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                        property var previousText: "0.0"
-                        property var name: "tweak"
+                        validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }                        
                         onTextEditingFinished:  function (newText) {
-                                                    currentText = newText;
+                                                    if ( newText != "" ) {
+                                                        currentText = newText
+                                                    }
+                                                    else { 
+                                                        currentText = "0.0"
+                                                    }
                                                     tweaked() 
                                                 }
                     }
@@ -862,11 +779,14 @@ MuseScore {
                                 TextInputField{
                                     width: 50   
                                     currentText: "0.0"                                    
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"                                    
+                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }                                                                    
                                     onTextEditingFinished: function (newText) {
-                                                                currentText = newText;
-                                                                editingFinishedFor(finalOffsets.itemAt(index).children[1]) 
+                                                                if ( newText != "" ) {
+                                                                    currentText = newText
+                                                                }
+                                                                else { 
+                                                                    currentText = "0.0"
+                                                                }                                                                
                                                             }                                    
                                 }
                             }
@@ -910,14 +830,12 @@ MuseScore {
         buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]                   
 
         onStandardButtonClicked: function(buttonId) {
-            if (buttonId === ButtonBoxModel.Cancel) {
-                if (modified) quitDialog.open()
-                else quit()                            
+            if (buttonId === ButtonBoxModel.Cancel) {                
+                quit()                            
             } 
             else if (buttonId === ButtonBoxModel.Ok) {
-                if (applyTemperament()) {
-                    if (modified)  quitDialog.open()
-                    else quit()                                
+                if (applyTemperament()) {                    
+                    quit()                                
                 }
             }
         }
@@ -930,21 +848,7 @@ MuseScore {
         onAccepted: {
             errorDialog.close()
         }
-    }
-
-    MessageDialog {
-        id: quitDialog
-        title: "Quit?"
-        text: "Do you want to quit the plugin?"
-        detailedText: "It looks like you have made customisations to this tuning, you could save them to a file before quitting if you like."
-        standardButtons: [StandardButton.Ok, StandardButton.Cancel]
-        onAccepted: {
-            quit()
-        }
-        onRejected: {
-            quitDialog.close()
-        }
-    }
+    }    
 
     Dialog {        
         id: addDialog 
