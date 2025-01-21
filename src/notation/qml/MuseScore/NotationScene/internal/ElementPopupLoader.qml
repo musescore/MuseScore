@@ -118,6 +118,7 @@ Item {
             //        This is necessary so that popups do not activate navigation in the new section,
             //        but at the same time, when clicking on the component (text input), the focus in popup's window should be activated
             popup.navigationSection = null
+            popup.openPolicies = PopupView.NoActivateFocus
 
             popup.notationViewNavigationSection = container.notationViewNavigationSection
             popup.navigationOrderStart = container.navigationOrderStart
