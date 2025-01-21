@@ -84,8 +84,6 @@ class Segment final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Segment)
     DECLARE_CLASSOF(ElementType::SEGMENT)
 
-    M_PROPERTY2(bool, isRepeatCourtesy, setIsRepeatCourtesy, false);
-
 protected:
     EngravingItem* getElement(staff_idx_t staff) const;       //??
 
@@ -284,6 +282,9 @@ public:
     bool isBarLineType() const { return m_segmentType == SegmentType::BarLine; }
     bool isBreathType() const { return m_segmentType == SegmentType::Breath; }
     bool isChordRestType() const { return m_segmentType == SegmentType::ChordRest; }
+    bool isClefRepeatAnnounceType() const { return m_segmentType == SegmentType::ClefRepeatAnnounce; }
+    bool isKeySigRepeatAnnounceType() const { return m_segmentType == SegmentType::KeySigRepeatAnnounce; }
+    bool isTimeSigRepeatAnnounceType() const { return m_segmentType == SegmentType::TimeSigRepeatAnnounce; }
     bool isEndBarLineType() const { return m_segmentType == SegmentType::EndBarLine; }
     bool isKeySigAnnounceType() const { return m_segmentType == SegmentType::KeySigAnnounce; }
     bool isTimeSigAnnounceType() const { return m_segmentType == SegmentType::TimeSigAnnounce; }

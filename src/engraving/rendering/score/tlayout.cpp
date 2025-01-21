@@ -3539,7 +3539,10 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         Clef* c = nullptr;
         if (item->segment()) {
             for (Segment* seg = item->segment()->prev1(); !c && seg && seg->tick() == item->tick(); seg = seg->prev1()) {
-                if (seg->enabled() && (seg->isClefType() || seg->isHeaderClefType())) {
+                const bool isClefSeg
+                    = (seg->isClefType() || seg->isHeaderClefType()
+                       || (seg->isClefRepeatAnnounceType() && item->segment()->isKeySigRepeatAnnounceType()));
+                if (seg->enabled() && isClefSeg) {
                     c = toClef(seg->element(item->track()));
                 }
             }

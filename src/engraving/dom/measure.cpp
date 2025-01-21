@@ -776,6 +776,7 @@ void Measure::add(EngravingItem* e)
         Segment* seg   = toSegment(e);
         Fraction t     = seg->rtick();
         Segment* s;
+        // LOGI() << "MEASURE " << no() + 1 << " ADD " << seg->subTypeName();
 
         for (s = first(); s && s->rtick() < t; s = s->next()) {
         }
@@ -839,10 +840,11 @@ void Measure::add(EngravingItem* e)
     }
     break;
     case ElementType::JUMP:
-        setRepeatJump(true);
-    // fall through
-
     case ElementType::MARKER:
+        if (e && (e->isJump() || muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()))) {
+            // "To coda" markings act like jumps
+            setRepeatJump(true);
+        }
         el().push_back(e);
         break;
 
@@ -1798,7 +1800,10 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce | SegmentType::KeySigAnnounce)) {
+                if (seg->segmentType()
+                    & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce | SegmentType::KeySigAnnounce
+                       | SegmentType::TimeSigRepeatAnnounce | SegmentType::KeySigRepeatAnnounce | SegmentType::TimeSigStartRepeatAnnounce
+                       | SegmentType::KeySigStartRepeatAnnounce)) {
                     seg->setRtick(nl);
                 }
             }

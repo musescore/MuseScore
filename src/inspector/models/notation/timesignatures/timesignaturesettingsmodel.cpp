@@ -75,6 +75,17 @@ void TimeSignatureSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_shouldShowCourtesy);
+
+    for (const mu::engraving::EngravingItem* element : m_elementList) {
+        if (element->generated()) {
+            m_isGenerated = true;
+            break;
+        }
+    }
+
+    m_shouldShowCourtesy->setIsEnabled(!m_isGenerated);
+    m_horizontalScale->setIsEnabled(!m_isGenerated);
+    m_verticalScale->setIsEnabled(!m_isGenerated);
 }
 
 void TimeSignatureSettingsModel::resetProperties()

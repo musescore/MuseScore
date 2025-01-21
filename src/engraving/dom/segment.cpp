@@ -80,21 +80,27 @@ const char* Segment::subTypeName() const
 const char* Segment::subTypeName(SegmentType t)
 {
     switch (t) {
-    case SegmentType::Invalid:              return "Invalid";
-    case SegmentType::BeginBarLine:         return "BeginBarLine";
-    case SegmentType::HeaderClef:           return "HeaderClef";
-    case SegmentType::Clef:                 return "Clef";
-    case SegmentType::KeySig:               return "Key Signature";
-    case SegmentType::Ambitus:              return "Ambitus";
-    case SegmentType::TimeSig:              return "Time Signature";
-    case SegmentType::StartRepeatBarLine:   return "Begin Repeat";
-    case SegmentType::BarLine:              return "BarLine";
-    case SegmentType::Breath:               return "Breath";
-    case SegmentType::ChordRest:            return "ChordRest";
-    case SegmentType::EndBarLine:           return "EndBarLine";
-    case SegmentType::KeySigAnnounce:       return "Key Sig Precaution";
-    case SegmentType::TimeSigAnnounce:      return "Time Sig Precaution";
-    case SegmentType::TimeTick:             return "Time tick";
+    case SegmentType::Invalid:               return "Invalid";
+    case SegmentType::BeginBarLine:          return "BeginBarLine";
+    case SegmentType::HeaderClef:            return "HeaderClef";
+    case SegmentType::Clef:                  return "Clef";
+    case SegmentType::KeySig:                return "Key Signature";
+    case SegmentType::Ambitus:               return "Ambitus";
+    case SegmentType::TimeSig:               return "Time Signature";
+    case SegmentType::StartRepeatBarLine:    return "Begin Repeat";
+    case SegmentType::ClefStartRepeatAnnounce:    return "Clef Repeat Start Courtesy";
+    case SegmentType::KeySigStartRepeatAnnounce:  return "Key Sig Repeat Start Courtesy";
+    case SegmentType::TimeSigStartRepeatAnnounce: return "Time Sig Repeat Start Courtesy";
+    case SegmentType::BarLine:               return "BarLine";
+    case SegmentType::Breath:                return "Breath";
+    case SegmentType::ChordRest:             return "ChordRest";
+    case SegmentType::ClefRepeatAnnounce:    return "Clef Repeat Courtesy";
+    case SegmentType::KeySigRepeatAnnounce:  return "Key Sig Repeat Courtesy";
+    case SegmentType::TimeSigRepeatAnnounce: return "Time Sig Repeat Courtesy";
+    case SegmentType::EndBarLine:            return "EndBarLine";
+    case SegmentType::KeySigAnnounce:        return "Key Sig Courtesy";
+    case SegmentType::TimeSigAnnounce:       return "Time Sig Courtesy";
+    case SegmentType::TimeTick:              return "Time tick";
     default:
         return "??";
     }
@@ -760,7 +766,9 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::CLEF:
-        assert(m_segmentType == SegmentType::Clef || m_segmentType == SegmentType::HeaderClef);
+        assert(
+            m_segmentType == SegmentType::Clef || m_segmentType == SegmentType::HeaderClef
+            || m_segmentType == SegmentType::ClefRepeatAnnounce || m_segmentType == SegmentType::ClefStartRepeatAnnounce);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
@@ -770,7 +778,9 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::TIMESIG:
-        assert(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
+        assert(
+            segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce
+            || segmentType() == SegmentType::TimeSigRepeatAnnounce || segmentType() == SegmentType::TimeSigStartRepeatAnnounce);
         checkElement(el, track);
         m_elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
@@ -778,7 +788,9 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::KEYSIG:
-        assert(m_segmentType == SegmentType::KeySig || m_segmentType == SegmentType::KeySigAnnounce);
+        assert(
+            m_segmentType == SegmentType::KeySig || m_segmentType == SegmentType::KeySigAnnounce
+            || m_segmentType == SegmentType::KeySigRepeatAnnounce || m_segmentType == SegmentType::KeySigStartRepeatAnnounce);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
@@ -1423,7 +1435,7 @@ EngravingItem* Segment::elementAt(track_idx_t track) const
 
 void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    bool scanAllTimeSigs = (isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+    bool scanAllTimeSigs = (isType(SegmentType::TimeSigType)
                             && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL);
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
@@ -1936,7 +1948,13 @@ bool Segment::notChordRestType() const
         || segmentType() == SegmentType::EndBarLine
         || segmentType() == SegmentType::BarLine
         || segmentType() == SegmentType::KeySigAnnounce
-        || segmentType() == SegmentType::TimeSigAnnounce) {
+        || segmentType() == SegmentType::TimeSigAnnounce
+        || segmentType() == SegmentType::ClefRepeatAnnounce
+        || segmentType() == SegmentType::TimeSigRepeatAnnounce
+        || segmentType() == SegmentType::KeySigRepeatAnnounce
+        || segmentType() == SegmentType::ClefStartRepeatAnnounce
+        || segmentType() == SegmentType::TimeSigStartRepeatAnnounce
+        || segmentType() == SegmentType::KeySigStartRepeatAnnounce) {
         return true;
     } else {
         return false;
@@ -2629,7 +2647,7 @@ double Segment::spacing() const
 
 bool Segment::hasTimeSigAboveStaves() const
 {
-    return isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+    return isType(SegmentType::TimeSigType)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES;
 }
 
@@ -2643,7 +2661,7 @@ bool Segment::makeSpaceForTimeSigAboveStaves() const
 
 bool Segment::hasTimeSigAcrossStaves() const
 {
-    return isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+    return isType(SegmentType::TimeSigType)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
 }
 
@@ -2779,10 +2797,6 @@ bool Segment::goesBefore(const Segment* nextSegment) const
 {
     bool thisIsClef = isClefType();
     bool nextIsClef = nextSegment->isClefType();
-    bool thisIsKeySigAnnounce = isKeySigAnnounceType() && isRepeatCourtesy();
-    bool nextIsKeySigAnnounce = nextSegment->isKeySigAnnounceType() && nextSegment->isRepeatCourtesy();
-    bool thisIsTimeSigAnnounce = isTimeSigAnnounceType() && isRepeatCourtesy();
-    bool nextIsTimeSigAnnounce = nextSegment->isTimeSigAnnounceType() && nextSegment->isRepeatCourtesy();
     bool thisIsBarline = isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
     bool nextIsBarline = nextSegment->isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
 
@@ -2806,13 +2820,6 @@ bool Segment::goesBefore(const Segment* nextSegment) const
             }
         }
         return clefPos == ClefToBarlinePosition::AFTER;
-    }
-
-    if (thisIsKeySigAnnounce && nextIsBarline) {
-        return true;
-    }
-    if (thisIsTimeSigAnnounce && nextIsBarline) {
-        return true;
     }
 
     return segmentType() < nextSegment->segmentType();
