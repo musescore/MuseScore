@@ -150,6 +150,17 @@ void PopupView::init()
         }
     });
 
+    navigationController()->navigationChanged().onNotify(this, [this]() {
+        ui::INavigationPanel* navigationPanel = navigationController()->activePanel();
+        if (!navigationPanel) {
+            return;
+        }
+
+        if (navigationPanel->window() == m_window->qWindow() && !m_window->hasActiveFocus()) {
+            m_window->forceActiveFocus();
+        }
+    });
+
     emit windowChanged();
 }
 

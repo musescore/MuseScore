@@ -93,7 +93,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 public:
     Inject<ui::IMainWindow> mainWindow = { this };
     Inject<ui::IUiConfiguration> uiConfiguration = { this };
-    Inject<ui::INavigationController> navigationController= { this };
+    Inject<ui::INavigationController> navigationController = { this };
 
 public:
 
