@@ -4154,6 +4154,11 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
     ldata->setNumberSym(ldata->number);
     ldata->yNumberPos = ctx.conf().styleMM(Sid::mmRestNumberPos);
 
+    const Staff* staff = item->staff();
+    if (staff->lines(item->tick()) == 1) {
+        ldata->yNumberPos = std::min(ldata->yNumberPos, -item->spatium());
+    }
+
     if (item->isOldStyle()) {
         SymIdList restSyms;
         double symsWidth = 0.0;
@@ -4188,7 +4193,11 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
 
     // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
     const StaffType* staffType = item->staffType();
-    ldata->setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium());
+    double midline = staffType->middleLine() / 2.0;
+    if (item->isOldStyle()) {
+        midline = std::max(1.0, midline);
+    }
+    ldata->setPos(0, midline * staffType->lineDistance().val() * item->spatium());
 
     ChordLayout::fillShape(item, ldata, ctx.conf());
 }
