@@ -900,12 +900,14 @@ MuseScore {
             case 0:
                 westernTemperaments = westernTemperaments.concat(entry) //adds new entry and updates buttons 
                 westernListView.positionViewAtEnd()
-                temperamentClicked(westernTemperaments[westernTemperaments.length-1])
+                westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
+                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true
                 break
             case 1:
                 middleEasternTemperaments = middleEasternTemperaments.concat(entry) //adds new entry and updates buttons 
                 middleEasternListView.positionViewAtEnd()
-                temperamentClicked(middleEasternTemperaments[middleEasternTemperaments.length-1])
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true
                 break
         }                        
     }
@@ -919,6 +921,8 @@ MuseScore {
                 else {
                     westernTemperaments = westernTemperaments.filter(x => x !== currentTemperament)
                     westernListView.positionViewAtEnd()
+                    westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
+                    westernListView.itemAtIndex(westernTemperaments.length-1).checked = true 
                 }
                 break
 
@@ -929,6 +933,8 @@ MuseScore {
                 else {
                     middleEasternTemperaments = middleEasternTemperaments.filter(x => x !== currentTemperament)
                     middleEasternListView.positionViewAtEnd()
+                    middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
+                    middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true
                 }
                 break
         }
