@@ -183,7 +183,11 @@ void NotationMidiInput::addNoteEventsToInputState()
     }
 
     if (!pitches.empty()) {
-        m_notationInteraction->noteInput()->setPitchesToInput(pitches);
+        INotationNoteInputPtr noteInput = m_notationInteraction->noteInput();
+        noteInput->setPitchesToInput(pitches);
+
+        const NoteInputState& state = noteInput->state();
+        playbackController()->playPitches(pitches, state.staffIdx(), state.segment());
     }
 
     m_eventsQueue.clear();

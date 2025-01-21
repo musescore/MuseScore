@@ -79,6 +79,7 @@ public:
     void setLastSegment(Segment* s) { m_lastSegment = s; }
 
     Staff* staff() const;
+    staff_idx_t staffIdx() const;
 
     Drumset* drumset() const;
 
