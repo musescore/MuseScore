@@ -727,7 +727,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                     vbox = false;
                 }
 
-                prevYBottom  = system->y() + sysStaff->y() + sysStaff->bbox().height();
+                prevYBottom  = system->y() + sysStaff->bbox().bottom();
                 yBottom      = system->y() + sysStaff->y() + sysStaff->skyline().south().max();
                 spacerOffset = sysStaff->skyline().south().max() - sysStaff->bbox().height();
                 vgdl.push_back(vgd);
