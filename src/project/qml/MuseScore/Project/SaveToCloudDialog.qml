@@ -90,7 +90,7 @@ StyledDialogView {
                         anchors.left: parent.left
 
                         source: contentItem.cloudInfo.cloudLogoUrl
-                        sourceSize.height: 20
+                        sourceSize.height: 26
                     }
 
                     EffectColorOverlay {

@@ -108,7 +108,7 @@ protected:
 
     virtual Ret downloadAccountInfo() = 0;
 
-    virtual QString logoColorForTheme(const ui::ThemeInfo& theme) const;
+    QString logoColor() const;
 
     void setAccountInfo(const AccountInfo& info);
 
