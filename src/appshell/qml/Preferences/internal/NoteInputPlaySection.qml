@@ -23,6 +23,7 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import MuseScore.Preferences 1.0
 
 BaseSection {
     id: root
@@ -35,24 +36,45 @@ BaseSection {
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
 
+    //property alias chordOptions: playChordBox.model
+    //property alias currentChordIndex: playChordBox.currentIndex
+
     signal playNotesWhenEditingChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
     signal playNotesOnMidiInputChangeRequested(bool play)
 
-    CheckBox {
-        id: playNotesBox
+    Row {
+        id: playNotesBoxRow
+
+        height: playNotesBox.height
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
+        spacing: 6
 
-        navigation.name: "PlayNotesBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
+        ToggleButton {
+            id: playNotesBox
 
-        onClicked: {
-            root.playNotesWhenEditingChangeRequested(!checked)
+            navigation.name: "PlayNotesBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+
+            onToggled: {
+                root.playNotesWhenEditingChangeRequested(!checked)
+            }
+        }
+
+        StyledTextLabel {
+            id: playNotesBoxLabel
+
+            height: parent.height
+
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+
+            wrapMode: Text.Wrap
+            text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
         }
     }
 
@@ -78,11 +100,26 @@ BaseSection {
         }
     }
 
+    // ComboBoxWithTitle {
+    //     id: playChordBox
+
+    //     title: qsTrc("appshell/preferences", "When adding chords to notes, play:")
+    //     columnWidth: root.columnWidth
+
+    //     navigation.name: "PlayChordsBox"
+    //     navigation.panel: root.navigation
+    //     navigation.row: 5
+
+    //     onValueEdited: function(newIndex, newValue) {
+    //         root.playChordWhenEditingChangeRequested(newIndex)
+    //     }
+    // }
+
     CheckBox {
         id: playChordBox
         width: parent.width;
 
-        text: qsTrc("appshell/preferences", "Play chord when editing")
+        text: qsTrc("appshell/preferences", "When adding chords to notes, play:")
 
         enabled: root.playNotesWhenEditing
 
@@ -115,6 +152,8 @@ BaseSection {
     CheckBox {
         id: playNotesOnMidiInputBox
         width: parent.width
+
+        enabled: root.noteInputModelRef.enableMidiInput
 
         text: qsTrc("appshell/preferences", "Play MIDI input")
 

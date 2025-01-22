@@ -85,6 +85,9 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
+            //chordOptions: noteInputModel.chordOptions()
+            //currentChordIndex: noteInputModel.playChordWhenEditing ? 0 : 1
+
             onPlayNotesWhenEditingChangeRequested: function(play) {
                 noteInputModel.playNotesWhenEditing = play
             }

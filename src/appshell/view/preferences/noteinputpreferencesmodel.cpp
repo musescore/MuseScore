@@ -238,3 +238,8 @@ void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
     engravingConfiguration()->setDynamicsApplyToAllVoices(value);
     emit dynamicsApplyToAllVoicesChanged(value);
 }
+
+QStringList NoteInputPreferencesModel::chordOptions() const
+{
+    return {"Entire chord", "Only the added note"};
+}

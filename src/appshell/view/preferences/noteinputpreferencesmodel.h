@@ -82,6 +82,8 @@ public:
 
     bool dynamicsApplyToAllVoices() const;
 
+    Q_INVOKABLE QStringList chordOptions() const;
+
 public slots:
     void setEnableMidiInput(bool value);
     void setAdvanceToNextNoteOnKeyRelease(bool value);
