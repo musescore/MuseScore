@@ -1714,6 +1714,9 @@ void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLine
         harmony->setPlacement(meiHarm.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
         harmony->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
+
+    // @color
+    Convert::colorFromMEI(harmony, meiHarm);
 }
 
 libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& meiLines)
@@ -1741,6 +1744,9 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     if (harmony->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
         meiHarm.SetPlace(Convert::placeToMEI(harmony->placement()));
     }
+
+    // @color
+    Convert::colorToMEI(harmony, meiHarm);
 
     return meiHarm;
 }
