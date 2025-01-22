@@ -212,6 +212,7 @@ enum class ElementType {
     TREMOLO_TWOCHORD,
     TREMOLO_SINGLECHORD,
     TIME_TICK_ANCHOR,
+    PARENTHESIS,
 
     ROOT_ITEM,
     DUMMY,

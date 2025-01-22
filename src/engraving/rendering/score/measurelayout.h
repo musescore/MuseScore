@@ -30,6 +30,7 @@ class MeasureBase;
 class Score;
 class Segment;
 class StaffLines;
+enum class SegmentType;
 enum class CourtesySegmentPosition : char;
 }
 
@@ -65,6 +66,10 @@ public:
     static void removeSystemTrailer(Measure* m);
     static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
     static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
+    static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
+    static void removeRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
+
+    static void setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx);
 
     static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
 
@@ -95,11 +100,13 @@ private:
 
     static void setClefBarLinePosition(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 
-    static void setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
-                                   const CourtesySegmentPosition segPosition, LayoutContext& ctx);
-    static void setCourtesyKeySig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
-                                  const CourtesySegmentPosition segPosition, LayoutContext& ctx);
-    static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
-                                const CourtesySegmentPosition segPosition, LayoutContext& ctx);
+    static void setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
+                                   LayoutContext& ctx);
+    static void setCourtesyKeySig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
+                                  LayoutContext& ctx);
+    static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
+                                LayoutContext& ctx);
+
+    static void createParenthesis(Segment* segment, const DirectionH direction, LayoutContext& ctx);
 };
 }

@@ -965,6 +965,7 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
                 continue;
             }
             const EngravingItem* item1 = r1.item();
+
             double ay1 = r1.top();
             double ay2 = r1.bottom();
             double verticalClearance = computeVerticalClearance(item1, item2, spatium) * squeezeFactor;
@@ -1313,8 +1314,9 @@ KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const 
 double HorizontalSpacing::computeVerticalClearance(const EngravingItem* item1, const EngravingItem* item2, double spatium)
 {
     // To be possibly expanded to more cases
-    UNUSED(item1);
     if (item2 && item2->isAccidental()) {
+        return 0.1 * spatium;
+    } else if ((item1 && item1->isParenthesis()) || (item2 && item2->isParenthesis())) {
         return 0.1 * spatium;
     }
 
@@ -1394,7 +1396,7 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
 
 bool HorizontalSpacing::isAlwaysKernable(const EngravingItem* item)
 {
-    return item->isTextBase() || item->isChordLine();
+    return item->isTextBase() || item->isChordLine() || item->isParenthesis();
 }
 
 KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2)
