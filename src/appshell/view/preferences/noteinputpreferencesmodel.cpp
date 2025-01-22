@@ -37,6 +37,10 @@ void NoteInputPreferencesModel::load()
         emit playNotesWhenEditingChanged(playNotesWhenEditing());
     });
 
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        emit enableMidiInputChanged(playNotesWhenEditing());
+    });
+
     shortcutsConfiguration()->advanceToNextNoteOnKeyReleaseChanged().onReceive(this, [this](bool value) {
         emit advanceToNextNoteOnKeyReleaseChanged(value);
     });
@@ -241,5 +245,5 @@ void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
 
 QStringList NoteInputPreferencesModel::chordOptions() const
 {
-    return {"Entire chord", "Only the added note"};
+    return { "Entire chord", "Only the added note" };
 }
