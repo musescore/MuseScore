@@ -481,6 +481,8 @@ public:
         ALIGN_TOP = 0xF48E,
         ALIGN_VERTICAL_CENTER = 0xF48F,
 
+        DURATION_CURSOR = 0xF492,
+
         NONE = 0xFFFF
     };
 

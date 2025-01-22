@@ -2066,7 +2066,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Input by duration"),
              TranslatableString("action", "Toggle note input mode: input by duration"),
-             IconCode::Code::STAR // TODO
+             IconCode::Code::DURATION_CURSOR
              ),
     UiAction("note-input-rhythm",
              mu::context::UiCtxProjectOpened,
