@@ -444,12 +444,6 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
-enum class CourtesySegmentPosition : char {
-    TRAILER,
-    BEFORE_REPEAT,
-    AFTER_REPEAT
-};
-
 //---------------------------------------------------------
 //   FontStyle
 //---------------------------------------------------------

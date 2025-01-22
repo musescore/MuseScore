@@ -125,6 +125,7 @@ class OttavaSegment;
 class Page;
 class PalmMute;
 class PalmMuteSegment;
+class Parenthesis;
 class Part;
 class PartialLyricsLine;
 class PartialLyricsLineSegment;
@@ -454,6 +455,7 @@ public:
     CONVERT(FretCircle, FRET_CIRCLE)
     CONVERT(StringTunings, STRING_TUNINGS)
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
+    CONVERT(Parenthesis, PARENTHESIS)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -868,5 +870,6 @@ CONVERT(LaissezVib)
 CONVERT(PartialTie)
 CONVERT(PartialLyricsLine)
 CONVERT(PartialLyricsLineSegment)
+CONVERT(Parenthesis)
 #undef CONVERT
 }

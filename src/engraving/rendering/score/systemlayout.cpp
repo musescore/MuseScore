@@ -170,17 +170,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
             }
 
-            if ((m->repeatEnd() && ctx.conf().styleB(Sid::showCourtesiesRepeats))
-                || (m->repeatJump() && ctx.conf().styleB(Sid::showCourtesiesOtherJumps))) {
-                MeasureLayout::addRepeatCourtesies(m, ctx);
-            }
-            const bool courtesiesAfterCancellingRepeats = m->prevMeasure() && m->prevMeasure()->repeatEnd()
-                                                          && ctx.conf().styleB(Sid::showCourtesiesAfterCancellingRepeats);
-            const bool courtesiesAfterCancellingOtherJumps = m->prevMeasure() && m->prevMeasure()->repeatJump() && ctx.conf().styleB(
-                Sid::showCourtesiesAfterCancellingOtherJumps);
-            if (courtesiesAfterCancellingRepeats || courtesiesAfterCancellingOtherJumps) {
-                MeasureLayout::addRepeatContinuationCourtesies(m, ctx);
-            }
+            MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
 
             MeasureLayout::updateGraceNotes(m, ctx);
 
@@ -228,17 +218,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 MeasureLayout::removeSystemTrailer(m);
             }
 
-            if ((m->repeatEnd() && ctx.conf().styleB(Sid::showCourtesiesRepeats))
-                || (m->repeatJump() && ctx.conf().styleB(Sid::showCourtesiesOtherJumps))) {
-                MeasureLayout::addRepeatCourtesies(m, ctx);
-            }
-            const bool courtesiesAfterCancellingRepeats = m->prevMeasure() && m->prevMeasure()->repeatEnd()
-                                                          && ctx.conf().styleB(Sid::showCourtesiesAfterCancellingRepeats);
-            const bool courtesiesAfterCancellingOtherJumps = m->prevMeasure() && m->prevMeasure()->repeatJump() && ctx.conf().styleB(
-                Sid::showCourtesiesAfterCancellingOtherJumps);
-            if (courtesiesAfterCancellingRepeats || courtesiesAfterCancellingOtherJumps) {
-                MeasureLayout::addRepeatContinuationCourtesies(m, ctx);
-            }
+            MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
 
             MeasureLayout::updateGraceNotes(m, ctx);
 
@@ -336,18 +316,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                         MeasureLayout::removeSystemTrailer(m);
                     }
 
-                    if ((m->repeatEnd() && ctx.conf().styleB(Sid::showCourtesiesRepeats))
-                        || (m->repeatJump() && ctx.conf().styleB(Sid::showCourtesiesOtherJumps))) {
-                        MeasureLayout::addRepeatCourtesies(m, ctx);
-                    }
-                    const bool courtesiesAfterCancellingRepeats = m->prevMeasure() && m->prevMeasure()->repeatEnd()
-                                                                  && ctx.conf().styleB(Sid::showCourtesiesAfterCancellingRepeats);
-                    const bool courtesiesAfterCancellingOtherJumps = m->prevMeasure() && m->prevMeasure()->repeatJump()
-                                                                     && ctx.conf().styleB(
-                        Sid::showCourtesiesAfterCancellingOtherJumps);
-                    if (courtesiesAfterCancellingRepeats || courtesiesAfterCancellingOtherJumps) {
-                        MeasureLayout::addRepeatContinuationCourtesies(m, ctx);
-                    }
+                    MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
 
                     prevMeasureState.restoreMeasure();
                     MeasureLayout::layoutMeasureElements(m, ctx);
@@ -1404,6 +1373,27 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         for (EngravingItem* e : s->annotations()) {
             if (e->isImage()) {
                 TLayout::layoutItem(e, ctx);
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
+    // Parenthesis
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isParenthesis()) {
+                if (e->addToSkyline()) {
+                    EngravingItem* parent = e->parentItem(true);
+                    IF_ASSERT_FAILED(parent && parent->isSegment()) {
+                        continue;
+                    }
+                    staff_idx_t si = e->staffIdx();
+                    Segment* s = toSegment(parent);
+                    Measure* m = s->measure();
+                    system->staff(si)->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos() + e->staffOffset()));
+                }
             }
         }
     }

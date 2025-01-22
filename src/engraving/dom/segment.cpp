@@ -45,6 +45,7 @@
 #include "mscore.h"
 #include "note.h"
 #include "ornament.h"
+#include "parenthesis.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -730,6 +731,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::FIGURED_BASS:
     case ElementType::FERMATA:
     case ElementType::STICKING:
+    case ElementType::PARENTHESIS:
         m_annotations.push_back(el);
         break;
 
@@ -922,6 +924,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
     case ElementType::STICKING:
+    case ElementType::PARENTHESIS:
         removeAnnotation(el);
         break;
 
@@ -1991,6 +1994,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
+    case ElementType::PARENTHESIS:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
     case ElementType::TAB_DURATION_SYMBOL:
@@ -2159,6 +2163,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
+    case ElementType::PARENTHESIS:
     case ElementType::IMAGE:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
@@ -2554,12 +2559,17 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (!e || e->staffIdx() != staffIdx) {
             continue;
         }
+
         setVisible(true);
         if (!e->addToSkyline()) {
             continue;
         }
 
-        if (e->isHarmony()) {
+        if (e->isParenthesis()) {
+            // Calculate layout, this needs to be placed at the right of the segment
+            renderer()->layoutItem(toParenthesis(e));
+            s.add(e->shape().translate(e->pos() + e->staffOffset()));
+        } else if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
             renderer()->layoutItem(toHarmony(e));
 
