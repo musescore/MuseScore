@@ -82,7 +82,7 @@ BaseSection {
 
         title: qsTrc("appshell/preferences", "Playback duration:")
 
-        enabled: (root.playNotesWhenEditing || root.playNotesOnMidiInput)
+        enabled: (root.playNotesWhenEditing)
 
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
