@@ -189,8 +189,6 @@ PreferencesPage {
             StyledTextLabel {
                 id: legacyToggleInfo
 
-                enabled: percussionPreferencesModel.useNewPercussionPanel
-
                 height: parent.height
 
                 horizontalAlignment: Text.AlignLeft

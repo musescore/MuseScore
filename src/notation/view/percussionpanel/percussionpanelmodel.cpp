@@ -175,10 +175,11 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
 
 void PercussionPanelModel::finishEditing(bool discardChanges)
 {
+    setCurrentPanelMode(m_panelModeToRestore);
+
     if (!interaction()) {
         //! NOTE: Can happen if we close the project while editing the layout...
         setDrumset(nullptr);
-        setCurrentPanelMode(m_panelModeToRestore);
         return;
     }
 
@@ -190,7 +191,6 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
 
     if (discardChanges) {
         setDrumset(inst ? inst->drumset() : nullptr);
-        setCurrentPanelMode(m_panelModeToRestore);
         return;
     }
 
@@ -231,7 +231,6 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
     undoStack->commitChanges();
 
-    setCurrentPanelMode(m_panelModeToRestore);
     m_padListModel->focusLastActivePad();
 }
 
@@ -249,9 +248,10 @@ void PercussionPanelModel::setUpConnections()
 
         if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
             finishEditing(/*discardChanges*/ true);
+        } else {
+            setDrumset(drumset);
         }
 
-        setDrumset(drumset);
         updateSoundTitle(currentTrackId());
     };
 
@@ -318,8 +318,12 @@ void PercussionPanelModel::setDrumset(engraving::Drumset* drumset)
 
     const std::pair<Instrument*, Part*> instAndPart = getCurrentInstrumentAndPart();
     Instrument* inst = instAndPart.first;
-    if (inst && inst->drumset() != m_padListModel->drumset()) {
-        inst->setDrumset(m_padListModel->drumset());
+
+    const Drumset* instDrumset = inst ? inst->drumset() : nullptr;
+    const Drumset* panelDrumset = m_padListModel->drumset();
+
+    if (instDrumset && panelDrumset && *instDrumset != *panelDrumset) {
+        inst->setDrumset(panelDrumset);
     }
 }
 
