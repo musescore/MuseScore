@@ -86,6 +86,8 @@ public:
 
     QColor dropRectColor() const override;
 
+    muse::draw::Color noteInputPreviewColor() const override;
+
     int selectionProximity() const override;
     void setSelectionProximity(int proximity) override;
     muse::async::Channel<int> selectionProximityChanged() const override;

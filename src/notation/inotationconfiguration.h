@@ -81,6 +81,8 @@ public:
 
     virtual QColor dropRectColor() const = 0;
 
+    virtual muse::draw::Color noteInputPreviewColor() const = 0;
+
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proximity) = 0;
     virtual muse::async::Channel<int> selectionProximityChanged() const = 0;
