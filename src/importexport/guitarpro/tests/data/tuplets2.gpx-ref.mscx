@@ -76,14 +76,24 @@ solo concert</text>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            </Dynamic>
           <Tempo>
             <tempo>2.666667</tempo>
             <text><sym>metNoteQuarterUp</sym> = 160</text>
             </Tempo>
+          <Rest>
+            <visible>0</visible>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>dashed</subtype>
+            </BarLine>
+          </voice>
+        <voice>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Beam>
             <l1>22</l1>
             <l2>26</l2>
@@ -174,12 +184,19 @@ solo concert</text>
               <string>1</string>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <visible>0</visible>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
           <BarLine>
             <subtype>dashed</subtype>
             </BarLine>
           </voice>
-        </Measure>
-      <Measure>
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -226,8 +243,8 @@ solo concert</text>
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-6</l1>
-            <l2>-4</l2>
+            <l1>40</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -299,8 +316,8 @@ solo concert</text>
               </Number>
             </Tuplet>
           <Beam>
-            <l1>6</l1>
-            <l2>10</l2>
+            <l1>52</l1>
+            <l2>56</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -377,8 +394,8 @@ solo concert</text>
               </Number>
             </Tuplet>
           <Beam>
-            <l1>14</l1>
-            <l2>18</l2>
+            <l1>64</l1>
+            <l2>68</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -442,9 +459,6 @@ solo concert</text>
               </Note>
             </Chord>
           <endTuplet/>
-          <BarLine>
-            <subtype>dashed</subtype>
-            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -453,9 +467,19 @@ solo concert</text>
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Rest>
+            <visible>0</visible>
+            <durationType>measure</durationType>
+            <duration>5/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>dashed</subtype>
+            </BarLine>
+          </voice>
+        <voice>
           <Beam>
-            <l1>14</l1>
-            <l2>18</l2>
+            <l1>76</l1>
+            <l2>80</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -536,9 +560,6 @@ solo concert</text>
               <string>1</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>dashed</subtype>
-            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -547,6 +568,10 @@ solo concert</text>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>half</durationType>
             <Note>
@@ -612,10 +637,6 @@ solo concert</text>
           <StaffText>
             <text>Arm.12</text>
             </StaffText>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            </Dynamic>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
