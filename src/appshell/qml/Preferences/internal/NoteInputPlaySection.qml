@@ -138,7 +138,7 @@ BaseSection {
         id: playChordSymbolBox
         width: parent.width;
 
-        text: qsTrc("appshell/preferences", "Play chord symbols and Nashville numbers")
+        text: qsTrc("appshell/preferences", "Play chord symbols and Nashville numbers when selected")
 
         enabled: root.playNotesWhenEditing
 
