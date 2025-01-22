@@ -71,6 +71,8 @@ public:
 
     MOCK_METHOD(QColor, dropRectColor, (), (const, override));
 
+    MOCK_METHOD(muse::draw::Color, noteInputPreviewColor, (), (const, override));
+
     MOCK_METHOD(int, selectionProximity, (), (const, override));
     MOCK_METHOD(void, setSelectionProximity, (int), (override));
     MOCK_METHOD(muse::async::Channel<int>, selectionProximityChanged, (), (const, override));

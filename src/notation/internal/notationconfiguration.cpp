@@ -49,6 +49,8 @@ static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/c
 static const Settings::Key FOREGROUND_WALLPAPER_PATH(module_name, "ui/canvas/foreground/wallpaper");
 static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
 
+static const Settings::Key NOTE_INPUT_PREVIEW_COLOR(module_name, "ui/canvas/noteInputPreviewColor");
+
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
 static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
@@ -161,6 +163,10 @@ void NotationConfiguration::init()
     settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
         m_foregroundChanged.notify();
     });
+
+    settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
+    settings()->setCanBeManuallyEdited(NOTE_INPUT_PREVIEW_COLOR, true);
+    settings()->setDescription(NOTE_INPUT_PREVIEW_COLOR, muse::trc("notation", "Note input preview note color"));
 
     settings()->setDefaultValue(FOREGROUND_WALLPAPER_PATH, Val());
     settings()->valueChanged(FOREGROUND_WALLPAPER_PATH).onReceive(nullptr, [this](const Val&) {
@@ -531,6 +537,11 @@ QColor NotationConfiguration::dropRectColor() const
     QColor color = selectionColor();
     color.setAlpha(80);
     return color;
+}
+
+muse::draw::Color NotationConfiguration::noteInputPreviewColor() const
+{
+    return settings()->value(NOTE_INPUT_PREVIEW_COLOR).toQColor();
 }
 
 int NotationConfiguration::selectionProximity() const

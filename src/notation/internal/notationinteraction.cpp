@@ -432,6 +432,14 @@ void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, const
     shadowNote.setVoice(voice);
     shadowNote.setLineIndex(line);
 
+    Color color = configuration()->noteInputPreviewColor();
+
+    if (color.isValid() && color != configuration()->selectionColor()) {
+        shadowNote.setColor(color);
+    } else {
+        shadowNote.setColor(configuration()->selectionColor(voice));
+    }
+
     mu::engraving::SymId symNotehead;
 
     if (inputState.rest()) {

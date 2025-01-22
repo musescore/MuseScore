@@ -155,6 +155,11 @@ QColor NotationConfigurationStub::dropRectColor() const
     return QColor();
 }
 
+muse::draw::Color NotationConfigurationStub::noteInputPreviewColor() const
+{
+    return muse::draw::Color();
+}
+
 int NotationConfigurationStub::selectionProximity() const
 {
     return 1;
