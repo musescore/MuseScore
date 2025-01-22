@@ -38,9 +38,6 @@ BaseSection {
 
     property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
 
-    //property alias chordOptions: playChordBox.model
-    //property alias currentChordIndex: playChordBox.currentIndex
-
     signal playNotesWhenEditingChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
     signal playChordWhenEditingChangeRequested(bool play)
@@ -102,26 +99,11 @@ BaseSection {
         }
     }
 
-    // ComboBoxWithTitle {
-    //     id: playChordBox
-
-    //     title: qsTrc("appshell/preferences", "When adding chords to notes, play:")
-    //     columnWidth: root.columnWidth
-
-    //     navigation.name: "PlayChordsBox"
-    //     navigation.panel: root.navigation
-    //     navigation.row: 5
-
-    //     onValueEdited: function(newIndex, newValue) {
-    //         root.playChordWhenEditingChangeRequested(newIndex)
-    //     }
-    // }
-
     CheckBox {
         id: playChordBox
         width: parent.width;
 
-        text: qsTrc("appshell/preferences", "When adding chords to notes, play:")
+        text: qsTrc("appshell/preferences", "Play chord when editing")
 
         enabled: root.playNotesWhenEditing
 
