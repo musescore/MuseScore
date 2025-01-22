@@ -36,6 +36,8 @@ BaseSection {
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
 
+    property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
+
     //property alias chordOptions: playChordBox.model
     //property alias currentChordIndex: playChordBox.currentIndex
 
@@ -152,8 +154,6 @@ BaseSection {
     CheckBox {
         id: playNotesOnMidiInputBox
         width: parent.width
-
-        enabled: root.noteInputModelRef.enableMidiInput
 
         text: qsTrc("appshell/preferences", "Play MIDI input")
 

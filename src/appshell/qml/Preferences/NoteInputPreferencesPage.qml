@@ -82,6 +82,8 @@ PreferencesPage {
             playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing          
             playNotesOnMidiInput: noteInputModel.playNotesOnMidiInput
 
+            playNotesOnMidiInputBoxEnabled: noteInputModel.enableMidiInput && noteInputModel.playNotesWhenEditing
+
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
