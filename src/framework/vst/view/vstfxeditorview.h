@@ -43,7 +43,7 @@ signals:
 
 private:
     bool isAbleToWrapPlugin() const override;
-    VstPluginPtr getPluginPtr() const override;
+    IVstInstancePtr getPluginPtr() const override;
 
     muse::audio::AudioFxChainOrder m_chainOrder = -1;
 };

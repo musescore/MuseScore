@@ -28,7 +28,6 @@
 #include <QScreen>
 
 #include "vsttypes.h"
-#include "internal/vstplugin.h"
 
 #include "async/async.h"
 #include "log.h"
@@ -124,13 +123,13 @@ void AbstractVstEditorView::wrapPluginView()
     }
 }
 
-void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
+void AbstractVstEditorView::attachView(IVstInstancePtr instance)
 {
-    if (!pluginPtr) {
+    if (!instance) {
         return;
     }
 
-    m_view = pluginPtr->createView();
+    m_view = instance->createView();
     if (!m_view) {
         return;
     }

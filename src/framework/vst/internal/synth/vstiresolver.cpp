@@ -67,5 +67,5 @@ SoundPresetList VstiResolver::resolveSoundPresets(const muse::audio::AudioResour
 
 void VstiResolver::clearSources()
 {
-    pluginsRegister()->unregisterAllInstrPlugin();
+    instancesRegister()->unregisterAllInstrPlugin();
 }

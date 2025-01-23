@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "ivstpluginsregister.h"
+#include "../ivstinstancesregister.h"
 
 class QWidget;
 
@@ -41,7 +41,7 @@ class AbstractVstEditorView : public uicomponents::TopLevelDialog, public Steinb
     Q_PROPERTY(int trackId READ trackId WRITE setTrackId NOTIFY trackIdChanged)
     Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
 
-    INJECT(IVstPluginsRegister, pluginsRegister)
+    muse::Inject<IVstInstancesRegister> instancesRegister;
 
 public:
     AbstractVstEditorView(QWidget* parent = nullptr);
@@ -61,12 +61,12 @@ signals:
 
 protected:
     virtual bool isAbleToWrapPlugin() const = 0;
-    virtual VstPluginPtr getPluginPtr() const = 0;
+    virtual IVstInstancePtr getPluginPtr() const = 0;
 
     void wrapPluginView();
 
 private:
-    void attachView(VstPluginPtr pluginPtr);
+    void attachView(IVstInstancePtr instance);
 
     void updateViewGeometry();
     void moveViewToMainWindowCenter();
@@ -79,7 +79,7 @@ private:
 
     FIDString currentPlatformUiType() const;
 
-    VstPluginPtr m_pluginPtr = nullptr;
+    IVstInstancePtr m_pluginPtr = nullptr;
     PluginViewPtr m_view = nullptr;
 
     muse::audio::TrackId m_trackId = -1;
