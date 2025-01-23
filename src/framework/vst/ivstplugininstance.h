@@ -27,12 +27,15 @@
 #include "audio/audiotypes.h"
 
 namespace muse::vst {
-class IVstInstance
+class IVstPluginInstance
 {
 public:
 
+    virtual ~IVstPluginInstance() = default;
+
     virtual const muse::audio::AudioResourceId& resourceId() const = 0;
     virtual const std::string& name() const = 0;
+    virtual VstPluginInstanceId id() const = 0;
 
     virtual bool isLoaded() const = 0;
     virtual async::Notification loadingCompleted() const = 0;

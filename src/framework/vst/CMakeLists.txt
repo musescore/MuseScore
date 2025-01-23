@@ -33,7 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ivstmodulesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/ivstconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/ivstinstancesregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/ivstinstance.h
+    ${CMAKE_CURRENT_LIST_DIR}/ivstplugininstance.h
     ${CMAKE_CURRENT_LIST_DIR}/vsterrors.h
     ${CMAKE_CURRENT_LIST_DIR}/vsttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
@@ -45,8 +45,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstancesregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstance.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstance.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstplugininstance.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstplugininstance.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstcomponenthandler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstcomponenthandler.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstaudioclient.cpp

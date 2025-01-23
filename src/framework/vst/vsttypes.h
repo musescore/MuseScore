@@ -44,8 +44,9 @@
 #include "log.h"
 
 namespace muse::vst {
-class IVstInstance;
-using IVstInstancePtr = std::shared_ptr<IVstInstance>;
+class IVstPluginInstance;
+using IVstPluginInstancePtr = std::shared_ptr<IVstPluginInstance>;
+using VstPluginInstanceId = int;
 using ClassInfo = VST3::Hosting::ClassInfo;
 
 using PluginId = std::string;

@@ -22,16 +22,20 @@
 
 #include "vstinstancesregister.h"
 
-#include "log.h"
+#include "global/containers.h"
 
-#include "vstinstance.h"
+#include "vstplugininstance.h"
+
+#include "log.h"
 
 using namespace muse::vst;
 using namespace muse::audio;
 
-IVstInstancePtr VstInstancesRegister::makeAndRegisterInstrPlugin(const muse::audio::TrackId trackId, const AudioResourceId &resourceId)
+IVstPluginInstancePtr VstInstancesRegister::makeAndRegisterInstrPlugin(const AudioResourceId& resourceId,
+                                                                       const muse::audio::TrackId trackId)
 {
-    std::shared_ptr<VstInstance> instance = std::make_shared<VstInstance>(resourceId);
+    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId);
+
     registerInstrPlugin(trackId, instance);
 
     instance->load();
@@ -39,69 +43,79 @@ IVstInstancePtr VstInstancesRegister::makeAndRegisterInstrPlugin(const muse::aud
     return instance;
 }
 
-IVstInstancePtr VstInstancesRegister::makeAndRegisterFxPlugin(const muse::audio::TrackId trackId,
-                                                              const muse::audio::AudioResourceId& resourceId,
-                                                              const muse::audio::AudioFxChainOrder chainOrder)
-{
-    std::shared_ptr<VstInstance> instance = std::make_shared<VstInstance>(resourceId);
-    registerFxPlugin(trackId, resourceId, chainOrder, instance);
-
-    instance->load();
-
-    return instance;
-}
-
-IVstInstancePtr VstInstancesRegister::makeAndRegisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+IVstPluginInstancePtr VstInstancesRegister::makeAndRegisterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                                                    const muse::audio::TrackId trackId,
                                                                     const muse::audio::AudioFxChainOrder chainOrder)
 {
-    std::shared_ptr<VstInstance> instance = std::make_shared<VstInstance>(resourceId);
-    registerMasterFxPlugin(resourceId, chainOrder, instance);
+    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId);
+
+    registerFxPlugin(trackId, chainOrder, instance);
 
     instance->load();
 
     return instance;
 }
 
-void VstInstancesRegister::registerInstrPlugin(const muse::audio::TrackId trackId, IVstInstancePtr instance)
+IVstPluginInstancePtr VstInstancesRegister::makeAndRegisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                                                          const muse::audio::AudioFxChainOrder chainOrder)
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
+    std::shared_ptr<VstPluginInstance> instance = std::make_shared<VstPluginInstance>(resourceId);
 
-    std::lock_guard lock(m_mutex);
+    registerMasterFxPlugin(chainOrder, instance);
 
-    m_vstiPluginsMap.insert_or_assign(trackId, instance);
+    instance->load();
+
+    return instance;
 }
 
-void VstInstancesRegister::registerFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
-                                            const AudioFxChainOrder chainOrder, IVstInstancePtr instance)
+void VstInstancesRegister::registerInstrPlugin(const muse::audio::TrackId trackId, IVstPluginInstancePtr instance)
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
+    IF_ASSERT_FAILED(instance) {
+        return;
+    }
 
     std::lock_guard lock(m_mutex);
 
-    VstFxInstancesMap& instancesMap = m_vstFxPluginsMap[trackId];
-    instancesMap.insert_or_assign(std::make_pair(resourceId, chainOrder), instance);
+    m_instances.insert_or_assign({ Type::Instrument, instance->resourceId(), trackId, 0 }, instance);
 }
 
-void VstInstancesRegister::registerMasterFxPlugin(const muse::audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder,
-                                                  IVstInstancePtr instance)
+void VstInstancesRegister::registerFxPlugin(const muse::audio::TrackId trackId,
+                                            const AudioFxChainOrder chainOrder,
+                                            IVstPluginInstancePtr instance)
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
+    IF_ASSERT_FAILED(instance) {
+        return;
+    }
 
     std::lock_guard lock(m_mutex);
 
-    m_masterPluginsMap.insert_or_assign(std::make_pair(resourceId, chainOrder), instance);
+    m_instances.insert_or_assign({ Type::Effect, instance->resourceId(), trackId, chainOrder }, instance);
 }
 
-IVstInstancePtr VstInstancesRegister::instrumentPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId) const
+void VstInstancesRegister::registerMasterFxPlugin(const AudioFxChainOrder chainOrder, IVstPluginInstancePtr instance)
 {
-    ONLY_MAIN_THREAD(threadSecurer);
+    registerFxPlugin(-1, chainOrder, instance);
+}
 
+IVstPluginInstancePtr VstInstancesRegister::instanceById(const VstPluginInstanceId id) const
+{
+    std::lock_guard lock(m_mutex);
+    for (const auto& p : m_instances) {
+        if (p.second->id() == id) {
+            return p.second;
+        }
+    }
+    return nullptr;
+}
+
+IVstPluginInstancePtr VstInstancesRegister::instrumentPlugin(const muse::audio::AudioResourceId& resourceId,
+                                                             const muse::audio::TrackId trackId) const
+{
     std::lock_guard lock(m_mutex);
 
-    auto search = m_vstiPluginsMap.find(trackId);
-    if (search != m_vstiPluginsMap.cend()
-        && search->second->resourceId() == resourceId) {
-        return search->second;
+    auto it = m_instances.find({ Type::Instrument, resourceId, trackId, 0 });
+    if (it != m_instances.end()) {
+        return it->second;
     }
 
     LOGE() << "Unable to find instrument plugin, trackId: " << trackId
@@ -110,110 +124,85 @@ IVstInstancePtr VstInstancesRegister::instrumentPlugin(const muse::audio::TrackI
     return nullptr;
 }
 
-IVstInstancePtr VstInstancesRegister::fxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
-                                               const AudioFxChainOrder chainOrder) const
+IVstPluginInstancePtr VstInstancesRegister::fxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                                     const muse::audio::TrackId trackId,
+                                                     const AudioFxChainOrder chainOrder) const
 {
-    ONLY_MAIN_THREAD(threadSecurer);
-
     std::lock_guard lock(m_mutex);
 
-    auto mapSearch = m_vstFxPluginsMap.find(trackId);
-    if (mapSearch == m_vstFxPluginsMap.end()) {
-        LOGE() << "Unable to find fx plugin, trackId: " << trackId
-               << " , resourceId: " << resourceId;
-
-        return nullptr;
+    auto it = m_instances.find({ Type::Effect, resourceId, trackId, chainOrder });
+    if (it != m_instances.end()) {
+        return it->second;
     }
 
-    const VstFxInstancesMap& instancesMap = mapSearch->second;
+    LOGE() << "Unable to find fx plugin, trackId: " << trackId
+           << ", resourceId: " << resourceId
+           << ", chainOrder: " << chainOrder;
 
-    auto pluginSearch = instancesMap.find({ resourceId, chainOrder });
-    if (pluginSearch == instancesMap.end()) {
-        LOGE() << "Unable to find fx plugin, trackId: " << trackId
-               << " , resourceId: " << resourceId;
-
-        return nullptr;
-    }
-
-    return pluginSearch->second;
+    return nullptr;
 }
 
-IVstInstancePtr VstInstancesRegister::masterFxPlugin(const muse::audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder) const
+IVstPluginInstancePtr VstInstancesRegister::masterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                                           const AudioFxChainOrder chainOrder) const
 {
-    ONLY_MAIN_THREAD(threadSecurer);
-
     std::lock_guard lock(m_mutex);
 
-    auto pluginSearch = m_masterPluginsMap.find({ resourceId, chainOrder });
-    if (pluginSearch == m_masterPluginsMap.end()) {
-        LOGE() << "Unable to find master plugin, resourceId: " << resourceId << ", chainOrder: " << chainOrder;
-
-        return nullptr;
+    auto it = m_instances.find({ Type::Effect, resourceId, -1, chainOrder });
+    if (it != m_instances.end()) {
+        return it->second;
     }
 
-    return pluginSearch->second;
+    LOGE() << "Unable to find master fx plugin"
+           << ", resourceId: " << resourceId
+           << ", chainOrder: " << chainOrder;
+
+    return nullptr;
 }
 
-void VstInstancesRegister::unregisterInstrPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId)
+void VstInstancesRegister::unregisterById(const VstPluginInstanceId id)
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
-
     std::lock_guard lock(m_mutex);
 
-    auto search = m_vstiPluginsMap.find(trackId);
-    if (search != m_vstiPluginsMap.end()
-        && search->second->resourceId() == resourceId) {
-        m_vstiPluginsMap.erase(search);
-        return;
-    }
-
-    LOGE() << "Unable to find plugin, trackId: " << trackId
-           << " , resourceId: " << resourceId;
-    return;
+    muse::remove_if(m_instances, [id](const auto& p) {
+        return p.second->id() == id;
+    });
 }
 
-void VstInstancesRegister::unregisterFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
+void VstInstancesRegister::unregisterInstrPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::TrackId trackId)
+{
+    std::lock_guard lock(m_mutex);
+
+    m_instances.erase({ Type::Instrument, resourceId, trackId, 0 });
+}
+
+void VstInstancesRegister::unregisterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                              const muse::audio::TrackId trackId,
                                               const AudioFxChainOrder chainOrder)
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
-
     std::lock_guard lock(m_mutex);
 
-    auto mapSearch = m_vstFxPluginsMap.find(trackId);
-    if (mapSearch == m_vstFxPluginsMap.end()) {
-        LOGE() << "Unable to find plugin, trackId: " << trackId
-               << " , resourceId: " << resourceId;
-        return;
-    }
-
-    VstFxInstancesMap& instancesMap = mapSearch->second;
-    instancesMap.erase({ resourceId, chainOrder });
+    m_instances.erase({ Type::Effect, resourceId, trackId, chainOrder });
 }
 
 void VstInstancesRegister::unregisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder)
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
-
-    std::lock_guard lock(m_mutex);
-
-    m_masterPluginsMap.erase({ resourceId, chainOrder });
+    unregisterFxPlugin(resourceId, -1, chainOrder);
 }
 
 void VstInstancesRegister::unregisterAllInstrPlugin()
 {
-    ONLY_MAIN_THREAD(threadSecurer);
-
     std::lock_guard lock(m_mutex);
 
-    m_vstiPluginsMap.clear();
+    muse::remove_if(m_instances, [](const auto& p) {
+        return p.first.type == Type::Instrument;
+    });
 }
 
 void VstInstancesRegister::unregisterAllFx()
 {
-    ONLY_MAIN_THREAD(threadSecurer);
-
     std::lock_guard lock(m_mutex);
 
-    m_vstFxPluginsMap.clear();
-    m_masterPluginsMap.clear();
+    muse::remove_if(m_instances, [](const auto& p) {
+        return p.first.type == Type::Effect;
+    });
 }

@@ -24,7 +24,7 @@
 
 #include "audioplugins/audiopluginstypes.h"
 
-#include "../ivstinstance.h"
+#include "../ivstplugininstance.h"
 #include "../vsttypes.h"
 
 namespace muse::vst {
@@ -34,7 +34,7 @@ public:
     VstAudioClient() = default;
     ~VstAudioClient();
 
-    void init(audioplugins::AudioPluginType type, IVstInstancePtr instance, muse::audio::audioch_t audioChannelsCount = 2);
+    void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance, muse::audio::audioch_t audioChannelsCount = 2);
 
     void loadSupportedParams();
 
@@ -85,7 +85,7 @@ private:
     bool m_isActive = false;
     muse::audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0
 
-    IVstInstancePtr m_pluginPtr = nullptr;
+    IVstPluginInstancePtr m_pluginPtr = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;
 
     SamplesInfo m_samplesInfo;
