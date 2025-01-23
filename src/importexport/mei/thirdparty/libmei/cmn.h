@@ -36,7 +36,7 @@ namespace libmei {
  * simultaneously, usually from lowest to highest.
  * Sometimes called a "roll".
  **/
-class Arpeg : public Element, public AttLabelled, public AttTyped, public AttArpegLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartId, public AttArpegVis, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttLineRendBase, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Arpeg : public Element, public AttLabelled, public AttTyped, public AttArpegLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartId, public AttArpegVis, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttLineRendBase, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Arpeg();
         virtual ~Arpeg();
@@ -176,7 +176,7 @@ public:
 };
 
 /** A half-measure repeat in any meter. **/
-class HalfmRpt : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttDurationLog, public AttColor, public AttExpandable, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class HalfmRpt : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttDurationAdditive, public AttColor, public AttExpandable, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         HalfmRpt();
         virtual ~HalfmRpt();
@@ -229,7 +229,7 @@ public:
 };
 
 /** Complete measure rest in any meter. **/
-class MRest : public Element, public AttLabelled, public AttTyped, public AttCue, public AttDurationAdditive, public AttLayerIdent, public AttStaffIdent, public AttColor, public AttCutout, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class MRest : public Element, public AttLabelled, public AttTyped, public AttCue, public AttDurationAdditive, public AttLayerIdent, public AttStaffIdent, public AttColor, public AttCutout, public AttExtSymAuth, public AttExtSymNames, public AttStaffLocPitched, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         MRest();
         virtual ~MRest();
@@ -269,10 +269,10 @@ public:
 };
 
 /**
- * Multiple measures of rest compressed into a single symbol, frequently found in
+ * Multiple full measure rests compressed into a single bar, frequently found in
  * performer parts.
  **/
-class MultiRest : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttNumbered, public AttMultiRestVis, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttNumberPlacement, public AttTypography, public AttWidth {
+class MultiRest : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttNumbered, public AttMultiRestVis, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttNumberPlacement, public AttStaffLocPitched, public AttTypography, public AttWidth {
     public:
         MultiRest();
         virtual ~MultiRest();
@@ -341,7 +341,7 @@ public:
  * An instruction expressed as a combination of text and symbols – segno and coda –
  * typically above, below, or between staves, but not on the staff.
  **/
-class RepeatMark : public Element, public AttLabelled, public AttTyped, public AttLang, public AttRepeatMarkLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class RepeatMark : public Element, public AttLabelled, public AttTyped, public AttLang, public AttRepeatMarkLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttExtender, public AttLineRend, public AttLineRendBase, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         RepeatMark();
         virtual ~RepeatMark();

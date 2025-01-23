@@ -137,7 +137,7 @@ void ChordTable::Reset()
 }
 
 F::F() :
-    Element("f"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("f"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttColor(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -157,6 +157,7 @@ bool F::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
@@ -181,6 +182,7 @@ bool F::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
@@ -202,6 +204,7 @@ void F::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetColor();
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
@@ -243,7 +246,7 @@ void Fb::Reset()
 }
 
 Harm::Harm() :
-    Element("harm"), AttLabelled(), AttTyped(), AttHarmLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttHarmVis(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
+    Element("harm"), AttLabelled(), AttTyped(), AttHarmLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttHarmVis(), AttColor(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
 {
 }
 
@@ -265,6 +268,7 @@ bool Harm::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadHarmVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
@@ -292,6 +296,7 @@ bool Harm::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
     hasAttribute = (WriteHarmVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
@@ -316,6 +321,7 @@ void Harm::Reset()
     ResetStartId();
     ResetTimestamp2Log();
     ResetHarmVis();
+    ResetColor();
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();

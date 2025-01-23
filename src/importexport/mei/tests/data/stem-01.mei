@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -68,8 +68,8 @@
                   <measure xml:id="muimas1" right="end" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="nekme74" dur="4" pname="e" oct="4" stem.len="0.000000" />
-                           <note xml:id="n2zero2" dur="4" pname="e" oct="5" stem.len="0.000000" />
+                           <note xml:id="nekme74" dur="4" pname="e" oct="4" stem.len="0" />
+                           <note xml:id="n2zero2" dur="4" pname="e" oct="5" stem.len="0" />
                            <chord xml:id="c14ojaey" type="mscore-beam-none" dur="8">
                               <note xml:id="n1xjn0sp" pname="e" oct="5" />
                               <note xml:id="n15p4jjf" pname="g" oct="5" />

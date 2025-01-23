@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -50,8 +50,8 @@
                         <layer xml:id="m1s1l1" n="1">
                            <note xml:id="s1l1_t0_1" dur="4" pname="c" oct="6" />
                            <note xml:id="s1l1_t1_4" dur="4" pname="b" oct="5" />
-                           <note xml:id="s1l1_t1_2" dur="4" pname="a" oct="4" oct.ges="5" />
-                           <note xml:id="s1l1_t3_4" dur="4" pname="b" oct="4" oct.ges="5" />
+                           <note xml:id="s1l1_t1_2" oct.ges="5" dur="4" pname="a" oct="4" />
+                           <note xml:id="s1l1_t3_4" oct.ges="5" dur="4" pname="b" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m1s2" n="2">
@@ -64,10 +64,10 @@
                   <measure xml:id="m2" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <note xml:id="s1l1_t1_1" dur="4" pname="c" oct="5" oct.ges="6" />
-                           <note xml:id="s1l1_t5_4" dur="4" pname="d" oct="5" oct.ges="6" />
-                           <note xml:id="s1l1_t3_2" dur="4" pname="e" oct="4" oct.ges="6" />
-                           <note xml:id="s1l1_t7_4" dur="4" pname="f" oct="4" oct.ges="6" />
+                           <note xml:id="s1l1_t1_1" oct.ges="6" dur="4" pname="c" oct="5" />
+                           <note xml:id="s1l1_t5_4" oct.ges="6" dur="4" pname="d" oct="5" />
+                           <note xml:id="s1l1_t3_2" oct.ges="6" dur="4" pname="e" oct="4" />
+                           <note xml:id="s1l1_t7_4" oct.ges="6" dur="4" pname="f" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m2s2" n="2">
@@ -80,9 +80,9 @@
                   <measure xml:id="m3" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="s1l1_t2_1" dur="4" pname="g" oct="4" oct.ges="6" />
-                           <note xml:id="s1l1_t9_4" dur="4" pname="a" oct="4" oct.ges="6" />
-                           <note xml:id="s1l1_t5_2" dur="2" pname="b" oct="4" oct.ges="6" />
+                           <note xml:id="s1l1_t2_1" oct.ges="6" dur="4" pname="g" oct="4" />
+                           <note xml:id="s1l1_t9_4" oct.ges="6" dur="4" pname="a" oct="4" />
+                           <note xml:id="s1l1_t5_2" oct.ges="6" dur="2" pname="b" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m3s2" n="2">
@@ -101,8 +101,8 @@
                         <layer xml:id="m4s2l1" n="1">
                            <note xml:id="s2l1_t3_1" dur="4" pname="c" oct="2" />
                            <note xml:id="s2l1_t13_4" dur="4" pname="d" oct="2" />
-                           <note xml:id="s2l1_t7_2" dur="4" pname="e" oct="3" oct.ges="2" />
-                           <note xml:id="s2l1_t15_4" dur="4" pname="d" oct="3" oct.ges="2" />
+                           <note xml:id="s2l1_t7_2" oct.ges="2" dur="4" pname="e" oct="3" />
+                           <note xml:id="s2l1_t15_4" oct.ges="2" dur="4" pname="d" oct="3" />
                         </layer>
                      </staff>
                      <octave xml:id="m4ot1" staff="2" dis="8" dis.place="below" startid="#s2l1_t7_2" lform="dotted" endid="#s2l1_t17_4" />
@@ -115,10 +115,10 @@
                      </staff>
                      <staff xml:id="m5s2" n="2">
                         <layer xml:id="m5s2l1" n="1">
-                           <note xml:id="s2l1_t4_1" dur="4" pname="c" oct="3" oct.ges="2" />
-                           <note xml:id="s2l1_t17_4" dur="4" pname="b" oct="2" oct.ges="1" />
-                           <note xml:id="s2l1_t9_2" dur="4" pname="a" oct="3" oct.ges="1" />
-                           <note xml:id="s2l1_t19_4" dur="4" pname="g" oct="3" oct.ges="1" />
+                           <note xml:id="s2l1_t4_1" oct.ges="2" dur="4" pname="c" oct="3" />
+                           <note xml:id="s2l1_t17_4" oct.ges="1" dur="4" pname="b" oct="2" />
+                           <note xml:id="s2l1_t9_2" oct.ges="1" dur="4" pname="a" oct="3" />
+                           <note xml:id="s2l1_t19_4" oct.ges="1" dur="4" pname="g" oct="3" />
                         </layer>
                      </staff>
                      <octave xml:id="m5ot1" staff="2" dis="15" dis.place="below" startid="#s2l1_t9_2" lendsym="none" endid="#s2l1_t11_2" />
@@ -131,22 +131,22 @@
                      </staff>
                      <staff xml:id="m6s2" n="2">
                         <layer xml:id="m6s2l1" n="1">
-                           <note xml:id="s2l1_t5_1" dur="4" pname="f" oct="3" oct.ges="1" />
-                           <note xml:id="s2l1_t21_4" dur="4" pname="e" oct="3" oct.ges="1" />
-                           <note xml:id="s2l1_t11_2" dur="2" pname="d" oct="3" oct.ges="1" />
+                           <note xml:id="s2l1_t5_1" oct.ges="1" dur="4" pname="f" oct="3" />
+                           <note xml:id="s2l1_t21_4" oct.ges="1" dur="4" pname="e" oct="3" />
+                           <note xml:id="s2l1_t11_2" oct.ges="1" dur="2" pname="d" oct="3" />
                         </layer>
                      </staff>
                   </measure>
                   <measure xml:id="m7" right="end" n="7">
                      <staff xml:id="m7s1" n="1">
                         <layer xml:id="m7s1l1" n="1">
-                           <note xml:id="s1l1_t6_1" dur="2" pname="c" oct="4" oct.ges="7" />
+                           <note xml:id="s1l1_t6_1" oct.ges="7" dur="2" pname="c" oct="4" />
                            <rest xml:id="s1l1_t13_2" dur="2" />
                         </layer>
                      </staff>
                      <staff xml:id="m7s2" n="2">
                         <layer xml:id="m7s2l1" n="1">
-                           <note xml:id="s2l1_t6_1" dur="2" pname="c" oct="4" oct.ges="1" />
+                           <note xml:id="s2l1_t6_1" oct.ges="1" dur="2" pname="c" oct="4" />
                            <rest xml:id="s2l1_t13_2" dur="2" />
                         </layer>
                      </staff>

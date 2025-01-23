@@ -69,6 +69,9 @@ public:
     std::string BulgeToStr(const data_BULGE &data) const;
     data_BULGE StrToBulge(const std::string &value, bool logWarning = true) const;
 
+    std::string DegreesToStr(data_DEGREES data) const;
+    data_DEGREES StrToDegrees(const std::string &value, bool logWarning = true) const;
+
     std::string DurationToStr(data_DURATION data) const;
     data_DURATION StrToDuration(const std::string &value, bool = true) const;
 

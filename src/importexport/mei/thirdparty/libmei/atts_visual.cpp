@@ -623,6 +623,61 @@ bool AttSpaceVis::HasCompressable() const
 }
 
 //----------------------------------------------------------------------------
+// AttStaffDefVis
+//----------------------------------------------------------------------------
+
+AttStaffDefVis::AttStaffDefVis() : Att()
+{
+    ResetStaffDefVis();
+}
+
+void AttStaffDefVis::ResetStaffDefVis()
+{
+    m_linesColor = "";
+    m_linesVisible = BOOLEAN_NONE;
+}
+
+bool AttStaffDefVis::ReadStaffDefVis(pugi::xml_node element, bool removeAttr)
+{
+    bool hasAttribute = false;
+    if (element.attribute("lines.color")) {
+        this->SetLinesColor(StrToStr(element.attribute("lines.color").value()));
+        if (removeAttr) element.remove_attribute("lines.color");
+        hasAttribute = true;
+    }
+    if (element.attribute("lines.visible")) {
+        this->SetLinesVisible(StrToBoolean(element.attribute("lines.visible").value()));
+        if (removeAttr) element.remove_attribute("lines.visible");
+        hasAttribute = true;
+    }
+    return hasAttribute;
+}
+
+bool AttStaffDefVis::WriteStaffDefVis(pugi::xml_node element)
+{
+    bool wroteAttribute = false;
+    if (this->HasLinesColor()) {
+        element.append_attribute("lines.color") = StrToStr(this->GetLinesColor()).c_str();
+        wroteAttribute = true;
+    }
+    if (this->HasLinesVisible()) {
+        element.append_attribute("lines.visible") = BooleanToStr(this->GetLinesVisible()).c_str();
+        wroteAttribute = true;
+    }
+    return wroteAttribute;
+}
+
+bool AttStaffDefVis::HasLinesColor() const
+{
+    return (m_linesColor != "");
+}
+
+bool AttStaffDefVis::HasLinesVisible() const
+{
+    return (m_linesVisible != BOOLEAN_NONE);
+}
+
+//----------------------------------------------------------------------------
 // AttStaffGrpVis
 //----------------------------------------------------------------------------
 

@@ -85,7 +85,7 @@ using namespace mu::engraving;
 
 #define SCOREDEF_IDX -1
 
-#define MEI_BASIC_VERSION "5.0+basic"
+#define MEI_BASIC_VERSION "5.1+basic"
 
 #define MEI_FB_HARM "fb-harm"
 
@@ -128,7 +128,7 @@ bool MeiImporter::read(const muse::io::path_t& path)
 
     pugi::xml_attribute meiVersion = root.attribute("meiversion");
     if (!meiVersion || String(meiVersion.value()) != String(MEI_BASIC_VERSION)) {
-        Convert::logs.push_back(String("The MEI file does not seem to be a MEI basic version '%1' file").arg(String(MEI_BASIC_VERSION)));
+        Convert::logs.push_back(String("The MEI file does not seem to be a MEI Basic version '%1' file").arg(String(MEI_BASIC_VERSION)));
     }
 
     bool success = true;
@@ -1994,7 +1994,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     Convert::colorFromMEI(accid, meiAccid);
     this->readXmlId(accid, meiAccid.m_xmlId);
     accid->setAccidentalType(pitchSt.accidType);
-    //accid->setBracket(AccidentalBracket::BRACKET); // Not supported in MEI-Basic
+    accid->setBracket(pitchSt.accidBracket);
     accid->setRole(pitchSt.accidRole);
     note->add(accid);
 

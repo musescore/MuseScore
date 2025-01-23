@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -53,7 +53,7 @@
                            <mRest xml:id="magjrcq" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="rcffupx" func="segno" tstamp="0.000000" />
+                     <repeatMark xml:id="rcffupx" func="segno" tstamp="0" />
                   </measure>
                   <measure xml:id="m147n12q" n="3">
                      <staff xml:id="m3s1" n="1">
@@ -61,7 +61,7 @@
                            <mRest xml:id="m12b8re7" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r5pepc5" func="coda" tstamp="0.000000" />
+                     <repeatMark xml:id="r5pepc5" func="coda" tstamp="0" />
                   </measure>
                   <measure xml:id="m1wtunea" n="4">
                      <staff xml:id="m4s1" n="1">
@@ -69,7 +69,7 @@
                            <mRest xml:id="m14ylxt4" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1g457ok" func="fine" tstamp="0.000000" />
+                     <repeatMark xml:id="r1g457ok" func="fine" tstamp="0" />
                   </measure>
                   <measure xml:id="mh0e6nx" n="5">
                      <staff xml:id="m5s1" n="1">
@@ -84,7 +84,7 @@
                            <mRest xml:id="mlv5uz7" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1f7agup" type="mscore-marker-to-coda" func="coda" tstamp="0.000000">To Coda</repeatMark>
+                     <repeatMark xml:id="r1f7agup" type="mscore-marker-to-coda" func="coda" tstamp="0">To Coda</repeatMark>
                   </measure>
                   <measure xml:id="moy1md4" n="7">
                      <staff xml:id="m7s1" n="1">
@@ -99,7 +99,7 @@
                            <mRest xml:id="mz96drd" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="rqzyhoe" func="daCapo" tstamp="0.000000" />
+                     <repeatMark xml:id="rqzyhoe" func="daCapo" tstamp="0" />
                   </measure>
                   <measure xml:id="mglhatt" n="9">
                      <staff xml:id="m9s1" n="1">
@@ -114,7 +114,7 @@
                            <mRest xml:id="m1wtn1lz" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r8bjppz" type="mscore-jump-dc-al-fine" func="daCapo" tstamp="0.000000">D.C. al Fine</repeatMark>
+                     <repeatMark xml:id="r8bjppz" type="mscore-jump-dc-al-fine" func="daCapo" tstamp="0">D.C. al Fine</repeatMark>
                   </measure>
                   <measure xml:id="m8vs4ge" n="11">
                      <staff xml:id="m11s1" n="1">
@@ -136,7 +136,7 @@
                            <mRest xml:id="m19j03ff" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1mmym64" type="mscore-jump-dc-al-coda" func="daCapo" tstamp="0.000000">D.C. al Coda</repeatMark>
+                     <repeatMark xml:id="r1mmym64" type="mscore-jump-dc-al-coda" func="daCapo" tstamp="0">D.C. al Coda</repeatMark>
                   </measure>
                   <measure xml:id="mia16k9" n="14">
                      <staff xml:id="m14s1" n="1">
@@ -151,7 +151,7 @@
                            <mRest xml:id="m1qxqnfq" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r11iw6ja" type="mscore-jump-ds-al-coda" func="dalSegno" tstamp="0.000000">D.S. al Coda</repeatMark>
+                     <repeatMark xml:id="r11iw6ja" type="mscore-jump-ds-al-coda" func="dalSegno" tstamp="0">D.S. al Coda</repeatMark>
                   </measure>
                   <measure xml:id="ma0vwly" n="16">
                      <staff xml:id="m16s1" n="1">
@@ -166,7 +166,7 @@
                            <mRest xml:id="mul8jwz" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1mbewl2" type="mscore-jump-ds-al-fine" func="dalSegno" tstamp="0.000000">D.S. al Fine</repeatMark>
+                     <repeatMark xml:id="r1mbewl2" type="mscore-jump-ds-al-fine" func="dalSegno" tstamp="0">D.S. al Fine</repeatMark>
                   </measure>
                   <measure xml:id="mtaqn7c" n="18">
                      <staff xml:id="m18s1" n="1">
@@ -181,7 +181,7 @@
                            <mRest xml:id="mp0hmii" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r19olli1" func="dalSegno" tstamp="0.000000" />
+                     <repeatMark xml:id="r19olli1" func="dalSegno" tstamp="0" />
                   </measure>
                   <measure xml:id="m1879ew5" n="20">
                      <staff xml:id="m20s1" n="1">
@@ -196,7 +196,7 @@
                            <mRest xml:id="m1ohl0o3" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r19gaqv8" type="mscore-marker-segno-variation" func="segno" tstamp="0.000000" />
+                     <repeatMark xml:id="r19gaqv8" type="mscore-marker-segno-variation" func="segno" tstamp="0" />
                   </measure>
                   <measure xml:id="mv2kkx2" n="22">
                      <staff xml:id="m22s1" n="1">
@@ -204,7 +204,7 @@
                            <mRest xml:id="mx6fj46" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r27n4ba" type="mscore-marker-varied-coda" func="coda" tstamp="0.000000" />
+                     <repeatMark xml:id="r27n4ba" type="mscore-marker-varied-coda" func="coda" tstamp="0" />
                   </measure>
                   <measure xml:id="m1p8go0p" n="23">
                      <staff xml:id="m23s1" n="1">
@@ -226,7 +226,7 @@
                            <mRest xml:id="mf88e0i" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="rb0e9jx" type="mscore-jump-dc-al-double-coda" func="daCapo" tstamp="0.000000">D.C. al Doppia Coda</repeatMark>
+                     <repeatMark xml:id="rb0e9jx" type="mscore-jump-dc-al-double-coda" func="daCapo" tstamp="0">D.C. al Doppia Coda</repeatMark>
                   </measure>
                   <measure xml:id="m4wju9q" n="26">
                      <staff xml:id="m26s1" n="1">
@@ -248,7 +248,7 @@
                            <mRest xml:id="mdx816j" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1rlyijq" type="mscore-jump-ds-al-double-coda" func="dalSegno" tstamp="0.000000">D.S. al Doppia Coda</repeatMark>
+                     <repeatMark xml:id="r1rlyijq" type="mscore-jump-ds-al-double-coda" func="dalSegno" tstamp="0">D.S. al Doppia Coda</repeatMark>
                   </measure>
                   <measure xml:id="m14x5idk" n="29">
                      <staff xml:id="m29s1" n="1">
@@ -270,7 +270,7 @@
                            <mRest xml:id="m1nfqh13" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r9pug6" type="mscore-jump-dal-segno-segno" func="dalSegno" tstamp="0.000000">Dal Doppio Segno</repeatMark>
+                     <repeatMark xml:id="r9pug6" type="mscore-jump-dal-segno-segno" func="dalSegno" tstamp="0">Dal Doppio Segno</repeatMark>
                   </measure>
                   <measure xml:id="mykxmdc" n="32">
                      <staff xml:id="m32s1" n="1">
@@ -292,7 +292,7 @@
                            <mRest xml:id="m1phn5hx" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="rgajmz3" type="mscore-jump-dss-al-coda" func="dalSegno" tstamp="0.000000">D.D.S. al Coda</repeatMark>
+                     <repeatMark xml:id="rgajmz3" type="mscore-jump-dss-al-coda" func="dalSegno" tstamp="0">D.D.S. al Coda</repeatMark>
                   </measure>
                   <measure xml:id="mrhoh70" n="35">
                      <staff xml:id="m35s1" n="1">
@@ -307,7 +307,7 @@
                            <mRest xml:id="mnffeub" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="ra4t4wq" type="mscore-jump-dss-al-double-coda" func="dalSegno" tstamp="0.000000">D.D.S. al Doppia Coda</repeatMark>
+                     <repeatMark xml:id="ra4t4wq" type="mscore-jump-dss-al-double-coda" func="dalSegno" tstamp="0">D.D.S. al Doppia Coda</repeatMark>
                   </measure>
                   <measure xml:id="m1cd5cwt" n="37">
                      <staff xml:id="m37s1" n="1">
@@ -322,7 +322,7 @@
                            <mRest xml:id="m14xsxp6" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="rp8uic0" type="mscore-jump-dss-al-fine" func="dalSegno" tstamp="0.000000">D.D.S. al Fine</repeatMark>
+                     <repeatMark xml:id="rp8uic0" type="mscore-jump-dss-al-fine" func="dalSegno" tstamp="0">D.D.S. al Fine</repeatMark>
                   </measure>
                   <measure xml:id="m1yvuz2f" right="end" n="39">
                      <staff xml:id="m39s1" n="1">

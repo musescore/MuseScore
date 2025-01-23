@@ -890,6 +890,60 @@ public:
 };
 
 //----------------------------------------------------------------------------
+// AttEnclosingChars
+//----------------------------------------------------------------------------
+
+class AttEnclosingChars : public Att {
+protected:
+    AttEnclosingChars();
+    ~AttEnclosingChars() = default;
+
+public:
+    /** Reset the default values for the attribute class **/
+    void ResetEnclosingChars();
+
+    /** Read the values for the attribute class **/
+    bool ReadEnclosingChars(pugi::xml_node element, bool removeAttr = true);
+
+    /** Write the values for the attribute class **/
+    bool WriteEnclosingChars(pugi::xml_node element);
+
+    /**
+     * @name Setters, getters and presence checker for class members.
+     * The checker returns true if the attribute class is set (e.g., not equal
+     * to the default value)
+     **/
+    ///@{
+    void SetEnclose(data_ENCLOSURE enclose_) { m_enclose = enclose_; }
+    data_ENCLOSURE GetEnclose() const { return m_enclose; }
+    bool HasEnclose() const;
+    ///@}
+
+private:
+    /**
+     * Records the characters often used to mark accidentals, articulations, and
+     * sometimes notes as having a cautionary or editorial function.
+     * For an example of cautionary accidentals enclosed in parentheses, see Read, p.
+     * 131, ex. 9-14.
+     **/
+    data_ENCLOSURE m_enclose;
+};
+
+//----------------------------------------------------------------------------
+// InstEnclosingChars
+//----------------------------------------------------------------------------
+
+/**
+ * Instantiable version of AttEnclosingChars
+ */
+
+class InstEnclosingChars : public AttEnclosingChars {
+public:
+    InstEnclosingChars() = default;
+    virtual ~InstEnclosingChars() = default;
+};
+
+//----------------------------------------------------------------------------
 // AttExtender
 //----------------------------------------------------------------------------
 
@@ -2399,6 +2453,61 @@ class InstStaffIdent : public AttStaffIdent {
 public:
     InstStaffIdent() = default;
     virtual ~InstStaffIdent() = default;
+};
+
+//----------------------------------------------------------------------------
+// AttStaffLocPitched
+//----------------------------------------------------------------------------
+
+class AttStaffLocPitched : public Att {
+protected:
+    AttStaffLocPitched();
+    ~AttStaffLocPitched() = default;
+
+public:
+    /** Reset the default values for the attribute class **/
+    void ResetStaffLocPitched();
+
+    /** Read the values for the attribute class **/
+    bool ReadStaffLocPitched(pugi::xml_node element, bool removeAttr = true);
+
+    /** Write the values for the attribute class **/
+    bool WriteStaffLocPitched(pugi::xml_node element);
+
+    /**
+     * @name Setters, getters and presence checker for class members.
+     * The checker returns true if the attribute class is set (e.g., not equal
+     * to the default value)
+     **/
+    ///@{
+    void SetPloc(data_PITCHNAME ploc_) { m_ploc = ploc_; }
+    data_PITCHNAME GetPloc() const { return m_ploc; }
+    bool HasPloc() const;
+    //
+    void SetOloc(data_OCTAVE oloc_) { m_oloc = oloc_; }
+    data_OCTAVE GetOloc() const { return m_oloc; }
+    bool HasOloc() const;
+    ///@}
+
+private:
+    /** Captures staff location in terms of written pitch name. **/
+    data_PITCHNAME m_ploc;
+    /** Records staff location in terms of written octave. **/
+    data_OCTAVE m_oloc;
+};
+
+//----------------------------------------------------------------------------
+// InstStaffLocPitched
+//----------------------------------------------------------------------------
+
+/**
+ * Instantiable version of AttStaffLocPitched
+ */
+
+class InstStaffLocPitched : public AttStaffLocPitched {
+public:
+    InstStaffLocPitched() = default;
+    virtual ~InstStaffLocPitched() = default;
 };
 
 //----------------------------------------------------------------------------

@@ -223,20 +223,20 @@ AttSoundLocation::AttSoundLocation() : Att()
 
 void AttSoundLocation::ResetSoundLocation()
 {
-    m_azimuth = 0.0;
-    m_elevation = 0.0;
+    m_azimuth = MEI_UNSET;
+    m_elevation = MEI_UNSET;
 }
 
 bool AttSoundLocation::ReadSoundLocation(pugi::xml_node element, bool removeAttr)
 {
     bool hasAttribute = false;
     if (element.attribute("azimuth")) {
-        this->SetAzimuth(StrToDbl(element.attribute("azimuth").value()));
+        this->SetAzimuth(StrToDegrees(element.attribute("azimuth").value()));
         if (removeAttr) element.remove_attribute("azimuth");
         hasAttribute = true;
     }
     if (element.attribute("elevation")) {
-        this->SetElevation(StrToDbl(element.attribute("elevation").value()));
+        this->SetElevation(StrToDegrees(element.attribute("elevation").value()));
         if (removeAttr) element.remove_attribute("elevation");
         hasAttribute = true;
     }
@@ -247,11 +247,11 @@ bool AttSoundLocation::WriteSoundLocation(pugi::xml_node element)
 {
     bool wroteAttribute = false;
     if (this->HasAzimuth()) {
-        element.append_attribute("azimuth") = DblToStr(this->GetAzimuth()).c_str();
+        element.append_attribute("azimuth") = DegreesToStr(this->GetAzimuth()).c_str();
         wroteAttribute = true;
     }
     if (this->HasElevation()) {
-        element.append_attribute("elevation") = DblToStr(this->GetElevation()).c_str();
+        element.append_attribute("elevation") = DegreesToStr(this->GetElevation()).c_str();
         wroteAttribute = true;
     }
     return wroteAttribute;
@@ -259,12 +259,12 @@ bool AttSoundLocation::WriteSoundLocation(pugi::xml_node element)
 
 bool AttSoundLocation::HasAzimuth() const
 {
-    return (m_azimuth != 0.0);
+    return (m_azimuth != MEI_UNSET);
 }
 
 bool AttSoundLocation::HasElevation() const
 {
-    return (m_elevation != 0.0);
+    return (m_elevation != MEI_UNSET);
 }
 
 } // namespace libmei
