@@ -5991,16 +5991,33 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         Note* origNote = toNote(op);
         Chord* ch = origNote->chord();
         const std::vector<Note*>& notes = ch->notes();
+
+        // first, try going to prev/next note in the current chord
         if (origNote != (back ? notes.back() : notes.front())) {
-            // find prev/next note in same chord
-            for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
-                if (*it == origNote) {
-                    el = back ? *(it + 1) : *(it - 1);
-                    break;
+            auto it = std::find(notes.begin(), notes.end(), origNote);
+            if (it != notes.end()) {
+                el = back ? *std::next(it) : *std::prev(it);
+            }
+        }
+
+        // next, try going to next/prev grace note chord in the same group as the current
+        const std::vector<Chord*> chordList = ch->allGraceChordsOfMainChord();
+
+        if (!el && ch != (back ? chordList.front() : chordList.back())) {
+            auto it = std::find(chordList.begin(), chordList.end(), ch);
+            if (it != chordList.end()) {
+                if (back) {
+                    const Chord* targetChord = *std::prev(it);
+                    el = targetChord->notes().front();
+                } else {
+                    const Chord* targetChord = *std::next(it);
+                    el = targetChord->notes().back();
                 }
             }
-        } else {
-            // find prev/next chord in another voice
+        }
+
+        // next, try going to prev/next chord in another voice
+        if (!el) {
             Segment* seg = ch->segment();
             if (!seg) {
                 LOGD("navigateToNearText: no segment");
@@ -6012,31 +6029,47 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
             for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
                 EngravingItem* e = seg->element(track);
                 if (e && e->isChord()) {
-                    el = back ? toChord(e)->notes().front() : toChord(e)->notes().back();
+                    const std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
+                    if (back) {
+                        Chord* targetChord = targetChordList.back();
+                        el = targetChord->notes().front();
+                    } else {
+                        Chord* targetChord = targetChordList.front();
+                        el = targetChord->notes().back();
+                    }
                     break;
                 }
             }
+        }
 
-            // find chord in prev/next segments
-            if (!el) {
-                seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
-                sTrack = back ? maxTrack : minTrack;
-                eTrack = back ? minTrack : maxTrack;
-                while (seg) {
-                    for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
-                        EngravingItem* e = seg->element(track);
-                        if (e && e->isChord()) {
-                            el = back ? toChord(e)->notes().front() : toChord(e)->notes().back();
-                            break;
+        // finally, try going to chord in prev/next segments
+        if (!el) {
+            Segment* seg = ch->segment();
+            seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
+            int sTrack = back ? maxTrack : minTrack;
+            int eTrack = back ? minTrack : maxTrack;
+            int inc = back ? -1 : 1;
+            while (seg) {
+                for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
+                    EngravingItem* e = seg->element(track);
+                    if (e && e->isChord()) {
+                        const std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
+                        if (back) {
+                            Chord* targetChord = targetChordList.back();
+                            el = targetChord->notes().front();
+                        } else {
+                            Chord* targetChord = targetChordList.front();
+                            el = targetChord->notes().back();
                         }
-                    }
-
-                    if (el) {
                         break;
                     }
-
-                    seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
                 }
+
+                if (el) {
+                    break;
+                }
+
+                seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
             }
         }
     } else if (op->isSegment()) {
