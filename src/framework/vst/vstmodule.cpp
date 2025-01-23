@@ -34,7 +34,7 @@
 #include "audioplugins/iaudiopluginmetareaderregister.h"
 
 #include "internal/vstconfiguration.h"
-#include "internal/vstpluginsregister.h"
+#include "internal/vstinstancesregister.h"
 #include "internal/vstmodulesrepository.h"
 #include "internal/synth/vstsynthesiser.h"
 #include "internal/synth/vstiresolver.h"
@@ -55,10 +55,6 @@ using namespace muse::audio;
 using namespace muse::audioplugins;
 using namespace muse::ui;
 
-static std::shared_ptr<VstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
-static std::shared_ptr<VstModulesRepository> s_pluginModulesRepo = std::make_shared<VstModulesRepository>();
-static std::shared_ptr<VstPluginsRegister> s_pluginsRegister = std::make_shared<VstPluginsRegister>();
-
 static void vst_init_qrc()
 {
     Q_INIT_RESOURCE(vst);
@@ -71,9 +67,13 @@ std::string VSTModule::moduleName() const
 
 void VSTModule::registerExports()
 {
-    ioc()->registerExport<IVstConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IVstModulesRepository>(moduleName(), s_pluginModulesRepo);
-    ioc()->registerExport<IVstPluginsRegister>(moduleName(), s_pluginsRegister);
+    m_configuration = std::make_shared<VstConfiguration>();
+    m_pluginModulesRepo = std::make_shared<VstModulesRepository>();
+    m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>();
+
+    ioc()->registerExport<IVstConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IVstModulesRepository>(moduleName(), m_pluginModulesRepo);
+    ioc()->registerExport<IVstInstancesRegister>(moduleName(), m_pluginInstancesRegister);
 }
 
 void VSTModule::resolveImports()
@@ -120,11 +120,11 @@ void VSTModule::registerUiTypes()
 
 void VSTModule::onInit(const IApplication::RunMode&)
 {
-    s_configuration->init();
-    s_pluginModulesRepo->init();
+    m_configuration->init();
+    m_pluginModulesRepo->init();
 }
 
 void VSTModule::onDeinit()
 {
-    s_pluginModulesRepo->deInit();
+    m_pluginModulesRepo->deInit();
 }

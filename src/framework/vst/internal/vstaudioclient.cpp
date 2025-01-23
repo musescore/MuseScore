@@ -46,14 +46,14 @@ VstAudioClient::~VstAudioClient()
     m_pluginComponent->terminate();
 }
 
-void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, audioch_t audioChannelsCount)
+void VstAudioClient::init(AudioPluginType type, IVstInstancePtr instance, audioch_t audioChannelsCount)
 {
-    IF_ASSERT_FAILED(plugin && type != AudioPluginType::Undefined) {
+    IF_ASSERT_FAILED(instance && type != AudioPluginType::Undefined) {
         return;
     }
 
     m_type = type;
-    m_pluginPtr = std::move(plugin);
+    m_pluginPtr = std::move(instance);
     m_audioChannelsCount = audioChannelsCount;
 }
 

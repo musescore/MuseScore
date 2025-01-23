@@ -23,8 +23,6 @@
 
 #include "log.h"
 
-#include "internal/vstplugin.h"
-
 using namespace muse;
 using namespace muse::vst;
 using namespace muse::audio::synth;
@@ -41,7 +39,6 @@ static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
 VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioInputParams& params,
                                const modularity::ContextPtr& iocCtx)
     : AbstractSynthesizer(params, iocCtx),
-    m_pluginPtr(std::make_shared<VstPlugin>(params.resourceMeta.id)),
     m_vstAudioClient(std::make_unique<VstAudioClient>()),
     m_trackId(trackId)
 {
@@ -49,13 +46,12 @@ VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioIn
 
 VstSynthesiser::~VstSynthesiser()
 {
-    pluginsRegister()->unregisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
+    instancesRegister()->unregisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
 }
 
 void VstSynthesiser::init()
 {
-    pluginsRegister()->registerInstrPlugin(m_trackId, m_pluginPtr);
-    m_pluginPtr->load();
+    m_pluginPtr = instancesRegister()->makeAndRegisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
 
     m_audioChannelsCount = config()->audioChannelsCount();
     m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr, m_audioChannelsCount);
@@ -106,7 +102,7 @@ bool VstSynthesiser::isValid() const
         return false;
     }
 
-    return m_pluginPtr->isValid();
+    return m_pluginPtr->isLoaded();
 }
 
 muse::audio::AudioSourceType VstSynthesiser::type() const
