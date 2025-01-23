@@ -72,10 +72,6 @@ void NoteInputPreferencesModel::load()
     engravingConfiguration()->dynamicsApplyToAllVoicesChanged().onReceive(this, [this](bool value) {
         emit dynamicsApplyToAllVoicesChanged(value);
     });
-
-    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
-        emit enableMidiInputChanged(playNotesWhenEditing());
-    });
 }
 
 bool NoteInputPreferencesModel::enableMidiInput() const
@@ -241,9 +237,4 @@ void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
 
     engravingConfiguration()->setDynamicsApplyToAllVoices(value);
     emit dynamicsApplyToAllVoicesChanged(value);
-}
-
-QStringList NoteInputPreferencesModel::chordOptions() const
-{
-    return { "Entire chord", "Only the added note" };
 }

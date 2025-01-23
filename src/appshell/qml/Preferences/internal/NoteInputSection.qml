@@ -65,7 +65,7 @@ BaseSection {
 
         navigation.name: "AdvanceToNextNoteBox"
         navigation.panel: root.navigation
-        navigation.row: 0
+        navigation.row: 1
 
         onClicked: {
             root.advanceToNextNoteChangeRequested(!checked)
@@ -80,7 +80,7 @@ BaseSection {
 
         navigation.name: "ColorNotesBox"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 2
 
         onClicked: {
             root.colorNotesChangeRequested(!checked)
@@ -95,7 +95,7 @@ BaseSection {
 
         navigation.name: "WarnBendBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         onClicked: {
             root.warnGuitarBendsChangeRequested(!checked)
@@ -114,7 +114,7 @@ BaseSection {
 
         navigation.name: "DelayBetweenNotesControl"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 4
 
         onValueEdited: function(newValue) {
             root.delayBetweenNotesChangeRequested(newValue)

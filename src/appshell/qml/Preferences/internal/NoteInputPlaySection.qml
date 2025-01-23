@@ -59,6 +59,8 @@ BaseSection {
             navigation.panel: root.navigation
             navigation.row: 0
 
+            navigation.accessible.name: playNotesBoxLabel.text
+
             onToggled: {
                 root.playNotesWhenEditingChangeRequested(!checked)
             }
@@ -67,10 +69,9 @@ BaseSection {
         StyledTextLabel {
             id: playNotesBoxLabel
 
-            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
 
             horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
 
             wrapMode: Text.Wrap
             text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
@@ -82,7 +83,7 @@ BaseSection {
 
         title: qsTrc("appshell/preferences", "Playback duration:")
 
-        enabled: (root.playNotesWhenEditing)
+        enabled: root.playNotesWhenEditing
 
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
@@ -92,7 +93,7 @@ BaseSection {
 
         navigation.name: "NotePlayDurationControl"
         navigation.panel: root.navigation
-        navigation.row: 4
+        navigation.row: 1
 
         onValueEdited: function(newValue) {
             root.notePlayDurationChangeRequested(newValue)
@@ -101,7 +102,7 @@ BaseSection {
 
     CheckBox {
         id: playChordBox
-        width: parent.width;
+        width: parent.width
 
         text: qsTrc("appshell/preferences", "Play chord when editing")
 
@@ -109,7 +110,7 @@ BaseSection {
 
         navigation.name: "PlayChordBox"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 2
 
         onClicked: {
             root.playChordWhenEditingChangeRequested(!checked)
@@ -118,7 +119,7 @@ BaseSection {
 
     CheckBox {
         id: playChordSymbolBox
-        width: parent.width;
+        width: parent.width
 
         text: qsTrc("appshell/preferences", "Play chord symbols and Nashville numbers when selected")
 
@@ -126,7 +127,7 @@ BaseSection {
 
         navigation.name: "PlayChordSymbolBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
@@ -141,7 +142,7 @@ BaseSection {
 
         navigation.name: "PlayNotesOnMidiInputBox"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 4
 
         onClicked: {
             root.playNotesOnMidiInputChangeRequested(!checked)
