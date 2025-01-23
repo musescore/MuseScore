@@ -6492,8 +6492,10 @@ void NotationInteraction::addMelisma()
                 fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::END));
                 break;
             }
-            if (fromLyrics->segment()->tick() < endTick) {
-                fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
+            if (fromLyrics->segment()->tick() < endTick
+                || (endTick + initialCR->actualTicks() == segment->measure()->endTick() && initialCR->hasFollowingJumpItem())) {
+                Fraction ticks = std::max(endTick - fromLyrics->segment()->tick(), Lyrics::TEMP_MELISMA_TICKS);
+                fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, ticks);
             }
         }
 
