@@ -25,7 +25,7 @@
 #include <mutex>
 #include <atomic>
 
-#include "../ivstinstance.h"
+#include "../ivstplugininstance.h"
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -40,17 +40,18 @@
 
 namespace muse::vst {
 class VstPluginProvider;
-class VstInstance : public IVstInstance, public async::Asyncable
+class VstPluginInstance : public IVstPluginInstance, public async::Asyncable
 {
     muse::GlobalInject<muse::audio::IAudioThreadSecurer> threadSecurer;
     muse::GlobalInject<IVstModulesRepository> modulesRepo;
 
 public:
-    VstInstance(const muse::audio::AudioResourceId& resourceId);
-    ~VstInstance() override;
+    VstPluginInstance(const muse::audio::AudioResourceId& resourceId);
+    ~VstPluginInstance() override;
 
     const muse::audio::AudioResourceId& resourceId() const override;
     const std::string& name() const override;
+    VstPluginInstanceId id() const override;
 
     PluginViewPtr createView() const override;
 
@@ -76,6 +77,7 @@ private:
     void rescanParams();
     void stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const;
 
+    VstPluginInstanceId m_id = 0;
     muse::audio::AudioResourceId m_resourceId;
 
     PluginModulePtr m_module = nullptr;
@@ -94,4 +96,3 @@ private:
     mutable std::mutex m_mutex;
 };
 }
-

@@ -34,13 +34,13 @@ bool VstFxEditorView::isAbleToWrapPlugin() const
     return !resourceId().isEmpty() && m_chainOrder != -1;
 }
 
-IVstInstancePtr VstFxEditorView::getPluginPtr() const
+IVstPluginInstancePtr VstFxEditorView::determineInstance() const
 {
     if (trackId() == -1) {
         return instancesRegister()->masterFxPlugin(resourceId().toStdString(), m_chainOrder);
     }
 
-    return instancesRegister()->fxPlugin(trackId(), resourceId().toStdString(), m_chainOrder);
+    return instancesRegister()->fxPlugin(resourceId().toStdString(), trackId(), m_chainOrder);
 }
 
 int VstFxEditorView::chainOrder() const

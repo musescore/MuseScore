@@ -106,9 +106,18 @@ tresult AbstractVstEditorView::resizeView(IPlugView* view, ViewRect* newSize)
     return kResultTrue;
 }
 
+IVstPluginInstancePtr AbstractVstEditorView::getInstance() const
+{
+    if (m_instanceId > 0) {
+        return instancesRegister()->instanceById(m_instanceId);
+    } else {
+        return determineInstance();
+    }
+}
+
 void AbstractVstEditorView::wrapPluginView()
 {
-    m_pluginPtr = getPluginPtr();
+    m_pluginPtr = getInstance();
 
     if (!m_pluginPtr) {
         return;
@@ -123,7 +132,7 @@ void AbstractVstEditorView::wrapPluginView()
     }
 }
 
-void AbstractVstEditorView::attachView(IVstInstancePtr instance)
+void AbstractVstEditorView::attachView(IVstPluginInstancePtr instance)
 {
     if (!instance) {
         return;
@@ -268,4 +277,18 @@ void AbstractVstEditorView::setResourceId(const QString& newResourceId)
     if (isAbleToWrapPlugin()) {
         wrapPluginView();
     }
+}
+
+int AbstractVstEditorView::instanceId() const
+{
+    return m_instanceId;
+}
+
+void AbstractVstEditorView::setInstanceId(int newInstanceId)
+{
+    if (m_instanceId == newInstanceId) {
+        return;
+    }
+    m_instanceId = newInstanceId;
+    emit instanceIdChanged();
 }

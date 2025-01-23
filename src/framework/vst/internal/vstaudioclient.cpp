@@ -46,7 +46,7 @@ VstAudioClient::~VstAudioClient()
     m_pluginComponent->terminate();
 }
 
-void VstAudioClient::init(AudioPluginType type, IVstInstancePtr instance, audioch_t audioChannelsCount)
+void VstAudioClient::init(AudioPluginType type, IVstPluginInstancePtr instance, audioch_t audioChannelsCount)
 {
     IF_ASSERT_FAILED(instance && type != AudioPluginType::Undefined) {
         return;

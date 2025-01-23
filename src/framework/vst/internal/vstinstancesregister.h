@@ -28,41 +28,42 @@
 #include "../ivstinstancesregister.h"
 #include "async/asyncable.h"
 
-#include "modularity/ioc.h"
-#include "audio/iaudiothreadsecurer.h"
-
 namespace muse::vst {
 class VstInstancesRegister : public IVstInstancesRegister, public async::Asyncable
 {
-    muse::GlobalInject<muse::audio::IAudioThreadSecurer> threadSecurer;
-
 public:
 
-    IVstInstancePtr makeAndRegisterInstrPlugin(const muse::audio::TrackId trackId,
-                                               const muse::audio::AudioResourceId& resourceId) override;
-    IVstInstancePtr makeAndRegisterFxPlugin(const muse::audio::TrackId trackId,
-                                            const muse::audio::AudioResourceId& resourceId,
-                                            const muse::audio::AudioFxChainOrder chainOrder) override;
-    IVstInstancePtr makeAndRegisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+    // make
+    IVstPluginInstancePtr makeAndRegisterInstrPlugin(const muse::audio::AudioResourceId& resourceId,
+                                                     const muse::audio::TrackId trackId) override;
+
+    IVstPluginInstancePtr makeAndRegisterFxPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::TrackId trackId,
                                                   const muse::audio::AudioFxChainOrder chainOrder) override;
 
-    void registerInstrPlugin(const muse::audio::TrackId trackId, IVstInstancePtr instance) override;
-    void registerFxPlugin(const muse::audio::TrackId trackId,
-                          const muse::audio::AudioResourceId& resourceId,
-                          const muse::audio::AudioFxChainOrder chainOrder,
-                          IVstInstancePtr instance) override;
-    void registerMasterFxPlugin(const muse::audio::AudioResourceId& resourceId,
-                                const muse::audio::AudioFxChainOrder chainOrder,
-                                IVstInstancePtr instance) override;
+    IVstPluginInstancePtr makeAndRegisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                                        const muse::audio::AudioFxChainOrder chainOrder) override;
 
-    IVstInstancePtr instrumentPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId) const override;
-    IVstInstancePtr fxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
-                             const muse::audio::AudioFxChainOrder chainOrder) const override;
-    IVstInstancePtr masterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+    // register
+    void registerInstrPlugin(const muse::audio::TrackId trackId, IVstPluginInstancePtr instance) override;
+
+    void registerFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioFxChainOrder chainOrder,
+                          IVstPluginInstancePtr instance) override;
+
+    void registerMasterFxPlugin(const muse::audio::AudioFxChainOrder chainOrder, IVstPluginInstancePtr instance) override;
+
+    // get
+    IVstPluginInstancePtr instanceById(const VstPluginInstanceId id) const override;
+    IVstPluginInstancePtr instrumentPlugin(const muse::audio::AudioResourceId& resourceId,
+                                           const muse::audio::TrackId trackId) const override;
+    IVstPluginInstancePtr fxPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::TrackId trackId,
                                    const muse::audio::AudioFxChainOrder chainOrder) const override;
+    IVstPluginInstancePtr masterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                         const muse::audio::AudioFxChainOrder chainOrder) const override;
 
-    void unregisterInstrPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId) override;
-    void unregisterFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
+    // unregister
+    void unregisterById(const VstPluginInstanceId id) override;
+    void unregisterInstrPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::TrackId trackId) override;
+    void unregisterFxPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::TrackId trackId,
                             const muse::audio::AudioFxChainOrder chainOrder) override;
     void unregisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::AudioFxChainOrder chainOrder) override;
 
@@ -72,12 +73,41 @@ public:
 private:
     mutable std::mutex m_mutex;
 
-    using FxPluginKey = std::pair<muse::audio::AudioResourceId, muse::audio::AudioFxChainOrder>;
-    using VstFxInstancesMap = std::map<FxPluginKey, IVstInstancePtr>;
+    enum class Type {
+        Undefined = 0,
+        Instrument,
+        Effect
+    };
 
-    std::map<muse::audio::TrackId, IVstInstancePtr> m_vstiPluginsMap;
-    std::map<muse::audio::TrackId, VstFxInstancesMap> m_vstFxPluginsMap;
-    VstFxInstancesMap m_masterPluginsMap;
+    struct Key {
+        Type type = Type::Undefined;
+        muse::audio::AudioResourceId resourceId;
+        muse::audio::TrackId trackId = -1;
+        muse::audio::AudioFxChainOrder chainOrder = 0;
+
+        inline bool operator ==(const Key& k) const
+        {
+            return type == k.type && trackId == k.trackId && resourceId == k.resourceId && chainOrder == k.chainOrder;
+        }
+
+        inline bool operator <(const Key& k) const
+        {
+            if (type != k.type) {
+                return type < k.type;
+            }
+
+            if (trackId != k.trackId) {
+                return trackId < k.trackId;
+            }
+
+            if (resourceId != k.resourceId) {
+                return resourceId < k.resourceId;
+            }
+
+            return chainOrder < k.chainOrder;
+        }
+    };
+
+    std::map<Key, IVstPluginInstancePtr> m_instances;
 };
 }
-

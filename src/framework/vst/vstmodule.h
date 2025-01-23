@@ -43,9 +43,9 @@ public:
     void onDeinit() override;
 
 private:
-     std::shared_ptr<VstConfiguration> m_configuration;
-     std::shared_ptr<VstModulesRepository> m_pluginModulesRepo;
-     std::shared_ptr<VstInstancesRegister> m_pluginInstancesRegister;
+    std::shared_ptr<VstConfiguration> m_configuration;
+    std::shared_ptr<VstModulesRepository> m_pluginModulesRepo;
+    std::shared_ptr<VstInstancesRegister> m_pluginInstancesRegister;
 };
 }
 #endif // MUSE_VST_MODULE_H

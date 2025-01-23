@@ -31,7 +31,7 @@
 #include "audio/iaudioconfiguration.h"
 
 #include "../vstaudioclient.h"
-#include "../../ivstinstance.h"
+#include "../../ivstplugininstance.h"
 #include "vsttypes.h"
 
 namespace muse::vst {
@@ -39,7 +39,7 @@ class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
     muse::Inject<muse::audio::IAudioConfiguration> config;
 public:
-    explicit VstFxProcessor(IVstInstancePtr&& instance, const muse::audio::AudioFxParams& params);
+    explicit VstFxProcessor(IVstPluginInstancePtr&& instance, const muse::audio::AudioFxParams& params);
 
     void init();
 
@@ -54,7 +54,7 @@ public:
 private:
     bool m_inited = false;
 
-    IVstInstancePtr m_pluginPtr = nullptr;
+    IVstPluginInstancePtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     muse::audio::AudioFxParams m_params;

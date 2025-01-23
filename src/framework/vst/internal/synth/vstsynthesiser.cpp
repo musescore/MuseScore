@@ -46,12 +46,12 @@ VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioIn
 
 VstSynthesiser::~VstSynthesiser()
 {
-    instancesRegister()->unregisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
+    instancesRegister()->unregisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 }
 
 void VstSynthesiser::init()
 {
-    m_pluginPtr = instancesRegister()->makeAndRegisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
+    m_pluginPtr = instancesRegister()->makeAndRegisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 
     m_audioChannelsCount = config()->audioChannelsCount();
     m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr, m_audioChannelsCount);

@@ -341,6 +341,20 @@ inline bool remove(Map& c, const T& k)
     return false;
 }
 
+template<typename Map, typename Predicate>
+inline int remove_if(Map& c, Predicate pred)
+{
+    auto old_size = c.size();
+    for (auto first = c.begin(), last = c.end(); first != last;) {
+        if (pred(*first)) {
+            first = c.erase(first);
+        } else {
+            ++first;
+        }
+    }
+    return old_size - c.size();
+}
+
 template<typename Map, typename K>
 inline auto take(Map& m, const K& k) -> typename Map::mapped_type
 {

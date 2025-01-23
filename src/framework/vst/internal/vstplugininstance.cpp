@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "vstinstance.h"
+#include "vstplugininstance.h"
 
 #include "vstpluginprovider.h"
 
@@ -34,17 +34,21 @@ using namespace muse::async;
 static const std::string_view COMPONENT_STATE_KEY = "componentState";
 static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
-VstInstance::VstInstance(const muse::audio::AudioResourceId& resourceId)
+static VstPluginInstanceId s_lastId = 0;
+
+VstPluginInstance::VstPluginInstance(const muse::audio::AudioResourceId& resourceId)
     : m_resourceId(resourceId), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
+
+    m_id = ++s_lastId;
 
     m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
         rescanParams();
     });
 }
 
-VstInstance::~VstInstance()
+VstPluginInstance::~VstPluginInstance()
 {
     muse::audio::AudioResourceId resourceId = m_resourceId;
     std::shared_ptr<VstPluginProvider> provider = std::move(m_pluginProvider);
@@ -64,7 +68,7 @@ VstInstance::~VstInstance()
     }, threadSecurer()->mainThreadId());
 }
 
-const muse::audio::AudioResourceId& VstInstance::resourceId() const
+const muse::audio::AudioResourceId& VstPluginInstance::resourceId() const
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
@@ -73,7 +77,7 @@ const muse::audio::AudioResourceId& VstInstance::resourceId() const
     return m_resourceId;
 }
 
-const std::string& VstInstance::name() const
+const std::string& VstPluginInstance::name() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -82,12 +86,17 @@ const std::string& VstInstance::name() const
     return m_module->getName();
 }
 
+VstPluginInstanceId VstPluginInstance::id() const
+{
+    return m_id;
+}
+
 /**
- * @brief VstInstance::load
+ * @brief VstPluginInstance::load
  * @note Some Vst plugins might not support loading in the background threads.
  *       So we have to ensure that this function being executed in the main thread
  */
-void VstInstance::load()
+void VstPluginInstance::load()
 {
     Async::call(this, [this]() {
         ONLY_MAIN_THREAD(threadSecurer);
@@ -140,7 +149,7 @@ void VstInstance::load()
     }, threadSecurer()->mainThreadId());
 }
 
-void VstInstance::rescanParams()
+void VstPluginInstance::rescanParams()
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
@@ -173,7 +182,7 @@ void VstInstance::rescanParams()
     m_pluginSettingsChanges.send(std::move(updatedConfig));
 }
 
-void VstInstance::stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const
+void VstPluginInstance::stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const
 {
     if (strSize == 0) {
         return;
@@ -183,7 +192,7 @@ void VstInstance::stateBufferFromString(VstMemoryStream& buffer, char* strData, 
     buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
 }
 
-PluginViewPtr VstInstance::createView() const
+PluginViewPtr VstPluginInstance::createView() const
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
@@ -201,7 +210,7 @@ PluginViewPtr VstInstance::createView() const
     return owned(controller->createView(PluginEditorViewType::kEditor));
 }
 
-PluginControllerPtr VstInstance::controller() const
+PluginControllerPtr VstPluginInstance::controller() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -214,7 +223,7 @@ PluginControllerPtr VstInstance::controller() const
     return m_pluginProvider->controller();
 }
 
-PluginComponentPtr VstInstance::component() const
+PluginComponentPtr VstPluginInstance::component() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -227,7 +236,7 @@ PluginComponentPtr VstInstance::component() const
     return m_pluginProvider->component();
 }
 
-PluginMidiMappingPtr VstInstance::midiMapping() const
+PluginMidiMappingPtr VstPluginInstance::midiMapping() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -240,7 +249,7 @@ PluginMidiMappingPtr VstInstance::midiMapping() const
     return m_pluginProvider->midiMapping();
 }
 
-bool VstInstance::isAbleForInput() const
+bool VstPluginInstance::isAbleForInput() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -257,7 +266,7 @@ bool VstInstance::isAbleForInput() const
     return search != m_classInfo.subCategories().cend();
 }
 
-void VstInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& config)
+void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& config)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -302,7 +311,7 @@ void VstInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& config)
     }
 }
 
-void VstInstance::refreshConfig()
+void VstPluginInstance::refreshConfig()
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
@@ -311,7 +320,7 @@ void VstInstance::refreshConfig()
     rescanParams();
 }
 
-bool VstInstance::isValid() const
+bool VstPluginInstance::isValid() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -325,19 +334,19 @@ bool VstInstance::isValid() const
     return true;
 }
 
-bool VstInstance::isLoaded() const
+bool VstPluginInstance::isLoaded() const
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
     return m_isLoaded;
 }
 
-Notification VstInstance::loadingCompleted() const
+Notification VstPluginInstance::loadingCompleted() const
 {
     return m_loadingCompleted;
 }
 
-async::Channel<muse::audio::AudioUnitConfig> VstInstance::pluginSettingsChanged() const
+async::Channel<muse::audio::AudioUnitConfig> VstPluginInstance::pluginSettingsChanged() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 

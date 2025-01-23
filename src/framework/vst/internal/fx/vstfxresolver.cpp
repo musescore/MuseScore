@@ -53,7 +53,7 @@ IFxProcessorPtr VstFxResolver::createMasterFx(const AudioFxParams& fxParams) con
         return nullptr;
     }
 
-    IVstInstancePtr pluginPtr = instancesRegister()->makeAndRegisterMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder);
+    IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder);
 
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
     fx->init();
@@ -70,7 +70,7 @@ IFxProcessorPtr VstFxResolver::createTrackFx(const TrackId trackId, const AudioF
         return nullptr;
     }
 
-    IVstInstancePtr pluginPtr = instancesRegister()->makeAndRegisterFxPlugin(trackId, fxParams.resourceMeta.id, fxParams.chainOrder);
+    IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterFxPlugin(fxParams.resourceMeta.id, trackId, fxParams.chainOrder);
 
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
     fx->init();
@@ -85,5 +85,5 @@ void VstFxResolver::removeMasterFx(const AudioResourceId& resoureId, AudioFxChai
 
 void VstFxResolver::removeTrackFx(const TrackId trackId, const AudioResourceId& resoureId, AudioFxChainOrder chainOrder)
 {
-    instancesRegister()->unregisterFxPlugin(trackId, resoureId, chainOrder);
+    instancesRegister()->unregisterFxPlugin(resoureId, trackId, chainOrder);
 }
