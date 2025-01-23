@@ -27,6 +27,7 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "measurerepeat.h"
+#include "marker.h"
 #include "note.h"
 #include "rest.h"
 #include "score.h"
@@ -139,7 +140,7 @@ static EngravingItem* prevElementForSpannerSegment(const SpannerSegment* spanner
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests, bool disableOverRepeats)
 {
     if (!cr) {
         return nullptr;
@@ -190,8 +191,29 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
+    Segment* curSeg = cr->segment();
+    Score* score = cr->score();
+    for (Segment* seg = curSeg->next1MM(st); seg; seg = seg->next1MM(st)) {
+        if (disableOverRepeats) {
+            // Disallow inputting ties between unrelated voltas
+            // This visually adjacent segment is never the next to be played
+            Volta* startVolta = findVolta(curSeg, score);
+            Volta* endVolta = findVolta(seg, score);
 
-    for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
+            if (startVolta && endVolta && startVolta != endVolta) {
+                return nullptr;
+            }
+
+            // Disallow inputting ties across codas
+            // This visually adjacent segment is never the next to be played
+            if (seg->measure() != curSeg->measure()) {
+                for (const EngravingItem* el : seg->measure()->el()) {
+                    if (el->isMarker() && toMarker(el)->isCoda()) {
+                        return nullptr;
+                    }
+                }
+            }
+        }
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
             if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
@@ -219,7 +241,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 //    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests, bool disableOverRepeats)
 {
     if (!cr) {
         return nullptr;
@@ -268,7 +290,30 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
+    Segment* curSeg = cr->segment();
+    Score* score = cr->score();
     for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
+        if (disableOverRepeats) {
+            // Disallow inputting ties between unrelated voltas
+            // This visually adjacent segment is never the next to be played
+            Volta* startVolta = findVolta(curSeg, score);
+            Volta* endVolta = findVolta(seg, score);
+
+            if (startVolta && endVolta && startVolta != endVolta) {
+                return nullptr;
+            }
+
+            // Disallow inputting ties across codas
+            // This visually adjacent segment is never the next to be played
+            if (seg->measure() != curSeg->measure()) {
+                for (const EngravingItem* el : seg->measure()->el()) {
+                    if (el->isMarker() && toMarker(el)->isCoda()) {
+                        return nullptr;
+                    }
+                }
+            }
+        }
+
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
             if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {

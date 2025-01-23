@@ -64,6 +64,7 @@
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/lyrics.h"
+#include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
@@ -2270,7 +2271,7 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
         }
 
         if (firstChordRest == secondItem && (!firstItem || firstItem->isChordRest())) {
-            secondItem = nextChordRest(toChordRest(firstItem));
+            secondItem = nextChordRest(toChordRest(firstItem), false, true, true);
         }
 
         bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
@@ -5617,6 +5618,28 @@ void NotationInteraction::navigateToNextSyllable()
             break;
         }
     }
+
+    if (nextSegment) {
+        // Disallow inputting ties between unrelated voltas
+        // This visually adjacent segment is never the next to be played
+        Volta* startVolta = findVolta(segment, score());
+        Volta* endVolta = findVolta(nextSegment, score());
+
+        if (startVolta && endVolta && startVolta != endVolta) {
+            nextSegment = nullptr;
+        }
+    }
+
+    if (nextSegment && nextSegment->measure() != segment->measure()) {
+        // Disallow inputting ties across codas
+        // This visually adjacent segment is never the next to be played
+        for (const EngravingItem* el : nextSegment->measure()->el()) {
+            if (el->isMarker() && toMarker(el)->isCoda()) {
+                nextSegment = nullptr;
+            }
+        }
+    }
+
     if (!nextSegment && !hasFollowingRepeat) {
         return;
     }
@@ -5685,6 +5708,21 @@ void NotationInteraction::navigateToNextSyllable()
 
     // Make sure we end up with either the cr of toLyrics or cr on correct track
     cr = !toLyrics ? toChordRest(nextSegment->element(track)) : cr;
+
+    // Disallow dashes between non-adjacent repeat sections eg. 1st volta -> 2nd volta
+    // Instead, try to add partial dashes
+    if (cr && fromLyrics) {
+        Measure* toLyricsMeasure = cr->measure();
+        Measure* fromLyricsMeasure = fromLyrics->measure();
+
+        if (toLyricsMeasure != fromLyricsMeasure && fromLyricsMeasure->lastChordRest(track)->hasFollowingJumpItem()) {
+            const std::vector<Measure*> previousRepeats = findPreviousRepeatMeasures(toLyricsMeasure);
+            const bool inPrecedingRepeatSeg = muse::contains(previousRepeats, fromLyricsMeasure);
+            if (!previousRepeats.empty() && !inPrecedingRepeatSeg) {
+                fromLyrics = nullptr;
+            }
+        }
+    }
 
     bool newLyrics = (toLyrics == 0);
     if (!toLyrics) {
@@ -6375,6 +6413,27 @@ void NotationInteraction::addMelisma()
         EngravingItem* el = nextSegment->element(track);
         if (el && el->isChord()) {
             break;
+        }
+    }
+
+    if (nextSegment) {
+        // Disallow inputting ties between unrelated voltas
+        // This visually adjacent segment is never the next to be played
+        Volta* startVolta = findVolta(segment, score());
+        Volta* endVolta = findVolta(nextSegment, score());
+
+        if (startVolta && endVolta && startVolta != endVolta) {
+            nextSegment = nullptr;
+        }
+    }
+
+    if (nextSegment && nextSegment->measure() != segment->measure()) {
+        // Disallow inputting ties across codas
+        // This visually adjacent segment is never the next to be played
+        for (const EngravingItem* el : nextSegment->measure()->el()) {
+            if (el->isMarker() && toMarker(el)->isCoda()) {
+                nextSegment = nullptr;
+            }
         }
     }
 

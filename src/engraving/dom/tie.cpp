@@ -253,7 +253,7 @@ void Tie::updatePossibleJumpPoints()
             continue;
         }
 
-        nextNote = searchTieNote(note, firstCrSeg);
+        nextNote = searchTieNote(note, firstCrSeg, false);
 
         if (nextNote) {
             bool hasIncomingTie = nextNote->tieBack();
