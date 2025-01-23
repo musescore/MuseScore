@@ -85,7 +85,7 @@ using namespace mu::engraving;
 
 #define SCOREDEF_IDX -1
 
-#define MEI_BASIC_VERSION "5.0+basic"
+#define MEI_BASIC_VERSION "5.1+basic"
 
 #define MEI_FB_HARM "fb-harm"
 
