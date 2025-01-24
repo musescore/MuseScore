@@ -693,9 +693,11 @@ void Sample::load()
       //
       // now add some extra sanity checks from the SF2 spec (biased so they work with unsigned int);
       // just a warning, they probably work with Fluid, possibly with audible artefacts though...
+#ifndef NDEBUG
       if (!(start + 7 < loopstart) || !(loopstart + 31 < loopend) || !(loopend + 7 < end))
             qWarning("SoundFont(%s) Sample(%s) start(%u) startloop(%u) endloop(%u) end(%u) smaller than SoundFont 2.04 spec chapter 7.10 recommendation",
                      qPrintable(sf->get_name()), name, start, loopstart, loopend, end);
+#endif
 
       // this used to cause a crash
       if (!data) {
