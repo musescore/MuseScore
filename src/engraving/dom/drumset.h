@@ -76,7 +76,8 @@ struct DrumInstrument {
 
     bool operator==(const DrumInstrument& other) const
     {
-        return notehead == other.notehead
+        return name == other.name
+               && notehead == other.notehead
                && noteheads == other.noteheads
                && line == other.line
                && stemDirection == other.stemDirection
@@ -107,7 +108,7 @@ public:
     DirectionV stemDirection(int pitch) const { return m_drums[pitch].stemDirection; }
     const String& name(int pitch) const { return m_drums[pitch].name; }
     String translatedName(int pitch) const;
-    int shortcut(int pitch) const { return m_drums[pitch].shortcut; }
+    char shortcut(int pitch) const { return m_drums[pitch].shortcut; }
     std::list<DrumInstrumentVariant> variants(int pitch) const { return m_drums[pitch].variants; }
     int panelRow(int pitch) const { return m_drums[pitch].panelRow; }
     int panelColumn(int pitch) const { return m_drums[pitch].panelColumn; }
