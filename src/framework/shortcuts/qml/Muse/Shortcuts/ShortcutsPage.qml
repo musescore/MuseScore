@@ -39,7 +39,6 @@ Item {
 
     ShortcutsModel {
         id: shortcutsModel
-
         selection: shortcutsView.sourceSelection
     }
 
@@ -51,29 +50,66 @@ Item {
         shortcutsModel.reset()
     }
 
+    function startEditCurrentShortcut() {
+        editShortcutModel.load(shortcutsModel.currentShortcut, shortcutsModel.shortcuts())
+        editShortcutDialog.open()
+    }
+
     Component.onCompleted: {
         shortcutsModel.load()
-
         topPanel.setSearchText(root.shortcutCodeKey)
     }
 
     QtObject {
         id: prv
-
         readonly property int buttonMinWidth: 104
     }
 
-    EditShortcutDialog {
+    StyledDialogView {
         id: editShortcutDialog
 
-        onApplySequenceRequested: function(newSequence, conflictShortcutIndex) {
-            shortcutsModel.applySequenceToCurrentShortcut(newSequence, conflictShortcutIndex)
+        title: qsTrc("shortcuts", "Enter shortcut sequence")
+
+        contentWidth: 538
+        contentHeight: 200
+
+        margins: 20
+
+        onNavigationActivateRequested: {
+            editShortcutDialogContent.requestActive()
         }
 
-        property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
+        EditShortcutModel {
+            id: editShortcutModel
 
-        function startEditCurrentShortcut() {
-            editShortcutDialog.startEdit(shortcutsModel.currentShortcut, shortcutsModel.shortcuts())
+            onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
+                shortcutsModel.applySequenceToCurrentShortcut(newSequence, conflictShortcutIndex)
+            }
+        }
+
+        EditShortcutDialogContent {
+            id: editShortcutDialogContent
+
+            navigationSection: editShortcutDialog.navigationSection
+
+            headerText: qsTrc("shortcuts", "Define keyboard shortcut")
+
+            originShortcutText: editShortcutModel.originSequence
+            newShortcutText: editShortcutModel.newSequence
+            informationText: editShortcutModel.conflictWarning
+
+            onSaveRequested: {
+                editShortcutModel.trySave()
+                editShortcutDialog.accept()
+            }
+
+            onCancelRequested: {
+                editShortcutDialog.reject()
+            }
+
+            onKeyPressed: function(event) {
+                editShortcutModel.inputKey(event.key, event.modifiers)
+            }
         }
     }
 
@@ -88,7 +124,7 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
 
-            canEditCurrentShortcut: editShortcutDialog.canEditCurrentShortcut
+            canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
             canClearCurrentShortcuts: shortcutsView.hasSelection
 
             buttonMinWidth: prv.buttonMinWidth
@@ -97,7 +133,7 @@ Item {
             navigation.order: root.navigationOrderStart + 1
 
             onStartEditCurrentShortcutRequested: {
-                editShortcutDialog.startEditCurrentShortcut()
+                root.startEditCurrentShortcut()
             }
 
             onClearSelectedShortcutsRequested: {
@@ -118,7 +154,7 @@ Item {
             navigationOrderStart: root.navigationOrderStart + 2
 
             onStartEditCurrentShortcutRequested: {
-                editShortcutDialog.startEditCurrentShortcut()
+                root.startEditCurrentShortcut()
             }
         }
 

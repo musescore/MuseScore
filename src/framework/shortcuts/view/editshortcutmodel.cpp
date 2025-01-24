@@ -212,7 +212,7 @@ QString EditShortcutModel::conflictWarning() const
     return muse::qtrc("shortcuts", "This shortcut is already assigned to: <b>%1</b>").arg(title);
 }
 
-void EditShortcutModel::applyNewSequence()
+void EditShortcutModel::trySave()
 {
     QString newSequence = this->newSequence();
 
