@@ -276,21 +276,20 @@ void NotationNoteInput::setupInputNote()
 {
     mu::engraving::InputState& is = score()->inputState();
     const EngravingItem* selectedItem = score()->selection().element();
-    int pitch = -1;
 
     if (selectedItem && selectedItem->isNote()) {
-        pitch = toNote(selectedItem)->noteVal().pitch;
+        is.setNotes({ toNote(selectedItem)->noteVal() });
     } else {
-        const Staff* staff = is.staff();
-        const Fraction tick = is.tick();
-        const int line = staff->middleLine(is.tick());
-        const ClefType clef = staff->clef(tick);
-        const Key key = staff->key(tick);
-        pitch = mu::engraving::line2pitch(line, clef, key);
-    }
+        mu::engraving::Position pos;
+        pos.segment = is.segment();
+        pos.staffIdx = is.staffIdx();
+        pos.line = is.staff()->middleLine(is.tick());
 
-    if (pitch != -1) {
-        is.setNotePitches({ pitch });
+        bool error = false;
+        NoteVal nval = score()->noteValForPosition(pos, is.accidentalType(), error);
+        if (!error) {
+            is.setNotes({ nval });
+        }
     }
 }
 
@@ -317,7 +316,7 @@ void NotationNoteInput::endNoteInput(bool resetState)
         is.setTrack(muse::nidx);
         is.setString(-1);
         is.setSegment(nullptr);
-        is.setNotePitches({});
+        is.setNotes({});
     }
 
     notifyAboutNoteInputEnded();
@@ -422,31 +421,42 @@ void NotationNoteInput::removeNote(const PointF& pos)
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
-void NotationNoteInput::setNoteToInput(NoteName note)
+void NotationNoteInput::setInputNote(NoteName note)
 {
     TRACEFUNC;
 
     const int noteIdx = static_cast<int>(note);
     const int octave = score()->resolveInputOctave(noteIdx, false);
     const int step = octave * mu::engraving::STEP_DELTA_OCTAVE + noteIdx;
-    const int pitch = mu::engraving::step2pitch(step) + octave * mu::engraving::PITCH_DELTA_OCTAVE;
 
-    setPitchesToInput({ pitch });
+    const mu::engraving::AccidentalVal acc = mu::engraving::Accidental::subtype2value(state().accidentalType());
+    const int tpc = mu::engraving::step2tpc(step % mu::engraving::STEP_DELTA_OCTAVE, acc);
+
+    NoteVal nval;
+    nval.pitch = mu::engraving::step2pitch(step) + octave * mu::engraving::PITCH_DELTA_OCTAVE;
+
+    if (score()->style().styleB(mu::engraving::Sid::concertPitch)) {
+        nval.tpc1 = tpc;
+    } else {
+        nval.tpc2 = tpc;
+    }
+
+    setInputNotes({ nval });
 }
 
-void NotationNoteInput::setPitchesToInput(const std::set<int>& pitches)
+void NotationNoteInput::setInputNotes(const NoteValList& notes)
 {
     TRACEFUNC;
 
-    if (score()->inputState().notePitches() == pitches) {
+    if (score()->inputState().notes() == notes) {
         return;
     }
 
-    score()->inputState().setNotePitches(pitches);
+    score()->inputState().setNotes(notes);
     notifyAboutStateChanged();
 }
 
-void NotationNoteInput::moveInputPitches(bool up, PitchMode mode)
+void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
 {
     TRACEFUNC;
 
@@ -455,39 +465,33 @@ void NotationNoteInput::moveInputPitches(bool up, PitchMode mode)
         return;
     }
 
-    std::set<int> newPitches;
+    NoteValList notes;
 
-    for (int pitch : is.notePitches()) {
-        int newPitch = pitch;
+    for (const NoteVal& val : is.notes()) {
+        NoteVal newVal;
+        newVal.pitch = val.pitch;
 
         switch (mode) {
         case PitchMode::CHROMATIC:
-            newPitch += up ? 1 : -1;
+            newVal.pitch += up ? 1 : -1;
             break;
         case PitchMode::DIATONIC: {
             const Fraction tick = is.tick();
             const Staff* staff = is.staff();
             const Key key = staff->key(tick);
-            const ClefType clef = staff->clef(tick);
 
-            const int tpc = mu::engraving::pitch2tpc(pitch, key, mu::engraving::Prefer::NEAREST);
-            const int oldLine = mu::engraving::relStep(pitch, tpc, clef);
-            const int newLine = oldLine + (up ? -1 : 1);
-            const int step = mu::engraving::absStep(newLine, clef);
-            const int octave = step / mu::engraving::STEP_DELTA_OCTAVE;
-
-            newPitch = mu::engraving::step2pitch(step) + octave * mu::engraving::PITCH_DELTA_OCTAVE;
+            newVal.pitch = mu::engraving::diatonicUpDown(key, newVal.pitch, up ? 1 : -1);
         } break;
         case PitchMode::OCTAVE:
-            newPitch += up ? mu::engraving::PITCH_DELTA_OCTAVE : -mu::engraving::PITCH_DELTA_OCTAVE;
+            newVal.pitch += up ? mu::engraving::PITCH_DELTA_OCTAVE : -mu::engraving::PITCH_DELTA_OCTAVE;
             break;
         }
 
-        newPitch = std::clamp(newPitch, 0, 127);
-        newPitches.insert(newPitch);
+        newVal.pitch = std::clamp(newVal.pitch, 0, 127);
+        notes.push_back(newVal);
     }
 
-    setPitchesToInput(newPitches);
+    setInputNotes(notes);
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)

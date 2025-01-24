@@ -187,7 +187,7 @@ void InputState::update(Selection& selection)
     setDuration(DurationType::V_INVALID);
     setRest(false);
     setAccidentalType(AccidentalType::NONE);
-    setNotePitches({});
+    setNotes({});
 
     Note* n1 = nullptr;
     ChordRest* cr1 = nullptr;

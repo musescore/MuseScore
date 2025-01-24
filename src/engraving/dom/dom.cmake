@@ -209,6 +209,7 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/navigate.h
     ${CMAKE_CURRENT_LIST_DIR}/note.cpp
     ${CMAKE_CURRENT_LIST_DIR}/note.h
+    ${CMAKE_CURRENT_LIST_DIR}/noteval.h
     ${CMAKE_CURRENT_LIST_DIR}/notedot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notedot.h
     ${CMAKE_CURRENT_LIST_DIR}/noteentry.cpp

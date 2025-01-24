@@ -116,7 +116,7 @@ void PlaybackControllerStub::playElements(const std::vector<const notation::Engr
 {
 }
 
-void PlaybackControllerStub::playPitches(const std::set<int>&, const notation::staff_idx_t, const notation::Segment*)
+void PlaybackControllerStub::playNotes(const notation::NoteValList&, const notation::staff_idx_t, const notation::Segment*)
 {
 }
 

@@ -76,7 +76,7 @@ public:
                                        const notation::INotationSoloMuteState::SoloMuteState& state) = 0;
 
     virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
-    virtual void playPitches(const std::set<int>& pitches, const notation::staff_idx_t staffIdx, const notation::Segment* segment) = 0;
+    virtual void playNotes(const notation::NoteValList& notes, const notation::staff_idx_t staffIdx, const notation::Segment* segment) = 0;
     virtual void playMetronome(int tick) = 0;
 
     virtual void seekElement(const notation::EngravingItem* element) = 0;

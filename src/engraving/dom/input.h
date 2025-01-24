@@ -28,6 +28,7 @@
 #include "durationtype.h"
 #include "mscore.h"
 #include "types.h"
+#include "noteval.h"
 
 #include "../types/types.h"
 
@@ -87,8 +88,8 @@ public:
     void setDrumNote(int v) { m_drumNote = v; }
 
     // Used in the input-by-duration mode
-    const std::set<int>& notePitches() const { return m_notePitches; }
-    void setNotePitches(const std::set<int>& v) { m_notePitches = v; }
+    const NoteValList& notes() const { return m_notes; }
+    void setNotes(const NoteValList& v) { m_notes = v; }
 
     voice_idx_t voice() const { return m_track == muse::nidx ? 0 : (m_track % VOICES); }
     void setVoice(voice_idx_t v);
@@ -145,7 +146,7 @@ private:
     int m_drumNote = -1;
     int m_string = VISUAL_INVALID_STRING_INDEX; // visual string selected for input (TAB staves only)
 
-    std::set<int> m_notePitches;
+    NoteValList m_notes;
 
     Segment* m_lastSegment = nullptr;
     Segment* m_segment = nullptr; // current segment

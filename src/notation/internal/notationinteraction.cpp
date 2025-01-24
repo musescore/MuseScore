@@ -2667,6 +2667,7 @@ std::vector<Position> NotationInteraction::inputPositions() const
     const Staff* staff = score()->staff(pos.staffIdx);
     const Fraction tick = is.tick();
 
+    const bool concertPitch = staff->concertPitch();
     const Key key = staff->key(tick);
     const ClefType clef = staff->clef(tick);
     const SysStaff* sysStaff = is.segment()->system()->staff(pos.staffIdx);
@@ -2678,10 +2679,13 @@ std::vector<Position> NotationInteraction::inputPositions() const
 
     const PointF measurePos = pos.segment->measure()->canvasPos();
 
-    for (int pitch : is.notePitches()) {
-        const int tpc = mu::engraving::pitch2tpc(pitch, key, Prefer::NEAREST);
-        pos.line = mu::engraving::relStep(pitch, tpc, clef);
+    for (const NoteVal& nval : is.notes()) {
+        int tpc = nval.tpc(concertPitch);
+        if (tpc == static_cast<int>(Tpc::TPC_INVALID)) {
+            tpc = mu::engraving::pitch2tpc(nval.pitch, key, mu::engraving::Prefer::NEAREST);
+        }
 
+        pos.line = mu::engraving::relStep(nval.pitch, tpc, clef);
         const double y = sysStaff->y() + pos.line * lineDist;
         pos.pos = PointF(is.segment()->x(), y) + measurePos;
 

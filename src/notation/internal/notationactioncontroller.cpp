@@ -770,9 +770,9 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
 
     if (addingMode == NoteAddingMode::NextChord) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
-            noteInput->setNoteToInput(note);
+            noteInput->setInputNote(note);
             const NoteInputState& state = noteInput->state();
-            playbackController()->playPitches(state.notePitches(), state.staffIdx(), state.segment());
+            playbackController()->playNotes(state.notes(), state.staffIdx(), state.segment());
             return;
         }
     }
@@ -1036,13 +1036,13 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             if (interaction->noteInput()->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
                 const bool up = direction == MoveDirection::Up;
                 if (quickly) {
-                    interaction->noteInput()->moveInputPitches(up, PitchMode::OCTAVE);
+                    interaction->noteInput()->moveInputNotes(up, PitchMode::OCTAVE);
                 } else {
-                    interaction->noteInput()->moveInputPitches(up, PitchMode::DIATONIC); // TODO
+                    interaction->noteInput()->moveInputNotes(up, PitchMode::DIATONIC);
                 }
 
                 const NoteInputState& state = interaction->noteInput()->state();
-                playbackController()->playPitches(state.notePitches(), state.staffIdx(), state.segment());
+                playbackController()->playNotes(state.notes(), state.staffIdx(), state.segment());
                 return;
             } else if (interaction->noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
                 if (quickly) {
@@ -1126,7 +1126,7 @@ void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
     INotationNoteInputPtr noteInput = interaction->noteInput();
     if (noteInput->isNoteInputMode()) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
-            noteInput->moveInputPitches(direction == MoveDirection::Up, PitchMode::DIATONIC);
+            noteInput->moveInputNotes(direction == MoveDirection::Up, PitchMode::DIATONIC);
             return;
         }
     }

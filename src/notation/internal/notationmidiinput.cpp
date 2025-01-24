@@ -172,22 +172,21 @@ void NotationMidiInput::startNoteInputIfNeed()
 
 void NotationMidiInput::addNoteEventsToInputState()
 {
-    std::set<int> pitches;
+    NoteValList notes;
     bool useWrittenPitch = configuration()->midiUseWrittenPitch().val;
 
     for (const muse::midi::Event& event : m_eventsQueue) {
         if (event.opcode() == muse::midi::Event::Opcode::NoteOn) {
-            mu::engraving::NoteVal val = score()->noteVal(event.note(), useWrittenPitch);
-            pitches.insert(val.pitch);
+            notes.push_back(score()->noteVal(event.note(), useWrittenPitch));
         }
     }
 
-    if (!pitches.empty()) {
+    if (!notes.empty()) {
         INotationNoteInputPtr noteInput = m_notationInteraction->noteInput();
-        noteInput->setPitchesToInput(pitches);
+        noteInput->setInputNotes(notes);
 
         const NoteInputState& state = noteInput->state();
-        playbackController()->playPitches(pitches, state.staffIdx(), state.segment());
+        playbackController()->playNotes(notes, state.staffIdx(), state.segment());
     }
 
     m_eventsQueue.clear();

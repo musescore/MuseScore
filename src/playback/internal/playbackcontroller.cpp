@@ -350,26 +350,26 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
     notationPlayback()->triggerEventsForItems(elementsForPlaying);
 }
 
-void PlaybackController::playPitches(const std::set<int>& pitches, const staff_idx_t staffIdx, const Segment* segment)
+void PlaybackController::playNotes(const NoteValList& notes, const staff_idx_t staffIdx, const Segment* segment)
 {
     Segment* seg = const_cast<Segment*>(segment);
     Chord* chord = engraving::Factory::createChord(seg);
     chord->setParent(seg);
 
-    std::vector<const EngravingItem*> notes;
+    std::vector<const EngravingItem*> elements;
 
-    for (int pitch : pitches) {
+    for (const NoteVal& nval : notes) {
         Note* note = engraving::Factory::createNote(chord);
         note->setParent(chord);
         note->setStaffIdx(staffIdx);
-        note->setNval(engraving::NoteVal(pitch));
-        notes.push_back(note);
+        note->setNval(nval);
+        elements.push_back(note);
     }
 
-    playElements(notes);
+    playElements(elements);
 
     delete chord;
-    DeleteAll(notes);
+    DeleteAll(elements);
 }
 
 void PlaybackController::playMetronome(int tick)
