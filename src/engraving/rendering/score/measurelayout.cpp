@@ -1712,20 +1712,19 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
 
         const bool sigsDifferent = actualTimeSig->sig() != curTimeSig->sig();
 
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : sigsDifferent;
+        // Show repeat courtesy if the sigs are different
+        // Show continuation courtesy if there's a repeat courtesy before it
+        // Show trailer courtesy only when there's a time sig element in the next bar
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy
+                                   : isTrailer ? actualTimeSig->tick() == m->endTick() : sigsDifferent;
         const bool show = actualTimeSig && actualTimeSig->showCourtesySig() && needsCourtesy;
 
-        if (!show) {
-            // Remove any existing courtesy signatures
-            if (courtesySigSeg) {
-                courtesySigSeg->setEnabled(false);
-                m->setHasCourtesyTimeSig(false);
-            }
-            continue;
-        }
-
-        // Create a segment if one doesn't already exist
         if (!courtesySigSeg) {
+            if (!show) {
+                continue;
+            }
+
+            // Create a segment if one doesn't already exist
             courtesySigSeg  = Factory::createSegment(m, courtesySegType, courtesySigRTick);
             m->add(courtesySigSeg);
             m->setTrailer(isTrailer);
@@ -1739,6 +1738,14 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
         EngravingItem* timeSigElem = courtesySigSeg->element(track);
         if (timeSigElem && timeSigElem->isTimeSig()) {
             courtesyTimeSig = toTimeSig(timeSigElem);
+        }
+
+        // this time sig shouldn't be shown, remove from segment
+        if (!show) {
+            if (courtesyTimeSig) {
+                courtesySigSeg->remove(courtesyTimeSig);
+            }
+            continue;
         }
 
         if (!courtesyTimeSig) {
@@ -1758,6 +1765,15 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
 
         TLayout::layoutTimeSig(courtesyTimeSig, courtesyTimeSig->mutldata(), ctx);
     }
+
+    if (courtesySigSeg && !m->hasCourtesyTimeSig()) {
+        // Whole segment shouldn't be shown, remove any existing courtesy signatures
+        if (courtesySigSeg) {
+            courtesySigSeg->setEnabled(false);
+            m->setHasCourtesyTimeSig(false);
+        }
+    }
+
     if (courtesySigSeg && courtesySigSeg->enabled()) {
         courtesySigSeg->createShapes();
     }
@@ -1785,9 +1801,6 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
             = refMeasure ? refMeasure->findSegmentR(SegmentType::KeySig, refSigElementTick - refMeasure->tick()) : nullptr;
         const EngravingItem* el = actualKeySigSeg ? actualKeySigSeg->element(track) : nullptr;
         const KeySig* actualKeySig = el ? toKeySig(el) : nullptr;
-        if (!actualKeySig) {
-            continue;
-        }
 
         const KeySigEvent refKey = staff->keySigEvent(refSigTick);
         // Get info from correct tick for repeats
@@ -1795,19 +1808,15 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
         const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : sigsDifferent;
         const bool staffIsPitchedAtNextMeas = ctx.dom().lastMeasure() == m
                                               || (m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick()));
-        const bool show = actualKeySig && actualKeySig->showCourtesy() && staffIsPitchedAtNextMeas && needsCourtesy;
+        const bool actualShowCourtesy = actualKeySig ? actualKeySig->showCourtesy() : true;
+        const bool show = actualShowCourtesy && staffIsPitchedAtNextMeas && needsCourtesy;
 
-        if (!show) {
-            // Remove any existing courtesy signatures
-            if (courtesySigSeg) {
-                courtesySigSeg->setEnabled(false);
-                m->setHasCourtesyKeySig(false);
-            }
-            continue;
-        }
-
-        // Create a segment if one doesn't already exist
         if (!courtesySigSeg) {
+            if (!show) {
+                continue;
+            }
+
+            // Create a segment if one doesn't already exist
             courtesySigSeg = Factory::createSegment(m, courtesySegType, courtesySigRTick);
             m->add(courtesySigSeg);
             m->setTrailer(isTrailer);
@@ -1823,6 +1832,14 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
             courtesyKeySig = toKeySig(keySigElem);
         }
 
+        // this key sig shouldn't be shown, remove from segment
+        if (!show) {
+            if (courtesyKeySig) {
+                courtesySigSeg->remove(courtesyKeySig);
+            }
+            continue;
+        }
+
         if (!courtesyKeySig) {
             courtesyKeySig = Factory::createKeySig(courtesySigSeg);
             courtesyKeySig->setTrack(track);
@@ -1834,6 +1851,14 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
 
         // Layout & create shapes
         TLayout::layoutKeySig(courtesyKeySig, courtesyKeySig->mutldata(), ctx.conf());
+    }
+
+    if (courtesySigSeg && !m->hasCourtesyKeySig()) {
+        // Whole segment shouldn't be shown, remove any existing courtesy signatures
+        if (courtesySigSeg) {
+            courtesySigSeg->setEnabled(false);
+            m->setHasCourtesyKeySig(false);
+        }
     }
 
     if (courtesySigSeg && courtesySigSeg->enabled()) {
@@ -1886,12 +1911,12 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
         const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : clefsMatch;
         const bool show = actualClef && actualClef->showCourtesy() && needsCourtesy;
 
-        if (!show) {
-            continue;
-        }
-
-        // Create a segment if one doesn't already exist
         if (!courtesyClefSeg) {
+            if (!show) {
+                continue;
+            }
+
+            // Create a segment if one doesn't already exist
             courtesyClefSeg = Factory::createSegment(m, courtesySegType, courtesyClefRTick);
             m->add(courtesyClefSeg);
             courtesyClefSeg->setTrailer(false);
@@ -1906,6 +1931,10 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
             courtesyClef = toClef(clefElem);
         }
 
+        if (!show && courtesyClef) {
+            continue;
+        }
+
         if (!courtesyClef) {
             courtesyClef = Factory::createClef(courtesyClefSeg);
             courtesyClef->setTrack(track);
@@ -1918,6 +1947,14 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
         // Layout & create shapes
         TLayout::layoutClef(courtesyClef, courtesyClef->mutldata(), ctx.conf());
+    }
+
+    if (courtesyClefSeg && !m->hasCourtesyClef()) {
+        // Whole segment shouldn't be shown, remove any existing courtesy signatures
+        if (courtesyClefSeg) {
+            courtesyClefSeg->setEnabled(false);
+            m->setHasCourtesyClef(false);
+        }
     }
 
     if (courtesyClefSeg && courtesyClefSeg->enabled()) {
