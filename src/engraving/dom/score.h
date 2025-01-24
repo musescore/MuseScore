@@ -1100,6 +1100,8 @@ private:
 
     void updateStavesNumberForSystems();
 
+    void applyAccidentalToInputNotes();
+
     int m_linkId = 0;
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;

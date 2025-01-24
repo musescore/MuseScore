@@ -62,7 +62,7 @@ public:
                 (override));
 
     MOCK_METHOD(void, playElements, ((const std::vector<const notation::EngravingItem*>&)), (override));
-    MOCK_METHOD(void, playPitches, (const std::set<int>&, const notation::staff_idx_t, const notation::Segment*), (override));
+    MOCK_METHOD(void, playNotes, (const notation::NoteValList&, const notation::staff_idx_t, const notation::Segment*), (override));
     MOCK_METHOD(void, playMetronome, (int), (override));
 
     MOCK_METHOD(void, seekElement, (const notation::EngravingItem*), (override));

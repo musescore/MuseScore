@@ -3231,15 +3231,14 @@ void Score::padToggle(Pad p, const EditData& ed)
                     m_is.moveToNextInputPos();
                 } else {
                     EngravingItem* e = selection().element();
-                    const std::set<int>& inputPitches = m_is.notePitches();
 
-                    if (!inputPitches.empty()) {
+                    if (!m_is.notes().empty()) {
                         const ChordRest* cr = m_is.cr();
                         bool addToChord = cr && cr->isChord() && cr->durationType() == m_is.duration();
 
-                        for (int pitch : inputPitches) {
-                            NoteVal nval(pitch);
-                            addPitch(nval, addToChord);
+                        for (const NoteVal& nval : m_is.notes()) {
+                            NoteVal copy(nval);
+                            addPitch(copy, addToChord);
                             addToChord = true;
                         }
                     } else if (e && e->isNote()) {

@@ -223,6 +223,9 @@ enum class NoteName
     B
 };
 
+using NoteVal = mu::engraving::NoteVal;
+using NoteValList = mu::engraving::NoteValList;
+
 enum class NoteAddingMode
 {
     CurrentChord,

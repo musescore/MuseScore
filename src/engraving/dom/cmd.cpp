@@ -2173,9 +2173,14 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
     if (m_is.accidentalType() == at) {
         at = AccidentalType::NONE;
     }
+
     if (noteEntryMode()) {
         m_is.setAccidentalType(at);
         m_is.setRest(false);
+
+        if (usingNoteEntryMethod(NoteEntryMethod::BY_DURATION)) {
+            applyAccidentalToInputNotes();
+        }
     } else {
         if (selection().isNone()) {
             ed.view()->startNoteEntryMode();
@@ -2186,6 +2191,29 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
             changeAccidental(at);
         }
     }
+}
+
+void Score::applyAccidentalToInputNotes()
+{
+    const AccidentalVal acc = Accidental::subtype2value(m_is.accidentalType());
+    const bool concertPitch = style().styleB(Sid::concertPitch);
+    NoteValList notes = m_is.notes();
+
+    for (NoteVal& nval : notes) {
+        const int oldPitch = nval.pitch;
+        const int step = mu::engraving::pitch2step(oldPitch);
+        const int newTpc = mu::engraving::step2tpc(step, acc);
+
+        nval.pitch += static_cast<int>(acc);
+
+        if (concertPitch) {
+            nval.tpc1 = newTpc;
+        } else {
+            nval.tpc2 = newTpc;
+        }
+    }
+
+    m_is.setNotes(notes);
 }
 
 //---------------------------------------------------------
