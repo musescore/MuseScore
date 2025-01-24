@@ -441,13 +441,17 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* 
         } else if (nodeName == u"Voices") {
             String voicesElement = innerNode.toElement().text();
             StringList voices = voicesElement.split(u' ');
+            int currentPosition = -1;
             for (const String& voiceIdx : voices) {
+                currentPosition++;
                 int idx = voiceIdx.toInt();
                 if (idx == -1) {
                     continue;
                 }
+
                 std::unique_ptr<GPVoice> voice;
                 voice = std::move(_voices.at(idx));
+                voice->setPosition(currentPosition);
                 _voices.erase(idx);
                 bar->addGPVoice(std::move(voice));
             }
