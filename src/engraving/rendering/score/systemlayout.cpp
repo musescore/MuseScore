@@ -850,7 +850,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
             // don't layout any tuplets covered by this top level tuplet for this voice--
             // they've already been laid out by layoutTuplet().
-            skipTo[track] = de->tick() + de->ticks();
+            skipTo[track] = de->tick() + de->actualTicks();
         }
     }
 
