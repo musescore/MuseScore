@@ -93,7 +93,7 @@ void DrumsetPalette::updateDrumset()
 
         std::shared_ptr<Chord> chord = notation::PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch);
 
-        int shortcutCode = m_drumset->shortcut(pitch);
+        char shortcutCode = m_drumset->shortcut(pitch);
         QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
 
         m_drumPalette->appendElement(chord, m_drumset->translatedName(pitch), 1.0, QPointF(0, 0), shortcut);
