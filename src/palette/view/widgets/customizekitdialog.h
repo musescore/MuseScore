@@ -56,12 +56,13 @@ private slots:
     void bboxClicked(QAbstractButton* button);
     void itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void nameChanged(const QString&);
-    void shortcutChanged();
     void valueChanged();
     void load();
     void save();
     void customGboxToggled(bool);
     void customQuarterChanged(int);
+
+    void defineShortcut();
 
 private:
     void apply();
