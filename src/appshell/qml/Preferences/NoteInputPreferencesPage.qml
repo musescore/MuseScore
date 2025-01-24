@@ -78,9 +78,9 @@ PreferencesPage {
         NoteInputPlaySection {
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
-            playChordWhenEditing: noteInputModel.playChordWhenEditing
-            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing          
-            playNotesOnMidiInput: noteInputModel.playNotesOnMidiInput
+            playChordWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordWhenEditing : false
+            playChordSymbolWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordSymbolWhenEditing : false
+            playNotesOnMidiInput: noteInputModel.playNotesWhenEditing && noteInputModel.enableMidiInput ? noteInputModel.playNotesOnMidiInput : false
 
             playNotesOnMidiInputBoxEnabled: noteInputModel.enableMidiInput && noteInputModel.playNotesWhenEditing
 
