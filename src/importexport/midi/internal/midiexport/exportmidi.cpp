@@ -413,6 +413,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                             RehearsalMark* r = toRehearsalMark(e);
                             muse::ByteArray rText = r->plainText().toUtf8();
                             size_t len = rText.size() + 1;
+<<<<<<< HEAD
                                 << << << < HEAD
                                 unsigned char* data = new unsigned char[len];
                             ==
@@ -420,6 +421,9 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                             >> >> >>
                             > bf892ac320(export rehearsal mark only for first staff(to skip unneccessary duplicates,
                                                                                     because they are the same fore each staff))
+=======
+                            unsigned char *data = new unsigned char[len];
+>>>>>>> bf892ac320 (export rehearsal mark only for first staff (to skip unneccessary duplicates, because they are the same fore each staff))
 
                             memcpy(data, rText.constData(), len);
 
