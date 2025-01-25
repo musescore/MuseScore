@@ -247,7 +247,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     CompatMidiRender::renderScore(m_score, events, context, midiExpandRepeats);
 
     writeHeader(context);
-    
+
     staff_idx_t staffIdx = 0;
     for (auto& track: tracks) {
         Staff* staff = m_score->staff(staffIdx);
@@ -405,25 +405,27 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                 }
             }
 
-            // export RehearsalMarks
-            for (Segment* seg = rs->firstMeasure()->first(); seg && seg->tick().ticks() < endTick; seg = seg->next1()) {
-                for (EngravingItem* e : seg->annotations()) {
-                    if (e->isRehearsalMark()) {
-                        RehearsalMark* r = toRehearsalMark(e);
-                        muse::ByteArray rText = r->plainText().toUtf8();
-                        size_t len = rText.size() + 1;
-                        unsigned char *data = new unsigned char[len];
+            // export RehearsalMarks only for first track
+            if (staffIdx == 0) {
+                for (Segment* seg = rs->firstMeasure()->first(); seg && seg->tick().ticks() < endTick; seg = seg->next1()) {
+                    for (EngravingItem* e : seg->annotations()) {
+                        if (e->isRehearsalMark()) {
+                            RehearsalMark* r = toRehearsalMark(e);
+                            muse::ByteArray rText = r->plainText().toUtf8();
+                            size_t len = rText.size() + 1;
+                            unsigned char* data = new unsigned char[len];
 
-                        memcpy(data, rText.constData(), len);
+                            memcpy(data, rText.constData(), len);
 
-                        MidiEvent ev;
-                        ev.setType(ME_META);
-                        ev.setMetaType(META_MARKER);
-                        ev.setEData(data);
-                        ev.setLen(static_cast<int>(len));
+                            MidiEvent ev;
+                            ev.setType(ME_META);
+                            ev.setMetaType(META_MARKER);
+                            ev.setEData(data);
+                            ev.setLen(static_cast<int>(len));
 
-                        int tick = r->segment()->tick().ticks() + tickOffset;
-                        track.insert(CompatMidiRender::tick(context, tick), ev);
+                            int tick = r->segment()->tick().ticks() + tickOffset;
+                            track.insert(CompatMidiRender::tick(context, tick), ev);
+                        }
                     }
                 }
             }
