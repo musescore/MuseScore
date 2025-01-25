@@ -247,7 +247,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     CompatMidiRender::renderScore(m_score, events, context, midiExpandRepeats);
 
     writeHeader(context);
-
+    
     staff_idx_t staffIdx = 0;
     for (auto& track: tracks) {
         Staff* staff = m_score->staff(staffIdx);
@@ -373,12 +373,13 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
             }
         }
 
-        // Export lyrics
+        // Export lyrics and RehearsalMarks as Meta events
         for (const RepeatSegment* rs : m_score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
 
+            // export Lyrics
             SegmentType st = SegmentType::ChordRest;
             for (Segment* seg = rs->firstMeasure()->first(st); seg && seg->tick().ticks() < endTick; seg = seg->next1(st)) {
                 for (track_idx_t i = part->startTrack(); i < part->endTrack(); ++i) {
@@ -403,17 +404,11 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     }
                 }
             }
-        }
-        
-        // Export RehearsalMarks as Markers
-        for (const RepeatSegment *rs : m_score->repeatList()) {
-            int startTick = rs->tick;
-            int endTick = startTick + rs->len();
-            int tickOffset = rs->utick - rs->tick;
 
+            // export RehearsalMarks
             for (Segment* seg = rs->firstMeasure()->first(); seg && seg->tick().ticks() < endTick; seg = seg->next1()) {
                 for (EngravingItem* e : seg->annotations()) {
-                    if (e->type() == ElementType::REHEARSAL_MARK) {
+                    if (e->isRehearsalMark()) {
                         RehearsalMark* r = toRehearsalMark(e);
                         muse::ByteArray rText = r->plainText().toUtf8();
                         size_t len = rText.size() + 1;
@@ -429,7 +424,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
                         int tick = r->segment()->tick().ticks() + tickOffset;
                         track.insert(CompatMidiRender::tick(context, tick), ev);
-                    }                        
+                    }
                 }
             }
         }
