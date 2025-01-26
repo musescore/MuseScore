@@ -1526,8 +1526,12 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
             if (e && e->isChord()) {
                 Chord* chord2 = toChord(e);
                 for (Note* note2 : chord2->notes()) {
-                    if (note2->string() == string && chords.empty()) {
-                        Tie* tie = Factory::createTie(note2);
+                    if (note2->string() == string) {
+                        if (chords.empty()) {
+                            Tie* tie = Factory::createTie(note2);
+                            tie->setEndNote(note);
+                            note2->add(tie);
+                        }
 
                         //  fixing gp5 bug with not storying let ring for tied notes
                         if (m_letRingForChords.find(chord2) != m_letRingForChords.end()) {
@@ -1535,8 +1539,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                             muse::remove(m_letRingForChords, chord2);
                         }
 
-                        tie->setEndNote(note);
-                        note2->add(tie);
                         if (m_harmonicNotes.find(note) != m_harmonicNotes.end() && m_harmonicNotes.find(note2) != m_harmonicNotes.end()) {
                             Note* startHarmonicNote = m_harmonicNotes.at(note2);
                             Note* endHarmonicNote = m_harmonicNotes.at(note);

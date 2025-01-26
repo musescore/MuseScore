@@ -755,4 +755,7 @@ TEST_F(GuitarPro_Tests, gpHideRests) {
 TEST_F(GuitarPro_Tests, gpTupletEmptyMeasure) {
     gpReadTest("tuplet-empty-measure", "gp");
 }
+TEST_F(GuitarPro_Tests, gpSkippedTiedNotes) {
+    gpReadTest("skipped_tied_notes", "gp5");
+}
 }
