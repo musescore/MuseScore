@@ -753,4 +753,7 @@ TEST_F(GuitarPro_Tests, gpBeamModes) {
 TEST_F(GuitarPro_Tests, gpHideRests) {
     gpReadTest("hide-rests", "gp");
 }
+TEST_F(GuitarPro_Tests, gpTupletEmptyMeasure) {
+    gpReadTest("tuplet-empty-measure", "gp");
+}
 }
