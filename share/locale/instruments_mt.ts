@@ -12802,7 +12802,7 @@
         <source>Large shaker in the form of a tube.</source>
         <comment>tubo description</comment>
         <extracomment>description for Tubo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xejker kbir f&apos;forma ta&apos; tubu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4309"/>
