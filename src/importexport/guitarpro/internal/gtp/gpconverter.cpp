@@ -416,6 +416,13 @@ void GPConverter::fixEmptyMeasures()
             rest->setDurationType(DurationType::V_MEASURE);
             if (Tuplet* tuplet = rest->tuplet()) {
                 tuplet->remove(rest);
+                if (tuplet->elements().empty()) {
+                    if (tuplet->tuplet()) {
+                        tuplet->tuplet()->remove(tuplet);
+                    }
+
+                    delete tuplet;
+                }
             }
         }
     }
