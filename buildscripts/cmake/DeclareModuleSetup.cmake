@@ -30,6 +30,7 @@
 # set(MODULE_DEF ...)                         - set definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
+# set(MODULE_LINK_PUBLIC ...)                 - set libraries for link and transitive link
 # set(MODULE_LINK_GLOBAL ON/OFF)              - set whether to link with `global` module (default ON)
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
@@ -54,7 +55,9 @@ macro(declare_module name)
     unset(MODULE_DEF)
     unset(MODULE_SRC)
     unset(MODULE_LINK)
+    unset(MODULE_LINK_PUBLIC)
     set(MODULE_LINK_GLOBAL ON)
+    set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
     unset(MODULE_UI)
@@ -65,6 +68,14 @@ macro(declare_module name)
     unset(MODULE_OVERRIDDEN_PCH)
     unset(MODULE_IS_STUB)
     set(MODULE_USE_COVERAGE ON)
+endmacro()
+
+macro(declare_thirdparty_module name)
+    declare_module(${name})
+    set(MODULE_USE_QT OFF)
+    set(MODULE_LINK_GLOBAL OFF)
+    set(MODULE_USE_PCH OFF)
+    set(MODULE_USE_COVERAGE OFF)
 endmacro()
 
 
@@ -80,7 +91,6 @@ endmacro()
 
 
 macro(setup_module)
-
     if (MODULE_IS_STUB)
         message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}> [stub]")
     else()
@@ -89,6 +99,22 @@ macro(setup_module)
 
     if (NOT MUSE_FRAMEWORK_PATH)
         set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
+    endif()
+
+    if (MODULE_USE_QT AND QT_SUPPORT)
+        if (CC_IS_EMSCRIPTEN)
+            qt_add_library(${MODULE} OBJECT)
+        else()
+            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+            qt_add_library(${MODULE})
+        endif()
+    else()
+        if (CC_IS_EMSCRIPTEN)
+            add_library(${MODULE} OBJECT)
+        else()
+            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+            add_library(${MODULE})
+        endif()
     endif()
 
     if (MODULE_QRC AND NOT NO_QT_SUPPORT)
@@ -106,12 +132,6 @@ macro(setup_module)
 
     add_qml_import_path(MODULE_QML_IMPORT)
     add_qml_import_path(MODULE_QMLAPI_IMPORT)
-
-    if (CC_IS_EMSCRIPTEN)
-        add_library(${MODULE} OBJECT)
-    else()
-        add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
-    endif()
 
     if (MODULE_ALIAS)
         add_library(${MODULE_ALIAS} ALIAS ${MODULE})
@@ -191,8 +211,8 @@ macro(setup_module)
         set(MODULE_LINK muse_global ${MODULE_LINK})
     endif()
 
-    set(MODULE_LINK ${CMAKE_DL_LIBS} ${QT_LIBRARIES} ${MODULE_LINK})
-
-    target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS})
-
+    target_link_libraries(${MODULE}
+        PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS}
+        PUBLIC ${MODULE_LINK_PUBLIC}
+    )
 endmacro()
