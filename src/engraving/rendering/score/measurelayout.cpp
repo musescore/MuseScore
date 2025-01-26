@@ -1423,7 +1423,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
     Measure* nm  = m->nextMeasure();
     double blw    = 0.0;
     bool hideCourtesy = false;
-    if (LayoutBreak* sectionBreakElement = m->isFinalMeasureOfSection()) {
+    if (LayoutBreak* sectionBreakElement = m->sectionBreakElement()) {
         hideCourtesy = !sectionBreakElement->showCourtesy();
     }
 
@@ -1862,7 +1862,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
 {
     Fraction _rtick = m->ticks();
     bool hideCourtesy = false;
-    if (LayoutBreak* sectionBreakElement = m->isFinalMeasureOfSection()) {
+    if (LayoutBreak* sectionBreakElement = m->sectionBreakElement()) {
         hideCourtesy = !sectionBreakElement->showCourtesy();
     }
 

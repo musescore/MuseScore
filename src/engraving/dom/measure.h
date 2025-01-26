@@ -282,7 +282,7 @@ public:
     bool visible(staff_idx_t staffIdx) const;
     bool stemless(staff_idx_t staffIdx) const;
     bool isFinalMeasureOfSection() const;
-    LayoutBreak* isFinalMeasureOfSection();
+    LayoutBreak* sectionBreakElement(bool includeNextFrames = true);
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
     bool isLastInSystem() const;

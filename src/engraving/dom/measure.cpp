@@ -1970,7 +1970,7 @@ bool Measure::isFinalMeasureOfSection() const
     return false;
 }
 
-LayoutBreak* Measure::isFinalMeasureOfSection()
+LayoutBreak* Measure::sectionBreakElement(bool includeNextFrames)
 {
     const MeasureBase* mb = static_cast<const MeasureBase*>(this);
 
@@ -1980,7 +1980,7 @@ LayoutBreak* Measure::isFinalMeasureOfSection()
         }
 
         mb = mb->next();
-    } while (mb && !mb->isMeasure());           // loop until reach next actual measure or end of score
+    } while (includeNextFrames && mb && !mb->isMeasure());           // loop until reach next actual measure or end of score
 
     return nullptr;
 }
