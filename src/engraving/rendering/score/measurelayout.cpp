@@ -1866,7 +1866,6 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
         hideCourtesy = !sectionBreakElement->showCourtesy();
     }
 
-
     // locate a time sig. in the next measure and, if found,
     // check if it has court. sig. turned off
     TimeSig* ts = nullptr;
