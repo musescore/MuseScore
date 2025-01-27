@@ -30,11 +30,13 @@ BaseSection {
     id: root
 
     property alias playNotesWhenEditing: playNotesToggle.checked
+    property alias playPreviewNotesInInputByDuration: playPreviewNotesInInputByDurationBox.checked
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
 
     signal playNotesWhenEditingChangeRequested(bool play)
+    signal playPreviewNotesInInputByDurationChangeRequested(bool play)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
@@ -69,6 +71,23 @@ BaseSection {
         }
     }
 
+    CheckBox {
+        id: playPreviewNotesInInputByDurationBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Include preview notes in playback (input by duration only)")
+
+        enabled: root.playNotesWhenEditing
+
+        navigation.name: "PlayPreviewNotesInInputByDurationBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onClicked: {
+            root.playPreviewNotesInInputByDurationChangeRequested(!checked)
+        }
+    }
+
     IncrementalPropertyControlWithTitle {
         id: notePlayDurationControl
 
@@ -84,7 +103,7 @@ BaseSection {
 
         navigation.name: "NotePlayDurationControl"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 2
 
         onValueEdited: function(newValue) {
             root.notePlayDurationChangeRequested(newValue)
@@ -101,7 +120,7 @@ BaseSection {
 
         navigation.name: "PlayChordBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         onClicked: {
             root.playChordWhenEditingChangeRequested(!checked)
@@ -118,7 +137,7 @@ BaseSection {
 
         navigation.name: "PlayChordSymbolBox"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 4
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)

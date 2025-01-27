@@ -87,6 +87,7 @@ PreferencesPage {
         NotePreviewSection {
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
             playChordWhenEditing: noteInputModel.playChordWhenEditing
+            playPreviewNotesInInputByDuration: noteInputModel.playPreviewNotesInInputByDuration
             playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
 
@@ -95,6 +96,10 @@ PreferencesPage {
 
             onPlayNotesWhenEditingChangeRequested: function(play) {
                 noteInputModel.playNotesWhenEditing = play
+            }
+
+            onPlayPreviewNotesInInputByDurationChangeRequested: function(play) {
+                noteInputModel.playPreviewNotesInInputByDuration = play
             }
 
             onPlayChordWhenEditingChangeRequested: function(play) {

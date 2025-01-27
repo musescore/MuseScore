@@ -134,6 +134,10 @@ public:
     void setIsPlayChordSymbolsEnabled(bool enabled)  override;
     muse::async::Notification isPlayChordSymbolsChanged() const override;
 
+    bool isPlayPreviewNotesInInputByDuration() const override;
+    void setIsPlayPreviewNotesInInputByDuration(bool play) override;
+    muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const override;
+
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled)  override;
 

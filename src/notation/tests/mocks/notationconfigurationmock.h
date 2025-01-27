@@ -134,6 +134,10 @@ public:
     MOCK_METHOD(void, setIsPlayChordSymbolsEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isPlayChordSymbolsChanged, (), (const, override));
 
+    MOCK_METHOD(bool, isPlayPreviewNotesInInputByDuration, (), (const, override));
+    MOCK_METHOD(void, setIsPlayPreviewNotesInInputByDuration, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, isPlayPreviewNotesInInputByDurationChanged, (), (const, override));
+
     MOCK_METHOD(bool, isMetronomeEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMetronomeEnabled, (bool), (override));
 

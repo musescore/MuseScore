@@ -144,6 +144,10 @@ public:
     virtual void setIsPlayChordSymbolsEnabled(bool enabled) = 0;
     virtual muse::async::Notification isPlayChordSymbolsChanged() const = 0;
 
+    virtual bool isPlayPreviewNotesInInputByDuration() const = 0;
+    virtual void setIsPlayPreviewNotesInInputByDuration(bool play) = 0;
+    virtual muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const = 0;
+
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
 

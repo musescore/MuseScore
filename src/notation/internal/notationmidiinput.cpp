@@ -185,8 +185,10 @@ void NotationMidiInput::addNoteEventsToInputState()
         INotationNoteInputPtr noteInput = m_notationInteraction->noteInput();
         noteInput->setInputNotes(notes);
 
-        const NoteInputState& state = noteInput->state();
-        playbackController()->playNotes(notes, state.staffIdx(), state.segment());
+        if (configuration()->isPlayPreviewNotesInInputByDuration()) {
+            const NoteInputState& state = noteInput->state();
+            playbackController()->playNotes(notes, state.staffIdx(), state.segment());
+        }
     }
 
     m_eventsQueue.clear();
