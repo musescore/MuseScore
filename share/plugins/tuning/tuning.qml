@@ -800,7 +800,35 @@ MuseScore {
                         text: "Add"                                
                         isNarrow: true
                         onClicked: addDialog.open() 
+
+                        StyledPopupView {        
+                            id: addDialog                             
+                            contentWidth:  c1.childrenRect.width
+                            contentHeight: c1.childrenRect.height 
+                            Column {
+                                id: c1  
+                                spacing: 30
+                                TextInputField {                
+                                    id: customTempName
+                                    hint: "Temperament name"  
+                                    focus: true 
+                                    onTextEditingFinished: function (newText) { currentText = newText }                                  
+                                }
+                                FlatButton {
+                                    //anchors.horizontalCenter: parent.horizontalCenter
+                                    text: "Ok"
+                                    accentButton: true
+                                    onClicked: {                   
+                                        addTemperament()
+                                        addDialog.close()
+                                        saveCustomTemperaments()
+                                        customTempName.currentText = ""                                       
+                                    }   
+                                } 
+                            }  
+                        }
                     }
+                    
                     FlatButton {
                         id: removeButton
                         text: "Remove"
@@ -850,36 +878,6 @@ MuseScore {
         }
     }    
 
-    Dialog {        
-        id: addDialog 
-        title: "Add Temperament"
-        anchors.centerIn: parent
-            
-        contentItem: Column {  
-            spacing: 30              
-            Row {
-                spacing: 10
-                StyledTextLabel {
-                    text: "Temperament name:"
-                }
-                TextField {                
-                    id: customTempName                    
-                }
-            }
-            FlatButton {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "Ok"
-                accentButton: true
-                onClicked: {                   
-                    addTemperament()
-                    addDialog.close()
-                    saveCustomTemperaments()
-                    customTempName.text = ""                                       
-                }   
-            } 
-        }  
-    }
-
     FileIO {
         id: fileIO
         source: fileIO.homePath()+"/Documents/MuseScore4/Plugins/tuningPluginData.json" //Qt.resolvedUrl("tuningPluginData.json").toString().replace("file:///", ""); 
@@ -887,7 +885,7 @@ MuseScore {
 
     function addTemperament() {
         var entry= {
-                        "name": customTempName.text,
+                        "name": customTempName.currentText,
                         "offsets": [],
                         "root": currentRoot,
                         "pure": currentPureTone                        
