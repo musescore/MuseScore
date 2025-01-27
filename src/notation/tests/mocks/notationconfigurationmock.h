@@ -112,6 +112,10 @@ public:
     MOCK_METHOD(void, setDefaultNoteInputMethod, (NoteInputMethod), (override));
     MOCK_METHOD(muse::async::Notification, defaultNoteInputMethodChanged, (), (const, override));
 
+    MOCK_METHOD(bool, addAccidentalDotsArticulationsToNextNoteEntered, (), (const, override));
+    MOCK_METHOD(void, setAddAccidentalDotsArticulationsToNextNoteEntered, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, addAccidentalDotsArticulationsToNextNoteEnteredChanged, (), (const, override));
+
     MOCK_METHOD(bool, isMidiInputEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMidiInputEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isMidiInputEnabledChanged, (), (const, override));

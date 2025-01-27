@@ -284,16 +284,31 @@ muse::async::Channel<muse::io::path_t> NotationConfigurationStub::partStyleFileP
     return ch;
 }
 
-void NotationConfigurationStub::setDefaultNoteInputMethod(NoteInputMethod)
-{
-}
-
 NoteInputMethod NotationConfigurationStub::defaultNoteInputMethod() const
 {
     return NoteInputMethod::UNKNOWN;
 }
 
+void NotationConfigurationStub::setDefaultNoteInputMethod(NoteInputMethod)
+{
+}
+
 muse::async::Notification NotationConfigurationStub::defaultNoteInputMethodChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::addAccidentalDotsArticulationsToNextNoteEntered() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setAddAccidentalDotsArticulationsToNextNoteEntered(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::addAccidentalDotsArticulationsToNextNoteEnteredChanged() const
 {
     static muse::async::Notification n;
     return n;

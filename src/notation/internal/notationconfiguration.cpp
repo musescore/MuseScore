@@ -61,6 +61,10 @@ static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrec
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
 static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/defaultInputMethod");
+
+static const Settings::Key ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED(module_name,
+                                                                                  "score/addAccidentalDotsArticulationsToNextNoteEntered");
+
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY(module_name,
                                                                                 "score/startNoteInputAtSelectionWhenPressingMidiKey");
@@ -201,6 +205,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(BY_NOTE_NAME_INPUT_METHOD));
     settings()->valueChanged(DEFAULT_NOTE_INPUT_METHOD).onReceive(this, [this](const Val&) {
         m_defaultNoteInputMethodChanged.notify();
+    });
+
+    settings()->setDefaultValue(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED, Val(true));
+    settings()->valueChanged(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED).onReceive(this, [this](const Val&) {
+        m_addAccidentalDotsArticulationsToNextNoteEnteredChanged.notify();
     });
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
@@ -693,6 +702,21 @@ void NotationConfiguration::setDefaultNoteInputMethod(NoteInputMethod method)
 async::Notification NotationConfiguration::defaultNoteInputMethodChanged() const
 {
     return m_defaultNoteInputMethodChanged;
+}
+
+bool NotationConfiguration::addAccidentalDotsArticulationsToNextNoteEntered() const
+{
+    return settings()->value(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED).toBool();
+}
+
+void NotationConfiguration::setAddAccidentalDotsArticulationsToNextNoteEntered(bool value)
+{
+    settings()->setSharedValue(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED, Val(value));
+}
+
+muse::async::Notification NotationConfiguration::addAccidentalDotsArticulationsToNextNoteEnteredChanged() const
+{
+    return m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

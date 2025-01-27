@@ -4504,19 +4504,6 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
     }
 }
 
-void NotationInteraction::addAccidentalToSelection(AccidentalType type)
-{
-    if (selection()->isNone()) {
-        return;
-    }
-
-    mu::engraving::EditData editData(&m_scoreCallbacks);
-
-    startEdit(TranslatableString("undoableAction", "Add accidental"));
-    score()->toggleAccidental(type, editData);
-    apply();
-}
-
 void NotationInteraction::putRestToSelection()
 {
     mu::engraving::InputState& is = score()->inputState();
@@ -4572,7 +4559,38 @@ void NotationInteraction::addBracketsToSelection(BracketsType type)
     }
 }
 
-void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationSymbolId)
+void NotationInteraction::toggleAccidentalForSelection(AccidentalType type)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    bool accidentalAlreadyAdded = false;
+    for (const EngravingItem* item : score()->selection().elements()) {
+        if (!item->isNote()) {
+            continue;
+        }
+
+        if (toNote(item)->accidentalType() != type) {
+            accidentalAlreadyAdded = false;
+            break;
+        }
+
+        accidentalAlreadyAdded = true;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Toggle accidental"));
+
+    if (accidentalAlreadyAdded) {
+        score()->changeAccidental(AccidentalType::NONE);
+    } else {
+        score()->changeAccidental(type);
+    }
+
+    apply();
+}
+
+void NotationInteraction::toggleArticulationForSelection(SymbolId articulationSymbolId)
 {
     if (selection()->isNone()) {
         return;
@@ -4608,6 +4626,21 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     for (Chord* chord: chords) {
         chord->updateArticulations({ articulationSymbolId }, updateMode);
     }
+    apply();
+}
+
+void NotationInteraction::toggleDotsForSelection(Pad dots)
+{
+    IF_ASSERT_FAILED(dots >= Pad::DOT && dots <= Pad::DOT4) {
+        return;
+    }
+
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Toggle augmentation dots"));
+    score()->padToggle(dots, true /*toggleForSelectionOnly*/);
     apply();
 }
 

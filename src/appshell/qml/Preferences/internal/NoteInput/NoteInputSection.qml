@@ -35,7 +35,10 @@ BaseSection {
     property alias noteInputMethods: defaultNoteInputMethodDropdown.model
     property int defaultNoteInputMethod: 0
 
+    property bool addAccidentalDotsArticulationsToNextNoteEntered: true
+
     signal defaultNoteInputMethodChangeRequested(int method)
+    signal addAccidentalDotsArticulationsToNextNoteEnteredChangeRequested(bool add)
 
     ComboBoxWithTitle {
         id: defaultNoteInputMethodDropdown
@@ -50,6 +53,25 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.defaultNoteInputMethodChangeRequested(newValue)
+        }
+    }
+
+    ComboBoxWithTitle {
+        title: qsTrc("appshell/preferences", "Apply accidentals, augmentation dots, and articulations")
+
+        navigation.name: "AddAccidentalDotsArticulationsToNextNoteEnteredDropdown"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        model: [
+            { text: qsTrc("appshell/preferences", "To next note entered"), value: 0 },
+            { text: qsTrc("appshell/preferences", "To previous note entered"), value: 1 },
+        ]
+
+        currentIndex: root.addAccidentalDotsArticulationsToNextNoteEntered ? 0 : 1
+
+        onValueEdited: function(newIndex, newValue) {
+            root.addAccidentalDotsArticulationsToNextNoteEnteredChangeRequested(newIndex === 0)
         }
     }
 }

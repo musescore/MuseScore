@@ -164,10 +164,10 @@ void NotationActionController::init()
 
     registerAction("rest", &Interaction::putRestToSelection);
 
-    registerAction("add-marcato", [this]() { addArticulation(SymbolId::articMarcatoAbove); });
-    registerAction("add-sforzato", [this]() { addArticulation(SymbolId::articAccentAbove); });
-    registerAction("add-tenuto", [this]() { addArticulation(SymbolId::articTenutoAbove); });
-    registerAction("add-staccato", [this]() { addArticulation(SymbolId::articStaccatoAbove); });
+    registerAction("add-marcato", [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
+    registerAction("add-sforzato", [this]() { toggleArticulation(SymbolId::articAccentAbove); });
+    registerAction("add-tenuto", [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
+    registerAction("add-staccato", [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
 
     registerAction("duplet", [this]() { putTuplet(2); }, &Controller::noteOrRestSelected);
     registerAction("triplet", [this]() { putTuplet(3); }, &Controller::noteOrRestSelected);
@@ -789,12 +789,25 @@ void NotationActionController::padNote(const Pad& pad)
 {
     TRACEFUNC;
 
-    INotationNoteInputPtr noteInput = currentNotationNoteInput();
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
     if (!noteInput) {
         return;
     }
 
     startNoteInputIfNeed();
+
+    if (pad >= Pad::DOT && pad <= Pad::DOT4) {
+        if (!noteInput->isNoteInputMode() || !configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
+            interaction->toggleDotsForSelection(pad);
+            return;
+        }
+    }
+
     noteInput->padNote(pad);
 
     if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
@@ -846,45 +859,47 @@ void NotationActionController::removeNote(const ActionData& args)
 void NotationActionController::toggleAccidental(AccidentalType type)
 {
     TRACEFUNC;
-    auto interaction = currentNotationInteraction();
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    auto noteInput = currentNotationNoteInput();
+    INotationNoteInputPtr noteInput = interaction->noteInput();
     if (!noteInput) {
         return;
     }
 
     startNoteInputIfNeed();
 
-    if (noteInput->isNoteInputMode()) {
+    if (noteInput->isNoteInputMode() && configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
         noteInput->setAccidental(type);
     } else {
-        interaction->addAccidentalToSelection(type);
+        interaction->toggleAccidentalForSelection(type);
         playSelectedElement();
     }
 }
 
-void NotationActionController::addArticulation(SymbolId articulationSymbolId)
+void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
 {
     TRACEFUNC;
-    auto interaction = currentNotationInteraction();
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    auto noteInput = interaction->noteInput();
+    INotationNoteInputPtr noteInput = interaction->noteInput();
     if (!noteInput) {
         return;
     }
 
     startNoteInputIfNeed();
 
-    if (noteInput->isNoteInputMode()) {
+    if (noteInput->isNoteInputMode() && configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
         noteInput->setArticulation(articulationSymbolId);
     } else {
-        interaction->changeSelectedNotesArticulation(articulationSymbolId);
+        interaction->toggleArticulationForSelection(articulationSymbolId);
     }
 }
 

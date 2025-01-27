@@ -3092,11 +3092,7 @@ void Score::cmdConcertPitchChanged(bool flag)
     }
 }
 
-//---------------------------------------------------------
-//   padToggle
-//---------------------------------------------------------
-
-void Score::padToggle(Pad p, const EditData& ed)
+void Score::padToggle(Pad p, bool toggleForSelectionOnly)
 {
     if (!noteEntryMode()) {
         for (ChordRest* cr : getSelectedChordRests()) {
@@ -3106,7 +3102,10 @@ void Score::padToggle(Pad p, const EditData& ed)
         }
     }
 
-    int oldDots = m_is.duration().dots();
+    const TDuration oldDuration = m_is.duration();
+    const bool oldRest = m_is.rest();
+    const AccidentalType oldAccidentalType = m_is.accidentalType();
+
     switch (p) {
     case Pad::NOTE00:
         m_is.setDuration(DurationType::V_LONG);
@@ -3152,7 +3151,6 @@ void Score::padToggle(Pad p, const EditData& ed)
             m_is.setRest(!m_is.rest());
             m_is.setAccidentalType(AccidentalType::NONE);
         } else if (selection().isNone()) {
-            ed.view()->startNoteEntryMode();
             m_is.setDuration(DurationType::V_QUARTER);
             m_is.setRest(true);
         } else {
@@ -3208,20 +3206,20 @@ void Score::padToggle(Pad p, const EditData& ed)
         // if in "note enter" mode, reset
         // rest flag
         //
-        if (noteEntryMode()) {
+        if (noteEntryMode() && !toggleForSelectionOnly) {
             if (usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
-                switch (oldDots) {
+                switch (oldDuration.dots()) {
                 case 1:
-                    padToggle(Pad::DOT, ed);
+                    padToggle(Pad::DOT);
                     break;
                 case 2:
-                    padToggle(Pad::DOT2, ed);
+                    padToggle(Pad::DOT2);
                     break;
                 case 3:
-                    padToggle(Pad::DOT3, ed);
+                    padToggle(Pad::DOT3);
                     break;
                 case 4:
-                    padToggle(Pad::DOT4, ed);
+                    padToggle(Pad::DOT4);
                     break;
                 }
 
@@ -3289,7 +3287,9 @@ void Score::padToggle(Pad p, const EditData& ed)
     }
 
     if (noteEntryMode()) {
-        return;
+        if (!toggleForSelectionOnly || selection().isNone()) {
+            return;
+        }
     }
 
     std::vector<ChordRest*> crs;
@@ -3318,12 +3318,10 @@ void Score::padToggle(Pad p, const EditData& ed)
         if (cr) {
             crs.push_back(cr);
         } else {
-            ed.view()->startNoteEntryMode();
             deselect(e);
         }
     } else if (selection().isNone() && p != Pad::REST) {
         TDuration td = m_is.duration();
-        ed.view()->startNoteEntryMode();
         m_is.setDuration(td);
         m_is.setAccidentalType(AccidentalType::NONE);
     } else {
@@ -3382,6 +3380,13 @@ void Score::padToggle(Pad p, const EditData& ed)
         }
         select(selectList, SelectType::ADD, 0);
         selection().updateSelectedElements();
+    }
+
+    if (toggleForSelectionOnly) {
+        m_is.setDuration(oldDuration);
+        m_is.setRest(oldRest);
+        m_is.setAccidentalType(oldAccidentalType);
+        m_is.moveToNextInputPos();
     }
 }
 

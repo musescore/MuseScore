@@ -370,10 +370,8 @@ void NotationNoteInput::padNote(const Pad& pad)
 {
     TRACEFUNC;
 
-    mu::engraving::EditData editData(m_scoreCallbacks);
-
     startEdit(TranslatableString("undoableAction", "Pad note"));
-    score()->padToggle(pad, editData);
+    score()->padToggle(pad);
     apply();
 
     notifyAboutStateChanged();
@@ -498,9 +496,7 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     TRACEFUNC;
 
-    mu::engraving::EditData editData(m_scoreCallbacks);
-
-    score()->toggleAccidental(accidentalType, editData);
+    score()->toggleAccidental(accidentalType);
 
     notifyAboutStateChanged();
 
@@ -774,10 +770,8 @@ void NotationNoteInput::doubleNoteInputDuration()
 {
     TRACEFUNC;
 
-    mu::engraving::EditData editData(m_scoreCallbacks);
-
     startEdit(TranslatableString("undoableAction", "Double note input duration"));
-    score()->cmdPadNoteIncreaseTAB(editData);
+    score()->cmdPadNoteIncreaseTAB();
     apply();
 
     notifyAboutStateChanged();
@@ -789,10 +783,8 @@ void NotationNoteInput::halveNoteInputDuration()
 {
     TRACEFUNC;
 
-    mu::engraving::EditData editData(m_scoreCallbacks);
-
     startEdit(TranslatableString("undoableAction", "Halve note input duration"));
-    score()->cmdPadNoteDecreaseTAB(editData);
+    score()->cmdPadNoteDecreaseTAB();
     apply();
 
     notifyAboutStateChanged();

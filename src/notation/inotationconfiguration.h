@@ -122,6 +122,10 @@ public:
     virtual void setDefaultNoteInputMethod(NoteInputMethod method) = 0;
     virtual muse::async::Notification defaultNoteInputMethodChanged() const = 0;
 
+    virtual bool addAccidentalDotsArticulationsToNextNoteEntered() const = 0;
+    virtual void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) = 0;
+    virtual muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const = 0;
+
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
     virtual muse::async::Notification isMidiInputEnabledChanged() const = 0;

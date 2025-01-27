@@ -37,6 +37,10 @@ void NoteInputPreferencesModel::load()
         emit defaultNoteInputMethodChanged(defaultNoteInputMethod());
     });
 
+    notationConfiguration()->addAccidentalDotsArticulationsToNextNoteEnteredChanged().onNotify(this, [this]() {
+        emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(addAccidentalDotsArticulationsToNextNoteEntered());
+    });
+
     notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
         emit midiInputEnabledChanged(midiInputEnabled());
     });
@@ -115,6 +119,11 @@ int NoteInputPreferencesModel::defaultNoteInputMethod() const
     return static_cast<int>(notationConfiguration()->defaultNoteInputMethod());
 }
 
+bool NoteInputPreferencesModel::addAccidentalDotsArticulationsToNextNoteEntered() const
+{
+    return notationConfiguration()->addAccidentalDotsArticulationsToNextNoteEntered();
+}
+
 bool NoteInputPreferencesModel::midiInputEnabled() const
 {
     return notationConfiguration()->isMidiInputEnabled();
@@ -183,6 +192,16 @@ void NoteInputPreferencesModel::setDefaultNoteInputMethod(int value)
 
     notationConfiguration()->setDefaultNoteInputMethod(static_cast<mu::notation::NoteInputMethod>(value));
     emit defaultNoteInputMethodChanged(value);
+}
+
+void NoteInputPreferencesModel::setAddAccidentalDotsArticulationsToNextNoteEntered(bool value)
+{
+    if (value == addAccidentalDotsArticulationsToNextNoteEntered()) {
+        return;
+    }
+
+    notationConfiguration()->setAddAccidentalDotsArticulationsToNextNoteEntered(value);
+    emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(value);
 }
 
 void NoteInputPreferencesModel::setMidiInputEnabled(bool value)
