@@ -372,6 +372,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::lyricsMelismaMinLength,  false, minMelismaLength,     resetMinMelismaLength },
         { StyleId::lyricsMelismaForce,      false, lyricsMelismaForce,   resetLyricsMelismaForce },
         { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
+        { StyleId::lyricsAvoidBarlines, false, lyricsAvoidBarlines, resetLyricsAvoidBarlines },
 
         { StyleId::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
@@ -554,6 +555,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::repeatBarTips,            false, showRepeatBarTips,            resetShowRepeatBarTips },
         { StyleId::startBarlineSingle,       false, showStartBarlineSingle,       resetShowStartBarlineSingle },
         { StyleId::startBarlineMultiple,     false, showStartBarlineMultiple,     resetShowStartBarlineMultiple },
+        { StyleId::maskBarlinesForText,      false, maskBarlines,                 resetMaskBarlines },
         { StyleId::dividerLeftSym,           false, dividerLeftSym,               0 },
         { StyleId::dividerRightSym,          false, dividerRightSym,              0 },
 

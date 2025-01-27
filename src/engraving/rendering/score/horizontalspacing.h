@@ -108,6 +108,7 @@ private:
     static bool stopCheckingPreviousSegments(const SegmentPosition& prev, const SegmentPosition& curSegPos);
     static void checkLyricsAgainstLeftMargin(Segment* segment, double& x, HorizontalSpacingContext& ctx);
     static void checkLyricsAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
+    static double spaceLyricsAgainstBarlines(Segment* firstSeg, Segment* secondSeg, const HorizontalSpacingContext& ctx);
     static void checkLargeTimeSigAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
     static void moveRightAlignedSegments(std::vector<SegmentPosition>& placedSegments, const HorizontalSpacingContext& ctx);
 

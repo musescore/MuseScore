@@ -99,6 +99,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lyricsMelismaForce,                         false),
     styleDef(lyricsMelismaMinLength,                     Spatium(1.0)),
     styleDef(lyricsDashPosAtStartOfSystem,               int(LyricsDashSystemStart::STANDARD)),
+    styleDef(lyricsAvoidBarlines,                        true),
 
     styleDef(lyricsOddFontFace,                          "Edwin"),
     styleDef(lyricsOddFontSize,                          10.0),
@@ -148,6 +149,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(repeatBarTips,                              false),
     styleDef(startBarlineSingle,                         false),
     styleDef(startBarlineMultiple,                       true),
+    styleDef(maskBarlinesForText,                        true),
 
     styleDef(bracketWidth,                               Spatium(0.45)),
     styleDef(bracketDistance,                            Spatium(0.45)),

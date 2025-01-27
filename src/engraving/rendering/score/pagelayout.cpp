@@ -52,6 +52,7 @@
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "masklayout.h"
 #include "measurelayout.h"
 #include "slurtielayout.h"
 #include "systemlayout.h"
@@ -401,6 +402,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
             SystemLayout::centerBigTimeSigsAcrossStaves(system);
         }
     }
+
+    MaskLayout::computeMasks(ctx, page);
 
     page->invalidateBspTree();
 }

@@ -316,5 +316,7 @@ private:
     static void draw(const Measure* item, muse::draw::Painter* painter);
     static void draw(const Segment* item, muse::draw::Painter* painter);
     static void draw(const Chord* item, muse::draw::Painter* painter);
+
+    static void setMask(const EngravingItem* item, muse::draw::Painter* painter);
 };
 }

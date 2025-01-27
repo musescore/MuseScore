@@ -89,6 +89,7 @@ public:
     virtual bool hasClipping() const = 0;
 
     virtual void setClipRect(const RectF& rect) = 0;
+    virtual void setMask(const RectF& background, const std::vector<RectF>& maskRects) = 0;
     virtual void setClipping(bool enable) = 0;
 };
 

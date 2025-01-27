@@ -357,6 +357,27 @@ void QPainterProvider::setClipRect(const RectF& rect)
     m_painter->setClipRect(rect.toQRectF());
 }
 
+void QPainterProvider::setMask(const RectF& background, const std::vector<RectF>& maskRects)
+{
+    if (maskRects.empty()) {
+        m_painter->setClipPath(QPainterPath(), Qt::NoClip);
+        return;
+    }
+
+    QPainterPath backgroundPath;
+    backgroundPath.addRect(background.toQRectF());
+
+    QPainterPath exclusionRegion;
+    exclusionRegion.setFillRule(Qt::WindingFill);
+    for (const RectF& rect : maskRects) {
+        exclusionRegion.addRect(rect.toQRectF());
+    }
+
+    QPainterPath mask = backgroundPath.subtracted(exclusionRegion);
+
+    m_painter->setClipPath(mask);
+}
+
 void QPainterProvider::setClipping(bool enable)
 {
     m_painter->setClipping(enable);
