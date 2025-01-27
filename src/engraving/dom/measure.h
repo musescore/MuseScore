@@ -352,6 +352,7 @@ public:
 
     void checkHeader();
     void checkTrailer();
+    void checkEndOfMeasureChange();
 
     void respaceSegments();
 

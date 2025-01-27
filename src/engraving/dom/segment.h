@@ -177,6 +177,8 @@ public:
     bool empty() const { return flag(ElementFlag::EMPTY); }
     bool written() const { return flag(ElementFlag::WRITTEN); }
     void setWritten(bool val) const { setFlag(ElementFlag::WRITTEN, val); }
+    bool endOfMeasureChange() const { return flag(ElementFlag::END_OF_MEASURE_CHANGE); }         // Key/time sigs which should be placed at the end of the measure
+    void setEndOfMeasureChange(bool val) const { setFlag(ElementFlag::END_OF_MEASURE_CHANGE, val); }
 
     void fixStaffIdx();
 

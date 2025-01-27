@@ -887,6 +887,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     ModifyDom::cmdUpdateNotes(measure, ctx.dom());
     ModifyDom::createStems(measure,  ctx);
     ModifyDom::setTrackForChordGraceNotes(measure, ctx.dom());
+    ModifyDom::sortMeasureBeginSegments(measure, ctx);
     // --------------------
     //
     // calculate accidentals and note lines,
@@ -995,8 +996,6 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     } else if (seg) {
         ctx.mutDom().undoRemoveElement(seg);
     }
-
-    ModifyDom::sortMeasureBeginSegments(measure, ctx);
 
     for (Segment& s : measure->segments()) {
         if (s.isEndBarLineType()) {
@@ -2046,20 +2045,21 @@ void MeasureLayout::removeRepeatCourtesyParentheses(Measure* m, const bool conti
             continue;
         }
         for (track_idx_t track = 0; track <= ctx.dom().nstaves() * VOICES; track += VOICES) {
-            EngravingItem* paren = seg->findAnnotation(ElementType::PARENTHESIS, track, track);
-            if (!paren) {
-                continue;
+            std::vector<EngravingItem*> parens = seg->findAnnotations(ElementType::PARENTHESIS, track, track);
+            for (EngravingItem* paren : parens) {
+                if (!paren->isParenthesis()) {
+                    continue;
+                }
+                seg->remove(paren);
             }
-
-            seg->remove(paren);
         }
     }
 }
 
 void MeasureLayout::setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx)
 {
-    const bool showCourtesyRepeats = m->repeatEnd() && ctx.conf().styleB(Sid::showCourtesiesRepeats);
-    const bool showCourtesyOtherJumps = m->repeatJump() && ctx.conf().styleB(Sid::showCourtesiesOtherJumps);
+    const bool showCourtesyRepeats = m->repeatEnd() && ctx.conf().styleB(Sid::showCourtesiesRepeats) && !m->endOfMeasureChange();
+    const bool showCourtesyOtherJumps = m->repeatJump() && ctx.conf().styleB(Sid::showCourtesiesOtherJumps) && !m->endOfMeasureChange();
 
     if (showCourtesyRepeats) {
         MeasureLayout::addRepeatCourtesies(m, ctx);
@@ -2084,8 +2084,10 @@ void MeasureLayout::setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx)
     }
 
     const bool courtesiesAfterCancellingRepeats = m->prevMeasure() && m->prevMeasure()->repeatEnd()
-                                                  && ctx.conf().styleB(Sid::showCourtesiesAfterCancellingRepeats);
-    const bool courtesiesAfterCancellingOtherJumps = m->prevMeasure() && m->prevMeasure()->repeatJump() && ctx.conf().styleB(
+                                                  && !m->prevMeasure()->endOfMeasureChange() && ctx.conf().styleB(
+        Sid::showCourtesiesAfterCancellingRepeats);
+    const bool courtesiesAfterCancellingOtherJumps = m->prevMeasure() && m->prevMeasure()->repeatJump()
+                                                     && !m->prevMeasure()->endOfMeasureChange() && ctx.conf().styleB(
         Sid::showCourtesiesAfterCancellingOtherJumps);
     if (courtesiesAfterCancellingRepeats) {
         MeasureLayout::addRepeatContinuationCourtesies(m, ctx);
@@ -2120,6 +2122,9 @@ void MeasureLayout::addRepeatCourtesies(Measure* m, LayoutContext& ctx)
     }
 
     for (Measure* repeatStartMeasure : measures) {
+        if (repeatStartMeasure == m->nextMeasure()) {
+            continue;
+        }
         setCourtesyClef(m, repeatStartMeasure->tick(), m->endTick(), SegmentType::ClefRepeatAnnounce, ctx);
         setCourtesyKeySig(m, repeatStartMeasure->tick(), m->endTick(), SegmentType::KeySigRepeatAnnounce, ctx);
         setCourtesyTimeSig(m, repeatStartMeasure->tick(), m->endTick(), SegmentType::TimeSigRepeatAnnounce, ctx);

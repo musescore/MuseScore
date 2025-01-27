@@ -563,14 +563,14 @@ StyledFlickable {
 
                 CheckBox {
                     text: qsTrc("notation/editstyle/timesignatures", "At repeats")
-                    checked: pageModel.courtesyChangesBeforeBarlineRepeats.value === true
-                    onClicked: pageModel.courtesyChangesBeforeBarlineRepeats.value = !pageModel.courtesyChangesBeforeBarlineRepeats.value
+                    checked: pageModel.changesBeforeBarlineRepeats.value === true
+                    onClicked: pageModel.changesBeforeBarlineRepeats.value = !pageModel.changesBeforeBarlineRepeats.value
                 }
 
                 CheckBox {
                     text: qsTrc("notation/editstyle/timesignatures", "At all other jumps")
-                    checked: pageModel.courtesyChangesBeforeBarlineOtherJumps.value === true
-                    onClicked: pageModel.courtesyChangesBeforeBarlineOtherJumps.value = !pageModel.courtesyChangesBeforeBarlineOtherJumps.value
+                    checked: pageModel.changesBeforeBarlineOtherJumps.value === true
+                    onClicked: pageModel.changesBeforeBarlineOtherJumps.value = !pageModel.changesBeforeBarlineOtherJumps.value
                 }
 
                 StyledGroupBox {
@@ -578,7 +578,6 @@ StyledFlickable {
 
                     title: qsTrc("notation/editstyle/timesignatures", "Changes that apply only after repeats and jumps")
 
-                    // OR gridlayout with 2 columns
                     GridLayout {
                         width: parent.width
                         rowSpacing: 8

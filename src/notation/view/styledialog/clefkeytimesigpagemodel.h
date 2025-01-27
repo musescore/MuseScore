@@ -66,8 +66,8 @@ class ClefKeyTimeSigPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * genKeysig READ genKeysig CONSTANT)
     Q_PROPERTY(StyleItem * genCourtesyKeysig READ genCourtesyKeysig CONSTANT)
 
-    Q_PROPERTY(StyleItem * courtesyChangesBeforeBarlineRepeats READ courtesyChangesBeforeBarlineRepeats CONSTANT)
-    Q_PROPERTY(StyleItem * courtesyChangesBeforeBarlineOtherJumps READ courtesyChangesBeforeBarlineOtherJumps CONSTANT)
+    Q_PROPERTY(StyleItem * changesBeforeBarlineRepeats READ changesBeforeBarlineRepeats CONSTANT)
+    Q_PROPERTY(StyleItem * changesBeforeBarlineOtherJumps READ changesBeforeBarlineOtherJumps CONSTANT)
     Q_PROPERTY(StyleItem * placeClefsBeforeRepeats READ placeClefsBeforeRepeats CONSTANT)
     Q_PROPERTY(StyleItem * changesBetweenEndStartRepeat READ changesBetweenEndStartRepeat CONSTANT)
     Q_PROPERTY(StyleItem * showCourtesiesRepeats READ showCourtesiesRepeats CONSTANT)
@@ -122,8 +122,8 @@ public:
     StyleItem* genKeysig() const;
     StyleItem* genCourtesyKeysig() const;
 
-    StyleItem* courtesyChangesBeforeBarlineRepeats() const;
-    StyleItem* courtesyChangesBeforeBarlineOtherJumps() const;
+    StyleItem* changesBeforeBarlineRepeats() const;
+    StyleItem* changesBeforeBarlineOtherJumps() const;
     StyleItem* placeClefsBeforeRepeats() const;
     StyleItem* changesBetweenEndStartRepeat() const;
     StyleItem* showCourtesiesRepeats() const;

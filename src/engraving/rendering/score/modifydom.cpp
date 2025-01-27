@@ -24,6 +24,7 @@
 #include "dom/measure.h"
 #include "dom/staff.h"
 #include "dom/spannermap.h"
+#include "dom/timesig.h"
 #include "dom/trill.h"
 #include "dom/ornament.h"
 #include "dom/note.h"
@@ -208,40 +209,110 @@ void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& 
 
 void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
 {
-    if (!measure->repeatStart()) {
+    // Move segments between measure which need to move
+
+    // Move key and time signature segments to the correct measure.
+    // Depending on configuration, this could mean moving segments at the end of this measure to the start of the following measure
+    // or moving segments from the start of the following measure to the end of this measure
+
+    // Loop through clef, key, time sigs in this bar.  If any are found and shouldn't be in this bar, move to the next
+
+    auto changeAppliesToRepeatAndContinuation = [&](const Segment& seg) -> bool {
+        // Check if the change applies to the beginning of the repeat section as well as the continuation
+        const std::vector<Measure*> measures = findFollowingRepeatMeasures(measure);
+        for (const Measure* repeatMeasure : measures) {
+            const Fraction startTick = repeatMeasure->tick();
+            for (track_idx_t track = 0; track < ctx.dom().nstaves(); track += VOICES) {
+                const Staff* staff = ctx.dom().staff(track2staff(track));
+
+                if (seg.isKeySigType()) {
+                    const Key continuationKey = staff->key(seg.tick());
+                    const Key repeatKey = staff->key(startTick);
+                    return continuationKey == repeatKey;
+                }
+
+                if (seg.isTimeSigType()) {
+                    const TimeSig* continuationTimeSig = staff->timeSig(seg.tick());
+                    const TimeSig* repeatTimeSig = staff->timeSig(startTick);
+                    return continuationTimeSig && repeatTimeSig && continuationTimeSig->sig() == repeatTimeSig->sig();
+                }
+
+                // const ClefType& continuationClef = staff->clef(seg.tick());
+                // const ClefType& repeatClef = staff->clef(startTick);
+                // if (continuationClef == repeatClef) {
+                //     return true;
+                // }
+            }
+        }
+        return false;
+    };
+
+    Measure* nextMeasure = measure->nextMeasure();
+
+    const bool sigsShouldBeInThisMeasure = ((measure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
+                                            || (measure->repeatJump() && ctx.conf().styleB(Sid::changesBeforeBarlineOtherJumps)));
+
+    std::vector<Segment*> segsToMoveToNextMeasure;
+    for (Segment& seg : measure->segments()) {
+        if (seg.tick() != measure->endTick() || seg.isChordRestType()) {
+            continue;
+        }
+
+        // Move key sigs and time sigs at the end of this measure into the next measure
+        if ((seg.isKeySigType() || seg.isTimeSigType()) && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
+            segsToMoveToNextMeasure.push_back(&seg);
+        }
+    }
+
+    // No next measure, so these segments are useless
+    if (!nextMeasure) {
+        for (Segment* seg : segsToMoveToNextMeasure) {
+            measure->remove(seg);
+        }
         return;
     }
 
-    Segment* blSeg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
-    Segment* ksSeg = measure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
-    Segment* tsSeg = measure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    std::vector<Segment*> segsToMoveToThisMeasure;
+    for (Segment& seg : nextMeasure->segments()) {
+        if (seg.tick() != nextMeasure->tick() || seg.isChordRestType()) {
+            continue;
+        }
 
-    if (!blSeg || (!ksSeg && !tsSeg)) {
-        return;
+        // Move key sigs and time sigs at the start of the next measure to the end of this measure
+        if ((seg.isTimeSigType() || seg.isKeySigType()) && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
+            segsToMoveToThisMeasure.push_back(&seg);
+        }
     }
 
-    Segment* s1 = nullptr; // leftmost, could be null if there only a time sig or only a key sig
-    Segment* s2 = nullptr;
-    Segment* s3 = nullptr; // rightmost
-
-    std::vector<Segment*> segments;
-    if (ctx.conf().styleB(Sid::changesBetweenEndStartRepeat)) {
-        s3 = blSeg;
-        s2 = tsSeg ? tsSeg : ksSeg;
-        s1 = tsSeg ? ksSeg : nullptr;
-    } else {
-        s3 = tsSeg ? tsSeg : ksSeg;
-        s2 = ksSeg ? ksSeg : blSeg;
-        s1 = ksSeg ? blSeg : nullptr;
+    for (Segment* seg : segsToMoveToNextMeasure) {
+        seg->setRtick(Fraction(0, 1));
+        seg->setEndOfMeasureChange(false);
+        measure->segments().remove(seg);
+        nextMeasure->add(seg);
     }
 
-    if (s2->next() != s3) {
-        measure->segments().remove(s2);
-        measure->segments().insert(s2, s3);
+    for (Segment* seg : segsToMoveToThisMeasure) {
+        seg->setRtick(measure->ticks());
+        seg->setEndOfMeasureChange(true);
+        nextMeasure->segments().remove(seg);
+        measure->add(seg);
     }
 
-    if (s1 && s1->next() != s2) {
-        measure->segments().remove(s1);
-        measure->segments().insert(s1, s2);
+    measure->checkEndOfMeasureChange();
+
+    // Sort segments at start of next measure
+    std::vector<Segment*> segsToSort;
+    for (Segment& seg : nextMeasure->segments()) {
+        if (seg.tick() != Fraction(0, 0) || seg.isChordRestType()) {
+            continue;
+        }
+
+        segsToSort.push_back(&seg);
+    }
+
+    // Re-add the segments. They will be placed in their correct positions
+    for (Segment* seg : segsToSort) {
+        nextMeasure->segments().remove(seg);
+        nextMeasure->add(seg);
     }
 }
