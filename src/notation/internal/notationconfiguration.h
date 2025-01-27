@@ -149,6 +149,10 @@ public:
     void setIsPlayChordSymbolsEnabled(bool enabled) override;
     muse::async::Notification isPlayChordSymbolsChanged() const override;
 
+    bool isPlayPreviewNotesInInputByDuration() const override;
+    void setIsPlayPreviewNotesInInputByDuration(bool play) override;
+    muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const override;
+
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled) override;
 
@@ -274,6 +278,7 @@ private:
     muse::async::Channel<std::string> m_styleFileImportPathChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
+    muse::async::Notification m_isPlayNotesPreviewInInputByDurationChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
     muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;

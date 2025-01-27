@@ -368,6 +368,21 @@ muse::async::Notification NotationConfigurationStub::isPlayChordSymbolsChanged()
     return n;
 }
 
+bool NotationConfigurationStub::isPlayPreviewNotesInInputByDuration() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setIsPlayPreviewNotesInInputByDuration(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::isPlayPreviewNotesInInputByDurationChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::isMetronomeEnabled() const
 {
     return false;

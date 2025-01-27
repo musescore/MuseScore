@@ -49,6 +49,10 @@ void NoteInputPreferencesModel::load()
         emit playNotesWhenEditingChanged(playNotesWhenEditing());
     });
 
+    notationConfiguration()->isPlayPreviewNotesInInputByDurationChanged().onNotify(this, [this]() {
+        emit playPreviewNotesInInputByDurationChanged(playPreviewNotesInInputByDuration());
+    });
+
     shortcutsConfiguration()->advanceToNextNoteOnKeyReleaseChanged().onReceive(this, [this](bool value) {
         emit advanceToNextNoteOnKeyReleaseChanged(value);
     });
@@ -134,6 +138,11 @@ int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() con
 bool NoteInputPreferencesModel::playNotesWhenEditing() const
 {
     return playbackConfiguration()->playNotesWhenEditing();
+}
+
+bool NoteInputPreferencesModel::playPreviewNotesInInputByDuration() const
+{
+    return notationConfiguration()->isPlayPreviewNotesInInputByDuration();
 }
 
 int NoteInputPreferencesModel::notePlayDurationMilliseconds() const
@@ -224,6 +233,16 @@ void NoteInputPreferencesModel::setPlayNotesWhenEditing(bool value)
 
     playbackConfiguration()->setPlayNotesWhenEditing(value);
     emit playNotesWhenEditingChanged(value);
+}
+
+void NoteInputPreferencesModel::setPlayPreviewNotesInInputByDuration(bool value)
+{
+    if (value == playPreviewNotesInInputByDuration()) {
+        return;
+    }
+
+    notationConfiguration()->setIsPlayPreviewNotesInInputByDuration(value);
+    emit playPreviewNotesInInputByDurationChanged(value);
 }
 
 void NoteInputPreferencesModel::setNotePlayDurationMilliseconds(int duration)
