@@ -521,7 +521,7 @@ void GPConverter::convertVoices(const std::vector<std::unique_ptr<GPVoice> >& vo
         fillUncompletedMeasure(ctx);
     }
 
-    int currentTrackFirstVoice = ctx.curTrack;
+    track_idx_t currentTrackFirstVoice = ctx.curTrack;
     for (const auto& voice : voices) {
         ctx.curTrack = currentTrackFirstVoice + voice->position();
         convertVoice(voice.get(), ctx);
