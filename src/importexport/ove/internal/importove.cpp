@@ -648,7 +648,7 @@ void OveToMScore::convertTrackHeader(ovebase::Track* track, Part* part)
             drumset->drum(i).line     = smDrumset->drum(i).line;
             drumset->drum(i).stemDirection = smDrumset->drum(i).stemDirection;
             drumset->drum(i).voice     = smDrumset->drum(i).voice;
-            drumset->drum(i).shortcut = 0;
+            drumset->drum(i).shortcut = smDrumset->drum(i).shortcut;
             drumset->drum(i).panelRow = smDrumset->drum(i).panelRow;
             drumset->drum(i).panelColumn = smDrumset->drum(i).panelColumn;
         }

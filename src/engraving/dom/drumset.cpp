@@ -71,26 +71,9 @@ void Drumset::save(XmlWriter& xml) const
         xml.tag("voice", voice(i));
         xml.tag("name", name(i));
         xml.tag("stem", int(stemDirection(i)));
-        if (shortcut(i)) {
-            switch (shortcut(i)) {
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'A':
-            case 'B':
-            {
-                char a[2];
-                a[0] = shortcut(i);
-                a[1] = 0;
-                xml.tag("shortcut", a);
-            }
-            break;
-            default:
-                LOGD("illegal drum shortcut");
-                break;
-            }
+        const String& sc = shortcut(i);
+        if (!sc.isEmpty()) {
+            xml.tag("shortcut", shortcut(i));
         }
         std::list<DrumInstrumentVariant> vs = variants(i);
         if (!vs.empty()) {
@@ -144,10 +127,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
     } else if (tag == "stem") {
         m_drums[pitch].stemDirection = DirectionV(e.readInt());
     } else if (tag == "shortcut") {
-        bool isNum;
-        AsciiStringView val = e.readAsciiText();
-        int i = val.toInt(&isNum);
-        m_drums[pitch].shortcut = isNum ? i : val.at(0).toUpper();
+        m_drums[pitch].shortcut = e.readText();
     } else if (tag == "variants") {
         while (e.readNextStartElement()) {
             const AsciiStringView tagv(e.name());
@@ -201,9 +181,9 @@ void Drumset::load(XmlReader& e)
 void Drumset::clear()
 {
     for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
-        m_drums[i].name = u"";
+        m_drums[i].name.clear();
         m_drums[i].notehead = NoteHeadGroup::HEAD_INVALID;
-        m_drums[i].shortcut = 0;
+        m_drums[i].shortcut.clear();
         m_drums[i].variants.clear();
         m_drums[i].panelRow = -1;
         m_drums[i].panelColumn = -1;
@@ -284,9 +264,10 @@ void Drumset::initDrumset()
 {
     smDrumset = new Drumset;
     for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
+        smDrumset->drum(i).name.clear();
         smDrumset->drum(i).notehead = NoteHeadGroup::HEAD_INVALID;
         smDrumset->drum(i).line     = 0;
-        smDrumset->drum(i).shortcut = 0;
+        smDrumset->drum(i).shortcut.clear();
         smDrumset->drum(i).voice    = 0;
         smDrumset->drum(i).stemDirection = DirectionV::UP;
         smDrumset->drum(i).panelRow     = -1;
@@ -311,7 +292,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 2,
         /*panelColumn*/ 1,
         /*voice*/ 1,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Bass Drum 1
     smDrumset->drum(36) = DrumInstrument(
@@ -322,7 +303,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 2,
         /*panelColumn*/ 0,
         /*voice*/ 1,
-        /*shortcut*/ Key_B);
+        /*shortcut*/ (muse::Char)Key_B);
 
     // Side Stick
     smDrumset->drum(37) = DrumInstrument(
@@ -333,7 +314,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 1,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Acoustic Snare
     smDrumset->drum(38) = DrumInstrument(
@@ -344,7 +325,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 0,
         /*voice*/ 0,
-        /*shortcut*/ Key_A);
+        /*shortcut*/ (muse::Char)Key_A);
 
     // Electric Snare
     smDrumset->drum(40) = DrumInstrument(
@@ -355,7 +336,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 2,
         /*panelColumn*/ 6,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Low Floor Tom
     smDrumset->drum(41) = DrumInstrument(
@@ -366,7 +347,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 7,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Closed Hi-Hat
     smDrumset->drum(42) = DrumInstrument(
@@ -377,7 +358,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 0,
         /*voice*/ 0,
-        /*shortcut*/ Key_G);
+        /*shortcut*/ (muse::Char)Key_G);
 
     // High Floor Tom
     smDrumset->drum(43) = DrumInstrument(
@@ -388,7 +369,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 6,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Pedal Hi-Hat
     smDrumset->drum(44) = DrumInstrument(
@@ -399,7 +380,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 2,
         /*panelColumn*/ 2,
         /*voice*/ 1,
-        /*shortcut*/ Key_F);
+        /*shortcut*/ (muse::Char)Key_F);
 
     // Low Tom
     smDrumset->drum(45) = DrumInstrument(
@@ -410,7 +391,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 5,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Open Hi-Hat
     smDrumset->drum(46) = DrumInstrument(
@@ -421,7 +402,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 1,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Low-Mid Tom
     smDrumset->drum(47) = DrumInstrument(
@@ -432,7 +413,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 4,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Hi-Mid Tom
     smDrumset->drum(48) = DrumInstrument(
@@ -443,7 +424,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 3,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Crash Cymbal 1
     smDrumset->drum(49) = DrumInstrument(
@@ -454,7 +435,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 4,
         /*voice*/ 0,
-        /*shortcut*/ Key_C);
+        /*shortcut*/ (muse::Char)Key_C);
 
     // High Tom
     smDrumset->drum(50) = DrumInstrument(
@@ -465,7 +446,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 1,
         /*panelColumn*/ 2,
         /*voice*/ 0,
-        /*shortcut*/ Key_E);
+        /*shortcut*/ (muse::Char)Key_E);
 
     // Ride Cymbal 1
     smDrumset->drum(51) = DrumInstrument(
@@ -476,7 +457,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 2,
         /*voice*/ 0,
-        /*shortcut*/ Key_D);
+        /*shortcut*/ (muse::Char)Key_D);
 
     // Chinese Cymbal
     smDrumset->drum(52) = DrumInstrument(
@@ -487,7 +468,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 6,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Ride Bell
     smDrumset->drum(53) = DrumInstrument(
@@ -498,7 +479,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 3,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Tambourine
     smDrumset->drum(54) = DrumInstrument(
@@ -509,7 +490,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 2,
         /*panelColumn*/ 4,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Splash Cymbal
     smDrumset->drum(55) = DrumInstrument(
@@ -520,7 +501,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 7,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Cowbell
     smDrumset->drum(56) = DrumInstrument(
@@ -531,7 +512,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 2,
         /*panelColumn*/ 3,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Crash Cymbal 2
     smDrumset->drum(57) = DrumInstrument(
@@ -542,7 +523,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 0,
         /*panelColumn*/ 5,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // Ride Cymbal 2
     smDrumset->drum(59) = DrumInstrument(
@@ -553,7 +534,7 @@ void Drumset::initDrumset()
         /*panelRow*/ 2,
         /*panelColumn*/ 5,
         /*voice*/ 0,
-        /*shortcut*/ 0);
+        /*shortcut*/ String());
 
     // END GENERATED CODE
 }

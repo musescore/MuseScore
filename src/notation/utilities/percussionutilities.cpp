@@ -101,14 +101,11 @@ void PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPit
 
     const QVariantMap vals = rv.val.toQVariant().toMap();
 
-    const QString newShortcutStr = vals.value("newShortcut").toString();
-    const char newShortcut = !newShortcutStr.isEmpty() ? newShortcutStr.at(0).toLatin1() : '\0';
+    drumset.drum(originPitch).shortcut = vals.value("newShortcut").toString();
 
     const int conflictShortcutPitch = vals.value("conflictDrumPitch").toInt();
-
-    drumset.drum(originPitch).shortcut = newShortcut;
     if (conflictShortcutPitch > -1 && drumset.isValid(conflictShortcutPitch)) {
-        drumset.drum(conflictShortcutPitch).shortcut = '\0';
+        drumset.drum(conflictShortcutPitch).shortcut.clear();
     }
 }
 
@@ -117,15 +114,14 @@ muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const 
     muse::UriQuery query("musescore://notation/editpercussionshortcut?sync=true&modal=true");
 
     const mu::engraving::DrumInstrument& originDrum = drumset.drum(originPitch);
-    query.addParam("originDrum", muse::Val::fromQVariant(drumToQVariantMap(originDrum)));
+    query.addParam("originDrum", muse::Val::fromQVariant(drumToQVariantMap(originPitch, originDrum)));
 
     QVariantList drumsWithShortcut;
     for (int otherPitch = 0; otherPitch < mu::engraving::DRUM_INSTRUMENTS; ++otherPitch) {
-        if (otherPitch == originPitch || !drumset.isValid(otherPitch) || drumset.shortcut(otherPitch) == '\0') {
+        if (otherPitch == originPitch || !drumset.isValid(otherPitch) || drumset.shortcut(otherPitch).isEmpty()) {
             continue;
         }
-        QVariantMap drumVariant = drumToQVariantMap(drumset.drum(otherPitch));
-        drumVariant["pitch"] = otherPitch;
+        QVariantMap drumVariant = drumToQVariantMap(otherPitch, drumset.drum(otherPitch));
         drumsWithShortcut << drumVariant;
     }
     query.addParam("drumsWithShortcut", muse::Val::fromQVariant(drumsWithShortcut));
@@ -148,13 +144,11 @@ muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const 
     return interactive()->open(query);
 }
 
-QVariantMap PercussionUtilities::drumToQVariantMap(const engraving::DrumInstrument& drum)
+QVariantMap PercussionUtilities::drumToQVariantMap(int pitch, const engraving::DrumInstrument& drum)
 {
     QVariantMap qv;
+    qv["pitch"] = pitch;
     qv["title"] = drum.name.toQString();
-
-    const QString shortcut = QChar(drum.shortcut);
-    qv["shortcut"] = shortcut;
-
+    qv["shortcut"] = drum.shortcut.toQString();
     return qv;
 }

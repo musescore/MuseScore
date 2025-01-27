@@ -27,6 +27,8 @@
 #include "pitchspelling.h"
 #include "../types/types.h"
 
+#include "editdata.h"
+
 namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
@@ -64,12 +66,12 @@ struct DrumInstrument {
     int panelColumn = -1;
 
     int voice = 0;
-    char shortcut = '\0';      ///< accelerator key (CDEFGAB)
+    String shortcut;
     std::list<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
     DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
-                   int pr = -1, int pc = -1, int v = 0, char sc = 0)
+                   int pr = -1, int pc = -1, int v = 0, String sc = String())
         : name(String::fromUtf8(s)), notehead(nh), line(l), stemDirection(d), panelRow(pr), panelColumn(pc), voice(v), shortcut(sc) {}
 
     void addVariant(DrumInstrumentVariant v) { variants.push_back(v); }
@@ -108,7 +110,7 @@ public:
     DirectionV stemDirection(int pitch) const { return m_drums[pitch].stemDirection; }
     const String& name(int pitch) const { return m_drums[pitch].name; }
     String translatedName(int pitch) const;
-    char shortcut(int pitch) const { return m_drums[pitch].shortcut; }
+    String shortcut(int pitch) const { return m_drums[pitch].shortcut; }
     std::list<DrumInstrumentVariant> variants(int pitch) const { return m_drums[pitch].variants; }
     int panelRow(int pitch) const { return m_drums[pitch].panelRow; }
     int panelColumn(int pitch) const { return m_drums[pitch].panelColumn; }
