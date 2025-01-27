@@ -2824,6 +2824,7 @@ bool Segment::goesBefore(const Segment* nextSegment) const
 
     bool thisIsEndOfMeasure = endOfMeasureChange();
 
+    // Place segments in correct place when "Place all changes before the barline" is enabled
     if (thisIsEndOfMeasure && nextSegment->tick() != meas->endTick()) {
         return false;
     }
@@ -2832,10 +2833,11 @@ bool Segment::goesBefore(const Segment* nextSegment) const
         return true;
     }
 
-    if ((thisIsKeySig || thisIsTimeSig) && nextIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+    // Place key signatures and time signatures in correct place when "Allow changes between end-start repeats" is enabled
+    if ((thisIsKeySig || thisIsTimeSig || thisIsClef) && nextIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
         return style().styleB(Sid::changesBetweenEndStartRepeat);
     }
-    if ((nextIsKeySig || nextIsTimeSig) && thisIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+    if ((nextIsKeySig || nextIsTimeSig || nextIsClef) && thisIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
         return !style().styleB(Sid::changesBetweenEndStartRepeat);
     }
 
@@ -2859,6 +2861,18 @@ bool Segment::goesBefore(const Segment* nextSegment) const
             }
         }
         return clefPos == ClefToBarlinePosition::AFTER;
+    }
+
+    if (thisIsClef && (nextIsKeySig || nextIsTimeSig) && thisMeasureIsStartRepeat
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
+        // Between repeats
+        return true;
+    }
+
+    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef && thisMeasureIsStartRepeat
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
+        // Between repeats
+        return false;
     }
 
     return segmentType() < nextSegment->segmentType();

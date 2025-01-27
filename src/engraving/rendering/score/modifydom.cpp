@@ -221,6 +221,9 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
         // Check if the change applies to the beginning of the repeat section as well as the continuation
         const std::vector<Measure*> measures = findFollowingRepeatMeasures(measure);
         for (const Measure* repeatMeasure : measures) {
+            if (repeatMeasure == measure->nextMeasure()) {
+                continue;
+            }
             const Fraction startTick = repeatMeasure->tick();
             for (track_idx_t track = 0; track < ctx.dom().nstaves(); track += VOICES) {
                 const Staff* staff = ctx.dom().staff(track2staff(track));
@@ -228,23 +231,44 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
                 if (seg.isKeySigType()) {
                     const Key continuationKey = staff->key(seg.tick());
                     const Key repeatKey = staff->key(startTick);
-                    return continuationKey == repeatKey;
+                    const Key keyBeforeContinuation = staff->key(seg.tick() - Fraction::eps());
+                    return keyBeforeContinuation != continuationKey && continuationKey == repeatKey;
                 }
 
                 if (seg.isTimeSigType()) {
                     const TimeSig* continuationTimeSig = staff->timeSig(seg.tick());
                     const TimeSig* repeatTimeSig = staff->timeSig(startTick);
-                    return continuationTimeSig && repeatTimeSig && continuationTimeSig->sig() == repeatTimeSig->sig();
+                    const TimeSig* timeSigBeforeContinuation = staff->timeSig(seg.tick() - Fraction::eps());
+                    return continuationTimeSig && repeatTimeSig && timeSigBeforeContinuation
+                           && timeSigBeforeContinuation->sig() != continuationTimeSig->sig()
+                           && continuationTimeSig->sig() == repeatTimeSig->sig();
                 }
 
-                // const ClefType& continuationClef = staff->clef(seg.tick());
-                // const ClefType& repeatClef = staff->clef(startTick);
-                // if (continuationClef == repeatClef) {
-                //     return true;
-                // }
+                if (seg.isClefType()) {
+                    const ClefType continuationClef = staff->clef(seg.tick());
+                    const ClefType repeatClef = staff->clef(startTick);
+                    const ClefType clefBeforeContinuation = staff->clef(seg.tick() - Fraction::eps());
+                    if (clefBeforeContinuation != continuationClef && continuationClef == repeatClef) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
+    };
+
+    auto clefSegBarlinePosition = [&](const Segment& seg) -> ClefToBarlinePosition
+    {
+        for (EngravingItem* el : seg.elist()) {
+            if (!el || !el->isClef()) {
+                continue;
+            }
+            const Clef* clef = toClef(el);
+            if (clef->clefToBarlinePosition() != ClefToBarlinePosition::AUTO) {
+                return clef->clefToBarlinePosition();
+            }
+        }
+        return ClefToBarlinePosition::AUTO;
     };
 
     Measure* nextMeasure = measure->nextMeasure();
@@ -256,6 +280,31 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
     for (Segment& seg : measure->segments()) {
         if (seg.tick() != measure->endTick() || seg.isChordRestType()) {
             continue;
+        }
+
+        // Move clefs at the end of this measure into the next measure
+        if (seg.isClefType()) {
+            ClefToBarlinePosition pos = clefSegBarlinePosition(seg);
+            // Clef position explicitly set by user
+            if (pos == ClefToBarlinePosition::BEFORE) {
+                continue;
+            } else if (pos == ClefToBarlinePosition::AFTER) {
+                segsToMoveToNextMeasure.push_back(&seg);
+                continue;
+            }
+
+            // AUTO on normal barline
+            if (!measure->repeatEnd()) {
+                continue;
+            }
+
+            // Otherwise, pos is AUTO
+            // Place changes before barline & clefs before repeats style settings
+            if ((!sigsShouldBeInThisMeasure && !changeAppliesToRepeatAndContinuation(seg))
+                || (measure->repeatEnd() && !ctx.conf().styleB(Sid::placeClefsBeforeRepeats))) {
+                segsToMoveToNextMeasure.push_back(&seg);
+                continue;
+            }
         }
 
         // Move key sigs and time sigs at the end of this measure into the next measure
@@ -276,6 +325,30 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
     for (Segment& seg : nextMeasure->segments()) {
         if (seg.tick() != nextMeasure->tick() || seg.isChordRestType()) {
             continue;
+        }
+
+        // Move clefs at the beginning of this measure into the previous measure
+        if (seg.isClefType()) {
+            ClefToBarlinePosition pos = clefSegBarlinePosition(seg);
+            // Clef position explicitly set by user
+            if (pos == ClefToBarlinePosition::BEFORE) {
+                segsToMoveToThisMeasure.push_back(&seg);
+                continue;
+            } else if (pos == ClefToBarlinePosition::AFTER) {
+                continue;
+            }
+
+            if (!measure->repeatEnd()) {
+                segsToMoveToThisMeasure.push_back(&seg);
+                continue;
+            }
+
+            // Otherwise, pos is AUTO
+            // Place changes before barline & clefs before repeats style settings
+            if ((sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg))
+                || !measure->repeatEnd() || ctx.conf().styleB(Sid::placeClefsBeforeRepeats)) {
+                segsToMoveToThisMeasure.push_back(&seg);
+            }
         }
 
         // Move key sigs and time sigs at the start of the next measure to the end of this measure
@@ -303,7 +376,7 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
     // Sort segments at start of next measure
     std::vector<Segment*> segsToSort;
     for (Segment& seg : nextMeasure->segments()) {
-        if (seg.tick() != Fraction(0, 0) || seg.isChordRestType()) {
+        if (seg.rtick() != Fraction(0, 1) || seg.isChordRestType() || seg.isEndBarLineType()) {
             continue;
         }
 
@@ -313,6 +386,8 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
     // Re-add the segments. They will be placed in their correct positions
     for (Segment* seg : segsToSort) {
         nextMeasure->segments().remove(seg);
+    }
+    for (Segment* seg : segsToSort) {
         nextMeasure->add(seg);
     }
 }
