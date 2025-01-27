@@ -1774,7 +1774,12 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
     }
 
     if (courtesySigSeg && courtesySigSeg->enabled()) {
-        courtesySigSeg->createShapes();
+        if (courtesySigSeg->hasElements()) {
+            courtesySigSeg->createShapes();
+        } else {
+            courtesySigSeg->setEnabled(false);
+            m->setHasCourtesyTimeSig(false);
+        }
     }
 }
 
@@ -1861,7 +1866,12 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
     }
 
     if (courtesySigSeg && courtesySigSeg->enabled()) {
-        courtesySigSeg->createShapes();
+        if (courtesySigSeg->hasElements()) {
+            courtesySigSeg->createShapes();
+        } else {
+            courtesySigSeg->setEnabled(false);
+            m->setHasCourtesyKeySig(false);
+        }
     }
 }
 
@@ -1930,7 +1940,11 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
             courtesyClef = toClef(clefElem);
         }
 
-        if (!show && courtesyClef) {
+        // this key sig shouldn't be shown, remove from segment
+        if (!show) {
+            if (courtesyClef) {
+                courtesyClefSeg->remove(courtesyClef);
+            }
             continue;
         }
 
@@ -1957,7 +1971,12 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     }
 
     if (courtesyClefSeg && courtesyClefSeg->enabled()) {
-        courtesyClefSeg->createShapes();
+        if (courtesyClefSeg->hasElements()) {
+            courtesyClefSeg->createShapes();
+        } else {
+            courtesyClefSeg->setEnabled(false);
+            m->setHasCourtesyClef(false);
+        }
     }
 }
 
