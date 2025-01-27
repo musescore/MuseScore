@@ -52,8 +52,8 @@ ClefKeyTimeSigPageModel::ClefKeyTimeSigPageModel(QObject* parent)
                                          StyleId::genCourtesyTimesig,
                                          StyleId::genKeysig,
                                          StyleId::genCourtesyKeysig,
-                                         StyleId::courtesyChangesBeforeBarlineRepeats,
-                                         StyleId::courtesyChangesBeforeBarlineOtherJumps,
+                                         StyleId::changesBeforeBarlineRepeats,
+                                         StyleId::changesBeforeBarlineOtherJumps,
                                          StyleId::placeClefsBeforeRepeats,
                                          StyleId::changesBetweenEndStartRepeat,
                                          StyleId::showCourtesiesRepeats,
@@ -242,14 +242,14 @@ StyleItem* ClefKeyTimeSigPageModel::genCourtesyKeysig() const
     return styleItem(StyleId::genCourtesyKeysig);
 }
 
-StyleItem* ClefKeyTimeSigPageModel::courtesyChangesBeforeBarlineRepeats() const
+StyleItem* ClefKeyTimeSigPageModel::changesBeforeBarlineRepeats() const
 {
-    return styleItem(StyleId::courtesyChangesBeforeBarlineRepeats);
+    return styleItem(StyleId::changesBeforeBarlineRepeats);
 }
 
-StyleItem* ClefKeyTimeSigPageModel::courtesyChangesBeforeBarlineOtherJumps() const
+StyleItem* ClefKeyTimeSigPageModel::changesBeforeBarlineOtherJumps() const
 {
-    return styleItem(StyleId::courtesyChangesBeforeBarlineOtherJumps);
+    return styleItem(StyleId::changesBeforeBarlineOtherJumps);
 }
 
 StyleItem* ClefKeyTimeSigPageModel::placeClefsBeforeRepeats() const

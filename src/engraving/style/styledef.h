@@ -1788,8 +1788,8 @@ enum class Sid {
     autoplaceEnabled,
     defaultsVersion,
 
-    courtesyChangesBeforeBarlineRepeats,
-    courtesyChangesBeforeBarlineOtherJumps,
+    changesBeforeBarlineRepeats,
+    changesBeforeBarlineOtherJumps,
 
     placeClefsBeforeRepeats,
     changesBetweenEndStartRepeat,

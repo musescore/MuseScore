@@ -776,7 +776,6 @@ void Measure::add(EngravingItem* e)
         Segment* seg   = toSegment(e);
         Fraction t     = seg->rtick();
         Segment* s;
-        // LOGI() << "MEASURE " << no() + 1 << " ADD " << seg->subTypeName();
 
         for (s = first(); s && s->rtick() < t; s = s->next()) {
         }
@@ -3463,6 +3462,22 @@ void Measure::checkTrailer()
             setTrailer(seg->trailer());
             break;
         }
+    }
+}
+
+void Measure::checkEndOfMeasureChange()
+{
+    bool found = false;
+    for (Segment* seg = last(); seg != first(); seg = seg->prev()) {
+        if (seg->enabled() && seg->endOfMeasureChange()) {
+            setEndOfMeasureChange(seg->endOfMeasureChange());
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        setEndOfMeasureChange(false);
     }
 }
 

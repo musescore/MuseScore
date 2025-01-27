@@ -121,6 +121,7 @@ enum class ElementFlag {
     ENABLED                = 0x04000000,      // used for segments
     EMPTY                  = 0x08000000,
     WRITTEN                = 0x10000000,
+    END_OF_MEASURE_CHANGE         = 0x20000000
 };
 
 typedef muse::Flags<ElementFlag> ElementFlags;

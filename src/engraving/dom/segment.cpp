@@ -2805,10 +2805,39 @@ bool Segment::hasAccidentals() const
 
 bool Segment::goesBefore(const Segment* nextSegment) const
 {
+    Measure* meas = measure();
+    Measure* prevMeasure = meas->prevMeasure();
+    const bool thisMeasureIsStartRepeat = meas->repeatStart();
+    const bool prevMeasureIsEndRepeat = prevMeasure ? prevMeasure->repeatEnd() : false;
+
     bool thisIsClef = isClefType();
     bool nextIsClef = nextSegment->isClefType();
     bool thisIsBarline = isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
     bool nextIsBarline = nextSegment->isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
+
+    bool thisIsStartRepeat = isStartRepeatBarLineType();
+    bool nextIsStartRepeat = nextSegment->isStartRepeatBarLineType();
+    bool thisIsKeySig = isKeySigType();
+    bool thisIsTimeSig = isTimeSigType();
+    bool nextIsKeySig = nextSegment->isKeySigType();
+    bool nextIsTimeSig = nextSegment->isTimeSigType();
+
+    bool thisIsEndOfMeasure = endOfMeasureChange();
+
+    if (thisIsEndOfMeasure && nextSegment->tick() != meas->endTick()) {
+        return false;
+    }
+
+    if (thisIsEndOfMeasure && nextIsBarline) {
+        return true;
+    }
+
+    if ((thisIsKeySig || thisIsTimeSig) && nextIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+        return style().styleB(Sid::changesBetweenEndStartRepeat);
+    }
+    if ((nextIsKeySig || nextIsTimeSig) && thisIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+        return !style().styleB(Sid::changesBetweenEndStartRepeat);
+    }
 
     if (thisIsClef && nextIsBarline) {
         ClefToBarlinePosition clefPos = ClefToBarlinePosition::AUTO;
