@@ -98,7 +98,7 @@ private:
 
     static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
 
-    static void setClefBarLinePosition(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
+    static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 
     static void setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
                                    LayoutContext& ctx);
