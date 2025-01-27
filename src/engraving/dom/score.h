@@ -217,7 +217,11 @@ struct ShowAnchors {
     ShowAnchors() = default;
     ShowAnchors(voice_idx_t vIdx, staff_idx_t stfIdx, const Fraction& sTickMain, const Fraction& eTickMain,
                 const Fraction& sTickExt, const Fraction& eTickExt)
-        : voiceIdx(vIdx), staffIdx(stfIdx), startTickMainRegion(sTickMain), endTickMainRegion(eTickMain),
+        : voiceIdx(vIdx), staffIdx(stfIdx), endStaffIdx(stfIdx + 1), startTickMainRegion(sTickMain), endTickMainRegion(eTickMain),
+        startTickExtendedRegion(sTickExt), endTickExtendedRegion(eTickExt) {}
+    ShowAnchors(voice_idx_t vIdx, staff_idx_t stfIdx, staff_idx_t endStfIdx, const Fraction& sTickMain, const Fraction& eTickMain,
+                const Fraction& sTickExt, const Fraction& eTickExt)
+        : voiceIdx(vIdx), staffIdx(stfIdx), endStaffIdx(endStfIdx), startTickMainRegion(sTickMain), endTickMainRegion(eTickMain),
         startTickExtendedRegion(sTickExt), endTickExtendedRegion(eTickExt) {}
 
     void reset()
@@ -232,6 +236,7 @@ struct ShowAnchors {
 
     voice_idx_t voiceIdx = muse::nidx;
     staff_idx_t staffIdx = muse::nidx;
+    staff_idx_t endStaffIdx = muse::nidx;
     Fraction startTickMainRegion = Fraction(-1, 1);
     Fraction endTickMainRegion = Fraction(-1, 1);
     Fraction startTickExtendedRegion = Fraction(-1, 1);

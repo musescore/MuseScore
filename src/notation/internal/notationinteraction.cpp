@@ -1507,7 +1507,8 @@ bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardMo
     return false;
 }
 
-static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t* staffIdx, Segment** segment)
+static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
+                              Segment** segment)
 {
     IF_ASSERT_FAILED(score && staffIdx && segment) {
         return;
@@ -1544,12 +1545,16 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
         return;
     }
 
+    const staff_idx_t endStaffIdx = std::min(*staffIdx + numStaves, score->nstaves());
+
     // Add time tick anchors throughout these measures
     for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
         if (!mb->isMeasure()) {
             continue;
         }
-        EditTimeTickAnchors::updateAnchors(toMeasure(mb), *staffIdx);
+        for (staff_idx_t i = 0; i < endStaffIdx; ++i) {
+            EditTimeTickAnchors::updateAnchors(toMeasure(mb), i);
+        }
     }
 
     // Get precise location using the newly created time tick anchors
@@ -1561,7 +1566,7 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
     startTick = (*segment)->tick();
     endTick = startTick + tickLength;
 
-    score->setShowAnchors(ShowAnchors(0, *staffIdx, startTick, endTick,
+    score->setShowAnchors(ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
                                       startMeasure->tick(), endMeasure->endTick()));
 
     // Invalidate BSP tree of affected pages
@@ -1597,7 +1602,7 @@ bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
 
-    dropRangePosition(score(), pos, rdd.tickLength, &staffIdx, &segment);
+    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
     if (staffIdx == muse::nidx || !segment) {
         return false;
     }
@@ -1621,7 +1626,7 @@ bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
         return false;
     }
 
-    const staff_idx_t endStaffIdx = staffIdx + rdd.numStaves;
+    const staff_idx_t endStaffIdx = std::min(staffIdx + rdd.numStaves, score()->nstaves());
 
     rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
                                                       segment, endSegment,
@@ -1899,7 +1904,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
 
-    dropRangePosition(score(), pos, rdd.tickLength, &staffIdx, &segment);
+    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
     if (staffIdx == muse::nidx || !segment) {
         return false;
     }
