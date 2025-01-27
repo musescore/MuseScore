@@ -33,7 +33,7 @@ using namespace muse::extensions::legacy;
 
 static Uri makeUri(const io::path_t& rootPath, const io::path_t& path)
 {
-    return Uri("muse://extensions/v1" + path.toQString().sliced(rootPath.size()).toLower().toStdString());
+    return Uri("musescore://extensions/v1" + path.toQString().sliced(rootPath.size()).toLower().toStdString());
 }
 
 std::map<std::string /*codeKey*/, Uri> ExtPluginsLoader::loadCodekeyUriMap(const io::path_t& defPath, const io::path_t& extPath) const
