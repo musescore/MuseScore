@@ -543,6 +543,11 @@ void Painter::setClipRect(const RectF& rect)
     m_provider->setClipRect(rect);
 }
 
+void Painter::setMask(const std::vector<RectF>& maskRects)
+{
+    m_provider->setMask(maskRects);
+}
+
 void Painter::setClipping(bool enable)
 {
     m_provider->setClipping(enable);

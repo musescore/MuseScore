@@ -83,6 +83,7 @@ public:
     bool hasClipping() const override;
 
     void setClipRect(const muse::RectF& rect) override;
+    void setMask(const std::vector<RectF>& maskRects) override;
     void setClipping(bool enable) override;
 
 private:

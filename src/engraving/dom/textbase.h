@@ -367,7 +367,6 @@ public:
     RectF pageRectangle() const;
 
     const Shape& highResShape() const { return ldata()->highResShape.value(); }
-    void computeHighResShape(const muse::draw::FontMetrics& fontMetrics);
 
     void dragTo(EditData&);
 

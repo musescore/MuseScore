@@ -46,6 +46,7 @@ namespace mu::engraving {
 
 static const ElementStyle lyricsElementStyle {
     { Sid::lyricsPlacement, Pid::PLACEMENT },
+    { Sid::lyricsAvoidBarlines, Pid::AVOID_BARLINES },
 };
 
 //---------------------------------------------------------
@@ -388,6 +389,8 @@ PropertyValue Lyrics::getProperty(Pid propertyId) const
         return m_ticks;
     case Pid::VERSE:
         return m_no;
+    case Pid::AVOID_BARLINES:
+        return m_avoidBarlines;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -447,6 +450,9 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         }
         m_no = v.toInt();
         break;
+    case Pid::AVOID_BARLINES:
+        m_avoidBarlines = v.toBool();
+        break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
             return false;
@@ -474,6 +480,8 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
         return Fraction(0, 1);
     case Pid::VERSE:
         return 0;
+    case Pid::AVOID_BARLINES:
+        return style().styleB(Sid::lyricsAvoidBarlines);
     case Pid::ALIGN:
         if (isMelisma()) {
             return style().styleV(Sid::lyricsMelismaAlign);

@@ -336,6 +336,7 @@ public:
     static void layoutBaseTextBase(TextBase* item, LayoutContext& ctx);  // base class
     static void layoutBaseTextBase1(TextBase* item, const LayoutContext& ctx);  // base class
     static void layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* data);
+    static void computeTextHighResShape(const TextBase* item, TextBase::LayoutData* ldata);
 
     static void layoutText(const Text* item, Text::LayoutData* ldata);
 
