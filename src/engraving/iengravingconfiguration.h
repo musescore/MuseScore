@@ -101,6 +101,7 @@ public:
         bool colorSegmentShapes = false;
         bool showSkylines = false;
         bool showSystemBoundingRects = false;
+        bool showElementMasks = false;
         bool showCorruptedMeasures = true;
 
         bool anyEnabled() const
@@ -111,6 +112,7 @@ public:
                    || colorSegmentShapes
                    || showSkylines
                    || showSystemBoundingRects
+                   || showElementMasks
 #ifndef NDEBUG
                    || showCorruptedMeasures
 #endif

@@ -69,6 +69,7 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "color-segment-shapes", &EngravingDebuggingOptions::colorSegmentShapes },
     { "show-skylines", &EngravingDebuggingOptions::showSkylines },
     { "show-system-bounding-rects", &EngravingDebuggingOptions::showSystemBoundingRects },
+    { "show-element-masks", &EngravingDebuggingOptions::showElementMasks },
     { "show-corrupted-measures", &EngravingDebuggingOptions::showCorruptedMeasures }
 };
 
