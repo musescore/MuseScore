@@ -115,6 +115,10 @@ public:
     void setDefaultNoteInputMethod(NoteInputMethod method) override;
     muse::async::Notification defaultNoteInputMethodChanged() const override;
 
+    bool addAccidentalDotsArticulationsToNextNoteEntered() const override;
+    void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
+    muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
+
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled)  override;
     muse::async::Notification isMidiInputEnabledChanged() const override;

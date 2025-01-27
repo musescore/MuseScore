@@ -2164,11 +2164,7 @@ void Score::toggleOrnament(SymId attr)
     }
 }
 
-//---------------------------------------------------------
-//   toggleAccidental
-//---------------------------------------------------------
-
-void Score::toggleAccidental(AccidentalType at, const EditData& ed)
+void Score::toggleAccidental(AccidentalType at)
 {
     if (m_is.accidentalType() == at) {
         at = AccidentalType::NONE;
@@ -2183,7 +2179,6 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
         }
     } else {
         if (selection().isNone()) {
-            ed.view()->startNoteEntryMode();
             m_is.setAccidentalType(at);
             m_is.setDuration(DurationType::V_QUARTER);
             m_is.setRest(false);
@@ -4499,95 +4494,87 @@ void Score::cmdPitchDownOctave()
     }
 }
 
-//---------------------------------------------------------
-//   cmdPadNoteIncreaseTAB
-//---------------------------------------------------------
-
-void Score::cmdPadNoteIncreaseTAB(const EditData& ed)
+void Score::cmdPadNoteIncreaseTAB()
 {
     switch (m_is.duration().type()) {
 // cycle back from longest to shortest?
 //          case TDuration::V_LONG:
-//                padToggle(Pad::NOTE128, ed);
+//                padToggle(Pad::NOTE128);
 //                break;
     case DurationType::V_BREVE:
-        padToggle(Pad::NOTE00, ed);
+        padToggle(Pad::NOTE00);
         break;
     case DurationType::V_WHOLE:
-        padToggle(Pad::NOTE0, ed);
+        padToggle(Pad::NOTE0);
         break;
     case DurationType::V_HALF:
-        padToggle(Pad::NOTE1, ed);
+        padToggle(Pad::NOTE1);
         break;
     case DurationType::V_QUARTER:
-        padToggle(Pad::NOTE2, ed);
+        padToggle(Pad::NOTE2);
         break;
     case DurationType::V_EIGHTH:
-        padToggle(Pad::NOTE4, ed);
+        padToggle(Pad::NOTE4);
         break;
     case DurationType::V_16TH:
-        padToggle(Pad::NOTE8, ed);
+        padToggle(Pad::NOTE8);
         break;
     case DurationType::V_32ND:
-        padToggle(Pad::NOTE16, ed);
+        padToggle(Pad::NOTE16);
         break;
     case DurationType::V_64TH:
-        padToggle(Pad::NOTE32, ed);
+        padToggle(Pad::NOTE32);
         break;
     case DurationType::V_128TH:
-        padToggle(Pad::NOTE64, ed);
+        padToggle(Pad::NOTE64);
         break;
     default:
         break;
     }
 }
 
-//---------------------------------------------------------
-//   cmdPadNoteDecreaseTAB
-//---------------------------------------------------------
-
-void Score::cmdPadNoteDecreaseTAB(const EditData& ed)
+void Score::cmdPadNoteDecreaseTAB()
 {
     switch (m_is.duration().type()) {
     case DurationType::V_LONG:
-        padToggle(Pad::NOTE0, ed);
+        padToggle(Pad::NOTE0);
         break;
     case DurationType::V_BREVE:
-        padToggle(Pad::NOTE1, ed);
+        padToggle(Pad::NOTE1);
         break;
     case DurationType::V_WHOLE:
-        padToggle(Pad::NOTE2, ed);
+        padToggle(Pad::NOTE2);
         break;
     case DurationType::V_HALF:
-        padToggle(Pad::NOTE4, ed);
+        padToggle(Pad::NOTE4);
         break;
     case DurationType::V_QUARTER:
-        padToggle(Pad::NOTE8, ed);
+        padToggle(Pad::NOTE8);
         break;
     case DurationType::V_EIGHTH:
-        padToggle(Pad::NOTE16, ed);
+        padToggle(Pad::NOTE16);
         break;
     case DurationType::V_16TH:
-        padToggle(Pad::NOTE32, ed);
+        padToggle(Pad::NOTE32);
         break;
     case DurationType::V_32ND:
-        padToggle(Pad::NOTE64, ed);
+        padToggle(Pad::NOTE64);
         break;
     case DurationType::V_64TH:
-        padToggle(Pad::NOTE128, ed);
+        padToggle(Pad::NOTE128);
         break;
     case DurationType::V_128TH:
-        padToggle(Pad::NOTE256, ed);
+        padToggle(Pad::NOTE256);
         break;
     case DurationType::V_256TH:
-        padToggle(Pad::NOTE512, ed);
+        padToggle(Pad::NOTE512);
         break;
     case DurationType::V_512TH:
-        padToggle(Pad::NOTE1024, ed);
+        padToggle(Pad::NOTE1024);
         break;
 // cycle back from shortest to longest?
 //          case DurationType::V_1024TH:
-//                padToggle(Pad::NOTE00, ed);
+//                padToggle(Pad::NOTE00);
 //                break;
     default:
         break;

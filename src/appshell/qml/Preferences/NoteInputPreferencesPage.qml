@@ -45,12 +45,17 @@ PreferencesPage {
         NoteInputSection {
             noteInputMethods: noteInputModel.noteInputMethods()
             defaultNoteInputMethod: noteInputModel.defaultNoteInputMethod
+            addAccidentalDotsArticulationsToNextNoteEntered: noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
             onDefaultNoteInputMethodChangeRequested: function(method) {
                 noteInputModel.defaultNoteInputMethod = method
+            }
+
+            onAddAccidentalDotsArticulationsToNextNoteEnteredChangeRequested: function(add) {
+                noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered = add
             }
         }
 

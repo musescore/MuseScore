@@ -345,7 +345,7 @@ public:
     void cmdAddOttava(OttavaType);
     std::vector<Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
-    void padToggle(Pad p, const EditData& ed);
+    void padToggle(Pad p, bool toggleForSelectionOnly = false);
     int resolveInputOctave(int note, bool addFlag) const;
     void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
     void cmdAddStretch(double);
@@ -381,8 +381,8 @@ public:
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     ChordRest* upStaff(ChordRest* cr);
     ChordRest* downStaff(ChordRest* cr);
-    void cmdPadNoteIncreaseTAB(const EditData& ed);
-    void cmdPadNoteDecreaseTAB(const EditData& ed);
+    void cmdPadNoteIncreaseTAB();
+    void cmdPadNoteDecreaseTAB();
     void cmdToggleMmrest();
     void cmdToggleHideEmpty();
     void cmdSetVisible();
@@ -494,7 +494,7 @@ public:
     void toggleArticulation(SymId);
     bool toggleArticulation(EngravingItem*, Articulation* atr);
     void toggleOrnament(SymId);
-    void toggleAccidental(AccidentalType, const EditData& ed);
+    void toggleAccidental(AccidentalType);
     void changeAccidental(AccidentalType);
     void changeAccidental(Note* oNote, AccidentalType);
 
