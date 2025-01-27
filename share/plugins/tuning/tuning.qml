@@ -1288,6 +1288,7 @@ MuseScore {
                         id: annotateValue
                         text: qsTr("Annotate")
                         checked: false
+                        onClicked: checked = !checked
                     }
                 }
             }
