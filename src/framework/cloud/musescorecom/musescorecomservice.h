@@ -69,8 +69,6 @@ private:
 
     bool doUpdateTokens() override;
 
-    QString logoColorForTheme(const ui::ThemeInfo& theme) const override;
-
     network::RequestHeaders headers() const;
 
     Ret doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,

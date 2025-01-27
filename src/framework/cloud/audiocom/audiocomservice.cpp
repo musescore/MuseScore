@@ -73,7 +73,7 @@ CloudInfo AudioComService::cloudInfo() const
         AUDIOCOM_CLOUD_TITLE,
         AUDIOCOM_CLOUD_URL,
         AUDIOCOM_LOGO_URL,
-        logoColorForTheme(uiConfig()->currentTheme())
+        logoColor()
     };
 }
 

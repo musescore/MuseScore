@@ -33,6 +33,7 @@
 #include "multiinstances/resourcelockguard.h"
 #include "network/networkerrors.h"
 #include "global/iapplication.h"
+#include "draw/types/color.h"
 
 #include "oauthhttpserverreplyhandler.h"
 
@@ -456,10 +457,17 @@ void AbstractCloudService::openUrl(const QUrl& url)
     }
 }
 
-QString AbstractCloudService::logoColorForTheme(const ui::ThemeInfo& theme) const
+QString AbstractCloudService::logoColor() const
 {
-    if (ui::isDarkTheme(theme.codeKey)) {
-        return "#FFFFFF";
+    const ui::ThemeList& themens = uiConfig()->themes();
+    bool isDarkMode = uiConfig()->isDarkMode();
+
+    for (const ui::ThemeInfo& theme : themens) {
+        if ((isDarkMode && theme.codeKey == ui::DARK_THEME_CODE)
+            || (!isDarkMode && theme.codeKey == ui::LIGHT_THEME_CODE)) {
+            return theme.values[ui::FONT_PRIMARY_COLOR].toString();
+        }
     }
-    return "#000000";
+
+    return QString::fromStdString(draw::Color::BLACK.toString());
 }
