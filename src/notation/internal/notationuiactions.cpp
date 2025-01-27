@@ -2057,7 +2057,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("note-input-steptime",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Default (step time)"),
+             TranslatableString("action", "Default (step-time)"),
              TranslatableString("action", "Toggle note input mode: default (step-time)"),
              IconCode::Code::EDIT
              ),
