@@ -2588,6 +2588,12 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              TranslatableString("action", "Show system bounding rectangles"),
              Checkable::Yes
              ),
+    UiAction("show-element-masks",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Show element masks"),
+             Checkable::Yes
+             ),
     UiAction("show-corrupted-measures",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

@@ -96,6 +96,20 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
             painter.drawPath(path);
         }
 
+        if (item->configuration()->debuggingOptions().showElementMasks) {
+            PainterPath path;
+            path.setFillRule(PainterPath::FillRule::WindingFill);
+            for (const ShapeElement& el : item->ldata()->mask().elements()) {
+                path.addRect(el);
+            }
+
+            painter.setPen(Color::BLACK);
+            Brush brush(Color::BLACK);
+            brush.setStyle(BrushStyle::BDiagPattern);
+            painter.setBrush(brush);
+            painter.drawPath(path);
+        }
+
         // Draw bbox
         if (isDiagnosticSelected || item->configuration()->debuggingOptions().showElementBoundingRects) {
             double scaling = painter.worldTransform().m11() / item->configuration()->guiScaling();
