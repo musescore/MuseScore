@@ -313,8 +313,8 @@ TEST_F(Engraving_TimesigTests, timesig_11)
     EXPECT_TRUE(score);
     score->doLayout();
 
-    TimeSig* timeSig = Factory::createTimeSig(score->dummy()->segment());
-    timeSig->setSig(Fraction(5, 4));
+    TimeSig* timeSig1 = Factory::createTimeSig(score->dummy()->segment());
+    timeSig1->setSig(Fraction(5, 4));
 
     TimeSig* timeSig2 = Factory::createTimeSig(score->dummy()->segment());
     timeSig2->setSig(Fraction(7, 8));
@@ -329,7 +329,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 
     // Add local timeSig to Clarinet staff at meas 3
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(thirdMeas, clarinetStaff, timeSig, true);
+    score->cmdAddTimeSig(thirdMeas, clarinetStaff, timeSig1, true);
     score->endCmd();
     // Check timeSig exist at meas 3 and is only on Clarinet
     Segment* timeSigSegment = thirdMeas->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
