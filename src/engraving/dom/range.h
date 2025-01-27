@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <list>
 #include <vector>
 
 #include "global/allocator.h"
