@@ -9,6 +9,11 @@ on:
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'macos_apple macos_intel'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -19,6 +24,11 @@ on:
         required: false
   workflow_call:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'macos_apple macos_intel'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -34,7 +44,7 @@ env:
   DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
 jobs:
-  macos:
+  macos_apple:
     runs-on: macos-13
     steps:
     - name: Cancel Previous Runs
@@ -78,7 +88,8 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Mac${ADD_INFO}")"
+        BUILD_ARCH="Apple"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Mac${ADD_INFO}_${BUILD_ARCH}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
@@ -94,7 +105,8 @@ jobs:
         sudo rm -rf "/Users/runner/Library/Android/sdk"
     - name: Setup environment
       run: |
-        bash ./build/ci/macos/setup.sh
+        BUILD_ARCH="Apple"
+        bash ./build/ci/macos/setup.sh --arch "$BUILD_ARCH"
     - name: Build
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
@@ -104,7 +116,106 @@ jobs:
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
         S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
         S_D="${{ secrets.DEVELOPER_NAME }}"; if [ -z "$S_D" ]; then S_D="MuseScore"; fi
-        bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" --developer_name "$S_D"
+        BUILD_ARCH="Apple"
+        bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" --developer_name "$S_D"  --arch "$BUILD_ARCH"
+    - name: Notarize
+      if: env.DO_NOTARIZE == 'true'
+      run: |
+        USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
+        PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
+        TID=${{ secrets.APPLE_TEAM_ID }}; if [ -z "$TID" ]; then TID=""; fi
+        bash ./build/ci/macos/notarize.sh -u $USER -p $PW -t $TID
+    - name: Checksum
+      run: |
+        bash ./build/ci/tools/checksum.sh
+    - name: AppCast
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos
+    - name: Publish to OSUOSL
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 3
+    - name: Upload artifacts on GitHub
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: ./build.artifacts/
+
+  macos_intel:
+    runs-on: macos-13
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.12.1
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - name: Configure workflow
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+        DO_PUBLISH='false'
+        if [[ "${{ inputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && "$BUILD_MODE" == "nightly") ]]; then
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
+            DO_PUBLISH='false'
+          fi
+        fi
+
+        DO_NOTARIZE='false'
+        if [ "${{ github.event_name }}" != "pull_request" ]; then
+          DO_NOTARIZE='true'
+          if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then
+            echo "::warning::APPLE_USERNAME is empty; notarization disabled"
+            DO_NOTARIZE='false'
+          elif [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then
+            echo "::warning::APPLE_PASSWORD is empty, notarization disabled"
+            DO_NOTARIZE='false'
+          fi
+        fi
+
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
+        BUILD_ARCH="Intel"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Mac${ADD_INFO}_${BUILD_ARCH}")"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_NOTARIZE=$DO_NOTARIZE" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+    - name: Free disk space
+      run: |
+        sudo rm -rf "/Applications/Visual Studio.app"
+        sudo rm -rf "/Applications/Visual Studio 2019.app"
+        sudo rm -rf "/Users/runner/Library/Android/sdk"
+    - name: Setup environment
+      run: |
+        BUILD_ARCH="Intel"
+        bash ./build/ci/macos/setup.sh --arch "$BUILD_ARCH"
+    - name: Build
+      run: |
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
+        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
+    - name: Package
+      run: |
+        S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
+        S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
+        S_D="${{ secrets.DEVELOPER_NAME }}"; if [ -z "$S_D" ]; then S_D="MuseScore"; fi
+        BUILD_ARCH="Intel"
+        bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" --developer_name "$S_D"  --arch "$BUILD_ARCH"
     - name: Notarize
       if: env.DO_NOTARIZE == 'true'
       run: |

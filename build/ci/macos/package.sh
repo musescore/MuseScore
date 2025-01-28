@@ -7,12 +7,14 @@ ARTIFACTS_DIR="build.artifacts"
 SIGN_CERTIFICATE_ENCRYPT_SECRET="''"
 SIGN_CERTIFICATE_PASSWORD="''"
 DEVELOPER_NAME="MuseSore"
+BUILD_ARCH="Apple"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --signsecret) SIGN_CERTIFICATE_ENCRYPT_SECRET="$2"; shift ;;
         --signpass) SIGN_CERTIFICATE_PASSWORD="$2"; shift ;;
         --developer_name) DEVELOPER_NAME="$2"; shift ;;
+        --arch) BUILD=ARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -86,11 +88,11 @@ if [ "$BUILD_MODE" == "nightly" ]; then
 
   BUILD_DATETIME=$(cat $ARTIFACTS_DIR/env/build_datetime.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
-  ARTIFACT_NAME=MuseScoreNightly-${BUILD_DATETIME}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
+  ARTIFACT_NAME=MuseScoreNightly-${BUILD_DATETIME}-${BUILD_BRANCH}-${BUILD_REVISION}-${BUILD_ARCH}.dmg
 
 else
 
-  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}.dmg  
+  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-${BUILD_ARCH}.dmg  
 
 fi
 
