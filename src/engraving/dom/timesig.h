@@ -52,6 +52,8 @@ class TimeSig final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, TimeSig)
     DECLARE_CLASSOF(ElementType::TIMESIG)
 
+    M_PROPERTY2(bool, isCourtesy, setIsCourtesy, false)
+
 public:
 
     void setParent(Segment* parent);

@@ -1780,7 +1780,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(changesBetweenEndStartRepeat,               true),
     styleDef(showCourtesiesRepeats,                      true),
     styleDef(useParensRepeatCourtesies,                  true),
-    styleDef(showCourtesiesFinalBar,                     true),
     styleDef(showCourtesiesOtherJumps,                   true),
     styleDef(useParensOtherJumpCourtesies,               true),
     styleDef(showCourtesiesAfterCancellingRepeats,       true),

@@ -287,6 +287,7 @@ PropertyValue Clef::getProperty(Pid propertyId) const
     case Pid::SMALL:         return isSmall();
     case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;
     case Pid::IS_HEADER: return m_isHeader;
+    case Pid::IS_COURTESY: return _isCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -325,6 +326,9 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::IS_HEADER:
         m_isHeader = v.toBool();
+        break;
+    case Pid::IS_COURTESY:
+        _isCourtesy = v.toBool();
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -408,6 +412,7 @@ PropertyValue Clef::propertyDefault(Pid id) const
     case Pid::SMALL:         return false;
     case Pid::CLEF_TO_BARLINE_POS: return ClefToBarlinePosition::AUTO;
     case Pid::IS_HEADER: return false;
+    case Pid::IS_COURTESY: return false;
     default:              return EngravingItem::propertyDefault(id);
     }
 }

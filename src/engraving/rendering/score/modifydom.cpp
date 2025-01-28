@@ -207,7 +207,7 @@ void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& 
     }
 }
 
-void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
+void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
 {
     // Move segments between measure which need to move
 
@@ -374,8 +374,19 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
     measure->checkEndOfMeasureChange();
 
     // Sort segments at start of next measure
+    removeAndAddBeginSegments(nextMeasure);
+
+    // Sort segments at start of first measure
+    Measure* prevMeasure = measure->prevMeasure();
+    if (prevMeasure && prevMeasure == ctx.dom().firstMeasure()) {
+        ModifyDom::removeAndAddBeginSegments(prevMeasure);
+    }
+}
+
+void ModifyDom::removeAndAddBeginSegments(Measure* measure)
+{
     std::vector<Segment*> segsToSort;
-    for (Segment& seg : nextMeasure->segments()) {
+    for (Segment& seg : measure->segments()) {
         if (seg.rtick() != Fraction(0, 1) || seg.isChordRestType() || seg.isEndBarLineType()) {
             continue;
         }
@@ -385,9 +396,9 @@ void ModifyDom::sortMeasureBeginSegments(Measure* measure, LayoutContext& ctx)
 
     // Re-add the segments. They will be placed in their correct positions
     for (Segment* seg : segsToSort) {
-        nextMeasure->segments().remove(seg);
+        measure->segments().remove(seg);
     }
     for (Segment* seg : segsToSort) {
-        nextMeasure->add(seg);
+        measure->add(seg);
     }
 }

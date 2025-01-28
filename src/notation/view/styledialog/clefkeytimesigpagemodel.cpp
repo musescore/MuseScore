@@ -58,7 +58,6 @@ ClefKeyTimeSigPageModel::ClefKeyTimeSigPageModel(QObject* parent)
                                          StyleId::changesBetweenEndStartRepeat,
                                          StyleId::showCourtesiesRepeats,
                                          StyleId::useParensRepeatCourtesies,
-                                         StyleId::showCourtesiesFinalBar,
                                          StyleId::showCourtesiesOtherJumps,
                                          StyleId::useParensOtherJumpCourtesies,
                                          StyleId::showCourtesiesAfterCancellingRepeats,
@@ -271,11 +270,6 @@ StyleItem* ClefKeyTimeSigPageModel::showCourtesiesRepeats() const
 StyleItem* ClefKeyTimeSigPageModel::useParensRepeatCourtesies() const
 {
     return styleItem(StyleId::useParensRepeatCourtesies);
-}
-
-StyleItem* ClefKeyTimeSigPageModel::showCourtesiesFinalBar() const
-{
-    return styleItem(StyleId::showCourtesiesFinalBar);
 }
 
 StyleItem* ClefKeyTimeSigPageModel::showCourtesiesOtherJumps() const

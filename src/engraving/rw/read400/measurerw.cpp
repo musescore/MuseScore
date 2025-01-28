@@ -391,6 +391,12 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 header = clef->isHeader();
             }
 
+            // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
+            if (ctx.tick() != Fraction(0, 1) && ctx.tick() == measure->tick()
+                && !(measure->prevMeasure() && measure->prevMeasure()->repeatEnd()) && !header) {
+                clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+            }
+
             segment = measure->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             segment->add(clef);
             clef->setIsHeader(header);
