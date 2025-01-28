@@ -706,9 +706,20 @@ bool MeasureBase::isBefore(const EngravingItem* other) const
 
 bool MeasureBase::isBefore(const MeasureBase* other) const
 {
+    if (this == other) {
+        return false;
+    }
+
     Fraction otherTick = other->tick();
     if (otherTick != m_tick) {
         return m_tick < otherTick;
+    }
+
+    if (this->isMeasure() && other->isMeasure()) {
+        // (this == other) has already been excluded, so this is only
+        // possible if one is the overlying mmRest starting on the other.
+        // Let's set by convention that the mmRest isBefore the underlying measure.
+        return toMeasure(this)->isMMRest();
     }
 
     bool otherIsMMRest = other->isMeasure() && toMeasure(other)->isMMRest();
