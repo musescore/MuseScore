@@ -136,6 +136,9 @@ void PopupWindow_QQuickView::forceActiveFocus()
         return;
     }
 
+    m_view->setFlags(m_view->flags() & (~Qt::WindowDoesNotAcceptFocus));
+    m_view->requestActivate();
+
     QQuickItem* rootObject = m_view->rootObject();
     if (!rootObject) {
         return;
@@ -242,6 +245,11 @@ void PopupWindow_QQuickView::setResizable(bool resizable)
 void PopupWindow_QQuickView::setPosition(const QPoint& position) const
 {
     m_view->setPosition(position);
+}
+
+bool PopupWindow_QQuickView::hasActiveFocus() const
+{
+    return m_view && m_view->activeFocusItem() != nullptr;
 }
 
 void PopupWindow_QQuickView::setOnHidden(const std::function<void()>& callback)

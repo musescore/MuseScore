@@ -68,6 +68,7 @@ public:
 
     void setPosition(const QPoint& position) const override;
 
+    bool hasActiveFocus() const override;
     void forceActiveFocus() override;
 
     void setOnHidden(const std::function<void()>& callback) override;
