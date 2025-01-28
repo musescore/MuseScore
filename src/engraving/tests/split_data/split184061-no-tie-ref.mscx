@@ -13,6 +13,7 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <pedalPosBelow x="0" y="0"/>
