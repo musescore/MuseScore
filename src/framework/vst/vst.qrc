@@ -1,3 +1,7 @@
 <RCC>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>qml/Muse/Vst/qmldir</file>
+        <file>qml/Muse/Vst/VstEditor.qml</file>
+        <file>qml/Muse/Vst/VstEditorDialog.qml</file>
+    </qresource>
 </RCC>
