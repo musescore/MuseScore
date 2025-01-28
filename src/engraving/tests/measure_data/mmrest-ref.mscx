@@ -12,6 +12,7 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <createMultiMeasureRests>1</createMultiMeasureRests>
