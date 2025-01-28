@@ -41,6 +41,7 @@ class ScoreRange;
 class ChordRest;
 class Score;
 class Tie;
+class Spacer;
 
 //---------------------------------------------------------
 //   TrackList
@@ -111,10 +112,20 @@ protected:
 
 private:
 
+    void backupSpacers(Segment* first, Segment* last);
+    void restoreSpacers(Score* score, const Fraction& tick) const;
+    void deleteSpacers();
     friend class TrackList;
 
+    struct SpacerBackup
+    {
+        Fraction sPosition;
+        staff_idx_t staffIdx;
+        Spacer* s = nullptr;
+    };
     std::list<TrackList*> m_tracks;
     std::vector<Tie*> m_startTies;
+    std::vector<SpacerBackup> m_spacers;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
 };
