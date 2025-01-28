@@ -76,6 +76,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/vstieditorview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/vstfxeditorview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/vstfxeditorview.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstview.h
     )
 
 set(MODULE_INCLUDE

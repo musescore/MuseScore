@@ -44,6 +44,7 @@
 
 #include "view/vstieditorview.h"
 #include "view/vstfxeditorview.h"
+#include "view/vstview.h"
 
 #include "log.h"
 
@@ -83,8 +84,10 @@ void VSTModule::resolveImports()
         ir->registerUri(Uri("muse://vsti/editor"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstiEditorView>("VstiEditorView")));
 
-        ir->registerUri(Uri("muse://vstfx/editor"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstFxEditorView>("VstFxEditorView")));
+        // ir->registerUri(Uri("muse://vstfx/editor"),
+        //                 ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstFxEditorView>("VstFxEditorView")));
+
+        ir->registerQmlUri(Uri("muse://vstfx/editor"), "Muse/Vst/VstEditorDialog.qml");
     }
 
     auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
@@ -115,6 +118,8 @@ void VSTModule::registerResources()
 
 void VSTModule::registerUiTypes()
 {
+    qmlRegisterType<VstView>("Muse.Vst", 1, 0, "VstView");
+
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(muse_vst_QML_IMPORT);
 }
 
