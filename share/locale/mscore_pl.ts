@@ -16040,7 +16040,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../libmscore/score.cpp" line="2260"/>
         <source>Clone paste error: insufficient staves available at given position</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd wklejania-klonowania: niewystarczająca liczba pięciolinii dostępnych w danej pozycji.</translation>
     </message>
 </context>
 <context>
@@ -16430,12 +16430,12 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2088"/>
         <source>A valid range or single selection required for measure position.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagany jest prawidłowy zakres lub pojedyncze zaznaczenie dla pozycji taktu.</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2093"/>
         <source>Invalid source score.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowa partytura źródłowa.</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="4963"/>
@@ -27851,7 +27851,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="211"/>
         <source>Paste (Clone)</source>
-        <translation type="unfinished"></translation>
+        <translation>Wklej (klonuj)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1951"/>
