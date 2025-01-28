@@ -2863,14 +2863,12 @@ bool Segment::goesBefore(const Segment* nextSegment) const
         return clefPos == ClefToBarlinePosition::AFTER;
     }
 
-    if (thisIsClef && (nextIsKeySig || nextIsTimeSig) && thisMeasureIsStartRepeat
-        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
+    if (thisIsClef && (nextIsKeySig || nextIsTimeSig) && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
         // Between repeats
         return true;
     }
 
-    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef && thisMeasureIsStartRepeat
-        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
+    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
         // Between repeats
         return false;
     }
