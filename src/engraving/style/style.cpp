@@ -539,8 +539,9 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
     }
 
     if (m_version < 450) {
-        // Doesn't exist before 4.5. Default to false for compatibility.
+        // Didn't exist before 4.5. Default to false for compatibility.
         set(Sid::scaleRythmicSpacingForSmallNotes, false);
+        set(Sid::maskBarlinesForText, false);
     }
 
     if (m_version < 420 && !MScore::testMode) {
