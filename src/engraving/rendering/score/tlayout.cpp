@@ -4519,15 +4519,20 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
     const double mag = item->mag();
     const bool leftBracket = item->direction() == DirectionH::LEFT;
 
-    const double height = staff->staffHeight(item->tick()) + 2 * spatium * mag;
+    double startY = -spatium;
+    double height = staff->staffHeight(item->tick()) + 2 * spatium * mag;       // 6sp for a standard 5 line stave
+
+    if (ctx.conf().styleB(Sid::smallParens)) {
+        startY = ldata->startY;
+        height = ldata->height;
+    }
+
     const double heightInSpatium = height / spatium;
-
-    const double shoulderX = 1.25 * spatium * mag;
-    const double thickness = 0.1 * spatium * mag; // THICKNESS - ADJUST
-
     const double shoulderYOffset = 0.2 * height;
+    const double thickness = height / 60 * mag;
+    const double shoulderX = 0.2 * height * mag;
 
-    PointF start = PointF(0.0, -spatium);
+    PointF start = PointF(0.0, startY);
     const PointF end = PointF(0.0, start.y() + height);
     const PointF endNormalised = end - start;
 

@@ -1807,6 +1807,8 @@ enum class Sid {
     showCourtesiesAfterCancellingOtherJumps,
     useParensOtherJumpCourtesiesAfterCancelling,
 
+    smallParens,
+
     STYLES
     ///\}
 };

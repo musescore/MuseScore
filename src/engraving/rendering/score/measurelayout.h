@@ -27,6 +27,7 @@
 namespace mu::engraving {
 class Measure;
 class MeasureBase;
+class Parenthesis;
 class Score;
 class Segment;
 class StaffLines;
@@ -107,7 +108,7 @@ private:
     static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
                                 LayoutContext& ctx);
 
-    static void createParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track);
+    static Parenthesis* findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track);
     static void removeRepeatCourtesyParenthesesSegment(Segment* seg, const track_idx_t track,
                                                        const DirectionH direction = DirectionH::AUTO);
 };

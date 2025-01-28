@@ -1924,30 +1924,38 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     }
 }
 
-void MeasureLayout::createParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)
+Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)
 {
     if (!segment->element(track)) {
-        return;
+        return nullptr;
     }
 
     std::vector<EngravingItem*> parens = segment->findAnnotations(ElementType::PARENTHESIS, track, track);
-    bool foundMatchingParen = false;
+
     for (EngravingItem* el : parens) {
         if (!el->isParenthesis() || toParenthesis(el)->direction() != direction) {
             continue;
         }
-        foundMatchingParen = true;
-        break;
-    }
-
-    if (foundMatchingParen) {
-        return;
+        return toParenthesis(el);
     }
 
     Parenthesis* paren = Factory::createParenthesis(segment);
     paren->setTrack(track);
     paren->setDirection(direction);
     segment->add(paren);
+
+    return paren;
+}
+
+static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom)
+{
+    Segment* seg = item->segment();
+    EngravingItem* el = seg->element(item->track());
+    const double spatium = item->spatium();
+    if (el) {
+        top = std::min(top, el->shape().top() + el->pos().y() + spatium / 2);
+        bottom = std::max(bottom, el->shape().bottom() + el->pos().y() - spatium / 2);
+    }
 }
 
 void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continuation, LayoutContext& ctx)
@@ -1959,6 +1967,8 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
     const Fraction sigTick = continuation ? Fraction(0, 0) : m->ticks();
 
     for (track_idx_t track = 0; track <= ctx.dom().nstaves() * VOICES; track += VOICES) {
+        double top = DBL_MAX;
+        double bottom = -DBL_MAX;
         Segment* leftMostSeg = m->findSegmentR(clefSegType, sigTick);
 
         if (!leftMostSeg || !leftMostSeg->enabled() || !leftMostSeg->element(track)) {
@@ -1974,7 +1984,7 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             return;
         }
 
-        createParenthesis(leftMostSeg, DirectionH::LEFT, track);
+        Parenthesis* leftParen = findOrCreateParenthesis(leftMostSeg, DirectionH::LEFT, track);
 
         Segment* rightMostSeg = m->findSegmentR(tsSegType, sigTick);
         if (!rightMostSeg || !rightMostSeg->enabled() || !rightMostSeg->element(track)) {
@@ -1990,7 +2000,17 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             return;
         }
 
-        createParenthesis(rightMostSeg, DirectionH::RIGHT, track);
+        Parenthesis* rightParen = findOrCreateParenthesis(rightMostSeg, DirectionH::RIGHT, track);
+        if (ctx.conf().styleB(Sid::smallParens)) {
+            calcParenTopBottom(leftParen, top, bottom);
+            calcParenTopBottom(rightParen, top, bottom);
+
+            const double height = bottom - top;
+            rightParen->mutldata()->startY.set_value(top);
+            rightParen->mutldata()->height.set_value(height);
+            leftParen->mutldata()->startY.set_value(top);
+            leftParen->mutldata()->height.set_value(height);
+        }
     }
 }
 

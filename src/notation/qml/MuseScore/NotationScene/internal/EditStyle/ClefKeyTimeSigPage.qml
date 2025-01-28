@@ -731,6 +731,14 @@ StyledFlickable {
 
                             text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a change before all other jumps")
                         }
+
+                        CheckBox {
+                            Layout.column: 0
+                            Layout.row: 2
+                            text: qsTrc("notation", "Small parentheses")
+                            checked: pageModel.smallParens.value === true
+                            onClicked: pageModel.smallParens.value = !pageModel.smallParens.value
+                        }
                     }
                 }
             }
