@@ -77,6 +77,12 @@
 #include "framework/stubs/shortcuts/shortcutsstubmodule.h"
 #endif
 
+#ifdef MUSE_MODULE_TOURS
+#include "framework/tours/toursmodule.h"
+#else
+#include "framework/stubs/tours/toursstubmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_UI
 #include "framework/dockwindow/dockmodule.h"
 #include "framework/ui/uimodule.h"
@@ -254,6 +260,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::uicomponents::UiComponentsModule());
     app->addModule(new muse::dock::DockModule());
 #endif
+    app->addModule(new muse::tours::ToursModule());
     app->addModule(new muse::vst::VSTModule());
 
 // modules
@@ -360,6 +367,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new muse::uicomponents::UiComponentsModule());
     app->addModule(new muse::dock::DockModule());
 #endif
+    app->addModule(new muse::tours::ToursModule());
     app->addModule(new muse::vst::VSTModule());
 
 // modules

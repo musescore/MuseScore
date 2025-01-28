@@ -65,6 +65,7 @@ public:
     api::ThemeApi* theme() const;
     QmlToolTip* tooltip() const;
     QmlDataFormatter* df() const;
+
     InteractiveProvider* interactiveProvider_property() const;
     std::shared_ptr<InteractiveProvider> interactiveProvider() const;
 
@@ -104,7 +105,9 @@ private:
     QStringList m_sourceImportPaths;
     api::ThemeApi* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
+
     std::shared_ptr<InteractiveProvider> m_interactiveProvider = nullptr;
+
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;
     QmlDataFormatter* m_dataFormatter = nullptr;

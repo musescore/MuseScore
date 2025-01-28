@@ -159,6 +159,10 @@ if (MUSE_MODULE_UI)
     list(APPEND LINK_LIB muse::dockwindow)
 endif()
 
+if (MUSE_MODULE_TOURS)
+    list(APPEND LINK_LIB muse::tours)
+endif()
+
 if (MUSE_MODULE_AUDIOPLUGINS)
     list(APPEND LINK_LIB muse::audioplugins)
 endif()

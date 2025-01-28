@@ -58,7 +58,7 @@ class DockPageView : public QQuickItem, public muse::Injectable
     Q_PROPERTY(muse::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
-    muse::Inject<ui::INavigationController> navigationController = { this };
+    Inject<ui::INavigationController> navigationController = { this };
 
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);

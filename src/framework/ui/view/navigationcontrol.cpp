@@ -100,6 +100,11 @@ QWindow* NavigationControl::window() const
     return AbstractNavigation::window();
 }
 
+QQuickItem* muse::ui::NavigationControl::visualItem() const
+{
+    return AbstractNavigation::visualItem();
+}
+
 void NavigationControl::trigger()
 {
     emit triggered();

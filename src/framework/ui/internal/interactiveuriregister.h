@@ -24,15 +24,6 @@
 
 #include "iinteractiveuriregister.h"
 
-template<>
-struct std::hash<muse::Uri>
-{
-    std::size_t operator()(const muse::Uri& uri) const noexcept
-    {
-        return std::hash<std::string> {}(uri.toString());
-    }
-};
-
 namespace muse::ui {
 class InteractiveUriRegister : public IInteractiveUriRegister
 {
