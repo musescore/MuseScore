@@ -39,6 +39,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstactionscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstmodulesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstmodulesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstancesregister.cpp

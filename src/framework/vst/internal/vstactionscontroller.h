@@ -21,48 +21,30 @@
  */
 #pragma once
 
-#include <QQuickItem>
+#include "actions/actionable.h"
 
-#include "global/modularity/ioc.h"
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "global/iinteractive.h"
 #include "../ivstinstancesregister.h"
 
 namespace muse::vst {
-class VstView : public QQuickItem, public Steinberg::IPlugFrame
+class VstActionsController : public actions::Actionable
 {
-    Q_OBJECT
-    Q_PROPERTY(int instanceId READ instanceId WRITE setInstanceId NOTIFY instanceIdChanged FINAL)
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged FINAL)
-
+    muse::Inject<actions::IActionsDispatcher> dispatcher;
+    muse::Inject<IInteractive> interactive;
     muse::Inject<IVstInstancesRegister> instancesRegister;
 
-    DECLARE_FUNKNOWN_METHODS
-
 public:
-    VstView(QQuickItem* parent = nullptr);
+    VstActionsController() = default;
 
-    int instanceId() const;
-    void setInstanceId(int newInstanceId);
+    void init();
 
-    Q_INVOKABLE void init();
+    void fxEditor(const actions::ActionQuery& actionQuery);
+    void instEditor(const actions::ActionQuery& actionQuery);
 
-    // IPlugFrame
-    Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
-    // ----------
-
-    QString title() const;
-
-signals:
-    void instanceIdChanged();
-    void titleChanged();
-
-private:
-
-    void updateViewGeometry();
-
-    int m_instanceId = -1;
-    IVstPluginInstancePtr m_instance;
-    PluginViewPtr m_view;
-    QString m_title;
+    void editorOperation(const std::string& operation, int instanceId);
 };
 }
+
 

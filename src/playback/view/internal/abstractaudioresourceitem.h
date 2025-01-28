@@ -28,8 +28,7 @@
 #include "async/asyncable.h"
 
 #include "audio/audiotypes.h"
-
-#include "types/uri.h"
+#include "actions/actiontypes.h"
 
 namespace mu::playback {
 class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable
@@ -54,8 +53,8 @@ public:
     virtual bool isActive() const;
     virtual bool hasNativeEditorSupport() const;
 
-    const muse::UriQuery& editorUri() const;
-    void setEditorUri(const muse::UriQuery& uri);
+    const muse::actions::ActionQuery& editorAction() const;
+    void setEditorAction(const muse::actions::ActionQuery& action);
 
 signals:
     void titleChanged();
@@ -82,7 +81,7 @@ protected:
 private:
     void doRequestToLaunchNativeEditorView();
 
-    muse::UriQuery m_editorUri;
+    muse::actions::ActionQuery m_editorAction;
 };
 }
 

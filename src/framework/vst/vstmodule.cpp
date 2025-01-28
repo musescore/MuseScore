@@ -41,6 +41,7 @@
 #include "internal/fx/vstfxresolver.h"
 #include "internal/vstpluginsscanner.h"
 #include "internal/vstpluginmetareader.h"
+#include "internal/vstactionscontroller.h"
 
 #include "view/vstieditorview.h"
 #include "view/vstfxeditorview.h"
@@ -71,6 +72,7 @@ void VSTModule::registerExports()
     m_configuration = std::make_shared<VstConfiguration>();
     m_pluginModulesRepo = std::make_shared<VstModulesRepository>();
     m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>();
+    m_actionsController = std::make_shared<VstActionsController>();
 
     ioc()->registerExport<IVstConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IVstModulesRepository>(moduleName(), m_pluginModulesRepo);
@@ -87,7 +89,7 @@ void VSTModule::resolveImports()
         // ir->registerUri(Uri("muse://vstfx/editor"),
         //                 ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstFxEditorView>("VstFxEditorView")));
 
-        ir->registerQmlUri(Uri("muse://vstfx/editor"), "Muse/Vst/VstEditorDialog.qml");
+        ir->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
     }
 
     auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
@@ -126,6 +128,7 @@ void VSTModule::registerUiTypes()
 void VSTModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+    m_actionsController->init();
     m_pluginModulesRepo->init();
 }
 
