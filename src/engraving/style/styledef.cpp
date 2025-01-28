@@ -1787,6 +1787,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(useParensRepeatCourtesiesAfterCancelling,   true),
     styleDef(showCourtesiesAfterCancellingOtherJumps,    true),
     styleDef(useParensOtherJumpCourtesiesAfterCancelling, true),
+    styleDef(smallParens,                                false),
 } };
 
 #undef styleDef

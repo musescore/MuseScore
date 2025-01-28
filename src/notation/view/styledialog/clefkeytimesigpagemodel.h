@@ -80,6 +80,8 @@ class ClefKeyTimeSigPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * showCourtesiesAfterCancellingOtherJumps READ showCourtesiesAfterCancellingOtherJumps CONSTANT)
     Q_PROPERTY(StyleItem * useParensOtherJumpCourtesiesAfterCancelling READ useParensOtherJumpCourtesiesAfterCancelling CONSTANT)
 
+    Q_PROPERTY(StyleItem * smallParens READ smallParens CONSTANT)
+
 public:
     explicit ClefKeyTimeSigPageModel(QObject* parent = nullptr);
 
@@ -135,5 +137,7 @@ public:
     StyleItem* useParensRepeatCourtesiesAfterCancelling() const;
     StyleItem* showCourtesiesAfterCancellingOtherJumps() const;
     StyleItem* useParensOtherJumpCourtesiesAfterCancelling() const;
+
+    StyleItem* smallParens() const;
 };
 }

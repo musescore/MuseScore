@@ -47,6 +47,8 @@ public:
     struct LayoutData : public EngravingItem::LayoutData
     {
         ld_field<muse::draw::PainterPath> path = "path";
+        ld_field<double> startY = "startY";
+        ld_field<double> height = "height";
     };
     DECLARE_LAYOUTDATA_METHODS(Parenthesis);
 };
