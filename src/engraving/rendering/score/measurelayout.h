@@ -67,7 +67,7 @@ public:
     static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
     static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
     static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
-    static void removeRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
+    static void removeRepeatCourtesyParenthesesMeasure(Measure* m, const bool continuation, LayoutContext& ctx);
 
     static void setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx);
 
@@ -107,6 +107,8 @@ private:
     static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
                                 LayoutContext& ctx);
 
-    static void createParenthesis(Segment* segment, const DirectionH direction, LayoutContext& ctx);
+    static void createParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track);
+    static void removeRepeatCourtesyParenthesesSegment(Segment* seg, const track_idx_t track,
+                                                       const DirectionH direction = DirectionH::AUTO);
 };
 }
