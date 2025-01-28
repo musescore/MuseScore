@@ -902,9 +902,15 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>
     }
 
     if (!bestMatch) {
+        static const std::wregex drumsetRegex(L"drum ?(set|kit)", std::regex_constants::icase);
+
         for (const String& name : nameList) {
-            if (name.contains(u"drum", muse::CaseInsensitive)) {
-                return searchTemplate(u"drumset");
+            if (name.contains(drumsetRegex)) {
+                return searchTemplate(u"drumset"); // Large Drum Kit
+            }
+
+            if (name.contains(u"drum", muse::CaseInsensitive) || name.contains(u"percussion", muse::CaseInsensitive)) {
+                return searchTemplate(u"percussion-synthesizer"); // General MIDI percussion
             }
 
             if (name.contains(u"piano", muse::CaseInsensitive)) {

@@ -50,10 +50,10 @@
           <head>normal</head>
           <line>8</line>
           <voice>1</voice>
-          <name>Acoustic Bass Drum</name>
+          <name>Bass Drum 2</name>
           <stem>2</stem>
-          <panelRow>2</panelRow>
-          <panelColumn>1</panelColumn>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="36">
           <head>normal</head>
@@ -62,7 +62,7 @@
           <name>Bass Drum 1</name>
           <stem>2</stem>
           <shortcut>B</shortcut>
-          <panelRow>2</panelRow>
+          <panelRow>0</panelRow>
           <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="37">
@@ -81,8 +81,8 @@
           <name>Acoustic Snare</name>
           <stem>1</stem>
           <shortcut>A</shortcut>
-          <panelRow>1</panelRow>
-          <panelColumn>0</panelColumn>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="40">
           <head>slash</head>
@@ -91,7 +91,7 @@
           <name>Electric Snare</name>
           <stem>1</stem>
           <panelRow>2</panelRow>
-          <panelColumn>6</panelColumn>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="41">
           <head>normal</head>
@@ -110,7 +110,7 @@
           <stem>1</stem>
           <shortcut>G</shortcut>
           <panelRow>0</panelRow>
-          <panelColumn>0</panelColumn>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="43">
           <head>normal</head>
@@ -118,8 +118,8 @@
           <voice>0</voice>
           <name>High Floor Tom</name>
           <stem>1</stem>
-          <panelRow>1</panelRow>
-          <panelColumn>6</panelColumn>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
         <Drum pitch="44">
           <head>cross</head>
@@ -128,7 +128,7 @@
           <name>Pedal Hi-Hat</name>
           <stem>2</stem>
           <shortcut>F</shortcut>
-          <panelRow>2</panelRow>
+          <panelRow>1</panelRow>
           <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="45">
@@ -138,7 +138,7 @@
           <name>Low Tom</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
-          <panelColumn>5</panelColumn>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="46">
           <head>xcircle</head>
@@ -147,7 +147,7 @@
           <name>Open Hi-Hat</name>
           <stem>1</stem>
           <panelRow>0</panelRow>
-          <panelColumn>1</panelColumn>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="47">
           <head>normal</head>
@@ -156,7 +156,7 @@
           <name>Low-Mid Tom</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
-          <panelColumn>4</panelColumn>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="48">
           <head>normal</head>
@@ -164,8 +164,8 @@
           <voice>0</voice>
           <name>Hi-Mid Tom</name>
           <stem>1</stem>
-          <panelRow>1</panelRow>
-          <panelColumn>3</panelColumn>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="49">
           <head>cross</head>
@@ -185,7 +185,7 @@
           <stem>1</stem>
           <shortcut>E</shortcut>
           <panelRow>1</panelRow>
-          <panelColumn>2</panelColumn>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="51">
           <head>cross</head>
@@ -195,16 +195,16 @@
           <stem>1</stem>
           <shortcut>D</shortcut>
           <panelRow>0</panelRow>
-          <panelColumn>2</panelColumn>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="52">
           <head>cross</head>
           <line>-4</line>
           <voice>0</voice>
-          <name>Chinese Cymbal</name>
+          <name>China Cymbal</name>
           <stem>1</stem>
-          <panelRow>0</panelRow>
-          <panelColumn>6</panelColumn>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="53">
           <head>diamond</head>
@@ -212,8 +212,8 @@
           <voice>0</voice>
           <name>Ride Bell</name>
           <stem>1</stem>
-          <panelRow>0</panelRow>
-          <panelColumn>3</panelColumn>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="54">
           <head>diamond</head>
@@ -222,7 +222,7 @@
           <name>Tambourine</name>
           <stem>1</stem>
           <panelRow>2</panelRow>
-          <panelColumn>4</panelColumn>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="55">
           <head>cross</head>
@@ -230,8 +230,8 @@
           <voice>0</voice>
           <name>Splash Cymbal</name>
           <stem>1</stem>
-          <panelRow>0</panelRow>
-          <panelColumn>7</panelColumn>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="56">
           <head>triangle-down</head>
@@ -240,7 +240,7 @@
           <name>Cowbell</name>
           <stem>1</stem>
           <panelRow>2</panelRow>
-          <panelColumn>3</panelColumn>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="57">
           <head>cross</head>
@@ -248,8 +248,8 @@
           <voice>0</voice>
           <name>Crash Cymbal 2</name>
           <stem>1</stem>
-          <panelRow>0</panelRow>
-          <panelColumn>5</panelColumn>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="59">
           <head>cross</head>
@@ -258,7 +258,7 @@
           <name>Ride Cymbal 2</name>
           <stem>1</stem>
           <panelRow>2</panelRow>
-          <panelColumn>5</panelColumn>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="81">
           <head>normal</head>
