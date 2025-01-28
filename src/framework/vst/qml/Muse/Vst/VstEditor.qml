@@ -27,11 +27,11 @@ import Muse.Vst 1.0
 
 Rectangle {
 
+    // in
     property alias instanceId: view.instanceId
 
-    property alias resourceId: view.resourceId
-    property alias trackId: view.trackId
-    property alias chainOrder: view.chainOrder
+    // out
+    property alias title: view.title
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -50,6 +50,7 @@ Rectangle {
         anchors.bottom: bottomPanel.top
     }
 
+    // for test
     Item {
         id: bottomPanel
         anchors.left: parent.left

@@ -70,20 +70,12 @@ VstPluginInstance::~VstPluginInstance()
 
 const muse::audio::AudioResourceId& VstPluginInstance::resourceId() const
 {
-    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
-
-    std::lock_guard lock(m_mutex);
-
     return m_resourceId;
 }
 
 const std::string& VstPluginInstance::name() const
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
-
-    std::lock_guard lock(m_mutex);
-
-    return m_module->getName();
+    return m_resourceId;
 }
 
 VstPluginInstanceId VstPluginInstance::id() const
