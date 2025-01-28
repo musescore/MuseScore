@@ -25,11 +25,11 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Drums</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion-synthesizer">
         <longName>Drums</longName>
         <shortName>Drums</shortName>
         <trackName></trackName>
-        <instrumentId>drum.group.set</instrumentId>
+        <instrumentId>drum.group</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>
