@@ -28,18 +28,10 @@ StyledDialogView {
 
     property alias instanceId: editor.instanceId
 
-    property alias resourceId: editor.resourceId
-    property alias trackId: editor.trackId
-    property alias chainOrder: editor.chainOrder
-
-    title: "Vst Editor"
+    title: editor.title
 
     contentHeight: editor.implicitHeight
     contentWidth: editor.implicitWidth
-
-    onContentHeightChanged: {
-        console.log("onContentHeightChanged: " + root.contentHeight)
-    }
 
     VstEditor {
         id: editor

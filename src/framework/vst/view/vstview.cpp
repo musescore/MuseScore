@@ -64,10 +64,13 @@ static FIDString currentPlatformUiType()
 
 void VstView::init()
 {
-    m_instance = instancesRegister()->fxPlugin(m_resourceId.toStdString(), m_trackId, m_chainOrder);
+    m_instance = instancesRegister()->instanceById(m_instanceId);
     IF_ASSERT_FAILED(m_instance) {
         return;
     }
+
+    m_title = QString::fromStdString(m_instance->name());
+    emit titleChanged();
 
     m_view = m_instance->createView();
     if (!m_view) {
@@ -84,7 +87,7 @@ void VstView::init()
     attached = m_view->attached(reinterpret_cast<void*>(window()->winId()), currentPlatformUiType());
     if (attached != Steinberg::kResultOk) {
         LOGE() << "Unable to attach vst plugin view to window"
-               << ", resourceId: " << m_resourceId;
+               << ", instance name: " << m_instance->name();
         return;
     }
 
@@ -158,41 +161,7 @@ void VstView::setInstanceId(int newInstanceId)
     emit instanceIdChanged();
 }
 
-QString VstView::resourceId() const
+QString VstView::title() const
 {
-    return m_resourceId;
-}
-
-void VstView::setResourceId(const QString &newResourceId)
-{
-    if (m_resourceId == newResourceId)
-        return;
-    m_resourceId = newResourceId;
-    emit resourceIdChanged();
-}
-
-int VstView::trackId() const
-{
-    return m_trackId;
-}
-
-void VstView::setTrackId(int newTrackId)
-{
-    if (m_trackId == newTrackId)
-        return;
-    m_trackId = newTrackId;
-    emit trackIdChanged();
-}
-
-int VstView::chainOrder() const
-{
-    return m_chainOrder;
-}
-
-void VstView::setChainOrder(int newChainOrder)
-{
-    if (m_chainOrder == newChainOrder)
-        return;
-    m_chainOrder = newChainOrder;
-    emit chainOrderChanged();
+    return m_title;
 }

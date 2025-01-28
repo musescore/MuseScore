@@ -28,7 +28,8 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "global/iinteractive.h"
+#include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "iplaybackconfiguration.h"
 
@@ -64,9 +65,10 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(muse::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
-    INJECT(muse::IInteractive, interactive)
-    INJECT(context::IGlobalContext, context)
-    INJECT(IPlaybackConfiguration, configuration)
+    muse::Inject<muse::IInteractive> interactive;
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher;
+    muse::Inject<context::IGlobalContext> context;
+    muse::Inject<IPlaybackConfiguration> configuration;
 
 public:
     enum class Type {
@@ -178,7 +180,7 @@ protected:
 
     muse::audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
-    void openEditor(AbstractAudioResourceItem* item, const muse::UriQuery& editorUri);
+    void openEditor(AbstractAudioResourceItem* item, const muse::actions::ActionQuery& action);
     void closeEditor(AbstractAudioResourceItem* item);
 
     bool askAboutChangingSound();
