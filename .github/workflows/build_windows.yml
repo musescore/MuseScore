@@ -201,10 +201,7 @@ jobs:
         path: build.artifacts\
 
   windows_portable_x32:
-    # Disable on pull_request
-    if: |
-      github.event_name != 'pull_request' &&
-      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable_x32'))
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable_x32')
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
@@ -283,10 +280,7 @@ jobs:
         path: build.artifacts\
 
   windows_portable_x64:
-    # Disable on pull_request
-    if: |
-      github.event_name != 'pull_request' &&
-      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable_x64'))
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable_x64')
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
