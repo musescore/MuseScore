@@ -167,6 +167,9 @@ public:
 
     TimeSigMap* compatTimeSigMap();
 
+    Fraction timeSigForNextMeasure() { return m_timeSigForNextMeasure; }
+    void setTimeSigForNextMeasure(Fraction timeSig) { m_timeSigForNextMeasure = timeSig; }
+
     Location location(bool forceAbsFrac = false) const;
     void fillLocation(Location&, bool forceAbsFrac = false) const;
     void setLocation(const Location&);   // sets a new reading point, taking into account its type (absolute or relative).
@@ -239,7 +242,10 @@ private:
     SettingsCompat _settingsCompat;
 
     TimeSigMap m_compatTimeSigMap;
+
     PropertyIdSet m_propertiesToSkip;
+
+    Fraction m_timeSigForNextMeasure = Fraction(0, 1);
 };
 }
 

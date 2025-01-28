@@ -241,7 +241,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::STEM] = 0.35 * spatium;
 
     table[ElementType::PARENTHESIS][ElementType::BAR_LINE] = 0.5 * spatium;
-    table[ElementType::PARENTHESIS][ElementType::KEYSIG] = 0.2 * spatium;
+    table[ElementType::PARENTHESIS][ElementType::KEYSIG] = 0.35 * spatium;
     table[ElementType::PARENTHESIS][ElementType::TIMESIG] = 0.2 * spatium;
     table[ElementType::PARENTHESIS][ElementType::CLEF] = 0.2 * spatium;
     table[ElementType::PARENTHESIS][ElementType::STEM] = 0.35 * spatium;

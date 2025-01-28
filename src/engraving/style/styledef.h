@@ -1796,7 +1796,6 @@ enum class Sid {
 
     showCourtesiesRepeats,
     useParensRepeatCourtesies,
-    showCourtesiesFinalBar,
 
     showCourtesiesOtherJumps,
     useParensOtherJumpCourtesies,

@@ -1824,6 +1824,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 staff->clefList().insert(std::pair<int, ClefType>(ctx.tick().ticks(), ClefType::G));
             }
 
+            // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
+            if (ctx.tick() != Fraction(0, 1) && ctx.tick() == m->tick()
+                && !(m->prevMeasure() && m->prevMeasure()->repeatEnd()) && !header) {
+                clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+            }
+
             segment->add(clef);
         } else if (tag == "TimeSig") {
             // if time sig not at beginning of measure => courtesy time sig

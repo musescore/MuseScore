@@ -231,7 +231,7 @@ StyledFlickable {
                             FlatButton {
                                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                                 icon: IconCode.UNDO
-                                enabled: !(root.numeralStyle.isDefault && root.timeSigAlignment.isDefault
+                                enabled: !(root.numeralStyle.isDefault && (!root.timeSigAlignment || root.timeSigAlignment.isDefault)
                                            && root.timeSigScale.isDefault && root.scaleLock.isDefault
                                            && root.numDist.isDefault && root.yPos.isDefault)
                                 onClicked: pageModel.resetStyleAndSize()
@@ -271,8 +271,12 @@ StyledFlickable {
                                         font.pixelSize: 16
                                     }
 
-                                    checked: root.timeSigAlignment.value === modelData.value
-                                    onToggled: root.timeSigAlignment.value = modelData.value
+                                    checked: root.timeSigAlignment ? root.timeSigAlignment.value === modelData.value : false
+                                    onToggled: function() {
+                                        if (root.timeSigAlignment) {
+                                            root.timeSigAlignment.value = modelData.value
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -687,16 +691,6 @@ StyledFlickable {
                             imageParens: "courtesyImages/repeat-3"
 
                             text: qsTrc("notation/editstyle/timesignatures", "Show at repeats")
-
-                            CheckBox {
-                                Layout.column: 0
-                                Layout.row: 2
-                                text: qsTrc("notation", "Also show at final bar")
-                                checked: pageModel.showCourtesiesFinalBar.value === true
-                                onClicked: pageModel.showCourtesiesFinalBar.value = !pageModel.showCourtesiesFinalBar.value
-
-                                enabled: pageModel.showCourtesiesRepeats.value
-                            }
                         }
 
                         CourtesyShowAndParenToggle {

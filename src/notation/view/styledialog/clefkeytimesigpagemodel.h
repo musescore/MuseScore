@@ -72,7 +72,6 @@ class ClefKeyTimeSigPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * changesBetweenEndStartRepeat READ changesBetweenEndStartRepeat CONSTANT)
     Q_PROPERTY(StyleItem * showCourtesiesRepeats READ showCourtesiesRepeats CONSTANT)
     Q_PROPERTY(StyleItem * useParensRepeatCourtesies READ useParensRepeatCourtesies CONSTANT)
-    Q_PROPERTY(StyleItem * showCourtesiesFinalBar READ showCourtesiesFinalBar CONSTANT)
     Q_PROPERTY(StyleItem * showCourtesiesOtherJumps READ showCourtesiesOtherJumps CONSTANT)
     Q_PROPERTY(StyleItem * useParensOtherJumpCourtesies READ useParensOtherJumpCourtesies CONSTANT)
     Q_PROPERTY(StyleItem * showCourtesiesAfterCancellingRepeats READ showCourtesiesAfterCancellingRepeats CONSTANT)
@@ -130,7 +129,6 @@ public:
     StyleItem* changesBetweenEndStartRepeat() const;
     StyleItem* showCourtesiesRepeats() const;
     StyleItem* useParensRepeatCourtesies() const;
-    StyleItem* showCourtesiesFinalBar() const;
     StyleItem* showCourtesiesOtherJumps() const;
     StyleItem* useParensOtherJumpCourtesies() const;
     StyleItem* showCourtesiesAfterCancellingRepeats() const;

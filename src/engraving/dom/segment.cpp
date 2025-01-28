@@ -787,6 +787,10 @@ void Segment::add(EngravingItem* el)
         m_elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
         setEmpty(false);
+        if (segmentType() == SegmentType::TimeSigAnnounce
+            || segmentType() == SegmentType::TimeSigRepeatAnnounce || segmentType() == SegmentType::TimeSigStartRepeatAnnounce) {
+            toTimeSig(el)->setIsCourtesy(true);
+        }
         break;
 
     case ElementType::KEYSIG:
@@ -799,6 +803,10 @@ void Segment::add(EngravingItem* el)
             el->staff()->setKey(tick(), toKeySig(el)->keySigEvent());
         }
         setEmpty(false);
+        if (m_segmentType == SegmentType::KeySigAnnounce
+            || m_segmentType == SegmentType::KeySigRepeatAnnounce || m_segmentType == SegmentType::KeySigStartRepeatAnnounce) {
+            toKeySig(el)->setIsCourtesy(true);
+        }
         break;
 
     case ElementType::CHORD:
@@ -2822,6 +2830,11 @@ bool Segment::goesBefore(const Segment* nextSegment) const
     bool nextIsKeySig = nextSegment->isKeySigType();
     bool nextIsTimeSig = nextSegment->isTimeSigType();
 
+    // Place non header clefs AFTER header clefs, key signatures, time signatures
+    const bool firstSystemMeasure = meas->findSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
+    bool thisIsHeader = isHeaderClefType() || (rtick() == Fraction(0, 1) && firstSystemMeasure && !thisIsClef);
+    bool nextIsHeader = nextSegment->isHeaderClefType() || (nextSegment->rtick() == Fraction(0, 1) && firstSystemMeasure && !nextIsClef);
+
     bool thisIsEndOfMeasure = endOfMeasureChange();
 
     // Place segments in correct place when "Place all changes before the barline" is enabled
@@ -2863,12 +2876,14 @@ bool Segment::goesBefore(const Segment* nextSegment) const
         return clefPos == ClefToBarlinePosition::AFTER;
     }
 
-    if (thisIsClef && (nextIsKeySig || nextIsTimeSig) && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
+    if (thisIsClef && (nextIsKeySig || nextIsTimeSig)
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1) && !nextIsHeader) {
         // Between repeats
         return true;
     }
 
-    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)) {
+    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1) && !thisIsHeader) {
         // Between repeats
         return false;
     }

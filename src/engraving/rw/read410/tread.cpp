@@ -1487,6 +1487,8 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
             sig.setForInstrumentChange(e.readBool());
+        } else if (tag == "isCourtesy") {
+            s->setIsCourtesy(e.readBool());
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
@@ -4524,6 +4526,8 @@ void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
             Groups groups;
             TRead::read(&groups, e, ctx);
             s->setGroups(groups);
+        } else if (tag == "isCourtesy") {
+            s->setIsCourtesy(e.readBool());
         } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
