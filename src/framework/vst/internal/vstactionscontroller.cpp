@@ -46,15 +46,20 @@ void VstActionsController::fxEditor(const actions::ActionQuery& actionQuery)
 
     int trackId = actionQuery.param("trackId", Val(-1)).toInt();
     int chainOrder = actionQuery.param("chainOrder", Val(0)).toInt();
+    std::string operation = actionQuery.param("operation", Val("open")).toString();
 
     auto instance = instancesRegister()->fxPlugin(resourceId, trackId, chainOrder);
+
+    if (operation == "close" && !instance) {
+        return;
+    }
+
     IF_ASSERT_FAILED(instance) {
         LOGE() << "not found instance, resourceId: " << resourceId
                << ", trackId: " << trackId << ", chainOrder: " << chainOrder;
         return;
     }
 
-    std::string operation = actionQuery.param("operation", Val("open")).toString();
     editorOperation(operation, instance->id());
 }
 
