@@ -1039,6 +1039,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     }
 
     const EngravingItem* selectedElement = interaction->selection()->element();
+    INotationNoteInputPtr noteInput = interaction->noteInput();
     bool playChord = false;
 
     switch (direction) {
@@ -1050,26 +1051,14 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->nudge(direction, quickly);
         } else if (selectedElement && selectedElement->hasGrips()) {
             interaction->nudgeAnchors(direction);
-        } else if (interaction->noteInput()->isNoteInputMode()) {
-            if (interaction->noteInput()->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
-                const bool up = direction == MoveDirection::Up;
-                if (quickly) {
-                    interaction->noteInput()->moveInputNotes(up, PitchMode::OCTAVE);
-                } else {
-                    interaction->noteInput()->moveInputNotes(up, PitchMode::DIATONIC);
-                }
-
-                if (configuration()->isPlayPreviewNotesInInputByDuration()) {
-                    const NoteInputState& state = interaction->noteInput()->state();
-                    playbackController()->playNotes(state.notes(), state.staffIdx(), state.segment());
-                }
-                return;
-            } else if (interaction->noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
-                if (quickly) {
-                    interaction->movePitch(direction, PitchMode::OCTAVE);
-                }
-                interaction->moveSelection(direction, MoveSelectionType::String);
+        } else if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+            moveInputNotes(direction == MoveDirection::Up, quickly);
+            return;
+        } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
+            if (quickly) {
+                interaction->movePitch(direction, PitchMode::OCTAVE);
             }
+            interaction->moveSelection(direction, MoveSelectionType::String);
             return;
         } else if (interaction->selection()->isNone()) {
             interaction->selectFirstElement(false);
@@ -1134,6 +1123,25 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     }
 
     playSelectedElement(playChord);
+}
+
+void NotationActionController::moveInputNotes(bool up, bool quickly)
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    if (quickly) {
+        interaction->noteInput()->moveInputNotes(up, PitchMode::OCTAVE);
+    } else {
+        interaction->noteInput()->moveInputNotes(up, PitchMode::DIATONIC);
+    }
+
+    if (configuration()->isPlayPreviewNotesInInputByDuration()) {
+        const NoteInputState& state = interaction->noteInput()->state();
+        playbackController()->playNotes(state.notes(), state.staffIdx(), state.segment());
+    }
 }
 
 void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
