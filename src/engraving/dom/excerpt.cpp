@@ -1076,7 +1076,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         }
     }
 
-    nmb->linkTo(mb);
+    score->undo(new Link(nmb, mb));
     nmb->setExcludeFromOtherParts(false);
 
     for (EngravingItem* e : mb->el()) {
@@ -1113,9 +1113,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
             // skip part name in score
             continue;
         } else if (e->isTextBase() || e->isLayoutBreak()) {
-            ne = e->clone();
+            ne = e->linkedClone();
             ne->setAutoplace(true);
-            ne->linkTo(e);
         } else {
             ne = e->clone();
         }
