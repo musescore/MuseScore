@@ -190,6 +190,9 @@ void MeasuresSettingsModel::updateIsMakeIntoSystemAvailable()
     const Selection& selection = currentNotation()->elements()->msScore()->selection();
     const MeasureBase* startMB = selection.startMeasureBase();
     const MeasureBase* endMB = selection.endMeasureBase();
+    if (!startMB || !endMB) {
+        return;
+    }
 
     bool available = true;
     if (startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock() && startMB->systemLock() == endMB->systemLock()) {
