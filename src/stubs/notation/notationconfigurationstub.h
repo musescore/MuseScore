@@ -75,6 +75,8 @@ public:
 
     muse::draw::Color noteInputPreviewColor() const override;
 
+    bool useNoteInputCursorInInputByDuration() const override;
+
     int selectionProximity() const override;
     void setSelectionProximity(int proximity)  override;
     muse::async::Channel<int> selectionProximityChanged() const override;

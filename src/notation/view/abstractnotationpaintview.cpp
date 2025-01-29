@@ -608,7 +608,8 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     INotationNoteInputPtr noteInput = notationNoteInput();
 
     if (noteInput->isNoteInputMode()) {
-        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
+            && !configuration()->useNoteInputCursorInInputByDuration()) {
             m_ruler->paint(painter, noteInput->state());
         } else {
             m_noteInputCursor->paint(painter);

@@ -160,6 +160,11 @@ muse::draw::Color NotationConfigurationStub::noteInputPreviewColor() const
     return muse::draw::Color();
 }
 
+bool NotationConfigurationStub::useNoteInputCursorInInputByDuration() const
+{
+    return false;
+}
+
 int NotationConfigurationStub::selectionProximity() const
 {
     return 1;

@@ -51,6 +51,9 @@ static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foregrou
 
 static const Settings::Key NOTE_INPUT_PREVIEW_COLOR(module_name, "ui/canvas/noteInputPreviewColor");
 
+static const Settings::Key USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION(module_name,
+                                                                      "ui/canvas/useNoteInputCursorInInputByDuration");
+
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
 static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
@@ -173,6 +176,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
     settings()->setCanBeManuallyEdited(NOTE_INPUT_PREVIEW_COLOR, true);
     settings()->setDescription(NOTE_INPUT_PREVIEW_COLOR, muse::trc("notation", "Note input preview note color"));
+
+    settings()->setDefaultValue(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION, Val(false));
+    settings()->setCanBeManuallyEdited(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION, true);
+    settings()->setDescription(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION,
+                               muse::trc("notation", "Use on-staff vertical cursor (input by duration mode)"));
 
     settings()->setDefaultValue(FOREGROUND_WALLPAPER_PATH, Val());
     settings()->valueChanged(FOREGROUND_WALLPAPER_PATH).onReceive(nullptr, [this](const Val&) {
@@ -558,6 +566,11 @@ QColor NotationConfiguration::dropRectColor() const
 muse::draw::Color NotationConfiguration::noteInputPreviewColor() const
 {
     return settings()->value(NOTE_INPUT_PREVIEW_COLOR).toQColor();
+}
+
+bool NotationConfiguration::useNoteInputCursorInInputByDuration() const
+{
+    return settings()->value(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION).toBool();
 }
 
 int NotationConfiguration::selectionProximity() const
