@@ -650,7 +650,7 @@ void Sample::load()
             std::vector<char> p;
             p.resize(size);
             if (fd.read(p.data(), size) != size) {
-                  qWarning("SoundFont(%s) Sample(%s) read %u bytes failed", qPrintable(sf->get_name()), name, size);
+                  qDebug("SoundFont(%s) Sample(%s) read %u bytes failed", qPrintable(sf->get_name()), name, size);
                   setValid(false);
                   return;
                   }
@@ -662,7 +662,7 @@ void Sample::load()
             size *= sizeof(short);
 
             if (fd.read((char*)data, size) != size) {
-                  qWarning("SoundFont(%s) Sample(%s) read %u bytes failed", qPrintable(sf->get_name()), name, size);
+                  qDebug("SoundFont(%s) Sample(%s) read %u bytes failed", qPrintable(sf->get_name()), name, size);
                   setValid(false);
                   return;
                   }
@@ -693,15 +693,13 @@ void Sample::load()
       //
       // now add some extra sanity checks from the SF2 spec (biased so they work with unsigned int);
       // just a warning, they probably work with Fluid, possibly with audible artefacts though...
-#ifndef NDEBUG
       if (!(start + 7 < loopstart) || !(loopstart + 31 < loopend) || !(loopend + 7 < end))
-            qWarning("SoundFont(%s) Sample(%s) start(%u) startloop(%u) endloop(%u) end(%u) smaller than SoundFont 2.04 spec chapter 7.10 recommendation",
+            qDebug("SoundFont(%s) Sample(%s) start(%u) startloop(%u) endloop(%u) end(%u) smaller than SoundFont 2.04 spec chapter 7.10 recommendation",
                      qPrintable(sf->get_name()), name, start, loopstart, loopend, end);
-#endif
 
       // this used to cause a crash
       if (!data) {
-            qWarning("SoundFont(%s) Sample(%s) data is nil", qPrintable(sf->get_name()), name);
+            qDebug("SoundFont(%s) Sample(%s) data is nil", qPrintable(sf->get_name()), name);
             setValid(false);
             }
 
@@ -1402,7 +1400,7 @@ void SFont::load_ihdr(int size)
                         pr->zones.prepend(0);
                   }
             else if (zndx > 0) {	/* 1st inst, warn if ofs >0 */
-	            qWarning("%d instrument zones not referenced, discarding", zndx);
+                  qWarning("%d instrument zones not referenced, discarding", zndx);
                   }
             pzndx = zndx;
             pr = p;			/* update instrument ptr */
@@ -1465,7 +1463,7 @@ void SFont::load_ibag(int size)
 
       if (!pz) {  /* in case that all are no zoners */
             if (genndx > 0)
-	            qWarning("No instrument generators and terminal index not 0");
+                  qWarning("No instrument generators and terminal index not 0");
             if (modndx > 0)
                   qWarning("No instrument modulators and terminal index not 0");
             return;
@@ -1673,7 +1671,7 @@ void SFont::load_shdr (int size)
                   continue;
                   }
             if ((p->end > getSamplesize()) || (p->start > (p->end - 4))) {
-                  qWarning("Sample(%s) start/end file positions are invalid, disabling", p->name);
+                  qDebug("Sample(%s) start/end file positions are invalid, disabling", p->name);
                   p->setValid(false);
                   continue;
                   }
@@ -1684,7 +1682,7 @@ void SFont::load_shdr (int size)
             else {
                   // loop is fowled?? (cluck cluck :)
                   if (p->loopend > p->end || p->loopstart >= p->loopend || p->loopstart <= p->start) {
-                        qWarning("Sample(%s) start(%u) startloop(%u) endloop(%u) end(%u) fowled (broken soundfont?), fixing up",
+                        qDebug("Sample(%s) start(%u) startloop(%u) endloop(%u) end(%u) fowled (broken soundfont?), fixing up",
                                p->name, p->start, p->loopstart, p->loopend, p->end);
                         /* can pad loop by 8 samples and ensure at least 4 for loop (2*8+4) */
                         if ((p->end - p->start) >= 20) {
@@ -1697,7 +1695,7 @@ void SFont::load_shdr (int size)
                               }
                         }
                   if ((p->end - p->start) < 8) {
-                        qWarning("Sample(%s) too small, disabling", p->name);
+                        qDebug("Sample(%s) too small, disabling", p->name);
                         p->setValid(false);
                         }
                   }
