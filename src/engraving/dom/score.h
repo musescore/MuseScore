@@ -1021,6 +1021,9 @@ public:
     void makeIntoSystem(MeasureBase* first, MeasureBase* last);
     void removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
     void removeLayoutBreaksOnAddSystemLock(const SystemLock* lock);
+    void removeSystemLocksOnRemoveMeasures(const MeasureBase* m1, const MeasureBase* m2);
+    void updateSystemLocksOnDisableMMRests();
+    void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
     friend class Chord;
 

@@ -77,7 +77,7 @@ const SystemLock* SystemLocks::lockContaining(const MeasureBase* mb) const
     return lock->contains(mb) ? lock : nullptr;
 }
 
-std::vector<const SystemLock*> SystemLocks::locksContainedInRange(const MeasureBase* start, const MeasureBase* end)
+std::vector<const SystemLock*> SystemLocks::locksContainedInRange(const MeasureBase* start, const MeasureBase* end) const
 {
     std::vector<const SystemLock*> result;
 

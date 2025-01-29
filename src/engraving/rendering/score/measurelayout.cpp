@@ -227,6 +227,8 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     mmrMeasure->setMMRestCount(numMeasuresInMMRest);
     mmrMeasure->setNo(firstMeasure->no());
 
+    ctx.mutDom().updateSystemLocksOnCreateMMRest(firstMeasure, lastMeasure);
+
     //
     // set mmrMeasure with same barline as last underlying measure
     //

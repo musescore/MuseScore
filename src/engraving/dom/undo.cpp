@@ -2039,6 +2039,11 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     case Sid::defaultsVersion:
         score->style().setDefaultStyleVersion(newValue.toInt());
         break;
+    case Sid::createMultiMeasureRests:
+        if (oldValue.toBool() == true && newValue.toBool() == false) {
+            score->updateSystemLocksOnDisableMMRests();
+        }
+        break;
     default:
         break;
     }

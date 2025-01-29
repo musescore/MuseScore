@@ -198,6 +198,7 @@ public:
     void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
     void addElement(EngravingItem* item);
     void removeElement(EngravingItem* item);
+    void updateSystemLocksOnCreateMMRest(Measure* first, Measure* last);
 
     void addUnmanagedSpanner(Spanner* s);
     const std::set<Spanner*>& unmanagedSpanners() const;

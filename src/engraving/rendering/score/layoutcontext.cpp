@@ -392,6 +392,14 @@ void DomAccessor::removeElement(EngravingItem* item)
     score()->removeElement(item);
 }
 
+void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+    score()->updateSystemLocksOnCreateMMRests(first, last);
+}
+
 void DomAccessor::addUnmanagedSpanner(Spanner* s)
 {
     IF_ASSERT_FAILED(score()) {
