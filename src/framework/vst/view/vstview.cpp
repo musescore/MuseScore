@@ -42,12 +42,6 @@ using namespace muse::vst;
 
 IMPLEMENT_QUERYINTERFACE(VstView, IPlugFrame, IPlugFrame::iid)
 
-VstView::VstView(QQuickItem* parent)
-    : QQuickItem(parent)
-{
-
-}
-
 static FIDString currentPlatformUiType()
 {
 #ifdef Q_OS_MAC
@@ -61,6 +55,16 @@ static FIDString currentPlatformUiType()
 #endif
 }
 
+VstView::VstView(QQuickItem* parent)
+    : QQuickItem(parent)
+{
+
+}
+
+VstView::~VstView()
+{
+    deinit();
+}
 
 void VstView::init()
 {
@@ -96,6 +100,20 @@ void VstView::init()
     });
 
     updateViewGeometry();
+}
+
+void VstView::deinit()
+{
+    if (m_view) {
+        m_view->setFrame(nullptr);
+        m_view->removed();
+        m_view = nullptr;
+    }
+
+    if (m_instance) {
+        m_instance->refreshConfig();
+        m_instance = nullptr;
+    }
 }
 
 Steinberg::tresult VstView::resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize)

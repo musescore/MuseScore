@@ -39,11 +39,13 @@ class VstView : public QQuickItem, public Steinberg::IPlugFrame
 
 public:
     VstView(QQuickItem* parent = nullptr);
+    ~VstView();
 
     int instanceId() const;
     void setInstanceId(int newInstanceId);
 
     Q_INVOKABLE void init();
+    Q_INVOKABLE void deinit();
 
     // IPlugFrame
     Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
