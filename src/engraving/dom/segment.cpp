@@ -1029,25 +1029,10 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
         map.insert({ dst[k], k });
     }
     for (EngravingItem* e : m_annotations) {
-        ElementType et = e->type();
-        // the set of system objects that are allowed to move staves if they are clones / excerpts
-        static const std::set<ElementType> allowedTypes {
-            ElementType::REHEARSAL_MARK,
-            ElementType::SYSTEM_TEXT,
-            ElementType::TRIPLET_FEEL,
-            ElementType::PLAYTECH_ANNOTATION,
-            ElementType::CAPO,
-            ElementType::STRING_TUNINGS,
-            ElementType::JUMP,
-            ElementType::MARKER,
-            ElementType::TEMPO_TEXT,
-            ElementType::VOLTA,
-            ElementType::GRADUAL_TEMPO_CHANGE,
-            ElementType::TEXTLINE
-        };
-        if (!e->systemFlag() || (e->isLinked() && (allowedTypes.find(et) != allowedTypes.end()))) {
-            e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
+        if (e->isTopSystemObject()) {
+            continue;
         }
+        e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
     }
     fixStaffIdx();
 }
