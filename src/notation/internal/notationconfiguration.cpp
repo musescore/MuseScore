@@ -51,6 +51,11 @@ static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foregrou
 
 static const Settings::Key NOTE_INPUT_PREVIEW_COLOR(module_name, "ui/canvas/noteInputPreviewColor");
 
+static const Settings::Key USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION(module_name,
+                                                                      "ui/canvas/useNoteInputCursorInInputByDuration");
+
+static const Settings::Key THIN_NOTE_INPUT_CURSOR(module_name, "ui/canvas/thinNoteInputCursor");
+
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
 static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
@@ -173,6 +178,13 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
     settings()->setCanBeManuallyEdited(NOTE_INPUT_PREVIEW_COLOR, true);
     settings()->setDescription(NOTE_INPUT_PREVIEW_COLOR, muse::trc("notation", "Note input preview note color"));
+
+    settings()->setDefaultValue(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION, Val(false));
+    settings()->valueChanged(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION).onReceive(nullptr, [this](const Val&) {
+        m_useNoteInputCursorInInputByDurationChanged.notify();
+    });
+
+    settings()->setDefaultValue(THIN_NOTE_INPUT_CURSOR, Val(false)); // accessible via DevTools/Settings
 
     settings()->setDefaultValue(FOREGROUND_WALLPAPER_PATH, Val());
     settings()->valueChanged(FOREGROUND_WALLPAPER_PATH).onReceive(nullptr, [this](const Val&) {
@@ -538,6 +550,11 @@ int NotationConfiguration::cursorOpacity() const
     return 50;
 }
 
+bool NotationConfiguration::thinNoteInputCursor() const
+{
+    return settings()->value(THIN_NOTE_INPUT_CURSOR).toBool();
+}
+
 QColor NotationConfiguration::loopMarkerColor() const
 {
     return QColor(0x2456AA);
@@ -558,6 +575,21 @@ QColor NotationConfiguration::dropRectColor() const
 muse::draw::Color NotationConfiguration::noteInputPreviewColor() const
 {
     return settings()->value(NOTE_INPUT_PREVIEW_COLOR).toQColor();
+}
+
+bool NotationConfiguration::useNoteInputCursorInInputByDuration() const
+{
+    return settings()->value(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION).toBool();
+}
+
+void NotationConfiguration::setUseNoteInputCursorInInputByDuration(bool use)
+{
+    settings()->setSharedValue(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION, Val(use));
+}
+
+muse::async::Notification NotationConfiguration::useNoteInputCursorInInputByDurationChanged() const
+{
+    return m_useNoteInputCursorInInputByDurationChanged;
 }
 
 int NotationConfiguration::selectionProximity() const

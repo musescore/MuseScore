@@ -82,11 +82,17 @@ public:
     QColor loopMarkerColor() const override;
     int cursorOpacity() const override;
 
+    bool thinNoteInputCursor() const override;
+
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     QColor dropRectColor() const override;
 
     muse::draw::Color noteInputPreviewColor() const override;
+
+    bool useNoteInputCursorInInputByDuration() const override;
+    void setUseNoteInputCursorInInputByDuration(bool use) override;
+    muse::async::Notification useNoteInputCursorInInputByDurationChanged() const override;
 
     int selectionProximity() const override;
     void setSelectionProximity(int proximity) override;
@@ -266,6 +272,7 @@ private:
 
     muse::async::Notification m_defaultNoteInputMethodChanged;
     muse::async::Notification m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;
+    muse::async::Notification m_useNoteInputCursorInInputByDurationChanged;
     muse::async::Notification m_isMidiInputEnabledChanged;
     muse::async::Notification m_startNoteInputAtSelectionWhenPressingMidiKeyChanged;
 

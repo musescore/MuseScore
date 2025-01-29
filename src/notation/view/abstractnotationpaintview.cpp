@@ -82,7 +82,7 @@ void AbstractNotationPaintView::load()
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
-    m_noteInputCursor = std::make_unique<NoteInputCursor>();
+    m_noteInputCursor = std::make_unique<NoteInputCursor>(configuration()->thinNoteInputCursor());
     m_ruler = std::make_unique<NotationRuler>(iocContext());
 
     m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn, iocContext());
@@ -608,7 +608,8 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     INotationNoteInputPtr noteInput = notationNoteInput();
 
     if (noteInput->isNoteInputMode()) {
-        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
+            && !configuration()->useNoteInputCursorInInputByDuration()) {
             m_ruler->paint(painter, noteInput->state());
         } else {
             m_noteInputCursor->paint(painter);

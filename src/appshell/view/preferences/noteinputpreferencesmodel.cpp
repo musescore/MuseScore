@@ -41,6 +41,10 @@ void NoteInputPreferencesModel::load()
         emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(addAccidentalDotsArticulationsToNextNoteEntered());
     });
 
+    notationConfiguration()->useNoteInputCursorInInputByDurationChanged().onNotify(this, [this]() {
+        emit useNoteInputCursorInInputByDurationChanged(useNoteInputCursorInInputByDuration());
+    });
+
     notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
         emit midiInputEnabledChanged(midiInputEnabled());
     });
@@ -124,6 +128,11 @@ bool NoteInputPreferencesModel::addAccidentalDotsArticulationsToNextNoteEntered(
     return notationConfiguration()->addAccidentalDotsArticulationsToNextNoteEntered();
 }
 
+bool NoteInputPreferencesModel::useNoteInputCursorInInputByDuration() const
+{
+    return notationConfiguration()->useNoteInputCursorInInputByDuration();
+}
+
 bool NoteInputPreferencesModel::midiInputEnabled() const
 {
     return notationConfiguration()->isMidiInputEnabled();
@@ -202,6 +211,16 @@ void NoteInputPreferencesModel::setAddAccidentalDotsArticulationsToNextNoteEnter
 
     notationConfiguration()->setAddAccidentalDotsArticulationsToNextNoteEntered(value);
     emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(value);
+}
+
+void NoteInputPreferencesModel::setUseNoteInputCursorInInputByDuration(bool value)
+{
+    if (value == useNoteInputCursorInInputByDuration()) {
+        return;
+    }
+
+    notationConfiguration()->setUseNoteInputCursorInInputByDuration(value);
+    emit useNoteInputCursorInInputByDurationChanged(value);
 }
 
 void NoteInputPreferencesModel::setMidiInputEnabled(bool value)

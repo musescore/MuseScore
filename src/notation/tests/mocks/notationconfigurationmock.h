@@ -67,11 +67,17 @@ public:
     MOCK_METHOD(QColor, loopMarkerColor, (), (const, override));
     MOCK_METHOD(int, cursorOpacity, (), (const, override));
 
+    MOCK_METHOD(bool, thinNoteInputCursor, (), (const, override));
+
     MOCK_METHOD(QColor, selectionColor, (engraving::voice_idx_t), (const, override));
 
     MOCK_METHOD(QColor, dropRectColor, (), (const, override));
 
     MOCK_METHOD(muse::draw::Color, noteInputPreviewColor, (), (const, override));
+
+    MOCK_METHOD(bool, useNoteInputCursorInInputByDuration, (), (const, override));
+    MOCK_METHOD(void, setUseNoteInputCursorInInputByDuration, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, useNoteInputCursorInInputByDurationChanged, (), (const, override));
 
     MOCK_METHOD(int, selectionProximity, (), (const, override));
     MOCK_METHOD(void, setSelectionProximity, (int), (override));

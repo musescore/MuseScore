@@ -46,6 +46,7 @@ PreferencesPage {
             noteInputMethods: noteInputModel.noteInputMethods()
             defaultNoteInputMethod: noteInputModel.defaultNoteInputMethod
             addAccidentalDotsArticulationsToNextNoteEntered: noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered
+            useNoteInputCursorInInputByDuration: noteInputModel.useNoteInputCursorInInputByDuration
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
@@ -56,6 +57,10 @@ PreferencesPage {
 
             onAddAccidentalDotsArticulationsToNextNoteEnteredChangeRequested: function(add) {
                 noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered = add
+            }
+
+            onUseNoteInputCursorInInputByDurationChangeRequested: function(use) {
+                noteInputModel.useNoteInputCursorInInputByDuration = use
             }
         }
 

@@ -24,6 +24,11 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
+NoteInputCursor::NoteInputCursor(bool isThinLine)
+    : m_isThinLine(isThinLine)
+{
+}
+
 void NoteInputCursor::paint(muse::draw::Painter* painter)
 {
     INotationNoteInputPtr noteInput = currentNoteInput();
@@ -32,12 +37,14 @@ void NoteInputCursor::paint(muse::draw::Painter* painter)
     }
 
     const NoteInputState& state = noteInput->state();
+    Color fillColor = configuration()->selectionColor(state.voice());
     RectF cursorRect = noteInput->cursorRect();
 
-    Color fillColor = configuration()->selectionColor(state.voice());
-    Color cursorRectColor = fillColor;
-    cursorRectColor.setAlpha(configuration()->cursorOpacity());
-    painter->fillRect(cursorRect, cursorRectColor);
+    if (!m_isThinLine) {
+        Color cursorRectColor = fillColor;
+        cursorRectColor.setAlpha(configuration()->cursorOpacity());
+        painter->fillRect(cursorRect, cursorRectColor);
+    }
 
     constexpr int leftLineWidth = 3;
     RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());

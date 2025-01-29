@@ -145,6 +145,11 @@ int NotationConfigurationStub::cursorOpacity() const
     return 1;
 }
 
+bool NotationConfigurationStub::thinNoteInputCursor() const
+{
+    return false;
+}
+
 QColor NotationConfigurationStub::selectionColor(engraving::voice_idx_t) const
 {
     return QColor();
@@ -158,6 +163,21 @@ QColor NotationConfigurationStub::dropRectColor() const
 muse::draw::Color NotationConfigurationStub::noteInputPreviewColor() const
 {
     return muse::draw::Color();
+}
+
+bool NotationConfigurationStub::useNoteInputCursorInInputByDuration() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setUseNoteInputCursorInInputByDuration(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::useNoteInputCursorInInputByDurationChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 int NotationConfigurationStub::selectionProximity() const

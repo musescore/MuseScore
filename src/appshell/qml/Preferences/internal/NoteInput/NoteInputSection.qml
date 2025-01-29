@@ -36,9 +36,11 @@ BaseSection {
     property int defaultNoteInputMethod: 0
 
     property bool addAccidentalDotsArticulationsToNextNoteEntered: true
+    property bool useNoteInputCursorInInputByDuration: false
 
     signal defaultNoteInputMethodChangeRequested(int method)
     signal addAccidentalDotsArticulationsToNextNoteEnteredChangeRequested(bool add)
+    signal useNoteInputCursorInInputByDurationChangeRequested(bool use)
 
     ComboBoxWithTitle {
         id: defaultNoteInputMethodDropdown
@@ -72,6 +74,25 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.addAccidentalDotsArticulationsToNextNoteEnteredChangeRequested(newIndex === 0)
+        }
+    }
+
+    ComboBoxWithTitle {
+        title: qsTrc("appshell/preferences", "Input by duration mode cursor")
+
+        navigation.name: "InputByDurationModeCursorDropdown"
+        navigation.panel: root.navigation
+        navigation.row: 2
+
+        model: [
+            { text: qsTrc("appshell/preferences", "Above staff"), value: 0 },
+            { text: qsTrc("appshell/preferences", "On staff"), value: 1 },
+        ]
+
+        currentIndex: root.useNoteInputCursorInInputByDuration ? 1 : 0
+
+        onValueEdited: function(newIndex, newValue) {
+            root.useNoteInputCursorInInputByDurationChangeRequested(newIndex === 1)
         }
     }
 }
