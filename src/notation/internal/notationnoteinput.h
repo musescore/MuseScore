@@ -99,6 +99,7 @@ private:
     EngravingItem* resolveNoteInputStartPosition() const;
 
     void setupInputNote();
+    NoteVal noteValForLine(int line) const;
 
     void startEdit(const muse::TranslatableString& actionName);
     void apply();
