@@ -24,11 +24,19 @@
 
 #include "notationtypes.h"
 
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/utils.h"
 
 namespace mu::notation {
 inline int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
 {
+    if (staff->isDrumStaff(tick)) {
+        const Drumset* drumset = staff->part()->instrument(tick)->drumset();
+        if (drumset) {
+            return drumset->line(nval.pitch);
+        }
+    }
+
     const bool concertPitch = staff->concertPitch();
     const int pitchOffset = concertPitch ? 0 : staff->part()->instrument(tick)->transpose().chromatic;
     const int epitch = nval.pitch - pitchOffset;

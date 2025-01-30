@@ -33,6 +33,7 @@
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/utils.h"
 
 #include "mscoreerrorscontroller.h"
@@ -55,7 +56,7 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
     m_interaction->selectionChanged().onNotify(this, [this]() {
         if (!isNoteInputMode()) {
             updateInputState();
-        } else if (usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        } else if (shouldSetupInputNote()) {
             const NoteInputState& is = state();
             const staff_idx_t prevStaffIdx = mu::engraving::staff2track(is.prevTrack());
 
@@ -109,7 +110,7 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
     is.setNoteEntryMode(true);
     is.setNoteEntryMethod(method);
 
-    if (is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
+    if (shouldSetupInputNote()) {
         setupInputNote();
     }
 
@@ -281,6 +282,12 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     return el;
 }
 
+bool NotationNoteInput::shouldSetupInputNote() const
+{
+    return usingNoteInputMethod(NoteInputMethod::BY_DURATION)
+           || usingNoteInputMethod(NoteInputMethod::RHYTHM);
+}
+
 void NotationNoteInput::setupInputNote()
 {
     mu::engraving::InputState& is = score()->inputState();
@@ -288,11 +295,37 @@ void NotationNoteInput::setupInputNote()
 
     if (selectedItem && selectedItem->isNote()) {
         is.setNotes({ toNote(selectedItem)->noteVal() });
-    } else {
-        const NoteVal nval = noteValForLine(is.staff()->middleLine(is.tick()));
-        if (nval.pitch > 0) {
-            is.setNotes({ nval });
+        return;
+    }
+
+    const Fraction tick = is.tick();
+    Staff* staff = is.staff();
+    NoteVal nval;
+
+    if (staff->isTabStaff(tick)) {
+        if (const StringData* stringData = staff->part()->stringData(tick, is.staffIdx())) {
+            nval.fret = 0;
+            nval.string = is.string();
+            nval.pitch = stringData->getPitch(nval.string, nval.fret, staff);
         }
+    } else if (staff->isDrumStaff(tick)) {
+        if (const Drumset* drumset = is.drumset()) {
+            nval.pitch = is.drumNote();
+
+            if (nval.pitch < 0) {
+                nval.pitch = drumset->nextPitch(nval.pitch);
+            }
+
+            if (drumset->isValid(nval.pitch)) {
+                nval.headGroup = drumset->noteHead(nval.pitch);
+            }
+        }
+    } else {
+        nval = noteValForLine(staff->middleLine(tick));
+    }
+
+    if (nval.pitch > 0) {
+        is.setNotes({ nval });
     }
 }
 
@@ -381,6 +414,10 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
     score()->cmdAddPitch(editData, inote, addToUpOnCurrentChord, insertNewChord);
     apply();
 
+    if (shouldSetupInputNote()) {
+        setupInputNote();
+    }
+
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
 
@@ -409,7 +446,7 @@ Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
     apply();
 
     if (ret) {
-        if (usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        if (shouldSetupInputNote()) {
             setupInputNote();
         }
     }
@@ -444,17 +481,32 @@ void NotationNoteInput::setInputNote(NoteName note)
 {
     TRACEFUNC;
 
-    const NoteInputState& is = score()->inputState();
+    NoteInputState& is = score()->inputState();
     IF_ASSERT_FAILED(is.isValid()) {
         return;
     }
 
-    const int noteIdx = static_cast<int>(note);
-    const int octave = score()->resolveInputOctave(noteIdx, false);
-    const int step = octave * mu::engraving::STEP_DELTA_OCTAVE + noteIdx;
-    const ClefType clef = is.staff()->clef(is.tick());
+    mu::engraving::Score::NoteInputParams params;
+    bool ok = score()->resolveNoteInputParams(static_cast<int>(note), false, params);
+    if (!ok) {
+        return;
+    }
 
-    const NoteVal nval = noteValForLine(mu::engraving::relStep(step, clef));
+    const Staff* staff = is.staff();
+    const Fraction tick = is.tick();
+
+    NoteVal nval;
+
+    if (staff->isDrumStaff(tick)) {
+        const Drumset* drumset = is.drumset();
+        if (drumset && drumset->isValid(params.drumPitch)) {
+            nval.pitch = params.drumPitch;
+            nval.headGroup = drumset->noteHead(params.drumPitch);
+        }
+    } else {
+        nval = noteValForLine(mu::engraving::relStep(params.step, staff->clef(tick)));
+    }
+
     if (nval.pitch > 0) {
         setInputNotes({ nval });
     }
@@ -464,11 +516,21 @@ void NotationNoteInput::setInputNotes(const NoteValList& notes)
 {
     TRACEFUNC;
 
-    if (score()->inputState().notes() == notes) {
+    NoteInputState& is = score()->inputState();
+
+    if (is.notes() == notes) {
         return;
     }
 
-    score()->inputState().setNotes(notes);
+    if (!notes.empty()) {
+        if (const Drumset* drumset = is.drumset()) {
+            const int pitch = notes.front().pitch;
+            is.setDrumNote(pitch);
+            is.setTrack(is.track() + drumset->voice(pitch));
+        }
+    }
+
+    is.setNotes(notes);
     notifyAboutStateChanged();
 }
 
@@ -481,11 +543,26 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
         return;
     }
 
+    const Staff* staff = is.staff();
+    const Fraction tick = is.tick();
+
     NoteValList notes;
 
     for (const NoteVal& val : is.notes()) {
         NoteVal newVal;
         newVal.pitch = val.pitch;
+
+        if (staff->isDrumStaff(tick)) {
+            if (const Drumset* drumset = is.drumset()) {
+                newVal.pitch = up ? drumset->nextPitch(newVal.pitch) : drumset->prevPitch(newVal.pitch);
+
+                if (drumset->isValid(newVal.pitch)) {
+                    newVal.headGroup = drumset->noteHead(newVal.pitch);
+                    notes.push_back(newVal);
+                }
+            }
+            continue;
+        }
 
         switch (mode) {
         case PitchMode::CHROMATIC:
@@ -538,7 +615,16 @@ void NotationNoteInput::setDrumNote(int note)
 {
     TRACEFUNC;
 
-    score()->inputState().setDrumNote(note);
+    mu::engraving::InputState& is = score()->inputState();
+    if (is.drumNote() == note) {
+        return;
+    }
+
+    is.setDrumNote(note);
+    if (shouldSetupInputNote()) {
+        setupInputNote();
+    }
+
     notifyAboutStateChanged();
 }
 
