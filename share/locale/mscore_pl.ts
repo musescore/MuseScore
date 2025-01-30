@@ -9260,12 +9260,13 @@ Domyślnie zostaną one umieszczone tak, aby ich prawy koniec znajdował się na
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="212"/>
         <source>Hide courtesy clefs,
 time and key signatures</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukryj przypomnienia zmian kluczy,
+oznaczeń metrycznych i tonacji</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="226"/>
         <source>Reset &apos;Hide courtesy clefs, time and key signatures&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &apos;Ukryj przypomnienia zmian kluczy, oznaczeń metrycznych i tonacji&apos;</translation>
     </message>
 </context>
 <context>
