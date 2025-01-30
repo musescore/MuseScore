@@ -150,16 +150,24 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
     return nval;
 }
 
-//---------------------------------------------------------
-//   addPitch
-//---------------------------------------------------------
+Note* Score::addPitch(NoteVal& nval, bool addToPreviousChord, InputState* externalInputState)
+{
+    AddToChord addType = addToPreviousChord ? AddToChord::AtPreviousPosition : AddToChord::None;
+    return addPitch(nval, addType, externalInputState);
+}
 
-Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputState)
+Note* Score::addPitch(NoteVal& nval, AddToChord addFlag, InputState* externalInputState)
 {
     InputState& is = externalInputState ? (*externalInputState) : m_is;
 
-    if (addFlag) {
-        ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
+    if (addFlag != AddToChord::None) {
+        ChordRest* c = nullptr;
+        if (addFlag == AddToChord::AtPreviousPosition) {
+            c = toChordRest(is.lastSegment()->element(is.track()));
+        } else if (addFlag == AddToChord::AtCurrentPosition) {
+            c = is.cr();
+        }
+
         if (c == 0 || !c->isChord()) {
             LOGD("Score::addPitch: cr %s", c ? c->typeName() : "zero");
             return 0;
@@ -245,7 +253,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         note->setTrack(chord->track());
         note->setNval(nval);
         lastTiedNote = note;
-        if (!addFlag) {
+        if (addFlag == AddToChord::None) {
             std::vector<Note*> notes = chord->notes();
             // break all ties into current chord
             // these will exist only if user explicitly moved cursor to a tied-into note

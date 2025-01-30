@@ -3232,12 +3232,15 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
 
                     if (!m_is.notes().empty()) {
                         const ChordRest* cr = m_is.cr();
-                        bool addToChord = cr && cr->isChord() && cr->durationType() == m_is.duration();
+                        AddToChord addType = AddToChord::None;
+                        if (cr && cr->isChord() && cr->durationType() == m_is.duration()) {
+                            addType = AddToChord::AtCurrentPosition;
+                        }
 
                         for (const NoteVal& nval : m_is.notes()) {
                             NoteVal copy(nval);
-                            addPitch(copy, addToChord);
-                            addToChord = true;
+                            addPitch(copy, addType);
+                            addType = AddToChord::AtCurrentPosition;
                         }
                     } else if (e && e->isNote()) {
                         // use same pitch etc. as previous note
