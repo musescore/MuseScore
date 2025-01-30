@@ -289,6 +289,12 @@ protected:
 #define SVG_PATH        "<path"
 #define SVG_POLYLINE    "<polyline"
 
+#define SVG_CLIP_PATH_BEGIN    "<clipPath"
+#define SVG_DEFS_BEGIN         "<defs>"
+#define SVG_CLIP_PATH_END      "</clipPath>"
+#define SVG_DEFS_END           "</defs>"
+#define SVG_ID                 " id=\""
+
 #define SVG_PRESERVE_ASPECT " preserveAspectRatio=\""
 
 #define SVG_FILL            " fill=\""
@@ -308,9 +314,15 @@ protected:
 #define SVG_FONT_SIZE       " font-size=\""
 
 #define SVG_FILL_RULE       " fill-rule=\"evenodd\""
+#define SVG_CLIP_RULE       " clip-rule=\"evenodd\""
 #define SVG_VECTOR_EFFECT   " vector-effect=\"non-scaling-stroke\""
 
 #define SVG_MATRIX    " transform=\"matrix("
+
+private:
+    int _curClipPathId = 0;
+    void drawPathData(const QPainterPath& p, bool setClipRule = false);
+    void setClipPath(const QPainterPath& clipPath);
 
 public:
     SvgPaintEngine()
@@ -1055,7 +1067,7 @@ bool SvgPaintEngine::begin(QPaintDevice*)
     }
     stream() << " xmlns=\"http://www.w3.org/2000/svg\""
                 " xmlns:xlink=\"http://www.w3.org/1999/xlink\""
-                " version=\"1.2\" baseProfile=\"tiny\">" << Qt::endl;
+                " version=\"1.2\" baseProfile=\"full\">" << Qt::endl;
     if (!d->attributes.title.isEmpty()) {
         stream() << SVG_TITLE_BEGIN << d->attributes.title.toHtmlEscaped() << SVG_TITLE_END << Qt::endl;
     }
@@ -1214,6 +1226,13 @@ void SvgPaintEngine::drawPath(const QPainterPath& p)
         stream() << SVG_FILL_RULE;
     }
 
+    drawPathData(p);
+
+    stream() << SVG_ELEMENT_END << Qt::endl;
+}
+
+void SvgPaintEngine::drawPathData(const QPainterPath& p, bool setClipRule)
+{
     // Path data
     stream() << SVG_D;
     for (int i = 0; i < p.elementCount(); ++i) {
@@ -1249,13 +1268,31 @@ void SvgPaintEngine::drawPath(const QPainterPath& p)
             stream() << SVG_SPACE;
         }
     }
-    stream() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
+    stream() << SVG_QUOTE;
+
+    if (setClipRule) {
+        stream() << SVG_CLIP_RULE;
+    }
+}
+
+void SvgPaintEngine::setClipPath(const QPainterPath& clipPath)
+{
+    stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_CLIP_PATH_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE << SVG_GT << SVG_SPACE;
+    stream() << SVG_PATH;
+    drawPathData(clipPath, true);
+    stream() << SVG_ELEMENT_END << SVG_CLIP_PATH_END << SVG_DEFS_END << Qt::endl;
 }
 
 void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
                                  PolygonDrawMode mode)
 {
     Q_ASSERT(pointCount >= 2);
+
+    QPainterPath clipPath = painter()->clipPath();
+    if (!clipPath.isEmpty()) {
+        ++_curClipPathId;
+        setClipPath(clipPath);
+    }
 
     QPainterPath path(points[0]);
     for (int i=1; i < pointCount; ++i) {
@@ -1276,7 +1313,11 @@ void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
                 stream() << SVG_SPACE;
             }
         }
-        stream() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
+        stream() << SVG_QUOTE << SVG_SPACE;
+        if (!clipPath.isEmpty()) {
+            stream() << "clip-path=\"url(#" << _curClipPathId << ")\"";
+        }
+        stream() << SVG_ELEMENT_END << Qt::endl;
     } else {
         path.closeSubpath();
         drawPath(path);
