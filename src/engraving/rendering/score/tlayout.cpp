@@ -3138,7 +3138,8 @@ void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
 
     bool doSnapBefore = possibleSnapBeforeElement && item->hairpin()->snapToItemBefore();
     if (doSnapBefore && possibleSnapBeforeElement->isHairpinSegment()) {
-        doSnapBefore = doSnapBefore && toHairpinSegment(possibleSnapBeforeElement)->hairpin()->snapToItemAfter();
+        doSnapBefore = doSnapBefore && toHairpinSegment(possibleSnapBeforeElement)->hairpin()->snapToItemAfter()
+                       && possibleSnapBeforeElement->ldata()->itemSnappedBefore() != item;
     }
 
     if (doSnapBefore) {
@@ -3147,7 +3148,8 @@ void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
 
     bool doSnapAfter = possibleSnapAfterElement && item->hairpin()->snapToItemAfter();
     if (doSnapAfter && possibleSnapAfterElement->isHairpinSegment()) {
-        doSnapAfter = doSnapAfter && toHairpinSegment(possibleSnapAfterElement)->hairpin()->snapToItemBefore();
+        doSnapAfter = doSnapAfter && toHairpinSegment(possibleSnapAfterElement)->hairpin()->snapToItemBefore()
+                      && possibleSnapAfterElement->ldata()->itemSnappedAfter() != item;
     }
 
     if (doSnapAfter) {
