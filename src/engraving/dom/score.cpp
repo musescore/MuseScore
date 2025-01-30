@@ -3227,60 +3227,17 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                     // Enter a rest
                     setNoteRest(m_is.segment(), m_is.track(), NoteVal(), m_is.duration().fraction());
                     m_is.moveToNextInputPos();
-                } else {
-                    EngravingItem* e = selection().element();
+                } else if (!m_is.notes().empty()) {
+                    const ChordRest* cr = m_is.cr();
+                    AddToChord addType = AddToChord::None;
+                    if (cr && cr->isChord() && cr->durationType() == m_is.duration()) {
+                        addType = AddToChord::AtCurrentPosition;
+                    }
 
-                    if (!m_is.notes().empty()) {
-                        const ChordRest* cr = m_is.cr();
-                        AddToChord addType = AddToChord::None;
-                        if (cr && cr->isChord() && cr->durationType() == m_is.duration()) {
-                            addType = AddToChord::AtCurrentPosition;
-                        }
-
-                        for (const NoteVal& nval : m_is.notes()) {
-                            NoteVal copy(nval);
-                            addPitch(copy, addType);
-                            addType = AddToChord::AtCurrentPosition;
-                        }
-                    } else if (e && e->isNote()) {
-                        // use same pitch etc. as previous note
-                        Note* n = toNote(e);
-                        DirectionV stemDirection = n->chord()->stemDirection();
-                        setNoteRest(m_is.segment(), m_is.track(), n->noteVal(), m_is.duration().fraction(),
-                                    stemDirection, false, m_is.articulationIds());
-                        m_is.moveToNextInputPos();
-                    } else {
-                        NoteVal nval;
-
-                        // enter a reasonable default note
-                        Staff* s = staff(m_is.track() / VOICES);
-                        Fraction tick = m_is.tick();
-                        if (s->isTabStaff(tick)) {
-                            // tab - use fret 0 on current string
-                            nval.fret = 0;
-                            nval.string = m_is.string();
-                            const StringData* stringData = s->part()->stringData(tick, s->idx());
-                            nval.pitch = stringData->getPitch(nval.string, nval.fret, s);
-                        } else if (s->isDrumStaff(tick)) {
-                            // drum - use selected drum palette note
-                            int n = m_is.drumNote();
-                            if (n == -1) {
-                                // no selection on palette - find next valid pitch
-                                const Drumset* ds = m_is.drumset();
-                                n = ds->nextPitch(n);
-                            }
-                            nval = NoteVal(n);
-                        } else {
-                            // standard staff - use middle line
-                            ClefType clef = s->clef(tick);
-                            Key key = s->key(tick);
-                            int line = ((s->lines(tick) - 1) / 2) * 2;
-                            nval = NoteVal(line2pitch(line, clef, key));
-                        }
-
-                        setNoteRest(m_is.segment(), m_is.track(), nval, m_is.duration().fraction(),
-                                    DirectionV::AUTO, false, m_is.articulationIds());
-                        m_is.moveToNextInputPos();
+                    for (const NoteVal& nval : m_is.notes()) {
+                        NoteVal copy(nval);
+                        addPitch(copy, addType);
+                        addType = AddToChord::AtCurrentPosition;
                     }
                 }
             } else {

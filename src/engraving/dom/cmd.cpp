@@ -4936,11 +4936,11 @@ void Score::cmdUnsetVisible()
     }
 }
 
-int Score::resolveInputOctave(int note, bool addFlag) const
+bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out) const
 {
     const InputState& is = inputState();
     if (!is.isValid()) {
-        return -1;
+        return false;
     }
 
     const Drumset* ds = is.drumset();
@@ -4948,23 +4948,22 @@ int Score::resolveInputOctave(int note, bool addFlag) const
     int octave = 4;
     if (ds) {
         char note1 = "CDEFGAB"[note];
-        int pitch = -1;
+        out.drumPitch = -1;
         for (int i = 0; i < 127; ++i) {
             if (!ds->isValid(i)) {
                 continue;
             }
             if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
-                pitch = i;
+                out.drumPitch = i;
                 break;
             }
         }
-        if (pitch == -1) {
+        if (out.drumPitch == -1) {
             LOGD("  shortcut %c not defined in drumset", note1);
-            return -1;
+            return false;
         }
 
-        octave = pitch / 12;
-
+        octave = out.drumPitch / 12;
     } else {
         static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
 
@@ -5018,7 +5017,8 @@ int Score::resolveInputOctave(int note, bool addFlag) const
         }
     }
 
-    return octave;
+    out.step = octave * 7 + note;
+    return true;
 }
 
 //---------------------------------------------------------
@@ -5036,13 +5036,16 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
 
     is.setRest(false);
 
-    int octave = resolveInputOctave(note, addFlag);
+    NoteInputParams params;
+    bool ok = resolveNoteInputParams(note, addFlag, params);
+    if (!ok) {
+        return;
+    }
 
     const Drumset* ds = is.drumset();
     if (ds) {
-        int pitch = octave * 12;
-        is.setDrumNote(pitch);
-        is.setTrack(is.track() + ds->voice(pitch));
+        is.setDrumNote(params.drumPitch);
+        is.setVoice(ds->voice(params.drumPitch));
 
         if (is.segment()) {
             Segment* seg = is.segment();
@@ -5060,8 +5063,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
         }
     }
 
-    int step = octave * 7 + note;
-    cmdAddPitch(step, addFlag, insert);
+    cmdAddPitch(params.step, addFlag, insert);
 
     ed.view()->adjustCanvasPosition(is.cr());
 }

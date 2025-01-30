@@ -56,7 +56,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationmidiinput.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/notationutils.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h

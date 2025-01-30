@@ -45,6 +45,7 @@
 #include "staff.h"
 #include "system.h"
 #include "tuplet.h"
+#include "drumset.h"
 
 #include "log.h"
 
@@ -1129,6 +1130,27 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
         }
     }
     return halfsteps;
+}
+
+int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
+{
+    if (staff->isDrumStaff(tick)) {
+        const Drumset* drumset = staff->part()->instrument(tick)->drumset();
+        if (drumset) {
+            return drumset->line(nval.pitch);
+        }
+    }
+
+    const bool concertPitch = staff->concertPitch();
+    const int pitchOffset = concertPitch ? 0 : staff->part()->instrument(tick)->transpose().chromatic;
+    const int epitch = nval.pitch - pitchOffset;
+
+    int tpc = nval.tpc(concertPitch);
+    if (tpc == static_cast<int>(mu::engraving::Tpc::TPC_INVALID)) {
+        tpc = pitch2tpc(epitch, staff->key(tick), mu::engraving::Prefer::NEAREST);
+    }
+
+    return relStep(epitch, tpc, staff->clef(tick));
 }
 
 int compareNotesPos(const Note* n1, const Note* n2)

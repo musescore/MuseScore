@@ -346,7 +346,14 @@ public:
     std::vector<Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
     void padToggle(Pad p, bool toggleForSelectionOnly = false);
-    int resolveInputOctave(int note, bool addFlag) const;
+
+    struct NoteInputParams {
+        int step = 0;
+        int drumPitch = 0;
+    };
+
+    bool resolveNoteInputParams(int noteIdx, bool addFlag, NoteInputParams& out) const;
+
     void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
     void cmdAddStretch(double);
     void cmdAddGrace(NoteType, int);

@@ -2685,7 +2685,7 @@ std::vector<Position> NotationInteraction::inputPositions() const
     pos.staffIdx = staffIdx;
 
     for (const NoteVal& nval : is.notes()) {
-        pos.line = noteValToLine(nval, staff, tick);
+        pos.line = mu::engraving::noteValToLine(nval, staff, tick);
         const double y = sysStaff->y() + pos.line * lineDist;
         pos.pos = PointF(is.segment()->x(), y) + measurePos;
 
