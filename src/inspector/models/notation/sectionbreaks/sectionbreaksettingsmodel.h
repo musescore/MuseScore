@@ -33,6 +33,7 @@ class SectionBreakSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * shouldResetBarNums READ shouldResetBarNums CONSTANT)
     Q_PROPERTY(PropertyItem * pauseDuration READ pauseDuration CONSTANT)
     Q_PROPERTY(PropertyItem * firstSystemIndent READ firstSystemIndent CONSTANT)
+    Q_PROPERTY(PropertyItem * showCourtesySignatures READ showCourtesySignatures CONSTANT)
 
 public:
     explicit SectionBreakSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -46,12 +47,14 @@ public:
     PropertyItem* shouldResetBarNums() const;
     PropertyItem* pauseDuration() const;
     PropertyItem* firstSystemIndent() const;
+    PropertyItem* showCourtesySignatures() const;
 
 private:
     PropertyItem* m_shouldStartWithLongInstrNames = nullptr;
     PropertyItem* m_shouldResetBarNums = nullptr;
     PropertyItem* m_pauseDuration = nullptr;
     PropertyItem* m_firstSystemIndent = nullptr;
+    PropertyItem* m_showCourtesySignatures = nullptr;
 };
 }
 

@@ -1424,6 +1424,10 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
     Segment* seg = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
     Measure* nm  = m->nextMeasure();
     double blw    = 0.0;
+    bool hideCourtesy = false;
+    if (LayoutBreak* sectionBreakElement = m->sectionBreakElement()) {
+        hideCourtesy = !sectionBreakElement->showCourtesy();
+    }
 
     if (nm && nm->repeatStart() && !m->repeatEnd() && !isLastMeasureInSystem && m->next() == nm) {
         // we may skip barline at end of a measure immediately before a start repeat:
@@ -1445,7 +1449,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
         //  This flag is later used to set a double end bar line and to actually
         //  create the courtesy key sig.
 
-        if (nm && !m->sectionBreak()) {
+        if (nm && !hideCourtesy) {
             //  Don't change barlines at the end of a section break,
             //  and don't create courtesy key/time signatures.
             bool hasKeySig = false;
@@ -1585,8 +1589,9 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
                 bool showCourtesy = ctx.conf().styleB(Sid::genCourtesyClef) && clef->showCourtesy();         // normally show a courtesy clef
                 // check if the measure is the last measure of the system or the last measure before a frame
                 bool lastMeasure = isLastMeasureInSystem || (nm ? !(m->next() == nm) : true);
-                if (!nm || m->isFinalMeasureOfSection() || (lastMeasure && !showCourtesy)) {
-                    // hide the courtesy clef in the final measure of a section, or if the measure is the final measure of a system
+                if (!nm || hideCourtesy || (lastMeasure && !showCourtesy)) {
+                    // hide the courtesy clef in the final measure of a section,
+                    // or if the measure is the final measure of a system
                     // and the score style or the clef style is set to "not show courtesy clef",
                     // or if the clef is at the end of the very last measure of the score
                     clef->clear();
@@ -1858,7 +1863,10 @@ void MeasureLayout::removeSystemHeader(Measure* m)
 void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)
 {
     Fraction _rtick = m->ticks();
-    bool isFinalMeasure = m->isFinalMeasureOfSection();
+    bool hideCourtesy = false;
+    if (LayoutBreak* sectionBreakElement = m->sectionBreakElement()) {
+        hideCourtesy = !sectionBreakElement->showCourtesy();
+    }
 
     // locate a time sig. in the next measure and, if found,
     // check if it has court. sig. turned off
@@ -1868,7 +1876,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     if (s) {
         s->setTrailer(true);
     }
-    if (nm && ctx.conf().styleB(Sid::genCourtesyTimesig) && !isFinalMeasure && !ctx.conf().isFloatMode()) {
+    if (nm && ctx.conf().styleB(Sid::genCourtesyTimesig) && !hideCourtesy && !ctx.conf().isFloatMode()) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
             size_t nstaves = ctx.dom().nstaves();

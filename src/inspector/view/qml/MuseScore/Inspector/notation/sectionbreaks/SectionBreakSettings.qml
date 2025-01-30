@@ -89,4 +89,21 @@ Column {
         navigation.panel: root.navigationPanel
         navigation.row: shouldResetBarNums.navigation.row + 1
     }
+
+    PropertyCheckBox {
+        id: showCourtesySignatures
+        text: qsTrc("inspector", "Hide courtesy clefs and signatures")
+        propertyItem: root.model ? root.model.showCourtesySignatures : null
+
+        checked: propertyItem && !Boolean(propertyItem.value)
+        onClicked: {
+            if (propertyItem) {
+                propertyItem.value = checked
+            }
+        }
+
+        navigation.name: "ShowCourtesySignatures"
+        navigation.panel: root.navigationPanel
+        navigation.row: startWithfirstSystemIndented.navigation.row + 1
+    }
 }
