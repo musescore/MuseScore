@@ -2659,21 +2659,30 @@ std::vector<Position> NotationInteraction::inputPositions() const
     std::vector<Position> result;
 
     const InputState& is = score()->inputState();
+    if (!is.isValid()) {
+        return result;
+    }
 
-    Position pos;
-    pos.segment = is.segment();
-    pos.staffIdx = is.staffIdx();
+    const staff_idx_t staffIdx = is.staffIdx();
+    const Staff* staff = score()->staff(staffIdx);
+    const System* system = is.segment()->system();
+    const SysStaff* sysStaff = system ? system->staff(staffIdx) : nullptr;
+    const Measure* measure = is.segment()->measure();
 
-    const Staff* staff = score()->staff(pos.staffIdx);
+    if (!staff || !sysStaff || !measure) {
+        return result;
+    }
+
     const Fraction tick = is.tick();
-    const SysStaff* sysStaff = is.segment()->system()->staff(pos.staffIdx);
-
+    const PointF measurePos = measure->canvasPos();
     const double lineDist = staff->staffType(tick)->lineDistance().val()
                             * (staff->isTabStaff(tick) ? 1 : .5)
                             * staff->staffMag(tick)
                             * score()->style().spatium();
 
-    const PointF measurePos = pos.segment->measure()->canvasPos();
+    Position pos;
+    pos.segment = is.segment();
+    pos.staffIdx = staffIdx;
 
     for (const NoteVal& nval : is.notes()) {
         pos.line = noteValToLine(nval, staff, tick);
