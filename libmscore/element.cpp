@@ -747,8 +747,8 @@ bool Element::readProperties(XmlReader& e)
                   }
 #ifndef NDEBUG
             else {
-                  for (ScoreElement* eee : qAsConst(*_links)) {
-                        Element* ee = static_cast<Element*>(eee);
+                  for (ScoreElement*& eee : *_links) {
+                        Element* ee = toElement(eee);
                         if (ee->type() != type()) {
                               qFatal("link %s(%d) type mismatch %s linked to %s",
                                  ee->name(), id, ee->name(), name());
@@ -2094,7 +2094,7 @@ void Element::endDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       if (!eed)
             return;
-      for (const PropertyData &pd : qAsConst(eed->propertyData)) {
+      for (const PropertyData& pd : qAsConst(eed->propertyData)) {
             setPropertyFlags(pd.id, pd.f); // reset initial property flags state
             PropertyFlags f = pd.f;
             if (f == PropertyFlags::STYLED)
@@ -2207,7 +2207,7 @@ void Element::endEditDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       bool changed = false;
       if (eed) {
-            for (const PropertyData &pd : qAsConst(eed->propertyData)) {
+            for (const PropertyData& pd : qAsConst(eed->propertyData)) {
                   setPropertyFlags(pd.id, pd.f); // reset initial property flags state
                   PropertyFlags f = pd.f;
                   if (f == PropertyFlags::STYLED)

@@ -3752,9 +3752,48 @@ bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
 
       if (tag == "defaultsVersion")                                 // 4mm -> 4nn, let's skip, i.e. reset to Mu3's 302
             e.skipCurrentElement();
-      if (tag == "lyricsDashFirstAndLastGapAreHalf")                // Mu4.5+ only
+      else if (tag == "lyricsAvoidBarlines")                        // Mu4.5+ only, let's skip
             e.skipCurrentElement();
-      if (tag == "offsetNoteLineEndPoints")                         // Mu4.5+ only
+      else if (tag == "maskBarlinesForText")                        // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "timeSigNormalScale")                         // as of Mu4.5+, before "timesigScale"
+            set(Sid::timesigScale, e.readSize());
+      else if (tag.startsWith("timeSig"))                           // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "trillAlwaysShowCueNote")                     // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "scaleRythmicSpacingForSmallNotes")           // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "mergeMatchingRests")                         // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "minEmptyMeasures") {                         // 2 -> 1
+            int minEmptyMeasures = e.readInt();
+            if (minEmptyMeasures != 1)                              // Changed from 4.5+ default
+                  set(Sid::minEmptyMeasures, minEmptyMeasures);
+            }
+      else if (tag.startsWith("singleMeasureMMRest"))               // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "mmRestConstantWidth"                         // Mu4.5+ only, let's skip
+            || tag == "mmRestReferenceWidth"                        // Mu4.5+ only, let's skip
+            || tag == "mmRestMaxWidthIncrease"                      // Mu4.5+ only, let's skip
+            || tag == "mmRestBetweenStaves")                        // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "minHangingTieLength")                        // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "laissezVibMinDistance")                      // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "tieDotsPlacement")                           // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "minLaissezVibLength"                         // Mu4.5+ only, let's skip
+            || tag =="laissezVibUseSmuflSym")                       // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag.startsWith("noteLine"))                          // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "glissandoType"                               // Mu4.5+ only, let's skip
+            || tag == "glissandoLineStyle"                          // Mu4.5+ only, let's skip
+            || tag == "glissandoDashLineLen"                        // Mu4.5+ only, let's skip
+            || tag == "glissandoDashGapLen"                         // Mu4.5+ only, let's skip
+            || tag == "glissandoShowText")                          // Mu4.5+ only, let's skip
             e.skipCurrentElement();
       else if (tag == "spatium")                                    // pre-4.5(?) typo
             set(Sid::spatium, e.readDouble() * DPMM);

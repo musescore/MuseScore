@@ -97,6 +97,8 @@ bool Score::read(XmlReader& e)
                   _synthesizerState.read(e);
             else if (tag == "page-offset")
                   _pageNumberOffset = e.readInt();
+            else if (tag == "eid")        // Mu4.5+ compatibility
+                  e.skipCurrentElement(); // skip, don't log
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
@@ -294,7 +296,7 @@ bool Score::read(XmlReader& e)
             }
 #endif
       // Make sure every instrument has an instrumentId set.
-      for (Part* part : parts()) {
+      for (Part*& part : parts()) {
             const InstrumentList* il = part->instruments();
             for (auto it = il->begin(); it != il->end(); it++)
                   static_cast<Instrument*>(it->second)->updateInstrumentId();
@@ -337,7 +339,7 @@ bool Score::read(XmlReader& e)
 
       fixTicks();
 
-      for (Part* p : qAsConst(_parts)) {
+      for (Part*& p : _parts) {
             p->updateHarmonyChannels(false);
             }
 
@@ -377,7 +379,7 @@ bool MasterScore::read(XmlReader& e)
       {
       if (!Score::read(e))
             return false;
-      for (Staff* s : staves())
+      for (Staff*& s : staves())
             s->updateOttava();
       setCreated(false);
       return true;
@@ -416,8 +418,7 @@ Score::FileError MasterScore::read302(XmlReader& e)
                   }
             else if (tag == "programRevision")
                   setMscoreRevision(e.readIntHex());
-            else if (tag == "LastEID"     // Mu4.2+ compatibility
-                  || tag == "eid")        // Mu4.5+ compatibility
+            else if (tag == "LastEID")    // Mu4.2+ compatibility
                   e.skipCurrentElement(); // skip, don't log
             else if (tag == "Score") {
                   MasterScore* score;
