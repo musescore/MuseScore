@@ -1474,16 +1474,10 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Score* sourceScore = score();
     const Score* destinationScore = destinationItem->score();
     const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
-    const Staff* sourceStaff = staff();
-    const Staff* destinationStaff = destinationItem->staff();
 
     // Properties must be propagated to items cloned for MMRests
-    if (sourceScore == destinationScore && sourceStaff == destinationStaff) {
+    if (sourceScore == destinationScore) {
         return PropertyPropagation::PROPAGATE;
-    }
-
-    if (propertyGroup(propertyId) != PropertyGroup::TEXT && sourceScore == destinationScore) {
-        return PropertyPropagation::NONE;
     }
 
     if (isTextProperty) {
