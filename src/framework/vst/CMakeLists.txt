@@ -72,13 +72,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxresolver.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractvsteditorview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractvsteditorview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstieditorview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstieditorview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstfxeditorview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstfxeditorview.h
-
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstviewdialog_qwidget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstviewdialog_qwidget.h
     ${CMAKE_CURRENT_LIST_DIR}/view/vstview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/vstview.h
     )
