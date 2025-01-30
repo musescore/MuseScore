@@ -137,6 +137,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
             // page.
 
             mu::engraving::StaffLines* concatenatedSL = nullptr;
+            mu::engraving::Shape concatenatedMask;
             StaffType* prevStaffType = nullptr;
             for (mu::engraving::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
                 if (!measure->isMeasure()) {
@@ -165,6 +166,8 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
                 if (concatenatedSL == nullptr) {
                     if ((m->visible(staffIndex) || m->isCutawayClef(staffIndex)) && sl->visible()) {
                         concatenatedSL = sl->clone();
+                        concatenatedMask.add(sl->ldata()->mask());
+                        concatenatedSL->mutldata()->setMask(concatenatedMask);
                         prevStaffType = score->staff(staffIndex)->staffType(m->tick());
                     }
                 } else {
@@ -176,6 +179,8 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
                         lines[l].setP2(muse::PointF(lastX, lines[l].p2().y()));
                     }
                     concatenatedSL->setLines(lines);
+                    concatenatedMask.add(sl->ldata()->mask().translated(sl->pagePos() - concatenatedSL->pagePos()));
+                    concatenatedSL->mutldata()->setMask(concatenatedMask);
                 }
             }
             if (concatenatedSL != nullptr) {
