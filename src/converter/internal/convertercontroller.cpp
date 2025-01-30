@@ -250,23 +250,45 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
     for (const QJsonValue& v : arr) {
         QJsonObject obj = v.toObject();
 
-        Job job;
-        job.in = correctUserInputPath(obj["in"].toString());
-        job.out = correctUserInputPath(obj["out"].toString());
-
         QJsonObject transposeOptionsObj = obj["transpose"].toObject();
+        RetVal<TransposeOptions> transposeOptions;
         if (!transposeOptionsObj.isEmpty()) {
-            RetVal<TransposeOptions> transposeOptions = ConverterUtils::parseTransposeOptions(transposeOptionsObj);
+            transposeOptions = ConverterUtils::parseTransposeOptions(transposeOptionsObj);
             if (!transposeOptions.ret) {
                 rv.ret = transposeOptions.ret;
                 return rv;
             }
-
-            job.transposeOptions = transposeOptions.val;
         }
 
-        if (!job.in.empty() && !job.out.empty()) {
-            rv.val.push_back(std::move(job));
+        // if there is single job out
+        if (obj["out"].isString()) {
+            Job job;
+            job.in = correctUserInputPath(obj["in"].toString());
+            job.out = correctUserInputPath(obj["out"].toString());
+            if (!transposeOptionsObj.isEmpty()) {
+                job.transposeOptions = transposeOptions.val;
+            }
+
+            if (!job.in.empty() && !job.out.empty()) {
+                rv.val.push_back(std::move(job));
+            }
+        } else if (obj["out"].isArray()) {
+            // Check if there is an array of output files
+            QJsonArray jsaOut;
+            jsaOut = obj["out"].toArray();
+            if (!jsaOut.empty()) {
+                foreach (QJsonValue v, jsaOut) {
+                    Job job;
+                    job.in = correctUserInputPath(obj["in"].toString());
+                    job.out = correctUserInputPath(v.toString());
+                    if (!transposeOptionsObj.isEmpty()) {
+                        job.transposeOptions = transposeOptions.val;
+                    }
+                    if (!job.in.empty() && !job.out.empty()) {
+                        rv.val.push_back(std::move(job));
+                    }
+                }
+            }
         }
     }
 
