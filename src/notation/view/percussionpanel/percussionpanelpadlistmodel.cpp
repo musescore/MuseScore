@@ -350,11 +350,9 @@ PercussionPanelPadModel* PercussionPanelPadListModel::createPadModelForPitch(int
     }
 
     PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
+
     model->setPadName(m_drumset->name(pitch));
-
-    const QString shortcut = m_drumset->shortcut(pitch) ? QChar(m_drumset->shortcut(pitch)) : QChar('\0');
-    model->setKeyboardShortcut(shortcut);
-
+    model->setKeyboardShortcut(m_drumset->shortcut(pitch));
     model->setPitch(pitch);
 
     model->padActionTriggered().onReceive(this, [this, pitch](PercussionPanelPadModel::PadAction action) {

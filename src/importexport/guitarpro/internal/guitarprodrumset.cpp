@@ -37,9 +37,10 @@ void initGuitarProDrumset()
     if (!gpDrumset) {
         gpDrumset = new Drumset();
         for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
+            gpDrumset->drum(i).name.clear();
             gpDrumset->drum(i).notehead = NoteHeadGroup::HEAD_INVALID;
             gpDrumset->drum(i).line     = 0;
-            gpDrumset->drum(i).shortcut = 0;
+            gpDrumset->drum(i).shortcut.clear();
             gpDrumset->drum(i).voice    = 0;
             gpDrumset->drum(i).stemDirection = DirectionV::UP;
             gpDrumset->drum(i).panelRow = -1;

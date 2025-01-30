@@ -557,7 +557,8 @@ QWindow* InteractiveProvider::topWindow() const
         return mainWin;
     }
 
-    if (!last.window->parent()) {
+    // TODO/HACK: last.window doesn't seem to have a parent when the top window is a widget....
+    if (!last.window->parent() && !topWindowIsWidget()) {
         ASSERT_X("Window must have a parent!");
     }
 
