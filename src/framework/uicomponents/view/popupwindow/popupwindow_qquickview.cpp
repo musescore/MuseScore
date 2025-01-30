@@ -40,6 +40,8 @@ PopupWindow_QQuickView::~PopupWindow_QQuickView()
 
 void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool isFrameless)
 {
+    QQuickWindow::setDefaultAlphaBuffer(!isDialogMode);
+
     //! NOTE: do not set the window when constructing the view
     //! This causes different bugs on different OS (e.g., no transparency for popups on windows)
     m_view = new QQuickView(engine, nullptr);
