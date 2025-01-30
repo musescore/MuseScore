@@ -52,6 +52,8 @@ StyledPopupView {
     property size cellSize
     property bool drawGrid
 
+    readonly property bool isDragInProgress: masterPalette.state == "drag" || customPalette.state == "drag"
+
     property int maxHeight: 400
     contentHeight: column.implicitHeight
     contentWidth: 300
