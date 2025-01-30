@@ -82,8 +82,8 @@ void VSTModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
-        //ir->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
+        //ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
+        ir->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
     }
 
     auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
