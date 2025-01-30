@@ -504,7 +504,15 @@ public:
     void doUndoRemoveElement(EngravingItem*);
     bool containsElement(const EngravingItem*) const;
 
-    Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
+    enum class AddToChord {
+        None,
+        AtPreviousPosition,
+        AtCurrentPosition,
+    };
+
+    Note* addPitch(NoteVal&, bool addToPreviousChord, InputState* externalInputState = nullptr);
+    Note* addPitch(NoteVal&, AddToChord addFlag = AddToChord::None, InputState* externalInputState = nullptr);
+
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
     NoteVal noteVal(int pitch, bool allowTransposition) const;
     Note* addMidiPitch(int pitch, bool addFlag, bool allowTransposition);
