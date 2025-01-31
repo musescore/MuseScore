@@ -68,14 +68,9 @@ inline muse::mpe::duration_t durationFromStartAndTicks(const Score* score, const
     return durationFromStartAndEndTick(score, startTick, startTick + durationTicks, tickPositionOffset);
 }
 
-struct TimestampAndDuration {
-    muse::mpe::timestamp_t timestamp = 0;
-    muse::mpe::duration_t duration = 0;
-};
-
-inline TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
-                                                                          const int startTick, const int durationTicks,
-                                                                          const int tickPositionOffset)
+inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
+                                                                                     const int startTick, const int durationTicks,
+                                                                                     const int tickPositionOffset)
 {
     int startTickWithOffset = startTick + tickPositionOffset;
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTickWithOffset);
