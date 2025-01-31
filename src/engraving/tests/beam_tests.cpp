@@ -263,3 +263,45 @@ TEST_F(Engraving_BeamTests, flipTremoloStemDir)
 
     delete score;
 }
+
+TEST_F(Engraving_BeamTests, deleteBeamStemDirection)
+{
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "deleteBeamStemDirection.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr1 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(0, 8))->element(0));
+    EXPECT_TRUE(cr1);
+    ChordRest* cr2 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(1, 8))->element(0));
+    EXPECT_TRUE(cr2);
+    ChordRest* cr3 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(2, 8))->element(0));
+    EXPECT_TRUE(cr3);
+    ChordRest* cr4 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(3, 8))->element(0));
+    EXPECT_TRUE(cr4);
+
+    for (ChordRest* cr : { cr1, cr2, cr3, cr4 }) {
+        EXPECT_TRUE(cr->ldata()->up);
+    }
+
+    score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
+    score->select({ cr2, cr3, cr4 }, SelectType::RANGE);
+    score->cmdDeleteSelection();
+    score->endCmd();
+    score->setLayoutAll();
+    score->doLayout();
+
+    EXPECT_FALSE(cr1->ldata()->up);
+
+    score->undoRedo(true, nullptr);
+
+    toChord(cr1)->setStemDirection(DirectionV::UP);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
+    score->select({ cr2, cr3, cr4 }, SelectType::RANGE);
+    score->cmdDeleteSelection();
+    score->endCmd();
+    score->setLayoutAll();
+    score->doLayout();
+
+    EXPECT_TRUE(cr1->ldata()->up);
+}
