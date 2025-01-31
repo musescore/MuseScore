@@ -37,8 +37,8 @@ class VstView : public QQuickItem, public Steinberg::IPlugFrame
 
     DECLARE_FUNKNOWN_METHODS
 
-public:
-    VstView(QQuickItem* parent = nullptr);
+        public:
+                 VstView(QQuickItem* parent = nullptr);
     ~VstView();
 
     int instanceId() const;
@@ -48,7 +48,7 @@ public:
     Q_INVOKABLE void deinit();
 
     // IPlugFrame
-    Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
+    Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* requiredSize) override;
     // ----------
 
     QString title() const;
@@ -59,10 +59,18 @@ signals:
 
 private:
 
+    struct ScreenMetrics {
+        QSize availableSize;
+        double devicePixelRatio = 0.0;
+    };
+
+    void updateScreenMetrics();
     void updateViewGeometry();
 
     int m_instanceId = -1;
     IVstPluginInstancePtr m_instance;
+    QWindow* m_window = nullptr;
+    ScreenMetrics m_screenMetrics;
     PluginViewPtr m_view;
     QString m_title;
 };

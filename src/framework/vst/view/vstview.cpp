@@ -87,8 +87,10 @@ void VstView::init()
 
     m_view->setFrame(this);
 
+    m_window = new QWindow(window());
+
     Steinberg::tresult attached;
-    attached = m_view->attached(reinterpret_cast<void*>(window()->winId()), currentPlatformUiType());
+    attached = m_view->attached(reinterpret_cast<void*>(m_window->winId()), currentPlatformUiType());
     if (attached != Steinberg::kResultOk) {
         LOGE() << "Unable to attach vst plugin view to window"
                << ", instance name: " << m_instance->name();
@@ -96,10 +98,14 @@ void VstView::init()
     }
 
     connect(window(), &QWindow::screenChanged, this, [this](QScreen*) {
+        updateScreenMetrics();
         updateViewGeometry();
     });
 
+    updateScreenMetrics();
     updateViewGeometry();
+
+    m_window->show();
 }
 
 void VstView::deinit()
@@ -108,6 +114,10 @@ void VstView::deinit()
         m_view->setFrame(nullptr);
         m_view->removed();
         m_view = nullptr;
+
+        m_window->hide();
+        delete m_window;
+        m_window = nullptr;
     }
 
     if (m_instance) {
@@ -116,35 +126,44 @@ void VstView::deinit()
     }
 }
 
-Steinberg::tresult VstView::resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize)
+Steinberg::tresult VstView::resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* requiredSize)
 {
-    view->checkSizeConstraint(newSize);
+    IF_ASSERT_FAILED(m_window) {
+        return Steinberg::kResultFalse;
+    }
 
-    QScreen* screen = window()->screen();
-    QSize availableSize = screen->availableSize();
+    view->checkSizeConstraint(requiredSize);
 
-    int newWidth = newSize->getWidth();
-    int newHeight = newSize->getHeight();
+    int newWidth = requiredSize->getWidth();
+    int newHeight = requiredSize->getHeight();
 
-//! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the fixed size.
+//! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the size.
 //! Otherwise, the user will get an extremely large window and won't be able to resize it
 #ifdef Q_OS_WIN
-    qreal scaling = screen->devicePixelRatio();
-    newWidth = newWidth / scaling;
-    newHeight = newHeight / scaling;
+    newWidth = newWidth / m_screenMetrics.devicePixelRatio;
+    newHeight = newHeight / m_screenMetrics.devicePixelRatio;
 #endif
 
-    newWidth = std::min(newWidth, availableSize.width());
-    newHeight = std::min(newHeight, availableSize.height());
+    newWidth = std::min(newWidth, m_screenMetrics.availableSize.width());
+    newHeight = std::min(newHeight, m_screenMetrics.availableSize.height());
 
     setImplicitHeight(newHeight);
     setImplicitWidth(newWidth);
 
-    view->onSize(newSize);
-
-    update();
+    m_window->setGeometry(this->x(), this->y(), this->implicitWidth(), this->implicitHeight());
+    Steinberg::ViewRect vstSize;
+    vstSize.right = m_window->width();
+    vstSize.bottom = m_window->height();
+    view->onSize(&vstSize);
 
     return Steinberg::kResultTrue;
+}
+
+void VstView::updateScreenMetrics()
+{
+    QScreen* screen = window()->screen();
+    m_screenMetrics.availableSize = screen->availableSize();
+    m_screenMetrics.devicePixelRatio = screen->devicePixelRatio();
 }
 
 void VstView::updateViewGeometry()
@@ -156,7 +175,7 @@ void VstView::updateViewGeometry()
 #ifdef Q_OS_WIN
     Steinberg::FUnknownPtr<IPluginContentScaleHandler> scalingHandler(m_view);
     if (scalingHandler) {
-        scalingHandler->setContentScaleFactor(window()->screen()->devicePixelRatio());
+        scalingHandler->setContentScaleFactor(m_screenMetrics.devicePixelRatio);
     }
 #endif
 
