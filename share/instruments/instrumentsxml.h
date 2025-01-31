@@ -3871,32 +3871,38 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cuica", "cuica longName"),
 //: shortName for Cuica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cu.", "cuica shortName"),
 
-//: description for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Drum Kit; [null]: Large; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Large drum kit.", "drumset description"),
-//: trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit (large)", "drumset trackName"),
-//: longName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Drum Kit; [null]: Large; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit", "drumset trackName"),
+//: longName for Drum Kit; [null]: Large; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit", "drumset longName"),
-//: shortName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Drum Kit; [null]: Large; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "D. Kit", "drumset shortName"),
+//: traitName for Drum Kit; [null]: Large; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "(Large)", "drumset traitName"),
 
-//: description for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Drum Kit; [null]: Minimal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Minimal drum kit, 4-piece.", "drum-kit-4 description"),
-//: trackName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit (minimal)", "drum-kit-4 trackName"),
-//: longName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Drum Kit; [null]: Minimal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit", "drum-kit-4 trackName"),
+//: longName for Drum Kit; [null]: Minimal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit", "drum-kit-4 longName"),
-//: shortName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Drum Kit; [null]: Minimal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "D. Kit", "drum-kit-4 shortName"),
+//: traitName for Drum Kit; [null]: Minimal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "(Minimal)", "drum-kit-4 traitName"),
 
-//: description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Drum Kit; [null]: Common; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Common drum kit, 5-piece.", "drum-kit-5 description"),
-//: trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit (common)", "drum-kit-5 trackName"),
-//: longName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Drum Kit; [null]: Common; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit", "drum-kit-5 trackName"),
+//: longName for Drum Kit; [null]: Common; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit", "drum-kit-5 longName"),
-//: shortName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Drum Kit; [null]: Common; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "D. Kit", "drum-kit-5 shortName"),
+//: traitName for Drum Kit; [null]: Common; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "*(Common)", "drum-kit-5 traitName"),
 
 //: description for Field Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Military field drum.", "military-drum description"),
@@ -4330,23 +4336,27 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Whip", "whip longName"),
 //: shortName for Whip; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Wh.", "whip shortName"),
 
-//: description for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Mixed Percussion; [null]: MIDI; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "General MIDI percussion kit with Level 2 extensions.", "percussion-synthesizer description"),
-//: trackName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "General MIDI Percussion", "percussion-synthesizer trackName"),
-//: longName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Mixed Percussion; [null]: MIDI; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Mixed Percussion", "percussion-synthesizer trackName"),
+//: longName for Mixed Percussion; [null]: MIDI; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Percussion", "percussion-synthesizer longName"),
-//: shortName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Mixed Percussion; [null]: MIDI; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Perc.", "percussion-synthesizer shortName"),
+//: traitName for Mixed Percussion; [null]: MIDI; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "(MIDI)", "percussion-synthesizer traitName"),
 
-//: description for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Mixed Percussion; [null]: Concert; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Orchestral percussion kit.", "percussion description"),
-//: trackName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Mixed Percussion; [null]: Concert; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Mixed Percussion", "percussion trackName"),
-//: longName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: longName for Mixed Percussion; [null]: Concert; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Percussion", "percussion longName"),
-//: shortName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: shortName for Mixed Percussion; [null]: Concert; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Perc.", "percussion shortName"),
+//: traitName for Mixed Percussion; [null]: Concert; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "*(Concert)", "percussion traitName"),
 
 // Percussion - Marching
 QT_TRANSLATE_NOOP("engraving/instruments/group", "Percussion - Marching"),
