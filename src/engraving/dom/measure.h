@@ -106,10 +106,8 @@ public:
     bool stemless() const { return m_stemless; }
     void setStemless(bool val) { m_stemless = val; }
 
-#ifndef NDEBUG
     bool corrupted() const { return m_corrupted; }
     void setCorrupted(bool val) { m_corrupted = val; }
-#endif
 
     int measureRepeatCount() const { return m_measureRepeatCount; }
     void setMeasureRepeatCount(int n) { m_measureRepeatCount = n; }
@@ -124,9 +122,7 @@ private:
                                             // this changes some layout rules
     bool m_visible = true;
     bool m_stemless = false;
-#ifndef NDEBUG
     bool m_corrupted = false;
-#endif
     int m_measureRepeatCount = 0;
 };
 
@@ -175,10 +171,8 @@ public:
     Spacer* vspacerUp(staff_idx_t staffIdx) const;
     void setStaffVisible(staff_idx_t staffIdx, bool visible);
     void setStaffStemless(staff_idx_t staffIdx, bool stemless);
-#ifndef NDEBUG
     bool corrupted(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
     void setCorrupted(staff_idx_t staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
-#endif
     MeasureNumber* noText(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->noText(); }
     void setNoText(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
 
