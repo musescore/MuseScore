@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,36 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#ifndef MUSE_VST_VSTFXEDITORVIEW_H
-#define MUSE_VST_VSTFXEDITORVIEW_H
-
-#include "abstractvsteditorview.h"
+#include "ui/iuiactionsmodule.h"
 
 namespace muse::vst {
-class VstFxEditorView : public AbstractVstEditorView
+class VstActionsController;
+class VstUiActions : public muse::ui::IUiActionsModule
 {
-    Q_OBJECT
-
-    Q_PROPERTY(int chainOrder READ chainOrder WRITE setChainOrder NOTIFY chainOrderChanged)
-
 public:
-    explicit VstFxEditorView(QWidget* parent = nullptr);
+    VstUiActions(const std::shared_ptr<VstActionsController>& c);
 
-    int chainOrder() const;
-    void setChainOrder(int newChainOrder);
+    const muse::ui::UiActionList& actionsList() const override;
+    bool actionEnabled(const muse::ui::UiAction& act) const override;
+    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-signals:
-    void chainOrderChanged();
+    bool actionChecked(const muse::ui::UiAction& act) const override;
+    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    bool isAbleToWrapPlugin() const override;
-    IVstPluginInstancePtr determineInstance() const override;
+    static const muse::ui::UiActionList m_actions;
 
-    muse::audio::AudioFxChainOrder m_chainOrder = -1;
+    const std::shared_ptr<VstActionsController> m_controller;
 };
 }
-
-Q_DECLARE_METATYPE(muse::vst::VstFxEditorView)
-
-#endif // MUSE_VST_VSTFXEDITORVIEW_H

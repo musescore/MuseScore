@@ -33,6 +33,8 @@
 #include "audioplugins/iaudiopluginsscannerregister.h"
 #include "audioplugins/iaudiopluginmetareaderregister.h"
 
+#include "ui/iuiactionsregister.h"
+
 #include "internal/vstconfiguration.h"
 #include "internal/vstinstancesregister.h"
 #include "internal/vstmodulesrepository.h"
@@ -41,9 +43,11 @@
 #include "internal/fx/vstfxresolver.h"
 #include "internal/vstpluginsscanner.h"
 #include "internal/vstpluginmetareader.h"
+#include "internal/vstactionscontroller.h"
+#include "internal/vstuiactions.h"
 
-#include "view/vstieditorview.h"
-#include "view/vstfxeditorview.h"
+#include "view/vstview.h"
+#include "view/vstviewdialog_qwidget.h"
 
 #include "log.h"
 
@@ -70,6 +74,7 @@ void VSTModule::registerExports()
     m_configuration = std::make_shared<VstConfiguration>();
     m_pluginModulesRepo = std::make_shared<VstModulesRepository>();
     m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>();
+    m_actionsController = std::make_shared<VstActionsController>();
 
     ioc()->registerExport<IVstConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IVstModulesRepository>(moduleName(), m_pluginModulesRepo);
@@ -78,13 +83,21 @@ void VSTModule::registerExports()
 
 void VSTModule::resolveImports()
 {
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerUri(Uri("muse://vsti/editor"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstiEditorView>("VstiEditorView")));
+    //! NOTE Now we can switch which view to use in runtime.
+    //! switches the action controller, so registration is there now.
+    //! as soon as the new view is stabilized, we need to remove the old one and do as usual
 
-        ir->registerUri(Uri("muse://vstfx/editor"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstFxEditorView>("VstFxEditorView")));
+    // auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    // if (ir) {
+    //     ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
+    //     ir->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
+    // }
+
+    m_actionsController->setupUsedView();
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<VstUiActions>(m_actionsController));
     }
 
     auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
@@ -115,12 +128,15 @@ void VSTModule::registerResources()
 
 void VSTModule::registerUiTypes()
 {
+    qmlRegisterType<VstView>("Muse.Vst", 1, 0, "VstView");
+
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(muse_vst_QML_IMPORT);
 }
 
 void VSTModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+    m_actionsController->init();
     m_pluginModulesRepo->init();
 }
 

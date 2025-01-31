@@ -19,22 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0    
 
-#include "vstieditorview.h"
+StyledDialogView {
+    id: root
 
-using namespace muse::vst;
+    property alias instanceId: editor.instanceId
 
-VstiEditorView::VstiEditorView(QWidget* parent)
-    : AbstractVstEditorView(parent)
-{
-}
+    title: editor.title
 
-bool VstiEditorView::isAbleToWrapPlugin() const
-{
-    return trackId() != -1 && !resourceId().isEmpty();
-}
+    contentHeight: editor.implicitHeight
+    contentWidth: editor.implicitWidth
 
-IVstPluginInstancePtr VstiEditorView::determineInstance() const
-{
-    return instancesRegister()->instrumentPlugin(resourceId().toStdString(), trackId());
+    alwaysOnTop: true
+
+    VstEditor {
+        id: editor
+        anchors.fill: parent
+    }
 }

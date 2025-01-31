@@ -19,26 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
 
-#ifndef MUSE_VST_VSTIEDITORVIEW_H
-#define MUSE_VST_VSTIEDITORVIEW_H
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0    
+import Muse.Vst 1.0
 
-#include "abstractvsteditorview.h"
+Rectangle {
 
-namespace muse::vst {
-class VstiEditorView : public AbstractVstEditorView
-{
-    Q_OBJECT
+    // in
+    property alias instanceId: view.instanceId
 
-public:
-    explicit VstiEditorView(QWidget* parent = nullptr);
+    // out
+    property alias title: view.title
 
-private:
-    bool isAbleToWrapPlugin() const override;
-    IVstPluginInstancePtr determineInstance() const override;
-};
+    color: ui.theme.backgroundPrimaryColor
+
+    implicitWidth: view.implicitWidth
+    implicitHeight: view.implicitHeight
+
+    Component.onCompleted: {
+        view.init()
+    }
+
+    VstView {
+        id: view
+        anchors.fill: parent
+    }
 }
-
-Q_DECLARE_METATYPE(muse::vst::VstiEditorView)
-
-#endif // MUSE_VST_VSTIEDITORVIEW_H

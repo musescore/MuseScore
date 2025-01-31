@@ -39,6 +39,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstactionscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstactionscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstmodulesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstmodulesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstancesregister.cpp
@@ -70,12 +74,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/vstfxresolver.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractvsteditorview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractvsteditorview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstieditorview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstieditorview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstfxeditorview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/vstfxeditorview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstviewdialog_qwidget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstviewdialog_qwidget.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstview.h
     )
 
 set(MODULE_INCLUDE

@@ -39,6 +39,10 @@ public:
     virtual io::paths_t userVstDirectories() const = 0;
     virtual void setUserVstDirectories(const io::paths_t& paths) = 0;
     virtual async::Channel<io::paths_t> userVstDirectoriesChanged() const = 0;
+
+    // dev
+    virtual std::string usedVstView() const = 0;
+    virtual void setUsedVstView(const std::string& code) = 0;
 };
 }
 
