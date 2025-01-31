@@ -44,9 +44,11 @@ public:
     virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
-    virtual bool showShadowNote(const muse::PointF& pos) = 0;
+    virtual void showShadowNoteForPosition(const muse::PointF& pos) = 0;
+    virtual void showShadowNoteForMidiPitch(const uint8_t note) = 0;
     virtual void hideShadowNote() = 0;
     virtual muse::RectF shadowNoteRect() const = 0;
+    virtual muse::async::Channel<bool> shadowNoteChanged() const = 0;
 
     // Visibility
     virtual void toggleVisible() = 0;
