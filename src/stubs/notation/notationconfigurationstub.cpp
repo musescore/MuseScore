@@ -155,6 +155,16 @@ QColor NotationConfigurationStub::dropRectColor() const
     return QColor();
 }
 
+muse::draw::Color NotationConfigurationStub::noteInputPreviewColor() const
+{
+    return muse::draw::Color();
+}
+
+bool NotationConfigurationStub::useNoteInputCursorInInputByDuration() const
+{
+    return false;
+}
+
 int NotationConfigurationStub::selectionProximity() const
 {
     return 1;
@@ -279,6 +289,36 @@ muse::async::Channel<muse::io::path_t> NotationConfigurationStub::partStyleFileP
     return ch;
 }
 
+NoteInputMethod NotationConfigurationStub::defaultNoteInputMethod() const
+{
+    return NoteInputMethod::UNKNOWN;
+}
+
+void NotationConfigurationStub::setDefaultNoteInputMethod(NoteInputMethod)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::defaultNoteInputMethodChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::addAccidentalDotsArticulationsToNextNoteEntered() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setAddAccidentalDotsArticulationsToNextNoteEntered(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::addAccidentalDotsArticulationsToNextNoteEnteredChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::isMidiInputEnabled() const
 {
     return false;
@@ -286,6 +326,27 @@ bool NotationConfigurationStub::isMidiInputEnabled() const
 
 void NotationConfigurationStub::setIsMidiInputEnabled(bool)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::isMidiInputEnabledChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKey() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setStartNoteInputAtSelectionWhenPressingMidiKey(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKeyChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 bool NotationConfigurationStub::isAutomaticallyPanEnabled() const
@@ -322,6 +383,21 @@ void NotationConfigurationStub::setIsPlayChordSymbolsEnabled(bool)
 }
 
 muse::async::Notification NotationConfigurationStub::isPlayChordSymbolsChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::isPlayPreviewNotesInInputByDuration() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setIsPlayPreviewNotesInInputByDuration(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::isPlayPreviewNotesInInputByDurationChanged() const
 {
     static muse::async::Notification n;
     return n;

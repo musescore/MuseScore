@@ -81,6 +81,10 @@ public:
 
     virtual QColor dropRectColor() const = 0;
 
+    virtual muse::draw::Color noteInputPreviewColor() const = 0;
+
+    virtual bool useNoteInputCursorInInputByDuration() const = 0;
+
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proximity) = 0;
     virtual muse::async::Channel<int> selectionProximityChanged() const = 0;
@@ -116,8 +120,21 @@ public:
     virtual void setPartStyleFilePath(const muse::io::path_t& path) = 0;
     virtual muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const = 0;
 
+    virtual NoteInputMethod defaultNoteInputMethod() const = 0;
+    virtual void setDefaultNoteInputMethod(NoteInputMethod method) = 0;
+    virtual muse::async::Notification defaultNoteInputMethodChanged() const = 0;
+
+    virtual bool addAccidentalDotsArticulationsToNextNoteEntered() const = 0;
+    virtual void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) = 0;
+    virtual muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const = 0;
+
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
+    virtual muse::async::Notification isMidiInputEnabledChanged() const = 0;
+
+    virtual bool startNoteInputAtSelectionWhenPressingMidiKey() const = 0;
+    virtual void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) = 0;
+    virtual muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const = 0;
 
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
@@ -132,6 +149,10 @@ public:
     virtual bool isPlayChordSymbolsEnabled() const = 0;
     virtual void setIsPlayChordSymbolsEnabled(bool enabled) = 0;
     virtual muse::async::Notification isPlayChordSymbolsChanged() const = 0;
+
+    virtual bool isPlayPreviewNotesInInputByDuration() const = 0;
+    virtual void setIsPlayPreviewNotesInInputByDuration(bool play) = 0;
+    virtual muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const = 0;
 
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;

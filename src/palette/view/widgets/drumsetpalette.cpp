@@ -72,13 +72,13 @@ void DrumsetPalette::updateDrumset()
         return;
     }
 
-    NoteInputState state = noteInput->state();
-    if (m_drumset == state.drumset) {
+    const NoteInputState& state = noteInput->state();
+    if (m_drumset == state.drumset()) {
         return;
     }
 
     clear();
-    m_drumset = state.drumset;
+    m_drumset = state.drumset();
 
     if (!m_drumset) {
         return;
@@ -126,7 +126,7 @@ void DrumsetPalette::drumNoteClicked(int val)
     if (newChordSelected) {
         const Note* note = ch->downNote();
 
-        track_idx_t track = (noteInput->state().currentTrack / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
+        track_idx_t track = (noteInput->state().track() / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
 
         noteInput->setCurrentTrack(track);
         noteInput->setDrumNote(note->pitch());
@@ -147,8 +147,8 @@ void DrumsetPalette::previewSound(const Chord* chord, bool newChordSelected, con
     }
 
     Chord* preview = chord->clone();
-    preview->setParent(inputState.segment);
-    preview->setTrack(inputState.currentTrack);
+    preview->setParent(inputState.segment());
+    preview->setTrack(inputState.track());
 
     const std::vector<Note*>& previewNotes = preview->notes();
     const std::vector<Note*>& chordNotes = chord->notes();

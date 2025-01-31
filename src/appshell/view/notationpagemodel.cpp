@@ -217,7 +217,7 @@ void NotationPageModel::updateDrumsetPanelVisibility()
     }
 
     const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
-    bool isNeedOpen = noteInput->isNoteInputMode() && noteInput->state().drumset != nullptr;
+    bool isNeedOpen = noteInput->isNoteInputMode() && noteInput->state().drumset() != nullptr;
 
     setDrumsetPanelOpen(isNeedOpen);
 }

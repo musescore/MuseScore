@@ -73,6 +73,10 @@ public:
 
     QColor dropRectColor() const override;
 
+    muse::draw::Color noteInputPreviewColor() const override;
+
+    bool useNoteInputCursorInInputByDuration() const override;
+
     int selectionProximity() const override;
     void setSelectionProximity(int proximity)  override;
     muse::async::Channel<int> selectionProximityChanged() const override;
@@ -109,8 +113,21 @@ public:
     void setPartStyleFilePath(const muse::io::path_t& path)  override;
     muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
 
+    NoteInputMethod defaultNoteInputMethod() const override;
+    void setDefaultNoteInputMethod(NoteInputMethod method) override;
+    muse::async::Notification defaultNoteInputMethodChanged() const override;
+
+    bool addAccidentalDotsArticulationsToNextNoteEntered() const override;
+    void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
+    muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
+
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled)  override;
+    muse::async::Notification isMidiInputEnabledChanged() const override;
+
+    bool startNoteInputAtSelectionWhenPressingMidiKey() const override;
+    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) override;
+    muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled)  override;
@@ -122,6 +139,10 @@ public:
     bool isPlayChordSymbolsEnabled() const override;
     void setIsPlayChordSymbolsEnabled(bool enabled)  override;
     muse::async::Notification isPlayChordSymbolsChanged() const override;
+
+    bool isPlayPreviewNotesInInputByDuration() const override;
+    void setIsPlayPreviewNotesInInputByDuration(bool play) override;
+    muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const override;
 
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled)  override;

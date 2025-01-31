@@ -50,6 +50,20 @@ bool InputState::isValid() const
 //   drumset
 //---------------------------------------------------------
 
+Staff* InputState::staff() const
+{
+    if (!m_segment || m_track == muse::nidx) {
+        return nullptr;
+    }
+
+    return m_segment->score()->staff(mu::engraving::track2staff(m_track));
+}
+
+staff_idx_t InputState::staffIdx() const
+{
+    return mu::engraving::track2staff(m_track);
+}
+
 Drumset* InputState::drumset() const
 {
     if (!m_segment || m_track == muse::nidx) {
@@ -173,6 +187,8 @@ void InputState::update(Selection& selection)
     setDuration(DurationType::V_INVALID);
     setRest(false);
     setAccidentalType(AccidentalType::NONE);
+    setNotes({});
+
     Note* n1 = nullptr;
     ChordRest* cr1 = nullptr;
     bool differentAccidentals = false;

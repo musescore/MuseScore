@@ -56,6 +56,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationmidiinput.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationutils.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h
@@ -134,6 +135,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationruler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationruler.h
     ${CMAKE_CURRENT_LIST_DIR}/view/loopmarker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/loopmarker.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.cpp
