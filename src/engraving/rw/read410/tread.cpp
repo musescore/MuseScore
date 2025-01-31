@@ -4107,7 +4107,12 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
 {
-    t->setGroup(TConv::fromXml(e.asciiAttribute("group"), StaffGroup::STANDARD));
+    const AsciiStringView group = e.asciiAttribute("group");
+    IF_ASSERT_FAILED(!group.empty()) {
+        return;
+    }
+
+    t->setGroup(TConv::fromXml(group, StaffGroup::STANDARD));
 
     if (t->group() == StaffGroup::TAB) {
         t->setGenKeysig(false);
