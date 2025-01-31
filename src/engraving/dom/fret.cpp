@@ -31,6 +31,7 @@
 #include "harmony.h"
 #include "measure.h"
 #include "note.h"
+#include "pitchspelling.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -164,8 +165,29 @@ void FretDiagram::updateDiagram(const String& harmonyName)
         readHarmonyToDiagramFile("://data/harmony_to_diagram.xml");
     }
 
-    String harmonyNameLower = harmonyName.toLower();
-    String diagramXml = muse::value(s_harmonyToDiagramMap, harmonyNameLower);
+    String _harmonyName = harmonyName;
+
+    if (!style().styleB(Sid::useStandardNoteNames)) {
+        NoteSpellingType spellingType = NoteSpellingType::STANDARD;
+        if (style().styleB(Sid::useGermanNoteNames)) {
+            spellingType = NoteSpellingType::GERMAN;
+        } else if (style().styleB(Sid::useFullGermanNoteNames)) {
+            spellingType = NoteSpellingType::GERMAN_PURE;
+        } else if (style().styleB(Sid::useSolfeggioNoteNames)) {
+            spellingType = NoteSpellingType::SOLFEGGIO;
+        } else if (style().styleB(Sid::useFrenchNoteNames)) {
+            spellingType = NoteSpellingType::FRENCH;
+        }
+
+        NoteCaseType noteCase;
+        size_t idx;
+        int tpc = convertNote(harmonyName, spellingType, noteCase, idx);
+        String acc = _harmonyName.mid(idx);
+
+        _harmonyName = tpc2name(tpc, NoteSpellingType::STANDARD, noteCase) + acc;
+    }
+
+    String diagramXml = muse::value(s_harmonyToDiagramMap, _harmonyName.toLower());
 
     if (diagramXml.empty()) {
         return;
