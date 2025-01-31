@@ -221,6 +221,11 @@ int MenuItem::icon_property() const
     return static_cast<int>(m_action.iconCode);
 }
 
+QString MenuItem::iconColor_property() const
+{
+    return m_action.iconColor;
+}
+
 bool MenuItem::enabled_property() const
 {
     return m_state.enabled;
