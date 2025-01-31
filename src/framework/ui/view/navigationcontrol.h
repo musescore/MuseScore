@@ -59,6 +59,7 @@ public:
     void onEvent(EventPtr e) override;
 
     QWindow* window() const override;
+    QQuickItem* visualItem() const override;
 
     void trigger() override;
 

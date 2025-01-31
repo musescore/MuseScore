@@ -103,6 +103,7 @@ public:
     virtual async::Channel<bool> activeChanged() const = 0;
 
     virtual QWindow* window() const = 0;
+    virtual QQuickItem* visualItem() const = 0;
 
     virtual void onEvent(EventPtr e) = 0;
 };

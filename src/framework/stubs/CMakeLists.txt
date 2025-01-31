@@ -58,6 +58,10 @@ if (NOT MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
 endif()
 
+if (NOT MUSE_MODULE_TOURS)
+    add_subdirectory(tours)
+endif()
+
 if (NOT MUSE_MODULE_UPDATE)
     add_subdirectory(update)
 endif()

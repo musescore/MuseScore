@@ -26,6 +26,7 @@
 #include <QString>
 #include <QMetaType>
 #include <QMap>
+#include <QQuickItem>
 
 #include "view/iconcodes.h" // IWYU pragma: export
 #include "workspace/workspacetypes.h"

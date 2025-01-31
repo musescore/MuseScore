@@ -648,6 +648,16 @@ INavigationControl* NavigationController::activeControl() const
     return findActive(activePanel->controls());
 }
 
+const INavigationControl* NavigationController::findControl(const std::string& section, const std::string& panel,
+                                                            const std::string& controlName) const
+{
+    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(section));
+    const INavigationPanel* pnl = sec ? findByName(sec->panels(), QString::fromStdString(panel)) : nullptr;
+    const INavigationControl* ctrl = pnl ? findByName(pnl->controls(), QString::fromStdString(controlName)) : nullptr;
+
+    return ctrl;
+}
+
 void NavigationController::setDefaultNavigationControl(INavigationControl* control)
 {
     m_defaultNavigationControl = control;

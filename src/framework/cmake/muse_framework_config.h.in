@@ -106,6 +106,10 @@
 #cmakedefine MUSE_MODULE_SHORTCUTS_TESTS 1
 #cmakedefine MUSE_MODULE_SHORTCUTS_API 1
 
+#cmakedefine MUSE_MODULE_TOURS 1
+#cmakedefine MUSE_MODULE_TOURS_TESTS 1
+#cmakedefine MUSE_MODULE_TOURS_API 1
+
 #cmakedefine MUSE_MODULE_UI 1
 #cmakedefine MUSE_MODULE_UI_TESTS 1
 #cmakedefine MUSE_MODULE_UI_API 1

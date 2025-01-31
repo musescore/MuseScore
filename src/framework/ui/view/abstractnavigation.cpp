@@ -225,11 +225,17 @@ void AbstractNavigation::onEvent(INavigation::EventPtr e)
 
 QWindow* AbstractNavigation::window() const
 {
+    QQuickItem* visualItem = this->visualItem();
+    return visualItem ? visualItem->window() : nullptr;
+}
+
+QQuickItem* AbstractNavigation::visualItem() const
+{
     QObject* prn = parent();
     while (prn) {
         QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
         if (vitem) {
-            return vitem->window();
+            return vitem;
         }
 
         prn = prn->parent();

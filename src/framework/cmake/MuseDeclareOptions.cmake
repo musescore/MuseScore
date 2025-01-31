@@ -49,6 +49,8 @@ option(MUSE_MODULE_NETWORK_WEBSOCKET "Enable websocket support" OFF)
 
 declare_muse_module_opt(SHORTCUTS ON)
 
+declare_muse_module_opt(TOURS ON)
+
 declare_muse_module_opt(UI ON)
 option(MUSE_MODULE_UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
 
