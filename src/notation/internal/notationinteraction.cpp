@@ -4116,6 +4116,9 @@ Ret NotationInteraction::repeatSelection()
     const mu::engraving::Selection& selection = score()->selection();
     if (score()->noteEntryMode() && selection.isSingle()) {
         EngravingItem* el = selection.element();
+        while (el && el->type() != ElementType::NOTE) {
+            el = el->prevSegmentElement();
+        }
         if (el && el->type() == ElementType::NOTE && !score()->inputState().endOfScore()) {
             startEdit(TranslatableString("undoableAction", "Repeat selection"));
             Chord* c = toNote(el)->chord();
