@@ -52,7 +52,7 @@ class Spanner;
 class StaffType;
 class StretchedBend;
 class NoteEditData;
-enum class AccidentalType;
+enum class AccidentalType : unsigned char;
 
 static constexpr int MAX_DOTS = 4;
 
