@@ -356,6 +356,7 @@ public:
     void respaceSegments();
 
     bool canAddStringTunings(staff_idx_t staffIdx) const;
+    bool canAddStaffTypeChange(staff_idx_t staffIdx) const;
 
 private:
 
