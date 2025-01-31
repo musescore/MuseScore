@@ -399,6 +399,7 @@ Ret ProjectActionsController::doFinishOpenProject()
 
             QTimer::singleShot(5000, [this]() {
                 museSoundsCheckUpdateScenario()->checkForUpdate();
+                toursService()->onEvent(u"project_opened");
             });
         });
     });
