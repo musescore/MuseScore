@@ -27,6 +27,7 @@
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
+#include "anchors.h"
 #include "articulation.h"
 #include "barline.h"
 #include "beam.h"
@@ -758,6 +759,15 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         chordRest->undoAddAnnotation(textBox);
         break;
     }
+    case TextStyleType::DYNAMICS: {
+        ChordRest* chordRest = chordOrRest(destinationElement);
+        if (!chordRest) {
+            break;
+        }
+        textBox = Factory::createDynamic(dummy()->segment());
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
     case TextStyleType::EXPRESSION: {
         ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
@@ -948,15 +958,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         textBox = tempoText;
         undoAddElement(textBox);
-        break;
-    }
-    case TextStyleType::DYNAMICS: {
-        ChordRest* chordRest = chordOrRest(destinationElement);
-        if (!chordRest) {
-            break;
-        }
-        textBox = Factory::createDynamic(dummy()->segment());
-        chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::HARP_PEDAL_DIAGRAM:
@@ -3962,6 +3963,45 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
     hairpin->setVoiceAssignment(dynamic->voiceAssignment());
 
     undoAddElement(hairpin);
+}
+
+Hairpin* Score::addHairpinToDynamicOnGripDrag(Dynamic* dynamic, bool isLeftGrip, const PointF& pos)
+{
+    const track_idx_t track = dynamic->track();
+    staff_idx_t staffIndex = dynamic->staffIdx();
+    Segment* seg = nullptr;
+    constexpr double spacingFactor = 0.5;
+
+    // Ensure time tick segments are created
+    EditTimeTickAnchors::updateAnchors(dynamic, track);
+
+    // Find segment of type ChordRest or TimeTick near cursor postion
+    dragPosition(pos, &staffIndex, &seg, spacingFactor, /*allowTimeAnchor*/ true);
+
+    const bool hasValidTick = seg && (isLeftGrip
+                                      ? seg->tick() < dynamic->tick()
+                                      : seg->tick() > dynamic->tick());
+    if (!hasValidTick) {
+        return nullptr;
+    }
+
+    Hairpin* hairpin = Factory::createHairpin(dummy()->segment());
+    hairpin->setHairpinType(isLeftGrip ? HairpinType::DECRESC_HAIRPIN : HairpinType::CRESC_HAIRPIN);
+
+    hairpin->setTrack(track);
+    hairpin->setTrack2(track);
+
+    if (isLeftGrip) {
+        hairpin->setTick(seg->tick());
+        hairpin->setTick2(dynamic->tick());
+    } else {
+        hairpin->setTick(dynamic->tick());
+        hairpin->setTick2(seg->tick());
+    }
+
+    undoAddElement(hairpin);
+
+    return hairpin;
 }
 
 //---------------------------------------------------------
