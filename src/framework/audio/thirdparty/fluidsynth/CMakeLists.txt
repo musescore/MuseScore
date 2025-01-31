@@ -1,5 +1,4 @@
-
-declare_module(fluidsynth)
+declare_thirdparty_module(fluidsynth)
 
 include(${CMAKE_CURRENT_LIST_DIR}/fluidsynth.cmake)
 
@@ -23,7 +22,6 @@ set(MODULE_LINK
     ${SNDFILE_LIB}
     )
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
 set(MODULE_USE_COVERAGE OFF)
 

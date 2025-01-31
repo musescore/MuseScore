@@ -30,6 +30,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
+#include "text.h"
 #include "textedit.h"
 #include "undo.h"
 #include "utils.h"
