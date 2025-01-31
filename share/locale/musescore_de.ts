@@ -7178,7 +7178,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="47"/>
         <source>Palette search</source>
-        <translation>Palettensuche</translation>
+        <translation>Palettendurchsuchung</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="48"/>
@@ -7525,7 +7525,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <source>Respell pitches</source>
-        <translation>Versetzungszeichen neu berechnen</translation>
+        <translation>Enharmonische Schreibweise optimieren</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
@@ -9352,7 +9352,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
         <source>Respell &amp;pitches</source>
-        <translation>Versetzungs&amp;zeichen neu berechnen</translation>
+        <translation>Enharmonische Schreibweise &amp;optimieren</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="474"/>
@@ -10487,9 +10487,9 @@ Diese Aktion wird keine Partituren löschen.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
-        <source>Copyright © 1999-2025 MuseScore Limited.
+        <source>Copyright © 1999-2024 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>Urheberrecht © 1999-2025 MuseScore Limited.
+        <translation>Urheberrecht © 1999-2024 MuseScore Limited.
 Veröffentlicht unter der &lt;a href=&quot;%1&quot;&gt;GNU General Public License Version 3&lt;/a&gt;.</translation>
     </message>
     <message>
@@ -27962,7 +27962,7 @@ fehlgeschlagen.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="598"/>
         <source>Please try again later, or get help for this problem on musescore.org.</source>
-        <translation>Bitte versuchen Sie es später erneut oder suchen auf musescore.com nach Hilfe für dieses Problem.</translation>
+        <translation>Bitte versuchen Sie es später erneut oder suchen auf musescore.org nach Hilfe für dieses Problem.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
