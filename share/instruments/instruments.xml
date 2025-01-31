@@ -7314,9 +7314,10 @@
             </Instrument>
             <Instrument id="drumset">
                   <family>drums</family>
-                  <trackName>Drum Kit (large)</trackName>
+                  <trackName>Drum Kit</trackName>
                   <longName>Drum Kit</longName>
                   <shortName>D. Kit</shortName>
+                  <traitName>(Large)</traitName>
                   <description>Large drum kit.</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
@@ -7476,8 +7477,14 @@
                         <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="52"> <!--Chinese Cymbal-->
-                        <head>cross</head>
-                        <line>-4</line>
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadHeavyXHat</quarter>
+                              <half>noteheadHeavyXHat</half>
+                              <whole>noteheadHeavyXHat</whole>
+                              <breve>noteheadHeavyXHat</breve>
+                        </noteheads>
+                        <line>-3</line>
                         <voice>0</voice>
                         <name>China Cymbal</name>
                         <stem>1</stem>
@@ -7504,7 +7511,7 @@
                   </Drum>
                   <Drum pitch="55"> <!--Splash Cymbal-->
                         <head>cross</head>
-                        <line>-5</line>
+                        <line>-4</line>
                         <voice>0</voice>
                         <name>Splash Cymbal</name>
                         <stem>1</stem>
@@ -7552,9 +7559,10 @@
             <Instrument id="drum-kit-4">
                   <family>drums</family>
                   <!--Created as a minimalist version of drumset-->
-                  <trackName>Drum Kit (minimal)</trackName>
+                  <trackName>Drum Kit</trackName>
                   <longName>Drum Kit</longName>
                   <shortName>D. Kit</shortName>
+                  <traitName>(Minimal)</traitName>
                   <description>Minimal drum kit, 4-piece.</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
@@ -7682,9 +7690,10 @@
             <Instrument id="drum-kit-5">
                   <family>drums</family>
                   <!--Created as a more conventional version of drumset.-->
-                  <trackName>Drum Kit (common)</trackName>
+                  <trackName>Drum Kit</trackName>
                   <longName>Drum Kit</longName>
                   <shortName>D. Kit</shortName>
+                  <traitName>*(Common)</traitName>
                   <description>Common drum kit, 5-piece.</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
@@ -9416,9 +9425,10 @@
             <Instrument id="percussion-synthesizer">
                   <family>other-percussion</family>
                   <!--Drums are hard-coded in drumset.cpp to initialize MIDI and playback systems at startup before instruments.xml is loaded.-->
-                  <trackName>General MIDI Percussion</trackName>
+                  <trackName>Mixed Percussion</trackName>
                   <longName>Percussion</longName>
                   <shortName>Perc.</shortName>
+                  <traitName>(MIDI)</traitName>
                   <description>General MIDI percussion kit with Level 2 extensions.</description>
                   <musicXMLid>drum.group</musicXMLid>
                   <clef>PERC</clef>
@@ -9443,6 +9453,7 @@
                   <trackName>Mixed Percussion</trackName>
                   <longName>Percussion</longName>
                   <shortName>Perc.</shortName>
+                  <traitName>*(Concert)</traitName>
                   <description>Orchestral percussion kit.</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
