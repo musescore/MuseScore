@@ -155,6 +155,7 @@ public:
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
+    void rebuildFretDiagramLegend();
 
     using Score::loopBoundaryTick;
     Fraction loopBoundaryTick(LoopBoundaryType type) const;

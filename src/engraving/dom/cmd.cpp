@@ -2943,6 +2943,7 @@ EngravingItem* Score::move(const String& cmd)
         case ElementType::HBOX:           // fallthrough
         case ElementType::VBOX:           // fallthrough
         case ElementType::TBOX:
+        case ElementType::FBOX:
             box = toBox(el);
             break;
         default:                                // on anything else, return failure
@@ -4618,6 +4619,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             case ElementType::HBOX:
             case ElementType::VBOX:
             case ElementType::TBOX:
+            case ElementType::FBOX:
                 mb = toMeasureBase(el);
                 break;
             default: {
