@@ -598,7 +598,6 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
 
     bool ctrlModifier = isSystemTextLine(spanner) && !systemStavesOnly;
     undoAddElement(spanner, true /*addToLinkedStaves*/, ctrlModifier);
-    select(spanner, SelectType::SINGLE, 0);
 }
 
 //---------------------------------------------------------
