@@ -66,6 +66,90 @@ static void cleanupTuplet(Tuplet* t)
 }
 
 //---------------------------------------------------------
+//   clonedNote
+//---------------------------------------------------------
+static Note* clonedNote(const Note* srcNote, TrackList::ClonedChordMap& cChordMap)
+{
+    Note* cNote = nullptr;
+    Chord* srcChord = srcNote->chord();
+    Chord* cChord = cChordMap[srcChord];
+
+    if ((srcChord) && (cChord)) {
+        int noteSrcPosition = 0;
+        int noteClonedPosition = 0;
+        bool noteFound = false;
+        // We presume notes where created in the same order in the srcChord and clonedChord
+        // Note position in sourceChord
+        for (Note* n : srcChord->notes()) {
+            ++noteSrcPosition;
+            if (srcNote == n) {
+                noteFound = true;
+                break;
+            }
+        }
+        if (noteFound) {
+            // Note in clonedChord
+            for (Note* n : cChord->notes()) {
+                ++noteClonedPosition;
+                if (noteClonedPosition == noteSrcPosition) {
+                    cNote = n;
+                    break;
+                }
+            }
+        }
+    }
+    return cNote;
+}
+
+//---------------------------------------------------------
+//   cloneAndRebuildSpanners
+//---------------------------------------------------------
+static void cloneAndRebuildSpanners(TrackList::ClonedChordMap& cChordMap)
+{
+    Chord* srcChord = nullptr;
+    Note* cNote = nullptr;
+    auto iter = cChordMap.begin();
+
+    // Clone Spanners from Chords
+    while (iter != cChordMap.end()) {
+        srcChord = iter->first;
+
+        //
+        // Add For and Back Note's spanners to cloned Note
+        //
+        for (Note* srcNote : srcChord->notes()) {
+            cNote = clonedNote(srcNote, cChordMap);
+
+            if (cNote) {
+                for (Spanner* sp : srcNote->spannerFor()) {
+                    if ((sp->isGuitarBend()) || (sp->isGlissando())) {
+                        Spanner* csp = toSpanner(sp->clone());
+
+                        Note* endClonedNote = clonedNote(toNote(sp->endElement()), cChordMap);
+                        if (endClonedNote) {
+                            csp->setNoteSpan(cNote, endClonedNote);
+                        }
+                        cNote->addSpannerFor(csp);
+                    }
+                }
+                for (Spanner* sp : srcNote->spannerBack()) {
+                    if ((sp->isGuitarBend()) || (sp->isGlissando())) {
+                        Spanner* csp = toSpanner(sp->clone());
+                        Note* startClonedNote = clonedNote(toNote(sp->startElement()), cChordMap);
+
+                        if (startClonedNote) {
+                            csp->setNoteSpan(startClonedNote, cNote);
+                        }
+                        cNote->addSpannerBack(csp);
+                    }
+                }
+            }
+        }
+        ++iter;
+    }
+}
+
+//---------------------------------------------------------
 //   TrackList
 //---------------------------------------------------------
 
@@ -194,6 +278,10 @@ void TrackList::append(EngravingItem* e)
                 }
                 if (e->isChord()) {
                     Chord* chord = toChord(e);
+
+                    // Map between Chords and clonned chords
+                    m_clonedChord.insert(std::make_pair(chord, toChord(element)));
+
                     bool akkumulateChord = true;
                     for (Note* n : chord->notes()) {
                         if (!n->tieBack() || !n->tieBack()->generated()) {
@@ -288,6 +376,7 @@ bool TrackList::truncate(const Fraction& f)
 void TrackList::read(const Segment* fs, const Segment* es)
 {
     Fraction tick = fs->tick();
+    m_clonedChord.clear();
 
     const Segment* s;
     for (s = fs; s && (s != es); s = s->next1()) {
@@ -343,6 +432,9 @@ void TrackList::read(const Segment* fs, const Segment* es)
         appendGap(gap, es->score());
     }
 
+    // Clone and rebuild Spanners
+    cloneAndRebuildSpanners(m_clonedChord);
+
     //
     // connect ties
     //
@@ -380,6 +472,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
             }
         }
     }
+    m_clonedChord.clear();
 }
 
 //---------------------------------------------------------
@@ -509,6 +602,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     if ((m_track % VOICES) && size() == 1 && at(0)->isRest()) {     // don’t write rests in voice > 0
         return true;
     }
+    ClonedChordMap wClonedChord;
     Measure* measure = score->tick2measure(tick);
     Measure* m       = measure;
     Fraction remains = m->endTick() - tick;
@@ -573,6 +667,9 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         remains  -= gd;
 
                         if (cr->isChord()) {
+                            // Map between Chords and clonned chords
+                            wClonedChord.insert(std::make_pair(toChord(e), toChord(cr)));
+
                             TremoloTwoChord* tremolo = toChord(cr)->tremoloTwoChord();
                             if (!firstpart && tremolo) {               // remove partial two-note tremolo
                                 if (toChord(e)->tremoloTwoChord()->chord1() == toChord(e)) {
@@ -633,6 +730,12 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             seg->add(ne);
         }
     }
+
+    //
+    // Rebuild Spanner's Start and End Notes
+    //
+    cloneAndRebuildSpanners(wClonedChord);
+
     //
     // connect ties from measure->first() to segment
     //
