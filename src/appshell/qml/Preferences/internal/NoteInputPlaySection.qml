@@ -23,40 +23,65 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import MuseScore.Preferences 1.0
 
 BaseSection {
     id: root
 
+    title: qsTrc("appshell/preferences", "Note preview")
+
     property alias playNotesWhenEditing: playNotesBox.checked
+    property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
-    property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
+    property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
+
+    property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
 
     signal playNotesWhenEditingChangeRequested(bool play)
+    signal notePlayDurationChangeRequested(int duration)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
-    signal notePlayDurationChangeRequested(int duration)
+    signal playNotesOnMidiInputChangeRequested(bool play)
 
-    CheckBox {
-        id: playNotesBox
+    Row {
+        id: playNotesBoxRow
+
+        height: playNotesBox.height
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Play notes when editing")
-        font: ui.theme.bodyBoldFont
+        spacing: 6
 
-        navigation.name: "PlayNotesBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
+        ToggleButton {
+            id: playNotesBox
 
-        onClicked: {
-            root.playNotesWhenEditingChangeRequested(!checked)
+            navigation.name: "PlayNotesBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+
+            navigation.accessible.name: playNotesBoxLabel.text
+
+            onToggled: {
+                root.playNotesWhenEditingChangeRequested(!checked)
+            }
+        }
+
+        StyledTextLabel {
+            id: playNotesBoxLabel
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            horizontalAlignment: Text.AlignLeft
+
+            wrapMode: Text.Wrap
+            text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
         }
     }
 
     IncrementalPropertyControlWithTitle {
         id: notePlayDurationControl
 
-        title: qsTrc("appshell/preferences", "Default duration:")
+        title: qsTrc("appshell/preferences", "Playback duration:")
 
         enabled: root.playNotesWhenEditing
 
@@ -96,7 +121,7 @@ BaseSection {
         id: playChordSymbolBox
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Play chord symbol when editing")
+        text: qsTrc("appshell/preferences", "Play chord symbols and Nashville numbers when selected")
 
         enabled: root.playNotesWhenEditing
 
@@ -106,6 +131,21 @@ BaseSection {
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: playNotesOnMidiInputBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play MIDI input")
+
+        navigation.name: "PlayNotesOnMidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 4
+
+        onClicked: {
+            root.playNotesOnMidiInputChangeRequested(!checked)
         }
     }
 }
