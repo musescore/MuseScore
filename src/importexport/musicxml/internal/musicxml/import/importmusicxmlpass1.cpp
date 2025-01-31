@@ -1722,14 +1722,14 @@ void MusicXmlParserPass1::credit(CreditWordsList& credits)
 }
 
 //---------------------------------------------------------
-//   isTitleFrameStyle
+//   isTitleBorderStyle
 //---------------------------------------------------------
 
 /**
  Determine if tid is a style type used in a title frame
  */
 
-static bool isTitleFrameStyle(const TextStyleType tid)
+static bool isTitleBorderStyle(const TextStyleType tid)
 {
     return tid == TextStyleType::TITLE
            || tid == TextStyleType::SUBTITLE
@@ -1785,7 +1785,7 @@ static void updateStyles(Score* score,
         }
 
         bool needUseDefaultSize = tid == TextStyleType::HARMONY_ROMAN
-                                  || isTitleFrameStyle(tid)
+                                  || isTitleBorderStyle(tid)
                                   || isHarpPedalStyle(tid);
 
         const TextStyle* ts = textStyle(tid);
@@ -2041,7 +2041,7 @@ void MusicXmlParserPass1::setStyle(const String& type, const double val)
     } else if (type == u"dashes") {
         m_score->style().set(Sid::lyricsDashLineThickness, Spatium(val / 10));
     } else if (type == u"enclosure") {
-        m_score->style().set(Sid::staffTextFrameWidth, Spatium(val / 10));
+        m_score->style().set(Sid::staffTextBorderWidth, Spatium(val / 10));
     } else if (type == u"ending") {
         m_score->style().set(Sid::voltaLineWidth, Spatium(val / 10));
     } else if (type == u"extend") {
