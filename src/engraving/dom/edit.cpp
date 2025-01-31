@@ -7180,7 +7180,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
                     }
                 }
                 t = n->tieFor();
-                if (t && (t->endNote()->chord()->tick() >= endTick)) {
+                if (t && t->endNote() && (t->endNote()->chord()->tick() >= endTick)) {
                     undoRemoveElement(t);
                 }
 
