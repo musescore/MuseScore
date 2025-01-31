@@ -102,7 +102,7 @@ FocusScope {
 
             Layout.preferredWidth: 220
 
-            navigation.name: "Scores Search"
+            navigation.name: "SearchControl"
             navigation.panel: navSearchPanel
             navigation.order: 1
             accessible.name: qsTrc("project", "Search recent scores")
