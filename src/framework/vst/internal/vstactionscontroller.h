@@ -26,7 +26,9 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "global/iinteractive.h"
+#include "ui/iinteractiveuriregister.h"
 #include "../ivstinstancesregister.h"
+#include "../ivstconfiguration.h"
 
 namespace muse::vst {
 class VstActionsController : public actions::Actionable
@@ -34,6 +36,8 @@ class VstActionsController : public actions::Actionable
     muse::Inject<actions::IActionsDispatcher> dispatcher;
     muse::Inject<IInteractive> interactive;
     muse::Inject<IVstInstancesRegister> instancesRegister;
+    muse::Inject<ui::IInteractiveUriRegister> interactiveUriRegister;
+    muse::Inject<IVstConfiguration> configuration;
 
 public:
     VstActionsController() = default;
@@ -44,6 +48,15 @@ public:
     void instEditor(const actions::ActionQuery& actionQuery);
 
     void editorOperation(const std::string& operation, int instanceId);
+
+    void setupUsedView();
+    void useView(bool isNew);
+    bool actionChecked(const actions::ActionCode& act) const;
+    async::Channel<actions::ActionCodeList> actionCheckedChanged() const;
+
+private:
+
+    async::Channel<actions::ActionCodeList> m_actionCheckedChanged;
 };
 }
 

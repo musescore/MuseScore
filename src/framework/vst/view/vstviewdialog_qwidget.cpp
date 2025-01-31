@@ -86,8 +86,8 @@ tresult VstViewDialog::resizeView(IPlugView* view, ViewRect* newSize)
     int newWidth = newSize->getWidth();
     int newHeight = newSize->getHeight();
 
-    //! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the fixed size.
-    //! Otherwise, the user will get an extremely large window and won't be able to resize it
+//! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the fixed size.
+//! Otherwise, the user will get an extremely large window and won't be able to resize it
 #ifdef Q_OS_WIN
     qreal scaling = screen->devicePixelRatio();
     newWidth = newWidth / scaling;
@@ -112,6 +112,8 @@ void VstViewDialog::wrapPluginView()
     if (!m_instance) {
         return;
     }
+
+    setWindowTitle(QString::fromStdString(m_instance->name()));
 
     if (m_instance->isLoaded()) {
         attachView(m_instance);

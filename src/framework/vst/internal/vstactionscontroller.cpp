@@ -22,14 +22,20 @@
 
 #include "vstactionscontroller.h"
 
+#include "../view/vstviewdialog_qwidget.h"
+
 #include "log.h"
 
+using namespace muse;
 using namespace muse::vst;
 
 static const char16_t* VST_EDITOR_URI = u"muse://vst/editor?instanceId=%1&sync=false&modal=false&floating=true";
 
 void VstActionsController::init()
 {
+    dispatcher()->reg(this, "vst-use-oldview", [this]() { useView(false); });
+    dispatcher()->reg(this, "vst-use-newview", [this]() { useView(true); });
+
     dispatcher()->reg(this, actions::ActionQuery("action://vst/fx_editor"), this, &VstActionsController::fxEditor);
     dispatcher()->reg(this, actions::ActionQuery("action://vst/instrument_editor"), this, &VstActionsController::instEditor);
 }
@@ -100,3 +106,40 @@ void VstActionsController::editorOperation(const std::string& operation, int ins
         }
     }
 }
+
+void VstActionsController::setupUsedView()
+{
+    useView(configuration()->usedVstView() == "newview");
+}
+
+void VstActionsController::useView(bool isNew)
+{
+    interactiveUriRegister()->unregisterUri(Uri("muse://vst/editor"));
+
+    if (isNew) {
+        configuration()->setUsedVstView("newview");
+        interactiveUriRegister()->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
+    } else {
+        configuration()->setUsedVstView("oldview");
+        interactiveUriRegister()->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
+    }
+
+    m_actionCheckedChanged.send({"vst-use-oldview", "vst-use-newview"});
+}
+
+bool VstActionsController::actionChecked(const actions::ActionCode& act) const
+{
+    if (act == "vst-use-oldview") {
+        return configuration()->usedVstView() != "newview";
+    } else if (act == "vst-use-newview") {
+        return configuration()->usedVstView() == "newview";
+    }
+
+    return false;
+}
+
+async::Channel<actions::ActionCodeList> VstActionsController::actionCheckedChanged() const
+{
+    return m_actionCheckedChanged;
+}
+

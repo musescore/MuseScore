@@ -36,51 +36,14 @@ Rectangle {
     color: ui.theme.backgroundPrimaryColor
 
     implicitWidth: view.implicitWidth
-    implicitHeight: view.implicitHeight + bottomPanel.height + topPanel.height
+    implicitHeight: view.implicitHeight
 
     Component.onCompleted: {
         view.init()
     }
 
-    // for test
-    Rectangle {
-        id: topPanel
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 40
-        color: "#ff0000"
-
-        FlatButton {
-            anchors.left: parent.left
-            anchors.leftMargin: 8
-            anchors.verticalCenter: parent.verticalCenter
-            text: "Click me"
-        }
-    }
-
     VstView {
         id: view
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: topPanel.bottom
-        anchors.bottom: bottomPanel.top
-    }
-
-    // for test
-    Rectangle {
-        id: bottomPanel
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        height: 40
-        color: "#ffff00"
-
-        FlatButton {
-            anchors.left: parent.left
-            anchors.leftMargin: 8
-            anchors.verticalCenter: parent.verticalCenter
-            text: "Click me"
-        }
+        anchors.fill: parent
     }
 }
