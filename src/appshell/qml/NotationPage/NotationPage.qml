@@ -405,7 +405,6 @@ DockPage {
 
             height: 368
             minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
 
             groupName: root.horizontalPanelsGroup
 
@@ -446,7 +445,6 @@ DockPage {
 
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
 
             groupName: root.horizontalPanelsGroup
 
@@ -477,7 +475,6 @@ DockPage {
 
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
 
             groupName: root.horizontalPanelsGroup
 
@@ -530,7 +527,6 @@ DockPage {
 
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
 
             groupName: root.horizontalPanelsGroup
 
