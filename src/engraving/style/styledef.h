@@ -115,6 +115,7 @@ enum class Sid {
     lyricsMelismaForce,
     lyricsMelismaMinLength,
     lyricsDashPosAtStartOfSystem,
+    lyricsAvoidBarlines,
 
     lyricsOddFontFace,
     lyricsOddFontSize,
@@ -163,6 +164,7 @@ enum class Sid {
     repeatBarTips,
     startBarlineSingle,
     startBarlineMultiple,
+    maskBarlinesForText,
 
     bracketWidth,
     bracketDistance,

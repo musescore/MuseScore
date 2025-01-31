@@ -33,6 +33,8 @@
 #include "types/transform.h"
 #include "types/painterpath.h"
 
+#include "../../engraving/infrastructure/shape.h"
+
 namespace muse::draw {
 class Painter;
 class IPaintProvider
@@ -89,6 +91,7 @@ public:
     virtual bool hasClipping() const = 0;
 
     virtual void setClipRect(const RectF& rect) = 0;
+    virtual void setMask(const std::vector<RectF>& maskRects) = 0;
     virtual void setClipping(bool enable) = 0;
 };
 

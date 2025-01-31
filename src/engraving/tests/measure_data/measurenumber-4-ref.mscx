@@ -3,6 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <showMeasureNumberOne>1</showMeasureNumberOne>
       <measureNumberSystem>0</measureNumberSystem>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>

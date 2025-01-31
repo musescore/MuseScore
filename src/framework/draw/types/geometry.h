@@ -356,6 +356,9 @@ public:
     inline void adjust(double xp1, double yp1, double xp2, double yp2) { m_x += xp1; m_y += yp1; m_w += xp2 - xp1; m_h += yp2 - yp1; }
     inline RectX<T> adjusted(T xp1, T yp1, T xp2, T yp2) const { return RectX<T>(m_x + xp1, m_y + yp1, m_w + xp2 - xp1, m_h + yp2 - yp1); }
 
+    inline void pad(double p) { adjust(-p, -p, p, p); }
+    inline RectX<T> padded(double p) const { return adjusted(-p, -p, p, p); }
+
     inline RectX<T>& scale(const SizeX<T>& mag)
     {
         m_x *= mag.width();

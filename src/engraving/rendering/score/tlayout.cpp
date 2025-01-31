@@ -5886,6 +5886,37 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
     if (item->hasFrame()) {
         item->layoutFrame(ldata);
     }
+
+    if (!item->isDynamic() && !(item->explicitParent() && item->parent()->isBox())) {
+        computeTextHighResShape(item, ldata);
+    }
+}
+
+void TLayout::computeTextHighResShape(const TextBase* item, TextBase::LayoutData* ldata)
+{
+    Shape& shape = ldata->highResShape.mut_value();
+    shape.clear();
+    shape.elements().reserve(item->xmlText().size());
+
+    for (const TextBlock& block : ldata->blocks) {
+        double y = block.y();
+        for (const TextFragment& fragment : block.fragments()) {
+            FontMetrics fontMetrics = FontMetrics(fragment.font(item));
+            double x = fragment.pos.x();
+            size_t textSize = fragment.text.size();
+            for (size_t i = 0; i < textSize; ++i) {
+                Char character = fragment.text.at(i);
+                RectF characterBoundingRect = fontMetrics.tightBoundingRect(fragment.text.at(i));
+                characterBoundingRect.translate(x, y);
+                shape.add(characterBoundingRect);
+                if (i + 1 < textSize) {
+                    x += fontMetrics.horizontalAdvance(character);
+                }
+            }
+        }
+    }
+
+    ldata->highResShape = shape;
 }
 
 void TLayout::layoutBaseTextBase1(TextBase* item, const LayoutContext&)

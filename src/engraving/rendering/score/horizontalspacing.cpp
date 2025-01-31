@@ -44,6 +44,7 @@ double HorizontalSpacing::computeSpacingForFullSystem(System* system, double str
                                                       bool overrideMinMeasureWidth)
 {
     HorizontalSpacingContext ctx;
+    ctx.system = system;
     ctx.spatium = system->spatium();
 
     ctx.stretchReduction = stretchReduction;
@@ -78,6 +79,7 @@ double HorizontalSpacing::computeSpacingForFullSystem(System* system, double str
 double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system)
 {
     HorizontalSpacingContext ctx;
+    ctx.system = system;
     ctx.spatium = system->spatium();
     ctx.xLeftBarrier = system->leftMargin();
 
@@ -345,7 +347,9 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
         } else if (timeSigAboveKeySigCase) {
             x = xPrevSeg + segment->minLeft(); // align to the preceding keySig
         } else {
-            double xNonCollision = xPrevSeg + minHorizontalDistance(prevSeg, segment, ctx.squeezeFactor);
+            double minHorDist = minHorizontalDistance(prevSeg, segment, ctx.squeezeFactor);
+            minHorDist = std::max(minHorDist, spaceLyricsAgainstBarlines(prevSeg, segment, ctx));
+            double xNonCollision = xPrevSeg + minHorDist;
             x = std::max(x, xNonCollision);
         }
 
@@ -449,6 +453,7 @@ void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPositio
 
     for (size_t i = segPositions.size(); i > 1; --i) {
         double systemEdge = segPositions.back().xPosInSystemCoords + segPositions.back().segment->minRight();
+
         SegmentPosition& segPos = segPositions[i - 1];
         double x = segPos.xPosInSystemCoords;
         Segment* seg = segPos.segment;
@@ -481,6 +486,65 @@ void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPositio
             }
         }
     }
+}
+
+double HorizontalSpacing::spaceLyricsAgainstBarlines(Segment* firstSeg, Segment* secondSeg, const HorizontalSpacingContext& ctx)
+{
+    if (!(firstSeg->isType(SegmentType::ChordRest) && secondSeg->isType(SegmentType::BarLineType))
+        && !(firstSeg->isType(SegmentType::BarLineType) && secondSeg->isType(SegmentType::ChordRest))) {
+        return 0.0;
+    }
+
+    double w = 0.0;
+
+    bool crSegIsBefore = firstSeg->isChordRestType();
+    Segment* crSegment = crSegIsBefore ? firstSeg : secondSeg;
+    Segment* barlineSegment = crSegIsBefore ? secondSeg : firstSeg;
+
+    staff_idx_t nstaves = crSegment->score()->nstaves();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (!ctx.system->staff(staffIdx)->show()) {
+            continue;
+        }
+
+        staff_idx_t nextStaff = ctx.system->nextVisibleStaff(staffIdx);
+        if (nextStaff == muse::nidx) {
+            continue;
+        }
+
+        BarLine* barline = toBarLine(barlineSegment->element(staff2track(staffIdx)));
+        if (!barline || barline->spanStaff() == 0) {
+            continue;
+        }
+
+        Shape barlineShape = barline->shape().translate(barline->pos());
+
+        track_idx_t startTrack = staff2track(staffIdx);
+        track_idx_t endTrack = staff2track(nextStaff) + VOICES;
+        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+            ChordRest* chordRest = toChordRest(crSegment->element(track));
+            if (!chordRest) {
+                continue;
+            }
+
+            for (Lyrics* lyrics : chordRest->lyrics()) {
+                if (!(lyrics->avoidBarlines() && lyrics->visible() && lyrics->autoplace())) {
+                    continue;
+                }
+                staff_idx_t lyricsStaffIdx = lyrics->staffIdx();
+                if ((lyricsStaffIdx == staffIdx && lyrics->placeBelow()) || (lyricsStaffIdx == nextStaff && lyrics->placeAbove())) {
+                    Shape lyricsShape = lyrics->shape().translate(lyrics->pos());
+                    double minDist = crSegIsBefore ? lyricsShape.right() + barlineShape.left() : lyricsShape.left() + barlineShape.right();
+                    const double padding = 0.3 * lyrics->fontMetrics().xHeight();
+                    minDist += padding;
+                    w = std::max(w, minDist);
+                }
+            }
+        }
+    }
+
+    return w;
 }
 
 void HorizontalSpacing::checkLargeTimeSigAgainstRightMargin(std::vector<SegmentPosition>& segPositions)

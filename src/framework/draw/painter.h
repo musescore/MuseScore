@@ -169,6 +169,7 @@ public:
     bool hasClipping() const;
 
     void setClipRect(const RectF& rect);
+    void setMask(const std::vector<RectF>& maskRects);
     void setClipping(bool enable);
 
     //! NOTE Provider for tests.

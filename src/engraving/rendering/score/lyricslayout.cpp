@@ -156,8 +156,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     double x = o.x() - cr->x();
 
     TLayout::layoutBaseTextBase1(item, ctx);
-
-    item->computeHighResShape(item->fontMetrics());
+    TLayout::computeTextHighResShape(item, ldata);
 
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;

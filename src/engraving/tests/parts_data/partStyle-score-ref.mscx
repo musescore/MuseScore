@@ -4,6 +4,7 @@
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <clefLeftMargin>4</clefLeftMargin>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <defaultFramePadding>0</defaultFramePadding>

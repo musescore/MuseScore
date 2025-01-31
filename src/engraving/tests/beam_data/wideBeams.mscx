@@ -3,6 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <useWideBeams>1</useWideBeams>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <spatium>1.74978</spatium>
