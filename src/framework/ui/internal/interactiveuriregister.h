@@ -29,6 +29,7 @@ class InteractiveUriRegister : public IInteractiveUriRegister
 {
 public:
     void registerUri(const Uri& uri, const ContainerMeta& meta) override;
+    void unregisterUri(const Uri& uri) override;
     ContainerMeta meta(const Uri& uri) const override;
 
 private:

@@ -73,7 +73,7 @@ void VstView::init()
         return;
     }
 
-    m_title = QString::fromStdString(m_instance->name());
+    m_title = "[quick] " + QString::fromStdString(m_instance->name());
     emit titleChanged();
 
     m_view = m_instance->createView();

@@ -37,6 +37,7 @@ public:
     virtual ~IInteractiveUriRegister() = default;
 
     virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
+    virtual void unregisterUri(const Uri& uri) = 0;
     virtual ContainerMeta meta(const Uri& uri) const = 0;
 
     // useful

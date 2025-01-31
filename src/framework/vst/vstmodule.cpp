@@ -33,6 +33,8 @@
 #include "audioplugins/iaudiopluginsscannerregister.h"
 #include "audioplugins/iaudiopluginmetareaderregister.h"
 
+#include "ui/iuiactionsregister.h"
+
 #include "internal/vstconfiguration.h"
 #include "internal/vstinstancesregister.h"
 #include "internal/vstmodulesrepository.h"
@@ -42,6 +44,7 @@
 #include "internal/vstpluginsscanner.h"
 #include "internal/vstpluginmetareader.h"
 #include "internal/vstactionscontroller.h"
+#include "internal/vstuiactions.h"
 
 #include "view/vstview.h"
 #include "view/vstviewdialog_qwidget.h"
@@ -80,10 +83,19 @@ void VSTModule::registerExports()
 
 void VSTModule::resolveImports()
 {
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        //ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
-        ir->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
+    //! NOTE Now we can switch which view to use in runtime.
+    //! switches the action controller, so registration is there now.
+    //! as soon as the new view is stabilized, we need to remove the old one and do as usual
+
+    // auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    // if (ir) {
+    //     ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
+    //     ir->registerQmlUri(Uri("muse://vst/editor"), "Muse/Vst/VstEditorDialog.qml");
+    // }
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<VstUiActions>(m_actionsController));
     }
 
     auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
@@ -124,6 +136,7 @@ void VSTModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
     m_actionsController->init();
     m_pluginModulesRepo->init();
+    m_actionsController->setupUsedView();
 }
 
 void VSTModule::onDeinit()
