@@ -42,7 +42,6 @@ struct OSXAudioDriver::Data {
 };
 
 OSXAudioDriver::OSXAudioDriver()
-    : m_data(nullptr)
 {
     m_data = std::make_shared<Data>();
     m_data->audioQueue = nullptr;
@@ -411,6 +410,28 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceSampleRates() con
         88200,
         96000,
     };
+}
+
+int OSXAudioDriver::audioDelayCompensate() const
+{
+    return 0;
+}
+
+void OSXAudioDriver::setAudioDelayCompensate(const int frames)
+{
+}
+
+bool OSXAudioDriver::isPlaying() const
+{
+    return false;
+}
+
+void OSXAudioDriver::remotePlayOrStop([[maybe_unused]] bool ps) const
+{
+}
+
+void OSXAudioDriver::remoteSeek([[maybe_unused]] msecs_t millis) const
+{
 }
 
 bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)

@@ -61,6 +61,10 @@ public:
     void setMuteHiddenInstruments(bool mute) override;
     muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
 
+    bool jackTransportEnable() const override;
+    void setJackTransportEnable(bool enable) override;
+    muse::async::Channel<bool> jackTransportEnableChanged() const override;
+
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundProfileName() const override;
 
