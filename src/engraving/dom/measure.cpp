@@ -1395,6 +1395,9 @@ bool Measure::acceptDrop(EditData& data) const
             viewer->setDropRectangle(canvasBoundingRect());
             return true;
         case ActionIconType::STAFF_TYPE_CHANGE:
+            if (!canAddStaffTypeChange(staffIdx)) {
+                return false;
+            }
             viewer->setDropRectangle(staffRect);
             return true;
         case ActionIconType::SYSTEM_LOCK:
@@ -1736,6 +1739,9 @@ EngravingItem* Measure::drop(EditData& data)
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
         case ActionIconType::STAFF_TYPE_CHANGE: {
+            if (!canAddStaffTypeChange(staffIdx)) {
+                return nullptr;
+            }
             EngravingItem* stc = Factory::createStaffTypeChange(this);
             stc->setParent(this);
             stc->setTrack(staffIdx * VOICES);
@@ -3473,6 +3479,21 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
     }
 
     return !alreadyHasStringTunings;
+}
+
+bool Measure::canAddStaffTypeChange(staff_idx_t staffIdx) const
+{
+    for (const EngravingObject* child : el()) {
+        if (!child || !child->isStaffTypeChange()) {
+            continue;
+        }
+        const StaffTypeChange* stc = toStaffTypeChange(child);
+        if (stc->staffIdx() == staffIdx) {
+            // Staff already has a StaffTypeChange at this measure...
+            return false;
+        }
+    }
+    return true;
 }
 
 Fraction Measure::maxTicks() const
