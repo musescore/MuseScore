@@ -1771,7 +1771,10 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         lines      = st->lines();             // init values from staff type
         lineDist   = st->lineDistance().val();
         stepOffset = st->stepOffset();
-        staffOffsetY = item->isHeader() ? 0.0 : st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
+
+        const double stOffset = st->yoffset().val();
+        const double stPrevOffset = stPrev && clefSeg->rtick() != Fraction(0, 1) ? stPrev->yoffset().val() : 0.0;
+        staffOffsetY = item->isHeader() ? 0.0 : stOffset - stPrevOffset;
     }
 
     double _spatium = item->spatium();
