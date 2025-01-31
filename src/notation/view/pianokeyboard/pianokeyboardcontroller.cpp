@@ -119,7 +119,6 @@ void PianoKeyboardController::onNotationChanged()
             updateNotesKeys(notes);
         }
 
-
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
             m_isFromMidi = true;
             updateNotesKeys(notes);
