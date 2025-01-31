@@ -4515,9 +4515,16 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
     ldata->clearShape();
 
     const Staff* staff = item->staff();
+    const Segment* seg = item->segment();
+    const bool isClefSeg = seg->isType(SegmentType::ClefType);
+    const Fraction tick = item->tick();
+    const Fraction tickPrev = tick - Fraction::eps();
     const double spatium = item->spatium();
     const double mag = item->mag();
     const bool leftBracket = item->direction() == DirectionH::LEFT;
+
+    const StaffType* st = staff->staffType(tick);
+    const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
 
     double startY = -spatium;
     double height = staff->staffHeight(item->tick()) + 2 * spatium * mag;       // 6sp for a standard 5 line stave
@@ -4525,6 +4532,11 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
     if (ctx.conf().styleB(Sid::smallParens)) {
         startY = ldata->startY;
         height = ldata->height;
+    }
+
+    if (isClefSeg && seg->rtick() == seg->measure()->ticks()) {
+        double offset = st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
+        startY += offset * spatium;
     }
 
     const double heightInSpatium = height / spatium;
@@ -4577,7 +4589,6 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 
     item->mutldata()->setShape(shape);
 
-    Segment* seg = item->segment();
     if (!leftBracket) {
         // Space against existing segment shape
         double minDist = HorizontalSpacing::minHorizontalDistance(seg->staffShape(item->staffIdx()),
