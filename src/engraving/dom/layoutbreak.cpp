@@ -24,9 +24,11 @@
 
 #include "types/typesconv.h"
 
+#include "keysig.h"
 #include "layoutbreak.h"
 #include "measurebase.h"
 #include "score.h"
+#include "segment.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -227,6 +229,30 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
 muse::TranslatableString LayoutBreak::subtypeUserName() const
 {
     return TConv::userName(layoutBreakType());
+}
+
+//---------------------------------------------------------
+//   keySigs
+//---------------------------------------------------------
+
+std::vector<KeySig*> LayoutBreak::keySigs(bool all) const
+{
+    std::vector<KeySig*> keysigs;
+    Measure* measure = this->measure()->nextMeasure();
+    if (measure && measure->isMMRest()) {
+        // propagate to original measure
+        measure = measure->mmRestFirst();
+    }
+    Segment* seg = measure ? measure->findFirstR(SegmentType::KeySig, Fraction(0, 1)) : nullptr;
+    if (seg) {
+        for (staff_idx_t i = 0; i <= score()->nstaves(); i++) {
+            KeySig* ks = toKeySig(seg->element(i * VOICES));
+            if (ks && (all || ks->forSectionBreak())) {
+                keysigs.push_back(ks);
+            }
+        }
+    }
+    return keysigs;
 }
 
 void LayoutBreak::added()

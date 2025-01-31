@@ -75,7 +75,10 @@ public:
 
     char16_t iconCode() const;
 
+    std::vector<KeySig*> keySigs(bool all=false) const;
+
     muse::draw::Font font() const;
+
 protected:
     void added() override;
     void removed() override;
