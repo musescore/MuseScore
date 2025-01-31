@@ -57,6 +57,7 @@ class MenuItem : public QObject, public async::Asyncable
     Q_PROPERTY(QString section READ section NOTIFY sectionChanged)
 
     Q_PROPERTY(int icon READ icon_property NOTIFY actionChanged)
+    Q_PROPERTY(QString iconColor READ iconColor_property NOTIFY actionChanged)
 
     Q_PROPERTY(bool enabled READ enabled_property NOTIFY stateChanged)
 
@@ -124,6 +125,7 @@ private:
     QString description_property() const;
 
     int icon_property() const;
+    QString iconColor_property() const;
 
     bool enabled_property() const;
 
