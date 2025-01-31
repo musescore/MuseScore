@@ -90,30 +90,40 @@ void PianoKeyboardController::setPressedKey(std::optional<piano_key_t> key)
 void PianoKeyboardController::onNotationChanged()
 {
     if (auto notation = currentNotation()) {
-        notation->interaction()->selectionChanged().onNotify(this, [this]() {
-            auto notation = currentNotation();
-            if (!notation) {
-                return;
-            }
+    notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        auto notation = currentNotation();
+        if (!notation) {
+            return;
+        }
 
-            auto selection = notation->interaction()->selection();
-            if (selection->isNone()) {
-                return;
-            }
+        auto selection = notation->interaction()->selection();
+        if (selection->isNone()) {
+            return;
+        }
 
-            std::vector<const Note*> notes;
-            for (const mu::engraving::Note* note : selection->notes()) {
-                notes.push_back(note);
-            }
+        std::vector<const Note*> notes;
+        for (const mu::engraving::Note* note : selection->notes()) {
+            notes.push_back(note);
+        }
 
-            m_isFromMidi = false;
-            updateNotesKeys(notes);
-        });
+        m_isFromMidi = false;
+        updateNotesKeys(notes);
+    });
 
-        notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
-            m_isFromMidi = true;
-            updateNotesKeys(notes);
-        });
+    auto selection = notation->interaction()->selection();
+    if (!selection->isNone()) {
+        std::vector<const Note*> notes;
+        for (const mu::engraving::Note* note : selection->notes()) {
+            notes.push_back(note);
+        }
+        updateNotesKeys(notes);
+    }
+
+
+    notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
+        m_isFromMidi = true;
+        updateNotesKeys(notes);
+    });
     }
 }
 
