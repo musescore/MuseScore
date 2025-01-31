@@ -38,6 +38,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
     </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>

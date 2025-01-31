@@ -137,7 +137,7 @@
     </part-list>
   <part id="P1">
     <measure number="1" width="152.91">
-      <print>
+      <print page-number="1">
         <system-layout>
           <system-margins>
             <left-margin>126.97</left-margin>
@@ -407,7 +407,7 @@
     </part>
   <part id="P2">
     <measure number="1" width="152.91">
-      <print>
+      <print page-number="1">
         <staff-layout number="1">
           <staff-distance>57.53</staff-distance>
           </staff-layout>
@@ -665,7 +665,7 @@
     </part>
   <part id="P3">
     <measure number="1" width="152.91">
-      <print>
+      <print page-number="1">
         <staff-layout number="1">
           <staff-distance>57.53</staff-distance>
           </staff-layout>
@@ -923,7 +923,7 @@
     </part>
   <part id="P4">
     <measure number="1" width="152.91">
-      <print>
+      <print page-number="1">
         <staff-layout number="1">
           <staff-distance>57.53</staff-distance>
           </staff-layout>

@@ -97,6 +97,7 @@
     </part>
   <part id="P2">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>

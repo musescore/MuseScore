@@ -9,6 +9,7 @@
   <!--=========================================================-->
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>4</divisions>
         <clef>
