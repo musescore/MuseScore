@@ -9266,7 +9266,7 @@ oznaczeń metrycznych i tonacji</translation>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="226"/>
         <source>Reset &apos;Hide courtesy clefs, time and key signatures&apos; value</source>
-        <translation>Resetuj wartość &apos;Ukryj przypomnienia zmian kluczy, oznaczeń metrycznych i tonacji&apos;</translation>
+        <translation>Resetuj wartość &quot;Ukryj przypomnienia zmian kluczy, oznaczeń metrycznych i tonacji&quot;</translation>
     </message>
 </context>
 <context>
