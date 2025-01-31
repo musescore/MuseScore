@@ -96,7 +96,12 @@ struct Coeffs
     // operator support for step-wise smoothing
     bool operator!=(const Coeffs& rhs) const
     {
-        return a1 != rhs.a1 || a2 != rhs.a2 || b0 != rhs.b0 || b1 != rhs.b1 || b2 != rhs.b2;
+        if constexpr (std::is_floating_point_v<T>) {
+            return !RealIsEqual(a1, rhs.a1) || !RealIsEqual(a2, rhs.a2) || !RealIsEqual(b0, rhs.b0)
+                   || !RealIsEqual(b1, rhs.b1) || !RealIsEqual(b2, rhs.b2);
+        } else {
+            return a1 != rhs.a1 || a2 != rhs.a2 || b0 != rhs.b0 || b1 != rhs.b1 || b2 != rhs.b2;
+        }
     }
 
     Coeffs& operator+=(const Coeffs& rhs)

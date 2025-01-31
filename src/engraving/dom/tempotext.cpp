@@ -35,6 +35,7 @@
 #include "tempotext.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -433,7 +434,7 @@ String TempoText::accessibleInfo() const
     String secondPart = text.split(u" = ").back();
     int x1 = findTempoDuration(firstPart, len1, t1);
     int x2 = -1;
-    if (m_relative) {
+    if (!muse::RealIsNull(m_relative)) {
         x2 = findTempoDuration(secondPart, len2, t2);
     }
 

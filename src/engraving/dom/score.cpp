@@ -507,7 +507,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
 
         // Implement section break rest
         for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
-            if (mb->pause()) {
+            if (!RealIsNull(mb->pause())) {
                 tempomap()->setPause(startTick.ticks(), mb->pause());
             }
         }
@@ -1105,7 +1105,7 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
         size_t ii = i + 1;
         for (; ii < n; ++ii) {
             ns = sl.at(ii);
-            if (ns->y() != s->y()) {
+            if (!RealIsEqual(ns->y(), s->y())) {
                 break;
             }
         }
@@ -1126,7 +1126,7 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
         if (y < y2) {
             systems.push_back(s);
             for (size_t iii = i + 1; ii < n; ++iii) {
-                if (sl.at(iii)->y() != s->y()) {
+                if (!RealIsEqual(sl.at(iii)->y(), s->y())) {
                     break;
                 }
                 systems.push_back(sl.at(iii));

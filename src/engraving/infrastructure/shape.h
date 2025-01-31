@@ -30,6 +30,8 @@
 
 #include "engraving/types/types.h"
 
+#include "realfn.h"
+
 namespace muse::draw {
 class Painter;
 }
@@ -186,7 +188,7 @@ std::string dump(const Shape& sh);
 
 inline static bool intersects(double a, double b, double c, double d, double minClearance = 0.0)
 {
-    if (a == b || c == d) {
+    if (muse::RealIsEqual(a, b) || muse::RealIsEqual(c, d)) {
         return false;
     }
     return (b + minClearance > c) && (a < d + minClearance);

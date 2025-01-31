@@ -24,6 +24,7 @@
 #include <cmath>
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace muse::audio;
 
@@ -203,7 +204,7 @@ void SampleRateConvertor::initWindow()
 
 double SampleRateConvertor::sinc(double value) const
 {
-    if (value == 0) {
+    if (RealIsNull(value)) {
         return 1.f;
     }
     double sincArg = M_PI * value * m_sampleRateIn;

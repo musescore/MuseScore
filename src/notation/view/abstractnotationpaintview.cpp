@@ -153,7 +153,7 @@ void AbstractNotationPaintView::scrollHorizontal(qreal position)
     TRACEFUNC;
 
     qreal scrollStep = position - m_previousHorizontalScrollPosition;
-    if (qFuzzyIsNull(scrollStep)) {
+    if (RealIsNull(scrollStep)) {
         return;
     }
 
@@ -166,7 +166,7 @@ void AbstractNotationPaintView::scrollVertical(qreal position)
     TRACEFUNC;
 
     qreal scrollStep = position - m_previousVerticalScrollPosition;
-    if (qFuzzyIsNull(scrollStep)) {
+    if (RealIsNull(scrollStep)) {
         return;
     }
 
@@ -799,7 +799,7 @@ qreal AbstractNotationPaintView::horizontalScrollbarSize() const
     }
 
     qreal scrollableWidth = horizontalScrollableSize();
-    if (qFuzzyIsNull(scrollableWidth)) {
+    if (RealIsNull(scrollableWidth)) {
         return 0;
     }
 
@@ -818,7 +818,7 @@ qreal AbstractNotationPaintView::verticalScrollbarSize() const
     }
 
     qreal scrollableHeight = verticalScrollableSize();
-    if (qFuzzyIsNull(scrollableHeight)) {
+    if (RealIsNull(scrollableHeight)) {
         return 0;
     }
 
@@ -873,7 +873,7 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
     double _spatium = notationStyle()->styleValue(StyleId::spatium).toDouble();
     qreal border = _spatium * BORDER_SPACING_RATIO;
     qreal _scale = currentScaling();
-    if (qFuzzyIsNull(_scale)) {
+    if (RealIsNull(_scale)) {
         _scale = 1;
     }
 
@@ -930,7 +930,7 @@ bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
     }
 
     auto [dx, dy] = constraintCanvas(0, 0);
-    if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
+    if (RealIsNull(dx) && RealIsNull(dy)) {
         return false;
     }
 
@@ -979,12 +979,12 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
         return false;
     }
 
-    if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
+    if (RealIsNull(dx) && RealIsNull(dy)) {
         return false;
     }
 
     auto [correctedDX, correctedDY] = constraintCanvas(dx, dy);
-    if (qFuzzyIsNull(correctedDX) && qFuzzyIsNull(correctedDY)) {
+    if (RealIsNull(correctedDX) && RealIsNull(correctedDY)) {
         return false;
     }
 
@@ -1035,15 +1035,15 @@ void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos, boo
 
     qreal currentScaling = this->currentScaling();
 
-    IF_ASSERT_FAILED(!qFuzzyIsNull(scaling)) {
+    IF_ASSERT_FAILED(!RealIsNull(scaling)) {
         return;
     }
 
-    if (qFuzzyCompare(currentScaling, scaling)) {
+    if (RealIsEqual(currentScaling, scaling)) {
         return;
     }
 
-    if (qFuzzyIsNull(currentScaling)) {
+    if (RealIsNull(currentScaling)) {
         currentScaling = 1;
     }
 
@@ -1059,7 +1059,7 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool over
         return;
     }
 
-    if (qFuzzyCompare(factor, 1.0)) {
+    if (RealIsEqual(factor, 1.0)) {
         return;
     }
 
@@ -1315,7 +1315,7 @@ RectF AbstractNotationPaintView::fromLogical(const RectF& rect) const
 
 bool AbstractNotationPaintView::isInited() const
 {
-    if (qFuzzyIsNull(width()) || qFuzzyIsNull(height())) {
+    if (RealIsNull(width()) || RealIsNull(height())) {
         return false;
     }
 

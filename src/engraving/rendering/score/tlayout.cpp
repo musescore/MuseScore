@@ -1936,7 +1936,7 @@ void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const Lay
     // Use Smufl optical center for dynamic if available
     SymId symId = TConv::symId(item->dynamicType());
     double opticalCenter = item->symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
-    if (symId != SymId::noSym && opticalCenter) {
+    if (symId != SymId::noSym && !RealIsNull(opticalCenter)) {
         double symWidth = item->symBbox(symId).width();
         double offset = symWidth / 2 - opticalCenter + item->symBbox(symId).left();
         double spatiumScaling = item->spatium() / conf.spatium();

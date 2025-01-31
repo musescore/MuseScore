@@ -3464,8 +3464,8 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     }
 
     m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
-    m_editData.hRaster = hRaster;
-    m_editData.vRaster = vRaster;
+    m_editData.hRaster = !RealIsNull(hRaster);
+    m_editData.vRaster = !RealIsNull(vRaster);
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;

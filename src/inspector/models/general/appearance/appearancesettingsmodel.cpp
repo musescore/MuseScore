@@ -25,6 +25,7 @@
 #include "translation.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::inspector;
 using namespace muse::actions;
@@ -174,7 +175,7 @@ std::vector<EngravingItem*> AppearanceSettingsModel::allOverlappingElements() co
     for (EngravingItem* element : m_elementsForArrangeProperty) {
         bbox |= element->pageBoundingRect();
     }
-    if (bbox.width() == 0 || bbox.height() == 0) {
+    if (muse::RealIsNull(bbox.width()) || muse::RealIsNull(bbox.height())) {
         LOGD() << "Bounding box appears to have a size of 0, so we'll get all the elements in the page";
         return allElementsInPage();
     }

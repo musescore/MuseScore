@@ -280,7 +280,7 @@ double SkylineLine::top(double startX, double endX)
         }
     }
 
-    if (top == DBL_MAX) {
+    if (muse::RealIsEqual(top, DBL_MAX)) {
         top = 0.0;
     }
 
@@ -296,7 +296,7 @@ double SkylineLine::bottom(double startX, double endX)
         }
     }
 
-    if (bottom == -DBL_MAX) {
+    if (muse::RealIsEqual(bottom, -DBL_MAX)) {
         bottom = 0.0;
     }
 
