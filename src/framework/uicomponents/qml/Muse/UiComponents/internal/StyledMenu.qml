@@ -318,6 +318,7 @@ MenuView {
                             if (!byHover) {
                                 if (subMenuShowed) {
                                     root.subMenuLoader.close()
+                                    root.openNextMenu()
                                     return
                                 }
                             }
