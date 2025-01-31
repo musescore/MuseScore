@@ -403,7 +403,7 @@ void Drumset::initDrumset()
         DirectionV::UP,
         /*panelRow*/ 1,
         /*panelColumn*/ 0,
-        /*voice*/ 0,
+        /*voice*/ 1,
         /*shortcut*/ 0);
 
     // Electric Bass Drum
