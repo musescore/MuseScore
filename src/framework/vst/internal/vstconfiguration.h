@@ -35,6 +35,10 @@ public:
     void setUserVstDirectories(const io::paths_t& paths) override;
     async::Channel<io::paths_t> userVstDirectoriesChanged() const override;
 
+    // dev
+    std::string usedVstView() const override;
+    void setUsedVstView(const std::string& code) override;
+
 private:
     async::Channel<io::paths_t> m_userVstDirsChanged;
 };

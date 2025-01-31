@@ -312,18 +312,18 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
     m_outParams.auxSends = auxSends;
 
     configuration()->isAuxSendVisibleChanged().onReceive(this, [this](aux_channel_idx_t index, bool visible) {
-            if (visible) {
-                IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
-                    return;
-                };
+        if (visible) {
+            IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
+                return;
+            };
 
-                m_auxSendItems.insert(index, buildAuxSendItem(index, m_outParams.auxSends[index]));
-            } else {
-                m_auxSendItems.remove(index);
-            }
+            m_auxSendItems.insert(index, buildAuxSendItem(index, m_outParams.auxSends[index]));
+        } else {
+            m_auxSendItems.remove(index);
+        }
 
-            emit auxSendItemListChanged();
-        }, AsyncMode::AsyncSetOnce);
+        emit auxSendItemListChanged();
+    }, AsyncMode::AsyncSetOnce);
 
     if (m_auxSendItems.size() == static_cast<int>(auxSends.size())) {
         return;

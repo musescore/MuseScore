@@ -58,7 +58,6 @@ static FIDString currentPlatformUiType()
 VstView::VstView(QQuickItem* parent)
     : QQuickItem(parent)
 {
-
 }
 
 VstView::~VstView()
@@ -192,8 +191,9 @@ int VstView::instanceId() const
 
 void VstView::setInstanceId(int newInstanceId)
 {
-    if (m_instanceId == newInstanceId)
+    if (m_instanceId == newInstanceId) {
         return;
+    }
     m_instanceId = newInstanceId;
     emit instanceIdChanged();
 }
