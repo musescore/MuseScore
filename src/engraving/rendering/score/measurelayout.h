@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MEASURELAYOUT_DEV_H
-#define MU_ENGRAVING_MEASURELAYOUT_DEV_H
+#pragma once
 
 #include "../layoutoptions.h"
 #include "layoutcontext.h"
@@ -28,9 +27,12 @@
 namespace mu::engraving {
 class Measure;
 class MeasureBase;
+class Parenthesis;
 class Score;
 class Segment;
 class StaffLines;
+enum class SegmentType;
+enum class CourtesySegmentPosition : char;
 }
 
 namespace mu::engraving::rendering::score {
@@ -63,6 +65,12 @@ public:
     static void removeSystemHeader(Measure* m);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
     static void removeSystemTrailer(Measure* m);
+    static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
+    static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
+    static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
+    static void removeRepeatCourtesyParenthesesMeasure(Measure* m, const bool continuation, LayoutContext& ctx);
+
+    static void setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx);
 
     static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
 
@@ -85,13 +93,23 @@ private:
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
 
-    //
     static void moveToNextMeasure(LayoutContext& ctx);
     static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
     static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 
     static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
+
+    static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
+
+    static void setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
+                                   LayoutContext& ctx);
+    static void setCourtesyKeySig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
+                                  LayoutContext& ctx);
+    static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
+                                LayoutContext& ctx);
+
+    static Parenthesis* findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track);
+    static void removeRepeatCourtesyParenthesesSegment(Segment* seg, const track_idx_t track,
+                                                       const DirectionH direction = DirectionH::AUTO);
 };
 }
-
-#endif // MU_ENGRAVING_MEASURELAYOUT_DEV_H

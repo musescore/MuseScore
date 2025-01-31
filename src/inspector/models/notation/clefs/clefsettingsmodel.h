@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_CLEFSETTINGSMODEL_H
-#define MU_INSPECTOR_CLEFSETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
 
@@ -32,6 +31,7 @@ class ClefSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
     Q_PROPERTY(PropertyItem * clefToBarlinePosition READ clefToBarlinePosition CONSTANT)
     Q_PROPERTY(bool isClefToBarPosAvailable READ isClefToBarPosAvailable NOTIFY isClefToBarPosAvailableChanged)
+    Q_PROPERTY(bool isCourtesyClefAvailable READ isCourtesyClefAvailable NOTIFY isCourtesyClefAvailableChanged)
 
 public:
     explicit ClefSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -45,20 +45,22 @@ public:
     PropertyItem* clefToBarlinePosition() const;
 
     bool isClefToBarPosAvailable() const;
+    bool isCourtesyClefAvailable() const;
 
 private slots:
     void setIsClefToBarPosAvailable(bool available);
+    void setIsCourtesyClefAvailable(bool available);
 
 signals:
     void isClefToBarPosAvailableChanged(bool newValue);
+    void isCourtesyClefAvailableChanged(bool newValue);
 
 private:
     PropertyItem* m_shouldShowCourtesy = nullptr;
     PropertyItem* m_clefToBarlinePosition = nullptr;
 
     bool m_isClefToBarPosAvailable = true;
-    void updateIsClefToBarPosAvailable();
+    bool m_isCourtesyClefAvailable = true;
+    void updatePropertiesAvailable();
 };
 }
-
-#endif // MU_INSPECTOR_CLEFSETTINGSMODEL_H

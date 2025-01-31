@@ -1121,6 +1121,7 @@ void TWrite::write(const Clef* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::CLEF_TYPE_TRANSPOSING);
     writeProperty(item, xml, Pid::CLEF_TO_BARLINE_POS);
     writeProperty(item, xml, Pid::IS_HEADER);
+    writeProperty(item, xml, Pid::IS_COURTESY);
     if (!item->showCourtesy()) {
         xml.tag("showCourtesyClef", item->showCourtesy());
     }
@@ -2117,6 +2118,7 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
     if (!item->showCourtesy()) {
         xml.tag("showCourtesySig", item->showCourtesy());
     }
+    writeProperty(item, xml, Pid::IS_COURTESY);
     if (item->forInstrumentChange()) {
         xml.tag("forInstrumentChange", true);
     }
@@ -3085,6 +3087,7 @@ void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
         write(&item->groups(), xml, ctx);
     }
     writeProperty(item, xml, Pid::SHOW_COURTESY);
+    writeProperty(item, xml, Pid::IS_COURTESY);
     writeProperty(item, xml, Pid::SCALE);
 
     xml.endElement();

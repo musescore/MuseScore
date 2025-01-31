@@ -70,6 +70,8 @@ class Lyrics;
 
 class NoteDot;
 
+class Parenthesis;
+
 class Rest;
 
 class ShadowNote;
@@ -141,6 +143,7 @@ public:
                                    LineSegment*,
                                    Lyrics*,
                                    NoteDot*,
+                                   Parenthesis*,
                                    Rest*,
                                    ShadowNote*,
                                    Spanner*,

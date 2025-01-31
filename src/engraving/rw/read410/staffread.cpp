@@ -56,9 +56,11 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 // inherit timesig from previous measure
                 //
                 Measure* m = ctx.lastMeasure();             // measure->prevMeasure();
-                Fraction f(m ? m->timesig() : Fraction(4, 4));
+                Fraction f(ctx.timeSigForNextMeasure() != Fraction(0, 1) ? ctx.timeSigForNextMeasure()
+                           : m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
+                ctx.setTimeSigForNextMeasure(Fraction(0, 1));
 
                 MeasureRead::readMeasure(measure, e, ctx, staff);
                 measure->checkMeasure(staff);

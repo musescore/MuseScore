@@ -1774,6 +1774,19 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(autoplaceEnabled,                           true),
     styleDef(defaultsVersion,                            Constants::MSC_VERSION),
+    styleDef(changesBeforeBarlineRepeats,                true),
+    styleDef(changesBeforeBarlineOtherJumps,             true),
+    styleDef(placeClefsBeforeRepeats,                    false),
+    styleDef(changesBetweenEndStartRepeat,               true),
+    styleDef(showCourtesiesRepeats,                      true),
+    styleDef(useParensRepeatCourtesies,                  true),
+    styleDef(showCourtesiesOtherJumps,                   true),
+    styleDef(useParensOtherJumpCourtesies,               true),
+    styleDef(showCourtesiesAfterCancellingRepeats,       true),
+    styleDef(useParensRepeatCourtesiesAfterCancelling,   true),
+    styleDef(showCourtesiesAfterCancellingOtherJumps,    true),
+    styleDef(useParensOtherJumpCourtesiesAfterCancelling, true),
+    styleDef(smallParens,                                false),
 } };
 
 #undef styleDef

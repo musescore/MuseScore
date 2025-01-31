@@ -177,6 +177,8 @@ public:
     bool empty() const { return flag(ElementFlag::EMPTY); }
     bool written() const { return flag(ElementFlag::WRITTEN); }
     void setWritten(bool val) const { setFlag(ElementFlag::WRITTEN, val); }
+    bool endOfMeasureChange() const { return flag(ElementFlag::END_OF_MEASURE_CHANGE); }         // Key/time sigs which should be placed at the end of the measure
+    void setEndOfMeasureChange(bool val) const { setFlag(ElementFlag::END_OF_MEASURE_CHANGE, val); }
 
     void fixStaffIdx();
 
@@ -282,6 +284,9 @@ public:
     bool isBarLineType() const { return m_segmentType == SegmentType::BarLine; }
     bool isBreathType() const { return m_segmentType == SegmentType::Breath; }
     bool isChordRestType() const { return m_segmentType == SegmentType::ChordRest; }
+    bool isClefRepeatAnnounceType() const { return m_segmentType == SegmentType::ClefRepeatAnnounce; }
+    bool isKeySigRepeatAnnounceType() const { return m_segmentType == SegmentType::KeySigRepeatAnnounce; }
+    bool isTimeSigRepeatAnnounceType() const { return m_segmentType == SegmentType::TimeSigRepeatAnnounce; }
     bool isEndBarLineType() const { return m_segmentType == SegmentType::EndBarLine; }
     bool isKeySigAnnounceType() const { return m_segmentType == SegmentType::KeySigAnnounce; }
     bool isTimeSigAnnounceType() const { return m_segmentType == SegmentType::TimeSigAnnounce; }
