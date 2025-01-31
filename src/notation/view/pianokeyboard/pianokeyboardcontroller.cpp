@@ -110,6 +110,15 @@ void PianoKeyboardController::onNotationChanged()
             updateNotesKeys(notes);
         });
 
+        auto selection = notation->interaction()->selection();
+        if (!selection->isNone()) {
+            std::vector<const Note*> notes;
+            for (const mu::engraving::Note* note : selection->notes()) {
+                notes.push_back(note);
+            }
+            updateNotesKeys(notes);
+        }
+
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
             m_isFromMidi = true;
             updateNotesKeys(notes);
