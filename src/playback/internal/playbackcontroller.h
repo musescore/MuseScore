@@ -145,6 +145,9 @@ private:
     void onAudioResourceChanged(const mu::engraving::InstrumentTrackId& trackId, const muse::audio::AudioResourceMeta& oldMeta,
                                 const muse::audio::AudioResourceMeta& newMeta);
 
+    bool shouldLoadDrumset(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioResourceMeta& oldMeta,
+                           const muse::audio::AudioResourceMeta& newMeta) const;
+
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
     void togglePlay();
