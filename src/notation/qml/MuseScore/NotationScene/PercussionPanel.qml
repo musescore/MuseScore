@@ -126,6 +126,27 @@ Item {
             // side columns being the "delete row" buttons on the left, and the "add row" button on the right
             readonly property int sideColumnsWidth: addRowButton.width
 
+            QtObject {
+                id: navigationPrv
+
+                // This variable ensures we stay within a given pad when tabbing back-and-forth between "main" and
+                // "footer" controls. It's also used to tab to the associated delete button for a given empty row
+                property var currentPadNavigationIndex: [0, 0]
+
+                function onPadNavigationEvent(event) {
+                    var navigationRow = navigationPrv.currentPadNavigationIndex[0]
+                    var navigationColumn = navigationPrv.currentPadNavigationIndex[1]
+
+                    if (navigationRow >= padGrid.numRows || navigationColumn >= padGrid.numColumns) {
+                        navigationPrv.currentPadNavigationIndex = [0, 0]
+                    }
+
+                    if (event.type === NavigationEvent.AboutActive) {
+                        event.setData("controlIndex", navigationPrv.currentPadNavigationIndex)
+                    }
+                }
+            }
+
             height: padGrid.cellHeight * padGrid.numRows
             spacing: padGrid.spacing / 2
 
@@ -137,6 +158,14 @@ Item {
                 order: padFootersNavPanel.order + 1
 
                 enabled: deleteButtonsColumn.visible
+
+                onNavigationEvent: {
+                    // Use the last known "pad navigation row" and tab to the associated delete button if it exists
+                    var padNavigationRow = navigationPrv.currentPadNavigationIndex[0]
+                    if (padGrid.model.rowIsEmpty(padNavigationRow)) {
+                        event.setData("controlIndex", [padNavigationRow, 0])
+                    }
+                }
             }
 
             Column {
@@ -172,8 +201,11 @@ Item {
                             icon: IconCode.DELETE_TANK
                             backgroundRadius: deleteButton.width / 2
 
-                            navigation.panel: deleteButtonsPanel
-                            navigation.row: model.index
+                            navigation {
+                                panel: deleteButtonsPanel
+                                row: model.index
+                                column: 0
+                            }
 
                             onClicked: {
                                 padGrid.model.deleteRow(model.index)
@@ -204,26 +236,6 @@ Item {
                 property Item swapOriginPad: null
                 property bool isKeyboardSwapActive: false
 
-                QtObject {
-                    id: gridPrv
-
-                    // This variable ensures we stay within a given pad when tabbing back-and-forth between
-                    // "main" and "footer" controls
-                    property var currentPadNavigationIndex: [0, 0]
-                    function onNavigationEvent(event) {
-                        var navigationRow = gridPrv.currentPadNavigationIndex[0]
-                        var navigationColumn = gridPrv.currentPadNavigationIndex[1]
-
-                        if (navigationRow >= padGrid.numRows || navigationColumn >= padGrid.numColumns) {
-                            gridPrv.currentPadNavigationIndex = [0, 0]
-                        }
-
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
-                        }
-                    }
-                }
-
                 Layout.alignment: Qt.AlignTop
                 Layout.fillHeight: true
 
@@ -244,7 +256,7 @@ Item {
                     order: root.contentNavigationPanelOrderStart + 2 // +2 for toolbar
 
                     onNavigationEvent: function(event) {
-                        gridPrv.onNavigationEvent(event)
+                        navigationPrv.onPadNavigationEvent(event)
                     }
                 }
 
@@ -258,7 +270,7 @@ Item {
                     enabled: percModel.currentPanelMode !== PanelMode.EDIT_LAYOUT
 
                     onNavigationEvent: function(event) {
-                        gridPrv.onNavigationEvent(event)
+                        navigationPrv.onPadNavigationEvent(event)
                     }
                 }
 
@@ -317,7 +329,7 @@ Item {
                             if (!pad.hasActiveControl) {
                                 return;
                             }
-                            gridPrv.currentPadNavigationIndex = [pad.navigationRow, pad.navigationColumn]
+                            navigationPrv.currentPadNavigationIndex = [pad.navigationRow, pad.navigationColumn]
                         }
 
                         Connections {

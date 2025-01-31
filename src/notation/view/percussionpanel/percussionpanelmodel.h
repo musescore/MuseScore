@@ -109,6 +109,8 @@ signals:
 private:
     void setUpConnections();
 
+    void setDrumset(mu::engraving::Drumset* drumset);
+
     void updateSoundTitle(const InstrumentTrackId& trackId);
 
     bool eventFilter(QObject* watched, QEvent* event) override;

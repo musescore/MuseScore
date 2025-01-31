@@ -136,6 +136,11 @@ public:
         return true;
     }
 
+    bool operator!=(const Drumset& other) const
+    {
+        return !(*this == other);
+    }
+
 private:
     DrumInstrument m_drums[DRUM_INSTRUMENTS];
 };

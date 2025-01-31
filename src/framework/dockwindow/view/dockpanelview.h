@@ -58,6 +58,9 @@ public:
     void addPanelAsTab(DockPanelView* tab);
     void setCurrentTabIndex(int index);
 
+    bool isCurrentTabInFrame() const;
+    void makeCurrentTabInFrame();
+
 public slots:
     void setGroupName(const QString& name);
     void setContextMenuModel(uicomponents::AbstractMenuModel* model);
