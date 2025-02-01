@@ -19,11 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#ifndef MU_ENGRAVING_RANGE_H
-#define MU_ENGRAVING_RANGE_H
-
-#include <list>
 #include <vector>
 
 #include "global/allocator.h"
@@ -41,6 +38,7 @@ class ScoreRange;
 class ChordRest;
 class Score;
 class Tie;
+class Marker;
 
 //---------------------------------------------------------
 //   TrackList
@@ -106,17 +104,27 @@ public:
     bool truncate(const Fraction&);
 
 protected:
-    std::list<Spanner*> m_spanner;
-    std::list<Annotation> m_annotations;
+    std::vector<Spanner*> m_spanner;
+    std::vector<Annotation> m_annotations;
 
 private:
 
+    bool endOfMeasure(EngravingItem* e) const;
+    void backupJumpsAndMarkers(Segment* first, Segment* last);
+    void restoreJumpsAndMarkers(Score* score, const Fraction& tick) const;
+    void deleteJumpsAndMarkers();
     friend class TrackList;
 
-    std::list<TrackList*> m_tracks;
+    struct JumpsMarkersBackup
+    {
+        Fraction sPosition;
+        EngravingItem* e = nullptr;
+    };
+
+    std::vector<TrackList*> m_tracks;
     std::vector<Tie*> m_startTies;
+    std::vector<JumpsMarkersBackup> m_jumpsMarkers;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
 };
-} // namespace mu::engraving
-#endif
+}
