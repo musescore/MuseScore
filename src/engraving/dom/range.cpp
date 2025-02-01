@@ -23,8 +23,6 @@
 #include "range.h"
 
 #include "barline.h"
-#include "jump.h"
-#include "marker.h"
 #include "chord.h"
 #include "excerpt.h"
 #include "factory.h"
@@ -676,7 +674,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
 ScoreRange::~ScoreRange()
 {
     muse::DeleteAll(m_tracks);
-    deleteRepeatsJumpsBarLines();
+    deleteBarLines();
 }
 
 //---------------------------------------------------------
@@ -693,7 +691,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
     track_idx_t startTrack = 0;
     track_idx_t endTrack   = score->nstaves() * VOICES;
 
-    m_spanners.clear();
+    m_spanner.clear();
 
     if (readSpanner) {
         Fraction stick = first->tick();
@@ -711,7 +709,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
                 ns->setStartElement(0);
                 ns->setEndElement(0);
                 ns->setTick(ns->tick() - stick);
-                m_spanners.push_back(ns);
+                m_spanner.push_back(ns);
             }
         }
     }
@@ -742,8 +740,9 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             score->doUndoRemoveElement(tie);
         }
     }
-    
-    backupRepeatsJumpsBarLines(first, last);
+
+    backupBarLines(first, last);
+    backupBreaks(first, last);
 }
 
 //---------------------------------------------------------
@@ -774,7 +773,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
         }
         ++track;
     }
-    for (Spanner* s : m_spanners) {
+    for (Spanner* s : m_spanner) {
         s->setTick(s->tick() + tick);
         if (s->isSlur()) {
             Slur* slur = toSlur(s);
@@ -829,7 +828,8 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
         score->doUndoAddElement(tie);
     }
 
-    restoreRepeatsJumpsBarLines(score, tick);
+    restoreBarLines(score, tick);
+    restoreBreaks(score, tick);
     return true;
 }
 
@@ -846,7 +846,7 @@ void ScoreRange::fill(const Fraction& f)
     }
 
     Fraction diff = ticks() - oldDuration;
-    for (Spanner* sp : m_spanners) {
+    for (Spanner* sp : m_spanner) {
         if (sp->tick2() >= oldEndTick && sp->tick() < oldEndTick) {
             sp->setTicks(sp->ticks() + diff);
         }
@@ -889,167 +889,29 @@ Fraction ScoreRange::ticks() const
 }
 
 //---------------------------------------------------------
-//   finalMesPosition
+//   backupBarLines
 //---------------------------------------------------------
-
-bool ScoreRange::finalMesPosition(EngravingItem* e) const
-{
-    bool result = false;
-
-    if (e->isMarker()
-        && ((muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()) || toMarker(e)->markerType() == MarkerType::FINE))) {
-        result = true;
-    } else if (e->isJump()) {
-        result = true;
-    }
-    return result;
-}
-
-//---------------------------------------------------------
-//   backupRepeatsJumpsBarLines
-//---------------------------------------------------------
-
-void ScoreRange::backupRepeatsJumpsBarLines(Segment* first, Segment* last)
+void ScoreRange::backupBarLines(Segment* first, Segment* last)
 {
     Measure* fm = first->measure();
     Measure* lm = last->measure();
 
     for (Measure* m = fm; m && m != lm->nextMeasure(); m = m->nextMeasure()) {
-        // Backup Markers and Jumps (Measures's son)
-        for (EngravingItem* e : m->el()) {
-            if (e && (e->isMarker() || e->isJump())) {
-                RJBLBackup mBackup;
-                mBackup.sPosition = (finalMesPosition(e) ? m->endTick() : m->tick());
-                mBackup.e = e->clone();
-                m_rjbl.push_back(mBackup);
-            }
-        }
-
         // Backup BarLines (Segments's sons)
         for (Segment* s = m->first(); s; s = s->next1()) {
             for (EngravingItem* e : s->elist()) {
-                if (e && e->isBarLine()) {
-                    RJBLBackup mBackup;
-                    mBackup.sPosition = s->tick();
-                    mBackup.e = e->clone();
-                    m_rjbl.push_back(mBackup);
+                if (e && e->isBarLine() && (toBarLine(e)->barLineType() != BarLineType::NORMAL)) {
+                    BarLinesBackup blBackup;
+                    blBackup.sPosition = s->tick();
+                    blBackup.formerMeasureStartOrEnd
+                        = ((blBackup.sPosition == m->tick()) || (blBackup.sPosition == m->endTick()) ? true : false);
+                    blBackup.bl = toBarLine(e)->clone();
+                    m_barLines.push_back(blBackup);
                 }
             }
-
             // Last segment
             if (s == m->last()) {
                 break;
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   insertJumpAndMarker
-//---------------------------------------------------------
-
-void ScoreRange::insertJumpAndMarker(Measure* fMeasure, const RJBLBackup& element) const
-{
-    for (Measure* m = fMeasure; m; m = m->nextMeasure()) {
-        // Markers: we keep them as long as they are in the measure before the final tick
-        // Jumps: we keep them as long as they are in the measure after the start tick
-
-        if (((finalMesPosition(element.e)) && ((element.sPosition > m->tick()) && (element.sPosition <= m->endTick())))
-            || ((!finalMesPosition(element.e)) && ((element.sPosition >= m->tick()) && (element.sPosition < m->endTick())))) {
-            EngravingItem* ce = element.e->clone();
-            ce->setParent(m);
-            ce->setTrack(0);
-            m->add(ce);
-        }
-
-        // Double check to deal only with suitable Measures
-        if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
-            break;
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   insertBarLineIn
-//---------------------------------------------------------
-
-void ScoreRange::insertBarLine(Measure* fMeasure, const RJBLBackup& barLine) const
-{
-    //---------------------------------------------------------
-    //   addBarLine
-    //---------------------------------------------------------
-    auto addBarLine = [&](Measure* m, BarLine* bl, SegmentType st, Fraction pos)
-    {
-        Segment* seg = m->undoGetSegment(st, pos);
-        if (seg) {
-            BarLineType blt = bl->barLineType();
-            // get existing bar line if it does exist
-            BarLine* nbl = toBarLine(seg->element(bl->track()));
-            if (!nbl) {
-                // no suitable bar line: create a new one
-                nbl = Factory::createBarLine(seg);
-                nbl->setParent(seg);
-                nbl->setTrack(bl->track());
-                nbl->setSpanStaff(bl->spanStaff());
-                m->score()->addElement(nbl);
-            } else {
-                // We change BarLineType if necessary to keep END_START repeats
-                if ((nbl->barLineType() == BarLineType::END_REPEAT) && (bl->barLineType() == BarLineType::START_REPEAT)) {
-                    blt = BarLineType::END_START_REPEAT;
-                }
-            }
-            nbl->setGenerated(false);
-            nbl->setBarLineType(blt);
-            nbl->setVisible(bl->visible());
-            nbl->setColor(bl->color());
-
-            // Adding Set repeats
-            if ((pos == m->tick()) && (bl->barLineType() == BarLineType::START_REPEAT)
-                && ((m->score()->nstaves() == 1) || bl->spanStaff())) {
-                m->setRepeatStart(true);
-            } else if ((pos == m->endTick()) && (bl->barLineType() == BarLineType::END_REPEAT)
-                       && ((m->score()->nstaves() == 1) || bl->spanStaff())) {
-                m->setRepeatEnd(true);
-            }
-        }
-    };
-
-    BarLine* bl = toBarLine(barLine.e);
-    bool blProcessed = false;
-    for (Measure* m = fMeasure; m && !blProcessed; m = m->nextMeasure()) {
-        // Within the Measure
-        if ((barLine.sPosition >= m->tick()) && (barLine.sPosition <= m->endTick())) {
-            // Duplicate the Barline END_START_REPEAT if at the end of a Measure
-            if (barLine.sPosition == m->endTick() && bl->barLineType() == BarLineType::END_START_REPEAT) {
-                bl->setBarLineType(BarLineType::END_REPEAT);
-                insertBarLine(fMeasure, barLine);
-                bl->setBarLineType(BarLineType::START_REPEAT);
-                insertBarLine(fMeasure, barLine);
-
-                bl->setBarLineType(BarLineType::END_START_REPEAT);
-                blProcessed = true;
-            } else {
-                // First position
-                if (barLine.sPosition == m->tick()) {
-                    // Just Start Repeat at the left of the Measure
-                    if (bl->barLineType() == BarLineType::START_REPEAT) {
-                        addBarLine(m, bl, SegmentType::StartRepeatBarLine, barLine.sPosition);
-                        blProcessed = true;
-                    }
-                }
-                // Last position
-                else if (barLine.sPosition == m->endTick()) {
-                    // Avoid Start Repeat at the end of the Measure
-                    if (bl->barLineType() != BarLineType::START_REPEAT) {
-                        addBarLine(m, bl, SegmentType::EndBarLine, barLine.sPosition);
-                        blProcessed = true;
-                    }
-                }
-                // Middle
-                else {
-                    addBarLine(m, bl, SegmentType::BarLine, barLine.sPosition);
-                    blProcessed = true;
-                }
             }
         }
         // Last Measure
@@ -1060,29 +922,202 @@ void ScoreRange::insertBarLine(Measure* fMeasure, const RJBLBackup& barLine) con
 }
 
 //---------------------------------------------------------
-//   restoreRepeatsJumpsBarLines
+//   insertBarLine
+//---------------------------------------------------------
+bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
+{
+    //---------------------------------------------------------
+    //   addBarLine
+    //---------------------------------------------------------
+    auto addBarLine = [&](Measure* m, BarLine* bl, SegmentType st, Fraction pos)
+    {
+        bool middle = (pos != m->tick()) && (pos != m->endTick());
+        Segment* seg = m->undoGetSegment(st, pos);
+        if (seg) {
+            BarLineType blt = bl->barLineType();
+            // get existing bar line if it does exist
+            BarLine* nbl = toBarLine(seg->element(bl->track()));
+            if (!nbl) {
+                // no suitable bar line: create a new one
+                nbl = Factory::createBarLine(seg);
+                nbl->setParent(seg);
+                nbl->setTrack(bl->track());
+                // A BL in the middle of a Measure does have SpanStaff to false
+                nbl->setSpanStaff(middle ? false : bl->spanStaff());
+                m->score()->addElement(nbl);
+            } else {
+                // We change BarLineType if necessary to keep END_START repeats if in the middle of a meassure
+                if ((nbl->barLineType() == BarLineType::END_REPEAT) && (bl->barLineType() == BarLineType::START_REPEAT) && middle) {
+                    blt = BarLineType::END_START_REPEAT;
+                }
+            }
+            nbl->setGenerated(false);
+            nbl->setBarLineType(blt);
+            nbl->setVisible(bl->visible());
+            nbl->setColor(bl->color());
+
+            // We check if the same BL type is in every Stave
+            bool blAcrossStaves = false;
+            // if there is only one stave or spanStaff
+            if ((m->score()->nstaves() == 1) || bl->spanStaff()) {
+                blAcrossStaves = true;
+            }
+            // If we are in the last stave
+            else if (bl->staffIdx() == (m->score()->nstaves() - 1)) {
+                bool sameBL = true;
+                // We check if and every previous stave has the same type of BL
+                for (size_t i = 0; i < (m->score()->nstaves() - 1); ++i) {
+                    BarLine* sbl = toBarLine(seg->element(staff2track(i)));
+                    if (!sbl || (sbl->barLineType() != blt)) {
+                        sameBL = false;
+                        break;
+                    }
+                }
+                blAcrossStaves = sameBL;
+
+                if (blAcrossStaves && !middle) {
+                    // Set Spanstaff to true if not in the middle and there is the same BL across staves
+                    for (int i = 0; i < (m->score()->nstaves() - 1); ++i) {
+                        BarLine* sbl = toBarLine(seg->element(staff2track(i)));
+                        if (sbl) {
+                            sbl->setSpanStaff(middle ? false : true);
+                        }
+                    }
+                }
+            }
+
+            // Adding Set repeats
+            if ((pos == m->tick()) && (bl->barLineType() == BarLineType::START_REPEAT) && blAcrossStaves) {
+                m->setRepeatStart(true);
+            } else if ((pos == m->endTick()) && (bl->barLineType() == BarLineType::END_REPEAT) && blAcrossStaves) {
+                m->setRepeatEnd(true);
+            }
+        }
+    };
+
+    bool processed = false;
+
+    // if END_START_REPEAT AND at the end of a Measure
+    if ((barLine.sPosition == m->endTick()) && (barLine.bl->barLineType() == BarLineType::END_START_REPEAT)) {
+        // Create END_REPEAT and START_REPEAT (and ignore return value)
+        barLine.bl->setBarLineType(BarLineType::END_REPEAT);
+        insertBarLine(m, barLine);
+        // Start Repeat into the next measure
+        if (m->nextMeasure()) {
+            barLine.bl->setBarLineType(BarLineType::START_REPEAT);
+            insertBarLine(m->nextMeasure(), barLine);
+        }
+
+        // Restore initial value just in case
+        barLine.bl->setBarLineType(BarLineType::END_START_REPEAT);
+        processed = true;
+    } else {
+        // First position
+        if (barLine.sPosition == m->tick()) {
+            // Just Start Repeat at the left of the Measure
+            if (barLine.bl->barLineType() == BarLineType::START_REPEAT) {
+                addBarLine(m, barLine.bl, SegmentType::StartRepeatBarLine, barLine.sPosition);
+                processed = true;
+            }
+        }
+        // Last position
+        else if (barLine.sPosition == m->endTick()) {
+            // Avoid Start Repeat at the end of the Measure
+            if (barLine.bl->barLineType() != BarLineType::START_REPEAT) {
+                addBarLine(m, barLine.bl, SegmentType::EndBarLine, barLine.sPosition);
+                processed = true;
+            }
+        }
+        // Middle
+        else {
+            // We don't create BL in the Middle
+            processed = true;
+        }
+    }
+    return processed;
+}
+
+//---------------------------------------------------------
+//   restoreBarLines
 //---------------------------------------------------------
 
-void ScoreRange::restoreRepeatsJumpsBarLines(Score* score, const Fraction& tick) const
+void ScoreRange::restoreBarLines(Score* score, const Fraction& tick) const
 {
-    for (const RJBLBackup& rjbl : m_rjbl) {
-        if (rjbl.e->isMarker() || rjbl.e->isJump()) {
-            insertJumpAndMarker(score->tick2measure(tick), rjbl);
-        } else if ((rjbl.e->isBarLine()) && (toBarLine(rjbl.e)->barLineType() != BarLineType::NORMAL)
-                   && (toBarLine(rjbl.e)->barLineType() != BarLineType::END)) {
-            insertBarLine(score->tick2measure(tick), rjbl);
+    for (const BarLinesBackup& bbl : m_barLines) {
+        // We only insert the necessary BarLines
+        if ((bbl.bl->barLineType() != BarLineType::NORMAL) && (bbl.bl->barLineType() != BarLineType::END)) {
+            for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
+                // if inserted within a suitable measure ... to the next barline
+                if (((bbl.sPosition >= m->tick()) && (bbl.sPosition <= m->endTick())) && (insertBarLine(m, bbl))) {
+                    break;
+                }
+                // Last Measure
+                if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+                    break;
+                }
+            }
         }
     }
 }
 
 //---------------------------------------------------------
-//   deleteRepeatsJumpsBarLines
+//   backupBreaks
+//---------------------------------------------------------
+void ScoreRange::backupBreaks(Segment* first, Segment* last)
+{
+    Measure* fm = first->measure();
+    Measure* lm = last->measure();
+    for (Measure* m = fm; m && m != lm->nextMeasure(); m = m->nextMeasure()) {
+        if (m->lineBreak()) {
+            BreaksBackup bBackup;
+            bBackup.sPosition = m->endTick();
+            bBackup.lBreakType = LayoutBreakType::LINE;
+            m_breaks.push_back(bBackup);
+        } else if (m->pageBreak()) {
+            BreaksBackup bBackup;
+            bBackup.sPosition = m->endTick();
+            bBackup.lBreakType = LayoutBreakType::PAGE;
+            m_breaks.push_back(bBackup);
+        }
+
+        // Last Measure
+        if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+            break;
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   restoreBreaks
 //---------------------------------------------------------
 
-void ScoreRange::deleteRepeatsJumpsBarLines()
+void ScoreRange::restoreBreaks(Score* score, const Fraction& tick) const
 {
-    for (const RJBLBackup& rjbl : m_rjbl) {
-        delete rjbl.e;
+    // Break list
+    for (const BreaksBackup& bb : m_breaks) {
+        // Look for suitable measure
+        for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
+            // We keep them as long as they are in the measure after the start tick
+            if ((bb.sPosition > m->tick()) && (bb.sPosition <= m->endTick())) {
+                m->undoSetBreak(true, bb.lBreakType);
+                break;
+            }
+            // Last Measure
+            if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+                break;
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   deleteBarLines
+//---------------------------------------------------------
+
+void ScoreRange::deleteBarLines()
+{
+    for (const BarLinesBackup& bbl : m_barLines) {
+        delete bbl.bl;
     }
 }
 

@@ -32,6 +32,7 @@ using namespace mu::engraving;
 
 bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const String& compareWithLocalPath)
 {
+    ScoreRW::saveScore(score, ScoreRW::rootPath() + u"/" + compareWithLocalPath);
     if (!ScoreRW::saveScore(score, saveName)) {
         return false;
     }
