@@ -40,9 +40,7 @@ class ScoreRange;
 class ChordRest;
 class Score;
 class Tie;
-class Marker;
 class BarLine;
-class Jump;
 
 //---------------------------------------------------------
 //   TrackList
@@ -108,29 +106,36 @@ public:
     bool truncate(const Fraction&);
 
 protected:
-    std::vector<Spanner*> m_spanners;
+    std::vector<Spanner*> m_spanner;
     std::vector<Annotation> m_annotations;
 
 private:
-
-    friend class TrackList;
-    struct RJBLBackup
+    struct BarLinesBackup
     {
         Fraction sPosition;
-        EngravingItem* e = nullptr;
+        bool formerMeasureStartOrEnd;
+        BarLine* bl = nullptr;
     };
+    void backupBarLines(Segment* first, Segment* last);
+    bool insertBarLine(Measure* m, const BarLinesBackup& barLine) const;
+    void restoreBarLines(Score* score, const Fraction& tick) const;
+    void deleteBarLines();
 
-    bool finalMesPosition(EngravingItem* e) const;
-    void backupRepeatsJumpsBarLines(Segment* first, Segment* last);
-    void insertJumpAndMarker(Measure* fMeasure, const RJBLBackup& element) const;
-    void insertBarLine(Measure* fMeasure, const RJBLBackup& barLine) const;
-    void restoreRepeatsJumpsBarLines(Score*, const Fraction&) const;
-    void deleteRepeatsJumpsBarLines();
+    void backupBreaks(Segment* first, Segment* last);
+    void restoreBreaks(Score* score, const Fraction& tick) const;
+
+    friend class TrackList;
 
     std::vector<TrackList*> m_tracks;
     std::vector<Tie*> m_startTies;
+    struct BreaksBackup
+    {
+        Fraction sPosition;
+        LayoutBreakType lBreakType;
+    };
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
-    std::vector<RJBLBackup> m_rjbl;
+    std::vector<BarLinesBackup> m_barLines;
+    std::vector<BreaksBackup> m_breaks;
 };
 }
