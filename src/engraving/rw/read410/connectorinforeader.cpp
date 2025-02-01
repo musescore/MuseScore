@@ -131,6 +131,11 @@ void ConnectorInfoReader::readEndpointLocation(Location& l)
     }
 }
 
+Fraction ConnectorInfoReader::curTick() const
+{
+    return m_ctx->tick();
+}
+
 //---------------------------------------------------------
 //   ConnectorInfoReader::update
 //---------------------------------------------------------
@@ -257,7 +262,9 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
 
         if (info->isStart()) {
             spanner->setTrack(l.track());
-            spanner->setTick(item->tick());
+            // trillCueNotes have unreliable tick() while reading so use instead tick from readContext
+            Fraction startTick = item->isChord() && toChord(item)->isTrillCueNote() ? info->curTick() : item->tick();
+            spanner->setTick(startTick);
             spanner->setStartElement(item);
             if (pasteMode) {
                 item->score()->undoAddElement(spanner);
