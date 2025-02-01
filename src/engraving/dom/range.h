@@ -40,9 +40,7 @@ class Spanner;
 class ScoreRange;
 class ChordRest;
 class Score;
-class Marker;
 class BarLine;
-class Jump;
 
 //---------------------------------------------------------
 //   TrackList
@@ -113,24 +111,22 @@ protected:
 
 private:
 
-    friend class TrackList;
-    struct RJBLBackup
+    struct BarLinesBackup
     {
         Fraction sPosition;
-        EngravingItem* e = nullptr;
+        bool formerMeasureStartOrEnd;
+        BarLine* bl = nullptr;
     };
-
-    bool finalMesPosition(EngravingItem* e) const;
-    void backupRepeatsJumpsBarLines(Segment* first, Segment* last);
-    void insertJumpAndMarker(Measure* fMeasure, const RJBLBackup& element) const;
-    void insertBarLine(Measure* fMeasure, const RJBLBackup& barLine) const;
-    void restoreRepeatsJumpsBarLines(Score*, const Fraction&) const;
-    void deleteRepeatsJumpsBarLines();
+    void backupBarLines(Segment* first, Segment* last);
+    bool insertBarLine(Measure* m, const BarLinesBackup& barLine) const;
+    void restoreBarLines(Score* score, const Fraction& tick) const;
+    void deleteBarLines();
+    friend class TrackList;
 
     std::list<TrackList*> m_tracks;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
-    std::list<RJBLBackup> m_rjbl;
+    std::list<BarLinesBackup> m_barLines;
 };
 } // namespace mu::engraving
 #endif
