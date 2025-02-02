@@ -29,7 +29,7 @@
 
 namespace mu::engraving {
 class EditData;
-enum class ElementType;
+enum class ElementType : unsigned char;
 }
 
 namespace mu::notation {

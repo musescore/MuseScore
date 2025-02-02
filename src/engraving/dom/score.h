@@ -144,14 +144,14 @@ struct NoteVal;
 struct ShowAnchors;
 
 enum class BeatType : char;
-enum class Key;
+enum class Key : signed char;
 enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : char;
 enum class Voicing : signed char;
 enum class HDuration : signed char;
-enum class AccidentalType;
-enum class LayoutBreakType;
+enum class AccidentalType : unsigned char;
+enum class LayoutBreakType : char;
 
 enum class LoopBoundaryType : signed char {
     Unknown = -1,

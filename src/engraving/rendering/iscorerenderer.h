@@ -60,7 +60,7 @@ class Harmony;
 
 class Image;
 
-enum class KerningType;
+enum class KerningType : char;
 class KeySig;
 
 class LedgerLine;

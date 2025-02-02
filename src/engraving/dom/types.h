@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <unordered_set>
+#include <set>
 
 #include "global/containers.h"
 
@@ -34,7 +34,7 @@
 namespace mu::engraving {
 class EngravingItem;
 
-enum class CommandType {
+enum class CommandType : signed char {
     Unknown = -1,
 
     // Parts
@@ -148,7 +148,7 @@ enum class CommandType {
 //---------------------------------------------------------
 // NOTE: keep this in sync with accList array in accidentals.cpp
 
-enum class AccidentalType {
+enum class AccidentalType : unsigned char {
     ///.\{
     NONE,
     FLAT,
@@ -331,7 +331,7 @@ enum class AccidentalType {
 //   NoteType
 //---------------------------------------------------------
 
-enum class NoteType {
+enum class NoteType : unsigned char {
     ///.\{
     NORMAL        = 0,
     ACCIACCATURA  = 0x1,
@@ -348,19 +348,19 @@ enum class NoteType {
 
 constexpr NoteType operator|(NoteType t1, NoteType t2)
 {
-    return static_cast<NoteType>(static_cast<int>(t1) | static_cast<int>(t2));
+    return static_cast<NoteType>(static_cast<unsigned char>(t1) | static_cast<unsigned char>(t2));
 }
 
 constexpr bool operator&(NoteType t1, NoteType t2)
 {
-    return static_cast<int>(t1) & static_cast<int>(t2);
+    return static_cast<unsigned char>(t1) & static_cast<unsigned char>(t2);
 }
 
 //---------------------------------------------------------
 //   HarmonyType
 //---------------------------------------------------------
 
-enum class HarmonyType {
+enum class HarmonyType : char {
     ///.\{
     STANDARD,
     ROMAN,
@@ -372,7 +372,7 @@ enum class HarmonyType {
 //   MMRestRangeBracketType
 //---------------------------------------------------------
 
-enum class MMRestRangeBracketType {
+enum class MMRestRangeBracketType : char {
     ///.\{
     BRACKETS, PARENTHESES, NONE
     ///\}
@@ -413,7 +413,7 @@ enum class SegmentType {
     KeySigAnnounce     = 0x1000,
     TimeSigAnnounce    = 0x2000,
     //--
-    All                = -1,   ///< Includes all barline types
+    All                = 0xffff,   ///< Includes all barline types
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
     BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
     ///\}
@@ -496,14 +496,14 @@ enum class TripletFeelType : char {
     SCOTTISH_16TH
 };
 
-enum class GuitarBendType {
+enum class GuitarBendType : char {
     BEND,
     PRE_BEND,
     GRACE_NOTE_BEND,
     SLIGHT_BEND,
 };
 
-enum class GuitarBendShowHoldLine {
+enum class GuitarBendShowHoldLine : char {
     AUTO,
     SHOW,
     HIDE,

@@ -24,7 +24,7 @@
 #define MU_ENGRAVING_SYMID_H
 
 namespace mu::engraving {
-enum class SmuflAnchorId {
+enum class SmuflAnchorId : char {
     stemDownNW,
     stemUpSE,
     stemDownSW,

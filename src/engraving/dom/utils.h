@@ -41,7 +41,7 @@ class System;
 class Tuplet;
 class Volta;
 
-enum class Key;
+enum class Key : signed char;
 
 extern RectF handleRect(const PointF& pos);
 

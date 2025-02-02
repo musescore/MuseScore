@@ -46,7 +46,7 @@ struct BeamFragment {
     double py2[2];
 };
 
-enum class ChordBeamAnchorType {
+enum class ChordBeamAnchorType : char {
     Start, End, Middle
 };
 
