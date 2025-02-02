@@ -327,9 +327,11 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
-    item->setProperty(pid, v);
-    if (item->isStyled(pid)) {
-        item->setPropertyFlags(pid, PropertyFlags::UNSTYLED);
+    if (!ctx.shouldSkipProperty(pid)) {
+        item->setProperty(pid, v);
+        if (item->isStyled(pid)) {
+            item->setPropertyFlags(pid, PropertyFlags::UNSTYLED);
+        }
     }
 }
 

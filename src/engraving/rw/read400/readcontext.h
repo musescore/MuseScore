@@ -100,6 +100,8 @@ public:
 
     double spatium() const;
     void setSpatium(double v);
+    void setPropertiesToSkip(const PropertyIdSet& propertiesToSkip) { m_propertiesToSkip = propertiesToSkip; }
+    bool shouldSkipProperty(Pid pid) const { return muse::contains(m_propertiesToSkip, pid); }
     double originalSpatium() const { return m_originalSpatium; }
     void setOriginalSpatium(double v) { m_originalSpatium = v; }
     bool overrideSpatium() const { return m_overrideSpatium; }
@@ -245,6 +247,7 @@ private:
     TimeSigMap m_compatTimeSigMap;
     bool m_overrideSpatium = false;
     double m_originalSpatium = 0;
+    PropertyIdSet m_propertiesToSkip;
 };
 }
 
