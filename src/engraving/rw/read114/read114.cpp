@@ -2729,9 +2729,13 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     ReadContext ctx(score);
-    if (out && out->overriddenSpatium.has_value()) {
-        ctx.setSpatium(out->overriddenSpatium.value());
-        ctx.setOverrideSpatium(true);
+    if (out) {
+        if (out->overriddenSpatium.has_value()) {
+            ctx.setSpatium(out->overriddenSpatium.value());
+            ctx.setOverrideSpatium(true);
+        }
+
+        ctx.setPropertiesToSkip(out->propertiesToSkip);
     }
 
     DEFER {
