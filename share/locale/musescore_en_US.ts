@@ -7069,7 +7069,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2021"/>
         <source>Default (step time)</source>
-        <translation>Default (step time)</translation>
+        <translation>Default (step-time)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2028"/>
@@ -7525,7 +7525,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <source>Respell pitches</source>
-        <translation>Respell pitches</translation>
+        <translation>Optimize enharmonic spelling</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
@@ -9352,7 +9352,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
         <source>Respell &amp;pitches</source>
-        <translation>Respell &amp;pitches</translation>
+        <translation>&amp;Optimize enharmonic spelling</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="474"/>
@@ -22444,7 +22444,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
         <source>Close Search</source>
-        <translation>Close Search</translation>
+        <translation>Close search</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>

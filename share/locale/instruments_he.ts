@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>כלי נשיפה מעץ נכתבים על חמשה כפולה</translation>
+        <translation>סקציית כלי הנשיפה מעץ נכתבים על חמשה כפולה</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>

@@ -10709,14 +10709,14 @@
         <source>Chimes</source>
         <comment>tubular-bells trackName</comment>
         <extracomment>trackName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klokkuspæl</translation>
+        <translation>Rørklokkur</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3615"/>
         <source>Chimes</source>
         <comment>tubular-bells longName</comment>
         <extracomment>longName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klokkuspæl</translation>
+        <translation>Rørklokkur</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3617"/>
