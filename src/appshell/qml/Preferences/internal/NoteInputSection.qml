@@ -30,15 +30,32 @@ BaseSection {
 
     title: qsTrc("appshell/preferences", "Note input")
 
+    property alias enableMidiInput: enableMidiInputBox.checked
     property alias advanceToNextNote: advanceToNextNoteBox.checked
     property alias colorNotes: colorNotesBox.checked
     property alias warnGuitarBends: warnBendsBox.checked
     property alias delayBetweenNotes: delayBetweenNotesControl.currentValue
 
+    signal enableMidiInputChangeRequested(bool midi)
     signal advanceToNextNoteChangeRequested(bool advance)
     signal colorNotesChangeRequested(bool color)
     signal warnGuitarBendsChangeRequested(bool warn)
     signal delayBetweenNotesChangeRequested(int delay)
+
+    CheckBox {
+        id: enableMidiInputBox
+        width: parent.width
+
+        text: qsTrc("action", "Enable MIDI input")
+
+        navigation.name: "EnableMidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
+        onClicked: {
+            root.enableMidiInputChangeRequested(!checked)
+        }
+    }
 
     CheckBox {
         id: advanceToNextNoteBox
@@ -48,7 +65,7 @@ BaseSection {
 
         navigation.name: "AdvanceToNextNoteBox"
         navigation.panel: root.navigation
-        navigation.row: 0
+        navigation.row: 1
 
         onClicked: {
             root.advanceToNextNoteChangeRequested(!checked)
@@ -63,7 +80,7 @@ BaseSection {
 
         navigation.name: "ColorNotesBox"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 2
 
         onClicked: {
             root.colorNotesChangeRequested(!checked)
@@ -78,7 +95,7 @@ BaseSection {
 
         navigation.name: "WarnBendBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         onClicked: {
             root.warnGuitarBendsChangeRequested(!checked)
@@ -97,7 +114,7 @@ BaseSection {
 
         navigation.name: "DelayBetweenNotesControl"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 4
 
         onValueEdited: function(newValue) {
             root.delayBetweenNotesChangeRequested(newValue)

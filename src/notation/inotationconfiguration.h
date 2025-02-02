@@ -118,6 +118,7 @@ public:
 
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
+    virtual muse::async::Notification isMidiInputEnabledChanged() const = 0;
 
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;

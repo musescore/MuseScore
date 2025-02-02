@@ -43,6 +43,7 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         NoteInputSection {
+            enableMidiInput: noteInputModel.enableMidiInput
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
             warnGuitarBends: noteInputModel.warnGuitarBends
@@ -50,6 +51,10 @@ PreferencesPage {
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
+
+            onEnableMidiInputChangeRequested: function(midi) {
+                noteInputModel.enableMidiInput = midi
+            }
 
             onAdvanceToNextNoteChangeRequested: function(advance) {
                 noteInputModel.advanceToNextNoteOnKeyRelease = advance
@@ -72,9 +77,12 @@ PreferencesPage {
 
         NoteInputPlaySection {
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
-            playChordWhenEditing: noteInputModel.playChordWhenEditing
-            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
+            playChordWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordWhenEditing : false
+            playChordSymbolWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordSymbolWhenEditing : false
+            playNotesOnMidiInput: noteInputModel.playNotesWhenEditing && noteInputModel.enableMidiInput ? noteInputModel.playNotesOnMidiInput : false
+
+            playNotesOnMidiInputBoxEnabled: noteInputModel.enableMidiInput && noteInputModel.playNotesWhenEditing
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
@@ -93,6 +101,10 @@ PreferencesPage {
 
             onNotePlayDurationChangeRequested: function(duration) {
                 noteInputModel.notePlayDurationMilliseconds = duration
+            }
+
+            onPlayNotesOnMidiInputChangeRequested: function(play) {
+                noteInputModel.playNotesOnMidiInput = play
             }
         }
 
