@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
-#define MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
+#pragma once
 
+#include "async/channel.h"
+#include "async/notification.h"
 #include "modularity/imoduleinterface.h"
-#include "types/retval.h"
 #include "playbacktypes.h"
 
 namespace mu::playback {
@@ -85,5 +85,3 @@ public:
     virtual bool shouldMeasureInputLag() const = 0;
 };
 }
-
-#endif // MU_PLAYBACK_IPLAYBACKCONFIGURATION_H

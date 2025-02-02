@@ -22,7 +22,8 @@
 #ifndef MU_NOTATION_IMASTERNOTATION_H
 #define MU_NOTATION_IMASTERNOTATION_H
 
-#include "types/retval.h"
+#include "async/notification.h"
+#include "types/ret.h"
 
 #include "inotation.h"
 #include "iexcerptnotation.h"

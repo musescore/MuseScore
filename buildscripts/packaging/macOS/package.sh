@@ -124,7 +124,7 @@ find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec cod
 # Sign code in other (more conventional) locations
 codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
 echo "spctl"
-spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
+spctl --assess --type execute -vvv "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"
 codesign --verify --deep --strict --verbose=2 "${VOLUME}/${LONGER_NAME}.app"
 
