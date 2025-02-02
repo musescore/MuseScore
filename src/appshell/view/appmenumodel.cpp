@@ -460,7 +460,8 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("color-segment-shapes"),
             makeMenuItem("show-skylines"),
             makeMenuItem("show-system-bounding-rects"),
-            makeMenuItem("show-corrupted-measures")
+            makeMenuItem("show-corrupted-measures"),
+            makeMenuItem("check-for-score-corruptions")
         };
 
         MenuItemList extensionsItems {
