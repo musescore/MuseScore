@@ -34,6 +34,8 @@ private:
     void onLoadNotation(INotationPtr notation) override;
     void onUnloadNotation(INotationPtr notation) override;
 
+    void initZoomAndPosition() override;
+
     void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix,
                          bool overrideZoomType = true) override;
 

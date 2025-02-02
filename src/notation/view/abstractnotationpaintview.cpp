@@ -229,8 +229,7 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
 void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 {
     if (viewport().isValid() && !m_notation->viewState()->isMatrixInited()) {
-        m_inputController->initZoom();
-        m_inputController->initCanvasPos();
+        initZoomAndPosition();
     }
 
     if (publishMode()) {
@@ -342,6 +341,10 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     }
 }
 
+void AbstractNotationPaintView::initZoomAndPosition()
+{
+}
+
 void AbstractNotationPaintView::setMatrix(const Transform& matrix)
 {
     if (m_matrix == matrix) {
@@ -390,8 +393,7 @@ void AbstractNotationPaintView::onViewSizeChanged()
 
     if (viewport().isValid()) {
         if (!notation()->viewState()->isMatrixInited()) {
-            m_inputController->initZoom();
-            m_inputController->initCanvasPos();
+            initZoomAndPosition();
         } else {
             m_inputController->updateZoomAfterSizeChange();
         }
@@ -421,6 +423,11 @@ void AbstractNotationPaintView::updateLoopMarkers()
     m_loopOutMarker->setVisible(loop.enabled);
 
     scheduleRedraw();
+}
+
+NotationViewInputController* AbstractNotationPaintView::inputController() const
+{
+    return m_inputController.get();
 }
 
 INotationPtr AbstractNotationPaintView::notation() const
