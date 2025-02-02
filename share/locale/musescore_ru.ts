@@ -2215,7 +2215,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="726"/>
         <source>Swing:</source>
-        <translation>Свинг</translation>
+        <translation>Свинг:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="733"/>
@@ -3124,34 +3124,32 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5961"/>
         <source>Break H-bar if it collides with number</source>
-        <translation>H-такты в основном (часть) оркестровых пауз ), другая часть - число в верху H-такта)
-
-</translation>
+        <translation>Разрывать полосу, если поперёк неё сместить цифру</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5971"/>
         <source>Reset &apos;Break H-bar if it collides with number&apos; value</source>
-        <translation>Сбросить значение «Разрывать группу нот, если она пересекается с числом»</translation>
+        <translation>Сбросить значение «Разрывать полосу, если поперёк неё сместить цифру»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6010"/>
         <source>Reset &apos;H-bar horizontal stroke thickness&apos; value</source>
-        <translation>Сбросить значение «Толщина горизонтального штриха полутона»</translation>
+        <translation>Сбросить значение «Толщина горизонтального штриха многотактовой паузы»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6052"/>
         <source>Reset &apos;H-bar margin within barlines&apos; value</source>
-        <translation>Сбросить значение «Отступ горизонтальной черты внутри тактовых черт»</translation>
+        <translation>Сбросить значение «Отступ от тактовых черт»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6091"/>
         <source>Reset &apos;H-bar vertical stroke thickness&apos; value</source>
-        <translation>Сбросить значение «Толщина вертикального штриха полосы педали»</translation>
+        <translation>Сбросить значение «Толщина вертикального штриха многотактовой паузы»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6130"/>
         <source>Reset &apos;H-bar vertical stroke height&apos; value</source>
-        <translation>Сбросить значение «Высота вертикального штриха полосы»</translation>
+        <translation>Сбросить значение «Высота вертикального штриха многотактовой паузы»</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6951"/>
@@ -3213,7 +3211,8 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11209"/>
         <source>Edit lyrics text style</source>
-        <translation>Редактировать стиль вокального текста</translation>
+        <translation>Редактировать стиль 
+вокального текста</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11244"/>
@@ -3560,7 +3559,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6363"/>
         <source>Number position:</source>
-        <translation>Расположение нумерации:</translation>
+        <translation>Расположение цифр:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6523"/>
@@ -5457,7 +5456,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="205"/>
         <source>Staff space (sp):</source>
-        <translation>Пробел нотоносца (sp)</translation>
+        <translation>Пробел нотоносца (инт)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="246"/>
@@ -5743,7 +5742,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="54"/>
         <source>Swing:</source>
-        <translation>Свинг</translation>
+        <translation>Свинг:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="67"/>
@@ -7114,7 +7113,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1821"/>
         <source>Toggle trill</source>
-        <translation>Переключить трель</translation>
+        <translation>Вкл./выкл. трель</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2334"/>
@@ -7124,12 +7123,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1869"/>
         <source>Toggle up bow</source>
-        <translation>Переключить смычок вверх</translation>
+        <translation>Вкл./выкл. смычок вверх</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1875"/>
         <source>Toggle down bow</source>
-        <translation>Переключить смычок вниз</translation>
+        <translation>Вкл./выкл. смычок вниз</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1602"/>
@@ -7527,7 +7526,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <source>Respell pitches</source>
-        <translation>Подобрать знаки альтерации</translation>
+        <translation>Подобрать энгармонические эквиваленты</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
@@ -9334,7 +9333,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>Realize &amp;chord symbols</source>
-        <translation>Записать символы аккордов нотами</translation>
+        <translation>Записать с&amp;имволы аккордов нотами</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
@@ -9344,7 +9343,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>Вкл./выкл. ритмическую слэш-нотацию</translation>
+        <translation>&amp;Вкл./выкл. ритмическую слэш-нотацию</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
@@ -9354,7 +9353,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
         <source>Respell &amp;pitches</source>
-        <translation>Подобрать знаки альтерации</translation>
+        <translation>Подобрать &amp;энгармонические эквиваленты</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="474"/>
@@ -9971,37 +9970,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
         <source>Toggle note input mode: insert/overwrite</source>
-        <translation>Переключить режим ввода нот: вставка/перезапись</translation>
+        <translation>Вкл./выкл. режим ввода нот: вставка/перезапись</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
         <source>Toggle note input mode: default (step-time)</source>
-        <translation>Переключить режим ввода нот: по умолчанию (шаговый)</translation>
+        <translation>Вкл./выкл. режим ввода нот: по умолчанию (шаговый)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
-        <translation>Переключить режим ввода нот: только ритм (не высота)</translation>
+        <translation>Вкл./выкл. режим ввода нот: только ритм (не высота)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2036"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
-        <translation>Переключить режим ввода нот: изменить высоту существующих нот</translation>
+        <translation>Вкл./выкл. режим ввода нот: изменить высоту существующих нот</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2043"/>
         <source>Toggle note input mode: real-time (metronome)</source>
-        <translation>Переключить режим ввода нот: реальное время (метроном)</translation>
+        <translation>Вкл./выкл. режим ввода нот: реальное время (метроном)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2050"/>
         <source>Toggle note input mode: real-time (foot pedal)</source>
-        <translation>Переключить режим ввода нот: реальное время (педаль)</translation>
+        <translation>Вкл./выкл. режим ввода нот: реальное время (педаль)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2057"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
-        <translation>Переключить режим ввода нот: вставка (увеличивает длительность такта)</translation>
+        <translation>Вкл./выкл. режим ввода нот: вставка (увеличивает длительность такта)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2063"/>
@@ -10645,7 +10644,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="223"/>
         <source>&amp;Measures</source>
-        <translation>&amp;Такты</translation>
+        <translation>Т&amp;акты</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
@@ -10761,7 +10760,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="282"/>
         <source>&amp;Measures</source>
-        <translation>&amp;Такты</translation>
+        <translation>Т&amp;акты</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="300"/>
@@ -12472,7 +12471,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
         <source>Playing technique annotation</source>
-        <translation>Аннотация техники исполнения</translation>
+        <translation>Аннотация к технике игры</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
@@ -12635,7 +12634,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>Notehead</source>
-        <translation>Головка ноты</translation>
+        <translation>Нотная головка</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
@@ -12699,7 +12698,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <location filename="../../src/engraving/types/typesconv.cpp" line="262"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1172"/>
         <source>Ottava</source>
-        <translation>Октава</translation>
+        <translation>Знак переноса октав</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="263"/>
@@ -12906,17 +12905,17 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1475"/>
         <source>Whole</source>
-        <translation>Целая</translation>
+        <translation>1-я</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1474"/>
         <source>Half</source>
-        <translation>Половинная</translation>
+        <translation>1/2-я</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1465"/>
         <source>Quarter</source>
-        <translation>Четвертная</translation>
+        <translation>1/4-я</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1477"/>
@@ -13007,7 +13006,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Extension line</source>
-        <translation>Линия распева</translation>
+        <translation>Удлинительная линия</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
@@ -13148,7 +13147,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <location filename="../../src/engraving/types/typesconv.cpp" line="1394"/>
         <source>triple sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation>трипль-диез</translation>
+        <translation>тройной диез</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1399"/>
@@ -13184,12 +13183,12 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
         <location filename="../../src/engraving/types/typesconv.cpp" line="1424"/>
         <source>triple flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation>трипль-бемоль</translation>
+        <translation>тройной бемоль</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1466"/>
         <source>Eighth</source>
-        <translation>Восьмая</translation>
+        <translation>8-я</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1467"/>
@@ -13429,7 +13428,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
         <source>C♭ major, A♭ minor</source>
-        <translation>до♭ мажор, ля♭ минор</translation>
+        <translation>До ♭ мажор, ля ♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2723"/>
@@ -13439,52 +13438,52 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
         <source>G♭ major, E♭ minor</source>
-        <translation>соль♭ мажор, ми♭ минор</translation>
+        <translation>Соль ♭ мажор, ми ♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
         <source>A major, F♯ minor</source>
-        <translation>ля мажор, фа♯ минор</translation>
+        <translation>Ля мажор, фа ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
         <source>D♭ major, B♭ minor</source>
-        <translation>ре♭ мажор, си♭ минор</translation>
+        <translation>ре ♭ мажор, си ♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
         <source>E major, C♯ minor</source>
-        <translation>ми мажор, до♯ минор</translation>
+        <translation>ми мажор, до ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
         <source>A♭ major, F minor</source>
-        <translation>ля♭ мажор, фа минор</translation>
+        <translation>ля ♭ мажор, фа минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
         <source>B major, G♯ minor</source>
-        <translation>си мажор, соль♯ минор</translation>
+        <translation>си мажор, соль ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
         <source>E♭ major, C minor</source>
-        <translation>ми♭ мажор, до минор</translation>
+        <translation>ми ♭ мажор, до минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
         <source>F♯ major, D♯ minor</source>
-        <translation>фа♯ мажор, ре♯ минор</translation>
+        <translation>фа ♯ мажор, ре ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
         <source>B♭ major, G minor</source>
-        <translation>си♭ мажор, соль минор</translation>
+        <translation>си ♭ мажор, соль минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
         <source>C♯ major, A♯ minor</source>
-        <translation>до♯ мажор, ля♯ минор</translation>
+        <translation>до ♯ мажор, ля ♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2720"/>
@@ -13524,7 +13523,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
         <source>Doppia Coda</source>
-        <translation>Доппия Кода</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2483"/>
@@ -13534,7 +13533,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2721"/>
         <source>C major, A minor</source>
-        <translation>До мажор, ля минор</translation>
+        <translation>до мажор, ля минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
@@ -13631,7 +13630,7 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="258"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation>Невозможно создать пропорцию %1 для длительности %2</translation>
+        <translation>Невозможно создать мультиоль-соотношение %1 для длительности %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="146"/>
@@ -15574,37 +15573,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="592"/>
         <source>Do (Walker)</source>
-        <translation>До (Уокер)</translation>
+        <translation>Do (Уокер)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>Re (Walker)</source>
-        <translation>Ре (Уокер)</translation>
+        <translation>Re (Уокер)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>Ti (Walker)</source>
-        <translation>Си (Уокер)</translation>
+        <translation>Ti (Уокер)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="595"/>
         <source>Do (Funk)</source>
-        <translation>До (Фанк)</translation>
+        <translation>Do (Фанк)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
         <source>Re (Funk)</source>
-        <translation>Ре (Фанк)</translation>
+        <translation>Re (Фанк)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
         <source>Ti (Funk)</source>
-        <translation>Си (Фанк)</translation>
+        <translation>Ti (Фанк)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <source>Do (Name)</source>
-        <translation>До (Название)</translation>
+        <translation>Do (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="601"/>
@@ -15619,7 +15618,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <source>Re (Name)</source>
-        <translation>Ре (Название)</translation>
+        <translation>Re (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="604"/>
@@ -15634,12 +15633,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Mi (Name)</source>
-        <translation>Ми (Название)</translation>
+        <translation>Mi (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="607"/>
         <source>Fa (Name)</source>
-        <translation>Фа (Название)</translation>
+        <translation>Fa (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>
@@ -15654,7 +15653,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="610"/>
         <source>Sol (Name)</source>
-        <translation>Соль (Название)</translation>
+        <translation>Sol (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
@@ -15664,7 +15663,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="612"/>
         <source>La (Name)</source>
-        <translation>Ля (Название)</translation>
+        <translation>La (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="613"/>
@@ -15679,12 +15678,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="615"/>
         <source>Ti (Name)</source>
-        <translation>Си (Название)</translation>
+        <translation>Ti (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="616"/>
         <source>Si (Name)</source>
-        <translation>Си (Название)</translation>
+        <translation>Si (Название)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="618"/>
@@ -15921,7 +15920,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1500"/>
         <source>Normal</source>
-        <translation>Средний размер</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1501"/>
@@ -17325,7 +17324,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3792"/>
         <source>Open</source>
-        <translation>Открытая</translation>
+        <translation>Открытый</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3797"/>
@@ -17406,7 +17405,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3973"/>
         <source>Niente</source>
-        <translation>До тишины</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3981"/>
@@ -18438,201 +18437,201 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
         <source>C♭♭</source>
-        <translation>До♭♭</translation>
+        <translation>C♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="46"/>
         <source>C♭</source>
-        <translation>До♭</translation>
+        <translation>C♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="47"/>
         <location filename="../../src/framework/global/utils.cpp" line="29"/>
         <location filename="../../src/framework/global/utils.cpp" line="44"/>
         <source>C</source>
-        <translation>До</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="48"/>
         <location filename="../../src/framework/global/utils.cpp" line="30"/>
         <source>C♯</source>
-        <translation>До♯</translation>
+        <translation>C♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="49"/>
         <source>C♯♯</source>
-        <translation>До♯♯</translation>
+        <translation>C♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="50"/>
         <source>D♭♭</source>
-        <translation>Ре♭♭</translation>
+        <translation>D♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="51"/>
         <location filename="../../src/framework/global/utils.cpp" line="45"/>
         <source>D♭</source>
-        <translation>Ре♭</translation>
+        <translation>D♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="52"/>
         <location filename="../../src/framework/global/utils.cpp" line="31"/>
         <location filename="../../src/framework/global/utils.cpp" line="46"/>
         <source>D</source>
-        <translation>Ре</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="53"/>
         <location filename="../../src/framework/global/utils.cpp" line="32"/>
         <source>D♯</source>
-        <translation>Ре♯</translation>
+        <translation>D♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="54"/>
         <source>D♯♯</source>
-        <translation>Ре♯♯</translation>
+        <translation>D♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="55"/>
         <source>E♭♭</source>
-        <translation>Ми♭♭</translation>
+        <translation>E♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="56"/>
         <location filename="../../src/framework/global/utils.cpp" line="47"/>
         <source>E♭</source>
-        <translation>Ми♭</translation>
+        <translation>E♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="57"/>
         <location filename="../../src/framework/global/utils.cpp" line="33"/>
         <location filename="../../src/framework/global/utils.cpp" line="48"/>
         <source>E</source>
-        <translation>Ми</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="58"/>
         <source>E♯</source>
-        <translation>Ми♯</translation>
+        <translation>E♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="59"/>
         <source>E♯♯</source>
-        <translation>Ми♯♯</translation>
+        <translation>E♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="60"/>
         <source>F♭♭</source>
-        <translation>Фа♭♭</translation>
+        <translation>F♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="61"/>
         <source>F♭</source>
-        <translation>Фа♭</translation>
+        <translation>F♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="62"/>
         <location filename="../../src/framework/global/utils.cpp" line="34"/>
         <location filename="../../src/framework/global/utils.cpp" line="49"/>
         <source>F</source>
-        <translation>Фа</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="63"/>
         <location filename="../../src/framework/global/utils.cpp" line="35"/>
         <source>F♯</source>
-        <translation>Фа♯</translation>
+        <translation>F♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="64"/>
         <source>F♯♯</source>
-        <translation>Фа♯♯</translation>
+        <translation>F♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="65"/>
         <source>G♭♭</source>
-        <translation>Соль♭♭</translation>
+        <translation>G♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="66"/>
         <location filename="../../src/framework/global/utils.cpp" line="50"/>
         <source>G♭</source>
-        <translation>Соль♭</translation>
+        <translation>G♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="67"/>
         <location filename="../../src/framework/global/utils.cpp" line="36"/>
         <location filename="../../src/framework/global/utils.cpp" line="51"/>
         <source>G</source>
-        <translation>Соль</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="68"/>
         <location filename="../../src/framework/global/utils.cpp" line="37"/>
         <source>G♯</source>
-        <translation>Соль♯</translation>
+        <translation>G♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="69"/>
         <source>G♯♯</source>
-        <translation>Соль♯♯</translation>
+        <translation>G♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="70"/>
         <source>A♭♭</source>
-        <translation>Ля♭♭</translation>
+        <translation>A♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="71"/>
         <location filename="../../src/framework/global/utils.cpp" line="52"/>
         <source>A♭</source>
-        <translation>Ля♭</translation>
+        <translation>A♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="72"/>
         <location filename="../../src/framework/global/utils.cpp" line="38"/>
         <location filename="../../src/framework/global/utils.cpp" line="53"/>
         <source>A</source>
-        <translation>Ля</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="73"/>
         <location filename="../../src/framework/global/utils.cpp" line="39"/>
         <source>A♯</source>
-        <translation>Ля♯</translation>
+        <translation>A♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="74"/>
         <source>A♯♯</source>
-        <translation>Ля♯♯</translation>
+        <translation>A♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="75"/>
         <source>B♭♭</source>
-        <translation>Си♭♭</translation>
+        <translation>B♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="76"/>
         <location filename="../../src/framework/global/utils.cpp" line="54"/>
         <source>B♭</source>
-        <translation>Си♭</translation>
+        <translation>B♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="77"/>
         <location filename="../../src/framework/global/utils.cpp" line="40"/>
         <location filename="../../src/framework/global/utils.cpp" line="55"/>
         <source>B</source>
-        <translation>Си</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="78"/>
         <source>B♯</source>
-        <translation>Си♯</translation>
+        <translation>B♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="79"/>
         <source>B♯♯</source>
-        <translation>Си♯♯</translation>
+        <translation>B♯♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
@@ -19652,12 +19651,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
-        <translation>Скобки</translation>
+        <translation>Круглые скобки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
-        <translation>Скобки</translation>
+        <translation>Квадратные скобки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
@@ -20442,7 +20441,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="48"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="58"/>
         <source>Number position</source>
-        <translation>Расположение цифер</translation>
+        <translation>Расположение цифр</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="48"/>
@@ -20915,7 +20914,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="80"/>
         <source>Frames</source>
-        <translation>Блоки</translation>
+        <translation>Рамки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="93"/>
@@ -21182,7 +21181,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/articulations/articulationsettingsmodel.cpp" line="35"/>
         <source>Articulation</source>
-        <translation>Штрих</translation>
+        <translation>Артикуляция</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="35"/>
@@ -21269,12 +21268,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/letringsettingsmodel.cpp" line="31"/>
         <source>Let ring</source>
-        <translation>Долгозвучащая нота</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="36"/>
         <source>Ottava</source>
-        <translation>Октава</translation>
+        <translation>Знак переноса октав</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="44"/>
@@ -21363,7 +21362,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
         <source>Text line</source>
-        <translation>Текстовая строка</translation>
+        <translation>Линия с текстом нотоносца</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="34"/>
@@ -21399,7 +21398,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp" line="32"/>
         <source>Measure repeat</source>
-        <translation>Повтор такта</translation>
+        <translation>Тактовый повтор</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/mmrests/mmrestsettingsmodel.cpp" line="32"/>
@@ -21495,7 +21494,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="68"/>
         <source>Ratio</source>
-        <translation>Ratio</translation>
+        <translation>Соотношение</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/score/scoreappearancesettingsmodel.cpp" line="33"/>
@@ -22378,12 +22377,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
         <source>Traditional</source>
-        <translation>Традиционное</translation>
+        <translation>Традиционный</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="43"/>
         <source>Straight</source>
-        <translation>Прямая</translation>
+        <translation>Прямой</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="100"/>
@@ -22720,7 +22719,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="646"/>
         <source>Frames</source>
-        <translation>Блоки</translation>
+        <translation>Рамки</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
@@ -23768,7 +23767,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="223"/>
         <source>Pitch</source>
-        <translation>Высотность</translation>
+        <translation>Высота звука</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="224"/>
@@ -23820,13 +23819,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="772"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1266"/>
         <source>Brackets</source>
-        <translation>Акколады</translation>
+        <translation>Квадратные скобки</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="773"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1267"/>
         <source>Parentheses</source>
-        <translation>Скобки</translation>
+        <translation>Круглые скобки</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
@@ -24958,7 +24957,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1479"/>
         <source>tempo primo</source>
-        <translation>темпо примо</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1488"/>
@@ -25168,7 +25167,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
         <source>C</source>
-        <translation>До</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1737"/>
@@ -25183,7 +25182,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
         <source>D</source>
-        <translation>Ре</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1741"/>
@@ -25198,7 +25197,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
         <source>E</source>
-        <translation>Ми</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1745"/>
@@ -25213,7 +25212,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
         <source>F</source>
-        <translation>Фа</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1749"/>
@@ -25228,7 +25227,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
         <source>G</source>
-        <translation>Соль</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1753"/>
@@ -25243,7 +25242,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
         <source>A</source>
-        <translation>Ля</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1757"/>
@@ -25258,7 +25257,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
         <source>B</source>
-        <translation>Си</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1761"/>
@@ -27173,7 +27172,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
         <source>Get more effects</source>
-        <translation>Ещё скачать эффекты</translation>
+        <translation>Скачать ещё эффекты</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -27208,7 +27207,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
         <source>Get more sounds</source>
-        <translation>Ещё скачать звуки</translation>
+        <translation>Скачать ещё звуки</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="391"/>
@@ -27334,7 +27333,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
         <source>ordinary</source>
-        <translation>обычный</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>

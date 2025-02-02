@@ -42,7 +42,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Add/remove system breaks</source>
-        <translation>Afegeix/Suprimeix els salts de sistema</translation>
+        <translation>Afegeix/elimina salts de sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
@@ -3160,7 +3160,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7324"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
-        <translation>No mostris arpegis en notació estàndar quan es mostra en tabulatura</translation>
+        <translation>No mostris arpegis en notació estàndard quan es mostren en tabulatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7572"/>
@@ -5284,7 +5284,7 @@ l&apos;alçària x del text):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="389"/>
         <source>Add to measure number:</source>
-        <translation>Afegeix al número del compàs:</translation>
+        <translation>Suma al número de compàs:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="415"/>
@@ -9383,7 +9383,7 @@ l&apos;alçària x del text):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Add/remove s&amp;ystem breaks…</source>
-        <translation>Afegeix/elimina els s&amp;alts del sistema...</translation>
+        <translation>Afegeix/elimina s&amp;alts de sistema...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
@@ -20657,7 +20657,7 @@ compàs d&apos;anacrusi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="65"/>
         <source>Start new section with long instrument names</source>
-        <translation>Comença una nova secció amb els noms llargs dels instruments</translation>
+        <translation>Comença la nova secció amb els noms llargs dels instruments</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="75"/>
@@ -20667,7 +20667,7 @@ compàs d&apos;anacrusi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="85"/>
         <source>Indent first system of new section</source>
-        <translation>Sagna el primer sistema d&apos;una nova secció</translation>
+        <translation>Sagna el primer sistema de la nova secció</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -22050,7 +22050,7 @@ compàs d&apos;anacrusi</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="132"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>No hi ha cap instruments a la partitura. Per a triar-ne alguns, premeu &lt;b&gt;Afegeix&lt;/b&gt;.</translation>
+        <translation>No hi ha cap instrument a la partitura. Per a triar-ne, premeu &lt;b&gt;Afegeix&lt;/b&gt;.</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="826"/>
@@ -24312,12 +24312,12 @@ A més a més, Mastering MuseScore compta amb una comunitat de músics solidàri
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="134"/>
         <source>Add %1 palette</source>
-        <translation>Afegeix %1 paleta</translation>
+        <translation>Afegeix la paleta %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="160"/>
         <source>%1 added</source>
-        <translation>%1 afegit</translation>
+        <translation>S&apos;ha afegit %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="161"/>

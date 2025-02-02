@@ -13676,7 +13676,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
         <source>Desynchronized color</source>
-        <translation>Kolor desynchronizowany</translation>
+        <translation>Kolor desynchronizowanych</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -20250,7 +20250,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="49"/>
         <source>Glissando line</source>
-        <translation>Linia glissanda</translation>
+        <translation>Typ linii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="59"/>
@@ -21243,12 +21243,12 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="56"/>
         <source>Straight</source>
-        <translation>Prosta</translation>
+        <translation>Prosty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="57"/>
         <source>Wavy</source>
-        <translation>Falista</translation>
+        <translation>Falisty</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="40"/>
