@@ -3416,9 +3416,13 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
 Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
-    if (out && out->overriddenSpatium.has_value()) {
-        ctx.setSpatium(out->overriddenSpatium.value());
-        ctx.setOverrideSpatium(true);
+    if (out) {
+        if (out->overriddenSpatium.has_value()) {
+            ctx.setSpatium(out->overriddenSpatium.value());
+            ctx.setOverrideSpatium(true);
+        }
+
+        ctx.setPropertiesToSkip(out->propertiesToSkip);
     }
     DEFER {
         if (out) {

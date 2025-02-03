@@ -98,6 +98,8 @@ public:
 
     double spatium() const;
     void setSpatium(double v);
+    void setPropertiesToSkip(const PropertyIdSet& propertiesToSkip) { m_propertiesToSkip = propertiesToSkip; }
+    bool shouldSkipProperty(Pid pid) const { return muse::contains(m_propertiesToSkip, pid); }
 
     compat::DummyElement* dummy() const;
 
@@ -237,6 +239,7 @@ private:
     SettingsCompat _settingsCompat;
 
     TimeSigMap m_compatTimeSigMap;
+    PropertyIdSet m_propertiesToSkip;
 };
 }
 
