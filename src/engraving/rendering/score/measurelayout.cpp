@@ -2380,7 +2380,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     }
 
     // courtesy key signatures, clefs
-    if (nm && ctx.conf().styleB(Sid::genCourtesyKeysig)) {
+    if (nm && ctx.conf().styleB(Sid::genCourtesyKeysig) && !systemBreakHideCourtesy) {
         setCourtesyKeySig(m, nm->tick(), m->endTick(), SegmentType::KeySigAnnounce, ctx);
     }
 

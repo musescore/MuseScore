@@ -1980,7 +1980,7 @@ bool Measure::isFinalMeasureOfSection() const
     return false;
 }
 
-LayoutBreak* Measure::sectionBreakElement(bool includeNextFrames)
+LayoutBreak* Measure::sectionBreakElement(bool includeNextFrames) const
 {
     const MeasureBase* mb = static_cast<const MeasureBase*>(this);
 

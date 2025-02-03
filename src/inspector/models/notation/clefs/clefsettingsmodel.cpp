@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "clefsettingsmodel.h"
+#include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/clef.h"
 
 #include "translation.h"
@@ -103,20 +105,25 @@ void ClefSettingsModel::setIsCourtesyClefAvailable(bool available)
 void ClefSettingsModel::updatePropertiesAvailable()
 {
     bool hasHeaderClef = false;
-    bool hasCourtesyClef = false;
+    bool hasRepeatCourtesy = false;
+    bool enableCourtesy = true;
     for (mu::engraving::EngravingItem* item : m_elementList) {
         mu::engraving::Segment* clefSeg = static_cast<mu::engraving::Clef*>(item)->segment();
         if (clefSeg->isHeaderClefType()) {
             hasHeaderClef = true;
         } else if (clefSeg->isClefRepeatAnnounceType()) {
-            hasCourtesyClef = true;
+            hasRepeatCourtesy = true;
+            enableCourtesy = false;
         }
 
-        if (hasHeaderClef && hasCourtesyClef) {
-            break;
+        const engraving::Measure* measure = item->findMeasure();
+        const engraving::Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
+        const engraving::LayoutBreak* sectionBreak = prevMeasure ? prevMeasure->sectionBreakElement() : nullptr;
+        if (sectionBreak && !sectionBreak->showCourtesy()) {
+            enableCourtesy = false;
         }
     }
 
-    setIsClefToBarPosAvailable(!(hasHeaderClef || hasCourtesyClef));
-    setIsCourtesyClefAvailable(!hasCourtesyClef);
+    setIsClefToBarPosAvailable(!(hasHeaderClef || hasRepeatCourtesy));
+    setIsCourtesyClefAvailable(enableCourtesy);
 }
