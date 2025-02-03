@@ -1345,7 +1345,7 @@
         <Drum pitch="35">
           <head>normal</head>
           <line>8</line>
-          <voice>0</voice>
+          <voice>1</voice>
           <name>Acoustic Bass Drum</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
@@ -1985,7 +1985,7 @@
         <Drum pitch="35">
           <head>normal</head>
           <line>8</line>
-          <voice>0</voice>
+          <voice>1</voice>
           <name>Acoustic Bass Drum</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
