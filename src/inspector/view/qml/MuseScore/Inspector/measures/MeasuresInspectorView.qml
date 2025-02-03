@@ -76,7 +76,7 @@ InspectorSectionView {
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "DeleteMeasures"
-                navigation.row: root.navigationRowStart + 1
+                navigation.row: insertMeasuresPopupButton.navigation.row + 1
 
                 toolTipTitle: qsTrc("inspector", "Delete selected measures")
 
