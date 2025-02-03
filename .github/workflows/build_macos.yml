@@ -62,7 +62,7 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_NOTARIZE='false'
-        if [ "$BUILD_MODE" != "devel" ]; then
+        if [ "${{ github.event_name }}" != "pull_request" ]; then
           DO_NOTARIZE='true'
           if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then
             echo "::warning::APPLE_USERNAME is empty; notarization disabled"
