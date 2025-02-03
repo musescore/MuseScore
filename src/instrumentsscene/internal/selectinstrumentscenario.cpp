@@ -54,7 +54,12 @@ RetVal<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const Ins
 
 RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const StringList& params) const
 {
-    String uri = String("musescore://instruments/select?%1").arg(params.join(u"&"));
+    static const std::string SELECT_INSTRUMENT_URI = "musescore://instruments/select";
+    if (interactive()->isOpened(SELECT_INSTRUMENT_URI).val) {
+        return make_ret(Ret::Code::Cancel);
+    }
+
+    String uri = String::fromStdString(SELECT_INSTRUMENT_URI + "?%1").arg(params.join(u"&"));
     RetVal<Val> retVal = interactive()->open(uri.toStdString());
     if (!retVal.ret) {
         return retVal.ret;
