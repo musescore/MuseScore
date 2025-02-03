@@ -29,6 +29,7 @@
 #include "ipaletteconfiguration.h"
 #include "internal/ipaletteprovider.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -43,6 +44,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
     INJECT(IPaletteConfiguration, configuration)
     INJECT(IPaletteProvider, paletteProvider)
     INJECT(engraving::rendering::ISingleRenderer, engravingRender)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
 public:
     TimeDialog(QWidget* parent = 0);
@@ -57,6 +59,11 @@ private slots:
     void nChanged(int);
     void paletteChanged(int idx);
     void textChanged();
+    void textToggled();
+    void fourfourToggled();
+    void allaBreveToggled();
+    void otherToggled();
+    void otherChanged(int idx);
     void setDirty();
     void setShowTimePalette(bool val);
 
