@@ -2430,6 +2430,11 @@ void Chord::removeMarkings(bool keepTremolo)
     if (arpeggio()) {
         remove(arpeggio());
     }
+
+    if (m_spanArpeggio) {
+        m_spanArpeggio = nullptr;
+    }
+
     muse::DeleteAll(graceNotes());
     graceNotes().clear();
     muse::DeleteAll(articulations());
