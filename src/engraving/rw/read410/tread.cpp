@@ -4042,7 +4042,7 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
     if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
-    } else if (tag == "SlurSegment" || tag == "TieSegment") {
+    } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment") {
         const int idx = e.intAttribute("no", 0);
         const int n = int(s->spannerSegments().size());
         for (int i = n; i < idx; ++i) {
