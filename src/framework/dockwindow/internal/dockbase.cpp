@@ -548,7 +548,7 @@ void DockBase::resize(int width, int height)
     }
 
     auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
-    if (!frame) {
+    if (!frame || m_dockWidget != frame->currentDockWidget()) {
         return;
     }
 

@@ -175,10 +175,11 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
 
 void PercussionPanelModel::finishEditing(bool discardChanges)
 {
+    setCurrentPanelMode(m_panelModeToRestore);
+
     if (!interaction()) {
         //! NOTE: Can happen if we close the project while editing the layout...
-        m_padListModel->setDrumset(nullptr);
-        setCurrentPanelMode(m_panelModeToRestore);
+        setDrumset(nullptr);
         return;
     }
 
@@ -189,8 +190,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     Part* part = instAndPart.second;
 
     if (discardChanges) {
-        m_padListModel->setDrumset(inst ? inst->drumset() : nullptr);
-        setCurrentPanelMode(m_panelModeToRestore);
+        setDrumset(inst ? inst->drumset() : nullptr);
         return;
     }
 
@@ -231,7 +231,6 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
     undoStack->commitChanges();
 
-    setCurrentPanelMode(m_panelModeToRestore);
     m_padListModel->focusLastActivePad();
 }
 
@@ -249,9 +248,10 @@ void PercussionPanelModel::setUpConnections()
 
         if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
             finishEditing(/*discardChanges*/ true);
+        } else {
+            setDrumset(drumset);
         }
 
-        m_padListModel->setDrumset(drumset);
         updateSoundTitle(currentTrackId());
     };
 
@@ -306,6 +306,25 @@ void PercussionPanelModel::setUpConnections()
         }
         updateSoundTitle(trackId);
     });
+}
+
+void PercussionPanelModel::setDrumset(engraving::Drumset* drumset)
+{
+    m_padListModel->setDrumset(drumset);
+
+    // If drumset contained drums with undefined values for panelRow/panelColumn, m_padListModel will have
+    // assigned them now (see PercussionPanelPadListModel::load). In this case, we should update the score's
+    // drumset so that it matches the one in the panel...
+
+    const std::pair<Instrument*, Part*> instAndPart = getCurrentInstrumentAndPart();
+    Instrument* inst = instAndPart.first;
+
+    const Drumset* instDrumset = inst ? inst->drumset() : nullptr;
+    const Drumset* panelDrumset = m_padListModel->drumset();
+
+    if (instDrumset && panelDrumset && *instDrumset != *panelDrumset) {
+        inst->setDrumset(panelDrumset);
+    }
 }
 
 void PercussionPanelModel::updateSoundTitle(const InstrumentTrackId& trackId)
@@ -509,6 +528,10 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
     const Staff* staff = inputState.staff;
 
     Part* part = staff ? staff->part() : nullptr;
+
+    if (!inputState.segment) {
+        return { nullptr, part };
+    }
 
     Instrument* inst = part ? part->instrument(inputState.segment->tick()) : nullptr;
 
