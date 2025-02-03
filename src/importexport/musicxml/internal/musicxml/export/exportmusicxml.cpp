@@ -415,7 +415,7 @@ private:
     void chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset);
     void rest(Rest* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll);
     void clef(staff_idx_t staff, const ClefType ct, const String& extraAttributes = u"");
-    void timesig(TimeSig* tsig);
+    void timesig(const TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
     void barlineLeft(const Measure* const m, const track_idx_t track);
     void barlineMiddle(const BarLine* bl);
@@ -2167,13 +2167,13 @@ void ExportMusicXml::moveToTickIfNeed(const Fraction& t)
 //   timesig
 //---------------------------------------------------------
 
-void ExportMusicXml::timesig(TimeSig* tsig)
+void ExportMusicXml::timesig(const TimeSig* tsig)
 {
-    TimeSigType st = tsig->timeSigType();
-    Fraction ts = tsig->sig();
-    int z = ts.numerator();
-    int n = ts.denominator();
-    String ns = tsig->numeratorString();
+    const TimeSigType st = tsig->timeSigType();
+    const Fraction ts = tsig->sig();
+    const int z = ts.numerator();
+    const int n = ts.denominator();
+    const String ns = tsig->numeratorString();
 
     m_attr.doAttr(m_xml, true);
     XmlWriter::Attributes attrs;
@@ -2181,6 +2181,8 @@ void ExportMusicXml::timesig(TimeSig* tsig)
         attrs = { { "symbol", "common" } };
     } else if (st == TimeSigType::ALLA_BREVE) {
         attrs = { { "symbol", "cut" } };
+    } else if (!ns.empty() && tsig->denominatorString().empty()) {
+        attrs = { { "symbol", "single-number" } };
     }
     if (!tsig->visible()) {
         attrs.push_back({ "print-object", "no" });
