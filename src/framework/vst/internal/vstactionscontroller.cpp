@@ -82,13 +82,19 @@ void VstActionsController::instEditor(const actions::ActionQuery& actionQuery)
     int trackId = actionQuery.param("trackId", Val(-1)).toInt();
 
     auto instance = instancesRegister()->instrumentPlugin(resourceId, trackId);
+
+    std::string operation = actionQuery.param("operation", Val("open")).toString();
+
+    if (operation == "close" && !instance) {
+        return;
+    }
+
     IF_ASSERT_FAILED(instance) {
         LOGE() << "not found instance, resourceId: " << resourceId
                << ", trackId: " << trackId;
         return;
     }
 
-    std::string operation = actionQuery.param("operation", Val("open")).toString();
     editorOperation(operation, instance->id());
 }
 
@@ -124,7 +130,7 @@ void VstActionsController::useView(bool isNew)
         interactiveUriRegister()->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
     }
 
-    m_actionCheckedChanged.send({"vst-use-oldview", "vst-use-newview"});
+    m_actionCheckedChanged.send({ "vst-use-oldview", "vst-use-newview" });
 }
 
 bool VstActionsController::actionChecked(const actions::ActionCode& act) const
@@ -142,4 +148,3 @@ async::Channel<actions::ActionCodeList> VstActionsController::actionCheckedChang
 {
     return m_actionCheckedChanged;
 }
-

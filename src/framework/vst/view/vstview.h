@@ -37,8 +37,8 @@ class VstView : public QQuickItem, public Steinberg::IPlugFrame
 
     DECLARE_FUNKNOWN_METHODS
 
-        public:
-                 VstView(QQuickItem* parent = nullptr);
+public:
+    VstView(QQuickItem* parent = nullptr);
     ~VstView();
 
     int instanceId() const;
@@ -75,4 +75,3 @@ private:
     QString m_title;
 };
 }
-

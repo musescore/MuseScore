@@ -58,7 +58,6 @@ static FIDString currentPlatformUiType()
 VstView::VstView(QQuickItem* parent)
     : QQuickItem(parent)
 {
-
 }
 
 VstView::~VstView()
@@ -137,7 +136,7 @@ Steinberg::tresult VstView::resizeView(Steinberg::IPlugView* view, Steinberg::Vi
     int newWidth = requiredSize->getWidth();
     int newHeight = requiredSize->getHeight();
 
-//! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the size.
+//! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the fixed size.
 //! Otherwise, the user will get an extremely large window and won't be able to resize it
 #ifdef Q_OS_WIN
     newWidth = newWidth / m_screenMetrics.devicePixelRatio;
@@ -152,8 +151,8 @@ Steinberg::tresult VstView::resizeView(Steinberg::IPlugView* view, Steinberg::Vi
 
     m_window->setGeometry(this->x(), this->y(), this->implicitWidth(), this->implicitHeight());
     Steinberg::ViewRect vstSize;
-    vstSize.right = m_window->width();
-    vstSize.bottom = m_window->height();
+    vstSize.right = m_window->width() * m_screenMetrics.devicePixelRatio;
+    vstSize.bottom = m_window->height() * m_screenMetrics.devicePixelRatio;
     view->onSize(&vstSize);
 
     return Steinberg::kResultTrue;
@@ -172,13 +171,6 @@ void VstView::updateViewGeometry()
         return;
     }
 
-#ifdef Q_OS_WIN
-    Steinberg::FUnknownPtr<IPluginContentScaleHandler> scalingHandler(m_view);
-    if (scalingHandler) {
-        scalingHandler->setContentScaleFactor(m_screenMetrics.devicePixelRatio);
-    }
-#endif
-
     Steinberg::ViewRect size;
     m_view->getSize(&size);
 
@@ -192,8 +184,9 @@ int VstView::instanceId() const
 
 void VstView::setInstanceId(int newInstanceId)
 {
-    if (m_instanceId == newInstanceId)
+    if (m_instanceId == newInstanceId) {
         return;
+    }
     m_instanceId = newInstanceId;
     emit instanceIdChanged();
 }
