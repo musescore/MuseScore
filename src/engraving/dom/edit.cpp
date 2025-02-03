@@ -7171,7 +7171,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
             Chord* c = toChord(e);
             for (Note* n : c->notes()) {
                 // Remove ties crossing measure range boundaries
-                Tie* t = n->tieBack();
+                Tie* t = n->tieBackNonPartial();
                 if (t && t->startNote() && (t->startNote()->chord()->tick() < startTick)) {
                     if (preserveTies) {
                         t->setEndNote(0);
@@ -7179,7 +7179,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
                         undoRemoveElement(t);
                     }
                 }
-                t = n->tieFor();
+                t = n->tieForNonPartial();
                 if (t && t->endNote() && (t->endNote()->chord()->tick() >= endTick)) {
                     undoRemoveElement(t);
                 }

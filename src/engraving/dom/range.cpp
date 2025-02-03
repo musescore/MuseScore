@@ -121,7 +121,7 @@ void TrackList::combineTuplet(Tuplet* dst, Tuplet* src)
         Chord* chord = toChord(src->elements().front());
         bool akkumulateChord = true;
         for (Note* n : chord->notes()) {
-            if (!n->tieBack() || !n->tieBack()->generated()) {
+            if (!n->tieBackNonPartial() || !n->tieBack()->generated()) {
                 akkumulateChord = false;
                 break;
             }
@@ -196,7 +196,7 @@ void TrackList::append(EngravingItem* e)
                     Chord* chord = toChord(e);
                     bool akkumulateChord = true;
                     for (Note* n : chord->notes()) {
-                        if (!n->tieBack() || !n->tieBack()->generated()) {
+                        if (!n->tieBackNonPartial() || !n->tieBack()->generated()) {
                             akkumulateChord = false;
                             break;
                         }
@@ -354,7 +354,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
         }
         Chord* chord = toChord(e);
         for (Note* n1 : chord->notes()) {
-            Tie* tie = n1->tieFor();
+            Tie* tie = n1->tieForNonPartial();
             if (!tie) {
                 continue;
             }
@@ -644,7 +644,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
         }
         Chord* chord = toChord(e);
         for (Note* n : chord->notes()) {
-            Tie* tie = n->tieFor();
+            Tie* tie = n->tieForNonPartial();
             if (!tie) {
                 continue;
             }
