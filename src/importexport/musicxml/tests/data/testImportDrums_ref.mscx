@@ -198,8 +198,14 @@
           <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="52">
-          <head>cross</head>
-          <line>-4</line>
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadHeavyXHat</whole>
+            <half>noteheadHeavyXHat</half>
+            <quarter>noteheadHeavyXHat</quarter>
+            <breve>noteheadHeavyXHat</breve>
+            </noteheads>
+          <line>-3</line>
           <voice>0</voice>
           <name>China Cymbal</name>
           <stem>1</stem>
@@ -226,7 +232,7 @@
           </Drum>
         <Drum pitch="55">
           <head>cross</head>
-          <line>-5</line>
+          <line>-4</line>
           <voice>0</voice>
           <name>Splash Cymbal</name>
           <stem>1</stem>
