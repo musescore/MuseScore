@@ -651,7 +651,7 @@ class Capella {
       unsigned char barNumberFrame; // 0=kein, 1=Rechteck, 2=Ellipse
       unsigned char nBarDistX;
       unsigned char nBarDistY;
-      // LogFont       barNumFont;
+      QFont barNumFont;
 
       unsigned nFirstPage;          // Versatz fuer Seitenzaehlung
 

@@ -365,10 +365,10 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         {
                         TransposableObj* to = static_cast<TransposableObj*>(oo);
                         QString str = "";
-                        for (BasicDrawObj* bdo : to->variants) {
+                        for (BasicDrawObj*& bdo : to->variants) {
                               SimpleTextObj* st = static_cast<SimpleTextObj*>(bdo);
                               if (st->font().family() == "capella3") {
-                                    for (const QChar& ch : st->text()) {
+                                    for (QChar& ch : st->text()) {
                                           if (ch == 'Q')
                                                 str += "b";
                                           else if (ch == 'S')
@@ -498,7 +498,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
             if (cr) {
                   if ((graceNumber1 > 0) && cr->isChord()) { // the spanner is starting from a grace note
                         Chord* chord = toChord(cr);
-                        for (Chord* cc : chord->graceNotes()) {
+                        for (Chord*& cc : chord->graceNotes()) {
                               --graceNumber1;
                               if ((graceNumber1 == 0) && (!cr1))
                                     cr1 = toChordRest(cc); // found first ChordRest
@@ -515,7 +515,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
             if (cr) {
                   if ((graceNumber > 0) && cr->isChord()) { // the spanner is ending on a grace note
                         Chord* chord = toChord(cr);
-                        for (Chord* cc : chord->graceNotes()) {
+                        for (Chord*& cc : chord->graceNotes()) {
                               --graceNumber;
                               if ((graceNumber == 0) && (!cr2))
                                     cr2 = toChordRest(cc); // found 2nd ChordRest
@@ -574,7 +574,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
       ClefType pclef = score->staff(staffIdx)->defaultClefType()._concertClef;
 
       QList<Chord*> graceNotes;
-      for (NoteObj* no : cvoice->objects) {
+      for (NoteObj*& no : cvoice->objects) {
             switch (no->type()) {
                   case CapellaNoteObjectType::REST:
                         {
@@ -766,7 +766,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               };
                         off += keyOffsets[int(key) + 7];
 
-                        for (const CNote& n : o->notes) {
+                        for (const CNote& n : qAsConst(o->notes)) {
                               Note* note = new Note(score);
                               int pitch = 0;
                               // .cap import: pitch contains the diatonic note number relative to clef and key
@@ -802,7 +802,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                                     note->setTieFor(tie);
                                     }
                               }
-                        for (Verse v : o->verse) {
+                        for (Verse& v : o->verse) {
                               Lyrics* l = new Lyrics(score);
                               l->setTrack(track);
                               l->setPlainText(v.text);
@@ -972,7 +972,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
       // pass II
       //
       tick = startTick;
-      for (NoteObj* no : cvoice->objects) {
+      for (NoteObj*& no : cvoice->objects) {
             BasicDurationalObj* d = 0;
             if (no->type() == CapellaNoteObjectType::REST)
                   d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(no));
@@ -980,7 +980,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                   d = static_cast<BasicDurationalObj*>(static_cast<ChordObj*>(no));
             if (!d)
                   continue;
-            for (BasicDrawObj* o : d->objects) {
+            for (BasicDrawObj*& o : d->objects) {
                   switch (o->type) {
                         case CapellaType::SIMPLE_TEXT:
                               // qDebug("simple text at %d", tick);
@@ -1175,9 +1175,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       // score->style().set(Sid::hideEmptyStaves, true);
 
 #if 1
-      for (CapSystem* csys : cap->systems) {
+      for (CapSystem*& csys : cap->systems) {
             qDebug("System:");
-            for (CapStaff* cstaff : csys->staves) {
+            for (CapStaff*& cstaff : csys->staves) {
                   CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
                   qDebug("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
                          qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
@@ -1191,7 +1191,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       // find out the maximum number of staves
       //
       int staves = 0;
-      for (CapSystem* csys : cap->systems) {
+      for (CapSystem*& csys : cap->systems) {
             staves = qMax(staves, csys->staves.size());
             }
       //
@@ -1263,7 +1263,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       if (bstaff)
             bstaff->setBarLineSpan(span != 0);
 
-      for (CapBracket cb : cap->brackets) {
+      for (CapBracket& cb : cap->brackets) {
             qDebug("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
             Staff* staff = score->staves().value(cb.from);
             if (staff == 0) {
@@ -1274,7 +1274,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             staff->setBracketSpan(0, cb.to - cb.from + 1);
             }
       MeasureBase* measure = nullptr;
-      for (BasicDrawObj* o : cap->backgroundChord->objects) {
+      for (BasicDrawObj*& o : cap->backgroundChord->objects) {
             switch (o->type) {
                   case CapellaType::SIMPLE_TEXT:
                         {
@@ -1325,7 +1325,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             }
 
       Fraction systemTick = Fraction(0,1);
-      for (CapSystem* csys : cap->systems) {
+      for (CapSystem*& csys : cap->systems) {
             qDebug("readCapSystem");
             /*
             if (csys->explLeftIndent > 0) {
@@ -1336,7 +1336,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             */
             Fraction mtick = Fraction(0,1);
-            for (CapStaff* cstaff : csys->staves) {
+            for (CapStaff*& cstaff : csys->staves) {
                   //
                   // assumption: layout index is mscore staffIdx
                   //    which means that there is a 1:1 relation between layout/staff
@@ -1344,7 +1344,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
                   qDebug("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
                   int staffIdx = cstaff->iLayout;
-                  for (CapVoice* cvoice : cstaff->voices) {
+                  for (CapVoice*& cvoice : cstaff->voices) {
                         Fraction tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
                         if (tick > mtick)
                               mtick = tick;
@@ -1354,7 +1354,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             if (m && !m->lineBreak()) {
                   LayoutBreak* lb = new LayoutBreak(score);
                   lb->setLayoutBreakType(LayoutBreak::Type::LINE);
-                  lb->setTrack(-1);       // this are system elements
+                  lb->setTrack(0);       // these are system elements
                   m->add(lb);
                   }
             systemTick = mtick;
@@ -2750,7 +2750,7 @@ void Capella::read(QFile* fp)
       barNumberFrame   = readByte();        // 0=kein, 1=Rechteck, 2=Ellipse
       nBarDistX        = readByte();
       nBarDistY        = readByte();
-      QFont barNumFont = readFont();
+      barNumFont       = readFont();
       nFirstPage       = readUnsigned();    // Versatz fuer Seitenzaehlung
       leftPageMargins  = readUnsigned();    // Seitenraender
       topPageMargins   = readUnsigned();

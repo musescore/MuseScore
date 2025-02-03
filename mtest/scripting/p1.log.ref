@@ -1,16 +1,16 @@
 test script p1: read score elements
-found:Clef (22) at 0
-found:KeySig (23) at 0
-found:TimeSig (25) at 0
+found:Clef (23) at 0
+found:KeySig (24) at 0
+found:TimeSig (26) at 0
 found:Chord (92) at 0
   beamMode:0
   small:false
   stemDirection:AUTO
   duration:1/4
-found:Rest (26) at 480
+found:Rest (27) at 480
 found:Chord (92) at 960
   beamMode:0
   small:false
   stemDirection:AUTO
   duration:1/2
-found:BarLine (12) at 1920
+found:BarLine (13) at 1920

@@ -364,7 +364,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                         if (!e || !e->isChord())
                               continue;
                         Chord* crd = toChord(e);
-                        for (Chord* chord1 : crd->graceNotes()) {
+                        for (Chord*& chord1 : crd->graceNotes()) {
                               for (Note* note1 : chord1->notes()) {
                                     if (note1->tieBack() && note1->accidental() == 0)
                                           continue;
@@ -425,7 +425,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
                   if (!e || !e->isChord())
                         continue;
                   Chord* chord = toChord(e);
-                  for (Chord* chord1 : chord->graceNotes()) {
+                  for (Chord*& chord1 : chord->graceNotes()) {
                         for (Note* note : chord1->notes()) {
                               if (note->tieBack() && note->accidental() == 0)
                                     continue;
@@ -1503,8 +1503,8 @@ Element* Measure::drop(EditData& data)
                   Bracket* b = toBracket(e);
                   int level = 0;
                   int firstStaff = 0;
-                  for (Staff* s : score()->staves()) {
-                        for (const BracketItem* bi : s->brackets()) {
+                  for (Staff*& s : score()->staves()) {
+                        for (BracketItem*& bi : s->brackets()) {
                               int lastStaff = firstStaff + bi->bracketSpan() - 1;
                               if (staffIdx >= firstStaff && staffIdx <= lastStaff)
                                     ++level;
@@ -1536,7 +1536,7 @@ Element* Measure::drop(EditData& data)
                         }
                   else {
                         // apply to all staves:
-                        for (Staff* s : score()->staves())
+                        for (Staff*& s : score()->staves())
                               score()->undoChangeKeySig(s, tick(), k);
                         }
 
@@ -1587,7 +1587,7 @@ Element* Measure::drop(EditData& data)
                               break;
                         }
                   if (b) {
-                        b->setTrack(-1);       // these are system elements
+                        b->setTrack(0);       // these are system elements
                         b->setParent(measure);
                         score()->undoAddElement(b);
                         }
@@ -1607,7 +1607,7 @@ Element* Measure::drop(EditData& data)
                         const bool systemEnd = (nextVisStaffIdx == score()->nstaves());
                         if (systemEnd) {
                               System* ns = 0;
-                              for (System* ts : score()->systems()) {
+                              for (System*& ts : score()->systems()) {
                                     if (ns) {
                                           ns = ts;
                                           break;
@@ -1652,7 +1652,7 @@ Element* Measure::drop(EditData& data)
                         }
                   else if (bl->barLineType() == BarLineType::START_REPEAT) {
                         Measure* m2 = isMMRest() ? mmRestFirst() : this;
-                        for (Score* lscore : score()->scoreList()) {
+                        for (Score*& lscore : score()->scoreList()) {
                               Measure* lmeasure = lscore->tick2measure(m2->tick());
                               if (lmeasure)
                                     lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
@@ -1660,7 +1660,7 @@ Element* Measure::drop(EditData& data)
                         }
                   else if (bl->barLineType() == BarLineType::END_REPEAT) {
                         Measure* m2 = isMMRest() ? mmRestLast() : this;
-                        for (Score* lscore : score()->scoreList()) {
+                        for (Score*& lscore : score()->scoreList()) {
                               Measure* lmeasure = lscore->tick2measure(m2->tick());
                               if (lmeasure)
                                     lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
@@ -1668,7 +1668,7 @@ Element* Measure::drop(EditData& data)
                         }
                   else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
                         Measure* m2 = isMMRest() ? mmRestLast() : this;
-                        for (Score* lscore : score()->scoreList()) {
+                        for (Score*& lscore : score()->scoreList()) {
                               Measure* lmeasure = lscore->tick2measure(m2->tick());
                               if (lmeasure) {
                                     lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
@@ -1808,7 +1808,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
       score()->undoInsertTime(startTick, diff);
       score()->undo(new InsertTime(score(), startTick, diff));
 
-      for (Score* s : score()->scoreList()) {
+      for (Score*& s : score()->scoreList()) {
             Measure* m = s->tick2measure(tick());
             s->undo(new ChangeMeasureLen(m, nf));
             if (nl > ol) {
@@ -3950,7 +3950,7 @@ void Measure::setEndBarLineType(BarLineType val, int track, bool visible, QColor
 void Measure::barLinesSetSpan(Segment* seg)
       {
       int track = 0;
-      for (Staff* staff : score()->staves()) {
+      for (Staff*& staff : score()->staves()) {
             BarLine* bl = toBarLine(seg->element(track));  // get existing bar line for this staff, if any
             if (bl) {
                   if (bl->generated()) {
@@ -4236,7 +4236,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
       Segment* kSegment = findFirstR(SegmentType::KeySig, Fraction(0,1));
       Segment* cSegment = findFirstR(SegmentType::HeaderClef, Fraction(0,1));
 
-      for (const Staff* staff : score()->staves()) {
+      for (Staff*& staff : score()->staves()) {
             const int track = staffIdx * VOICES;
 
             if (isFirstSystem || score()->styleB(Sid::genClef)) {
