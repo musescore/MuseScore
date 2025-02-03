@@ -353,7 +353,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
     }
 
-    HorizontalSpacing::centerTimeSigIfNeeded(system);
+    updateBigTimeSigIfNeeded(system, ctx);
+
     // Recompute spacing to account for the last changes (barlines, hidden staves, etc)
     curSysWidth = HorizontalSpacing::computeSpacingForFullSystem(system);
 
@@ -598,6 +599,74 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 }
 
+void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
+{
+    if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::ABOVE_STAVES) {
+        return;
+    }
+
+    staff_idx_t nstaves = ctx.dom().nstaves();
+    bool centerOnBarline = ctx.conf().styleB(Sid::timeSigCenterOnBarline);
+
+    for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment& seg : measure->segments()) {
+            if (!seg.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+                continue;
+            }
+
+            std::set<TimeSig*> timeSigToKeep;
+            for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                TimeSig* timeSig = toTimeSig(seg.element(staff2track(staffIdx)));
+                if (!timeSig || !timeSig->showOnThisStaff()) {
+                    continue;
+                }
+
+                timeSigToKeep.insert(timeSig);
+                if (system->staff(staffIdx)->show()) {
+                    continue;
+                }
+
+                staff_idx_t nextVisStaff = system->nextVisibleStaff(staffIdx);
+                if (nextVisStaff == muse::nidx) {
+                    continue;
+                }
+
+                TimeSig* nextVisTimeSig = toTimeSig(seg.element(staff2track(nextVisStaff)));
+                if (nextVisTimeSig) {
+                    timeSigToKeep.insert(nextVisTimeSig);
+                }
+            }
+
+            Segment* prevBarlineSeg = nullptr;
+            if (centerOnBarline) {
+                for (Segment* prevSeg = seg.prev1(); prevSeg && prevSeg->tick() == seg.tick(); prevSeg = prevSeg->prev1()) {
+                    if (prevSeg->isEndBarLineType()) {
+                        prevBarlineSeg = prevSeg;
+                        break;
+                    }
+                }
+            }
+
+            for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                TimeSig* timeSig = toTimeSig(seg.element(staff2track(staffIdx)));
+                if (!timeSig) {
+                    continue;
+                }
+                if (!muse::contains(timeSigToKeep, timeSig)) {
+                    timeSig->mutldata()->reset(); // Eliminates the shape
+                    continue;
+                }
+                if (prevBarlineSeg && prevBarlineSeg->system() == system) {
+                    RectF bbox = timeSig->ldata()->bbox();
+                    timeSig->mutldata()->setPosX(-0.5 * (bbox.right() + bbox.left()));
+                }
+            }
+
+            seg.createShapes();
+        }
+    }
+}
+
 void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 {
     if (ctx.dom().nstaves() == 0) {
@@ -706,7 +775,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     }
                 } else if (s.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
                     TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
-                    if (ts && ts->addToSkyline()) {
+                    if (ts && ts->addToSkyline() && ts->showOnThisStaff()) {
                         TimeSigPlacement timeSigPlacement = ts->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
                         if (timeSigPlacement != TimeSigPlacement::ACROSS_STAVES) {
                             skyline.add(ts->shape().translate(ts->pos() + p + ts->staffOffset()));
@@ -1313,7 +1382,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             for (Segment& s : toMeasure(mb)->segments()) {
                 if (s.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
                     for (EngravingItem* timeSig : s.elist()) {
-                        if (timeSig && timeSig->ldata()->isValid()) {
+                        if (timeSig && toTimeSig(timeSig)->showOnThisStaff()) {
                             Autoplace::autoplaceSegmentElement(timeSig, timeSig->mutldata());
                         }
                     }
@@ -2688,15 +2757,15 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                EngravingItem* timeSig = segment.element(staff2track(staffIdx));
-                if (!timeSig || !timeSig->ldata()->isValid()) {
+                TimeSig* timeSig = toTimeSig(segment.element(staff2track(staffIdx)));
+                if (!timeSig || !timeSig->showOnThisStaff()) {
                     continue;
                 }
                 staff_idx_t thisStaffIdx = timeSig->effectiveStaffIdx();
                 staff_idx_t nextStaffIdx = thisStaffIdx;
                 for (staff_idx_t idx = thisStaffIdx + 1; idx < nstaves; ++idx) {
-                    EngravingItem* nextTimeSig = segment.element(staff2track(idx));
-                    if (nextTimeSig && nextTimeSig->ldata()->isValid()) {
+                    TimeSig* nextTimeSig = toTimeSig(segment.element(staff2track(idx)));
+                    if (nextTimeSig && nextTimeSig->showOnThisStaff()) {
                         staff_idx_t nextTimeSigStave = nextTimeSig->effectiveStaffIdx();
                         nextStaffIdx = system->prevVisibleStaff(nextTimeSigStave);
                         break;

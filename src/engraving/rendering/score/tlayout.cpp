@@ -6292,10 +6292,6 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     ldata->pn = PointF();
     ldata->pointLargeRightParen = PointF();
 
-    if (!item->showOnThisStaff()) {
-        return;
-    }
-
     const MStyle& style = item->style();
     TimeSigPlacement timeSigPlacement = style.styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
     if (timeSigPlacement == TimeSigPlacement::NORMAL) {
