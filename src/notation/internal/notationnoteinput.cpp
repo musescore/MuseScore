@@ -44,6 +44,15 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::async;
 
+static bool noteInputMethodAvailable(NoteInputMethod method, const Staff* staff, const Fraction& tick)
+{
+    if (method == NoteInputMethod::BY_DURATION) {
+        return staff && !staff->isTabStaff(tick);
+    }
+
+    return true;
+}
+
 NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack
                                      , const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx), m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
@@ -106,13 +115,19 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
 
     is.setRest(false);
     is.setNoteEntryMode(true);
-    is.setNoteEntryMethod(method);
+
+    const Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
+
+    if (noteInputMethodAvailable(method, staff, is.tick())) {
+        is.setNoteEntryMethod(method);
+    } else {
+        is.setNoteEntryMethod(NoteInputMethod::BY_NOTE_NAME); // fallback
+    }
 
     if (shouldSetupInputNote()) {
         setupInputNote();
     }
 
-    const Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
     switch (staff->staffType(is.tick())->group()) {
     case mu::engraving::StaffGroup::STANDARD:
         break;
@@ -394,8 +409,16 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
 {
     TRACEFUNC;
 
-    score()->inputState().setNoteEntryMethod(method);
+    NoteInputState& is = score()->inputState();
+    if (is.usingNoteEntryMethod(method)) {
+        return;
+    }
 
+    if (!noteInputMethodAvailable(method, is.staff(), is.tick())) {
+        return;
+    }
+
+    is.setNoteEntryMethod(method);
     notifyAboutStateChanged();
 }
 
