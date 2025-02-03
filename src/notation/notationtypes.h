@@ -201,7 +201,8 @@ enum class BoxType
     Vertical,
     Horizontal,
     Measure,
-    Text
+    Text,
+    Fret
 };
 
 enum class AddBoxesTarget {

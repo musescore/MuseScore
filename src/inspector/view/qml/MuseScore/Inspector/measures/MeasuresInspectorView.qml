@@ -89,7 +89,7 @@ InspectorSectionView {
         StyledTextLabel {
             Layout.fillWidth: true
             Layout.topMargin: 12
-            visible: model.scoreIsInPageView
+            visible: root.model ? model.scoreIsInPageView : false
             horizontalAlignment: Qt.AlignLeft
             text: qsTrc("inspector", "Move to system")
         }
@@ -160,7 +160,7 @@ InspectorSectionView {
 
             toolTipTitle: qsTrc("inspector", "Lock current system(s)")
             toolTipDescription: qsTrc("inspector", "Keep these measures together and prevent them from reflowing to the next system")
-            toolTipShortcut: model.shortcutToggleSystemLock
+            toolTipShortcut: root.model ? model.shortcutToggleSystemLock : ""
 
             accentButton: Boolean(model.allSystemsAreLocked)
 
@@ -169,7 +169,7 @@ InspectorSectionView {
 
         FlatButton {
             id: makeIntoOneSystem
-            enabled: model.isMakeIntoSystemAvailable
+            enabled: root.model ? model.isMakeIntoSystemAvailable : false
 
             Layout.topMargin: 4
             Layout.fillWidth: true

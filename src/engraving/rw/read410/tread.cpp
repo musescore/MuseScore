@@ -2304,7 +2304,25 @@ void TRead::read(VBox* b, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
 {
-    TRead::read(static_cast<Box*>(b), xml, ctx);
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (tag == "textScale") {
+            b->setTextScale(xml.readInt());
+        } else if (tag == "diagramScale") {
+            b->setDiagramScale(xml.readInt());
+        } else if (tag == "columnGap") {
+            b->setColumnGap(Spatium(xml.readDouble()));
+        } else if (tag == "rowGap") {
+            b->setRowGap(Spatium(xml.readDouble()));
+        } else if (tag == "chordsPerRow") {
+            b->setChordsPerRow(xml.readInt());
+        } else if (tag == "horizontalAlign") {
+            b->setContentHorizontallAlignment(static_cast<AlignH>(xml.readInt()));
+        } else if (TRead::readProperties(static_cast<Box*>(b), xml, ctx)) {
+        } else {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(TBox* b, XmlReader& e, ReadContext& ctx)

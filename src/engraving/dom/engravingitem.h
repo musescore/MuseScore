@@ -403,6 +403,7 @@ public:
 
     bool isPrintable() const;
     bool isPlayable() const;
+    void setIsPlayable(bool playable);
     virtual double absoluteFromSpatium(const Spatium& sp) const { return sp.val() * spatium(); }
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
@@ -737,6 +738,8 @@ private:
     bool m_colorsInversionEnabled = true;
 
     mutable LayoutData* m_layoutData = nullptr;
+
+    std::optional<bool> m_isPlayable;
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

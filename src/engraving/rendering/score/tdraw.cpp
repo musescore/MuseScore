@@ -1032,6 +1032,83 @@ void TDraw::draw(const VBox* item, Painter* painter)
 void TDraw::draw(const FBox* item, Painter* painter)
 {
     draw(static_cast<const Box*>(item), painter);
+
+    const std::vector<Harmony*> harmonies = item->harmonies();
+    const std::vector<FretDiagram*> fretDiagrams = item->fretDiagrams();
+    if (harmonies.empty() || fretDiagrams.empty()) {
+        return;
+    }
+
+    const FBox::LayoutData* ldata = dynamic_cast<const FBox::LayoutData*>(item->ldata());
+
+    const double cellWidth = ldata->cellWidth;
+    const double cellHeight = ldata->cellHeight;
+
+    const double totalTableWidth = ldata->totalTableWidth;
+
+    const int chordsPerRow = item->chordsPerRow();
+    const double rowGap = item->rowGap().val() * item->spatium();
+    const double columnGap = item->columnGap().val() * item->spatium();
+
+    const int totalHarmonies = harmonies.size();
+
+    const double spatium = item->spatium();
+
+    AlignH alignH = item->contentHorizontallAlignment();
+    const double leftMargin = item->getProperty(Pid::LEFT_MARGIN).toDouble() * spatium;
+    const double rightMargin = item->getProperty(Pid::RIGHT_MARGIN).toDouble() * spatium;
+    const double topMargin = item->getProperty(Pid::TOP_MARGIN).toDouble() * spatium;
+    const double bottomMargin = item->getProperty(Pid::BOTTOM_MARGIN).toDouble() * spatium;
+
+    const double startX = alignH == AlignH::HCENTER
+                          ? (item->width() - totalTableWidth) / 2
+                          : alignH == AlignH::RIGHT ? item->width() - totalTableWidth : 0.0;
+    const double startY = !muse::RealIsNull(topMargin) ? topMargin : -bottomMargin;
+
+    for (int i = 0; i < totalHarmonies; ++i) {
+        int row = i / chordsPerRow;
+        int col = i % chordsPerRow;
+
+        int itemsInRow = std::min(chordsPerRow, totalHarmonies - row * chordsPerRow);
+        double rowOffsetX = alignH == AlignH::HCENTER
+                            ? (totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap)) / 2
+                            : alignH == AlignH::RIGHT
+                            ? totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap) - rightMargin + spatium
+                            : leftMargin + spatium;
+
+        Harmony* harmony = harmonies[i];
+        FretDiagram* fretDiagram = fretDiagrams[i];
+
+        const double harmonyHeight = harmony->ldata()->harmonyHeight;
+
+        double x = startX + rowOffsetX + col * (cellWidth + columnGap);
+        double y = startY + row * (cellHeight + rowGap) + harmonyHeight;
+
+        // draw harmony
+
+        painter->setBrush(BrushStyle::NoBrush);
+        Color color = harmony->textColor();
+        painter->setPen(color);
+
+        Font f(harmony->font());
+        f.setPointSizeF(f.pointSizeF() * item->textScale() * MScore::pixelRatio);
+#ifndef Q_OS_MACOS
+        TextBase::drawTextWorkaround(painter, f, PointF(x, y), harmony->harmonyName());
+#else
+        painter->setFont(f);
+        painter->drawText(PointF(x, y), harmony->harmonyName());
+#endif
+
+        // draw fret diagram
+
+        if (fretDiagram) {
+            PointF pos(x, y + harmonyHeight + 4);
+
+            painter->translate(pos);
+            draw(fretDiagram, painter);
+            painter->translate(-pos);
+        }
+    }
 }
 
 void TDraw::draw(const TBox* item, Painter* painter)

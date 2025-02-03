@@ -176,12 +176,64 @@ class FBox : public VBox
     DECLARE_CLASSOF(ElementType::FBOX)
 
 public:
-    FBox(System* parent)
-        : VBox(ElementType::FBOX, parent) {}
+    FBox(System* parent);
 
     FBox* clone() const override { return new FBox(*this); }
 
     void add(EngravingItem*) override;
+
+    double textScale() const;
+    void setTextScale(double scale);
+
+    double diagramScale() const;
+    void setDiagramScale(double scale);
+
+    Spatium columnGap() const;
+    void setColumnGap(Spatium gap);
+
+    Spatium rowGap() const;
+    void setRowGap(Spatium gap);
+
+    int chordsPerRow() const;
+    void setChordsPerRow(int chords);
+
+    AlignH contentHorizontallAlignment() const;
+    void setContentHorizontallAlignment(AlignH alignment);
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+
+    const std::vector<Harmony*> harmonies() const { return m_harmonies; }
+    const std::vector<FretDiagram*> fretDiagrams() const { return m_fretDiagrams; }
+
+    void init();
+
+    struct LayoutData : public VBox::LayoutData {
+        double cellWidth = 0.0;
+        double cellHeight = 0.0;
+
+        double totalTableHeight = 0.0;
+        double totalTableWidth = 0.0;
+
+        double defaultMargins = 0.0;
+    };
+
+    DECLARE_LAYOUTDATA_METHODS(FBox)
+
+private:
+    void resolveContentRect();
+
+    std::vector<Harmony*> m_harmonies;
+    std::vector<FretDiagram*> m_fretDiagrams;
+
+    double m_textScale = 0.0;
+    double m_diagramScale = 0.0;
+    Spatium m_columnGap;
+    Spatium m_rowGap;
+    int m_chordsPerRow = 0;
+
+    AlignH m_contentAlignmentH = AlignH::HCENTER;
 };
 
 //---------------------------------------------------------
