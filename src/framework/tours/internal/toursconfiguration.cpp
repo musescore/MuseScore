@@ -54,8 +54,8 @@ void ToursConfiguration::setLastShownTourIdForEvent(const String& eventCode, con
     String newTourId = eventCode + u"/" + tourId;
 
     for (size_t i = 0; i < allLastShownTours.size(); ++i) {
-        const String& tourId = allLastShownTours[i];
-        if (tourId.startsWith(eventCode)) {
+        const String& lastTourId = allLastShownTours[i];
+        if (lastTourId.startsWith(eventCode)) {
             allLastShownTours[i] = newTourId;
             changed = true;
         }
