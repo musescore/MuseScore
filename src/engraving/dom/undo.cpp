@@ -2301,7 +2301,7 @@ void InsertRemoveMeasures::insertMeasures()
             }
             Chord* chord = toChord(e);
             for (Note* n : chord->notes()) {
-                Tie* tie = n->tieFor();
+                Tie* tie = n->tieForNonPartial();
                 if (!tie) {
                     continue;
                 }
