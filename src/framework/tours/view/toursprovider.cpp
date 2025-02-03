@@ -51,7 +51,7 @@ void ToursProvider::doShow()
     m_openTimer.stop();
 
     const TourStep& step = m_tour.steps[m_currentStep];
-    int index = m_currentStep + 1;
+    size_t index = m_currentStep + 1;
 
     m_currentStep++;
 
