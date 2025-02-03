@@ -3,6 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
@@ -545,6 +546,7 @@
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
+        <maskBarlinesForText>0</maskBarlinesForText>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>

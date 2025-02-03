@@ -6,6 +6,7 @@
       <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <bracketWidth>0.35</bracketWidth>
       <barNoteDistance>0.6</barNoteDistance>
       <beamWidth>0.48</beamWidth>

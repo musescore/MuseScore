@@ -513,6 +513,7 @@ public:
         virtual void reset()
         {
             m_shape.reset();
+            m_mask.reset();
             //! NOTE Temporary removed, have problems, need investigation
             //m_pos.reset();
         }
@@ -582,6 +583,9 @@ public:
             setBbox(r);
         }
 
+        void setMask(const Shape& m) { m_mask.set_value(m); }
+        const Shape& mask() const { return m_mask.value(); }
+
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
         void connectItemSnappedBefore(EngravingItem* itemBefore);
@@ -633,6 +637,7 @@ public:
         double m_mag = 1.0;                     // standard magnification (derived value)
         ld_field<PointF> m_pos = "pos";         // Reference position, relative to _parent, set by autoplace
         ld_field<Shape> m_shape = "shape";
+        ld_field<Shape> m_mask = "mask";
 
         EngravingItem* m_itemSnappedBefore = nullptr;
         EngravingItem* m_itemSnappedAfter = nullptr;

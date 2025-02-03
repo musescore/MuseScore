@@ -4,6 +4,7 @@
     <Division>480</Division>
     <Style>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>

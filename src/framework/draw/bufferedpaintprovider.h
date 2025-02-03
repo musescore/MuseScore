@@ -85,6 +85,7 @@ public:
     bool hasClipping() const override;
 
     void setClipRect(const RectF& rect) override;
+    void setMask(const RectF& background, const std::vector<RectF>& maskRects) override;
     void setClipping(bool enable) override;
 
     // ---

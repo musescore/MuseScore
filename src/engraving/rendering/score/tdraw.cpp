@@ -680,6 +680,9 @@ void TDraw::draw(const BarLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
+    painter->save();
+    setMask(item, painter);
+
     const BarLine::LayoutData* data = item->ldata();
     IF_ASSERT_FAILED(data) {
         return;
@@ -853,6 +856,8 @@ void TDraw::draw(const BarLine* item, Painter* painter)
             painter->drawText(-r.width(), 0.0, ch);
         }
     }
+
+    painter->restore();
 }
 
 void TDraw::draw(const Beam* item, Painter* painter)
@@ -2274,33 +2279,15 @@ void TDraw::draw(const Note* item, Painter* painter)
         }
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
-        // draw background, if required (to hide a segment of string line or to show a fretting conflict)
-        if (!tab->linesThrough() || item->fretConflict()) {
-            double d  = item->style().styleS(Sid::tabFretPadding).val() * item->spatium();
-            RectF bb = RectF(ldata->bbox().x() - d,
-                             tab->fretMaskY() * item->magS(),
-                             ldata->bbox().width() + 2 * d,
-                             tab->fretMaskH() * item->magS()
-                             );
 
-            // we do not know which viewer did this draw() call
-            // so update all:
-            if (!item->score()->getViewer().empty()) {
-                for (MuseScoreView* view : item->score()->getViewer()) {
-                    view->drawBackground(painter, bb);
-                }
-            } else {
-                painter->fillRect(bb, config->noteBackgroundColor());
-            }
-
-            if (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable()) {                //on fret conflict, draw on red background
-                painter->save();
-                painter->setPen(config->criticalColor());
-                painter->setBrush(config->criticalColor());
-                painter->drawRect(bb);
-                painter->restore();
-            }
+        if (item->fretConflict() && item->score()->printing() && item->score()->showUnprintable()) {                    //on fret conflict, draw on red background
+            painter->save();
+            painter->setPen(config->criticalColor());
+            painter->setBrush(config->criticalColor());
+            painter->drawRect(ldata->bbox());
+            painter->restore();
         }
+
         Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(f);
@@ -2663,8 +2650,14 @@ void TDraw::draw(const Spacer* item, Painter* painter)
 void TDraw::draw(const StaffLines* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    painter->save();
+
+    setMask(item, painter);
+
     painter->setPen(Pen(item->curColor(), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLines(item->lines());
+
+    painter->restore();
 }
 
 void TDraw::draw(const StaffState* item, Painter* painter)
@@ -3267,6 +3260,20 @@ void TDraw::draw(const WhammyBarSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::setMask(const EngravingItem* item, Painter* painter)
+{
+    const EngravingItem::LayoutData* ldata = item->ldata();
+
+    const Shape& mask = ldata->mask();
+    if (mask.empty()) {
+        return;
+    }
+
+    RectF background = ldata->bbox().padded(item->spatium());
+
+    painter->setMask(background, mask.toRects());
 }
 
 // dev

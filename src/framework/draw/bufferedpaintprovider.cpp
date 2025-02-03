@@ -344,6 +344,12 @@ void BufferedPaintProvider::setClipRect(const RectF& rect)
     UNUSED(rect);
 }
 
+void BufferedPaintProvider::setMask(const RectF& background, const std::vector<RectF>& maskRects)
+{
+    UNUSED(background);
+    UNUSED(maskRects);
+}
+
 void BufferedPaintProvider::setClipping(bool enable)
 {
     UNUSED(enable);

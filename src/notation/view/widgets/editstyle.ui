@@ -289,7 +289,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>409</width>
+                <width>591</width>
                 <height>523</height>
                </rect>
               </property>
@@ -4939,8 +4939,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>249</width>
-             <height>485</height>
+             <width>595</width>
+             <height>508</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -4950,102 +4950,17 @@
                <string>Barlines</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_42">
-               <item row="7" column="0">
-                <widget class="QLabel" name="label_85">
+               <item row="9" column="0">
+                <widget class="QLabel" name="label_86">
                  <property name="text">
-                  <string>Double barline thickness:</string>
+                  <string>Double barline distance:</string>
                  </property>
                  <property name="buddy">
-                  <cstring>doubleBarWidth</cstring>
+                  <cstring>doubleBarDistance</cstring>
                  </property>
                 </widget>
                </item>
-               <item row="4" column="1">
-                <widget class="QDoubleSpinBox" name="barWidth">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.010000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="2">
-                <widget class="QToolButton" name="resetEndBarWidth">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Thin barline thickness' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="2">
-                <widget class="QToolButton" name="resetRepeatBarlineDotSeparation">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Show repeat barline tips (“winged” repeats)' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_82">
-                 <property name="text">
-                  <string>Thin barline thickness:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>barWidth</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="2">
-                <widget class="QToolButton" name="resetDoubleBarWidth">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Barline at start of multiple staves' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0" colspan="2">
-                <widget class="QCheckBox" name="showStartBarlineMultiple">
-                 <property name="text">
-                  <string>Barline at start of multiple staves</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="1">
-                <widget class="QDoubleSpinBox" name="doubleBarWidth">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.010000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="1">
+               <item row="9" column="1">
                 <widget class="QDoubleSpinBox" name="doubleBarDistance">
                  <property name="keyboardTracking">
                   <bool>false</bool>
@@ -5055,95 +4970,6 @@
                  </property>
                  <property name="singleStep">
                   <double>0.010000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <spacer name="horizontalSpacer_48">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="9" column="1">
-                <widget class="QDoubleSpinBox" name="repeatBarlineDotSeparation">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.010000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QToolButton" name="resetShowRepeatBarTips">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Repeat barline to dots distance' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0" colspan="2">
-                <widget class="QCheckBox" name="showRepeatBarTips">
-                 <property name="text">
-                  <string>Show repeat barline tips (“winged” repeats)</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QToolButton" name="resetScaleBarlines">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Thick barline distance' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="1">
-                <widget class="QDoubleSpinBox" name="endBarDistance">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.010000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="0">
-                <widget class="QLabel" name="label_84">
-                 <property name="text">
-                  <string>Thick barline distance:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>endBarDistance</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0" colspan="2">
-                <widget class="QCheckBox" name="scaleBarlines">
-                 <property name="text">
-                  <string>Scale barlines to staff size</string>
                  </property>
                 </widget>
                </item>
@@ -5160,33 +4986,33 @@
                  </property>
                 </widget>
                </item>
-               <item row="8" column="2">
-                <widget class="QToolButton" name="resetDoubleBarDistance">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Barline at start of single staff' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
                <item row="6" column="2">
-                <widget class="QToolButton" name="resetEndBarDistance">
+                <widget class="QToolButton" name="resetEndBarWidth">
                  <property name="toolTip">
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Scale barlines to staff size' value</string>
+                  <string>Reset 'Thin barline thickness' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
                  </property>
                 </widget>
                </item>
-               <item row="5" column="1">
+               <item row="7" column="1">
+                <widget class="QDoubleSpinBox" name="endBarDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
                 <widget class="QDoubleSpinBox" name="endBarWidth">
                  <property name="keyboardTracking">
                   <bool>false</bool>
@@ -5196,6 +5022,26 @@
                  </property>
                  <property name="singleStep">
                   <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QCheckBox" name="showStartBarlineSingle">
+                 <property name="text">
+                  <string>Barline at start of single staff</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="2">
+                <widget class="QToolButton" name="resetRepeatBarlineDotSeparation">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Show repeat barline tips (“winged” repeats)' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
                  </property>
                 </widget>
                </item>
@@ -5212,37 +5058,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_83">
-                 <property name="text">
-                  <string>Thick barline thickness:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>endBarWidth</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="0">
-                <widget class="QLabel" name="repeatBarlineDotSeparationLbl">
-                 <property name="text">
-                  <string>Repeat barline to dots distance:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>repeatBarlineDotSeparation</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="0">
-                <widget class="QLabel" name="label_86">
-                 <property name="text">
-                  <string>Double barline distance:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>doubleBarDistance</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
+               <item row="5" column="2">
                 <widget class="QToolButton" name="resetBarWidth">
                  <property name="toolTip">
                   <string>Reset to default</string>
@@ -5255,10 +5071,211 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0" colspan="2">
-                <widget class="QCheckBox" name="showStartBarlineSingle">
+               <item row="2" column="0" colspan="2">
+                <widget class="QCheckBox" name="showStartBarlineMultiple">
                  <property name="text">
-                  <string>Barline at start of single staff</string>
+                  <string>Barline at start of multiple staves</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="1">
+                <widget class="QDoubleSpinBox" name="doubleBarWidth">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_83">
+                 <property name="text">
+                  <string>Thick barline thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>endBarWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <spacer name="horizontalSpacer_48">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="9" column="2">
+                <widget class="QToolButton" name="resetDoubleBarDistance">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Barline at start of single staff' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="2">
+                <widget class="QToolButton" name="resetEndBarDistance">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Scale barlines to staff size' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_84">
+                 <property name="text">
+                  <string>Thick barline distance:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>endBarDistance</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="0">
+                <widget class="QLabel" name="repeatBarlineDotSeparationLbl">
+                 <property name="text">
+                  <string>Repeat barline to dots distance:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>repeatBarlineDotSeparation</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_82">
+                 <property name="text">
+                  <string>Thin barline thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>barWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0" colspan="2">
+                <widget class="QCheckBox" name="scaleBarlines">
+                 <property name="text">
+                  <string>Scale barlines to staff size</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="2">
+                <widget class="QToolButton" name="resetDoubleBarWidth">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Barline at start of multiple staves' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="resetShowRepeatBarTips">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Repeat barline to dots distance' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="1">
+                <widget class="QDoubleSpinBox" name="repeatBarlineDotSeparation">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" colspan="2">
+                <widget class="QCheckBox" name="showRepeatBarTips">
+                 <property name="text">
+                  <string>Show repeat barline tips (“winged” repeats)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QDoubleSpinBox" name="barWidth">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="QLabel" name="label_85">
+                 <property name="text">
+                  <string>Double barline thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>doubleBarWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QToolButton" name="resetScaleBarlines">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Thick barline distance' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QCheckBox" name="maskBarlines">
+                 <property name="accessibleName">
+                  <string>Mask barlines</string>
+                 </property>
+                 <property name="text">
+                  <string>Mask barlines when intersecting text</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QToolButton" name="resetMaskBarlines">
+                 <property name="text">
+                  <string notr="true"/>
                  </property>
                 </widget>
                </item>
@@ -11570,7 +11587,7 @@
              <x>0</x>
              <y>0</y>
              <width>469</width>
-             <height>461</height>
+             <height>484</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -11594,71 +11611,15 @@
                 </widget>
                </item>
                <item>
-                <layout class="QGridLayout" name="gridLayout_673" columnminimumwidth="0,0,0,0,0,0,0">
-                 <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="yLyricsPosBelow">
-                   <property name="suffix">
-                    <string>sp</string>
-                   </property>
-                   <property name="minimum">
-                    <double>-99.989999999999995</double>
-                   </property>
-                   <property name="singleStep">
-                    <double>0.100000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="2">
-                  <widget class="QToolButton" name="resetLyricsPosAbove">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Position above' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="4">
-                  <widget class="QLabel" name="label_minDistance">
-                   <property name="text">
-                    <string>Min. gap between lyrics:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>lyricsMinDistance</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="2">
-                  <widget class="QToolButton" name="resetLyricsLineHeight">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Line height' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="label_134">
+                <layout class="QGridLayout" name="gridLayout_673">
+                 <item row="0" column="5">
+                  <widget class="QDoubleSpinBox" name="lyricsMinTopDistance">
                    <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
-                   <property name="text">
-                    <string>Position below:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="5">
-                  <widget class="QDoubleSpinBox" name="lyricsMinDistance">
                    <property name="keyboardTracking">
                     <bool>false</bool>
                    </property>
@@ -11666,67 +11627,13 @@
                     <string>sp</string>
                    </property>
                    <property name="decimals">
-                    <number>2</number>
+                    <number>1</number>
                    </property>
                    <property name="minimum">
                     <double>-100.000000000000000</double>
                    </property>
                    <property name="singleStep">
-                    <double>0.050000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="4">
-                  <widget class="QLabel" name="label_131">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>0</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>Min. margin to current staff:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>lyricsMinTopDistance</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="2">
-                  <widget class="QToolButton" name="resetLyricsPosBelow">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Position below' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="yLyricsPosAbove">
-                   <property name="minimumSize">
-                    <size>
-                     <width>80</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="suffix">
-                    <string>sp</string>
-                   </property>
-                   <property name="minimum">
-                    <double>-99.989999999999995</double>
-                   </property>
-                   <property name="singleStep">
-                    <double>0.100000000000000</double>
+                    <double>0.500000000000000</double>
                    </property>
                   </widget>
                  </item>
@@ -11755,38 +11662,84 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="5">
-                  <widget class="QDoubleSpinBox" name="lyricsMinTopDistance">
+                 <item row="4" column="6">
+                  <widget class="QToolButton" name="resetLyricsAlignVerseNumber">
+                   <property name="maximumSize">
+                    <size>
+                     <width>120</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Align verse number' value</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="6">
+                  <widget class="QToolButton" name="resetLyricsMinDistance">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Min. distance' value</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QToolButton" name="resetLyricsPosAbove">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Position above' value</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="4">
+                  <widget class="QLabel" name="label_minDistance">
+                   <property name="text">
+                    <string>Min. gap between lyrics:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>lyricsMinDistance</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_134">
                    <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
-                   <property name="keyboardTracking">
-                    <bool>false</bool>
-                   </property>
-                   <property name="suffix">
-                    <string>sp</string>
-                   </property>
-                   <property name="decimals">
-                    <number>1</number>
-                   </property>
-                   <property name="minimum">
-                    <double>-100.000000000000000</double>
-                   </property>
-                   <property name="singleStep">
-                    <double>0.500000000000000</double>
+                   <property name="text">
+                    <string>Position below:</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="4">
-                  <widget class="QLabel" name="label_137">
-                   <property name="text">
-                    <string>Min. margin to other staves:</string>
+                 <item row="0" column="6">
+                  <widget class="QToolButton" name="resetLyricsMinTopDistance">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
                    </property>
-                   <property name="buddy">
-                    <cstring>lyricsMinBottomDistance</cstring>
+                   <property name="accessibleName">
+                    <string>Reset 'Min. top margin' value</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
                    </property>
                   </widget>
                  </item>
@@ -11800,6 +11753,80 @@
                    </property>
                    <property name="text">
                     <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="4">
+                  <widget class="QLabel" name="label_137">
+                   <property name="text">
+                    <string>Min. margin to other staves:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>lyricsMinBottomDistance</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QToolButton" name="resetLyricsPosBelow">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Position below' value</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QToolButton" name="resetLyricsLineHeight">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Line height' value</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="4">
+                  <widget class="QLabel" name="label_131">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>Min. margin to current staff:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>lyricsMinTopDistance</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QDoubleSpinBox" name="lyricsLineHeight">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
+                   <property name="suffix">
+                    <string>%</string>
+                   </property>
+                   <property name="minimum">
+                    <double>50.000000000000000</double>
+                   </property>
+                   <property name="maximum">
+                    <double>1000.000000000000000</double>
                    </property>
                   </widget>
                  </item>
@@ -11822,80 +11849,41 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="1">
-                  <widget class="QComboBox" name="lyricsPlacement">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
+                 <item row="2" column="1">
+                  <widget class="QDoubleSpinBox" name="yLyricsPosAbove">
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
+                     <width>80</width>
                      <height>0</height>
                     </size>
                    </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
-                    </size>
+                   <property name="suffix">
+                    <string>sp</string>
                    </property>
-                   <item>
-                    <property name="text">
-                     <string notr="true">Above</string>
-                    </property>
-                   </item>
-                   <item>
-                    <property name="text">
-                     <string notr="true">Below</string>
-                    </property>
-                   </item>
+                   <property name="minimum">
+                    <double>-99.989999999999995</double>
+                   </property>
+                   <property name="singleStep">
+                    <double>0.100000000000000</double>
+                   </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
-                  <widget class="QDoubleSpinBox" name="lyricsLineHeight">
+                 <item row="3" column="5">
+                  <widget class="QDoubleSpinBox" name="lyricsMinDistance">
                    <property name="keyboardTracking">
                     <bool>false</bool>
                    </property>
                    <property name="suffix">
-                    <string>%</string>
+                    <string>sp</string>
+                   </property>
+                   <property name="decimals">
+                    <number>2</number>
                    </property>
                    <property name="minimum">
-                    <double>50.000000000000000</double>
+                    <double>-100.000000000000000</double>
                    </property>
-                   <property name="maximum">
-                    <double>1000.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_132">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Position above:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_71">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Position:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>lyricsPlacement</cstring>
+                   <property name="singleStep">
+                    <double>0.050000000000000</double>
                    </property>
                   </widget>
                  </item>
@@ -11937,48 +11925,61 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="6">
-                  <widget class="QToolButton" name="resetLyricsAlignVerseNumber">
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="lyricsPlacement">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                    <property name="maximumSize">
                     <size>
-                     <width>120</width>
+                     <width>16777215</width>
                      <height>16777215</height>
                     </size>
                    </property>
-                   <property name="toolTip">
-                    <string>Reset to default</string>
+                   <item>
+                    <property name="text">
+                     <string notr="true">Above</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">Below</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="yLyricsPosBelow">
+                   <property name="suffix">
+                    <string>sp</string>
                    </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Align verse number' value</string>
+                   <property name="minimum">
+                    <double>-99.989999999999995</double>
                    </property>
-                   <property name="text">
-                    <string notr="true"/>
+                   <property name="singleStep">
+                    <double>0.100000000000000</double>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="6">
-                  <widget class="QToolButton" name="resetLyricsMinTopDistance">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Min. top margin' value</string>
-                   </property>
-                   <property name="text">
-                    <string notr="true"/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="6">
-                  <widget class="QToolButton" name="resetLyricsMinDistance">
-                   <property name="toolTip">
-                    <string>Reset to default</string>
-                   </property>
-                   <property name="accessibleName">
-                    <string>Reset 'Min. distance' value</string>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_132">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
                    </property>
                    <property name="text">
-                    <string notr="true"/>
+                    <string>Position above:</string>
                    </property>
                   </widget>
                  </item>
@@ -11989,6 +11990,42 @@
                    </property>
                    <property name="accessibleName">
                     <string>Reset 'Min. bottom margin' value</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_71">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Position:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>lyricsPlacement</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="0" colspan="2">
+                  <widget class="QCheckBox" name="lyricsAvoidBarlines">
+                   <property name="accessibleName">
+                    <string>Avoid barlines</string>
+                   </property>
+                   <property name="text">
+                    <string>Avoid barlines</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="2">
+                  <widget class="QToolButton" name="resetLyricsAvoidBarlines">
+                   <property name="accessibleName">
+                    <string>Reset avoid barlines</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>

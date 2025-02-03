@@ -460,6 +460,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("color-segment-shapes"),
             makeMenuItem("show-skylines"),
             makeMenuItem("show-system-bounding-rects"),
+            makeMenuItem("show-element-masks"),
             makeMenuItem("show-corrupted-measures")
         };
 
