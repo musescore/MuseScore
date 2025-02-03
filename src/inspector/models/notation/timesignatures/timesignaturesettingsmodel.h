@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_TIMESIGNATURESETTINGSMODEL_H
-#define MU_INSPECTOR_TIMESIGNATURESETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
 
@@ -32,6 +31,7 @@ class TimeSignatureSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * horizontalScale READ horizontalScale CONSTANT)
     Q_PROPERTY(PropertyItem * verticalScale READ verticalScale CONSTANT)
     Q_PROPERTY(PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
+    Q_PROPERTY(bool isGenerated READ isGenerated CONSTANT)
 
 public:
     explicit TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -47,12 +47,14 @@ public:
     PropertyItem* verticalScale() const;
     PropertyItem* shouldShowCourtesy() const;
 
+    bool isGenerated() const { return m_isGenerated; }
+
 private:
 
     PropertyItem* m_horizontalScale = nullptr;
     PropertyItem* m_verticalScale = nullptr;
     PropertyItem* m_shouldShowCourtesy = nullptr;
+
+    bool m_isGenerated = false;
 };
 }
-
-#endif // TIMESIGNATURESETTINGSMODEL_H

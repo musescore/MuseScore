@@ -266,6 +266,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::TAB_DURATION_SYMBOL,  "TabDurationSymbol",    muse::TranslatableString("engraving", "Tab duration symbol") },
     { ElementType::FSYMBOL,              "FSymbol",              muse::TranslatableString("engraving", "Font symbol") },
     { ElementType::PAGE,                 "Page",                 muse::TranslatableString("engraving", "Page") },
+    { ElementType::PARENTHESIS,          "Parenthesis",          muse::TranslatableString("engraving", "Parenthesis") },
     { ElementType::HAIRPIN,              "HairPin",              muse::TranslatableString("engraving", "Hairpin") },
     { ElementType::OTTAVA,               "Ottava",               muse::TranslatableString("engraving", "Ottava") },
     { ElementType::PEDAL,                "Pedal",                muse::TranslatableString("engraving", "Pedal") },

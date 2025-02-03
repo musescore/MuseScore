@@ -45,6 +45,7 @@
 #include "mscore.h"
 #include "note.h"
 #include "ornament.h"
+#include "parenthesis.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -80,21 +81,27 @@ const char* Segment::subTypeName() const
 const char* Segment::subTypeName(SegmentType t)
 {
     switch (t) {
-    case SegmentType::Invalid:              return "Invalid";
-    case SegmentType::BeginBarLine:         return "BeginBarLine";
-    case SegmentType::HeaderClef:           return "HeaderClef";
-    case SegmentType::Clef:                 return "Clef";
-    case SegmentType::KeySig:               return "Key Signature";
-    case SegmentType::Ambitus:              return "Ambitus";
-    case SegmentType::TimeSig:              return "Time Signature";
-    case SegmentType::StartRepeatBarLine:   return "Begin Repeat";
-    case SegmentType::BarLine:              return "BarLine";
-    case SegmentType::Breath:               return "Breath";
-    case SegmentType::ChordRest:            return "ChordRest";
-    case SegmentType::EndBarLine:           return "EndBarLine";
-    case SegmentType::KeySigAnnounce:       return "Key Sig Precaution";
-    case SegmentType::TimeSigAnnounce:      return "Time Sig Precaution";
-    case SegmentType::TimeTick:             return "Time tick";
+    case SegmentType::Invalid:               return "Invalid";
+    case SegmentType::BeginBarLine:          return "BeginBarLine";
+    case SegmentType::HeaderClef:            return "HeaderClef";
+    case SegmentType::Clef:                  return "Clef";
+    case SegmentType::KeySig:                return "Key Signature";
+    case SegmentType::Ambitus:               return "Ambitus";
+    case SegmentType::TimeSig:               return "Time Signature";
+    case SegmentType::StartRepeatBarLine:    return "Begin Repeat";
+    case SegmentType::ClefStartRepeatAnnounce:    return "Clef Repeat Start Courtesy";
+    case SegmentType::KeySigStartRepeatAnnounce:  return "Key Sig Repeat Start Courtesy";
+    case SegmentType::TimeSigStartRepeatAnnounce: return "Time Sig Repeat Start Courtesy";
+    case SegmentType::BarLine:               return "BarLine";
+    case SegmentType::Breath:                return "Breath";
+    case SegmentType::ChordRest:             return "ChordRest";
+    case SegmentType::ClefRepeatAnnounce:    return "Clef Repeat Courtesy";
+    case SegmentType::KeySigRepeatAnnounce:  return "Key Sig Repeat Courtesy";
+    case SegmentType::TimeSigRepeatAnnounce: return "Time Sig Repeat Courtesy";
+    case SegmentType::EndBarLine:            return "EndBarLine";
+    case SegmentType::KeySigAnnounce:        return "Key Sig Courtesy";
+    case SegmentType::TimeSigAnnounce:       return "Time Sig Courtesy";
+    case SegmentType::TimeTick:              return "Time tick";
     default:
         return "??";
     }
@@ -724,6 +731,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::FIGURED_BASS:
     case ElementType::FERMATA:
     case ElementType::STICKING:
+    case ElementType::PARENTHESIS:
         m_annotations.push_back(el);
         break;
 
@@ -760,7 +768,9 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::CLEF:
-        assert(m_segmentType == SegmentType::Clef || m_segmentType == SegmentType::HeaderClef);
+        assert(
+            m_segmentType == SegmentType::Clef || m_segmentType == SegmentType::HeaderClef
+            || m_segmentType == SegmentType::ClefRepeatAnnounce || m_segmentType == SegmentType::ClefStartRepeatAnnounce);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
@@ -770,21 +780,33 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::TIMESIG:
-        assert(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
+        assert(
+            segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce
+            || segmentType() == SegmentType::TimeSigRepeatAnnounce || segmentType() == SegmentType::TimeSigStartRepeatAnnounce);
         checkElement(el, track);
         m_elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
         setEmpty(false);
+        if (segmentType() == SegmentType::TimeSigAnnounce
+            || segmentType() == SegmentType::TimeSigRepeatAnnounce || segmentType() == SegmentType::TimeSigStartRepeatAnnounce) {
+            toTimeSig(el)->setIsCourtesy(true);
+        }
         break;
 
     case ElementType::KEYSIG:
-        assert(m_segmentType == SegmentType::KeySig || m_segmentType == SegmentType::KeySigAnnounce);
+        assert(
+            m_segmentType == SegmentType::KeySig || m_segmentType == SegmentType::KeySigAnnounce
+            || m_segmentType == SegmentType::KeySigRepeatAnnounce || m_segmentType == SegmentType::KeySigStartRepeatAnnounce);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
             el->staff()->setKey(tick(), toKeySig(el)->keySigEvent());
         }
         setEmpty(false);
+        if (m_segmentType == SegmentType::KeySigAnnounce
+            || m_segmentType == SegmentType::KeySigRepeatAnnounce || m_segmentType == SegmentType::KeySigStartRepeatAnnounce) {
+            toKeySig(el)->setIsCourtesy(true);
+        }
         break;
 
     case ElementType::CHORD:
@@ -910,6 +932,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
     case ElementType::STICKING:
+    case ElementType::PARENTHESIS:
         removeAnnotation(el);
         break;
 
@@ -1423,7 +1446,7 @@ EngravingItem* Segment::elementAt(track_idx_t track) const
 
 void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    bool scanAllTimeSigs = (isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+    bool scanAllTimeSigs = (isType(SegmentType::TimeSigType)
                             && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL);
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
@@ -1936,7 +1959,13 @@ bool Segment::notChordRestType() const
         || segmentType() == SegmentType::EndBarLine
         || segmentType() == SegmentType::BarLine
         || segmentType() == SegmentType::KeySigAnnounce
-        || segmentType() == SegmentType::TimeSigAnnounce) {
+        || segmentType() == SegmentType::TimeSigAnnounce
+        || segmentType() == SegmentType::ClefRepeatAnnounce
+        || segmentType() == SegmentType::TimeSigRepeatAnnounce
+        || segmentType() == SegmentType::KeySigRepeatAnnounce
+        || segmentType() == SegmentType::ClefStartRepeatAnnounce
+        || segmentType() == SegmentType::TimeSigStartRepeatAnnounce
+        || segmentType() == SegmentType::KeySigStartRepeatAnnounce) {
         return true;
     } else {
         return false;
@@ -1973,6 +2002,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
+    case ElementType::PARENTHESIS:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
     case ElementType::TAB_DURATION_SYMBOL:
@@ -2135,6 +2165,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
+    case ElementType::PARENTHESIS:
     case ElementType::IMAGE:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
@@ -2524,12 +2555,17 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (!e || e->staffIdx() != staffIdx) {
             continue;
         }
+
         setVisible(true);
         if (!e->addToSkyline()) {
             continue;
         }
 
-        if (e->isHarmony()) {
+        if (e->isParenthesis()) {
+            // Calculate layout, this needs to be placed at the right of the segment
+            renderer()->layoutItem(toParenthesis(e));
+            s.add(e->shape().translate(e->pos() + e->staffOffset()));
+        } else if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
             renderer()->layoutItem(toHarmony(e));
 
@@ -2617,7 +2653,7 @@ double Segment::spacing() const
 
 bool Segment::hasTimeSigAboveStaves() const
 {
-    return isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+    return isType(SegmentType::TimeSigType)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES;
 }
 
@@ -2631,7 +2667,7 @@ bool Segment::makeSpaceForTimeSigAboveStaves() const
 
 bool Segment::hasTimeSigAcrossStaves() const
 {
-    return isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)
+    return isType(SegmentType::TimeSigType)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
 }
 
@@ -2765,10 +2801,46 @@ bool Segment::hasAccidentals() const
 
 bool Segment::goesBefore(const Segment* nextSegment) const
 {
+    Measure* meas = measure();
+    Measure* prevMeasure = meas->prevMeasure();
+    const bool thisMeasureIsStartRepeat = meas->repeatStart();
+    const bool prevMeasureIsEndRepeat = prevMeasure ? prevMeasure->repeatEnd() : false;
+
     bool thisIsClef = isClefType();
     bool nextIsClef = nextSegment->isClefType();
     bool thisIsBarline = isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
     bool nextIsBarline = nextSegment->isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
+
+    bool thisIsStartRepeat = isStartRepeatBarLineType();
+    bool nextIsStartRepeat = nextSegment->isStartRepeatBarLineType();
+    bool thisIsKeySig = isKeySigType();
+    bool thisIsTimeSig = isTimeSigType();
+    bool nextIsKeySig = nextSegment->isKeySigType();
+    bool nextIsTimeSig = nextSegment->isTimeSigType();
+
+    // Place non header clefs AFTER header clefs, key signatures, time signatures
+    const bool firstSystemMeasure = meas->findSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
+    bool thisIsHeader = isHeaderClefType() || (rtick() == Fraction(0, 1) && firstSystemMeasure && !thisIsClef);
+    bool nextIsHeader = nextSegment->isHeaderClefType() || (nextSegment->rtick() == Fraction(0, 1) && firstSystemMeasure && !nextIsClef);
+
+    bool thisIsEndOfMeasure = endOfMeasureChange();
+
+    // Place segments in correct place when "Place all changes before the barline" is enabled
+    if (thisIsEndOfMeasure && nextSegment->tick() != meas->endTick()) {
+        return false;
+    }
+
+    if (thisIsEndOfMeasure && nextIsBarline) {
+        return true;
+    }
+
+    // Place key signatures and time signatures in correct place when "Allow changes between end-start repeats" is enabled
+    if ((thisIsKeySig || thisIsTimeSig || thisIsClef) && nextIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+        return style().styleB(Sid::changesBetweenEndStartRepeat);
+    }
+    if ((nextIsKeySig || nextIsTimeSig || nextIsClef) && thisIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+        return !style().styleB(Sid::changesBetweenEndStartRepeat);
+    }
 
     if (thisIsClef && nextIsBarline) {
         ClefToBarlinePosition clefPos = ClefToBarlinePosition::AUTO;
@@ -2790,6 +2862,18 @@ bool Segment::goesBefore(const Segment* nextSegment) const
             }
         }
         return clefPos == ClefToBarlinePosition::AFTER;
+    }
+
+    if (thisIsClef && (nextIsKeySig || nextIsTimeSig)
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1) && !nextIsHeader) {
+        // Between repeats
+        return true;
+    }
+
+    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1) && !thisIsHeader) {
+        // Between repeats
+        return false;
     }
 
     return segmentType() < nextSegment->segmentType();

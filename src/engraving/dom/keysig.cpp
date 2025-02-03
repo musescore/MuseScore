@@ -212,6 +212,8 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
         return int(showCourtesy());
     case Pid::KEYSIG_MODE:
         return int(mode());
+    case Pid::IS_COURTESY:
+        return _isCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -249,6 +251,9 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         setMode(KeyMode(v.toInt()));
         staff()->setKey(tick(), keySigEvent());
         break;
+    case Pid::IS_COURTESY:
+        _isCourtesy = v.toBool();
+        break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
@@ -275,6 +280,8 @@ PropertyValue KeySig::propertyDefault(Pid id) const
         return true;
     case Pid::KEYSIG_MODE:
         return int(KeyMode::UNKNOWN);
+    case Pid::IS_COURTESY:
+        return false;
     default:
         return EngravingItem::propertyDefault(id);
     }

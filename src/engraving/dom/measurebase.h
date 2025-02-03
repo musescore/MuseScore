@@ -176,6 +176,15 @@ public:
     bool hasCourtesyKeySig() const { return flag(ElementFlag::KEYSIG); }
     void setHasCourtesyKeySig(bool v) { setFlag(ElementFlag::KEYSIG, v); }
 
+    bool hasCourtesyTimeSig() const { return flag(ElementFlag::TIMESIG); }
+    void setHasCourtesyTimeSig(bool v) const { setFlag(ElementFlag::TIMESIG, v); }
+
+    bool hasCourtesyClef() const { return flag(ElementFlag::CLEF); }
+    void setHasCourtesyClef(bool v) const { setFlag(ElementFlag::CLEF, v); }
+
+    bool endOfMeasureChange() const { return flag(ElementFlag::END_OF_MEASURE_CHANGE); }
+    void setEndOfMeasureChange(bool val) const { setFlag(ElementFlag::END_OF_MEASURE_CHANGE, val); }
+
     virtual void computeMinWidth() { }
 
     int index() const;

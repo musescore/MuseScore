@@ -2793,6 +2793,12 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (ctx.tick() != m->tick()) {
                 clef->setSmall(true);                 // TODO: layout does this ?
             }
+
+            // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
+            if (ctx.tick() != Fraction(0, 1) && ctx.tick() == m->tick() && !(m->prevMeasure() && m->prevMeasure()->repeatEnd())) {
+                clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+            }
+
             segment->add(clef);
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());

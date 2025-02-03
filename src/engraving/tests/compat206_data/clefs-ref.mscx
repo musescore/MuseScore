@@ -195,6 +195,7 @@
           <Clef>
             <concertClefType>C2</concertClefType>
             <transposingClefType>C2</transposingClefType>
+            <clefToBarlinePos>2</clefToBarlinePos>
             </Clef>
           <Chord>
             <durationType>whole</durationType>

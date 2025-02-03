@@ -89,6 +89,8 @@ class Clef final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Clef)
     DECLARE_CLASSOF(ElementType::CLEF)
 
+    M_PROPERTY2(bool, isCourtesy, setIsCourtesy, false)
+
 public:
 
     Clef* clone() const override { return new Clef(*this); }
