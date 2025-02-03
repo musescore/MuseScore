@@ -88,15 +88,6 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return muse::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
-static bool shouldLoadDrumset(const AudioResourceMeta& oldMeta, const AudioResourceMeta& newMeta)
-{
-    if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
-        return false;
-    }
-
-    return oldMeta.type == AudioResourceType::MuseSamplerSoundPack || newMeta.type == AudioResourceType::MuseSamplerSoundPack;
-}
-
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
@@ -421,11 +412,27 @@ void PlaybackController::onAudioResourceChanged(const InstrumentTrackId& trackId
         return;
     }
 
-    if (shouldLoadDrumset(oldMeta, newMeta)) {
+    if (shouldLoadDrumset(trackId, oldMeta, newMeta)) {
         m_drumsetLoader.loadDrumset(m_notation, trackId, newMeta);
     }
 
     notationPlayback->removeSoundFlags({ trackId });
+}
+
+bool PlaybackController::shouldLoadDrumset(const engraving::InstrumentTrackId& trackId, const AudioResourceMeta& oldMeta,
+                                           const AudioResourceMeta& newMeta) const
+{
+    if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
+        return false;
+    }
+
+    const Part* part = masterNotationParts()->part(trackId.partId);
+    const Instrument* instrument = part ? part->instrumentById(trackId.instrumentId) : nullptr;
+    if (!instrument || !instrument->useDrumset()) {
+        return false;
+    }
+
+    return oldMeta.type == AudioResourceType::MuseSamplerSoundPack || newMeta.type == AudioResourceType::MuseSamplerSoundPack;
 }
 
 void PlaybackController::addSoundFlagsIfNeed(const std::vector<EngravingItem*>& selection)
@@ -1006,7 +1013,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
             onTrackNewlyAdded(instrumentTrackId);
         }
 
-        if (shouldLoadDrumset(originMeta, appliedParams.in.resourceMeta)) {
+        if (shouldLoadDrumset(instrumentTrackId, originMeta, appliedParams.in.resourceMeta)) {
             m_drumsetLoader.loadDrumset(m_notation, instrumentTrackId, appliedParams.in.resourceMeta);
         }
     })
