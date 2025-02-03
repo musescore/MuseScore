@@ -72,7 +72,6 @@ private:
 
     VstPluginInstanceId m_instanceId = -1;
     IVstPluginInstancePtr m_instance = nullptr;
-    PluginViewPtr m_view = nullptr;  
+    PluginViewPtr m_view = nullptr;
 };
 }
-

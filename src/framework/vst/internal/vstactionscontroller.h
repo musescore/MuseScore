@@ -59,5 +59,3 @@ private:
     async::Channel<actions::ActionCodeList> m_actionCheckedChanged;
 };
 }
-
-

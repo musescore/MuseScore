@@ -49,7 +49,6 @@ const UiActionList VstUiActions::m_actions = {
 VstUiActions::VstUiActions(const std::shared_ptr<VstActionsController>& c)
     : m_controller(c)
 {
-
 }
 
 const UiActionList& VstUiActions::actionsList() const
