@@ -120,7 +120,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     if (configuration()->useFactorySettings() || !sp->readFromFile(configuration()->timeSignaturesDirPath().toQString())) {
         Fraction sig(4, 4);
-        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(),TimeSigType::NORMAL);
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
     }
     for (int i = 0; i < sp->actualCellCount(); ++i) { // cells can be changed
         sp->setCellReadOnly(i, false);
@@ -163,17 +163,17 @@ void TimeDialog::addClicked()
     }
 
     auto ts = mu::engraving::Factory::makeTimeSig(gpaletteScore->dummy()->segment());
-    ts->setSig(Fraction(zNominal->value(), denominator()),tst);
+    ts->setSig(Fraction(zNominal->value(), denominator()), tst);
     ts->setGroups(groups->groups());
 
-    if (otherButton->isChecked()){
+    if (otherButton->isChecked()) {
         IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
         SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
         // ...and set numerator to font string for symbol and denominator to empty string
         ts->setNumeratorString(symbolFont->toString(symId));
         ts->setDenominatorString(QString());
     }
-    if(textButton->isChecked()){
+    if (textButton->isChecked()) {
         // check for special text
         if ((QString("%1").arg(zNominal->value()) != zText->text())
             || (QString("%1").arg(denominator()) != nText->text())) {
@@ -215,14 +215,14 @@ void TimeDialog::save()
 
 void TimeDialog::zChanged()
 {
-    if(textButton->isChecked()){
+    if (textButton->isChecked()) {
         int numerator = zNominal->value();
         int denominator = this->denominator();
 
         Fraction sig(numerator, denominator);
 
         // Update beam groups view
-        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(),TimeSigType::NORMAL);
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
     }
 }
 
@@ -232,10 +232,10 @@ void TimeDialog::zChanged()
 
 void TimeDialog::nChanged(int val)
 {
-    if(textButton->isChecked()){
+    if (textButton->isChecked()) {
         Q_UNUSED(val);
         Fraction sig(zNominal->value(), denominator());
-        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(),TimeSigType::NORMAL);
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
     }
 }
 
@@ -342,7 +342,7 @@ void TimeDialog::paletteChanged(int idx)
     zText->setText(timeSig->numeratorString());
     nText->setText(timeSig->denominatorString());
     textButton->setChecked(true);
-    groups->setSig(sig, g, zText->text(), nText->text(),TimeSigType::NORMAL);
+    groups->setSig(sig, g, zText->text(), nText->text(), TimeSigType::NORMAL);
 }
 
 //---------------------------------------------------------
@@ -351,57 +351,53 @@ void TimeDialog::paletteChanged(int idx)
 
 void TimeDialog::textChanged()
 {
-    if(textButton->isChecked()){
+    if (textButton->isChecked()) {
         Fraction sig(zNominal->value(), denominator());
-        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(),TimeSigType::NORMAL);
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
     }
 }
 
 void TimeDialog::textToggled()
 {
-    if(textButton->isChecked()){
+    if (textButton->isChecked()) {
         this->textChanged();
     }
 }
 
 void TimeDialog::fourfourToggled()
 {
-    if(fourfourButton->isChecked()){
+    if (fourfourButton->isChecked()) {
         Fraction sig(zNominal->value(), denominator());
-        groups->setSig(sig, Groups::endings(sig), QString(), QString(),TimeSigType::FOUR_FOUR);
+        groups->setSig(sig, Groups::endings(sig), QString(), QString(), TimeSigType::FOUR_FOUR);
     }
-
 }
 
 void TimeDialog::allaBreveToggled()
 {
-    if(allaBreveButton->isChecked()){
+    if (allaBreveButton->isChecked()) {
         Fraction sig(zNominal->value(), denominator());
-        groups->setSig(sig, Groups::endings(sig), QString(), QString(),TimeSigType::ALLA_BREVE);
+        groups->setSig(sig, Groups::endings(sig), QString(), QString(), TimeSigType::ALLA_BREVE);
     }
-
 }
 
 void TimeDialog::otherToggled()
 {
     if (otherButton->isChecked()) {
         Fraction sig(zNominal->value(), denominator());
-        IEngravingFontPtr symbolFont = gpaletteScore->engravingFont(); 
+        IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
         SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
-        groups->setSig(sig, Groups::endings(sig), symbolFont->toString(symId), QString(),TimeSigType::NORMAL);
+        groups->setSig(sig, Groups::endings(sig), symbolFont->toString(symId), QString(), TimeSigType::NORMAL);
     }
-    
 }
 
 void TimeDialog::otherChanged(int idx)
 {
     if (otherButton->isChecked()) {
         Fraction sig(zNominal->value(), denominator());
-        IEngravingFontPtr symbolFont = gpaletteScore->engravingFont(); 
+        IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
         SymId symId = (SymId)(otherCombo->itemData(idx).toInt());
-        groups->setSig(sig, Groups::endings(sig), symbolFont->toString(symId), QString(),TimeSigType::NORMAL);
+        groups->setSig(sig, Groups::endings(sig), symbolFont->toString(symId), QString(), TimeSigType::NORMAL);
     }
-    
 }
 
 void TimeDialog::setDirty()
