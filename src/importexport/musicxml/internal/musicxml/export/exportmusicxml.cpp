@@ -3110,6 +3110,8 @@ static std::vector<String> symIdToArtic(const SymId sid)
         return { u"staccato" };
         break;
 
+    case SymId::articStaccatissimoAbove:
+    case SymId::articStaccatissimoBelow:
     case SymId::articStaccatissimoWedgeAbove:
     case SymId::articStaccatissimoWedgeBelow:
         return { u"staccatissimo" };
@@ -3180,8 +3182,6 @@ static std::vector<String> symIdToArtic(const SymId sid)
         return { u"tenuto", u"accent" };
         break;
 
-    case SymId::articStaccatissimoAbove:
-    case SymId::articStaccatissimoBelow:
     case SymId::articStaccatissimoStrokeAbove:
     case SymId::articStaccatissimoStrokeBelow:
         return { u"spiccato" };
