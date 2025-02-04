@@ -442,6 +442,7 @@ public:
     bool custom(Pid) const;
     virtual bool isUserModified() const;
 
+    void drawSymbolReversed(SymId id, muse::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
     void drawSymbol(SymId id, muse::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
     void drawSymbols(const SymIdList&, muse::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
     void drawSymbols(const SymIdList&, muse::draw::Painter* p, const PointF& o, const SizeF& scale) const;

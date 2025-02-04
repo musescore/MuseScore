@@ -252,6 +252,7 @@ Chord::Chord(Segment* parent)
     m_stem             = 0;
     m_hook             = 0;
     m_stemDirection    = DirectionV::AUTO;
+    m_hookIsReversed   = false;
     m_arpeggio         = 0;
     m_spanArpeggio     = 0;
     m_endsNoteAnchoredLine    = false;
@@ -297,15 +298,16 @@ Chord::Chord(const Chord& c, bool link)
     m_arpeggio      = 0;
     m_stemSlash     = 0;
 
-    m_spanArpeggio   = c.m_spanArpeggio;
-    m_graceIndex     = c.m_graceIndex;
-    m_noStem         = c.m_noStem;
-    m_showStemSlash  = c.m_showStemSlash;
-    m_playEventType  = c.m_playEventType;
-    m_stemDirection  = c.m_stemDirection;
-    m_noteType       = c.m_noteType;
-    m_crossMeasure   = CrossMeasure::UNKNOWN;
-    m_combineVoice     = c.m_combineVoice;
+    m_spanArpeggio    = c.m_spanArpeggio;
+    m_graceIndex      = c.m_graceIndex;
+    m_noStem          = c.m_noStem;
+    m_showStemSlash   = c.m_showStemSlash;
+    m_playEventType   = c.m_playEventType;
+    m_stemDirection   = c.m_stemDirection;
+    m_hookIsReversed  = c.m_hookIsReversed;
+    m_noteType        = c.m_noteType;
+    m_crossMeasure    = CrossMeasure::UNKNOWN;
+    m_combineVoice    = c.m_combineVoice;
 
     if (c.m_stem) {
         add(Factory::copyStem(*(c.m_stem)));
@@ -2087,8 +2089,10 @@ PropertyValue Chord::getProperty(Pid propertyId) const
     case Pid::SHOW_STEM_SLASH: return showStemSlash();
     case Pid::SMALL:           return isSmall();
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(stemDirection());
-    case Pid::PLAY: return isChordPlayable();
-    case Pid::COMBINE_VOICE: return PropertyValue::fromValue<AutoOnOff>(combineVoice());
+    case Pid::PLAY:            return isChordPlayable();
+    case Pid::COMBINE_VOICE:   return PropertyValue::fromValue<AutoOnOff>(combineVoice());
+    case Pid::HOOK_REVERSED:   return hookIsReversed();
+
     default:
         return ChordRest::getProperty(propertyId);
     }
@@ -2102,11 +2106,13 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::NO_STEM:         return false;
-    case Pid::SHOW_STEM_SLASH: return noteType() == NoteType::ACCIACCATURA;
+    case Pid::SHOW_STEM_SLASH: return noteType() & NoteType::ACCIACCATURA;
     case Pid::SMALL:           return false;
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
-    case Pid::PLAY: return true;
-    case Pid::COMBINE_VOICE: return AutoOnOff::AUTO;
+    case Pid::PLAY:            return true;
+    case Pid::COMBINE_VOICE:   return AutoOnOff::AUTO;
+    case Pid::HOOK_REVERSED:   return false;
+
     default:
         return ChordRest::propertyDefault(propertyId);
     }
@@ -2137,6 +2143,10 @@ bool Chord::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::COMBINE_VOICE:
         setCombineVoice(v.value<AutoOnOff>());
         break;
+    case Pid::HOOK_REVERSED:
+        setHookReversed(v.toBool());
+        break;
+
     default:
         return ChordRest::setProperty(propertyId, v);
     }
