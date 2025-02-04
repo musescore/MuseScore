@@ -27,6 +27,7 @@
 #include <unordered_map>
 
 #include "global/allocator.h"
+#include "global/realfn.h"
 #include "types/bps.h"
 #include "types/flags.h"
 
@@ -57,8 +58,8 @@ struct TEvent {
     {
         return type == other.type
                && tempo == other.tempo
-               && pause == other.pause
-               && time == other.time;
+               && muse::RealIsEqual(pause, other.pause)
+               && muse::RealIsEqual(time, other.time);
     }
 };
 

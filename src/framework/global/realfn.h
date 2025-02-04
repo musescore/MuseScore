@@ -85,13 +85,31 @@ inline void SetDefaultCompareRealPrecision()
     SetDefaultCompareFloatPrecision();
 }
 
+inline bool RealIsNull(double d)
+{
+    return std::abs(d) <= _compare_double_null;
+}
+
+inline bool RealIsNull(float d)
+{
+    return std::fabs(d) <= _compare_float_null;
+}
+
 inline bool RealIsEqual(double p1, double p2)
 {
+    if (RealIsNull(std::abs(p1 - p2))) {
+        return true;
+    }
+
     return std::abs(p1 - p2) * _compare_double_epsilon <= std::min(std::abs(p1), std::abs(p2));
 }
 
 inline bool RealIsEqual(float p1, float p2)
 {
+    if (RealIsNull(std::fabs(p1 - p2))) {
+        return true;
+    }
+
     return std::fabs(p1 - p2) * _compare_float_epsilon <= std::min(std::fabs(p1), std::fabs(p2));
 }
 
@@ -143,16 +161,6 @@ inline bool RealIsEqualOrMore(float p1, float p2)
 inline bool RealIsEqualOrLess(float p1, float p2)
 {
     return p1 < p2 || RealIsEqual(p1, p2);
-}
-
-inline bool RealIsNull(double d)
-{
-    return std::abs(d) <= _compare_double_null;
-}
-
-inline bool RealIsNull(float d)
-{
-    return std::fabs(d) <= _compare_float_null;
 }
 
 inline double RealRound(double value, int prec)

@@ -33,6 +33,8 @@
 #include "dom/note.h"
 #include "dom/score.h"
 
+#include "realfn.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
@@ -877,7 +879,7 @@ bool AccidentalsLayout::isExceptionOfFourth(const Accidental* acc1, const Accide
     }
 
     if ((acc1->bracket() == AccidentalBracket::BRACKET || acc2->bracket() == AccidentalBracket::BRACKET)
-        && acc1->mag() == 1 && acc2->mag() == 1) {
+        && muse::RealIsEqual(acc1->mag(), 1) && muse::RealIsEqual(acc2->mag(), 1)) {
         return false;
     }
 

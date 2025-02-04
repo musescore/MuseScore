@@ -4304,7 +4304,7 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     if (!muse::RealIsNull(tuning)) {
         microtonalAlter = tuning / 100.0;
     }
-    if (alter || microtonalAlter) {
+    if (alter || !muse::RealIsNull(microtonalAlter)) {
         xml.tag("alter", alter + microtonalAlter);
     }
     xml.tag(useDrumset ? "display-octave" : "octave", octave);

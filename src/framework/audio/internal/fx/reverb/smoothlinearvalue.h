@@ -122,7 +122,7 @@ public:
     /** Sets the target value which is reached after "steps" calls to smoothTick */
     void setTargetValue(const ValueT& val)
     {
-        if (m_targetValue != val) {
+        if (!RealIsEqual(m_targetValue, val)) {
             m_targetValue = val;
             m_deltaValue = ValueT((1.0 / m_currentSteps) * (m_targetValue - m_currentValue));
             m_targetSteps = m_currentSteps;
@@ -154,7 +154,11 @@ public:
     /// check if the smoothed value isn't moving and has a specific (target)value
     bool isStaticAtValue(const ValueT& static_value) const
     {
-        return isAtTargetValue() && (getTargetValue() == static_value);
+        if constexpr (std::is_floating_point_v<ValueT>) {
+            return isAtTargetValue() && (RealIsEqual(getTargetValue(), static_value));
+        } else {
+            return isAtTargetValue() && (getTargetValue() == static_value);
+        }
     }
 
     inline bool isAtTargetValue() const
