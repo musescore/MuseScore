@@ -111,7 +111,7 @@ private:
     QString m_highlightedMenuId;
     QString m_openedMenuId;
 
-    bool m_needActivateHighlight = true;
+    bool m_needActivateHighlight = false;
     std::optional<MUNavigationSystemState> m_lastActiveMUNavigationState;
     bool m_needActivateLastMUNavigationControl = false;
 
