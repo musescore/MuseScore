@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_MCURSOR_H
 #define MU_ENGRAVING_MCURSOR_H
 
+#include "engravingitem.h"
 #include "types/string.h"
 #include "../types/fraction.h"
 
@@ -54,6 +55,8 @@ public:
     MasterScore* score() const { return m_score; }
     void setScore(MasterScore* s) { m_score = s; }
     void setTimeSig(Fraction f) { m_sig = f; }
+
+    EngravingItem* currentElement() const;
 
 private:
 
