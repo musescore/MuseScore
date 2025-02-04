@@ -4814,7 +4814,10 @@ void Score::cmdApplyLockToSelection()
         return;
     }
 
-    if (first != last) {
+    const SystemLock* lockOnLast = systemLocks()->lockContaining(last);
+    if (lockOnLast && lockOnLast->endMB() == last) {
+        undoRemoveSystemLock(lockOnLast);
+    } else if (first != last) {
         makeIntoSystem(first, last);
     } else {
         makeIntoSystem(first->system()->first(), last);
