@@ -1002,15 +1002,15 @@ void TDraw::draw(const Box* item, Painter* painter)
     const bool showFrame = showHighlightedFrame || (item->score() ? item->score()->showFrames() : false);
 
     if (showFrame) {
-        double lineWidth = item->spatium() * .15;
+        double lineWidth = SPATIUM20 * .10;
         Pen pen;
         pen.setWidthF(lineWidth);
-        pen.setJoinStyle(PenJoinStyle::MiterJoin);
-        pen.setCapStyle(PenCapStyle::SquareCap);
+        pen.setJoinStyle(PenJoinStyle::RoundJoin);
+        pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setColor(showHighlightedFrame
                      ? item->configuration()->selectionColor()
                      : item->configuration()->frameColor());
-        pen.setDashPattern({ 1, 3 });
+        pen.setDashPattern({ 5, 5 });
 
         painter->setBrush(BrushStyle::NoBrush);
         painter->setPen(pen);
