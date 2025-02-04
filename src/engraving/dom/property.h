@@ -43,18 +43,18 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 #define M_PROPERTY(a, b, c)                                      \
-    a _##b { };                                                \
-public:                                                     \
-    const a& b() const { return _##b; }                  \
-    void c(const a& val) { _##b = val; }                  \
-private:
+        a _##b { };                                                \
+    public:                                                     \
+        const a& b() const { return _##b; }                  \
+        void c(const a& val) { _##b = val; }                  \
+    private:
 
 #define M_PROPERTY2(a, b, c, d)                                   \
-    a _##b { d };                                          \
-public:                                                     \
-    const a& b() const { return _##b; }                  \
-    void c(const a& val) { _##b = val; }                  \
-private:
+        a _##b { d };                                          \
+    public:                                                     \
+        const a& b() const { return _##b; }                  \
+        void c(const a& val) { _##b = val; }                  \
+    private:
 
 //---------------------------------------------------------
 //   PropertyFlags
@@ -318,13 +318,13 @@ enum class Pid {
     FONT_STYLE,
     TEXT_LINE_SPACING,
 
-    FRAME_TYPE,
-    FRAME_WIDTH,
-    FRAME_PADDING,
-    FRAME_ROUND,
-    FRAME_FG_COLOR,
+    BORDER_TYPE,
+    BORDER_WIDTH,
+    BORDER_PADDING,
+    BORDER_ROUND,
+    BORDER_FG_COLOR,
 
-    FRAME_BG_COLOR,
+    BORDER_BG_COLOR,
     SIZE_SPATIUM_DEPENDENT,
     TEXT_SIZE_SPATIUM_DEPENDENT, // for text component of textLine items
     MUSICAL_SYMBOLS_SCALE,

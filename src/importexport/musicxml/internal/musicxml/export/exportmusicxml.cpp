@@ -1393,7 +1393,7 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
         xml.tag("line-width", { { "type", "beam" } }, s.styleS(Sid::beamWidth).val() * 10);
         xml.tag("line-width", { { "type", "bracket" } }, s.styleS(Sid::bracketWidth).val() * 10);
         xml.tag("line-width", { { "type", "dashes" } }, s.styleS(Sid::lyricsDashLineThickness).val() * 10);
-        xml.tag("line-width", { { "type", "enclosure" } }, s.styleD(Sid::staffTextFrameWidth) * 10);
+        xml.tag("line-width", { { "type", "enclosure" } }, s.styleD(Sid::staffTextBorderWidth) * 10);
         xml.tag("line-width", { { "type", "ending" } }, s.styleS(Sid::voltaLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "extend" } }, s.styleS(Sid::lyricsLineThickness).val() * 10);
         xml.tag("line-width", { { "type", "leger" } }, s.styleS(Sid::ledgerLineWidth).val() * 10);
@@ -5089,7 +5089,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     } else {
         xml.startElement("direction-type");
         String attr;
-        if (text->hasFrame()) {
+        if (text->hasBorder()) {
             if (text->circle()) {
                 attr = u" enclosure=\"circle\"";
             } else {
@@ -5288,7 +5288,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
     m_xml.startElement("direction", { { "placement", (relativePosition.y() < 0) ? "above" : "below" } });
     m_xml.startElement("direction-type");
     String attr;
-    if (text->hasFrame()) {
+    if (text->hasBorder()) {
         if (text->circle()) {
             attr = u" enclosure=\"circle\"";
         } else {
@@ -5320,7 +5320,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     String attr;
     if (rmk->circle()) {
         attr = u" enclosure=\"circle\"";
-    } else if (!rmk->hasFrame()) {
+    } else if (!rmk->hasBorder()) {
         attr = u" enclosure=\"none\"";
     }
     attr += color2xml(rmk);
@@ -8161,7 +8161,7 @@ static bool systemHasMeasures(const System* const system)
 }
 
 //---------------------------------------------------------
-//  findTextFramesToWriteAsWordsAbove
+//  findTextFranesToWriteAsWordsAbove
 //---------------------------------------------------------
 
 static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const measure)
@@ -8841,7 +8841,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     if (!h->isStyled(Pid::PLACEMENT)) {
         harmonyAttrs.push_back({ "placement", (h->placement() == PlacementV::BELOW) ? "below" : "above" });
     }
-    harmonyAttrs.push_back({ "print-frame", h->hasFrame() ? "yes" : "no" });     // .append(relative));
+    harmonyAttrs.push_back({ "print-frame", h->hasBorder() ? "yes" : "no" });     // .append(relative));
     if (!h->visible()) {
         harmonyAttrs.push_back({ "print-object", "no" });
     }
