@@ -51,7 +51,7 @@ Item {
     }
 
     function startEditCurrentShortcut() {
-        editShortcutModel.load(shortcutsModel.currentShortcut, shortcutsModel.shortcuts())
+        editShortcutDialog.load(shortcutsModel.currentShortcut, shortcutsModel.shortcuts())
         editShortcutDialog.open()
     }
 
@@ -65,51 +65,11 @@ Item {
         readonly property int buttonMinWidth: 104
     }
 
-    StyledDialogView {
+    StandardEditShortcutDialog {
         id: editShortcutDialog
 
-        title: qsTrc("shortcuts", "Enter shortcut sequence")
-
-        contentWidth: 538
-        contentHeight: 200
-
-        margins: 20
-
-        onNavigationActivateRequested: {
-            editShortcutDialogContent.requestActive()
-        }
-
-        EditShortcutModel {
-            id: editShortcutModel
-
-            onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
-                shortcutsModel.applySequenceToCurrentShortcut(newSequence, conflictShortcutIndex)
-            }
-        }
-
-        EditShortcutDialogContent {
-            id: editShortcutDialogContent
-
-            navigationSection: editShortcutDialog.navigationSection
-
-            headerText: qsTrc("shortcuts", "Define keyboard shortcut")
-
-            originShortcutText: editShortcutModel.originSequence
-            newShortcutText: editShortcutModel.newSequence
-            informationText: editShortcutModel.conflictWarning
-
-            onSaveRequested: {
-                editShortcutModel.trySave()
-                editShortcutDialog.accept()
-            }
-
-            onCancelRequested: {
-                editShortcutDialog.reject()
-            }
-
-            onKeyPressed: function(event) {
-                editShortcutModel.inputKey(event.key, event.modifiers)
-            }
+        onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
+            shortcutsModel.applySequenceToCurrentShortcut(newSequence, conflictShortcutIndex)
         }
     }
 

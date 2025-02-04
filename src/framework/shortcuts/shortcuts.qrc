@@ -11,5 +11,6 @@
         <file>qml/Muse/Shortcuts/internal/ShortcutsBottomPanel.qml</file>
         <file>qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml</file>
         <file>qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml</file>
+        <file>qml/Muse/Shortcuts/StandardEditShortcutDialog.qml</file>
     </qresource>
 </RCC>

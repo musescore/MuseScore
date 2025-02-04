@@ -30,37 +30,30 @@ import MuseScore.NotationScene 1.0
 StyledDialogView {
     id: root
 
-    property var originDrum: null
-    property var drumsWithShortcut: null
-
-    property var applicationShortcuts: null
-
-    title: qsTrc("shortcuts", "Enter shortcut")
+    title: qsTrc("shortcuts", "Enter shortcut sequence")
 
     contentWidth: 538
     contentHeight: 200
 
     margins: 20
 
-    function done(data = {}) {
-        let value = Object.assign(data)
-        root.ret = {
-            errcode: 0,
-            value: value
-        }
-        root.hide()
-    }
+    signal applyNewSequenceRequested(var newSequence, var conflictShortcutIndex)
+    signal load(var currentShortcut, var allShortcuts)
 
     onNavigationActivateRequested: {
         editShortcutDialogContent.requestActive()
     }
 
-    Component.onCompleted: {
-        model.load(root.originDrum, root.drumsWithShortcut, root.applicationShortcuts)
+    onLoad: function(currentShortcut, allShortcuts) {
+        editShortcutModel.load(currentShortcut, allShortcuts)
     }
 
-    EditPercussionShortcutModel {
-        id: model
+    EditShortcutModel {
+        id: editShortcutModel
+
+        onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
+            root.applyNewSequenceRequested(newSequence, conflictShortcutIndex)
+        }
     }
 
     EditShortcutDialogContent {
@@ -68,18 +61,15 @@ StyledDialogView {
 
         navigationSection: root.navigationSection
 
-        headerText: qsTrc("shortcuts", "Define percussion keyboard shortcut")
+        headerText: qsTrc("shortcuts", "Define keyboard shortcut")
 
-        originShortcutText: model.originShortcutText
-        newShortcutText: model.newShortcutText
-        informationText: model.informationText
+        originShortcutText: editShortcutModel.originSequence
+        newShortcutText: editShortcutModel.newSequence
+        informationText: editShortcutModel.conflictWarning
 
         onSaveRequested: {
-            if (model.trySave()) {
-                root.done({ newShortcut: model.newShortcutText, conflictDrumPitch: model.conflictDrumPitch() })
-                return
-            }
-            root.reject()
+            editShortcutModel.trySave()
+            root.accept()
         }
 
         onCancelRequested: {
@@ -87,7 +77,7 @@ StyledDialogView {
         }
 
         onKeyPressed: function(event) {
-            model.inputKey(event.key)
+            editShortcutModel.inputKey(event.key, event.modifiers)
         }
     }
 }
