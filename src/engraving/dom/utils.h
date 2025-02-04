@@ -38,8 +38,10 @@ class Measure;
 class Score;
 class Segment;
 class System;
+class Staff;
 class Tuplet;
 class Volta;
+struct NoteVal;
 
 enum class Key;
 
@@ -82,6 +84,7 @@ extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalDiatonicSteps);
+extern int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick);
 extern int compareNotesPos(const Note* n1, const Note* n2);
 
 extern Segment* skipTuplet(Tuplet* tuplet);

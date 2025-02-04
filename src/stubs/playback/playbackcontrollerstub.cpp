@@ -116,6 +116,10 @@ void PlaybackControllerStub::playElements(const std::vector<const notation::Engr
 {
 }
 
+void PlaybackControllerStub::playNotes(const notation::NoteValList&, const notation::staff_idx_t, const notation::Segment*)
+{
+}
+
 void PlaybackControllerStub::playMetronome(int)
 {
 }

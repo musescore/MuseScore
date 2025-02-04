@@ -390,12 +390,16 @@ Ret ProjectActionsController::doFinishOpenProject()
 {
     extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
 
-    //! Show MuseSampler update if need
+    //! Show Tours & Muse Sounds update if need
     async::Channel<Uri> opened = interactive()->opened();
     opened.onReceive(this, [this, opened](const Uri&) {
         async::Async::call(this, [this, opened]() {
             async::Channel<Uri> mut = opened;
             mut.resetOnReceive(this);
+
+            QTimer::singleShot(1000, [this]() {
+                toursService()->onEvent(u"project_opened");
+            });
 
             QTimer::singleShot(5000, [this]() {
                 museSoundsCheckUpdateScenario()->checkForUpdate();

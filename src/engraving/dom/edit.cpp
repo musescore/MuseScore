@@ -1161,7 +1161,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
 
     if (noteEntryMode()) {
         // set input cursor to possibly re-written segment
-        Fraction icTick = inputPos();
+        Fraction icTick = m_is.tick();
         Segment* icSegment = tick2segment(icTick, false, SegmentType::ChordRest);
         if (!icSegment) {
             // this can happen if cursor was on a rest
@@ -4091,7 +4091,7 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
                 d.fraction(), DirectionV::AUTO, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
                 externalInputState);
     is.moveToNextInputPos();
-    if (!is.noteEntryMode() || is.usingNoteEntryMethod(NoteEntryMethod::STEPTIME)) {
+    if (!is.noteEntryMode() || is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME)) {
         is.setRest(false);  // continue with normal note entry
     }
 }

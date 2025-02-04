@@ -190,11 +190,12 @@ public:
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinsToSelection(HairpinType type) override;
-    void addAccidentalToSelection(AccidentalType type) override;
     void putRestToSelection() override;
     void putRest(Duration duration) override;
     void addBracketsToSelection(BracketsType type) override;
-    void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
+    void toggleAccidentalForSelection(AccidentalType type) override;
+    void toggleArticulationForSelection(SymbolId articulationSymbolId) override;
+    void toggleDotsForSelection(Pad dots) override;
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;
     bool canAddTupletToSelectedChordRests() const override;
     void addTupletToSelectedChordRests(const TupletOptions& options) override;
@@ -315,6 +316,14 @@ private:
     void apply();
     void rollback();
 
+    struct ShadowNoteParams {
+        mu::engraving::TDuration duration;
+        mu::engraving::AccidentalType accidentalType = mu::engraving::AccidentalType::NONE;
+        std::set<SymId> articulationIds;
+    };
+
+    void showShadowNoteAtPosition(mu::engraving::ShadowNote& note, const ShadowNoteParams& params, mu::engraving::Position& pos);
+
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
@@ -368,10 +377,17 @@ private:
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
     double currentScaling(muse::draw::Painter* painter) const;
+
+    std::vector<mu::engraving::Position> inputPositions() const;
+
+    bool shouldDrawInputPreview() const;
+    void drawInputPreview(muse::draw::Painter* painter);
+
     void drawAnchorLines(muse::draw::Painter* painter);
     void drawTextEditMode(muse::draw::Painter* painter);
     void drawSelectionRange(muse::draw::Painter* painter);
     void drawGripPoints(muse::draw::Painter* painter);
+
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
 

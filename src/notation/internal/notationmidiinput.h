@@ -58,8 +58,12 @@ private:
     mu::engraving::Score* score() const;
 
     void doProcessEvents();
+
+    void startNoteInputIfNeed();
+
+    void addNoteEventsToInputState();
     Note* addNoteToScore(const muse::midi::Event& e);
-    Note* makeNote(const muse::midi::Event& e);
+    Note* makePreviewNote(const muse::midi::Event& e);
 
     void enableMetronome();
     void disableMetronome();
@@ -74,6 +78,7 @@ private:
     bool isRealtime() const;
     bool isRealtimeAuto() const;
     bool isRealtimeManual() const;
+    bool isInputByDuration() const;
 
     bool isNoteInputMode() const;
 

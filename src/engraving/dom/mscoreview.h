@@ -57,7 +57,6 @@ public:
 
     virtual void changeEditElement(EngravingItem*) {}
     virtual void setDropRectangle(const RectF&) {}
-    virtual void startNoteEntryMode() {}
     virtual void drawBackground(muse::draw::Painter*, const RectF&) const = 0;
     virtual void setDropTarget(EngravingItem*) {}
 

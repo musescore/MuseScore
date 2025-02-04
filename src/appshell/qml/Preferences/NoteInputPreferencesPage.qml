@@ -25,7 +25,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
-import "internal"
+import "internal/NoteInput"
 
 PreferencesPage {
     id: root
@@ -43,24 +43,48 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         NoteInputSection {
-            advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
-            colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
-            warnGuitarBends: noteInputModel.warnGuitarBends
-            delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
+            noteInputMethods: noteInputModel.noteInputMethods()
+            defaultNoteInputMethod: noteInputModel.defaultNoteInputMethod
+            addAccidentalDotsArticulationsToNextNoteEntered: noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered
+            useNoteInputCursorInInputByDuration: noteInputModel.useNoteInputCursorInInputByDuration
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
+            onDefaultNoteInputMethodChangeRequested: function(method) {
+                noteInputModel.defaultNoteInputMethod = method
+            }
+
+            onAddAccidentalDotsArticulationsToNextNoteEnteredChangeRequested: function(add) {
+                noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered = add
+            }
+
+            onUseNoteInputCursorInInputByDurationChangeRequested: function(use) {
+                noteInputModel.useNoteInputCursorInInputByDuration = use
+            }
+        }
+
+        SeparatorLine {}
+
+        MidiInputSection {
+            midiInputEnabled: noteInputModel.midiInputEnabled
+            startNoteInputWhenPressingKey: noteInputModel.startNoteInputAtSelectionWhenPressingMidiKey
+            advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
+            delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
+            onMidiInputEnabledChangeRequested: function(enabled) {
+                noteInputModel.midiInputEnabled = enabled
+            }
+
+            onStartNoteInputWhenPressingKeyChangeRequested: function(start) {
+                noteInputModel.startNoteInputAtSelectionWhenPressingMidiKey = start
+            }
+
             onAdvanceToNextNoteChangeRequested: function(advance) {
                 noteInputModel.advanceToNextNoteOnKeyRelease = advance
-            }
-
-            onColorNotesChangeRequested: function(color) {
-                noteInputModel.colorNotesOutsideOfUsablePitchRange = color
-            }
-
-            onWarnGuitarBendsChangeRequested: function(warn) {
-                noteInputModel.warnGuitarBends = warn
             }
 
             onDelayBetweenNotesChangeRequested: function(delay) {
@@ -70,17 +94,22 @@ PreferencesPage {
 
         SeparatorLine {}
 
-        NoteInputPlaySection {
+        NotePreviewSection {
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
             playChordWhenEditing: noteInputModel.playChordWhenEditing
+            playPreviewNotesInInputByDuration: noteInputModel.playPreviewNotesInInputByDuration
             playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 2
+            navigation.order: root.navigationOrderStart + 3
 
             onPlayNotesWhenEditingChangeRequested: function(play) {
                 noteInputModel.playNotesWhenEditing = play
+            }
+
+            onPlayPreviewNotesInInputByDurationChangeRequested: function(play) {
+                noteInputModel.playPreviewNotesInInputByDuration = play
             }
 
             onPlayChordWhenEditingChangeRequested: function(play) {
@@ -98,40 +127,38 @@ PreferencesPage {
 
         SeparatorLine {}
 
-        BaseSection {
-            id: dynamicsAllVoicesSection
-
+        VoiceAssignmentSection {
             width: parent.width
 
-            title: qsTrc("appshell/preferences", "Voice assignment")
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
 
-            StyledTextLabel {
-                width: parent.width
-                text: qsTrc("appshell/preferences", "When entered, dynamics and hairpins should affect:")
-                horizontalAlignment: Text.AlignLeft
+            dynamicsApplyToAllVoices: noteInputModel.dynamicsApplyToAllVoices
+
+            onDynamicsApplyToAllVoicesChangeRequested: function(value) {
+                noteInputModel.dynamicsApplyToAllVoices = value
+            }
+        }
+
+        SeparatorLine {}
+
+        NoteColorsSection {
+            width: parent.width
+
+            colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
+            warnGuitarBends: noteInputModel.warnGuitarBends
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
+
+            onColorNotesChangeRequested: function(color) {
+                noteInputModel.colorNotesOutsideOfUsablePitchRange = color
             }
 
-            RoundedRadioButton {
-                width: parent.width
-
-                text: qsTrc("appshell/preferences", "All voices on the instrument")
-
-                checked: noteInputModel.dynamicsApplyToAllVoices
-                onToggled: {
-                    noteInputModel.dynamicsApplyToAllVoices = checked
-                }
+            onWarnGuitarBendsChangeRequested: function(warn) {
+                noteInputModel.warnGuitarBends = warn
             }
 
-            RoundedRadioButton {
-                width: parent.width
-
-                text: qsTrc("appshell/preferences", "Only the voice they are applied to")
-
-                checked: !noteInputModel.dynamicsApplyToAllVoices
-                onToggled: {
-                    noteInputModel.dynamicsApplyToAllVoices = !checked
-                }
-            }
         }
     }
 }

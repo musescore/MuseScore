@@ -2054,12 +2054,19 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Insert/overwrite"),
              TranslatableString("action", "Toggle note input mode: insert/overwrite")
              ),
-    UiAction("note-input-steptime",
+    UiAction("note-input-by-note-name",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Default (step-time)"),
-             TranslatableString("action", "Toggle note input mode: default (step-time)"),
+             TranslatableString("action", "Input by note name"),
+             TranslatableString("action", "Toggle note input mode: input by note name"),
              IconCode::Code::EDIT
+             ),
+    UiAction("note-input-by-duration",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Input by duration"),
+             TranslatableString("action", "Toggle note input mode: input by duration"),
+             IconCode::Code::DURATION_CURSOR
              ),
     UiAction("note-input-rhythm",
              mu::context::UiCtxProjectOpened,
@@ -2849,7 +2856,14 @@ const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
     static ToolConfig config;
     if (!config.isValid()) {
         config.items = {
-            { "note-input", true },
+            { "note-input-by-note-name", true },
+            { "note-input-by-duration", true },
+            { "note-input-rhythm", false },
+            { "note-input-repitch", false },
+            { "note-input-realtime-auto", false },
+            { "note-input-realtime-manual", false },
+            { "note-input-timewise", false },
+            { "", true },
             { "pad-note-1024", false },
             { "pad-note-512", false },
             { "pad-note-256", false },

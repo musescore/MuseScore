@@ -144,6 +144,7 @@ using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
+using staff_idx_t = mu::engraving::staff_idx_t;
 using ChangesRange = mu::engraving::ScoreChangesRange;
 using GuitarBendType = mu::engraving::GuitarBendType;
 using engraving::LoopBoundaryType;
@@ -222,6 +223,9 @@ enum class NoteName
     B
 };
 
+using NoteVal = mu::engraving::NoteVal;
+using NoteValList = mu::engraving::NoteValList;
+
 enum class NoteAddingMode
 {
     CurrentChord,
@@ -236,22 +240,7 @@ enum class PastingType {
     Special
 };
 
-struct NoteInputState
-{
-    NoteInputMethod method = NoteInputMethod::UNKNOWN;
-    Duration duration;
-    AccidentalType accidentalType = AccidentalType::NONE;
-    std::set<SymbolId> articulationIds;
-    bool isRest = false;
-    bool withSlur = false;
-    engraving::voice_idx_t currentVoiceIndex = 0;
-    engraving::track_idx_t currentTrack = 0;
-    int currentString = 0;
-    Drumset* drumset = nullptr;
-    StaffGroup staffGroup = StaffGroup::STANDARD;
-    const Staff* staff = nullptr;
-    Segment* segment = nullptr;
-};
+using NoteInputState = mu::engraving::InputState;
 
 enum class NoteFilter
 {

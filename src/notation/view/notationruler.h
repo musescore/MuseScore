@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,31 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTEINPUTCURSOR_H
-#define MU_NOTATION_NOTEINPUTCURSOR_H
 
-#include <QColor>
+#pragma once
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+
 #include "notation/inotationconfiguration.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class NoteInputCursor : public muse::Injectable
+class NotationRuler : public muse::Injectable
 {
-    muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
-    NoteInputCursor(bool isThinLine = false);
+    NotationRuler(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
-    void paint(muse::draw::Painter* painter);
+    void paint(muse::draw::Painter* painter, const NoteInputState& state);
 
 private:
-    INotationNoteInputPtr currentNoteInput() const;
+    enum LineType {
+        CurrentPosition,
+        MainBeat,
+        Subdivision,
+    };
 
-    bool m_isThinLine = false;
+    static LineType lineType(int lineTicks, int inputTicks, size_t lineIdx);
+
+    void paintLine(muse::draw::Painter* painter, LineType type, const muse::PointF& point, double spatium, voice_idx_t voiceIdx);
 };
 }
-
-#endif // MU_NOTATION_NOTEINPUTCURSOR_H

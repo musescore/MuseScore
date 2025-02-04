@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,40 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+
+import "../../internal"
 
 BaseSection {
     id: root
 
-    title: qsTrc("appshell/preferences", "Note input")
-
-    property alias advanceToNextNote: advanceToNextNoteBox.checked
     property alias colorNotes: colorNotesBox.checked
     property alias warnGuitarBends: warnBendsBox.checked
-    property alias delayBetweenNotes: delayBetweenNotesControl.currentValue
 
-    signal advanceToNextNoteChangeRequested(bool advance)
     signal colorNotesChangeRequested(bool color)
     signal warnGuitarBendsChangeRequested(bool warn)
-    signal delayBetweenNotesChangeRequested(int delay)
 
-    CheckBox {
-        id: advanceToNextNoteBox
-        width: parent.width
-
-        text: qsTrc("appshell/preferences", "Advance to next note on key release (MIDI)")
-
-        navigation.name: "AdvanceToNextNoteBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
-
-        onClicked: {
-            root.advanceToNextNoteChangeRequested(!checked)
-        }
-    }
+    title: qsTrc("appshell/preferences", "Note colors")
 
     CheckBox {
         id: colorNotesBox
@@ -63,7 +44,7 @@ BaseSection {
 
         navigation.name: "ColorNotesBox"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 0
 
         onClicked: {
             root.colorNotesChangeRequested(!checked)
@@ -78,29 +59,10 @@ BaseSection {
 
         navigation.name: "WarnBendBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 1
 
         onClicked: {
             root.warnGuitarBendsChangeRequested(!checked)
-        }
-    }
-
-    IncrementalPropertyControlWithTitle {
-        id: delayBetweenNotesControl
-
-        title: qsTrc("appshell/preferences", "Delay between notes in automatic real time mode:")
-
-        columnWidth: root.columnWidth
-        spacing: root.columnSpacing
-
-        measureUnitsSymbol: qsTrc("global", "ms")
-
-        navigation.name: "DelayBetweenNotesControl"
-        navigation.panel: root.navigation
-        navigation.row: 3
-
-        onValueEdited: function(newValue) {
-            root.delayBetweenNotesChangeRequested(newValue)
         }
     }
 }
