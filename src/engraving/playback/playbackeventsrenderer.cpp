@@ -287,6 +287,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
     NoteArticulationsParser::parsePersistentMeta(ctx, ctx.commonArticulations);
     NoteArticulationsParser::parseGhostNote(note, ctx, ctx.commonArticulations);
     NoteArticulationsParser::parseNoteHead(note, ctx, ctx.commonArticulations);
+    NoteArticulationsParser::parseSymbols(note, ctx, ctx.commonArticulations);
 
     if (ctx.commonArticulations.empty()) {
         ctx.commonArticulations = makeStandardArticulationMap(profile, actualTimestamp, actualDuration);
