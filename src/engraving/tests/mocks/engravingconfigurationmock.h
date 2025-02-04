@@ -76,6 +76,8 @@ public:
     MOCK_METHOD(Color, frameColor, (), (const, override));
     MOCK_METHOD(muse::async::Channel<Color>, frameColorChanged, (), (const, override));
 
+    MOCK_METHOD(Color, scoreGreyColor, (), (const, override));
+
     MOCK_METHOD(Color, invisibleColor, (), (const, override));
     MOCK_METHOD(muse::async::Channel<Color>, invisibleColorChanged, (), (const, override));
 
