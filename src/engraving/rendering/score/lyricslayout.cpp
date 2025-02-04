@@ -45,22 +45,8 @@ static Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, Pla
     Lyrics* l = nullptr;
     const Segment* originalSeg = s;
     while ((s = s->next1(SegmentType::ChordRest))) {
-        // Disallow inputting ties between unrelated voltas
-        // This visually adjacent segment is never the next to be played
-        Volta* startVolta = findVolta(originalSeg, originalSeg->score());
-        Volta* endVolta = findVolta(s, originalSeg->score());
-        if (startVolta && endVolta && startVolta != endVolta) {
+        if (!segmentsAreAdjacentInRepeatStructure(originalSeg, s)) {
             return nullptr;
-        }
-
-        if (originalSeg->measure() != s->measure()) {
-            // Disallow inputting ties across codas
-            // This visually adjacent segment is never the next to be played
-            for (const EngravingItem* el : s->measure()->el()) {
-                if (el->isMarker() && toMarker(el)->isCoda()) {
-                    return nullptr;
-                }
-            }
         }
 
         track_idx_t strack = staffIdx * VOICES;

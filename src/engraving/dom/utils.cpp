@@ -806,7 +806,6 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
     Chord* chord = note->chord();
     Segment* seg = chord->segment();
     Part* part   = chord->part();
-    Score* score = chord->score();
     track_idx_t strack = part->staves().front()->idx() * VOICES;
     track_idx_t etrack = strack + part->staves().size() * VOICES;
 
@@ -822,25 +821,8 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
         return nullptr;
     }
 
-    if (disableOverRepeats) {
-        // Disallow inputting ties between unrelated voltas
-        // This visually adjacent segment is never the next to be played
-        Volta* startVolta = findVolta(seg, score);
-        Volta* endVolta = findVolta(nextSegment, score);
-
-        if (startVolta && endVolta && startVolta != endVolta) {
-            return nullptr;
-        }
-
-        // Disallow inputting ties across codas
-        // This visually adjacent segment is never the next to be played
-        if (nextSegment->measure() != seg->measure()) {
-            for (const EngravingItem* el : nextSegment->measure()->el()) {
-                if (el->isMarker() && toMarker(el)->isCoda()) {
-                    return nullptr;
-                }
-            }
-        }
+    if (disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(seg, nextSegment)) {
+        return nullptr;
     }
 
     if (chord->isGraceBefore()) {
@@ -1586,5 +1568,30 @@ bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure)
     }
 
     return false;
+}
+
+bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg)
+{
+    // Disallow inputting ties between unrelated voltas
+    // This visually adjacent segment is never the next to be played
+    Score* score = firstSeg->score();
+    Volta* startVolta = findVolta(firstSeg, score);
+    Volta* endVolta = findVolta(secondSeg, score);
+
+    if (startVolta && endVolta && startVolta != endVolta) {
+        return false;
+    }
+
+    // Disallow inputting ties across codas
+    // This visually adjacent segment is never the next to be played
+    if (secondSeg->measure() != firstSeg->measure()) {
+        for (const EngravingItem* el : secondSeg->measure()->el()) {
+            if (el->isMarker() && toMarker(el)->isCoda()) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 }

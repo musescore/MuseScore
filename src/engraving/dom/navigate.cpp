@@ -192,27 +192,9 @@ ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
     Segment* curSeg = cr->segment();
-    Score* score = cr->score();
     for (Segment* seg = curSeg->next1MM(st); seg; seg = seg->next1MM(st)) {
-        if (options.disableOverRepeats) {
-            // Disallow inputting ties between unrelated voltas
-            // This visually adjacent segment is never the next to be played
-            Volta* startVolta = findVolta(curSeg, score);
-            Volta* endVolta = findVolta(seg, score);
-
-            if (startVolta && endVolta && startVolta != endVolta) {
-                return nullptr;
-            }
-
-            // Disallow inputting ties across codas
-            // This visually adjacent segment is never the next to be played
-            if (seg->measure() != curSeg->measure()) {
-                for (const EngravingItem* el : seg->measure()->el()) {
-                    if (el->isMarker() && toMarker(el)->isCoda()) {
-                        return nullptr;
-                    }
-                }
-            }
+        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+            return nullptr;
         }
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
@@ -291,27 +273,9 @@ ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
     Segment* curSeg = cr->segment();
-    Score* score = cr->score();
     for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
-        if (options.disableOverRepeats) {
-            // Disallow inputting ties between unrelated voltas
-            // This visually adjacent segment is never the next to be played
-            Volta* startVolta = findVolta(curSeg, score);
-            Volta* endVolta = findVolta(seg, score);
-
-            if (startVolta && endVolta && startVolta != endVolta) {
-                return nullptr;
-            }
-
-            // Disallow inputting ties across codas
-            // This visually adjacent segment is never the next to be played
-            if (seg->measure() != curSeg->measure()) {
-                for (const EngravingItem* el : seg->measure()->el()) {
-                    if (el->isMarker() && toMarker(el)->isCoda()) {
-                        return nullptr;
-                    }
-                }
-            }
+        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+            return nullptr;
         }
 
         ChordRest* e = toChordRest(seg->element(track));

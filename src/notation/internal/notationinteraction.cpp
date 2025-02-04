@@ -5624,25 +5624,8 @@ void NotationInteraction::navigateToNextSyllable()
         }
     }
 
-    if (nextSegment) {
-        // Disallow inputting ties between unrelated voltas
-        // This visually adjacent segment is never the next to be played
-        Volta* startVolta = findVolta(segment, score());
-        Volta* endVolta = findVolta(nextSegment, score());
-
-        if (startVolta && endVolta && startVolta != endVolta) {
-            nextSegment = nullptr;
-        }
-    }
-
-    if (nextSegment && nextSegment->measure() != segment->measure()) {
-        // Disallow inputting ties across codas
-        // This visually adjacent segment is never the next to be played
-        for (const EngravingItem* el : nextSegment->measure()->el()) {
-            if (el->isMarker() && toMarker(el)->isCoda()) {
-                nextSegment = nullptr;
-            }
-        }
+    if (!segmentsAreAdjacentInRepeatStructure(segment, nextSegment)) {
+        nextSegment = nullptr;
     }
 
     if (!nextSegment && !hasFollowingRepeat) {
@@ -6421,25 +6404,8 @@ void NotationInteraction::addMelisma()
         }
     }
 
-    if (nextSegment) {
-        // Disallow inputting ties between unrelated voltas
-        // This visually adjacent segment is never the next to be played
-        Volta* startVolta = findVolta(segment, score());
-        Volta* endVolta = findVolta(nextSegment, score());
-
-        if (startVolta && endVolta && startVolta != endVolta) {
-            nextSegment = nullptr;
-        }
-    }
-
-    if (nextSegment && nextSegment->measure() != segment->measure()) {
-        // Disallow inputting ties across codas
-        // This visually adjacent segment is never the next to be played
-        for (const EngravingItem* el : nextSegment->measure()->el()) {
-            if (el->isMarker() && toMarker(el)->isCoda()) {
-                nextSegment = nullptr;
-            }
-        }
+    if (segmentsAreAdjacentInRepeatStructure(segment, nextSegment)) {
+        nextSegment = nullptr;
     }
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
