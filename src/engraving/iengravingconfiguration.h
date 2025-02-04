@@ -92,6 +92,8 @@ public:
     virtual Color frameColor() const = 0;
     virtual muse::async::Channel<Color> frameColorChanged() const = 0;
 
+    virtual Color scoreGreyColor() const = 0;
+
     virtual Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {
