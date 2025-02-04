@@ -2569,15 +2569,16 @@ void Segment::createShape(staff_idx_t staffIdx)
         }
 
         setVisible(true);
+        if (e->isParenthesis()) {
+            // Calculate layout, this needs to be placed at the edge of the segment
+            renderer()->layoutItem(toParenthesis(e));
+        }
+
         if (!e->addToSkyline()) {
             continue;
         }
 
-        if (e->isParenthesis()) {
-            // Calculate layout, this needs to be placed at the right of the segment
-            renderer()->layoutItem(toParenthesis(e));
-            s.add(e->shape().translate(e->pos() + e->staffOffset()));
-        } else if (e->isHarmony()) {
+        if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
             renderer()->layoutItem(toHarmony(e));
 

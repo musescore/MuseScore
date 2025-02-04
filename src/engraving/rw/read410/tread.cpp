@@ -135,6 +135,7 @@
 #include "../../dom/pedal.h"
 #include "../../dom/palmmute.h"
 #include "../../dom/segment.h"
+#include "../../dom/parenthesis.h"
 #include "../../dom/part.h"
 #include "../../dom/partialtie.h"
 #include "../../dom/whammybar.h"
@@ -3757,6 +3758,17 @@ void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
             p->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
+        }
+    }
+}
+
+void TRead::read(Parenthesis* p, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (TRead::readProperty(p, tag, xml, ctx, Pid::HORIZONTAL_DIRECTION)) {
+        } else if (!readItemProperties(p, xml, ctx)) {
+            xml.unknown();
         }
     }
 }

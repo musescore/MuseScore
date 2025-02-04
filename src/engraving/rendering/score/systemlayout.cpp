@@ -46,6 +46,7 @@
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/part.h"
+#include "dom/parenthesis.h"
 #include "dom/pedal.h"
 #include "dom/rest.h"
 #include "dom/score.h"

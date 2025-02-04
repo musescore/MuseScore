@@ -110,6 +110,7 @@
 
 #include "dom/page.h"
 #include "dom/palmmute.h"
+#include "dom/parenthesis.h"
 #include "dom/part.h"
 #include "dom/partialtie.h"
 #include "dom/pedal.h"
@@ -282,6 +283,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::PAGE:         write(item_cast<const Page*>(item), xml, ctx);
         break;
     case ElementType::PALM_MUTE:    write(item_cast<const PalmMute*>(item), xml, ctx);
+        break;
+    case ElementType::PARENTHESIS:    write(item_cast<const Parenthesis*>(item), xml, ctx);
         break;
     case ElementType::PARTIAL_LYRICSLINE:  write(item_cast<const PartialLyricsLine*>(item), xml, ctx);
         break;
@@ -2388,6 +2391,18 @@ void TWrite::write(const PalmMute* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Parenthesis* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::HORIZONTAL_DIRECTION);
+    writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
 

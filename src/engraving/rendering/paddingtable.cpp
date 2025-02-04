@@ -249,6 +249,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::PARENTHESIS][ElementType::REST] = 0.35 * spatium;
     table[ElementType::PARENTHESIS][ElementType::NOTEDOT] = 0.35 * spatium;
     table[ElementType::PARENTHESIS][ElementType::HOOK] = 0.35 * spatium;
+    table[ElementType::PARENTHESIS][ElementType::PARENTHESIS] = 1.0 * spatium;
 
     // Measure repeat set same values as note
     table[ElementType::MEASURE_REPEAT] = table[ElementType::NOTE];
