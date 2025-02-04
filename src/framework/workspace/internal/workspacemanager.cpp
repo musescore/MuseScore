@@ -124,7 +124,7 @@ void WorkspaceManager::appendNewWorkspace(WorkspacePtr workspace)
 void WorkspaceManager::setupConnectionsToNewWorkspace(const IWorkspacePtr workspace)
 {
     std::string newWorkspaceName = workspace->name();
-    workspace->reloadNotification().onNotify(this, [this, &newWorkspaceName](){
+    workspace->reloadNotification().onNotify(this, [this, newWorkspaceName](){
         if (m_currentWorkspace->name() == newWorkspaceName) {
             m_currentWorkspaceChanged.notify();
         }
@@ -229,26 +229,40 @@ void WorkspaceManager::load()
 
 io::paths_t WorkspaceManager::findWorkspaceFiles() const
 {
-    io::paths_t result;
-    io::paths_t dirPaths = configuration()->workspacePaths();
-
-    for (const io::path_t& dirPath : dirPaths) {
+    auto findFiles = [this](const io::path_t& dirPath) {
         std::string filter = "*" + WORKSPACE_EXT;
         RetVal<io::paths_t> files = fileSystem()->scanFiles(dirPath, { filter });
         if (!files.ret) {
             LOGE() << files.ret.toString();
-            continue;
         }
 
-        result.insert(result.end(), files.val.begin(), files.val.end());
+        return files.val;
+    };
+
+    io::paths_t builtinWorkspacesPaths = configuration()->builtinWorkspacesFilePaths();
+
+    io::paths_t userWorkspacesPaths = findFiles(configuration()->userWorkspacesPath());
+    std::set<io::path_t> userWorkspacesFileNames;
+    for (const io::path_t& dirPath : userWorkspacesPaths) {
+        userWorkspacesFileNames.insert(io::filename(dirPath));
     }
+
+    muse::remove_if(builtinWorkspacesPaths, [=](const io::path_t& path) -> bool {
+        io::path_t fileName = io::filename(path);
+        return muse::contains(userWorkspacesFileNames, fileName);
+    });
+
+    io::paths_t result;
+    muse::join(result, builtinWorkspacesPaths);
+    muse::join(result, userWorkspacesPaths);
 
     return result;
 }
 
 void WorkspaceManager::setupDefaultWorkspace()
 {
-    WorkspacePtr workspace = findAndInit(DEFAULT_WORKSPACE_NAME);
+    std::string defaultWorkspaceName = configuration()->defaultWorkspaceName();
+    WorkspacePtr workspace = findAndInit(defaultWorkspaceName);
     if (workspace) {
         m_defaultWorkspace = workspace;
         return;
@@ -256,7 +270,7 @@ void WorkspaceManager::setupDefaultWorkspace()
 
     LOGW() << "not found default workspace, will be created new";
 
-    m_defaultWorkspace = doNewWorkspace(DEFAULT_WORKSPACE_NAME);
+    m_defaultWorkspace = doNewWorkspace(defaultWorkspaceName);
     m_workspaces.push_back(m_defaultWorkspace);
 
     Ret ret = fileSystem()->makePath(configuration()->userWorkspacesPath());
@@ -265,10 +279,12 @@ void WorkspaceManager::setupDefaultWorkspace()
         return;
     }
 
-    ret = m_defaultWorkspace->save();
-    if (!ret) {
-        LOGE() << "failed save default workspace";
-    }
+    ret = m_defaultWorkspace->load();
+
+//    ret = m_defaultWorkspace->save();
+//    if (!ret) {
+//        LOGE() << "failed save default workspace";
+//    }
 }
 
 void WorkspaceManager::setupCurrentWorkspace()
@@ -288,7 +304,8 @@ void WorkspaceManager::setupCurrentWorkspace()
 
     WorkspacePtr workspace = findAndInit(workspaceName);
     if (!workspace) {
-        LOGW() << "failed get workspace: " << workspaceName << ", will use " << DEFAULT_WORKSPACE_NAME;
+        std::string defaultWorkspaceName = configuration()->defaultWorkspaceName();
+        LOGW() << "failed get workspace: " << workspaceName << ", will use " << defaultWorkspaceName;
 
         //! NOTE Already should be inited
         IF_ASSERT_FAILED(m_defaultWorkspace) {
@@ -296,7 +313,7 @@ void WorkspaceManager::setupCurrentWorkspace()
         }
 
         workspace = m_defaultWorkspace;
-        configuration()->setCurrentWorkspaceName(DEFAULT_WORKSPACE_NAME);
+        configuration()->setCurrentWorkspaceName(defaultWorkspaceName);
     }
 
     m_currentWorkspace = workspace;

@@ -30,12 +30,16 @@
 #include "modularity/ioc.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "global/iapplication.h"
+#include "io/ifilesystem.h"
+#include "iworkspaceconfiguration.h"
 
 namespace muse::workspace {
 class Workspace : public IWorkspace, public Injectable, public async::Asyncable
 {
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
     Inject<IApplication> application = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<IWorkspaceConfiguration> configuration = { this };
 
 public:
     Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx);
@@ -43,11 +47,16 @@ public:
     std::string name() const override;
     std::string title() const override;
 
+    bool isBuiltin() const override;
+    bool isEdited() const override;
+
     bool isManaged(const DataKey& key) const override;
     void setIsManaged(const DataKey& key, bool val) override;
 
     RetVal<QByteArray> rawData(const DataKey& key) const override;
     Ret setRawData(const DataKey& key, const QByteArray& data) override;
+
+    void reset() override;
 
     async::Notification reloadNotification() override;
 
@@ -61,7 +70,13 @@ private:
 
     std::string fileResourceName() const;
 
-    WorkspaceFile m_file;
+    io::path_t builtinWorkspacePath() const;
+    io::path_t originWorkspacePath() const;
+
+    void backupWorkspace() const;
+    void copyBuiltinWorkspaceToUserDir();
+
+    std::shared_ptr<WorkspaceFile> m_file = nullptr;
 
     async::Notification m_reloadNotification;
 };

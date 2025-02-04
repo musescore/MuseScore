@@ -90,6 +90,7 @@ StyledDialogView {
             Layout.leftMargin: -parent.anchors.leftMargin
             Layout.rightMargin: -parent.anchors.rightMargin
             leftPadding: parent.anchors.leftMargin
+            rightPadding: parent.anchors.rightMargin
 
             model: workspacesModel
 

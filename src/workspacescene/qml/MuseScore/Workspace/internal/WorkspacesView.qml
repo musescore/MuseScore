@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.12
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
@@ -31,6 +32,7 @@ RadioButtonGroup {
     property string firstWorkspaceTitle: Boolean(prv.selectedWorkspace) ? prv.selectedWorkspace.title : ""
 
     property int leftPadding: 0
+    property int rightPadding: 0
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "WorkspacesViewPanel"
@@ -103,21 +105,48 @@ RadioButtonGroup {
             }
         }
 
-        RoundedRadioButton {
+        RowLayout {
             anchors.fill: parent
-            leftPadding: root.leftPadding
 
-            ButtonGroup.group: root.radioButtonGroup
+            spacing: 4
 
-            spacing: 12
+            RoundedRadioButton {
+                leftPadding: root.leftPadding
+                Layout.fillWidth: true
 
-            text: model.name
-            font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+                ButtonGroup.group: root.radioButtonGroup
 
-            checked: model.isSelected
+                spacing: 12
 
-            onClicked: {
-                root.model.selectWorkspace(model.index)
+                text: model.name
+                font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+
+                checked: model.isSelected
+
+                onClicked: {
+                    root.model.selectWorkspace(model.index)
+                }
+            }
+
+            FlatButton {
+                id: resetButton
+
+                Layout.alignment: Qt.AlignRight
+                Layout.rightMargin: root.rightPadding
+
+                text: qsTrc("workspace", "Reset")
+                icon: IconCode.UNDO
+                orientation: Qt.Horizontal
+
+                navigation.name: "ResetButton"
+                navigation.panel: root.navigationPanel
+                navigation.column: 2 // todo
+
+                enabled: model.isEdited
+
+                onClicked: {
+                    root.model.resetWorkspace(model.index)
+                }
             }
         }
 

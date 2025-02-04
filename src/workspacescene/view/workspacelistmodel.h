@@ -55,6 +55,7 @@ public:
     Q_INVOKABLE void createNewWorkspace();
     Q_INVOKABLE void selectWorkspace(int workspaceIndex);
     Q_INVOKABLE void removeWorkspace(int workspaceIndex);
+    Q_INVOKABLE void resetWorkspace(int workspaceIndex);
 
 signals:
     void selectedWorkspaceChanged(QVariant selectedWorkspace);
@@ -68,7 +69,8 @@ private:
     enum Roles {
         RoleName = Qt::UserRole + 1,
         RoleIsSelected,
-        RoleIsRemovable
+        RoleIsRemovable,
+        RoleIsEdited
     };
 
     QList<muse::workspace::IWorkspacePtr> m_workspaces;

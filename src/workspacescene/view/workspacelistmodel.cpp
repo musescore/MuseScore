@@ -34,6 +34,7 @@ using namespace muse::workspace;
 static const QString NAME_KEY("name");
 static const QString IS_SELECTED_KEY("isSelected");
 static const QString IS_REMOVABLE_KEY("isRemovable");
+static const QString IS_EDITED_KEY("isEdited");
 static const QString INDEX_KEY("index");
 
 WorkspaceListModel::WorkspaceListModel(QObject* parent)
@@ -91,6 +92,8 @@ QVariant WorkspaceListModel::data(const QModelIndex& index, int role) const
         return workspace[NAME_KEY];
     case RoleIsRemovable:
         return workspace[IS_REMOVABLE_KEY];
+    case RoleIsEdited:
+        return workspace[IS_EDITED_KEY];
     case RoleIsSelected:
         return workspace[IS_SELECTED_KEY];
     }
@@ -125,7 +128,8 @@ QVariantMap WorkspaceListModel::workspaceToObject(IWorkspacePtr workspace) const
 
     QVariantMap result;
     result[NAME_KEY] = QString::fromStdString(workspaceName);
-    result[IS_REMOVABLE_KEY] = workspaceName != DEFAULT_WORKSPACE_NAME;
+    result[IS_REMOVABLE_KEY] = !workspace->isBuiltin();
+    result[IS_EDITED_KEY] = workspace->isEdited();
     result[IS_SELECTED_KEY] = workspaceName == selectedWorkspaceName;
     result[INDEX_KEY] = m_workspaces.indexOf(workspace);
 
@@ -142,7 +146,8 @@ QHash<int, QByteArray> WorkspaceListModel::roleNames() const
     static const QHash<int, QByteArray> roles {
         { RoleName, NAME_KEY.toUtf8() },
         { RoleIsSelected, IS_SELECTED_KEY.toUtf8() },
-        { RoleIsRemovable, IS_REMOVABLE_KEY.toUtf8() }
+        { RoleIsRemovable, IS_REMOVABLE_KEY.toUtf8() },
+        { RoleIsEdited, IS_EDITED_KEY.toUtf8() }
     };
 
     return roles;
@@ -207,6 +212,19 @@ void WorkspaceListModel::removeWorkspace(int workspaceIndex)
     if (removedWorkspace == m_selectedWorkspace) {
         setSelectedWorkspace(workspacesManager()->defaultWorkspace());
     }
+}
+
+void WorkspaceListModel::resetWorkspace(int workspaceIndex)
+{
+    if (!isIndexValid(workspaceIndex)) {
+        return;
+    }
+
+    IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
+    workspace->reset();
+
+    QModelIndex modelIndex = index(workspaceIndex);
+    emit dataChanged(modelIndex, modelIndex);
 }
 
 bool WorkspaceListModel::apply()
