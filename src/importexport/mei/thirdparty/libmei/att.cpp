@@ -44,7 +44,7 @@ std::string Att::IntToStr(int data) const
 
 std::string Att::VUToStr(data_VU data) const
 {
-    return StringFormat("%fvu", data);
+    return DblToStr(data) + "vu";
 }
 
 // Basic converters for reading
@@ -416,7 +416,7 @@ std::string Att::MeasurementsignedToStr(data_MEASUREMENTSIGNED data) const
         value = StringFormat("%dpx", data.GetPx() / DEFINITION_FACTOR);
     }
     else if (data.GetType() == MEASUREMENTTYPE_vu) {
-        value = StringFormat("%.4fvu", data.GetVu());
+        value = VUToStr(data.GetVu());
     }
 
     return value;
@@ -631,7 +631,7 @@ data_ORIENTATION Att::StrToOrientation(const std::string &value, bool logWarning
 
 std::string Att::PercentToStr(data_PERCENT data) const
 {
-    return StringFormat("%.2f%%", data);
+    return DblToStr(data) + "%";
 }
 
 data_PERCENT Att::StrToPercent(const std::string &value, bool logWarning) const
@@ -644,11 +644,6 @@ data_PERCENT Att::StrToPercent(const std::string &value, bool logWarning) const
     return atof(value.substr(0, value.find("%")).c_str());
 }
 
-std::string Att::PercentLimitedToStr(data_PERCENT_LIMITED data) const
-{
-    return StringFormat("%.2f%%", data);
-}
-
 data_PERCENT_LIMITED Att::StrToPercentLimited(const std::string &value, bool logWarning) const
 {
     static const std::regex test("[0-9]+(\\.?[0-9]*)?%");
@@ -659,16 +654,11 @@ data_PERCENT_LIMITED Att::StrToPercentLimited(const std::string &value, bool log
     return atof(value.substr(0, value.find("%")).c_str());
 }
 
-std::string Att::PercentLimitedSignedToStr(data_PERCENT_LIMITED_SIGNED data) const
-{
-    return StringFormat("%.2f%%", data);
-}
-
 data_PERCENT_LIMITED_SIGNED Att::StrToPercentLimitedSigned(const std::string &value, bool logWarning) const
 {
     static const std::regex test("(+|-)?[0-9]+(\\.?[0-9]*)?%");
     if (!std::regex_match(value, test)) {
-        if (logWarning) LogWarning("Unsupported data.PERCENT.LIMITED.SIGNEd '%s'", value.c_str());
+        if (logWarning) LogWarning("Unsupported data.PERCENT.LIMITED.SIGNED '%s'", value.c_str());
         return 0;
     }
     return atof(value.substr(0, value.find("%")).c_str());
