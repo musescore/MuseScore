@@ -2271,7 +2271,9 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
         }
 
         if (firstChordRest == secondItem && (!firstItem || firstItem->isChordRest())) {
-            secondItem = nextChordRest(toChordRest(firstItem), false, true, true);
+            ChordRestNavigateOptions options;
+            options.disableOverRepeats = true;
+            secondItem = nextChordRest(toChordRest(firstItem), options);
         }
 
         bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
@@ -2935,13 +2937,16 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
     }
     ChordRest* el = 0;
     switch (type) {
-    case MoveSelectionType::Chord:
+    case MoveSelectionType::Chord: {
+        ChordRestNavigateOptions options;
+        options.skipGrace = true;
         if (d == MoveDirection::Right) {
-            el = mu::engraving::nextChordRest(cr, true);
+            el = mu::engraving::nextChordRest(cr, options);
         } else {
-            el = mu::engraving::prevChordRest(cr, true);
+            el = mu::engraving::prevChordRest(cr, options);
         }
         break;
+    }
     case MoveSelectionType::Measure:
         if (d == MoveDirection::Right) {
             el = score()->nextMeasure(cr, true, true);

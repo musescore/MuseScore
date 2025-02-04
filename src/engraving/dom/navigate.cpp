@@ -140,7 +140,7 @@ static EngravingItem* prevElementForSpannerSegment(const SpannerSegment* spanner
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests, bool disableOverRepeats)
+ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -150,7 +150,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
         const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
-        if (skipGrace) {
+        if (options.skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
@@ -178,7 +178,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
             cr = pc;
         }
     } else { // cr is not a grace note
-        if (cr->isChord() && !skipGrace) {
+        if (cr->isChord() && !options.skipGrace) {
             const Chord* c = toChord(cr);
             if (!c->graceNotes().empty()) {
                 const GraceNotesGroup& group = c->graceNotesAfter();
@@ -194,7 +194,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
     Segment* curSeg = cr->segment();
     Score* score = cr->score();
     for (Segment* seg = curSeg->next1MM(st); seg; seg = seg->next1MM(st)) {
-        if (disableOverRepeats) {
+        if (options.disableOverRepeats) {
             // Disallow inputting ties between unrelated voltas
             // This visually adjacent segment is never the next to be played
             Volta* startVolta = findVolta(curSeg, score);
@@ -216,10 +216,10 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
         }
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
-            if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
+            if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !skipGrace) {
+            if (e->isChord() && !options.skipGrace) {
                 Chord* c = toChord(e);
                 if (!c->graceNotes().empty()) {
                     const GraceNotesGroup& group = c->graceNotesBefore();
@@ -241,7 +241,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 //    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests, bool disableOverRepeats)
+ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -251,7 +251,7 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
         const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
-        if (skipGrace) {
+        if (options.skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
@@ -279,7 +279,7 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
     } else {
         //
         // cr is not a grace note
-        if (cr->isChord() && !skipGrace) {
+        if (cr->isChord() && !options.skipGrace) {
             const Chord* c = toChord(cr);
             const GraceNotesGroup& group = c->graceNotesBefore();
             if (!group.empty()) {
@@ -293,7 +293,7 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
     Segment* curSeg = cr->segment();
     Score* score = cr->score();
     for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
-        if (disableOverRepeats) {
+        if (options.disableOverRepeats) {
             // Disallow inputting ties between unrelated voltas
             // This visually adjacent segment is never the next to be played
             Volta* startVolta = findVolta(curSeg, score);
@@ -316,10 +316,10 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
-            if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
+            if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !skipGrace) {
+            if (e->isChord() && !options.skipGrace) {
                 const GraceNotesGroup& group = toChord(e)->graceNotesAfter();
                 if (!group.empty()) {
                     return group.back();

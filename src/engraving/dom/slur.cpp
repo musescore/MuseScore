@@ -138,6 +138,9 @@ bool SlurSegment::edit(EditData& ed)
     const bool extendToBarLine = shiftMod && altMod;
     const bool isPartialSlur = sl->isIncoming() || sl->isOutgoing();
 
+    ChordRestNavigateOptions options;
+    options.disableOverRepeats = true;
+
     if (ed.key == Key_Left) {
         if (extendToBarLine) {
             const Measure* measure = e->measure();
@@ -153,11 +156,11 @@ bool SlurSegment::edit(EditData& ed)
         } else {
             if (start && sl->isIncoming()) {
                 sl->undoSetIncoming(false);
-                cr = prevChordRest(e, false, true, true);
+                cr = prevChordRest(e, options);
             } else if (!start && sl->isOutgoing()) {
                 sl->undoSetOutgoing(false);
             } else {
-                cr = prevChordRest(e, false, true, true);
+                cr = prevChordRest(e, options);
             }
         }
     } else if (ed.key == Key_Right) {
@@ -177,9 +180,9 @@ bool SlurSegment::edit(EditData& ed)
                 sl->undoSetIncoming(false);
             } else if (!start && sl->isOutgoing()) {
                 sl->undoSetOutgoing(false);
-                cr = nextChordRest(e, false, true, true);
+                cr = nextChordRest(e, options);
             } else {
-                cr = nextChordRest(e, false, true, true);
+                cr = nextChordRest(e, options);
             }
         }
     } else if (ed.key == Key_Up) {
