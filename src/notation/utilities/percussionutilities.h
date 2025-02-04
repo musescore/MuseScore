@@ -50,6 +50,6 @@ public:
 
 private:
     static muse::RetVal<muse::Val> openPercussionShortcutDialog(const mu::engraving::Drumset& drumset, int originPitch);
-    static QVariantMap drumToQVariantMap(const engraving::DrumInstrument& drum);
+    static QVariantMap drumToQVariantMap(int pitch, const engraving::DrumInstrument& drum);
 };
 }

@@ -306,11 +306,7 @@ void CustomizeKitDialog::loadPitchesList()
         QTreeWidgetItem* item = new CustomizeKitTreeWidgetItem(pitchList);
         item->setText(Column::PITCH, QString("%1").arg(i));
         item->setText(Column::NOTE, pitch2string(i));
-        if (m_editedDrumset.shortcut(i) == 0) {
-            item->setText(Column::SHORTCUT, "");
-        } else {
-            item->setText(Column::SHORTCUT, QChar(m_editedDrumset.shortcut(i)));
-        }
+        item->setText(Column::SHORTCUT, m_editedDrumset.shortcut(i));
         item->setText(Column::NAME, m_editedDrumset.translatedName(i));
         item->setData(Column::PITCH, Qt::UserRole, i);
     }
@@ -483,9 +479,8 @@ void CustomizeKitDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* 
     noteHead->setCurrentIndex(noteHead->findData(int(nh)));
     fillNoteheadsComboboxes(isCustomGroup, pitch);
 
-    const bool hasShortcut = m_editedDrumset.shortcut(pitch) != '\0';
-    const QString shortcutText = hasShortcut ? QChar(m_editedDrumset.shortcut(pitch)) : muse::qtrc("shortcuts", "None");
-    shortcut->setText(shortcutText);
+    const QString shortcutText = m_editedDrumset.shortcut(pitch);
+    shortcut->setText(!shortcutText.isEmpty() ? shortcutText : muse::qtrc("shortcuts", "None"));
 
     staffLine->blockSignals(false);
     voice->blockSignals(false);
@@ -673,10 +668,10 @@ void CustomizeKitDialog::defineShortcut()
     const int originPitch = item->data(Column::PITCH, Qt::UserRole).toInt();
     PercussionUtilities::editPercussionShortcut(m_editedDrumset, originPitch);
 
-    const QString editedShortcutText = QChar(m_editedDrumset.shortcut(originPitch));
+    const QString editedShortcutText = m_editedDrumset.shortcut(originPitch);
     shortcut->setText(!editedShortcutText.isEmpty() ? editedShortcutText : muse::qtrc("shortcuts", "None"));
     item->setText(Column::SHORTCUT, !editedShortcutText.isEmpty() ? editedShortcutText : QString());
-    // TODO: Update the item of the conflict shortcut too
+    // TODO: Update the item of the conflict shortcut too (#26226)
 
     valueChanged();
 }

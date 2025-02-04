@@ -4949,14 +4949,15 @@ bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out)
     if (ds) {
         char note1 = "CDEFGAB"[note];
         out.drumPitch = -1;
-        for (int i = 0; i < 127; ++i) {
+        for (int i = 0; i < mu::engraving::DRUM_INSTRUMENTS; ++i) {
             if (!ds->isValid(i)) {
                 continue;
             }
-            if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
-                out.drumPitch = i;
-                break;
-            }
+            // TODO: Not handling shortcuts like this anymore
+            // if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
+            //     out.drumPitch = i;
+            //     break;
+            // }
         }
         if (out.drumPitch == -1) {
             LOGD("  shortcut %c not defined in drumset", note1);

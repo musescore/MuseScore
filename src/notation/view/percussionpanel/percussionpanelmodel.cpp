@@ -214,8 +214,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         drum.panelRow = row;
         drum.panelColumn = column;
 
-        const QString& shortcut = model->keyboardShortcut();
-        drum.shortcut = shortcut.isEmpty() ? '\0' : shortcut.toLatin1().at(0);
+        drum.shortcut = model->keyboardShortcut();
     }
 
     // Return if nothing changed after edit...
@@ -394,7 +393,7 @@ void PercussionPanelModel::onDuplicatePadRequested(int pitch)
 
     engraving::DrumInstrument duplicateDrum = updatedDrumset.drum(pitch);
 
-    duplicateDrum.shortcut = '\0'; // Don't steal the shortcut
+    duplicateDrum.shortcut.clear(); // Don't steal the shortcut
     duplicateDrum.panelRow = nextAvailableIndex / m_padListModel->numColumns();
     duplicateDrum.panelColumn = nextAvailableIndex % m_padListModel->numColumns();
 
