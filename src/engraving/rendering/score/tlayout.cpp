@@ -4508,9 +4508,11 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
 
 void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 {
+    LOGI() << "==> layoutParenthesis: " << item->tick().toString() << " dir: " << (int)item->direction();
     Parenthesis::LayoutData* ldata = item->mutldata();
     ldata->setPos(PointF());
     ldata->clearShape();
+    ldata->path.reset();
 
     const Staff* staff = item->staff();
     const Segment* seg = item->segment();
@@ -4594,8 +4596,8 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
         start.setX(minDist);
     } else {
         // Space following segment shape against this
-        double minDist = HorizontalSpacing::minHorizontalDistance(item->shape().translated(start), seg->staffShape(
-                                                                      item->staffIdx()), item->spatium());
+        double minDist = HorizontalSpacing::minHorizontalDistance(item->shape().translated(start),
+                                                                  seg->staffShape(item->staffIdx()), item->spatium());
         start.setX(-minDist);
     }
     item->setPos(start);

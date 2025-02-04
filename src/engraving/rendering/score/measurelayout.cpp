@@ -1929,7 +1929,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
 Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)
 {
-    if (!segment->element(track)) {
+    if (!segment || !segment->element(track)) {
         return nullptr;
     }
 
@@ -1956,8 +1956,8 @@ static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom)
     EngravingItem* el = seg->element(item->track());
     const double spatium = item->spatium();
     if (el) {
-        top = std::min(top, el->shape().top() + el->pos().y() + spatium / 2);
-        bottom = std::max(bottom, el->shape().bottom() + el->pos().y() - spatium / 2);
+        top = std::min(top, el->shape().top() + el->pos().y() + spatium / 4);
+        bottom = std::max(bottom, el->shape().bottom() + el->pos().y() - spatium / 4);
     }
 }
 
@@ -1969,38 +1969,61 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
 
     const Fraction sigTick = continuation ? Fraction(0, 0) : m->ticks();
 
+    auto segShouldHaveParenthesis = [&](const Segment* seg, const track_idx_t track) -> bool {
+        const EngravingItem* el = seg ? seg->element(track) : nullptr;
+        return seg && seg->enabled() && el && el->visible();
+    };
+
     for (track_idx_t track = 0; track <= ctx.dom().nstaves() * VOICES; track += VOICES) {
         double top = DBL_MAX;
         double bottom = -DBL_MAX;
-        Segment* leftMostSeg = m->findSegmentR(clefSegType, sigTick);
+        Segment* clefSeg = m->findSegmentR(clefSegType, sigTick);
+        Segment* ksSeg = m->findSegmentR(ksSegType, sigTick);
+        Segment* tsSeg = m->findSegmentR(tsSegType, sigTick);
 
-        if (!leftMostSeg || !leftMostSeg->enabled() || !leftMostSeg->element(track)) {
-            leftMostSeg = m->findSegmentR(ksSegType, sigTick);
+        Segment* leftMostSeg = clefSeg;
+
+        if (!segShouldHaveParenthesis(leftMostSeg, track)) {
+            leftMostSeg = ksSeg;
         }
 
-        if (!leftMostSeg || !leftMostSeg->enabled() || !leftMostSeg->element(track)) {
-            leftMostSeg = m->findSegmentR(tsSegType, sigTick);
+        if (!segShouldHaveParenthesis(leftMostSeg, track)) {
+            leftMostSeg = tsSeg;
         }
 
-        if (!leftMostSeg || !leftMostSeg->enabled() || !leftMostSeg->element(track)) {
-            removeRepeatCourtesyParenthesesSegment(leftMostSeg, track, DirectionH::LEFT);
-            return;
+        if (!segShouldHaveParenthesis(leftMostSeg, track)) {
+            leftMostSeg = nullptr;
+        }
+
+        // Remove stale parentheses
+        for (Segment* seg : { clefSeg, ksSeg, tsSeg }) {
+            if (seg == leftMostSeg || !seg) {
+                continue;
+            }
+            removeRepeatCourtesyParenthesesSegment(seg, track, DirectionH::LEFT);
         }
 
         Parenthesis* leftParen = findOrCreateParenthesis(leftMostSeg, DirectionH::LEFT, track);
 
-        Segment* rightMostSeg = m->findSegmentR(tsSegType, sigTick);
-        if (!rightMostSeg || !rightMostSeg->enabled() || !rightMostSeg->element(track)) {
-            rightMostSeg = m->findSegmentR(ksSegType, sigTick);
+        Segment* rightMostSeg = tsSeg;
+        if (!segShouldHaveParenthesis(rightMostSeg, track)) {
+            rightMostSeg = ksSeg;
         }
 
-        if (!rightMostSeg || !rightMostSeg->enabled() || !rightMostSeg->element(track)) {
-            rightMostSeg = m->findSegmentR(clefSegType, sigTick);
+        if (!segShouldHaveParenthesis(rightMostSeg, track)) {
+            rightMostSeg = clefSeg;
         }
 
-        if (!rightMostSeg || !rightMostSeg->enabled() || !rightMostSeg->element(track)) {
-            removeRepeatCourtesyParenthesesSegment(rightMostSeg, track, DirectionH::RIGHT);
-            return;
+        if (!segShouldHaveParenthesis(rightMostSeg, track)) {
+            rightMostSeg = nullptr;
+        }
+
+        // Remove stale parentheses
+        for (Segment* seg : { clefSeg, ksSeg, tsSeg }) {
+            if (seg == rightMostSeg || !seg) {
+                continue;
+            }
+            removeRepeatCourtesyParenthesesSegment(seg, track, DirectionH::RIGHT);
         }
 
         Parenthesis* rightParen = findOrCreateParenthesis(rightMostSeg, DirectionH::RIGHT, track);
@@ -2065,17 +2088,19 @@ void MeasureLayout::setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx)
 
     if (showCourtesyRepeats) {
         MeasureLayout::addRepeatCourtesies(m, ctx);
-        MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, false, ctx);
         if (ctx.conf().styleB(Sid::useParensRepeatCourtesies)) {
             MeasureLayout::addRepeatCourtesyParentheses(m, false, ctx);
+        } else {
+            MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, false, ctx);
         }
     }
 
     if (showCourtesyOtherJumps) {
         MeasureLayout::addRepeatCourtesies(m, ctx);
-        MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, false, ctx);
         if (ctx.conf().styleB(Sid::useParensOtherJumpCourtesies)) {
             MeasureLayout::addRepeatCourtesyParentheses(m, false, ctx);
+        } else {
+            MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, false, ctx);
         }
     }
 
@@ -2093,17 +2118,19 @@ void MeasureLayout::setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx)
                                                      && ctx.conf().styleB(Sid::showCourtesiesOtherJumps);
     if (courtesiesAfterCancellingRepeats) {
         MeasureLayout::addRepeatContinuationCourtesies(m, ctx);
-        MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, true, ctx);
         if (ctx.conf().styleB(Sid::useParensRepeatCourtesiesAfterCancelling)) {
             MeasureLayout::addRepeatCourtesyParentheses(m, true, ctx);
+        } else {
+            MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, true, ctx);
         }
     }
 
     if (courtesiesAfterCancellingOtherJumps) {
         MeasureLayout::addRepeatContinuationCourtesies(m, ctx);
-        MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, true, ctx);
         if (ctx.conf().styleB(Sid::useParensOtherJumpCourtesiesAfterCancelling)) {
             MeasureLayout::addRepeatCourtesyParentheses(m, true, ctx);
+        } else {
+            MeasureLayout::removeRepeatCourtesyParenthesesMeasure(m, true, ctx);
         }
     }
 
