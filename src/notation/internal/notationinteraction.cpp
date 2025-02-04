@@ -4767,21 +4767,21 @@ void NotationInteraction::moveMeasureToNextSystem()
 
 void NotationInteraction::toggleSystemLock()
 {
-    startEdit(TranslatableString("undoableAction", "Toggle system lock"));
+    startEdit(TranslatableString("undoableAction", "Lock/unlock selected system(s)"));
     score()->cmdToggleSystemLock();
     apply();
 }
 
 void NotationInteraction::toggleScoreLock()
 {
-    startEdit(TranslatableString("undoableAction", "Toggle score lock"));
+    startEdit(TranslatableString("undoableAction", "Lock/unlock all systems"));
     score()->cmdToggleScoreLock();
     apply();
 }
 
 void NotationInteraction::makeIntoSystem()
 {
-    startEdit(TranslatableString("undoableAction", "Make measure(s) into one system"));
+    startEdit(TranslatableString("undoableAction", "Create system from selection"));
     score()->cmdMakeIntoSystem();
     apply();
 }
