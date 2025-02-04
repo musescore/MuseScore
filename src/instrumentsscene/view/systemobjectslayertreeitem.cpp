@@ -22,6 +22,8 @@
 
 #include "systemobjectslayertreeitem.h"
 
+#include "engraving/dom/timesig.h"
+
 #include "layoutpanelutils.h"
 #include "translation.h"
 #include "log.h"
@@ -96,8 +98,13 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGrou
 
     updateState();
 
-    listenUndoStackChanged();
-    listenVisibleChanged();
+    notation()->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& changes) {
+        onUndoStackChanged(changes);
+    });
+
+    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
+        onVisibleChanged(isVisible);
+    });
 }
 
 const Staff* SystemObjectsLayerTreeItem::staff() const
@@ -131,62 +138,70 @@ bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
     return false;
 }
 
-void SystemObjectsLayerTreeItem::listenUndoStackChanged()
+void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreChangesRange& changes)
 {
-    notation()->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& changes) {
-        if (muse::contains(changes.changedPropertyIdSet, Pid::TRACK)) {
-            updateStaff();
+    if (muse::contains(changes.changedPropertyIdSet, Pid::TRACK)) {
+        updateStaff();
+    }
+
+    if (muse::contains(changes.changedStyleIdSet, Sid::timeSigPlacement)) {
+        m_systemObjectGroups = collectSystemObjectGroups(m_staff);
+        updateState();
+        return;
+    }
+
+    if (changes.staffIdxFrom > m_staffIdx || changes.staffIdxTo < m_staffIdx) {
+        return;
+    }
+
+    bool shouldUpdateState = false;
+
+    for (const auto& pair : changes.changedItems) {
+        EngravingItem* item = pair.first;
+
+        bool isSystemObj = item->systemFlag();
+        if (!isSystemObj && item->isTimeSig()) {
+            isSystemObj = toTimeSig(item)->timeSigPlacement() != TimeSigPlacement::NORMAL;
         }
 
-        if (changes.staffIdxFrom > m_staffIdx || changes.staffIdxTo < m_staffIdx) {
-            return;
+        if (!isSystemObj || item->staffIdx() != m_staffIdx) {
+            continue;
         }
 
-        bool shouldUpdateState = false;
-
-        for (const auto& pair : changes.changedItems) {
-            EngravingItem* item = pair.first;
-            if (!item->systemFlag() || item->staffIdx() != m_staffIdx) {
-                continue;
-            }
-
-            if (muse::contains(pair.second, CommandType::AddElement)) {
-                shouldUpdateState |= addSystemObject(item);
-            } else if (muse::contains(pair.second, CommandType::RemoveElement)) {
-                shouldUpdateState |= removeSystemObject(item);
-            } else if (muse::contains(pair.second, CommandType::ChangeProperty)) {
-                shouldUpdateState |= muse::contains(changes.changedPropertyIdSet, Pid::VISIBLE);
-            }
+        if (muse::contains(pair.second, CommandType::AddElement)) {
+            shouldUpdateState |= addSystemObject(item);
+        } else if (muse::contains(pair.second, CommandType::RemoveElement)) {
+            shouldUpdateState |= removeSystemObject(item);
+        } else if (muse::contains(pair.second, CommandType::ChangeProperty)) {
+            shouldUpdateState |= muse::contains(changes.changedPropertyIdSet, Pid::VISIBLE);
         }
+    }
 
-        if (shouldUpdateState) {
-            updateState();
-        }
-    });
+    if (shouldUpdateState) {
+        updateState();
+    }
 }
 
-void SystemObjectsLayerTreeItem::listenVisibleChanged()
+void SystemObjectsLayerTreeItem::onVisibleChanged(bool isVisible)
 {
-    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
-        if (m_ignoreVisibilityChanges || m_systemObjectGroups.empty()) {
-            return;
+    if (m_ignoreVisibilityChanges || m_systemObjectGroups.empty()) {
+        return;
+    }
+
+    const muse::TranslatableString actionName = isVisible
+                                                ? TranslatableString("undoableAction", "Make system object(s) visible")
+                                                : TranslatableString("undoableAction", "Make system object(s) invisible");
+
+    notation()->undoStack()->prepareChanges(actionName);
+
+    for (const SystemObjectsGroup& group : m_systemObjectGroups) {
+        for (engraving::EngravingItem* item : group.items) {
+            item->undoSetVisible(isVisible);
         }
+    }
 
-        const muse::TranslatableString actionName = isVisible
-                                                    ? TranslatableString("undoableAction", "Make system object(s) visible")
-                                                    : TranslatableString("undoableAction", "Make system object(s) invisible");
-
-        notation()->undoStack()->prepareChanges(actionName);
-
-        for (const SystemObjectsGroup& group : m_systemObjectGroups) {
-            for (engraving::EngravingItem* item : group.items) {
-                item->undoSetVisible(isVisible);
-            }
-        }
-
-        notation()->undoStack()->commitChanges();
-        notation()->notationChanged().notify();
-    });
+    notation()->undoStack()->commitChanges();
+    notation()->notationChanged().notify();
 }
 
 bool SystemObjectsLayerTreeItem::addSystemObject(engraving::EngravingItem* obj)
