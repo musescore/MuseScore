@@ -1028,7 +1028,7 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
 
-            if (level < chordRest->beams()) {
+            if (level < chordRest->beams() && !chordRest->isRest()) {
                 levelHasBeam = true;
             }
             bool isBroken16 = false;
@@ -1077,7 +1077,7 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
                     beamletIndex = lastChordIndex;
                     lastChordIndex = noLastChord;
                 }
-                if (startCr && endCr) {
+                if (startCr && endCr && levelHasBeam) {
                     if (startCr == endCr && startCr->isChord()) {
                         bool isBeamletBefore = calcIsBeamletBefore(item,
                                                                    toChord(startCr),
