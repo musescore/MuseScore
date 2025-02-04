@@ -654,8 +654,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("make-into-system",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Make measure(s) into one system"),
-             TranslatableString("action", "Make measure(s) into one system")
+             TranslatableString("action", "Create system from selection"),
+             TranslatableString("action", "Create system from selection")
              ),
     UiAction("section-break",
              mu::context::UiCtxProjectOpened,
@@ -1611,14 +1611,14 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("toggle-score-lock",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Toggle score lock"),
-             TranslatableString("action", "Toggle score lock")
+             TranslatableString("action", "Lock/unlock all systems"),
+             TranslatableString("action", "Lock/unlock all systems")
              ),
     UiAction("toggle-system-lock",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Toggle system lock"),
-             TranslatableString("action", "Toggle system lock"),
+             TranslatableString("action", "Lock/unlock selected system(s)"),
+             TranslatableString("action", "Lock/unlock selected system(s)"),
              IconCode::Code::SYSTEM_LOCK
              ),
     UiAction("enh-both",
