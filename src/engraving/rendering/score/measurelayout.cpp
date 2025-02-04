@@ -2027,7 +2027,7 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
         }
 
         Parenthesis* rightParen = findOrCreateParenthesis(rightMostSeg, DirectionH::RIGHT, track);
-        if (ctx.conf().styleB(Sid::smallParens)) {
+        if (ctx.conf().styleB(Sid::smallParens) && leftParen && rightParen) {
             calcParenTopBottom(leftParen, top, bottom);
             calcParenTopBottom(rightParen, top, bottom);
 

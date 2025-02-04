@@ -56,6 +56,7 @@
 #include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
+#include "rendering/score/segmentlayout.h"
 
 #include "navigate.h"
 
@@ -2563,16 +2564,14 @@ void Segment::createShape(staff_idx_t staffIdx)
         }
     }
 
+    rendering::score::SegmentLayout::placeParentheses(this, staffIdx);
+
     for (EngravingItem* e : m_annotations) {
         if (!e || e->staffIdx() != staffIdx) {
             continue;
         }
 
         setVisible(true);
-        if (e->isParenthesis()) {
-            // Calculate layout, this needs to be placed at the edge of the segment
-            renderer()->layoutItem(toParenthesis(e));
-        }
 
         if (!e->addToSkyline()) {
             continue;

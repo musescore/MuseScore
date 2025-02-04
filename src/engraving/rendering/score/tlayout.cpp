@@ -4510,7 +4510,6 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
 
 void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 {
-    LOGI() << "==> layoutParenthesis: " << item->tick().toString() << " dir: " << (int)item->direction();
     Parenthesis::LayoutData* ldata = item->mutldata();
     ldata->setPos(PointF());
     ldata->clearShape();
@@ -4543,7 +4542,8 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 
     const double heightInSpatium = height / spatium;
     const double shoulderYOffset = 0.2 * height;
-    const double thickness = height / 60 * mag;
+    const double thickness = height / 60 * mag; // 0.1sp for a height of 6sp
+    ldata->thickness.set_value(thickness);
     const double shoulderX = 0.2 * height * mag;
 
     PointF start = PointF(0.0, startY);
@@ -4591,17 +4591,6 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 
     item->mutldata()->setShape(shape);
 
-    if (!leftBracket) {
-        // Space against existing segment shape
-        double minDist = HorizontalSpacing::minHorizontalDistance(seg->staffShape(item->staffIdx()),
-                                                                  item->shape().translated(start), item->spatium());
-        start.setX(minDist);
-    } else {
-        // Space following segment shape against this
-        double minDist = HorizontalSpacing::minHorizontalDistance(item->shape().translated(start),
-                                                                  seg->staffShape(item->staffIdx()), item->spatium());
-        start.setX(-minDist);
-    }
     item->setPos(start);
 }
 

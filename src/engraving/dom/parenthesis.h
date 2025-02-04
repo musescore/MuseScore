@@ -49,6 +49,7 @@ public:
         ld_field<muse::draw::PainterPath> path = "path";
         ld_field<double> startY = "startY";
         ld_field<double> height = "height";
+        ld_field<double> thickness = "thickness";
     };
     DECLARE_LAYOUTDATA_METHODS(Parenthesis);
 };
