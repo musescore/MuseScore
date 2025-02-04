@@ -2722,10 +2722,10 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     IF_ASSERT_FAILED(score->isMaster()) {
-        return Err::FileUnknownError;
+        return make_ret(Err::FileUnknownError);
     }
 
     ReadContext ctx(score);
@@ -2919,7 +2919,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     if (e.error() != muse::XmlStreamReader::NoError) {
         LOGD() << e.lineNumber() << " " << e.columnNumber() << ": " << e.errorString();
-        return Err::FileBadFormat;
+        return make_ret(Err::FileBadFormat, e.errorString());
     }
 
     for (Staff* s : masterScore->staves()) {
@@ -3176,7 +3176,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         score->removeElement(invalidSpanner);
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)

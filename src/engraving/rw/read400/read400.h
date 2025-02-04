@@ -35,7 +35,7 @@ class Read400 : public rw::IReader
 {
 public:
 
-    Err readScore(Score* score, XmlReader& e, rw::ReadInOutData* data) override;
+    muse::Ret readScore(Score* score, XmlReader& e, rw::ReadInOutData* data) override;
 
     static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 
