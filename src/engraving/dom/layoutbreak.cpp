@@ -229,6 +229,15 @@ muse::TranslatableString LayoutBreak::subtypeUserName() const
     return TConv::userName(layoutBreakType());
 }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String LayoutBreak::accessibleInfo() const
+{
+    return translatedSubtypeUserName();
+}
+
 void LayoutBreak::added()
 {
     IF_ASSERT_FAILED(score()) {
