@@ -55,17 +55,6 @@ public:
 private:
     mu::engraving::Score* score() const;
 
-    mu::engraving::staff_idx_t selectionLastVisibleStaff(const System* system) const;
-    mu::engraving::staff_idx_t selectionFirstVisibleStaff(const System* system) const;
-
-    struct RangeSection {
-        const mu::engraving::System* system = nullptr;
-        const mu::engraving::Segment* startSegment = nullptr;
-        const mu::engraving::Segment* endSegment = nullptr;
-    };
-    std::vector<RangeSection> splitRangeBySections(const mu::engraving::Segment* rangeStartSegment,
-                                                   const mu::engraving::Segment* rangeEndSegment) const;
-
     IGetScore* m_getScore = nullptr;
 };
 }

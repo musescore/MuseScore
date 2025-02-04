@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONINTERACTION_H
-#define MU_NOTATION_NOTATIONINTERACTION_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -103,16 +102,20 @@ public:
     void endDrag() override;
     muse::async::Notification dragChanged() const override;
 
-    bool isDragCopyStarted() const override;
-    bool dragCopyAllowed(const EngravingItem* element) const override;
-    void startDragCopy(const EngravingItem* element, QObject* dragSource) override;
-    void endDragCopy() override;
+    bool isOutgoingDragElementAllowed(const EngravingItem* element) const override;
+    void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource) override;
+    void startOutgoingDragRange(QObject* dragSource) override;
+    bool isOutgoingDragStarted() const override;
+    void endOutgoingDrag() override;
 
     // Drop
-    void startDrop(const QByteArray& edata) override;
-    bool startDrop(const QUrl& url) override;
-    bool isDropAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool drop(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool startDropSingle(const QByteArray& edata) override;
+    bool startDropRange(const QByteArray& data) override;
+    bool startDropImage(const QUrl& url) override;
+    bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool isDropRangeAccepted(const muse::PointF& pos) override;
+    bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
     void setDropRect(const muse::RectF& rect) override;
     void endDrop() override;
@@ -367,20 +370,25 @@ private:
     void updateDragAnchorLines();
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
+
     double currentScaling(muse::draw::Painter* painter) const;
+
     void drawAnchorLines(muse::draw::Painter* painter);
     void drawTextEditMode(muse::draw::Painter* painter);
     void drawSelectionRange(muse::draw::Painter* painter);
     void drawGripPoints(muse::draw::Painter* painter);
+    void drawLasso(muse::draw::Painter* painter);
+    void drawDrop(muse::draw::Painter* painter);
+
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
 
     EngravingItem* dropTarget(mu::engraving::EditData& ed) const;
-    bool dragStandardElement(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
-    bool dragMeasureAnchorElement(const muse::PointF& pos);
-    bool dragTimeAnchorElement(const muse::PointF& pos);
+    bool prepareDropStandardElement(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
+    bool prepareDropMeasureAnchorElement(const muse::PointF& pos);
+    bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     bool dropCanvas(EngravingItem* e);
-    void resetDropElement();
+    void resetDropData();
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
 
@@ -424,11 +432,31 @@ private:
         void reset();
     };
 
-    struct DropData
+    struct ElementDropData
     {
         mu::engraving::EditData ed;
         EngravingItem* dropTarget = nullptr;
         muse::RectF dropRect;
+    };
+
+    struct RangeDropData
+    {
+        engraving::Fraction sourceTick;
+        engraving::staff_idx_t sourceStaffIdx = muse::nidx;
+
+        engraving::Fraction tickLength;
+        size_t numStaves = 0;
+
+        engraving::Segment* targetSegment = nullptr;
+        engraving::staff_idx_t targetStaffIdx = 0;
+
+        std::vector<muse::RectF> dropRects;
+    };
+
+    struct DropData
+    {
+        std::optional<ElementDropData> elementDropData;
+        std::optional<RangeDropData> rangeDropData;
     };
 
     ScoreCallbacks m_scoreCallbacks;
@@ -444,7 +472,7 @@ private:
     muse::async::Notification m_dragChanged;
     std::vector<muse::LineF> m_anchorLines;
 
-    QDrag* m_drag = nullptr;
+    QDrag* m_outgoingDrag = nullptr;
 
     mu::engraving::EditData m_editData;
 
@@ -469,5 +497,3 @@ private:
     muse::async::Channel<ShowItemRequest> m_showItemRequested;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONINTERACTION_H

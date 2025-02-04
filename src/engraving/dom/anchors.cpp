@@ -161,10 +161,11 @@ TimeTickAnchor::TimeTickAnchor(Segment* parent)
 TimeTickAnchor::DrawRegion TimeTickAnchor::drawRegion() const
 {
     const ShowAnchors& showAnchors = score()->showAnchors();
-    Fraction thisTick = segment()->tick();
+    const staff_idx_t thisStaffIdx = staffIdx();
+    const Fraction thisTick = segment()->tick();
 
-    bool trackOutOfRange = staffIdx() != showAnchors.staffIdx;
-    bool tickOutOfRange = thisTick < showAnchors.startTickExtendedRegion || thisTick >= showAnchors.endTickExtendedRegion;
+    const bool trackOutOfRange = thisStaffIdx < showAnchors.staffIdx || thisStaffIdx >= showAnchors.endStaffIdx;
+    const bool tickOutOfRange = thisTick < showAnchors.startTickExtendedRegion || thisTick >= showAnchors.endTickExtendedRegion;
     if (trackOutOfRange || tickOutOfRange) {
         return DrawRegion::OUT_OF_RANGE;
     }
