@@ -1282,17 +1282,21 @@
           <line>0</line>
           <voice>0</voice>
           <name>Side Stick</name>
-          <stem>2</stem>
+          <stem>1</stem>
           <shortcut>A</shortcut>
-          </Drum>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
+        </Drum>
         <Drum pitch="38">
           <head>normal</head>
           <line>0</line>
           <voice>0</voice>
-          <name>Acoustic Snare</name>
-          <stem>2</stem>
+          <name>Snare</name>
+          <stem>1</stem>
           <shortcut>B</shortcut>
-          </Drum>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
+        </Drum>
         <clef>PERC</clef>
         <Articulation>
           <velocity>100</velocity>
@@ -1361,13 +1365,15 @@
         <trackName>Bass Drum</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
-        <Drum pitch="35">
+        <Drum pitch="36">
           <head>normal</head>
           <line>0</line>
           <voice>0</voice>
-          <name>Acoustic Bass Drum</name>
-          <stem>2</stem>
+          <name>Concert Bass Drum</name>
+          <stem>1</stem>
           <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -1440,10 +1446,12 @@
           <head>normal</head>
           <line>0</line>
           <voice>0</voice>
-          <name>Crash Cymbal 2</name>
-          <stem>2</stem>
+          <name>Crash Cymbal</name>
+          <stem>1</stem>
           <shortcut>A</shortcut>
-          </Drum>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
+        </Drum>
         <clef>PERC</clef>
         <Articulation>
           <velocity>100</velocity>
