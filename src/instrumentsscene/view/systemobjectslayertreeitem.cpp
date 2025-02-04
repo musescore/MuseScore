@@ -22,6 +22,8 @@
 
 #include "systemobjectslayertreeitem.h"
 
+#include "engraving/dom/timesig.h"
+
 #include "layoutpanelutils.h"
 #include "translation.h"
 #include "log.h"
@@ -137,6 +139,12 @@ void SystemObjectsLayerTreeItem::listenUndoStackChanged()
             updateStaff();
         }
 
+        if (muse::contains(changes.changedStyleIdSet, Sid::timeSigPlacement)) {
+            m_systemObjectGroups = collectSystemObjectGroups(m_staff);
+            updateState();
+            return;
+        }
+
         if (changes.staffIdxFrom > m_staffIdx || changes.staffIdxTo < m_staffIdx) {
             return;
         }
@@ -145,7 +153,13 @@ void SystemObjectsLayerTreeItem::listenUndoStackChanged()
 
         for (const auto& pair : changes.changedItems) {
             EngravingItem* item = pair.first;
-            if (!item->systemFlag() || item->staffIdx() != m_staffIdx) {
+
+            bool isSystemObj = item->systemFlag();
+            if (!isSystemObj && item->isTimeSig()) {
+                isSystemObj = toTimeSig(item)->timeSigPlacement() != TimeSigPlacement::NORMAL;
+            }
+
+            if (!isSystemObj || item->staffIdx() != m_staffIdx) {
                 continue;
             }
 

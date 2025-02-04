@@ -1428,23 +1428,40 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
 {
     std::vector<EngravingItem*> result;
 
+    const TimeSigPlacement timeSigPlacement = score->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
+    const bool isOnStaffTimeSig = timeSigPlacement != TimeSigPlacement::NORMAL;
+
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (const Segment& seg : measure->segments()) {
-            if (!seg.isChordRestType()) {
-                continue;
-            }
+            if (seg.isChordRestType()) {
+                for (EngravingItem* annotation : seg.annotations()) {
+                    if (!annotation || !annotation->systemFlag()) {
+                        continue;
+                    }
 
-            for (EngravingItem* annotation : seg.annotations()) {
-                if (!annotation || !annotation->systemFlag()) {
-                    continue;
-                }
-
-                if (!staves.empty()) {
-                    if (muse::contains(staves, annotation->staff())) {
+                    if (!staves.empty()) {
+                        if (muse::contains(staves, annotation->staff())) {
+                            result.push_back(annotation);
+                        }
+                    } else if (annotation->isTopSystemObject()) {
                         result.push_back(annotation);
                     }
-                } else if (annotation->isTopSystemObject()) {
-                    result.push_back(annotation);
+                }
+            }
+
+            if (isOnStaffTimeSig && seg.isTimeSigType()) {
+                for (EngravingItem* item : seg.elist()) {
+                    if (!item || !item->isTimeSig()) {
+                        continue;
+                    }
+
+                    if (!staves.empty()) {
+                        if (muse::contains(staves, item->staff())) {
+                            result.push_back(item);
+                        }
+                    } else if (item->staffIdx() == 0) {
+                        result.push_back(item);
+                    }
                 }
             }
         }
