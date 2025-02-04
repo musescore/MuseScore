@@ -23,9 +23,11 @@
 
 #include "dom/part.h"
 #include "dom/drumset.h"
+#include "dom/parenthesis.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
+#include "horizontalspacing.h"
 
 using namespace mu::engraving::rendering::score;
 
@@ -230,4 +232,65 @@ void SegmentLayout::layoutChordsStem(const Segment& segment, track_idx_t startTr
             // stem direction can change later during beam processing
         }
     }
+}
+
+void SegmentLayout::placeParentheses(const Segment* segment, staff_idx_t staffIdx)
+{
+    const EngravingItem* segItem = segment->elementAt(staff2track(staffIdx));
+    const std::vector<EngravingItem*> parens = segment->findAnnotations(ElementType::PARENTHESIS, staffIdx * VOICES, staffIdx * VOICES);
+    assert(parens.size() <= 2);
+    if (parens.empty() || !segItem) {
+        return;
+    }
+
+    if (parens.size() == 1) {
+        // 1 parenthesis
+        Parenthesis* paren = toParenthesis(parens.front());
+        const bool leftBracket = paren->direction() == DirectionH::LEFT;
+        segment->renderer()->layoutItem(paren);
+        if (!leftBracket) {
+            // Space against existing segment shape
+            const double minDist = HorizontalSpacing::minHorizontalDistance(segment->staffShape(paren->staffIdx()),
+                                                                            paren->shape().translated(paren->pos()), paren->spatium());
+            paren->mutldata()->moveX(minDist);
+        } else {
+            // Space following segment shape against this
+            const double minDist = HorizontalSpacing::minHorizontalDistance(paren->shape().translated(paren->pos()),
+                                                                            segment->staffShape(paren->staffIdx()), paren->spatium());
+            paren->mutldata()->moveX(-minDist);
+        }
+        return;
+    }
+
+    // 2 parentheses
+    Parenthesis* leftParen = toParenthesis(parens.front());
+    Parenthesis* rightParen = toParenthesis(parens.back());
+
+    segment->renderer()->layoutItem(toParenthesis(leftParen));
+    segment->renderer()->layoutItem(toParenthesis(rightParen));
+    Shape dummySegShape = segment->staffShape(leftParen->staffIdx());
+
+    const double itemLeftX = segItem->pos().x();
+    const double itemRightX = itemLeftX + segItem->width();
+
+    const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftParen->pos()),
+                                                                             dummySegShape, leftParen->spatium());
+    leftParen->mutldata()->moveX(-leftParenPadding);
+    dummySegShape.add(leftParen->shape().translate(leftParen->pos() + leftParen->staffOffset()));
+
+    const double rightParenPadding = HorizontalSpacing::minHorizontalDistance(dummySegShape, rightParen->shape().translated(
+                                                                                  rightParen->pos()), rightParen->spatium());
+    rightParen->mutldata()->moveX(rightParenPadding);
+
+    // Move parentheses to place item in the middle
+    const double leftParenX = leftParen->pos().x() + leftParen->ldata()->bbox().x() + leftParen->ldata()->thickness;
+    const double rightParenX = rightParen->pos().x() + rightParen->ldata()->bbox().x() + rightParen->width()
+                               - rightParen->ldata()->thickness;
+
+    const double leftParenToItem = itemLeftX - leftParenX;
+    const double itemToRightParen = rightParenX - itemRightX;
+    const double parenToItemDist = (leftParenToItem + itemToRightParen) / 2;
+
+    leftParen->mutldata()->moveX(-(parenToItemDist - leftParenToItem));
+    rightParen->mutldata()->moveX(-(itemToRightParen - parenToItemDist));
 }
