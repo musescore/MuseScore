@@ -2096,7 +2096,7 @@ void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewS
     p->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
-            p->setBrush(configuration()->formattingColor());
+            p->setBrush(configuration()->scoreGreyColor());
         } else {
             p->setBrush(BrushStyle::NoBrush);
         }
