@@ -135,6 +135,21 @@ muse::async::Channel<bool> PlaybackConfigurationStub::muteHiddenInstrumentsChang
     return ch;
 }
 
+bool PlaybackConfigurationStub::jackTransportEnable() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setJackTransportEnable(bool)
+{
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::jackTransportEnableChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const
 {
     static const SoundProfileName basic;

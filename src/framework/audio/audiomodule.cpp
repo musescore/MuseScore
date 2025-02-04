@@ -24,6 +24,7 @@
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
+#include "framework/midi/midimodule.h"
 #include "internal/audioconfiguration.h"
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
@@ -54,25 +55,14 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 
-#ifdef MUSE_MODULE_AUDIO_JACK
-#include "internal/platform/jack/jackaudiodriver.h"
+#if defined(Q_OS_MACOS) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
+#include "internal/audiomidimanager.h"
 #endif
 
-#ifdef Q_OS_LINUX
-#include "internal/platform/lin/linuxaudiodriver.h"
-#endif
-
-#ifdef Q_OS_FREEBSD
-#include "internal/platform/lin/linuxaudiodriver.h"
-#endif
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && !defined(MINGW)
 //#include "internal/platform/win/winmmdriver.h"
 //#include "internal/platform/win/wincoreaudiodriver.h"
 #include "internal/platform/win/wasapiaudiodriver.h"
-#endif
-
-#ifdef Q_OS_MACOS
-#include "internal/platform/osx/osxaudiodriver.h"
 #endif
 
 #ifdef Q_OS_WASM
@@ -118,29 +108,19 @@ void AudioModule::registerExports()
     m_playbackFacade = std::make_shared<Playback>(iocContext());
     m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
-#if defined(MUSE_MODULE_AUDIO_JACK)
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
-#else
-
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
+#if defined(Q_OS_MACOS) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
+    m_audioDriver = std::shared_ptr<IAudioDriver>(new AudioMidiManager());
 #endif
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && !defined(MINGW)
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
 #endif
 
-#ifdef Q_OS_MACOS
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new OSXAudioDriver());
-#endif
-
 #ifdef Q_OS_WASM
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
 #endif
-
-#endif // MUSE_MODULE_AUDIO_JACK
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
@@ -271,7 +251,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_audioDriver->init();
-
+        m_audioDriver->setAudioDelayCompensate(m_configuration->audioDelayCompensate());
         IAudioDriver::Spec activeSpec;
         if (m_audioDriver->open(requiredSpec, &activeSpec)) {
             setupAudioWorker(activeSpec);

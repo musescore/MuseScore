@@ -67,6 +67,10 @@ public:
     virtual void setMuteHiddenInstruments(bool mute) = 0;
     virtual muse::async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;
 
+    virtual bool jackTransportEnable() const = 0;
+    virtual void setJackTransportEnable(bool enable) = 0;
+    virtual muse::async::Channel<bool> jackTransportEnableChanged() const = 0;
+
     virtual const SoundProfileName& basicSoundProfileName() const = 0;
     virtual const SoundProfileName& museSoundProfileName() const = 0;
 

@@ -211,6 +211,8 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
     notationConfiguration()->setTemplateModeEnabled(options.notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options.notation.testModeEnabled);
 
+    audioConfiguration()->setAudioDelayCompensate(options.audio.audioDelayCompensate.value_or(1024)); // FIX: equal to buffer-size
+
     if (runMode == IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
         migration.appVersion = mu::engraving::Constants::MSC_VERSION;

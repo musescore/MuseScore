@@ -48,6 +48,8 @@ public:
     virtual bool isPlaying() const = 0;
     virtual muse::async::Notification isPlayingChanged() const = 0;
 
+    virtual void remoteSeek(const muse::audio::msecs_t msecs) = 0;
+    virtual void remotePlayOrStop(const bool playOrStop) = 0;
     virtual void reset() = 0;
 
     virtual muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const = 0;

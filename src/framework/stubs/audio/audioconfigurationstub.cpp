@@ -52,6 +52,15 @@ async::Notification AudioConfigurationStub::audioOutputDeviceIdChanged() const
     return async::Notification();
 }
 
+int AudioConfigurationStub::audioDelayCompensate() const
+{
+    return 0;
+}
+
+void AudioConfigurationStub::setAudioDelayCompensate(const int frames)
+{
+}
+
 audioch_t AudioConfigurationStub::audioChannelsCount() const
 {
     return 2;
