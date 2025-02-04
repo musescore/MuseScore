@@ -48,6 +48,17 @@ void ActionsDispatcher::dispatch(const ActionCode& actionCode)
 
 void ActionsDispatcher::dispatch(const ActionCode& actionCode, const ActionData& data)
 {
+    // is query?
+    ActionQuery query = ActionQuery(actionCode);
+    if (query.isValid()) {
+        IF_ASSERT_FAILED(data.empty()) {
+            LOGE() << "not supported action data with query";
+        }
+        dispatch(query);
+        return;
+    }
+
+    // code
     auto it = m_clients.find(actionCode);
     if (it == m_clients.end()) {
         LOGW() << "not a registered action: " << actionCode;
