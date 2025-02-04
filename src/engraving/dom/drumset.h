@@ -115,6 +115,8 @@ public:
     int panelRow(int pitch) const { return m_drums[pitch].panelRow; }
     int panelColumn(int pitch) const { return m_drums[pitch].panelColumn; }
 
+    int pitchForShortcut(const String& shortcut) const;
+
     void save(XmlWriter&) const;
     void load(XmlReader&);
     bool readProperties(XmlReader&, int);

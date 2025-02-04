@@ -45,6 +45,27 @@ String Drumset::translatedName(int pitch) const
     return muse::mtrc("engraving/drumset", name(pitch));
 }
 
+int Drumset::pitchForShortcut(const String& shortcut) const
+{
+    if (shortcut.isEmpty()) {
+        return -1;
+    }
+
+    for (int pitch = 0; pitch < DRUM_INSTRUMENTS; ++pitch) {
+        if (!isValid(pitch)) {
+            continue;
+        }
+
+        if (drum(pitch).shortcut != shortcut) {
+            continue;
+        }
+
+        return pitch;
+    }
+
+    return -1;
+}
+
 //---------------------------------------------------------
 //   save
 //---------------------------------------------------------
