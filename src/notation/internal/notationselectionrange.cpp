@@ -126,7 +126,7 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
         }
 
         double x1 = sectionStartSegment->pagePos().x();
-        double x2 = sectionEndSegment->pageBoundingRect().topRight().x();
+        double x2 = sectionEndSegment->pageBoundingRect().right();
         const int SELECTION_BOX_PADDING = 0.5 * scoreFirstStaff->spatium(startSegment->tick());
         double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - SELECTION_BOX_PADDING;
         double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + SELECTION_BOX_PADDING;
@@ -153,22 +153,23 @@ bool NotationSelectionRange::containsPoint(const PointF& point) const
     return false;
 }
 
-bool NotationSelectionRange::containsItem(const EngravingItem* item) const
+/// When `item` is a Measure, use `staffIdx` to query whether a specific staff is contained in the selection.
+bool NotationSelectionRange::containsItem(const EngravingItem* item, engraving::staff_idx_t staffIdx) const
 {
     Fraction itemTick = item->tick();
     Fraction selectionStartTick = startTick();
     Fraction selectionEndTick = endTick();
 
-    if (item->isMeasure()) {
-        return itemTick >= selectionStartTick && itemTick < selectionEndTick;
-    }
-
-    if (itemTick < selectionStartTick || itemTick > selectionEndTick) {
+    if (itemTick < selectionStartTick || itemTick >= selectionEndTick) {
         return false;
     }
 
-    if (itemTick == selectionEndTick) {
-        return item->rtick() > Fraction(0, 1);
+    if (item->isMeasure()) {
+        if (staffIdx != muse::nidx) {
+            return startStaffIndex() <= staffIdx && staffIdx < endStaffIndex();
+        }
+
+        return true;
     }
 
     track_idx_t itemTrack = item->track();
@@ -275,7 +276,7 @@ const
     const mu::engraving::Segment* startSegment = rangeStartSegment;
     Fraction rangeEndTick = rangeEndSegment->tick();
     for (const mu::engraving::Segment* segment = rangeStartSegment;
-         segment && segment != rangeEndSegment && segment->tick() <= rangeEndTick;) {
+         segment && segment != rangeEndSegment && segment->tick() < rangeEndTick;) {
         mu::engraving::System* currentSegmentSystem = segment->measure()->system();
 
         mu::engraving::Segment* nextSegment = segment->next1MMenabled();
@@ -300,7 +301,7 @@ const
             }
         }
 
-        if (nextSegmentSystem != currentSegmentSystem || nextSegment == rangeEndSegment) {
+        if (nextSegmentSystem != currentSegmentSystem || nextSegment->tick() >= rangeEndTick) {
             RangeSection section;
             section.system = currentSegmentSystem;
             section.startSegment = startSegment;
