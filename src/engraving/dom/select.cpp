@@ -420,6 +420,10 @@ MeasureBase* Selection::startMeasureBase() const
         }
     }
 
+    if (tickStart().negative()) { // Tick is not set
+        return nullptr;
+    }
+
     bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
     Fraction refTick = tickStart();
 
@@ -437,6 +441,10 @@ MeasureBase* Selection::endMeasureBase() const
         if (mb) {
             return mb;
         }
+    }
+
+    if (tickEnd().negative()) { // Tick is not set
+        return nullptr;
     }
 
     bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
