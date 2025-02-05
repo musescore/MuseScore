@@ -193,12 +193,6 @@
 #include "stubs/project/projectstubmodule.h"
 #endif
 
-#ifdef MUSE_MODULE_WORKSPACE
-#include "workspacescene/workspacescenemodule.h"
-#else
-#include "stubs/workspacescene/workspacescenestubmodule.h"
-#endif
-
 #ifdef Q_OS_WASM
 #include "wasmtest/wasmtestmodule.h"
 #endif
@@ -323,7 +317,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
-    app->addModule(new mu::workspacescene::WorkspaceSceneModule());
 
 #ifdef Q_OS_WASM
     app->addModule(new mu::wasmtest::WasmTestModule());
@@ -439,7 +432,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
-    app->addModule(new mu::workspacescene::WorkspaceSceneModule());
 
 #ifdef Q_OS_WASM
     app->addModule(new mu::wasmtest::WasmTestModule());

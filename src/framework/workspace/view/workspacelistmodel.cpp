@@ -27,9 +27,8 @@
 
 #include "log.h"
 
-using namespace mu::workspacescene;
-using namespace muse;
 using namespace muse::workspace;
+using namespace muse;
 
 static const QString NAME_KEY("name");
 static const QString IS_SELECTED_KEY("isSelected");
@@ -179,7 +178,7 @@ void WorkspaceListModel::createNewWorkspace()
     newWorkspace->setIsManaged(muse::ui::WS_UiSettings, meta.value(muse::ui::WS_UiSettings).toBool());
     newWorkspace->setIsManaged(muse::ui::WS_UiStates, meta.value(muse::ui::WS_UiStates).toBool());
     newWorkspace->setIsManaged(muse::ui::WS_UiToolConfigs, meta.value(muse::ui::WS_UiToolConfigs).toBool());
-    newWorkspace->setIsManaged(palette::WS_Palettes, meta.value(palette::WS_Palettes).toBool());
+//    newWorkspace->setIsManaged(palette::WS_Palettes, meta.value(palette::WS_Palettes).toBool()); // todo
 
     int newWorkspaceIndex = m_workspaces.size();
 

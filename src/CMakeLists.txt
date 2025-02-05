@@ -74,10 +74,6 @@ if (MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()
 
-if (MUSE_MODULE_WORKSPACE)
-    add_subdirectory(workspacescene)
-endif()
-
 # Stubs
 add_subdirectory(stubs)
 

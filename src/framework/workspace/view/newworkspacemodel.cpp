@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::workspacescene;
+using namespace muse::workspace;
 
 NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
     : QObject(parent)
@@ -159,6 +159,6 @@ QVariant NewWorkspaceModel::createWorkspace() const
     meta[muse::ui::WS_UiSettings] = useUiPreferences();
     meta[muse::ui::WS_UiStates] = useUiArrangement();
     meta[muse::ui::WS_UiToolConfigs] = useToolbarCustomization();
-    meta[palette::WS_Palettes] = usePalettes();
+//    meta[palette::WS_Palettes] = usePalettes(); // todo
     return meta;
 }
