@@ -2540,9 +2540,13 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
         RectF measureRect = targetMeasure->staffPageBoundingRect(staffIdx);
         measureRect.adjust(page->x(), page->y(), page->x(), page->y());
         m_dropData.ed.pos = measureRect.center();
-        setAnchorLines({ LineF(pos, measureRect.topLeft()) });
 
-        return targetMeasure->acceptDrop(m_dropData.ed);
+        const bool dropAccepted = targetMeasure->acceptDrop(m_dropData.ed);
+        if (dropAccepted) {
+            setAnchorLines({ LineF(pos, measureRect.topLeft()) });
+        }
+
+        return dropAccepted;
     }
     dropElem->score()->addRefresh(dropElem->canvasBoundingRect());
     setDropTarget(nullptr);
