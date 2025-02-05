@@ -22,11 +22,13 @@
 #ifndef MUSE_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
 #define MUSE_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
 
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "iworkspaceconfiguration.h"
+
+#include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
+#include "iworkspaceconfiguration.h"
+#include "iworkspacemanager.h"
 
 namespace muse::workspace {
 class WorkspaceActionController : public Injectable, public actions::Actionable
@@ -34,6 +36,7 @@ class WorkspaceActionController : public Injectable, public actions::Actionable
     Inject<actions::IActionsDispatcher> dispatcher = { this };
     Inject<IInteractive> interactive = { this };
     Inject<IWorkspaceConfiguration> configuration = { this };
+    Inject<IWorkspaceManager> manager = { this };
 
 public:
     WorkspaceActionController(const modularity::ContextPtr& iocCtx)
@@ -44,6 +47,7 @@ public:
 private:
     void selectWorkspace(const muse::actions::ActionData& args);
     void openConfigureWorkspacesDialog();
+    void createNewWorkspace();
 
     void setCurrentWorkspaceName(const std::string& workspaceName);
 };

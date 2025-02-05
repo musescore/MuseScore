@@ -23,6 +23,8 @@
 
 #include "types/val.h"
 
+#include "log.h"
+
 using namespace muse::workspace;
 using namespace muse::actions;
 
@@ -30,6 +32,7 @@ void WorkspaceActionController::init()
 {
     dispatcher()->reg(this, "select-workspace", this, &WorkspaceActionController::selectWorkspace);
     dispatcher()->reg(this, "configure-workspaces", this, &WorkspaceActionController::openConfigureWorkspacesDialog);
+    dispatcher()->reg(this, "create-workspace", this, &WorkspaceActionController::createNewWorkspace);
 }
 
 void WorkspaceActionController::selectWorkspace(const ActionData& args)
@@ -47,6 +50,42 @@ void WorkspaceActionController::openConfigureWorkspacesDialog()
 
     std::string selectedWorkspace = result.val.toString();
     setCurrentWorkspaceName(selectedWorkspace);
+}
+
+void muse::workspace::WorkspaceActionController::createNewWorkspace()
+{
+    IWorkspacePtrList workspaces = manager()->workspaces();
+
+    QStringList workspaceNames;
+    for (const IWorkspacePtr& workspace: workspaces) {
+        workspaceNames << QString::fromStdString(workspace->name());
+    }
+
+    UriQuery uri("muse://workspace/create");
+    uri.addParam("sync", Val(true));
+    uri.addParam("workspaceNames", Val(workspaceNames.join(',')));
+
+    RetVal<Val> obj = interactive()->open(uri);
+    if (!obj.ret) {
+        return;
+    }
+
+    QVariantMap meta = obj.val.toQVariant().toMap();
+    QString name = meta.value("name").toString();
+    IF_ASSERT_FAILED(!name.isEmpty()) {
+        return;
+    }
+
+    IWorkspacePtr newWorkspace = manager()->newWorkspace(name.toStdString());
+    if (!newWorkspace) {
+        return;
+    }
+
+    workspaces.emplace_back(newWorkspace);
+
+    manager()->setWorkspaces(workspaces);
+
+    setCurrentWorkspaceName(name.toStdString());
 }
 
 void WorkspaceActionController::setCurrentWorkspaceName(const std::string& workspaceName)
