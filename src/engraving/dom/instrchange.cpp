@@ -86,70 +86,72 @@ void InstrumentChange::setInstrument(const Instrument& i)
 
 void InstrumentChange::setupInstrument(const Instrument* instrument)
 {
-    if (m_init) {
-        Fraction tickStart = segment()->tick();
-        Part* part = staff()->part();
-        Interval oldV = part->instrument(tickStart)->transpose();
-        Interval oldKv = staff()->transpose(tickStart);
-        Interval v = instrument->transpose();
-        bool concPitch = style().styleB(Sid::concertPitch);
-
-        // change the clef for each staff
-        for (size_t i = 0; i < part->nstaves(); i++) {
-            ClefType oldClefType = concPitch ? part->instrument(tickStart)->clefType(i).concertClef
-                                   : part->instrument(tickStart)->clefType(i).transposingClef;
-            ClefType newClefType = concPitch ? instrument->clefType(i).concertClef
-                                   : instrument->clefType(i).transposingClef;
-            // Introduce cleff change only if the new clef *symbol* is different from the old one
-            if (ClefInfo::symId(oldClefType) != ClefInfo::symId(newClefType)) {
-                // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
-                EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
-                score()->undoChangeClef(part->staff(i), element, newClefType, true);
-            }
-        }
-
-        // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
-        if ((v.chromatic - oldV.chromatic) % 12) {
-            for (size_t i = 0; i < part->nstaves(); i++) {
-                if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
-                    KeySigEvent ks;
-                    // Check, if some key signature is already there, if no, mark new one "for instrument change"
-                    Segment* seg = segment()->prev1(SegmentType::KeySig);
-                    voice_idx_t voice = part->staff(i)->idx() * VOICES;
-                    KeySig* ksig = seg ? toKeySig(seg->element(voice)) : nullptr;
-                    bool forInstChange = !(ksig && ksig->tick() == tickStart && !ksig->generated());
-                    ks.setForInstrumentChange(forInstChange);
-                    Key cKey = part->staff(i)->concertKey(tickStart);
-                    ks.setConcertKey(cKey);
-                    score()->undoChangeKeySig(part->staff(i), tickStart, ks);
-                }
-            }
-        }
-
-        // change instrument in all linked scores
-        for (EngravingObject* se : linkList()) {
-            InstrumentChange* lic = static_cast<InstrumentChange*>(se);
-            Instrument* newInstrument = new Instrument(*instrument);
-            lic->score()->undo(new ChangeInstrument(lic, newInstrument));
-        }
-
-        // transpose for current score only
-        // this automatically propagates to linked scores
-        if (part->instrument(tickStart)->transpose() != oldV) {
-            auto i = part->instruments().upper_bound(tickStart.ticks());          // find(), ++i
-            Fraction tickEnd;
-            if (i == part->instruments().end()) {
-                tickEnd = Fraction(-1, 1);
-            } else {
-                tickEnd = Fraction::fromTicks(i->first);
-            }
-            score()->transpositionChanged(part, oldKv, tickStart, tickEnd);
-        }
-
-        //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
-        const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(instrument->trackName());
-        undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
+    if (!m_init) {
+        return;
     }
+
+    Fraction tickStart = segment()->tick();
+    Part* part = staff()->part();
+    Interval oldV = part->instrument(tickStart)->transpose();
+    Interval oldKv = staff()->transpose(tickStart);
+    Interval v = instrument->transpose();
+    bool concPitch = style().styleB(Sid::concertPitch);
+
+    // change the clef for each staff
+    for (size_t i = 0; i < part->nstaves(); i++) {
+        ClefType oldClefType = concPitch ? part->instrument(tickStart)->clefType(i).concertClef
+                               : part->instrument(tickStart)->clefType(i).transposingClef;
+        ClefType newClefType = concPitch ? instrument->clefType(i).concertClef
+                               : instrument->clefType(i).transposingClef;
+        // Introduce cleff change only if the new clef *symbol* is different from the old one
+        if (ClefInfo::symId(oldClefType) != ClefInfo::symId(newClefType)) {
+            // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
+            EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
+            score()->undoChangeClef(part->staff(i), element, newClefType, true);
+        }
+    }
+
+    // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
+    if ((v.chromatic - oldV.chromatic) % 12) {
+        for (size_t i = 0; i < part->nstaves(); i++) {
+            if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
+                KeySigEvent ks;
+                // Check, if some key signature is already there, if no, mark new one "for instrument change"
+                Segment* seg = segment()->prev1(SegmentType::KeySig);
+                voice_idx_t voice = part->staff(i)->idx() * VOICES;
+                KeySig* ksig = seg ? toKeySig(seg->element(voice)) : nullptr;
+                bool forInstChange = !(ksig && ksig->tick() == tickStart && !ksig->generated());
+                ks.setForInstrumentChange(forInstChange);
+                Key cKey = part->staff(i)->concertKey(tickStart);
+                ks.setConcertKey(cKey);
+                score()->undoChangeKeySig(part->staff(i), tickStart, ks);
+            }
+        }
+    }
+
+    // change instrument in all linked scores
+    for (EngravingObject* se : linkList()) {
+        InstrumentChange* lic = static_cast<InstrumentChange*>(se);
+        Instrument* newInstrument = new Instrument(*instrument);
+        lic->score()->undo(new ChangeInstrument(lic, newInstrument));
+    }
+
+    // transpose for current score only
+    // this automatically propagates to linked scores
+    if (part->instrument(tickStart)->transpose() != oldV) {
+        auto i = part->instruments().upper_bound(tickStart.ticks());              // find(), ++i
+        Fraction tickEnd;
+        if (i == part->instruments().end()) {
+            tickEnd = Fraction(-1, 1);
+        } else {
+            tickEnd = Fraction::fromTicks(i->first);
+        }
+        score()->transpositionChanged(part, oldKv, tickStart, tickEnd);
+    }
+
+    //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
+    const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(instrument->trackName());
+    undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
 }
 
 //---------------------------------------------------------
