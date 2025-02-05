@@ -41,6 +41,7 @@ ColumnLayout {
 
     SearchField {
         id: searchField
+        navigation.name: "SearchControl"
     }
 
     StyledListView {
