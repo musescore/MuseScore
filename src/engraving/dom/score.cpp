@@ -2885,47 +2885,20 @@ void Score::cmdRemoveStaff(staff_idx_t staffIdx)
     undoRemoveStaff(s);
 }
 
-//---------------------------------------------------------
-//   sortSystemStaves
-//---------------------------------------------------------
-
 void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
 {
     std::vector<staff_idx_t> moveTo;
-    for (Staff* staff : m_systemObjectStaves) {
-        moveTo.push_back(staff->idx());
-    }
-    // rebuild system object staves
-    for (size_t i = 0; i < m_staves.size(); i++) {
-        staff_idx_t newLocation = muse::indexOf(dst, i);
-        if (newLocation == muse::nidx) { //!dst.contains(_staves[i]->idx())) {
-            // this staff was removed
-            for (size_t j = 0; j < m_systemObjectStaves.size(); j++) {
-                if (m_staves[i]->idx() == moveTo[j]) {
-                    // the removed staff was a system object staff
-                    if (i == m_staves.size() - 1 || muse::contains(moveTo, m_staves[i + 1]->idx())) {
-                        // this staff is at the end of the score, or is right before a new system object staff
-                        moveTo[j] = muse::nidx;
-                    } else {
-                        moveTo[j] = i + 1;
-                    }
-                }
-            }
-        } else if (newLocation != m_staves[i]->idx() && muse::contains(m_systemObjectStaves, m_staves[i])) {
-            // system object staff was moved somewhere, put the system objects at the top of its new group
-            staff_idx_t topOfGroup = newLocation;
-            String family = m_staves[dst[newLocation]]->part()->familyId();
-            while (topOfGroup > 0) {
-                if (m_staves[dst[topOfGroup - 1]]->part()->familyId() != family) {
-                    // the staff above is of a different instrument family, current topOfGroup is destination
-                    break;
-                } else {
-                    topOfGroup--;
-                }
-            }
-            moveTo[muse::indexOf(m_systemObjectStaves, m_staves[i])] = dst[topOfGroup];
+    for (const Staff* staff : m_systemObjectStaves) {
+        staff_idx_t oldStaffIdx = staff->idx();
+        staff_idx_t newStaffIfx = oldStaffIdx < dst.size() ? dst[oldStaffIdx] : muse::nidx;
+
+        if (muse::contains(moveTo, newStaffIfx)) {
+            newStaffIfx = muse::nidx;
         }
+
+        moveTo.push_back(newStaffIfx);
     }
+
     for (staff_idx_t i = 0; i < m_systemObjectStaves.size(); i++) {
         if (moveTo[i] == m_systemObjectStaves[i]->idx()) {
             // this sysobj staff doesn't move
@@ -2936,6 +2909,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                 if (!mb->isMeasure()) {
                     continue;
                 }
+
                 Measure* m = toMeasure(mb);
                 for (EngravingItem* e : m->el()) {
                     if ((e->isJump() || e->isMarker()) && e->isLinked() && e->track() == staff2track(m_systemObjectStaves[i]->idx())) {
@@ -2949,6 +2923,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                         }
                     }
                 }
+
                 for (Segment* s = m->first(); s; s = s->next()) {
                     if (s->isChordRest() || !s->annotations().empty()) {
                         const auto annotations = s->annotations(); // make a copy since we alter the list
@@ -2972,6 +2947,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                     }
                 }
             }
+
             // update systemObjectStaves with the correct staff
             if (moveTo[i] == muse::nidx) {
                 m_systemObjectStaves.erase(m_systemObjectStaves.begin() + i);
@@ -5640,6 +5616,11 @@ void Score::clearSystemObjectStaves()
 void Score::addSystemObjectStaff(Staff* staff)
 {
     m_systemObjectStaves.push_back(staff);
+}
+
+void Score::removeSystemObjectStaff(Staff* staff)
+{
+    muse::remove(m_systemObjectStaves, staff);
 }
 
 bool Score::isSystemObjectStaff(Staff* staff) const

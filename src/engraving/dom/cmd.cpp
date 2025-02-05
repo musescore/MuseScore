@@ -90,7 +90,7 @@ using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
+static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack, bool undo = false)
 {
     IF_ASSERT_FAILED(stack) {
         static UndoMacro::ChangesInfo empty;
@@ -108,16 +108,16 @@ static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
         return empty;
     }
 
-    return actualMacro->changesInfo();
+    return actualMacro->changesInfo(undo);
 }
 
-static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::set<const EngravingItem*>& changedItems)
+static ScoreChangesRange buildChangesRange(const CmdState& cmdState, const UndoMacro::ChangesInfo& changes)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
 
-    for (const EngravingItem* element : changedItems) {
-        int tick = element->tick().ticks();
+    for (const auto& pair : changes.changedItems) {
+        int tick = pair.first->tick().ticks();
 
         if (startTick > tick) {
             startTick = tick;
@@ -128,7 +128,12 @@ static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std
         }
     }
 
-    return { startTick, endTick };
+    return { startTick, endTick,
+             cmdState.startStaff(), cmdState.endStaff(),
+             std::move(changes.changedItems),
+             std::move(changes.changedObjectTypes),
+             std::move(changes.changedPropertyIdSet),
+             std::move(changes.changedStyleIdSet) };
 }
 
 //---------------------------------------------------------
@@ -357,36 +362,22 @@ void Score::undoRedo(bool undo, EditData* ed)
     //! NOTE: the order of operations is very important here
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
-    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
+    UndoMacro::ChangesInfo changes;
 
     cmdState().reset();
     if (undo) {
+        changes = changesInfo(undoStack(), undo);
         undoStack()->undo(ed);
     } else {
         undoStack()->redo(ed);
+        changes = changesInfo(undoStack());
     }
+
     update(false);
     masterScore()->setPlaylistDirty();    // TODO: flag all individual operations
     updateSelection();
 
-    ScoreChangesRange range = changesRange();
-
-    if (range.changedItems.empty()) {
-        range.changedItems = std::move(changes.changedItems);
-    }
-
-    if (range.changedTypes.empty()) {
-        range.changedTypes = std::move(changes.changedObjectTypes);
-    }
-
-    if (range.changedPropertyIdSet.empty()) {
-        range.changedPropertyIdSet = std::move(changes.changedPropertyIdSet);
-    }
-
-    if (range.changedStyleIdSet.empty()) {
-        range.changedStyleIdSet = std::move(changes.changedStyleIdSet);
-    }
-
+    ScoreChangesRange range = buildChangesRange(cmdState(), changes);
     changesChannel().send(range);
 }
 
@@ -418,7 +409,10 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
 
     update(false, layoutAllParts);
 
-    ScoreChangesRange range = changesRange();
+    ScoreChangesRange range;
+    if (!rollback) {
+        range = buildChangesRange(cmdState(), changesInfo(undoStack()));
+    }
 
     LOGD() << "Undo stack current macro child count: " << undoStack()->activeCommand()->childCount();
 
@@ -434,20 +428,6 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     if (!isCurrentCommandEmpty && !rollback) {
         changesChannel().send(range);
     }
-}
-
-ScoreChangesRange Score::changesRange() const
-{
-    const CmdState& cmdState = score()->cmdState();
-    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
-    auto ticksRange = changedTicksRange(cmdState, changes.changedItems);
-
-    return { ticksRange.first, ticksRange.second,
-             cmdState.startStaff(), cmdState.endStaff(),
-             std::move(changes.changedItems),
-             std::move(changes.changedObjectTypes),
-             std::move(changes.changedPropertyIdSet),
-             std::move(changes.changedStyleIdSet) };
 }
 
 #ifndef NDEBUG

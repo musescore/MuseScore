@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,29 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTSTYPES_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTSTYPES_H
+
+#pragma once
 
 #include <QObject>
 
 namespace mu::instrumentsscene {
-class InstrumentsTreeItemType
+class LayoutPanelItemType
 {
     Q_GADGET
 
 public:
-    enum class ItemType {
+    enum ItemType {
         UNDEFINED = -1,
         ROOT,
         PART,
         INSTRUMENT,
         STAFF,
+        SYSTEM_OBJECTS_LAYER,
         CONTROL_ADD_STAFF,
-        CONTROL_ADD_DOUBLE_INSTRUMENT
     };
 
     Q_ENUM(ItemType)
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTSTYPES_H
