@@ -434,73 +434,45 @@ void EngravingItem::setStaffIdx(staff_idx_t val)
     m_track = staff2track(val, voiceIdx == muse::nidx ? 0 : voiceIdx);
 }
 
-staff_idx_t EngravingItem::staffIdxOrNextVisible() const
+staff_idx_t EngravingItem::effectiveStaffIdx() const
 {
-    // for system objects, sometimes the staff they're on is hidden so we have to find the next
-    // best staff for them
-    if (!staff()) {
+    if (!systemFlag()) {
+        return vStaffIdx();
+    }
+
+    const System* system = toSystem(findAncestor(ElementType::SYSTEM));
+    if (!system) {
+        return vStaffIdx();
+    }
+
+    staff_idx_t originalStaffIdx = staffIdx();
+    if (originalStaffIdx == muse::nidx) {
         return muse::nidx;
     }
 
-    staff_idx_t si = staff()->idx();
-    if (!systemFlag()) {
-        return si;
+    const Staff* originalStaff = m_score->staff(originalStaffIdx);
+    if (originalStaff->show() && system->staff(originalStaffIdx)->show()) {
+        return originalStaffIdx;
     }
-    Measure* m = nullptr;
-    if (parent() && parent()->isSegment()) {
-        Segment* s = parent() ? toSegment(parent()) : nullptr;
-        m = s ? s->measure() : nullptr;
-    } else if (parent() && parent()->isMeasure()) {
-        m = parent() ? toMeasure(parent()) : nullptr;
-    } else if (isSpanner()) {
-        m = score()->tick2measure(tick());
-    } else if (isSpannerSegment()) {
-        const SpannerSegment* spannerSeg = toSpannerSegment(this);
-        if (spannerSeg->isSingleBeginType()) {
-            m = score()->tick2measure(tick());
-        } else if (spannerSeg->isMiddleType() || spannerSeg->isEndType()) {
-            m = spannerSeg->system() ? spannerSeg->system()->firstMeasure() : nullptr;
+
+    staff_idx_t nextSystemObjectStaff = muse::nidx;
+    const std::vector<Staff*>& systemObjectStaves = m_score->systemObjectStaves();
+    for (size_t i = 1; i < systemObjectStaves.size(); ++i) {
+        staff_idx_t idx = systemObjectStaves[i]->idx();
+        if (idx > originalStaffIdx) {
+            nextSystemObjectStaff = idx;
+            break;
         }
     }
-    if (!m || !m->system() || !m->system()->staff(si)) {
-        return si;
-    }
-    staff_idx_t firstVis = m->system()->firstVisibleStaff();
-    if (isTopSystemObject()) {
-        // original, put on the top of the score
-        return firstVis;
-    }
-    if (si <= firstVis) {
-        // we already know this staff will be replaced by the original
-        return muse::nidx;
-    }
-    bool foundStaff = false;
-    if (!m->system()->staff(si)->show()) {
-        const std::vector<Staff*> soStaves = score()->systemObjectStaves();
-        for (staff_idx_t i = 0; i < soStaves.size(); ++i) {
-            staff_idx_t idxOrig = soStaves[i]->idx();
-            if (idxOrig == si) {
-                // this is the staff we are supposed to be on
-                for (staff_idx_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
-                    if (i + 1 < soStaves.size() && idxNew >= score()->staffIdx(soStaves[i + 1]->part())) {
-                        // This is the flag to not show this element
-                        si = muse::nidx;
-                        break;
-                    } else if (m->system()->staff(idxNew)->show()) {
-                        // Move current element to this staff and finish
-                        foundStaff = true;
-                        si = idxNew;
-                        break;
-                    }
-                }
-                break;
-            }
+
+    staff_idx_t nstaves = m_score->nstaves();
+    for (staff_idx_t staffIdx = originalStaffIdx + 1; staffIdx < nstaves && staffIdx < nextSystemObjectStaff; ++staffIdx) {
+        if (m_score->staff(staffIdx)->show() && system->staff(staffIdx)->show()) {
+            return staffIdx;
         }
-    } else {
-        // the staff this object should be on is visible, so npnp
-        foundStaff = true;
     }
-    return foundStaff ? si : muse::nidx;
+
+    return muse::nidx;
 }
 
 bool EngravingItem::isTopSystemObject() const
@@ -672,10 +644,7 @@ PointF EngravingItem::pagePos() const
         return p;
     }
 
-    staff_idx_t idx = muse::nidx;
-    if (systemFlag()) {
-        idx = staffIdxOrNextVisible();
-    }
+    staff_idx_t idx = effectiveStaffIdx();
 
     if (idx == muse::nidx) {
         idx = vStaffIdx();
@@ -725,11 +694,7 @@ PointF EngravingItem::canvasPos() const
         return p;
     }
 
-    staff_idx_t idx = muse::nidx;
-
-    if (systemFlag()) {
-        idx = staffIdxOrNextVisible();
-    }
+    staff_idx_t idx = effectiveStaffIdx();
 
     if (idx == muse::nidx) {
         idx = vStaffIdx();
@@ -2267,7 +2232,7 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
     if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
         Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
         System* system = meas->system();
-        const staff_idx_t stIdx = staffIdxOrNextVisible();
+        const staff_idx_t stIdx = effectiveStaffIdx();
         if (stIdx == muse::nidx) {
             return { LineF() };
         }

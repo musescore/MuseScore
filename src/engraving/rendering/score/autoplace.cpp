@@ -54,7 +54,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         LD_CONDITION(s->ldata()->isSetPos());
 
         double sp = item->style().spatium();
-        staff_idx_t si = item->staffIdxOrNextVisible();
+        staff_idx_t si = item->effectiveStaffIdx();
 
         // if there's no good staff for this object, obliterate it
         ldata->setIsSkipDraw(si == muse::nidx);
@@ -130,7 +130,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
         LD_CONDITION(ldata->isSetBbox());
         LD_CONDITION(m->ldata()->isSetPos());
 
-        staff_idx_t si = item->staffIdxOrNextVisible();
+        staff_idx_t si = item->effectiveStaffIdx();
 
         // if there's no good staff for this object, obliterate it
         ldata->setIsSkipDraw(si == muse::nidx);
@@ -215,7 +215,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         Shape sh = item->shape();
         sl.add(sh.translate(item->pos()));
         double yd = 0.0;
-        staff_idx_t stfIdx = item->systemFlag() ? item->staffIdxOrNextVisible() : item->staffIdx();
+        staff_idx_t stfIdx = item->effectiveStaffIdx();
         if (stfIdx == muse::nidx) {
             ldata->setIsSkipDraw(true);
             return;

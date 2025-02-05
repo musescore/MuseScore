@@ -328,7 +328,7 @@ public:
 
     staff_idx_t staffIdx() const;
     void setStaffIdx(staff_idx_t val);
-    staff_idx_t staffIdxOrNextVisible() const; // for system objects migrating
+    staff_idx_t effectiveStaffIdx() const; // for system objects migrating
     bool isTopSystemObject() const;
     virtual staff_idx_t vStaffIdx() const;
     voice_idx_t voice() const;
