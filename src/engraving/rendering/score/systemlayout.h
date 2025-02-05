@@ -125,6 +125,8 @@ private:
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
+
+    static void updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx);
 };
 }
 

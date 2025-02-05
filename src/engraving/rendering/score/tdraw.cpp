@@ -3099,6 +3099,9 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     if (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genTimesig()) {
         return;
     }
+    if (!item->showOnThisStaff()) {
+        return;
+    }
     painter->setPen(item->curColor());
 
     const TimeSig::LayoutData* ldata = item->ldata();
