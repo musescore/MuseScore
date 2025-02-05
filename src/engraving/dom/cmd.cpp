@@ -1444,8 +1444,8 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
             continue;
         }
         Fraction tick = baseTick + Fraction::fromTicks(voiceOffset[track - strack]);
-        Measure* m   = tick2measure(tick);
-        if ((track % VOICES) && !m->hasVoices(staffIdx)) {
+        Measure* tm   = tick2measure(tick);
+        if ((track % VOICES) && !tm->hasVoices(staffIdx)) {
             continue;
         }
 

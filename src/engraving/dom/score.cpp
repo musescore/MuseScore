@@ -3564,10 +3564,10 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
         cr = toChordRest(e->parentItem());
     } else if (e->isChordRest()) {
         cr = toChordRest(e);
-    } else if (EngravingItem* a = e->findAncestor(ElementType::CHORD)) {
-        cr = toChordRest(a);
-    } else if (EngravingItem* a = e->findAncestor(ElementType::REST)) {
-        cr = toChordRest(a);
+    } else if (EngravingItem* c = e->findAncestor(ElementType::CHORD)) {
+        cr = toChordRest(c);
+    } else if (EngravingItem* r = e->findAncestor(ElementType::REST)) {
+        cr = toChordRest(r);
     }
 
     if (cr) {
