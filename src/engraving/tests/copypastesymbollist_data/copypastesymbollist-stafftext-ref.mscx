@@ -256,9 +256,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <text>2</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -267,7 +264,7 @@
               </Note>
             </Chord>
           <StaffText>
-            <text>3</text>
+            <text>2</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -277,7 +274,7 @@
               </Note>
             </Chord>
           <StaffText>
-            <text>4</text>
+            <text>3</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -291,7 +288,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <text>5</text>
+            <text>4</text>
             </StaffText>
           <Beam>
             <l1>30</l1>
@@ -304,9 +301,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <text>6</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -314,9 +308,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <text>7</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -324,9 +315,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <text>8</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -335,7 +323,7 @@
               </Note>
             </Chord>
           <StaffText>
-            <text>9</text>
+            <text>5</text>
             </StaffText>
           <Beam>
             <l1>34</l1>
@@ -348,9 +336,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <text>10</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -359,7 +344,7 @@
               </Note>
             </Chord>
           <StaffText>
-            <text>11</text>
+            <text>6</text>
             </StaffText>
           <Chord>
             <durationType>eighth</durationType>
@@ -368,9 +353,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <text>12</text>
-            </StaffText>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -383,7 +365,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <text>13</text>
+            <text>7</text>
             </StaffText>
           <Chord>
             <durationType>whole</durationType>
@@ -392,12 +374,54 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>-7/8</fractions>
+            </location>
+          <StaffText>
+            <text>8</text>
+            </StaffText>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <StaffText>
+            <text>9</text>
+            </StaffText>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <StaffText>
+            <text>10</text>
+            </StaffText>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <StaffText>
+            <text>11</text>
+            </StaffText>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <StaffText>
+            <text>12</text>
+            </StaffText>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <StaffText>
+            <text>13</text>
+            </StaffText>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <StaffText>
+            <text>14</text>
+            </StaffText>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <StaffText>
-            <text>14</text>
+            <text>15</text>
             </StaffText>
           <Chord>
             <durationType>whole</durationType>
