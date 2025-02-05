@@ -68,16 +68,6 @@ bool Workspace::isEdited() const
     return fileSystem()->exists(originWorkspacePath());
 }
 
-bool Workspace::isManaged(const DataKey& key) const
-{
-    return m_file->meta(key).toBool();
-}
-
-void Workspace::setIsManaged(const DataKey& key, bool val)
-{
-    m_file->setMeta(key, Val(val));
-}
-
 RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
 {
     TRACEFUNC;

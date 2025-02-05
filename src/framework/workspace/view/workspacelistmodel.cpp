@@ -175,10 +175,6 @@ void WorkspaceListModel::createNewWorkspace()
     }
 
     IWorkspacePtr newWorkspace = workspacesManager()->newWorkspace(name.toStdString());
-    newWorkspace->setIsManaged(muse::ui::WS_UiSettings, meta.value(muse::ui::WS_UiSettings).toBool());
-    newWorkspace->setIsManaged(muse::ui::WS_UiStates, meta.value(muse::ui::WS_UiStates).toBool());
-    newWorkspace->setIsManaged(muse::ui::WS_UiToolConfigs, meta.value(muse::ui::WS_UiToolConfigs).toBool());
-//    newWorkspace->setIsManaged(palette::WS_Palettes, meta.value(palette::WS_Palettes).toBool()); // todo
 
     int newWorkspaceIndex = m_workspaces.size();
 

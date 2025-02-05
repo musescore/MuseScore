@@ -50,9 +50,6 @@ public:
     bool isBuiltin() const override;
     bool isEdited() const override;
 
-    bool isManaged(const DataKey& key) const override;
-    void setIsManaged(const DataKey& key, bool val) override;
-
     RetVal<QByteArray> rawData(const DataKey& key) const override;
     Ret setRawData(const DataKey& key, const QByteArray& data) override;
 
