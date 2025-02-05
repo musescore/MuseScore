@@ -850,6 +850,12 @@ EngravingItem* Score::nextElement()
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
             break;
         }
+        case ElementType::SYSTEM_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toSystemLockIndicator(e)->systemLock()->endMB();
+            continue;
+        }
         case ElementType::SOUND_FLAG:
             if (EngravingItem* parent = toSoundFlag(e)->parentItem()) {
                 return parent;
@@ -1040,6 +1046,12 @@ EngravingItem* Score::prevElement()
         case ElementType::LAYOUT_BREAK: {
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
             break;
+        }
+        case ElementType::SYSTEM_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toSystemLockIndicator(e)->systemLock()->endMB();
+            continue;
         }
         default:
             break;
