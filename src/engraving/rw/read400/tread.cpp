@@ -2180,7 +2180,12 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
             b->add(lb);
             b->cleanupLayoutBreaks(false);
         }
-    } else if (tag == "StaffTypeChange") {
+    } else if (tag == "StaffTypeChange" && b->isMeasure()) {
+        const staff_idx_t staffIdx = track2staff(ctx.track());
+        if (!toMeasure(b)->canAddStaffTypeChange(staffIdx)) {
+            LOGW() << "Corruption: staff already has StaffTypeChange at this measure, cannot add another.";
+            return true;
+        }
         StaffTypeChange* stc = Factory::createStaffTypeChange(b);
         stc->setTrack(ctx.track());
         stc->setParent(b);
@@ -3638,7 +3643,12 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
 {
-    t->setGroup(TConv::fromXml(e.asciiAttribute("group"), StaffGroup::STANDARD));
+    const AsciiStringView group = e.asciiAttribute("group");
+    IF_ASSERT_FAILED(!group.empty()) {
+        return;
+    }
+
+    t->setGroup(TConv::fromXml(group, StaffGroup::STANDARD));
 
     if (t->group() == StaffGroup::TAB) {
         t->setGenKeysig(false);
