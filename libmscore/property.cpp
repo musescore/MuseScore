@@ -189,7 +189,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::GLISS_EASEOUT,           false, "easeOutSpin",           P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "ease out")         },
       { Pid::DIAGONAL,                false, 0,                       P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "diagonal")         },
       { Pid::GROUPS,                  false, 0,                       P_TYPE::GROUPS,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "groups")           },
-      { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "line style")       },
+      { Pid::LINE_STYLE,              true,  "lineStyle",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "line style")       },
       { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::SP_REAL,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "line width")       },
       { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "line width (spatium)") },
       { Pid::LASSO_POS,               false, 0,                       P_TYPE::POINT_MM,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "lasso position")   },
@@ -298,7 +298,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
       { Pid::BEGIN_TEXT_ALIGN,        false, "beginTextAlign",        P_TYPE::ALIGN,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text align") },
       { Pid::BEGIN_TEXT_PLACE,        false, "beginTextPlace",        P_TYPE::TEXT_PLACE,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text place") },
-      { Pid::BEGIN_HOOK_TYPE,         false, "beginHookType",         P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin hook type")  },
+      { Pid::BEGIN_HOOK_TYPE,         true,  "beginHookType",         P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin hook type")  },
       { Pid::BEGIN_HOOK_HEIGHT,       false, "beginHookHeight",       P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin hook height") },
       { Pid::BEGIN_FONT_FACE,         false, "beginFontFace",         P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font face")  },
       { Pid::BEGIN_FONT_SIZE,         false, "beginFontSize",         P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font size")  },
@@ -316,7 +316,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
       { Pid::END_TEXT_ALIGN,          false, "endTextAlign",          P_TYPE::ALIGN,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text align")   },
       { Pid::END_TEXT_PLACE,          false, "endTextPlace",          P_TYPE::TEXT_PLACE,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text place")   },
-      { Pid::END_HOOK_TYPE,           false, "endHookType",           P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "end hook type")    },
+      { Pid::END_HOOK_TYPE,           true,  "endHookType",           P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "end hook type")    },
       { Pid::END_HOOK_HEIGHT,         false, "endHookHeight",         P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "end hook height")  },
       { Pid::END_FONT_FACE,           false, "endFontFace",           P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font face")    },
       { Pid::END_FONT_SIZE,           false, "endFontSize",           P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font size")    },
