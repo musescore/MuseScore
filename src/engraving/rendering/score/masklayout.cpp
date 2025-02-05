@@ -107,10 +107,12 @@ void MaskLayout::maskBarlineForText(BarLine* barline, staff_idx_t staffIdx, cons
     for (TextBase* text : possibleIntersectingText) {
         const double xHeight = text->fontMetrics().xHeight();
         const double collisionPadding = 0.25 * xHeight;
-        const double maskPadding = std::clamp(0.5 * xHeight, 0.1 * spatium, spatium);
+        const bool hasFrame = text->frameType() != FrameType::NO_FRAME;
+        const bool useHighResShape = !text->isDynamic() && !text->hasFrame();
+        const double maskPadding = hasFrame ? 0.0 : std::clamp(0.5 * xHeight, 0.1 * spatium, spatium);
 
         PointF textPos = text->pagePos();
-        Shape textShape = (text->isDynamic() ? text->ldata()->shape() : text->ldata()->highResShape()).translated(textPos);
+        Shape textShape = (useHighResShape ? text->ldata()->highResShape() : text->ldata()->shape()).translated(textPos);
 
         Shape filteredTextShape;
         filteredTextShape.elements().reserve(textShape.elements().size());
