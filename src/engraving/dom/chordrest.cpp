@@ -644,7 +644,7 @@ void ChordRest::replaceBeam(Beam* newBeam)
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
     if (secondChordRest == nullptr) {
-        secondChordRest = nextChordRest(const_cast<ChordRest*>(this));
+        secondChordRest = nextChordRest(const_cast<ChordRest*>(this), false, true, true);
     }
     int currentTick = tick().ticks();
     Slur* result = nullptr;

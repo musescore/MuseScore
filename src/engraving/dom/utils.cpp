@@ -30,8 +30,9 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
-#include "dom/masterscore.h"
-#include "dom/repeatlist.h"
+#include "marker.h"
+#include "masterscore.h"
+#include "repeatlist.h"
 #include "keysig.h"
 #include "measure.h"
 #include "note.h"
@@ -774,6 +775,10 @@ int diatonicUpDown(Key k, int pitch, int steps)
 
 Volta* findVolta(const Segment* seg, const Score* score)
 {
+    if (!seg) {
+        return nullptr;
+    }
+
     const Measure* measure = seg->measure();
     const Fraction tick = measure->tick() + Fraction::eps();
     auto spanners = score->spannerMap().findOverlapping(tick.ticks(), tick.ticks());
@@ -791,7 +796,7 @@ Volta* findVolta(const Segment* seg, const Score* score)
 //    search Note to tie to "note"
 //---------------------------------------------------------
 
-Note* searchTieNote(const Note* note, const Segment* nextSegment)
+Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool disableOverRepeats)
 {
     if (!note) {
         return nullptr;
@@ -817,11 +822,25 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment)
         return nullptr;
     }
 
-    Volta* startVolta = findVolta(seg, score);
-    Volta* endVolta = findVolta(nextSegment, score);
+    if (disableOverRepeats) {
+        // Disallow inputting ties between unrelated voltas
+        // This visually adjacent segment is never the next to be played
+        Volta* startVolta = findVolta(seg, score);
+        Volta* endVolta = findVolta(nextSegment, score);
 
-    if (startVolta && endVolta && startVolta != endVolta) {
-        return nullptr;
+        if (startVolta && endVolta && startVolta != endVolta) {
+            return nullptr;
+        }
+
+        // Disallow inputting ties across codas
+        // This visually adjacent segment is never the next to be played
+        if (nextSegment->measure() != seg->measure()) {
+            for (const EngravingItem* el : nextSegment->measure()->el()) {
+                if (el->isMarker() && toMarker(el)->isCoda()) {
+                    return nullptr;
+                }
+            }
+        }
     }
 
     if (chord->isGraceBefore()) {

@@ -330,7 +330,7 @@ void Lyrics::adjustPrevious()
 void Lyrics::setNeedRemoveInvalidSegments()
 {
     // Allow "invalid" segments when there is a partial lyric line in a following repeat segment
-    if (chordRest()->hasFollowingJumpItem() && repeatHasPartialLyricLine(measure())) {
+    if (m_separator && measure() && m_separator->tick2() == measure()->endTick() && repeatHasPartialLyricLine(measure())) {
         return;
     }
     m_needRemoveInvalidSegments = true;
