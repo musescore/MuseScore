@@ -998,9 +998,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         if (!sp->systemFlag() && sp->staff() && !sp->staff()->show()) {
             continue;
         }
-        if (sp->systemFlag() && sp->staffIdxOrNextVisible() == muse::nidx) {
-            continue;
-        }
 
         const Measure* startMeas = sp->findStartMeasure();
         const Measure* endMeas = sp->findEndMeasure();
@@ -1542,7 +1539,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
     //
     for (SpannerSegment* ss : segments) {
         if (ss->addToSkyline()) {
-            staff_idx_t stfIdx = ss->systemFlag() ? ss->staffIdxOrNextVisible() : ss->staffIdx();
+            staff_idx_t stfIdx = ss->effectiveStaffIdx();
             if (stfIdx == muse::nidx) {
                 continue;
             }
@@ -2680,12 +2677,12 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
                 if (!timeSig || !timeSig->ldata()->isValid()) {
                     continue;
                 }
-                staff_idx_t thisStaffIdx = timeSig->staffIdxOrNextVisible();
+                staff_idx_t thisStaffIdx = timeSig->effectiveStaffIdx();
                 staff_idx_t nextStaffIdx = thisStaffIdx;
                 for (staff_idx_t idx = thisStaffIdx + 1; idx < nstaves; ++idx) {
                     EngravingItem* nextTimeSig = segment.element(staff2track(idx));
                     if (nextTimeSig && nextTimeSig->ldata()->isValid()) {
-                        staff_idx_t nextTimeSigStave = nextTimeSig->staffIdxOrNextVisible();
+                        staff_idx_t nextTimeSigStave = nextTimeSig->effectiveStaffIdx();
                         nextStaffIdx = system->prevVisibleStaff(nextTimeSigStave);
                         break;
                     }
