@@ -82,6 +82,21 @@ ExportSettingsPage {
         }
     }
 
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Export selection only")
+        visible: root.model.showSelectionOnlyControl
+
+        navigation.name: "ExportSelectionCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 3
+
+        checked: root.model.selectionOnly
+        onClicked: {
+            root.model.selectionOnly = !checked
+        }
+    }
+
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")

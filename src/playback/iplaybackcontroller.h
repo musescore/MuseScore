@@ -103,6 +103,8 @@ public:
 
     virtual void setNotation(notation::INotationPtr notation) = 0;
     virtual void setIsExportingAudio(bool exporting) = 0;
+
+    virtual muse::audio::msecs_t selectionDuration() const = 0;
 };
 }
 

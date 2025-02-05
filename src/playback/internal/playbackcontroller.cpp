@@ -1663,6 +1663,7 @@ void PlaybackController::setIsExportingAudio(bool exporting)
 {
     m_isExportingAudio = exporting;
     updateSoloMuteStates();
+    seekRangeSelection();
 }
 
 bool PlaybackController::canReceiveAction(const ActionCode&) const
@@ -1673,4 +1674,15 @@ bool PlaybackController::canReceiveAction(const ActionCode&) const
 muse::audio::secs_t PlaybackController::playedTickToSecs(int tick) const
 {
     return secs_t(notationPlayback()->playedTickToSec(tick));
+}
+
+muse::audio::msecs_t PlaybackController::selectionDuration() const
+{
+    auto range = selectionRange();
+    if (range) {
+        auto startTick = notationPlayback()->playPositionTickByRawTick(range->startTick().ticks());
+        auto endTick = notationPlayback()->playPositionTickByRawTick(range->endTick().ticks());
+        return secsToMicrosecs(notationPlayback()->playedTickToSec(endTick.val - startTick.val));
+    }
+    return 0;
 }

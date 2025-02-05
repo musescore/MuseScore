@@ -39,6 +39,9 @@ public:
     void setExportSampleRate(int rate) override;
     const std::vector<int>& availableSampleRates() const override;
 
+    bool selectionOnly() const override;
+    void setSelectionOnly(bool flag) override;
+
     muse::audio::samples_t exportBufferSize() const override;
 
 private:

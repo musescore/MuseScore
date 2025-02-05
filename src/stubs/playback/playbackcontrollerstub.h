@@ -85,6 +85,8 @@ public:
 
     void setNotation(notation::INotationPtr notation) override;
     void setIsExportingAudio(bool exporting) override;
+
+    muse::audio::msecs_t selectionDuration() const override { return 0; }
 };
 }
 

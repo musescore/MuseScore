@@ -76,9 +76,16 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
     m_sampleRate = sampleRate;
 
     if (isOffline) {
-        LOGD() << "Start offline mode, sampleRate: " << m_sampleRate;
         m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
         m_offlineModeStarted = true;
+        if (m_currentPosition >= MAXIMUM_BUFFER_SIZE) {
+            // advance offline processor to sample before (or at) current position
+            prepareOutputBuffer(MAXIMUM_BUFFER_SIZE);
+            auto remaining = m_currentPosition;
+            do {
+                m_samplerLib->processOffline(m_sampler, m_bus);
+            } while ((remaining -= MAXIMUM_BUFFER_SIZE) >= MAXIMUM_BUFFER_SIZE);
+        }
     }
 }
 
