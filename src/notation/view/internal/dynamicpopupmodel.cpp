@@ -161,6 +161,16 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
     m_item->undoChangeProperty(Pid::DYNAMIC_TYPE, DYN_POPUP_PAGES[page][index].dynType);
     endCommand();
 
+    INotationInteractionPtr interaction = currentNotation()->interaction();
+
+    interaction->flipHairpinsType(toDynamic(m_item));
+
+    // Hide the bounding box which appears when called using Ctrl+D shortcut
+    if (interaction->isTextEditingStarted()) {
+        interaction->endEditText();
+        interaction->startEditGrip(m_item, Grip::DRAG);
+    }
+
     updateNotation();
 }
 

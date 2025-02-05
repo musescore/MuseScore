@@ -189,6 +189,7 @@ public:
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
+    void addHairpinOnGripDrag(engraving::Dynamic* dynamic, bool isLeftGrip) override;
     void addHairpinsToSelection(HairpinType type) override;
     void putRestToSelection() override;
     void putRest(Duration duration) override;
@@ -203,6 +204,9 @@ public:
 
     void increaseDecreaseDuration(int steps, bool stepByDots) override;
 
+    void flipHairpinsType(engraving::Dynamic* selDyn) override;
+
+    void toggleDynamicPopup() override;
     bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
     void moveMeasureToPrevSystem() override;

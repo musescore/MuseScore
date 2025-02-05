@@ -115,6 +115,9 @@ public:
     DynamicType dynamicTypeFrom() const;
     DynamicType dynamicTypeTo() const;
 
+    const Dynamic* dynamicSnappedBefore() const;
+    const Dynamic* dynamicSnappedAfter() const;
+
     HairpinType hairpinType() const { return m_hairpinType; }
     void setHairpinType(HairpinType val);
 
