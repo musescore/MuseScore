@@ -1473,19 +1473,19 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
 
     const Score* sourceScore = score();
     const Score* destinationScore = destinationItem->score();
-    const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
     const Staff* sourceStaff = staff();
     const Staff* destinationStaff = destinationItem->staff();
 
-    // Properties must be propagated to items cloned for MMRests
-    if (sourceScore == destinationScore && sourceStaff == destinationStaff) {
+    if (sourceScore == destinationScore) {
+        if (sourceStaff != destinationStaff && (propertyId == Pid::VISIBLE || propertyGroup(propertyId) == PropertyGroup::POSITION)) {
+            // Allow visibility and position to stay independent
+            return PropertyPropagation::NONE;
+        }
+        // Maintain every other property synced
         return PropertyPropagation::PROPAGATE;
     }
 
-    if (propertyGroup(propertyId) != PropertyGroup::TEXT && sourceScore == destinationScore) {
-        return PropertyPropagation::NONE;
-    }
-
+    const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
     if (isTextProperty) {
         if (sourceScore->isMaster() && destinationItem->isPropertyLinkedToMaster(propertyId)) {
             // From master score - check if destination part follows master
@@ -1502,6 +1502,11 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
         // Properties are only propagated when being edited from master. If this is being edited
         // from a part score, we mark it as unlinked so it becomes independent in the part.
         return PropertyPropagation::UNLINK;
+    }
+
+    if (systemFlag() && !isTopSystemObject()) {
+        // Let only the top system object propagate
+        return PropertyPropagation::NONE;
     }
 
     if (destinationItem->isPropertyLinkedToMaster(propertyId)) {
