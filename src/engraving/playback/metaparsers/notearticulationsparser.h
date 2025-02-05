@@ -38,6 +38,7 @@ public:
     static void parseGhostNote(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseNoteHead(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseSymbols(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parseLaissezVibrer(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseSpanners(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 
 protected:

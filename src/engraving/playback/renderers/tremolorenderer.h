@@ -35,13 +35,14 @@ public:
                          muse::mpe::PlaybackEventList& result);
 
 private:
-    using TremoloTimeCache = std::unordered_map<const Note*, TimestampAndDuration>;
+    using TremoloTimeCache = std::unordered_map<const Note*, muse::mpe::TimestampAndDuration>;
 
     static int stepDurationTicks(const Chord* chord, int tremoloLines);
     static void buildAndAppendEvents(const Chord* chord, const muse::mpe::ArticulationType type, const int stepDurationTicks,
                                      const int startTick, const RenderingContext& ctx, TremoloTimeCache& tremoloCache,
                                      muse::mpe::PlaybackEventList& result);
-    static const TimestampAndDuration& tremoloTimeAndDuration(const Note* note, const RenderingContext& ctx, TremoloTimeCache& cache);
+    static const muse::mpe::TimestampAndDuration& tremoloTimeAndDuration(const Note* note, const RenderingContext& ctx,
+                                                                         TremoloTimeCache& cache);
 };
 }
 
