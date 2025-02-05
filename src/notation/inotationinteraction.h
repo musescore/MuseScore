@@ -186,6 +186,7 @@ public:
     virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
+    virtual void addHairpinOnGripDrag(engraving::Dynamic* dynamic, bool isLeftGrip) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;
     virtual void putRestToSelection() = 0;
     virtual void putRest(Duration duration) = 0;
@@ -200,6 +201,9 @@ public:
 
     virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
 
+    virtual void flipHairpinsType(engraving::Dynamic* selDyn) = 0;
+
+    virtual void toggleDynamicPopup() = 0;
     virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
     virtual void moveMeasureToPrevSystem() = 0;

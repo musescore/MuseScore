@@ -148,6 +148,7 @@ public:
     MOCK_METHOD(void, addTiedNoteToChord, (), (override));
     MOCK_METHOD(void, addSlurToSelection, (), (override));
     MOCK_METHOD(void, addOttavaToSelection, (OttavaType), (override));
+    MOCK_METHOD(void, addHairpinOnGripDrag, (engraving::Dynamic*, bool), (override));
     MOCK_METHOD(void, addHairpinsToSelection, (HairpinType), (override));
     MOCK_METHOD(void, putRestToSelection, (), (override));
     MOCK_METHOD(void, putRest, (Duration), (override));
@@ -162,6 +163,9 @@ public:
 
     MOCK_METHOD(void, increaseDecreaseDuration, (int, bool), (override));
 
+    MOCK_METHOD(void, flipHairpinsType, (engraving::Dynamic * selDyn), (override));
+
+    MOCK_METHOD(void, toggleDynamicPopup, (), (override));
     MOCK_METHOD(bool, toggleLayoutBreakAvailable, (), (const, override));
     MOCK_METHOD(void, toggleLayoutBreak, (LayoutBreakType), (override));
     MOCK_METHOD(void, moveMeasureToPrevSystem, (), (override));
