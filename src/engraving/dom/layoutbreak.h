@@ -73,6 +73,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    String accessibleInfo() const override;
+
     char16_t iconCode() const;
 
     muse::draw::Font font() const;
