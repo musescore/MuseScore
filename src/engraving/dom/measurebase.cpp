@@ -567,7 +567,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
-        lb->setTrack(muse::nidx);           // this are system elements
+        lb->setTrack(0);
         lb->setParent(mb);
         score()->undoAddElement(lb);
     }

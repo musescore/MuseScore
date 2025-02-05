@@ -1370,7 +1370,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         if (m && !m->lineBreak()) {
             LayoutBreak* lb = Factory::createLayoutBreak(m);
             lb->setLayoutBreakType(LayoutBreakType::LINE);
-            lb->setTrack(muse::nidx);             // this are system elements
+            lb->setTrack(0);
             m->add(lb);
         }
         systemTick = mtick;

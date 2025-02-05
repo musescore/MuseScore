@@ -3785,9 +3785,6 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
     FontMetrics metrics(item->font());
     RectF bbox = metrics.boundingRect(item->iconCode());
     ldata->setShape(Shape(bbox, item));
-
-    // Ensure it goes behind notation
-    const_cast<LayoutBreak*>(item)->setZ(-10);
 }
 
 void TLayout::layoutSystemLockIndicator(const SystemLockIndicator* item, SystemLockIndicator::LayoutData* ldata)

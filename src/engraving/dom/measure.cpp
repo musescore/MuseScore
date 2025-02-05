@@ -1585,7 +1585,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         if (b) {
-            b->setTrack(muse::nidx);                   // these are system elements
+            b->setTrack(0);
             b->setParent(measure);
             score()->undoAddElement(b);
         }
