@@ -94,6 +94,7 @@ protected:
 
     bool isIndexValid(int index) const;
     void dispatch(const muse::actions::ActionCode& actionCode, const muse::actions::ActionData& args = muse::actions::ActionData());
+    void dispatch(const muse::actions::ActionQuery& actionQuery);
 
 private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
