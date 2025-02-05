@@ -3410,6 +3410,10 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly)
 
 void NotationInteraction::nudgeAnchors(MoveDirection d)
 {
+    IF_ASSERT_FAILED(m_editData.element) {
+        return;
+    }
+
     startEdit(TranslatableString("undoableAction", "Nudge"));
     qreal vRaster = mu::engraving::MScore::vRaster();
     qreal hRaster = mu::engraving::MScore::hRaster();
