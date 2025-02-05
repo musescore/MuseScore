@@ -430,6 +430,11 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
         LOGD("Score::readAddConnector is called not in paste mode.");
         return;
     }
+
+    if (info->connector()->systemFlag()) {
+        return;
+    }
+
     const ElementType type = info->type();
     switch (type) {
     case ElementType::HAIRPIN:
@@ -437,7 +442,6 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::TEXTLINE:
-    case ElementType::VOLTA:
     case ElementType::PALM_MUTE:
     case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::WHAMMY_BAR:
@@ -445,7 +449,6 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
     case ElementType::HARMONIC_MARK:
     case ElementType::PICK_SCRAPE:
     case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     {
         Spanner* sp = toSpanner(info->connector());
