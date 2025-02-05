@@ -96,6 +96,16 @@ muse::actions::ActionData MenuItem::args() const
     return m_args;
 }
 
+const muse::actions::ActionQuery& MenuItem::query() const
+{
+    return m_query;
+}
+
+void MenuItem::setQuery(const muse::actions::ActionQuery& query)
+{
+    m_query = query;
+}
+
 bool MenuItem::isValid() const
 {
     return !m_id.isEmpty();

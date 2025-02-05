@@ -45,6 +45,8 @@ public:
 private:
     void openUri(const muse::UriQuery& uri, bool isSingle = true);
     void saveDiagnosticFiles();
+
+    void onActionQuery(const actions::ActionQuery& q);
 };
 }
 

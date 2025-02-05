@@ -95,6 +95,15 @@ const UiActionsRegister::Info& UiActionsRegister::info(const ActionCode& code) c
         return it->second;
     }
 
+    // is query?
+    ActionQuery q(code);
+    if (q.isValid()) {
+        it = m_actions.find(q.uri().toString());
+        if (it != m_actions.end()) {
+            return it->second;
+        }
+    }
+
     static Info null;
     return null;
 }
