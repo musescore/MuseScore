@@ -3316,7 +3316,7 @@ void MeiImporter::addLayoutBreakToMeasure(Measure* measure, LayoutBreakType layo
 
     LayoutBreak* layoutBreak = Factory::createLayoutBreak(measure);
     layoutBreak->setLayoutBreakType(layoutBreakType);
-    layoutBreak->setTrack(muse::nidx); // this are system elements
+    layoutBreak->setTrack(0);
     measure->add(layoutBreak);
 }
 
