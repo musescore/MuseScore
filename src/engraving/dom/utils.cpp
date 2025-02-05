@@ -1572,6 +1572,9 @@ bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure)
 
 bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg)
 {
+    if (!firstSeg || !secondSeg) {
+        return false;
+    }
     // Disallow inputting ties between unrelated voltas
     // This visually adjacent segment is never the next to be played
     Score* score = firstSeg->score();

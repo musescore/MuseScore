@@ -6433,6 +6433,10 @@ void NotationInteraction::addMelisma()
                 prevPartialLyricsLine = lyricsLine;
                 break;
             }
+
+            if (prevPartialLyricsLine) {
+                break;
+            }
         }
         segment = segment->prev1(SegmentType::ChordRest);
         // if the segment has a rest in this track, stop going back
@@ -6468,6 +6472,11 @@ void NotationInteraction::addMelisma()
                 Fraction ticks = std::max(endTick - fromLyrics->segment()->tick(), Lyrics::TEMP_MELISMA_TICKS);
                 fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, ticks);
             }
+        }
+
+        if (prevPartialLyricsLine) {
+            const Fraction tickDiff = (segment->tick() + segment->ticks()) - prevPartialLyricsLine->tick2();
+            prevPartialLyricsLine->undoMoveEnd(tickDiff);
         }
 
         if (fromLyrics) {
