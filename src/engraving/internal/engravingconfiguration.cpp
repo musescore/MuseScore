@@ -48,6 +48,7 @@ static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColor
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
 static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
 static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/frameColor");
+static const Settings::Key SCORE_GREY_COLOR("engraving", "engraving/color/scoreGreyColor");
 static const Settings::Key INVISIBLE_COLOR("engraving", "engraving/colors/invisibleColor");
 static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinkedColor");
 
@@ -128,6 +129,10 @@ void EngravingConfiguration::init()
     settings()->valueChanged(FRAME_COLOR).onReceive(nullptr, [this](const Val& val) {
         m_frameColorChanged.send(Color::fromQColor(val.toQColor()));
     });
+
+    settings()->setDefaultValue(SCORE_GREY_COLOR, Val(Color("#A0A0A4").toQColor()));
+    settings()->setDescription(SCORE_GREY_COLOR, muse::trc("engraving", "Score grey color"));
+    settings()->setCanBeManuallyEdited(SCORE_GREY_COLOR, false);
 
     settings()->setDefaultValue(FORMATTING_COLOR, Val(Color("#C31989").toQColor()));
     settings()->setDescription(FORMATTING_COLOR, muse::trc("engraving", "Formatting color"));
@@ -374,6 +379,11 @@ Color EngravingConfiguration::frameColor() const
 muse::async::Channel<Color> EngravingConfiguration::frameColorChanged() const
 {
     return m_frameColorChanged;
+}
+
+Color EngravingConfiguration::scoreGreyColor() const
+{
+    return Color::fromQColor(settings()->value(SCORE_GREY_COLOR).toQColor());
 }
 
 Color EngravingConfiguration::invisibleColor() const
