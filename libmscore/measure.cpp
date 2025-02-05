@@ -1400,6 +1400,10 @@ bool Measure::acceptDrop(EditData& data) const
                   viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
+            case ElementType::STAFFTYPE_CHANGE:
+                  if (!canAddStaffTypeChange(staffIdx))
+                        return false;
+                  //fallthrough
             case ElementType::BRACKET:
             case ElementType::REPEAT_MEASURE:
             case ElementType::MEASURE:
@@ -1408,7 +1412,6 @@ bool Measure::acceptDrop(EditData& data) const
             case ElementType::BAR_LINE:
             case ElementType::SYMBOL:
             case ElementType::CLEF:
-            case ElementType::STAFFTYPE_CHANGE:
             case ElementType::VBOX:
             case ElementType::HBOX:
             case ElementType::TBOX:
@@ -1737,6 +1740,8 @@ Element* Measure::drop(EditData& data)
 
             case ElementType::STAFFTYPE_CHANGE:
                   {
+                  if (!canAddStaffTypeChange(staffIdx))
+                        return nullptr;
                   e->setParent(this);
                   e->setTrack(staffIdx * VOICES);
                   score()->undoAddElement(e);
@@ -4824,6 +4829,20 @@ qreal Measure::computeFirstSegmentXPosition(Segment* segment)
       x += segment->extraLeadingSpace().val() * spatium();
 
       return x;
+      }
+bool Measure::canAddStaffTypeChange(int staffIdx) const
+      {
+      for (const Element* child : el()) {
+            if (!child || !child->isStaffTypeChange()) {
+                  continue;
+                  }
+            const StaffTypeChange* stc = toStaffTypeChange(child);
+            if (stc->staffIdx() == staffIdx) {
+                  // Staff already has a StaffTypeChange at this measure...
+                  return false;
+                  }
+            }
+      return true;
       }
 
 }

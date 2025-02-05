@@ -10,25 +10,23 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "libmscore/score.h"
-#include "libmscore/element.h"
-#include "libmscore/note.h"
-#include "libmscore/rest.h"
-#include "libmscore/measure.h"
-#include "libmscore/system.h"
-#include "libmscore/segment.h"
-#include "libmscore/page.h"
-#include "libmscore/image.h"
-#include "libmscore/text.h"
-#include "libmscore/spanner.h"
-#include "libmscore/chord.h"
-#include "libmscore/icon.h"
-#include "libmscore/xml.h"
-#include "libmscore/stafflines.h"
 #include "musescore.h"
-#include "scoreview.h"
 #include "continuouspanel.h"
+#include "scoreview.h"
 #include "tourhandler.h"
+
+#include "libmscore/element.h"
+#include "libmscore/icon.h"
+#include "libmscore/image.h"
+#include "libmscore/measure.h"
+#include "libmscore/note.h"
+#include "libmscore/page.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/spanner.h"
+#include "libmscore/stafflines.h"
+#include "libmscore/system.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 
@@ -166,11 +164,15 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
             if (pos.x() >= (b.x() + b.width() * .5) && m != _score->lastMeasureMM() && m->nextMeasure()->system() == m->system())
                   m = m->nextMeasure();
             QPointF anchor(m->canvasBoundingRect().x(), y);
-            setDropAnchorLines({ QLineF(pos, anchor) });
+
+            const bool dropAccepted = m->acceptDrop(editData);
+            if (dropAccepted)
+                  setDropAnchorLines({ QLineF(pos, anchor) });
+
             editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
             editData.dropElement->setTrack(track);
             editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
-            return true;
+            return dropAccepted;
             }
       editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
       setDropTarget(0);
@@ -273,7 +275,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             return;
             }
       qDebug("unknown drop format: formats:");
-      for (const QString& s : dta->formats())
+      for (QString& s : dta->formats())
             qDebug("  <%s>", qPrintable(s));
       event->ignore();
       }

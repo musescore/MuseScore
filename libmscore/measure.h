@@ -288,6 +288,8 @@ class Measure final : public MeasureBase {
 
       qreal computeFirstSegmentXPosition(Segment* segment);
 
+      bool canAddStaffTypeChange(int staffIdx) const;
+
       };
 
 }     // namespace Ms
