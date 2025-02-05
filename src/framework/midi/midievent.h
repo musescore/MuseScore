@@ -140,6 +140,35 @@ struct Event {
         return 0;
     }
 
+    static Event fromMIDI10BytePackage(const unsigned char* pointer, int length)
+    {
+        Event e;
+        uint32_t val = 0;
+        assert(length <= 3);
+        for (int i=0; i < length; i++) {
+            uint32_t byteVal = static_cast<uint32_t>(pointer[i]);
+            val |= byteVal << ((2 - i) * 8);
+        }
+        e.m_data[0]=val;
+        e.setMessageType(MessageType::ChannelVoice10);
+        return e;
+    }
+
+    int to_MIDI10BytesPackage(unsigned char* pointer) const
+    {
+        if (messageType() == MessageType::ChannelVoice10) {
+            auto val = m_data[0];
+            int c = Event::midi10ByteCountForOpcode(opcode());
+            assert(c <= 3);
+            for (int i=0; i < c; i++) {
+                auto byteVal = (val >> ((2 - i) * 8)) & 0xff;
+                pointer[i]=static_cast<unsigned char>(byteVal);
+            }
+            return c;
+        }
+        return 0;
+    }
+
     static Event fromRawData(const uint32_t* data, size_t count)
     {
         Event e;
@@ -666,17 +695,18 @@ struct Event {
             basic10Event.setGroup(group());
             switch (opcode()) {
             //D2.1
+            case Opcode::PolyPressure:
+            case Opcode::ControlChange:
             case Opcode::NoteOn:
             case Opcode::NoteOff: {
                 auto e = basic10Event;
-                auto v = scaleDown(velocity(), 16, 7);
-                e.setNote(note());
-                if (v != 0) {
-                    e.setVelocity(static_cast<uint16_t>(v));
-                } else {
+                auto v1 = (m_data[0] & 0x7F00);
+                auto v2 = m_data[1] >> 25;
+                if (opcode() == Opcode::NoteOn && v2 == 0) {
                     //4.2.2 velocity comment
-                    e.setVelocity(1);
+                    v2 = 1;
                 }
+                e.m_data[0] |= v1 | v2;
                 events.push_back(e);
                 break;
             }
@@ -695,8 +725,8 @@ struct Event {
                 std::vector<std::pair<uint8_t, uint8_t> > controlChanges = {
                     { (opcode() == Opcode::RegisteredController ? 101 : 99), bank() },
                     { (opcode() == Opcode::RegisteredController ? 100 : 98), index() },
-                    { 6,  (data() & 0x7FFFFFFF) >> 24 },
-                    { 38, (data() & 0x1FC0000) >> 18 }
+                    { 6,  data() >> 25 }, // first 7 bits
+                    { 38, (data() & 0x1FC0000) >> 18 } // second 7 bits
                 };
                 for (auto& c : controlChanges) {
                     auto e = basic10Event;
@@ -708,16 +738,16 @@ struct Event {
                 break;
             }
 
-            //D.4
+            //D2.4
             case Opcode::ProgramChange: {
                 if (isBankValid()) {
                     auto e = basic10Event;
                     e.setOpcode(Opcode::ControlChange);
                     e.setIndex(0);
-                    e.setData((bank() & 0x7F00) >> 8);
+                    e.setData((m_data[1] & 0x7F00) >> 8);
                     events.push_back(e);
                     e.setIndex(0);
-                    e.setData(bank() & 0x7F);
+                    e.setData(m_data[1] & 0x7F);
                     events.push_back(e);
                 }
                 auto e = basic10Event;
@@ -728,7 +758,7 @@ struct Event {
             //D2.5
             case Opcode::PitchBend: {
                 auto e = basic10Event;
-                e.setData(data());
+                e.setData(pitchBend14());
                 events.push_back(e);
                 break;
             }
@@ -976,6 +1006,96 @@ struct Event {
             break;
         }
         return str;
+    }
+
+    uint8_t velocity7() const
+    {
+        uint16_t val = velocity();
+        if (isChannelVoice20()) {
+            return static_cast<uint8_t>(scaleDown(val, 16, 7));
+        }
+        return static_cast<uint8_t>(val);
+    }
+
+    void setVelocity7(uint8_t value)
+    {
+        if (isChannelVoice20()) {
+            uint16_t scaled = scaleUp(value, 7, 16);
+            setVelocity(scaled);
+            return;
+        }
+        setVelocity(value);
+    }
+
+    uint8_t data7() const
+    {
+        uint32_t val = data();
+        if (messageType() == MessageType::ChannelVoice20) {
+            return scaleDown(val, 32, 7);
+        }
+        return val;
+    }
+
+    uint32_t data14() const
+    {
+        uint32_t val = data();
+        if (messageType() == MessageType::ChannelVoice20) {
+            return scaleDown(val, 32, 14);
+        }
+        return val;
+    }
+
+    uint32_t pitchBend14() const
+    {
+        assert(isChannelVoice() && opcode() == Opcode::PitchBend);
+        return data14();
+    }
+
+    int midi20WordCount() const
+    {
+        return Event::wordCountForMessageType(messageType());
+    }
+
+    static int wordCountForMessageType(MessageType messageType)
+    {
+        switch (messageType) {
+        case MessageType::Utility: return 1;
+        case MessageType::SystemRealTime: return 1;
+        case MessageType::ChannelVoice10: return 1;
+        case MessageType::SystemExclusiveData: return 2;
+        case MessageType::ChannelVoice20: return 2;
+        case MessageType::Data: return 4;
+        }
+        return 0; // reserved
+    }
+
+    static int midi10ByteCountForOpcode(Opcode opcode)
+    {
+        switch (opcode) {
+        case Opcode::RegisteredPerNoteController:
+        case Opcode::AssignablePerNoteController:
+        case Opcode::RelativeRegisteredController:
+        case Opcode::RelativeAssignableController:
+        case Opcode::PerNotePitchBend:
+        case Opcode::PerNoteManagement:
+            //D2.8 cannot be translated to Midi 1.0
+            assert(false);
+        case Opcode::RegisteredController:
+        case Opcode::AssignableController:
+            // Already translated to a sequence of CCs.
+            assert(false);
+        case Opcode::NoteOff:
+        case Opcode::NoteOn:
+        case Opcode::PolyPressure:
+        case Opcode::ControlChange:
+        case Opcode::PitchBend:
+            return 3;
+        case Opcode::ProgramChange:
+        case Opcode::ChannelPressure:
+            return 2;
+        }
+        assert(false);
+        return 0;
     }
 
 private:

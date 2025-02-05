@@ -35,6 +35,15 @@
 using namespace muse;
 using namespace muse::midi;
 
+//#define DEBUG_COREMIDIINPORT
+#ifdef DEBUG_COREMIDIINPORT
+#define LOG_MIDI_D LOGD
+#define LOG_MIDI_W LOGW
+#else
+#define LOG_MIDI_D LOGN
+#define LOG_MIDI_W LOGN
+#endif
+
 struct muse::midi::CoreMidiInPort::Core {
     MIDIClientRef client = 0;
     MIDIPortRef inputPort = 0;
@@ -198,34 +207,40 @@ void CoreMidiInPort::initCore()
             // Document Version 1.1.2
             // Draft Date 2023-10-27
             // Published 2023-11-10
-            const uint32_t message_type_to_size_in_byte[] =  { 1,  // 0x0
-                                                               1,  // 0x1
-                                                               1,  // 0x2
-                                                               2,  // 0x3
-                                                               2,  // 0x4
-                                                               4,  // 0x5
-                                                               1,  // 0x6
-                                                               1,  // 0x7
-                                                               2,  // 0x8
-                                                               2,  // 0x9
-                                                               2,  // 0xA
-                                                               3,  // 0xB
-                                                               3,  // 0xC
-                                                               4,  // 0xD
-                                                               4,  // 0xE
-                                                               4 };// 0xF
+            // Section 2.1.4
+            const uint32_t message_type_to_size_in_words[] = {
+                1,  // 0x0 Utility
+                1,  // 0x1 SystemRealTime
+                1,  // 0x2 ChannelVoice10
+                2,  // 0x3 SystemExclusiveData
+                2,  // 0x4 ChannelVoice20
+                4,  // 0x5 Data
+                1,  // 0x6 Reserved
+                1,  // 0x7 Reserved
+                2,  // 0x8 Reserved
+                2,  // 0x9 Reserved
+                2,  // 0xA Reserved
+                3,  // 0xB Reserved
+                3,  // 0xC Reserved
+                4,  // 0xD Reserved
+                4,  // 0xE Reserved
+                4   // 0xF Reserved
+            };
+
             const MIDIEventPacket* packet = eventList->packet;
             for (UInt32 index = 0; index < eventList->numPackets; index++) {
-                LOGD() << "midi packet size " << packet->wordCount << " bytes";
+                LOG_MIDI_D() << "Receiving MIDIEventPacket with " << packet->wordCount << " words";
                 // Handle packet
                 uint32_t pos = 0;
                 while (pos < packet->wordCount) {
                     uint32_t most_significant_4_bit = packet->words[pos] >> 28;
-                    uint32_t message_size = message_type_to_size_in_byte[most_significant_4_bit];
+                    assert(most_significant_4_bit < 6);
 
-                    LOGD() << "midi message size " << message_size << " bytes";
+                    uint32_t message_size = message_type_to_size_in_words[most_significant_4_bit];
+                    LOG_MIDI_D() << "Receiving midi message with " << message_size << " words";
                     Event e = Event::fromRawData(&packet->words[pos], message_size);
                     if (e) {
+                        LOG_MIDI_D() << "Received midi message:" << e.to_string();
                         m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                     pos += message_size;
@@ -241,18 +256,30 @@ void CoreMidiInPort::initCore()
         {
             const MIDIPacket* packet = packetList->packet;
             for (UInt32 index = 0; index < packetList->numPackets; index++) {
-                if (packet->length != 0 && packet->length <= 4) {
-                    uint32_t message(0);
-                    memcpy(&message, packet->data, std::min(sizeof(message), sizeof(char) * packet->length));
-
-                    auto e = Event::fromMIDI10Package(message).toMIDI20();
+                auto len = packet->length;
+                int pos = 0;
+                const Byte* pointer = static_cast<const Byte*>(&(packet->data[0]));
+                while (pos < len) {
+                    Byte status = pointer[pos] >> 4;
+                    if (status < 8 || status >= 15) {
+                        LOG_MIDI_W() << "Unhandled status byte:" << status;
+                        return;
+                    }
+                    Event::Opcode opcode = static_cast<Event::Opcode>(status);
+                    int msgLen = Event::midi10ByteCountForOpcode(opcode);
+                    if (msgLen == 0) {
+                        LOG_MIDI_W() << "Unhandled opcode:" << status;
+                        return;
+                    }
+                    Event e = Event::fromMIDI10BytePackage(pointer + pos, msgLen);
+                    LOG_MIDI_D() << "Received midi 1.0 message:" << e.to_string();
+                    e = e.toMIDI20();
                     if (e) {
+                        LOG_MIDI_D() << "Converted to midi 2.0 midi message:" << e.to_string();
                         m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
-                } else if (packet->length > 4) {
-                    LOGW() << "unsupported midi message size " << packet->length << " bytes";
+                    pos += msgLen;
                 }
-
                 packet = MIDIPacketNext(packet);
             }
         };
