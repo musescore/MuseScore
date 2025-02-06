@@ -1028,7 +1028,7 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
 
-            if (level < chordRest->beams()) {
+            if (level < chordRest->beams() && !chordRest->isRest()) {
                 levelHasBeam = true;
             }
             bool isBroken16 = false;
@@ -1073,11 +1073,14 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
                 if (lastChordIndex < item->elements().size() && (chordRest->isRest() || (endCr && endCr->isRest()))) {
                     // we broke the beam on this chordrest, but the last cr of the beam segment can't end on a rest
                     // so it ends on lastChord
-                    endCr = toChordRest(item->elements()[lastChordIndex]);
-                    beamletIndex = lastChordIndex;
-                    lastChordIndex = noLastChord;
+                    ChordRest* lastCr = toChordRest(item->elements()[lastChordIndex]);
+                    if (lastCr && startCr && lastCr->tick() >= startCr->tick()) {
+                        endCr = lastCr;
+                        beamletIndex = lastChordIndex;
+                        lastChordIndex = noLastChord;
+                    }
                 }
-                if (startCr && endCr) {
+                if (startCr && endCr && levelHasBeam) {
                     if (startCr == endCr && startCr->isChord()) {
                         bool isBeamletBefore = calcIsBeamletBefore(item,
                                                                    toChord(startCr),
@@ -1086,7 +1089,7 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
                                                                    previousBreak16,
                                                                    previousBreak32);
                         createBeamletSegment(item, ctx, toChord(startCr), isBeamletBefore, level);
-                    } else {
+                    } else if (startCr != endCr) {
                         createBeamSegment(item, startCr, endCr, level, frenchStyleBeams);
                     }
                 }
