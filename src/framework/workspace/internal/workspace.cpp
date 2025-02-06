@@ -106,11 +106,14 @@ void Workspace::reset()
     if (!isEdited() || !isBuiltin()) {
         return;
     }
+
+    io::path_t builtinWorkspacePath = this->builtinWorkspacePath();
+
     //! remove current file
     fileSystem()->remove(filePath());
 
     //! redirect to builtin workspace file
-    m_file = std::make_shared<WorkspaceFile>(builtinWorkspacePath());
+    m_file = std::make_shared<WorkspaceFile>(builtinWorkspacePath);
 
     reload();
 }

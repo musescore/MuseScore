@@ -143,10 +143,10 @@ int WorkspaceListModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> WorkspaceListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
-        {RoleName,       NAME_KEY.toUtf8() },
-        {RoleIsSelected, IS_SELECTED_KEY.toUtf8() },
-        {RoleIsBuiltin,  IS_BUILTIN_KEY.toUtf8() },
-        {RoleIsEdited,   IS_EDITED_KEY.toUtf8() }
+        { RoleName,       NAME_KEY.toUtf8() },
+        { RoleIsSelected, IS_SELECTED_KEY.toUtf8() },
+        { RoleIsBuiltin,  IS_BUILTIN_KEY.toUtf8() },
+        { RoleIsEdited,   IS_EDITED_KEY.toUtf8() }
     };
 
     return roles;
@@ -215,6 +215,19 @@ void WorkspaceListModel::resetWorkspace(int workspaceIndex)
         return;
     }
 
+    int resetButton = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+    std::string question = muse::trc("workspace",
+                                     "This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?");
+
+    IInteractive::Button btn = interactive()->warning(muse::trc("workspace", "Resetting workspaces"), question, {
+        IInteractive::ButtonData(resetButton, muse::trc("workspace", "Reset workspace"), true, false, IInteractive::ButtonRole::AcceptRole),
+        interactive()->buttonData(IInteractive::Button::Cancel)
+    }).standardButton();
+
+    if (static_cast<int>(btn) != resetButton) {
+        return;
+    }
+
     IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
     workspace->reset();
 
@@ -237,7 +250,7 @@ QString WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& n
     workspace->setName(newName.toStdString());
 
     QModelIndex modelIndex = index(workspaceIndex);
-    emit dataChanged(modelIndex, modelIndex, {RoleName});
+    emit dataChanged(modelIndex, modelIndex, { RoleName });
 
     return {};
 }
