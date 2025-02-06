@@ -92,7 +92,9 @@ void Drumset::save(XmlWriter& xml) const
         xml.tag("voice", voice(i));
         xml.tag("name", name(i));
         xml.tag("stem", int(stemDirection(i)));
-        xml.tag("shortcut", shortcut(i));
+        if (!shortcut(i).empty()) {
+            xml.tag("shortcut", shortcut(i));
+        }
         std::list<DrumInstrumentVariant> vs = variants(i);
         if (!vs.empty()) {
             xml.startElement("variants");

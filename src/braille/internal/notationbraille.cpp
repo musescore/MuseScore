@@ -548,7 +548,14 @@ void NotationBraille::setKeys(const QString& sequence)
             Duration duration = Duration(d);
             setInputNoteDuration(duration);
 
-            interaction()->noteInput()->addNote(brailleInput()->noteName(), NoteAddingMode::NextChord);
+            NoteInputParams params;
+            const int note = static_cast<int>(brailleInput()->noteName());
+            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ false, params);
+            if (!ok) {
+                return;
+            }
+
+            interaction()->noteInput()->addNote(params, NoteAddingMode::NextChord);
 
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {
@@ -603,7 +610,13 @@ void NotationBraille::setKeys(const QString& sequence)
             if (brailleInput()->accidental() != mu::notation::AccidentalType::NONE) {
                 interaction()->noteInput()->setAccidental(brailleInput()->accidental());
             }
-            interaction()->noteInput()->addNote(brailleInput()->noteName(), NoteAddingMode::CurrentChord);
+
+            NoteInputParams params;
+            const int note = static_cast<int>(brailleInput()->noteName());
+            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ true, params);
+            if (!ok) {
+                return;
+            }
 
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {

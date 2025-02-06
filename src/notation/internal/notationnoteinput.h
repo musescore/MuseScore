@@ -60,7 +60,7 @@ public:
     bool usingNoteInputMethod(NoteInputMethod method) const override;
     void setNoteInputMethod(NoteInputMethod method) override;
 
-    void addNote(NoteName noteName, NoteAddingMode addingMode) override;
+    void addNote(const NoteInputParams& params, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) override;
     void removeNote(const muse::PointF& pos) override;
@@ -76,7 +76,7 @@ public:
     void halveNoteInputDuration() override;
 
     // Used in the input-by-duration mode
-    void setInputNote(NoteName note) override;
+    void setInputNote(const NoteInputParams& params) override;
     void setInputNotes(const NoteValList& notes) override;
     void moveInputNotes(bool up, PitchMode mode) override;
 

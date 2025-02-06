@@ -114,6 +114,8 @@ void NotationActionController::init()
     registerPadNoteAction("pad-dot4", Pad::DOT4);
     registerPadNoteAction("pad-rest", Pad::REST);
 
+    registerAction("note-action", &Controller::handleNoteAction);
+
     registerNoteAction("note-c", NoteName::C);
     registerNoteAction("note-d", NoteName::D);
     registerNoteAction("note-e", NoteName::E);
@@ -758,6 +760,17 @@ void NotationActionController::toggleNoteInputInsert()
 
 void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode addingMode)
 {
+    NoteInputParams params;
+    const bool addFlag = addingMode == NoteAddingMode::CurrentChord;
+    bool ok = currentNotationScore()->resolveNoteInputParams(static_cast<int>(note), addFlag, params);
+    if (!ok) {
+        return;
+    }
+    handleNoteAction(ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode));
+}
+
+void NotationActionController::handleNoteAction(const muse::actions::ActionData& args)
+{
     TRACEFUNC;
 
     INotationNoteInputPtr noteInput = currentNotationNoteInput();
@@ -765,13 +778,20 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
         return;
     }
 
+    IF_ASSERT_FAILED(args.count() > 1) {
+        return;
+    }
+
+    const NoteInputParams params = args.arg<NoteInputParams>(0);
+    const NoteAddingMode addingMode = args.arg<NoteAddingMode>(1);
+
     if (!noteInput->isNoteInputMode()) {
         noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
     }
 
     if (addingMode == NoteAddingMode::NextChord) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
-            noteInput->setInputNote(note);
+            noteInput->setInputNote(params);
 
             if (configuration()->isPlayPreviewNotesInInputByDuration()) {
                 const NoteInputState& state = noteInput->state();
@@ -781,7 +801,7 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
         }
     }
 
-    noteInput->addNote(note, addingMode);
+    noteInput->addNote(params, addingMode);
 
     playSelectedElement();
 }

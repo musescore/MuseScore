@@ -144,6 +144,11 @@ enum class CommandType {
     ChangeScoreOrder,
 };
 
+struct NoteInputParams {
+    int step = 0;
+    int drumPitch = -1;
+};
+
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------

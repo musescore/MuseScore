@@ -422,17 +422,18 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
     notifyAboutStateChanged();
 }
 
-void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
+void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode addingMode)
 {
     TRACEFUNC;
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
     startEdit(TranslatableString("undoableAction", "Enter note"));
-    int inote = static_cast<int>(noteName);
+
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
-    score()->cmdAddPitch(editData, inote, addToUpOnCurrentChord, insertNewChord);
+    score()->cmdAddPitch(editData, params, addToUpOnCurrentChord, insertNewChord);
+
     apply();
 
     if (shouldSetupInputNote()) {
@@ -498,7 +499,7 @@ void NotationNoteInput::removeNote(const PointF& pos)
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
-void NotationNoteInput::setInputNote(NoteName note)
+void NotationNoteInput::setInputNote(const NoteInputParams& params)
 {
     TRACEFUNC;
 
@@ -506,13 +507,6 @@ void NotationNoteInput::setInputNote(NoteName note)
     IF_ASSERT_FAILED(is.isValid()) {
         return;
     }
-
-    mu::engraving::Score::NoteInputParams params;
-    bool ok = score()->resolveNoteInputParams(static_cast<int>(note), false, params);
-    if (!ok) {
-        return;
-    }
-
     const Staff* staff = is.staff();
     const Fraction tick = is.tick();
 

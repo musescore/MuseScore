@@ -803,18 +803,35 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
 {
     INotationNoteInputPtr noteInput = viewInteraction()->noteInput();
     const mu::engraving::Drumset* drumset = noteInput ? noteInput->state().drumset() : nullptr;
-    if (!drumset || event->modifiers() != Qt::NoModifier) {
+    if (!drumset) {
         return false;
     }
 
-    const QKeySequence seq(event->keyCombination());
-    const int pitchToWrite = drumset->pitchForShortcut(seq.toString());
-    if (pitchToWrite > -1) {
-        // TODO: Dispatch a note input action using this pitch
-        return true;
+    const QKeyCombination noModifiers(Qt::Key(event->key()));
+    const int pitchToWrite = drumset->pitchForShortcut(QKeySequence(noModifiers).toString());
+    if (pitchToWrite < 0) {
+        return false;
     }
 
-    return false;
+    const Qt::KeyboardModifiers mods = event->modifiers();
+    NoteAddingMode addingMode = NoteAddingMode::NextChord;
+
+    if (mods & Qt::ShiftModifier && (mods & Qt::ControlModifier || mods & Qt::MetaModifier)) {
+        addingMode = NoteAddingMode::InsertChord;
+    } else if (mods & Qt::ShiftModifier) {
+        addingMode = NoteAddingMode::CurrentChord;
+    } else if (mods & ~Qt::NoModifier) {
+        // Not a supported modifier combination...
+        return false;
+    }
+
+    NoteInputParams params;
+    params.drumPitch = pitchToWrite;
+
+    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
+    dispatcher()->dispatch("note-action", args);
+
+    return true;
 }
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
