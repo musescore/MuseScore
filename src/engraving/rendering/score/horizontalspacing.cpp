@@ -24,6 +24,7 @@
 #include "horizontalspacing.h"
 
 #include "dom/barline.h"
+#include "dom/beam.h"
 #include "dom/chord.h"
 #include "dom/engravingitem.h"
 #include "dom/glissando.h"
@@ -33,6 +34,7 @@
 #include "dom/score.h"
 #include "dom/stemslash.h"
 #include "dom/staff.h"
+#include "dom/stem.h"
 #include "dom/system.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
@@ -614,6 +616,52 @@ void HorizontalSpacing::moveRightAlignedSegments(std::vector<SegmentPosition>& p
     }
 }
 
+void HorizontalSpacing::checkCollisionsWithCrossStaffStems(const Segment* thisSeg, const Segment* nextSeg, staff_idx_t staffIdx,
+                                                           double& curMinDist)
+{
+    std::vector<ChordRest*> itemsToCheck;
+    itemsToCheck.reserve(VOICES);
+
+    for (EngravingItem* el : nextSeg->elist()) {
+        if (el && el->vStaffIdx() == staffIdx) {
+            ChordRest* cr = toChordRest(el);
+            if (cr->beam() && cr->beam()->cross()) {
+                itemsToCheck.push_back(toChordRest(el));
+            }
+        }
+    }
+
+    for (ChordRest* cr : itemsToCheck) {
+        Chord* potentialCollidingChord = nullptr;
+        for (ChordRest* beamElement : cr->beam()->elements()) {
+            if (beamElement->isChord() && beamElement->parent() == thisSeg) {
+                potentialCollidingChord = toChord(beamElement);
+                break;
+            }
+        }
+
+        if (!potentialCollidingChord || potentialCollidingChord->up() != cr->up() || !potentialCollidingChord->stem()) {
+            return;
+        }
+
+        bool checkStemCollision = (cr->up() && potentialCollidingChord->vStaffIdx() > cr->vStaffIdx())
+                                  || (!cr->up() && potentialCollidingChord->vStaffIdx() < cr->vStaffIdx());
+        if (!checkStemCollision) {
+            return;
+        }
+
+        Stem* stem = potentialCollidingChord->stem();
+        Shape prevStemShape = stem->shape().translated(stem->pos() + potentialCollidingChord->pos());
+        prevStemShape.adjust(0.0, -10000, 0.0, 10000);
+
+        const Shape& staffShape = nextSeg->staffShape(staffIdx);
+
+        double minDist = minHorizontalDistance(prevStemShape, staffShape, stem->spatium());
+
+        curMinDist = std::max(curMinDist, minDist);
+    }
+}
+
 double HorizontalSpacing::chordRestSegmentNaturalWidth(Segment* segment, HorizontalSpacingContext& ctx)
 {
     double durationStretch = computeSegmentDurationStretch(segment, segment->prev(SegmentType::ChordRest));
@@ -1152,6 +1200,10 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
             // first chordrest of a staff should clear the widest header for any staff
             // so make sure segment is as wide as it needs to be
             d = std::max(d, f->staffShape(staffIdx).right());
+        }
+
+        if (f->isChordRestType() && ns->isChordRestType()) {
+            checkCollisionsWithCrossStaffStems(f, ns, staffIdx, d);
         }
 
         ww = std::max(ww, d);

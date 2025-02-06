@@ -105,6 +105,8 @@ private:
     static double spaceLyricsAgainstBarlines(Segment* firstSeg, Segment* secondSeg, const HorizontalSpacingContext& ctx);
     static void checkLargeTimeSigAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
     static void moveRightAlignedSegments(std::vector<SegmentPosition>& placedSegments, const HorizontalSpacingContext& ctx);
+    static void checkCollisionsWithCrossStaffStems(const Segment* thisSeg, const Segment* nextSeg, staff_idx_t staffIdx,
+                                                   double& curMinDist);
 
     static double chordRestSegmentNaturalWidth(Segment* segment, HorizontalSpacingContext& ctx);
     static double computeSegmentDurationStretch(const Segment* curSeg, const Segment* prevSeg);
