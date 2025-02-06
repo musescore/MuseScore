@@ -82,19 +82,14 @@ private:
             : segment(s), xPosInSystemCoords(x) {}
     };
 
-    struct CrossBeamType
+    struct CrossBeamSpacing
     {
         bool upDown = false;
         bool downUp = false;
         bool canBeAdjusted = true;
         bool hasOpposingBeamlets = false;
-        void reset()
-        {
-            upDown = false;
-            downUp = false;
-            canBeAdjusted = true;
-            hasOpposingBeamlets = false;
-        }
+        bool preventCrossStaffKerning = false;
+        bool ensureMinStemDistance = false;
     };
 
     static void spaceMeasureGroup(const std::vector<Measure*>& measureGroup, HorizontalSpacingContext& ctx);
@@ -118,7 +113,7 @@ private:
     static bool needsCueSizeSpacing(const Segment* segment);
 
     static void applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width);
-    static CrossBeamType computeCrossBeamType(Segment* thisSeg, Segment* nextSeg);
+    static CrossBeamSpacing computeCrossBeamSpacing(Segment* thisSeg, Segment* nextSeg);
 
     static void enforceMinimumMeasureWidths(const std::vector<Measure*> measureGroup);
     static double computeMinMeasureWidth(Measure* m);

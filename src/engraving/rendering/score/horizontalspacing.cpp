@@ -725,36 +725,75 @@ bool HorizontalSpacing::needsCueSizeSpacing(const Segment* segment)
 
 void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width)
 {
-    Measure* m = thisSeg->measure();
-    CrossBeamType crossBeamType = computeCrossBeamType(thisSeg, nextSeg);
+    CrossBeamSpacing crossBeamSpacing = computeCrossBeamSpacing(thisSeg, nextSeg);
 
-    double displacement = m->score()->noteHeadWidth() - m->score()->style().styleMM(Sid::stemWidth);
-    if (crossBeamType.upDown && crossBeamType.canBeAdjusted) {
+    const Score* score = thisSeg->score();
+    const PaddingTable& paddingTable = score->paddingTable();
+    const MStyle& style = score->style();
+
+    double displacement = score->noteHeadWidth() - style.styleMM(Sid::stemWidth);
+
+    if (crossBeamSpacing.upDown && crossBeamSpacing.canBeAdjusted) {
         thisSeg->addWidthOffset(displacement);
         width += displacement;
-    } else if (crossBeamType.downUp && crossBeamType.canBeAdjusted) {
+    } else if (crossBeamSpacing.downUp && crossBeamSpacing.canBeAdjusted) {
         thisSeg->addWidthOffset(-displacement);
         width -= displacement;
     }
 
-    if (crossBeamType.upDown) {
-        if (crossBeamType.hasOpposingBeamlets) {
-            double minBeamletClearance = m->style().styleMM(Sid::beamMinLen) * 2.0
-                                         + m->score()->paddingTable().at(ElementType::BEAM).at(ElementType::BEAM);
+    if (crossBeamSpacing.upDown) {
+        if (crossBeamSpacing.hasOpposingBeamlets) {
+            double minBeamletClearance = style.styleMM(Sid::beamMinLen) * 2.0 + paddingTable.at(ElementType::BEAM).at(ElementType::BEAM);
             width = std::max(width, displacement + minBeamletClearance);
         } else {
             width = std::max(width, 2 * displacement);
         }
     }
+
+    if (crossBeamSpacing.preventCrossStaffKerning) {
+        double padding = crossBeamSpacing.ensureMinStemDistance ? paddingTable.at(ElementType::STEM).at(ElementType::STEM)
+                         : style.styleMM(Sid::minNoteDistance);
+        width = std::max(width, score->noteHeadWidth() + padding);
+    } else if (crossBeamSpacing.ensureMinStemDistance) {
+        width = std::max(width, score->paddingTable().at(ElementType::STEM).at(ElementType::STEM));
+    }
 }
 
-HorizontalSpacing::CrossBeamType HorizontalSpacing::computeCrossBeamType(Segment* thisSeg, Segment* nextSeg)
+HorizontalSpacing::CrossBeamSpacing HorizontalSpacing::computeCrossBeamSpacing(Segment* thisSeg, Segment* nextSeg)
 {
-    CrossBeamType crossBeamType;
+    CrossBeamSpacing crossBeamType;
 
     if (!thisSeg->isChordRestType() || !nextSeg || !nextSeg->isChordRestType()) {
         return crossBeamType;
     }
+
+    bool preventCrossStaffKerning = false;
+    bool ensureMinStemDistance = false;
+    for (EngravingItem* e : thisSeg->elist()) {
+        if (!e || !e->isChord() || !e->visible() || !e->staff()->visible()) {
+            continue;
+        }
+
+        Chord* thisChord = toChord(e);
+        ChordRest* nextCR = toChordRest(nextSeg->element(thisChord->track()));
+        Chord* nextChord = nextCR && nextCR->isChord() ? toChord(nextCR) : nullptr;
+        if (!nextChord) {
+            continue;
+        }
+
+        int thisStaffMove = thisChord->staffMove();
+        int nextStaffMove = nextChord->staffMove();
+        if (thisStaffMove == nextStaffMove) {
+            continue;
+        }
+
+        preventCrossStaffKerning = thisStaffMove > nextStaffMove;
+        ensureMinStemDistance = (thisStaffMove > nextStaffMove && thisChord->up() && !nextChord->up())
+                                || (thisStaffMove < nextStaffMove && thisChord->up() == nextChord->up());
+    }
+
+    crossBeamType.preventCrossStaffKerning = preventCrossStaffKerning;
+    crossBeamType.ensureMinStemDistance = ensureMinStemDistance;
 
     bool upDown = false;
     bool downUp = false;
