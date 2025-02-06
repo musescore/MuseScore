@@ -99,7 +99,7 @@ private:
 
     static void spaceMeasureGroup(const std::vector<Measure*>& measureGroup, HorizontalSpacingContext& ctx);
     static double getFirstSegmentXPos(Segment* segment, HorizontalSpacingContext& ctx);
-    static std::vector<SegmentPosition> spaceSegments(const std::vector<Segment*> segList, int startSegIdx, HorizontalSpacingContext& ctx);
+    static std::vector<SegmentPosition> spaceSegments(const std::vector<Segment*>& segList, int startSegIdx, HorizontalSpacingContext& ctx);
     static bool ignoreSegmentForSpacing(const Segment* segment);
     static bool ignoreAllSegmentsForSpacing(const std::vector<SegmentPosition>& segmentPositions);
     static void spaceAgainstPreviousSegments(Segment* segment, std::vector<SegmentPosition>& prevSegPositions,

@@ -239,7 +239,7 @@ void HorizontalSpacing::spaceMeasureGroup(const std::vector<Measure*>& measureGr
     ctx.xCur = lastMeas->x() + lastMeas->width();
 }
 
-std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments(const std::vector<Segment*> segList, int startSegIdx,
+std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments(const std::vector<Segment*>& segList, int startSegIdx,
                                                                                  HorizontalSpacingContext& ctx)
 {
     std::vector<SegmentPosition> placedSegments;
