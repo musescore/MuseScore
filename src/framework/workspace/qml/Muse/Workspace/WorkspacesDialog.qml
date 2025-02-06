@@ -63,7 +63,7 @@ StyledDialogView {
             Layout.preferredHeight: childrenRect.height
 
             firstWorkspaceTitle: view.firstWorkspaceTitle
-            canRemove: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
+            canRemove: Boolean(workspacesModel.selectedWorkspace) && !workspacesModel.selectedWorkspace.isBuiltin
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 3

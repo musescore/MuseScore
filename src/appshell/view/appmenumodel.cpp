@@ -703,7 +703,7 @@ MenuItemList AppMenuModel::makeWorkspacesItems()
         item->setId(makeId(item->action().code, index++));
 
         UiAction action = item->action();
-        action.title = TranslatableString::untranslatable(String::fromStdString(workspace->title()));
+        action.title = TranslatableString::untranslatable(String::fromStdString(workspace->name()));
 
         item->setAction(action);
         item->setArgs(ActionData::make_arg1<std::string>(workspace->name()));

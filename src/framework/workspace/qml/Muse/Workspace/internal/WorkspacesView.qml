@@ -85,7 +85,11 @@ RadioButtonGroup {
     }
 
     delegate: ListItemBlank {
+        id: listItem
+
         property string title: model.name
+        property string incorrectNameWarning: ""
+        property bool isBuiltin: model.isBuiltin
 
         width: ListView.view.width
         height: 46
@@ -105,12 +109,37 @@ RadioButtonGroup {
             }
         }
 
+        function startEditName() {
+            if (model.isBuiltin) {
+                return
+            }
+
+            if (workspaceRadioButton.contentComponent !== editWorkspaceNameField) {
+                workspaceRadioButton.contentComponent = editWorkspaceNameField
+            }
+        }
+
+        function endEditName(newName) {
+            if (model.isBuiltin) {
+                return
+            }
+
+            if (workspaceRadioButton.contentComponent !== workspaceNameLabel) {
+                workspaceRadioButton.contentComponent = workspaceNameLabel
+                root.incorrectTitleWarning = ""
+                root.model.renameWorkspace(model.index, newName)
+                listItem.navigation.requestActive()
+            }
+        }
+
         RowLayout {
             anchors.fill: parent
 
             spacing: 4
 
             RoundedRadioButton {
+                id: workspaceRadioButton
+
                 leftPadding: root.leftPadding
                 Layout.fillWidth: true
 
@@ -118,13 +147,16 @@ RadioButtonGroup {
 
                 spacing: 12
 
-                text: model.name
-                font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
-
                 checked: model.isSelected
+
+                contentComponent: workspaceNameLabel
 
                 onClicked: {
                     root.model.selectWorkspace(model.index)
+                }
+
+                onDoubleClicked: {
+                    listItem.startEditName()
                 }
             }
 
@@ -143,6 +175,7 @@ RadioButtonGroup {
                 navigation.column: 2 // todo
 
                 enabled: model.isEdited
+                visible: !model.isBuiltin
 
                 onClicked: {
                     root.model.resetWorkspace(model.index)
@@ -150,9 +183,63 @@ RadioButtonGroup {
             }
         }
 
+        Component {
+            id: workspaceNameLabel
+
+
+            StyledTextLabel {
+                text: model.name
+
+                horizontalAlignment: Qt.AlignLeft
+                font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+            }
+        }
+
+        Component {
+            id: editWorkspaceNameField
+
+            RowLayout {
+                spacing: 38
+
+                TextInputField {
+                    Layout.fillWidth: true
+
+                    navigation.panel: root.navigation.panel
+                    navigation.row: root.navigation.row
+                    navigation.column: 1
+
+                    maximumLength: 40
+
+                    Component.onCompleted: {
+                        forceActiveFocus()
+                        navigation.requestActive()
+                    }
+
+                    currentText: model.name
+
+                    onTextChanged: function(newTextValue) {
+                        listItem.incorrectNameWarning = root.model.renameWorkspace(model.index, newTextValue)
+                    }
+
+                    onTextEditingFinished: function(newTextValue) {
+                        Qt.callLater(listItem.endEditName, newTextValue)
+                    }
+                }
+
+                StyledTextLabel {
+                    Layout.preferredWidth: parent.width / 3
+
+                    text: listItem.incorrectNameWarning
+
+                    horizontalAlignment: Text.AlignLeft
+                }
+            }
+        }
+
         SeparatorLine { anchors.bottom: parent.bottom }
 
         onClicked: {
+            endEditName()
             root.model.selectWorkspace(model.index)
         }
     }

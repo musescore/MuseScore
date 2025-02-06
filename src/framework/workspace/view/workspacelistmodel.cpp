@@ -32,7 +32,7 @@ using namespace muse;
 
 static const QString NAME_KEY("name");
 static const QString IS_SELECTED_KEY("isSelected");
-static const QString IS_REMOVABLE_KEY("isRemovable");
+static const QString IS_BUILTIN_KEY("isBuiltin");
 static const QString IS_EDITED_KEY("isEdited");
 static const QString INDEX_KEY("index");
 
@@ -89,8 +89,8 @@ QVariant WorkspaceListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleName:
         return workspace[NAME_KEY];
-    case RoleIsRemovable:
-        return workspace[IS_REMOVABLE_KEY];
+    case RoleIsBuiltin:
+        return workspace[IS_BUILTIN_KEY];
     case RoleIsEdited:
         return workspace[IS_EDITED_KEY];
     case RoleIsSelected:
@@ -127,7 +127,7 @@ QVariantMap WorkspaceListModel::workspaceToObject(IWorkspacePtr workspace) const
 
     QVariantMap result;
     result[NAME_KEY] = QString::fromStdString(workspaceName);
-    result[IS_REMOVABLE_KEY] = !workspace->isBuiltin();
+    result[IS_BUILTIN_KEY] = workspace->isBuiltin();
     result[IS_EDITED_KEY] = workspace->isEdited();
     result[IS_SELECTED_KEY] = workspaceName == selectedWorkspaceName;
     result[INDEX_KEY] = m_workspaces.indexOf(workspace);
@@ -143,10 +143,10 @@ int WorkspaceListModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> WorkspaceListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
-        { RoleName, NAME_KEY.toUtf8() },
-        { RoleIsSelected, IS_SELECTED_KEY.toUtf8() },
-        { RoleIsRemovable, IS_REMOVABLE_KEY.toUtf8() },
-        { RoleIsEdited, IS_EDITED_KEY.toUtf8() }
+        {RoleName,       NAME_KEY.toUtf8() },
+        {RoleIsSelected, IS_SELECTED_KEY.toUtf8() },
+        {RoleIsBuiltin,  IS_BUILTIN_KEY.toUtf8() },
+        {RoleIsEdited,   IS_EDITED_KEY.toUtf8() }
     };
 
     return roles;
@@ -220,6 +220,47 @@ void WorkspaceListModel::resetWorkspace(int workspaceIndex)
 
     QModelIndex modelIndex = index(workspaceIndex);
     emit dataChanged(modelIndex, modelIndex);
+}
+
+QString WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& newName)
+{
+    if (!isIndexValid(workspaceIndex)) {
+        return {};
+    }
+
+    Ret ret = doValidateWorkspaceName(workspaceIndex, newName);
+    if (!ret) {
+        return QString::fromStdString(ret.text());
+    }
+
+    IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
+    workspace->setName(newName.toStdString());
+
+    QModelIndex modelIndex = index(workspaceIndex);
+    emit dataChanged(modelIndex, modelIndex, {RoleName});
+
+    return {};
+}
+
+Ret WorkspaceListModel::doValidateWorkspaceName(int workspaceIndex, const QString& name) const
+{
+    if (name.isEmpty()) {
+        return false;
+    }
+
+    QString nameLower = name.toLower();
+
+    for (int i = 0; i < m_workspaces.size(); ++i) {
+        if (i == workspaceIndex) {
+            continue;
+        }
+
+        if (QString::fromStdString(m_workspaces[i]->name()).toLower() == nameLower) {
+            return make_ret(Ret::Code::UnknownError, muse::trc("workspace", "Name already exists"));
+        }
+    }
+
+    return true;
 }
 
 bool WorkspaceListModel::apply()

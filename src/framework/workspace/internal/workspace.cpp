@@ -48,9 +48,18 @@ std::string Workspace::name() const
     return io::completeBasename(m_file->filePath()).toStdString();
 }
 
-std::string Workspace::title() const
+void Workspace::setName(const std::string& name)
 {
-    return name();
+    io::path_t filePath = m_file->filePath();
+    io::path_t newPath = io::absoluteDirpath(filePath) + "/" + name + "." + io::suffix(filePath);
+
+    if (filePath == newPath) {
+        return;
+    }
+
+    fileSystem()->move(filePath, newPath);
+
+    m_file = std::make_shared<WorkspaceFile>(newPath);
 }
 
 bool Workspace::isBuiltin() const

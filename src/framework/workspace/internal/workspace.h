@@ -45,7 +45,7 @@ public:
     Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx);
 
     std::string name() const override;
-    std::string title() const override;
+    void setName(const std::string& name) override;
 
     bool isBuiltin() const override;
     bool isEdited() const override;

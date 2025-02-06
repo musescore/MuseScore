@@ -36,7 +36,7 @@ public:
     virtual ~IWorkspace() = default;
 
     virtual std::string name() const = 0;
-    virtual std::string title() const = 0;
+    virtual void setName(const std::string& name) = 0;
 
     virtual bool isBuiltin() const = 0;
     virtual bool isEdited() const = 0;
