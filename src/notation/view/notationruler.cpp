@@ -157,7 +157,7 @@ void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& poi
 
     if (type == LineType::CurrentPosition) {
         Font font(uiConfiguration()->iconsFontFamily(), Font::Type::Icon);
-        font.setPointSizeF(rect.height() * 0.7);
+        font.setPixelSize(rect.height() * 0.7);
 
         painter->setPen(color);
         painter->setFont(font);
