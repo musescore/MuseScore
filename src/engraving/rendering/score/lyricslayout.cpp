@@ -796,6 +796,7 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     const MStyle& style = item->style();
     const bool melisma = lyricsLine->isEndMelisma();
     const bool hasFollowingJump = endChordRest->hasFollowingJumpItem();
+    const bool hasPrecedingJump = endChordRest->hasPrecedingJumpItem();
 
     if (!melisma && !item->isPartialLyricsLineSegment() && !endLyrics && !hasFollowingJump) {
         return 0.0;
@@ -806,6 +807,12 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     // Full melisma or dashes at end of system
     if (!item->isSingleEndType() || dashesEndOfSystem || !lyricsLine->endElement()) {
         return system->endingXForOpenEndedLines();
+    }
+
+    // Partial dashes after a repeat
+    if (!melisma && endLyrics && hasPrecedingJump && item->isPartialLyricsLineSegment()) {
+        const double lyricsLeftEdge = endLyrics->pageX() - systemPageX + endLyrics->ldata()->bbox().left();
+        return lyricsLeftEdge - style.styleMM(Sid::lyricsDashPad);
     }
 
     // Full dashes or melisma before a repeat - possibly with a partial dash/repeat on the other side of the repeat

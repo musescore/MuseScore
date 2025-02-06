@@ -5673,8 +5673,12 @@ void NotationInteraction::navigateToNextSyllable()
     }
 
     score()->startCmd(TranslatableString("undoableAction", "Navigate to next syllable"));
-    ChordRest* cr = toChordRest(nextSegment->element(toLyricTrack));
-    Lyrics* toLyrics = cr->lyrics(verse, placement);
+    ChordRest* cr = nextSegment ? toChordRest(nextSegment->element(toLyricTrack)) : nullptr;
+    Lyrics* toLyrics = cr ? cr->lyrics(verse, placement) : nullptr;
+
+    if (!toLyrics && !cr) {
+        return;
+    }
 
     // If no lyrics in current track, check others
     if (!toLyrics) {
@@ -5712,11 +5716,28 @@ void NotationInteraction::navigateToNextSyllable()
         }
     }
 
+    PartialLyricsLine* prevPartialLyricsLine = nullptr;
+
+    for (auto sp : score()->spannerMap().findOverlapping(initialCR->tick().ticks(), initialCR->tick().ticks())) {
+        if (!sp.value->isPartialLyricsLine() || sp.value->track() != track) {
+            continue;
+        }
+        PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
+        if (partialLine->isEndMelisma() || partialLine->no() != lyrics->no() || partialLine->placement() != lyrics->placement()) {
+            continue;
+        }
+        prevPartialLyricsLine = partialLine;
+        break;
+    }
+
     bool newLyrics = (toLyrics == 0);
-    if (!toLyrics) {
-        toLyrics = Factory::createLyrics(cr);
+    if (!toLyrics || hasPrecedingRepeat) {
+        // Don't advance cursor if we are after a repeat, there is no partial dash present and we are inputting a dash
+        ChordRest* toLyricsChord = hasPrecedingRepeat && !prevPartialLyricsLine && lyrics->xmlText().empty() ? initialCR : cr;
+
+        toLyrics = Factory::createLyrics(toLyricsChord);
         toLyrics->setTrack(track);
-        toLyrics->setParent(cr);
+        toLyrics->setParent(toLyricsChord);
 
         toLyrics->setNo(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
@@ -5752,18 +5773,22 @@ void NotationInteraction::navigateToNextSyllable()
         }
         // for the same reason, it cannot have a melisma
         fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, Fraction(0, 1));
-    } else if (hasPrecedingRepeat) {
+    } else if (hasPrecedingRepeat && !prevPartialLyricsLine) {
         // No from lyrics - create incoming partial dash
         PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
         dash->setIsEndMelisma(false);
         dash->setNo(verse);
         dash->setPlacement(lyrics->placement());
         dash->setTick(initialCR->tick());
-        dash->setTicks(initialCR->ticks());
+        dash->setTicks(hasPrecedingRepeat ? Fraction(0, 1) : initialCR->ticks());
         dash->setTrack(initialCR->track());
         dash->setTrack2(initialCR->track());
 
         score()->undoAddElement(dash);
+    } else if (prevPartialLyricsLine) {
+        const Fraction tickDiff = cr->tick() - prevPartialLyricsLine->tick2();
+        prevPartialLyricsLine->undoMoveEnd(tickDiff);
+        prevPartialLyricsLine->triggerLayout();
     }
 
     if (newLyrics) {

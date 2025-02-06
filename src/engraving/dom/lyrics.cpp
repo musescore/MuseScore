@@ -329,8 +329,15 @@ void Lyrics::adjustPrevious()
 
 void Lyrics::setNeedRemoveInvalidSegments()
 {
-    // Allow "invalid" segments when there is a partial lyric line in a following repeat segment
-    if (m_separator && measure() && m_separator->tick2() == measure()->endTick() && repeatHasPartialLyricLine(measure())) {
+    // Allow "invalid" segments when there is a following repeat item
+
+    const Measure* meas = measure();
+    const ChordRest* separatorEndChord = m_separator ? toChordRest(m_separator->endElement()) : nullptr;
+    const ChordRest* lastChordRest = meas ? meas->lastChordRest(track()) : nullptr;
+    const bool endChordIsLastInMeasure = separatorEndChord == lastChordRest;
+    const bool hasFollowingJump = lastChordRest ? lastChordRest->hasFollowingJumpItem() : false;
+
+    if (endChordIsLastInMeasure && hasFollowingJump) {
         return;
     }
     m_needRemoveInvalidSegments = true;
@@ -361,6 +368,19 @@ void Lyrics::removeFromScore()
         ChordRest* ecr = score()->findCR(endTick(), track());
         if (ecr) {
             ecr->setMelismaEnd(false);
+        }
+    }
+
+    if (!plainText().isEmpty()) {
+        for (auto sp : score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks())) {
+            if (!sp.value->isPartialLyricsLine() || sp.value->track() != track()) {
+                continue;
+            }
+            PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
+            if (partialLine->isEndMelisma() || partialLine->no() != no() || partialLine->placement() != placement()) {
+                continue;
+            }
+            score()->undoRemoveElement(partialLine);
         }
     }
 

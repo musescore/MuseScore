@@ -7316,12 +7316,14 @@ void Score::undoRemoveStaleTieJumpPoints()
                 continue;
             }
 
-            // Remove invalid lyrics dashes
-            for (Lyrics* lyrics : toChordRest(e)->lyrics()) {
-                LyricsLine* separator = lyrics->separator();
-                if ((lyrics->syllabic() == LyricsSyllabic::BEGIN || lyrics->syllabic() == LyricsSyllabic::MIDDLE) && separator
-                    && !separator->nextLyrics() && !separator->isEndMelisma()) {
-                    lyrics->setNeedRemoveInvalidSegments();
+            if (!toChordRest(e)->hasFollowingJumpItem()) {
+                // Remove invalid lyrics dashes
+                for (Lyrics* lyrics : toChordRest(e)->lyrics()) {
+                    LyricsLine* separator = lyrics->separator();
+                    if ((lyrics->syllabic() == LyricsSyllabic::BEGIN || lyrics->syllabic() == LyricsSyllabic::MIDDLE) && separator
+                        && !separator->nextLyrics() && !separator->isEndMelisma()) {
+                        lyrics->setNeedRemoveInvalidSegments();
+                    }
                 }
             }
 
