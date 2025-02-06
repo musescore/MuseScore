@@ -175,7 +175,7 @@ RadioButtonGroup {
                 navigation.column: 2 // todo
 
                 enabled: model.isEdited
-                visible: !model.isBuiltin
+                visible: model.isBuiltin
 
                 onClicked: {
                     root.model.resetWorkspace(model.index)

@@ -74,7 +74,7 @@ bool Workspace::isEdited() const
         return io::absoluteDirpath(filePath()) == configuration()->userWorkspacesPath();
     }
 
-    return fileSystem()->exists(originWorkspacePath());
+    return false;
 }
 
 RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
@@ -93,12 +93,8 @@ RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
 
 Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
 {
-    if (!isEdited()) {
-        if (isBuiltin()) {
-            copyBuiltinWorkspaceToUserDir();
-        } else {
-            backupWorkspace();
-        }
+    if (!isEdited() && isBuiltin()) {
+        copyBuiltinWorkspaceToUserDir();
     }
 
     m_file->setData(key, data);
@@ -107,25 +103,14 @@ Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
 
 void Workspace::reset()
 {
-    if (!isEdited()) {
+    if (!isEdited() || !isBuiltin()) {
         return;
     }
+    //! remove current file
+    fileSystem()->remove(filePath());
 
-    io::path_t originWorkspacePath = this->originWorkspacePath();
-
-    if (isBuiltin()) {
-        //! remove current file
-        fileSystem()->remove(filePath());
-
-        //! redirect to buildin workspace file
-        m_file = std::make_shared<WorkspaceFile>(originWorkspacePath);
-    } else {
-        //! origin workspace file to current workspace file
-        fileSystem()->copy(originWorkspacePath, filePath());
-
-        //! remove origin workspace file
-        fileSystem()->remove(originWorkspacePath);
-    }
+    //! redirect to builtin workspace file
+    m_file = std::make_shared<WorkspaceFile>(builtinWorkspacePath());
 
     reload();
 }
@@ -182,23 +167,6 @@ io::path_t Workspace::builtinWorkspacePath() const
     }
 
     return {};
-}
-
-io::path_t Workspace::originWorkspacePath() const
-{
-    if (isBuiltin()) {
-        return builtinWorkspacePath();
-    }
-
-    io::path_t dirPath = io::absoluteDirpath(filePath());
-
-    return io::absoluteDirpath(filePath()) + "/." + io::filename(filePath());
-}
-
-void Workspace::backupWorkspace() const
-{
-    WorkspaceFile backup(originWorkspacePath());
-    backup.save();
 }
 
 void Workspace::copyBuiltinWorkspaceToUserDir()

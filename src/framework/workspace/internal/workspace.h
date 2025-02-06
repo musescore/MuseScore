@@ -68,9 +68,7 @@ private:
     std::string fileResourceName() const;
 
     io::path_t builtinWorkspacePath() const;
-    io::path_t originWorkspacePath() const;
 
-    void backupWorkspace() const;
     void copyBuiltinWorkspaceToUserDir();
 
     std::shared_ptr<WorkspaceFile> m_file = nullptr;
