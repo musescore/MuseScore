@@ -4812,6 +4812,12 @@ void Score::cmdApplyLockToSelection()
         last = selection().endMeasureBase();
     } else {
         for (EngravingItem* el : selection().elements()) {
+            if (el->isSystemLockIndicator()) {
+                const SystemLock* lock = toSystemLockIndicator(el)->systemLock();
+                first = lock->startMB();
+                last = lock->endMB();
+                break;
+            }
             MeasureBase* mb = el->findMeasureBase();
             if (!mb) {
                 continue;
@@ -4829,7 +4835,10 @@ void Score::cmdApplyLockToSelection()
         return;
     }
 
-    if (first != last) {
+    const SystemLock* lockOnLast = systemLocks()->lockContaining(last);
+    if (lockOnLast && lockOnLast->endMB() == last) {
+        undoRemoveSystemLock(lockOnLast);
+    } else if (first != last) {
         makeIntoSystem(first, last);
     } else {
         makeIntoSystem(first->system()->first(), last);

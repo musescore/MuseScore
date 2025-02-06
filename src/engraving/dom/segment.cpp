@@ -2089,6 +2089,12 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
                 return nme;
             } else if (nme && nme->isLayoutBreak() && e->staffIdx() == 0) {
                 return nme;
+            } else if (nmb->isEndOfSystemLock()) {
+                System* system = nmb->system();
+                SystemLockIndicator* lockInd = system ? system->lockIndicators().front() : nullptr;
+                if (lockInd) {
+                    return lockInd;
+                }
             }
         }
 
@@ -2263,6 +2269,12 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                 return me;
             } else if (me && me->isLayoutBreak() && e->staffIdx() == 0) {
                 return me;
+            } else if (measure()->isEndOfSystemLock()) {
+                System* system = measure()->system();
+                SystemLockIndicator* lockInd = system ? system->lockIndicators().front() : nullptr;
+                if (lockInd) {
+                    return lockInd;
+                }
             } else if (psm != pmb) {
                 return pmb;
             }

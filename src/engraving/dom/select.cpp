@@ -420,6 +420,10 @@ MeasureBase* Selection::startMeasureBase() const
         }
     }
 
+    if (tickStart().negative()) { // Tick is not set
+        return nullptr;
+    }
+
     bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
     Fraction refTick = tickStart();
 
@@ -439,6 +443,10 @@ MeasureBase* Selection::endMeasureBase() const
         }
     }
 
+    if (tickEnd().negative()) { // Tick is not set
+        return nullptr;
+    }
+
     bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
     Fraction refTick = tickEnd() - Fraction::eps();
 
@@ -447,6 +455,11 @@ MeasureBase* Selection::endMeasureBase() const
 
 std::vector<System*> Selection::selectedSystems() const
 {
+    EngravingItem* el = element();
+    if (el && el->isSystemLockIndicator()) {
+        return { const_cast<System*>(toSystemLockIndicator(el)->system()) };
+    }
+
     const MeasureBase* startMB = startMeasureBase();
     const MeasureBase* endMB = endMeasureBase();
     if (!startMB || !endMB) {

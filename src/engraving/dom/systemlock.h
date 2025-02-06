@@ -102,6 +102,8 @@ public:
 
     char16_t iconCode() const;
 
+    String formatBarsAndBeats() const override;
+
 private:
     const SystemLock* m_systemLock = nullptr;
 };
