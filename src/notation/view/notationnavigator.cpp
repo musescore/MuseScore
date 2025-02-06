@@ -287,7 +287,7 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
         painter->translate(page->pos().toQPointF());
 
         painter->setFont(font);
-        painter->setPen(engravingConfiguration()->formattingColor().toQColor());
+        painter->setPen(engravingConfiguration()->scoreGreyColor().toQColor());
         painter->drawText(page->ldata()->bbox().toQRectF(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
 
         painter->translate(-page->pos().toQPointF());

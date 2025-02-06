@@ -841,7 +841,7 @@ void TDraw::draw(const BarLine* item, Painter* painter)
     if (s && s->isEndBarLineType() && !item->score()->printing()) {
         Measure* m = s->measure();
         if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
-            painter->setPen(item->configuration()->formattingColor());
+            painter->setPen(item->configuration()->invisibleColor());
 
             Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / SPATIUM20);
@@ -1002,15 +1002,15 @@ void TDraw::draw(const Box* item, Painter* painter)
     const bool showFrame = showHighlightedFrame || (item->score() ? item->score()->showFrames() : false);
 
     if (showFrame) {
-        double lineWidth = item->spatium() * .15;
+        double lineWidth = SPATIUM20 * .10;
         Pen pen;
         pen.setWidthF(lineWidth);
-        pen.setJoinStyle(PenJoinStyle::MiterJoin);
-        pen.setCapStyle(PenCapStyle::SquareCap);
+        pen.setJoinStyle(PenJoinStyle::RoundJoin);
+        pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setColor(showHighlightedFrame
                      ? item->configuration()->selectionColor()
                      : item->configuration()->frameColor());
-        pen.setDashPattern({ 1, 3 });
+        pen.setDashPattern({ 5, 5 });
 
         painter->setBrush(BrushStyle::NoBrush);
         painter->setPen(pen);
@@ -1191,7 +1191,7 @@ void TDraw::draw(const FiguredBass* item, Painter* painter)
     if (!item->score()->printing() && item->score()->showUnprintable()) {
         for (double len : ldata->lineLengths) {
             if (len > 0) {
-                painter->setPen(Pen(item->configuration()->frameColor(), 3));
+                painter->setPen(Pen(item->configuration()->invisibleColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }
