@@ -1097,8 +1097,6 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
                            && (ns->measure()->isFirstInSystem() || ns->measure()->prev()->isHBox())
                            && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()));
 
-    bool mustClearCollisionsOnAllStaves = ns->hasTimeSigAcrossStaves();
-
     double ww = -DBL_MAX;          // can remain negative
     double d = 0.0;
     Score* score = f->score();
@@ -1110,14 +1108,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
         d = minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor);
-        if (mustClearCollisionsOnAllStaves) {
-            for (unsigned staffIdx2 = 0; staffIdx2 < f->shapes().size(); ++staffIdx2) {
-                if (score->staff(staffIdx2) && !score->staff(staffIdx2)->show()) {
-                    continue;
-                }
-                d = std::max(d, minHorizontalDistance(fshape, ns->staffShape(staffIdx2), sp, squeezeFactor));
-            }
-        } else if (systemHeaderGap) {
+        if (systemHeaderGap) {
             // first chordrest of a staff should clear the widest header for any staff
             // so make sure segment is as wide as it needs to be
             d = std::max(d, f->staffShape(staffIdx).right());
@@ -1383,40 +1374,6 @@ double HorizontalSpacing::computeVerticalClearance(const EngravingItem* item1, c
     }
 
     return 0.2 * spatium;
-}
-
-void HorizontalSpacing::centerTimeSigIfNeeded(System* system)
-{
-    const MStyle& style = system->style();
-    if (!(style.styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES
-          && style.styleB(Sid::timeSigCenterOnBarline))) {
-        return;
-    }
-
-    for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        for (Segment& seg : measure->segments()) {
-            if (!seg.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
-                continue;
-            }
-            Segment* prevBarlineSeg = nullptr;
-            for (Segment* prevSeg = seg.prev1(); prevSeg && prevSeg->tick() == seg.tick(); prevSeg = prevSeg->prev1()) {
-                if (prevSeg->isEndBarLineType()) {
-                    prevBarlineSeg = prevSeg;
-                    break;
-                }
-            }
-            if (prevBarlineSeg && prevBarlineSeg->system() == system) {
-                for (EngravingItem* timeSig : seg.elist()) {
-                    if (!timeSig) {
-                        continue;
-                    }
-                    RectF bbox = timeSig->ldata()->bbox();
-                    timeSig->mutldata()->setPosX(-0.5 * (bbox.right() + bbox.left()));
-                }
-                seg.createShapes();
-            }
-        }
-    }
 }
 
 bool HorizontalSpacing::isSameVoiceKerningLimited(const EngravingItem* item)

@@ -85,6 +85,9 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         });
 
         if (filteredSkyline.elements().empty()) {
+            if (add && item->addToSkyline()) {
+                staffSkyline.add(shape);
+            }
             return;
         }
 
