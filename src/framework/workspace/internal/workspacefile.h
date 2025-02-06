@@ -30,8 +30,10 @@
 #include "modularity/ioc.h"
 #include "types/val.h"
 
-class MQZipReader;
-class MQZipWriter;
+namespace muse {
+class ZipReader;
+class ZipWriter;
+}
 
 namespace muse::workspace {
 class WorkspaceFile
@@ -58,13 +60,13 @@ private:
 
     struct Container
     {
-        static void write(MQZipWriter& zip, const std::vector<std::string>& paths);
+        static void write(ZipWriter& zip, const std::vector<std::string>& paths);
     };
 
     struct Meta
     {
-        static void write(MQZipWriter& zip, const std::map<std::string, Val>& meta);
-        static void read(MQZipReader& zip, std::map<std::string, Val>& meta);
+        static void write(ZipWriter& zip, const std::map<std::string, Val>& meta);
+        static void read(ZipReader& zip, std::map<std::string, Val>& meta);
     };
 
     io::path_t m_filePath;
