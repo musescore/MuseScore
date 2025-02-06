@@ -52,6 +52,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/dynamic.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
@@ -1132,6 +1133,14 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
+
+        if (m_editData.element->isDynamic()) {
+            // When the dynamic has no left grip, the right grip will have index zero, a.k.a. Grip::LEFT.
+            // TODO: refactor all code that works with Grips, so that this is not necessary
+            Dynamic* dynamic = toDynamic(m_editData.element);
+            bool isLeftGrip = dynamic->hasLeftGrip() ? m_editData.curGrip == Grip::LEFT : false;
+            addHairpinOnGripDrag(toDynamic(m_editData.element), isLeftGrip);
+        }
     } else {
         if (m_editData.element) {
             m_editData.element->editDrag(m_dragData.ed);
@@ -1144,7 +1153,11 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     score()->update();
 
     if (isGripEditStarted()) {
-        updateGripAnchorLines();
+        if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
+            updateDragAnchorLines();
+        } else {
+            updateGripAnchorLines();
+        }
     } else {
         updateDragAnchorLines();
     }
@@ -1454,12 +1467,12 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     switch (et) {
     case ElementType::TEXTLINE:
         systemStavesOnly = m_dropData.ed.dropElement->systemFlag();
-    // fall-thru
+        [[fallthrough]];
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
         systemStavesOnly = systemStavesOnly || !(m_dropData.ed.modifiers & Qt::ControlModifier);
-    // fall-thru
+        [[fallthrough]];
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::PEDAL:
@@ -1478,7 +1491,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::FSYMBOL:
     case ElementType::IMAGE:
         applyUserOffset = true;
-    // fall-thru
+        [[fallthrough]];
     case ElementType::DYNAMIC:
     case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
@@ -1559,17 +1572,21 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         resetDropElement();
         break;
     }
+
+    EngravingItem* elementToSelect = m_dropData.ed.dropElement;
     m_dropData.ed.dropElement = nullptr;
     m_dropData.ed.pos = PointF();
     m_dropData.ed.modifiers = {};
-    setDropTarget(nullptr);         // this also resets dropRectangle and dropAnchor
+
+    setDropTarget(nullptr); // this also resets dropRectangle and dropAnchor
     apply();
-    // update input cursor position (must be done after layout)
-//    if (noteEntryMode()) {
-//        moveCursor();
-//    }
+
     if (accepted) {
         notifyAboutDropChanged();
+
+        if (elementToSelect) {
+            selectAndStartEditIfNeeded(elementToSelect);
+        }
     }
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -2846,6 +2863,11 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     mu::engraving::EngravingItem* editedElement = m_editData.element;
+
+    if (editedElement && editedElement->isDynamic()) {
+        toDynamic(editedElement)->findAdjacentHairpins();
+    }
+
     int gripsCount = editedElement ? editedElement->gripsCount() : 0;
 
     if (gripsCount == 0) {
@@ -3756,6 +3778,7 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
 
     m_editData.element = element;
     m_editData.curGrip = grip;
+    m_editData.editTextualProperties = false;
 
     updateGripAnchorLines();
     m_editData.element->startEdit(m_editData);
@@ -3956,7 +3979,11 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
         if (!isShiftRelease) {
             if (isGripEditStarted()) {
-                updateGripAnchorLines();
+                if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
+                    updateDragAnchorLines();
+                } else {
+                    updateGripAnchorLines();
+                }
             } else if (isElementEditStarted() && !m_editData.editTextualProperties) {
                 updateDragAnchorLines();
             }
@@ -4493,6 +4520,38 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     startEdit(TranslatableString("undoableAction", "Add ottava"));
     score()->cmdAddOttava(type);
     apply();
+}
+
+void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic, bool isLeftGrip)
+{
+    startEdit(TranslatableString("undoableAction", "Add hairpin"));
+
+    const PointF pos = m_dragData.ed.pos;
+    Hairpin* hairpin = score()->addHairpinToDynamicOnGripDrag(dynamic, isLeftGrip, pos);
+
+    if (!hairpin) {
+        rollback();
+        return;
+    }
+
+    apply();
+
+    // Reset grip offset to zero after drawing the hairpin
+    dynamic->resetRightDragOffset();
+
+    IF_ASSERT_FAILED(!hairpin->segmentsEmpty()) {
+        return;
+    }
+
+    if (isLeftGrip) {
+        LineSegment* segment = hairpin->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::START);
+    } else {
+        LineSegment* segment = hairpin->backSegment();
+        select({ segment });
+        startEditGrip(segment, Grip::END);
+    }
 }
 
 void NotationInteraction::addHairpinsToSelection(HairpinType type)

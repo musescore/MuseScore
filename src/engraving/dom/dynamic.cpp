@@ -38,7 +38,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -532,6 +532,39 @@ TranslatableString Dynamic::subtypeUserName() const
     }
 }
 
+void Dynamic::editDrag(EditData& ed)
+{
+    const bool hasLeftGrip = this->hasLeftGrip();
+    const bool hasRightGrip = this->hasRightGrip();
+
+    // Right grip (when two grips/when single grip)
+    if ((int(ed.curGrip) == 1 && hasLeftGrip && hasRightGrip) || (int(ed.curGrip) == 0 && !hasLeftGrip && hasRightGrip)) {
+        m_rightDragOffset += ed.evtDelta.x();
+        if (m_rightDragOffset < 0) {
+            m_rightDragOffset = 0;
+        }
+        return;
+    }
+
+    // Left grip (when two grips or single grip)
+    if (int(ed.curGrip) == 0 && hasLeftGrip) {
+        m_leftDragOffset += ed.evtDelta.x();
+        if (m_leftDragOffset > 0) {
+            m_leftDragOffset = 0;
+        }
+        return;
+    }
+
+    TextBase::editDrag(ed);
+}
+
+void Dynamic::endEditDrag(EditData& ed)
+{
+    m_leftDragOffset = m_rightDragOffset = 0.0;
+
+    TextBase::endEditDrag(ed);
+}
+
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
@@ -716,4 +749,116 @@ String Dynamic::screenReaderInfo() const
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
+}
+
+//---------------------------------------------------------
+//   drawEditMode
+//---------------------------------------------------------
+
+void Dynamic::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
+{
+    if (ed.editTextualProperties) {
+        TextBase::drawEditMode(p, ed, currentViewScaling);
+    } else {
+        EngravingItem::drawEditMode(p, ed, currentViewScaling);
+    }
+}
+
+//---------------------------------------------------------
+//   hasLeftHairpin
+//---------------------------------------------------------
+
+bool Dynamic::hasLeftGrip() const
+{
+    if (segment()->tick().isZero()) {
+        return false; // Don't show the left grip for the leftmost dynamic with tick zero
+    }
+    return m_leftHairpin == nullptr;
+}
+
+//---------------------------------------------------------
+//   hasRightHairpin
+//---------------------------------------------------------
+
+bool Dynamic::hasRightGrip() const
+{
+    return m_rightHairpin == nullptr;
+}
+
+//---------------------------------------------------------
+//   findAdjacentHairpins
+//---------------------------------------------------------
+
+void Dynamic::findAdjacentHairpins()
+{
+    m_leftHairpin = nullptr;
+    m_rightHairpin = nullptr;
+
+    const Fraction tick = segment()->tick();
+    const int intTick = tick.ticks();
+
+    const auto& spanners = score()->spannerMap().findOverlapping(intTick - 1, intTick + 1);
+    for (auto i : spanners) {
+        Spanner* sp = i.value;
+        if (sp->track() == track() && sp->isHairpin()) {
+            Hairpin* hp = toHairpin(sp);
+            if (hp->tick() == tick) {
+                m_rightHairpin = hp;
+            } else if (hp->tick2() == tick) {
+                m_leftHairpin = hp;
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   gripsCount
+//---------------------------------------------------------
+
+int Dynamic::gripsCount() const
+{
+    if (empty()) {
+        return 0;
+    }
+
+    const bool hasLeftGrip = this->hasLeftGrip();
+    const bool hasRightGrip = this->hasRightGrip();
+
+    if (hasLeftGrip && hasRightGrip) {
+        return 2;
+    } else if (hasLeftGrip || hasRightGrip) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+//---------------------------------------------------------
+//   gripsPositions
+//---------------------------------------------------------
+
+std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
+{
+    const LayoutData* ldata = this->ldata();
+    const PointF pp(pagePos());
+    double md = score()->style().styleS(Sid::hairpinMinDistance).val() * spatium(); // Minimum distance between dynamic and grip
+
+    // Calculated by subtracting the y-value of the dynamic's pagePos from the y-value of hairpin's Grip::START position in HairpinSegment::gripsPositions
+    const double GRIP_VERTICAL_OFFSET = -11.408;
+
+    PointF leftOffset(-ldata->bbox().width() / 2 - md + m_leftDragOffset, GRIP_VERTICAL_OFFSET);
+    PointF rightOffset(ldata->bbox().width() / 2 + md + m_rightDragOffset, GRIP_VERTICAL_OFFSET);
+
+    const bool hasLeftGrip = this->hasLeftGrip();
+    const bool hasRightGrip = this->hasRightGrip();
+
+    if (hasLeftGrip && hasRightGrip) {
+        return { pp + leftOffset, pp + rightOffset };
+    } else if (hasLeftGrip) {
+        return { pp + leftOffset };
+    } else if (hasRightGrip) {
+        return { pp + rightOffset };
+    } else {
+        return {};
+    }
 }

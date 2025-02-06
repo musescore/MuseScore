@@ -189,6 +189,7 @@ public:
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
+    void addHairpinOnGripDrag(engraving::Dynamic* dynamic, bool isLeftGrip) override;
     void addHairpinsToSelection(HairpinType type) override;
     void putRestToSelection() override;
     void putRest(Duration duration) override;
