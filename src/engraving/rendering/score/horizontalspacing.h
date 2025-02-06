@@ -137,6 +137,7 @@ private:
     static bool isSameVoiceKerningLimited(const EngravingItem* item);
     static bool isNeverKernable(const EngravingItem* item);
     static bool isAlwaysKernable(const EngravingItem* item);
+    static bool ignoreItems(const EngravingItem* item1, const EngravingItem* item2);
 
     static KerningType doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);

@@ -1354,6 +1354,10 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
 
 KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
+    if (ignoreItems(item1, item2)) {
+        return KerningType::ALLOW_COLLISION;
+    }
+
     if (isSameVoiceKerningLimited(item1) && isSameVoiceKerningLimited(item2) && item1->track() == item2->track()) {
         return KerningType::NON_KERNING;
     }
@@ -1418,6 +1422,16 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
 bool HorizontalSpacing::isAlwaysKernable(const EngravingItem* item)
 {
     return item->isTextBase() || item->isChordLine() || item->isParenthesis();
+}
+
+bool HorizontalSpacing::ignoreItems(const EngravingItem* item1, const EngravingItem* item2)
+{
+    if (item1->isRest() && toRest(item1)->isFullMeasureRest()) {
+        // Full-measure rest must ignore cross-stave notes
+        return item1->staffIdx() != item2->staffIdx();
+    }
+
+    return false;
 }
 
 KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2)
