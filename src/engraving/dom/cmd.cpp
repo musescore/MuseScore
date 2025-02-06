@@ -2155,8 +2155,8 @@ void Score::toggleAccidental(AccidentalType at)
         m_is.setAccidentalType(at);
         m_is.setRest(false);
 
-        if (usingNoteEntryMethod(NoteEntryMethod::BY_DURATION)) {
-            applyAccidentalToInputNotes();
+        if (!m_is.notes().empty()) {
+            applyAccidentalToInputNotes(at);
         }
     } else {
         if (selection().isNone()) {
@@ -2169,23 +2169,24 @@ void Score::toggleAccidental(AccidentalType at)
     }
 }
 
-void Score::applyAccidentalToInputNotes()
+void Score::applyAccidentalToInputNotes(AccidentalType accidentalType)
 {
-    const AccidentalVal acc = Accidental::subtype2value(m_is.accidentalType());
-    const bool concertPitch = style().styleB(Sid::concertPitch);
-    NoteValList notes = m_is.notes();
+    NoteValList notes;
 
-    for (NoteVal& nval : notes) {
-        const int oldPitch = nval.pitch;
-        const int step = mu::engraving::pitch2step(oldPitch);
-        const int newTpc = mu::engraving::step2tpc(step, acc);
+    Position pos;
+    pos.segment = m_is.segment();
+    pos.staffIdx = m_is.staffIdx();
 
-        nval.pitch += static_cast<int>(acc);
+    for (const NoteVal& oldVal : m_is.notes()) {
+        pos.line = noteValToLine(oldVal, m_is.staff(), m_is.tick());
 
-        if (concertPitch) {
-            nval.tpc1 = newTpc;
+        bool error = false;
+        const NoteVal newVal = noteValForPosition(pos, accidentalType, error);
+
+        if (error) {
+            notes.push_back(oldVal);
         } else {
-            nval.tpc2 = newTpc;
+            notes.push_back(newVal);
         }
     }
 

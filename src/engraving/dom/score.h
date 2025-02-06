@@ -1107,7 +1107,7 @@ private:
 
     void updateStavesNumberForSystems();
 
-    void applyAccidentalToInputNotes();
+    void applyAccidentalToInputNotes(AccidentalType accidentalType);
 
     Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
