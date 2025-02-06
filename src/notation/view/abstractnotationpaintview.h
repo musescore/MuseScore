@@ -168,6 +168,9 @@ signals:
 protected:
     INotationPtr notation() const;
     void setNotation(INotationPtr notation);
+
+    NotationViewInputController* inputController() const;
+
     void setReadonly(bool readonly);
     void setMatrix(const muse::draw::Transform& matrix);
 
@@ -183,6 +186,8 @@ protected:
 
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
+
+    virtual void initZoomAndPosition();
 
     virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix, bool overrideZoomType);
 
