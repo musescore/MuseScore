@@ -136,6 +136,7 @@ void PopupView::init()
     m_window->init(engine, isDialog(), frameless());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_component, m_contentItem);
+    m_window->setTakeFocusOnClick(m_takeFocusOnClick);
 
     // TODO: Can't use new `connect` syntax because the IPopupWindow::aboutToClose
     // has a parameter of type QQuickCloseEvent, which is not public, so we
@@ -352,6 +353,11 @@ PopupView::Placement PopupView::placement() const
 bool PopupView::activateParentOnClose() const
 {
     return m_activateParentOnClose;
+}
+
+bool PopupView::takeFocusOnClick() const
+{
+    return m_takeFocusOnClick;
 }
 
 muse::ui::INavigationControl* PopupView::navigationParentControl() const
@@ -674,6 +680,15 @@ void PopupView::setActivateParentOnClose(bool activateParentOnClose)
 
     m_activateParentOnClose = activateParentOnClose;
     emit activateParentOnCloseChanged(m_activateParentOnClose);
+}
+
+void PopupView::setTakeFocusOnClick(bool takeFocusOnClick)
+{
+    if (m_takeFocusOnClick == takeFocusOnClick) {
+        return;
+    }
+    m_takeFocusOnClick = takeFocusOnClick;
+    emit takeFocusOnClickChanged(takeFocusOnClick);
 }
 
 QVariantMap PopupView::ret() const

@@ -38,6 +38,7 @@ StyledPopupView {
 
     showArrow: false
     openPolicies: PopupView.NoActivateFocus
+    takeFocusOnClick: false
 
     padding: 0 // The popup will "steal" mouse events if the padding overlaps with the shadow note area
     margins: 0
