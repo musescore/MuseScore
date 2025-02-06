@@ -3938,7 +3938,7 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
 //   processLines
 //---------------------------------------------------------
 
-static void processLines(System* system, std::vector<Spanner*> lines, bool align)
+static void processLines(System* system, std::vector<Spanner*> lines, bool align = false)
       {
       std::vector<SpannerSegment*> segments;
       for (Spanner* sp : lines) {
@@ -4611,7 +4611,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         }
                   }
             }
-      processLines(system, spanner, false);
+      processLines(system, spanner);
       for (auto s : spanner) {
             Slur* slur = toSlur(s);
             ChordRest* scr = s->startCR();
@@ -4621,6 +4621,20 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             if (ecr && ecr->isChord())
                   toChord(ecr)->layoutArticulations3(slur);
             }
+
+      //-------------------------------------------------------------
+      // Trills
+      //-------------------------------------------------------------
+
+      std::vector<Spanner*> trills;
+      for (auto interval : spanners) {
+            Spanner* sp = interval.value;
+            if (sp->staff() && !sp->staff()->show())
+                  continue;
+            if (sp->tick() < etick && sp->tick2() > stick && sp->isTrill())
+                  trills.push_back(sp);
+            }
+      processLines(system, trills);
 
       std::vector<Dynamic*> dynamics;
       for (Segment* s : sl) {
@@ -4695,12 +4709,12 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         voltas.push_back(sp);
                   else if (sp->isHairpin())
                         hairpins.push_back(sp);
-                  else if (!sp->isSlur() && !sp->isVolta())    // slurs are already
+                  else if (!sp->isSlur() && !sp->isVolta() && !sp->isTrill())    // slurs are already
                         spanner.push_back(sp);
                   }
             }
-      processLines(system, hairpins, false);
-      processLines(system, spanner, false);
+      processLines(system, hairpins);
+      processLines(system, spanner);
 
       //-------------------------------------------------------------
       // Fermata, TremoloBar
@@ -4717,8 +4731,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       // Ottava, Pedal
       //-------------------------------------------------------------
 
-      processLines(system, ottavas, false);
-      processLines(system, pedal,   true);
+      processLines(system, ottavas);
+      processLines(system, pedal, /*align=*/ true);
 
       //-------------------------------------------------------------
       // Lyric
@@ -4799,7 +4813,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       // layout Voltas for current system
       //-------------------------------------------------------------
 
-      processLines(system, voltas, false);
+      processLines(system, voltas);
 
       //
       // vertical align volta segments
