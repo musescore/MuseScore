@@ -265,31 +265,6 @@ void TremoloSingleChord::triggerLayout() const
     EngravingItem::triggerLayout();
 }
 
-bool TremoloSingleChord::needStartEditingAfterSelecting() const
-{
-    return false;
-}
-
-int TremoloSingleChord::gripsCount() const
-{
-    return 0;
-}
-
-Grip TremoloSingleChord::initialEditModeGrip() const
-{
-    return Grip::NO_GRIP;
-}
-
-Grip TremoloSingleChord::defaultGrip() const
-{
-    return Grip::NO_GRIP;
-}
-
-std::vector<PointF> TremoloSingleChord::gripsPositions(const EditData&) const
-{
-    return std::vector<PointF>();
-}
-
 void TremoloSingleChord::endEdit(EditData&)
 {
     UNREACHABLE;
