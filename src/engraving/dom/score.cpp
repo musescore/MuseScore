@@ -3203,7 +3203,14 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                     // Enter a rest
                     setNoteRest(m_is.segment(), m_is.track(), NoteVal(), m_is.duration().fraction());
                     m_is.moveToNextInputPos();
-                } else if (!m_is.notes().empty()) {
+                } else {
+                    if (usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+                        const EngravingItem* selectedItem = score()->selection().element();
+                        if (selectedItem && selectedItem->isNote()) {
+                            m_is.setNotes({ toNote(selectedItem)->noteVal() });
+                        }
+                    }
+
                     ChordRest* cr = m_is.cr();
                     Chord* chord = nullptr;
 
