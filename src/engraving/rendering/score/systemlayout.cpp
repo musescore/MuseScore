@@ -2910,9 +2910,7 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
         if (!shapeItem) {
             return false;
         }
-        return shapeItem == element || shapeItem->parentItem(true) == element || shapeItem->type() == element->type()
-               || shapeItem->isAccidental() || shapeItem == element->ldata()->itemSnappedBefore()
-               || shapeItem == element->ldata()->itemSnappedAfter();
+        return shapeItem->isAccidental() || Autoplace::itemsShouldIgnoreEachOther(element, shapeItem);
     });
 
     double yStaffDiff = nextStaff->y() - thisStaff->y();
