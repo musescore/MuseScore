@@ -515,22 +515,12 @@ public:
     void doUndoRemoveElement(EngravingItem*);
     bool containsElement(const EngravingItem*) const;
 
-    enum class AddToChord : unsigned char {
-        None,
-        AtPreviousPosition,
-        AtCurrentPosition,
-    };
-
-    Note* addPitch(NoteVal&, bool addToPreviousChord, InputState* externalInputState = nullptr);
-    Note* addPitch(NoteVal&, AddToChord addFlag = AddToChord::None, InputState* externalInputState = nullptr);
-
-    Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
-    NoteVal noteVal(int pitch, bool allowTransposition) const;
+    Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
     Note* addMidiPitch(int pitch, bool addFlag, bool allowTransposition);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);
-    Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
+    NoteVal noteVal(int pitch, bool allowTransposition) const;
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
@@ -1118,6 +1108,10 @@ private:
     void updateStavesNumberForSystems();
 
     void applyAccidentalToInputNotes();
+
+    Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr);
+    Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
+    Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
     int m_linkId = 0;
     MasterScore* m_masterScore = nullptr;
