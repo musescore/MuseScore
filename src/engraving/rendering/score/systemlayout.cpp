@@ -876,7 +876,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
-    processLines(system, ctx, spanner, false);
+    processLines(system, ctx, spanner);
     for (auto s : spanner) {
         Slur* slur = toSlur(s);
         ChordRest* scr = s->startCR();
@@ -888,6 +888,21 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             ChordLayout::layoutArticulations3(toChord(ecr), slur, ctx);
         }
     }
+
+    //-------------------------------------------------------------
+    // Trills
+    //-------------------------------------------------------------
+    std::vector<Spanner*> trills;
+    for (auto interval : spanners) {
+        Spanner* sp = interval.value;
+        if (sp->staff() && !sp->staff()->show()) {
+            continue;
+        }
+        if (sp->tick() < etick && sp->tick2() > stick && sp->isTrill()) {
+            trills.push_back(sp);
+        }
+    }
+    processLines(system, ctx, trills);
 
     //-------------------------------------------------------------
     // Drumline sticking
@@ -1024,12 +1039,12 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 hairpins.push_back(sp);
             } else if (sp->isGradualTempoChange()) {
                 tempoChangeLines.push_back(sp);
-            } else if (!sp->isSlur() && !sp->isVolta()) {      // slurs are already
+            } else if (!sp->isSlur() && !sp->isVolta() && !sp->isTrill()) {      // slurs are already
                 spanner.push_back(sp);
             }
         }
     }
-    processLines(system, ctx, hairpins, false);
+    processLines(system, ctx, hairpins);
 
     for (SpannerSegment* spannerSegment : system->spannerSegments()) {
         if (spannerSegment->isHairpinSegment()) {
@@ -1039,7 +1054,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     AlignmentLayout::alignItemsWithTheirSnappingChain(dynamicsExprAndHairpinsToAlign, system);
 
-    processLines(system, ctx, spanner, false);
+    processLines(system, ctx, spanner);
     for (MeasureNumber* mno : measureNumbers) {
         Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
         system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
@@ -1051,8 +1066,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(mmrr->measure()->pos() + mmrr->pos()), mmrr);
     }
 
-    processLines(system, ctx, ottavas, false);
-    processLines(system, ctx, pedal,   true);
+    processLines(system, ctx, ottavas);
+    processLines(system, ctx, pedal, /*align=*/ true);
 
     //-------------------------------------------------------------
     // Lyric
@@ -1176,7 +1191,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     // layout Voltas for current system
     //-------------------------------------------------------------
 
-    processLines(system, ctx, voltas, false);
+    processLines(system, ctx, voltas);
 
     //
     // vertical align volta segments
@@ -1237,7 +1252,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
-    processLines(system, ctx, tempoChangeLines, false);
+    processLines(system, ctx, tempoChangeLines);
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
         if (spannerSeg->isGradualTempoChangeSegment()) {
             tempoElementsToAlign.push_back(spannerSeg);
