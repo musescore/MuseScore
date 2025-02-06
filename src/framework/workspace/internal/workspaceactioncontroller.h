@@ -45,6 +45,8 @@ public:
     void init();
 
 private:
+    void prepareCurrentWorkspaceForChange();
+
     void selectWorkspace(const muse::actions::ActionData& args);
     void openConfigureWorkspacesDialog();
     void createNewWorkspace();

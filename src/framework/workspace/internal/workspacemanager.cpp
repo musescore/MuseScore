@@ -66,6 +66,11 @@ IWorkspacePtr WorkspaceManager::currentWorkspace() const
     return m_currentWorkspace;
 }
 
+void WorkspaceManager::prepareCurrentWorkspaceForChange()
+{
+    m_currentWorkspaceAboutToBeChanged.notify();
+}
+
 async::Notification WorkspaceManager::currentWorkspaceAboutToBeChanged() const
 {
     return m_currentWorkspaceAboutToBeChanged;
@@ -104,15 +109,19 @@ async::Notification WorkspaceManager::workspacesListChanged() const
     return m_workspacesListChanged;
 }
 
-IWorkspacePtr WorkspaceManager::newWorkspace(const std::string& workspaceName) const
+IWorkspacePtr WorkspaceManager:: cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const
 {
-    return doNewWorkspace(workspaceName);
+    return std::make_shared<Workspace>(makeNewWorkspacePath(newWorkspaceName), dynamic_cast<Workspace*>(workspace.get()), iocContext());
 }
 
 WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) const
 {
-    io::path_t filePath = configuration()->userWorkspacesPath() + "/" + workspaceName + WORKSPACE_EXT;
-    return std::make_shared<Workspace>(filePath, iocContext());
+    return std::make_shared<Workspace>(makeNewWorkspacePath(workspaceName), iocContext());
+}
+
+io::path_t WorkspaceManager::makeNewWorkspacePath(const std::string& workspaceName) const
+{
+    return configuration()->userWorkspacesPath() + "/" + workspaceName + WORKSPACE_EXT;
 }
 
 void WorkspaceManager::appendNewWorkspace(WorkspacePtr workspace)
@@ -154,11 +163,11 @@ Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorksp
 
 Ret WorkspaceManager::removeWorkspace(const IWorkspacePtr& workspace)
 {
-    std::string workspaceName = workspace->name();
-    if (!canRemoveWorkspace(workspaceName)) {
+    if (!canRemoveWorkspace(workspace)) {
         return make_ret(Ret::Code::Ok);
     }
 
+    std::string workspaceName = workspace->name();
     for (auto it = m_workspaces.begin(); it != m_workspaces.end(); ++it) {
         if (it->get()->name() == workspaceName) {
             Ret ret = fileSystem()->remove(it->get()->filePath());
@@ -173,9 +182,9 @@ Ret WorkspaceManager::removeWorkspace(const IWorkspacePtr& workspace)
     return make_ret(Ret::Code::Ok);
 }
 
-bool WorkspaceManager::canRemoveWorkspace(const std::string& workspaceName) const
+bool WorkspaceManager::canRemoveWorkspace(const IWorkspacePtr& workspace) const
 {
-    return workspaceName != DEFAULT_WORKSPACE_NAME;
+    return !workspace->isBuiltin();
 }
 
 Ret WorkspaceManager::addNonExistentWorkspaces(const IWorkspacePtrList& newWorkspaceList)
@@ -280,11 +289,10 @@ void WorkspaceManager::setupDefaultWorkspace()
     }
 
     ret = m_defaultWorkspace->load();
-
-//    ret = m_defaultWorkspace->save();
-//    if (!ret) {
-//        LOGE() << "failed save default workspace";
-//    }
+    if (!ret) {
+        LOGE() << ret.toString();
+        return;
+    }
 }
 
 void WorkspaceManager::setupCurrentWorkspace()
@@ -294,8 +302,6 @@ void WorkspaceManager::setupCurrentWorkspace()
         if (m_currentWorkspace->name() == workspaceName) {
             return;
         }
-
-        m_currentWorkspaceAboutToBeChanged.notify();
 
         saveCurrentWorkspace();
 

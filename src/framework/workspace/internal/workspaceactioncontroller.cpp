@@ -35,14 +35,23 @@ void WorkspaceActionController::init()
     dispatcher()->reg(this, "create-workspace", this, &WorkspaceActionController::createNewWorkspace);
 }
 
+void WorkspaceActionController::prepareCurrentWorkspaceForChange()
+{
+    manager()->prepareCurrentWorkspaceForChange();
+}
+
 void WorkspaceActionController::selectWorkspace(const ActionData& args)
 {
+    prepareCurrentWorkspaceForChange();
+
     std::string selectedWorkspace = !args.empty() ? args.arg<std::string>(0) : "";
     setCurrentWorkspaceName(selectedWorkspace);
 }
 
 void WorkspaceActionController::openConfigureWorkspacesDialog()
 {
+    prepareCurrentWorkspaceForChange();
+
     RetVal<Val> result = interactive()->open("muse://workspace/select?sync=true");
     if (!result.ret) {
         return;
@@ -54,6 +63,8 @@ void WorkspaceActionController::openConfigureWorkspacesDialog()
 
 void muse::workspace::WorkspaceActionController::createNewWorkspace()
 {
+    prepareCurrentWorkspaceForChange();
+
     IWorkspacePtrList workspaces = manager()->workspaces();
 
     QStringList workspaceNames;
@@ -76,7 +87,7 @@ void muse::workspace::WorkspaceActionController::createNewWorkspace()
         return;
     }
 
-    IWorkspacePtr newWorkspace = manager()->newWorkspace(name.toStdString());
+    IWorkspacePtr newWorkspace = manager()->cloneWorkspace(manager()->currentWorkspace(), name.toStdString());
     if (!newWorkspace) {
         return;
     }

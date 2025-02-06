@@ -43,6 +43,12 @@ Workspace::Workspace(const io::path_t& filePath, const modularity::ContextPtr& i
     });
 }
 
+Workspace::Workspace(const io::path_t& filePath, const Workspace* other, const ContextPtr& iocCtx)
+    : Workspace(filePath, iocCtx)
+{
+    m_file = std::make_shared<WorkspaceFile>(filePath, other->m_file.get());
+}
+
 std::string Workspace::name() const
 {
     return io::completeBasename(m_file->filePath()).toStdString();
@@ -57,9 +63,15 @@ void Workspace::setName(const std::string& name)
         return;
     }
 
+    Ret ret = doSave();
+    if (!ret) {
+        LOGE() << "Failed to save workspace, error: " << ret.toString();
+    }
+
     fileSystem()->move(filePath, newPath);
 
     m_file = std::make_shared<WorkspaceFile>(newPath);
+    load();
 }
 
 bool Workspace::isBuiltin() const
@@ -93,10 +105,6 @@ RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
 
 Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
 {
-    if (!isEdited() && isBuiltin()) {
-        copyBuiltinWorkspaceToUserDir();
-    }
-
     m_file->setData(key, data);
     return make_ret(Ret::Code::Ok);
 }
@@ -141,6 +149,15 @@ Ret Workspace::load()
 
 Ret Workspace::save()
 {
+    if (isBuiltin()) {
+        copyBuiltinWorkspaceToUserDir();
+    }
+
+    return doSave();
+}
+
+Ret Workspace::doSave()
+{
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider.get(), fileResourceName());
     m_file->setMeta("app_version", Val(application()->version().toStdString()));
     return m_file->save();
@@ -174,6 +191,15 @@ io::path_t Workspace::builtinWorkspacePath() const
 
 void Workspace::copyBuiltinWorkspaceToUserDir()
 {
-    m_file = std::make_shared<WorkspaceFile>(configuration()->userWorkspacesPath() + "/" + io::filename(filePath()));
-    m_file->save();
+    Ret ret = doSave();
+    if (!ret) {
+        LOGE() << "Failed to copy builtin workspace, error: " << ret.toString();
+    }
+
+    io::path_t userFilePath = configuration()->userWorkspacesPath() + "/" + io::filename(filePath());
+
+    fileSystem()->copy(m_file->filePath(), userFilePath);
+
+    m_file = std::make_shared<WorkspaceFile>(userFilePath);
+    load();
 }

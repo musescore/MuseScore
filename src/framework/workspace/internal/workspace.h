@@ -43,6 +43,7 @@ class Workspace : public IWorkspace, public Injectable, public async::Asyncable
 
 public:
     Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx);
+    Workspace(const io::path_t& filePath, const Workspace* other, const modularity::ContextPtr& iocCtx);
 
     std::string name() const override;
     void setName(const std::string& name) override;
@@ -64,6 +65,8 @@ public:
 
 private:
     void reload();
+
+    Ret doSave();
 
     std::string fileResourceName() const;
 

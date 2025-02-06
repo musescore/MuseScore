@@ -174,7 +174,10 @@ void WorkspaceListModel::createNewWorkspace()
         return;
     }
 
-    IWorkspacePtr newWorkspace = workspacesManager()->newWorkspace(name.toStdString());
+    IWorkspacePtr newWorkspace = workspacesManager()->cloneWorkspace(m_selectedWorkspace, name.toStdString());
+    if (!newWorkspace) {
+        return;
+    }
 
     int newWorkspaceIndex = m_workspaces.size();
 

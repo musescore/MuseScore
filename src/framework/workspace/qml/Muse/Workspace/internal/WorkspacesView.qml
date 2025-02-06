@@ -188,7 +188,7 @@ RadioButtonGroup {
 
 
             StyledTextLabel {
-                text: model.name
+                text: model.name + (model.isEdited ? " (%1)".arg(qsTrc("workspace", "Edited")) : "")
 
                 horizontalAlignment: Qt.AlignLeft
                 font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont

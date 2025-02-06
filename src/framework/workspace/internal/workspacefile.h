@@ -40,6 +40,7 @@ class WorkspaceFile
 
 public:
     WorkspaceFile(const io::path_t& filePath);
+    WorkspaceFile(const io::path_t& filePath, const WorkspaceFile* other);
 
     io::path_t filePath() const;
 

@@ -48,6 +48,7 @@ public:
     IWorkspacePtr defaultWorkspace() const override;
 
     IWorkspacePtr currentWorkspace() const override;
+    void prepareCurrentWorkspaceForChange() override;
     async::Notification currentWorkspaceAboutToBeChanged() const override;
     async::Notification currentWorkspaceChanged() const override;
 
@@ -55,7 +56,7 @@ public:
     Ret setWorkspaces(const IWorkspacePtrList& workspaces) override;
     async::Notification workspacesListChanged() const override;
 
-    IWorkspacePtr newWorkspace(const std::string& workspaceName) const override;
+    IWorkspacePtr cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const override;
 
 private:
     void load();
@@ -63,6 +64,7 @@ private:
     io::paths_t findWorkspaceFiles() const;
 
     WorkspacePtr doNewWorkspace(const std::string& workspaceName) const;
+    io::path_t makeNewWorkspacePath(const std::string& workspaceName) const;
 
     void appendNewWorkspace(WorkspacePtr workspace);
     void setupConnectionsToNewWorkspace(const IWorkspacePtr workspace);
@@ -73,7 +75,7 @@ private:
 
     Ret removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList);
     Ret removeWorkspace(const IWorkspacePtr& workspace);
-    bool canRemoveWorkspace(const std::string& workspaceName) const;
+    bool canRemoveWorkspace(const IWorkspacePtr& workspace) const;
 
     Ret addNonExistentWorkspaces(const IWorkspacePtrList& newWorkspaceList);
     Ret addWorkspace(IWorkspacePtr workspace);

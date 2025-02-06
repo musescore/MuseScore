@@ -42,6 +42,13 @@ WorkspaceFile::WorkspaceFile(const io::path_t& filePath)
     : m_filePath(filePath)
 {}
 
+WorkspaceFile::WorkspaceFile(const io::path_t& filePath, const WorkspaceFile* other)
+    : WorkspaceFile(filePath)
+{
+    m_meta = other->m_meta;
+    m_data = other->m_data;
+}
+
 io::path_t WorkspaceFile::filePath() const
 {
     return m_filePath;

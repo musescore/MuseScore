@@ -41,6 +41,7 @@ public:
 
     //! NOTE Current selected by a user, writable, optionally managed
     virtual IWorkspacePtr currentWorkspace() const = 0;
+    virtual void prepareCurrentWorkspaceForChange() = 0;
     virtual async::Notification currentWorkspaceAboutToBeChanged() const = 0;
     virtual async::Notification currentWorkspaceChanged() const = 0;
 
@@ -48,7 +49,7 @@ public:
     virtual Ret setWorkspaces(const IWorkspacePtrList& workspaces) = 0;
     virtual async::Notification workspacesListChanged() const = 0;
 
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
+    virtual IWorkspacePtr cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const = 0;
 };
 }
 
