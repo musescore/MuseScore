@@ -52,6 +52,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacesmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacesmenumodel.h
     )
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)

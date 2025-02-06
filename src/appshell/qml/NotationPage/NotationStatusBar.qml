@@ -110,6 +110,9 @@ Item {
             Layout.preferredHeight: 28
 
             text: model.currentWorkspaceItem.title
+            icon: IconCode.WORKSPACE
+            orientation: Qt.Horizontal
+
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
@@ -117,7 +120,15 @@ Item {
             navigation.order: 1
 
             onClicked: {
-                Qt.callLater(model.selectWorkspace)
+                menuLoader.toggleOpened(model.currentWorkspaceItem.subitems)
+            }
+
+            StyledMenuLoader {
+                id: menuLoader
+
+                onHandleMenuItem: function(itemId) {
+                    Qt.callLater(model.handleWorkspacesMenuItem, itemId)
+                }
             }
         }
 
