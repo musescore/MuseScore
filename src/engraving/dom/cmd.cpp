@@ -1068,7 +1068,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     assert(segment->segmentType() == SegmentType::ChordRest);
     InputState& is = externalInputState ? (*externalInputState) : m_is;
 
-    bool isRest   = nval.pitch == -1;
+    bool isRest   = nval.isRest();
     Fraction tick = segment->tick();
     EngravingItem* nr   = nullptr;
     Tie* tie      = nullptr;

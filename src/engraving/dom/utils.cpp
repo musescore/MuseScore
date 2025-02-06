@@ -1143,6 +1143,10 @@ int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
         }
     }
 
+    if (nval.isRest()) {
+        return staff->middleLine(tick);
+    }
+
     const bool concertPitch = staff->concertPitch();
     const int pitchOffset = concertPitch ? 0 : staff->part()->instrument(tick)->transpose().chromatic;
     const int epitch = nval.pitch - pitchOffset;
