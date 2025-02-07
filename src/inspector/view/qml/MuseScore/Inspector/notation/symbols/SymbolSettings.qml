@@ -80,7 +80,7 @@ Column {
             navigationRowStart: root.navigationRowStart + 1
 
             titleText: qsTrc("inspector", "Rotation")
-            measureUnitsSymbol: qsTrc("global", "°")
+            measureUnitsSymbol: "°"
             propertyItem: root.model ? root.model.symAngle : null
 
             decimals: 0
