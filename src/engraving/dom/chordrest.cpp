@@ -1396,7 +1396,7 @@ bool ChordRest::hasPrecedingJumpItem() const
     // Voltas
     auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
     for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick()) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick() || toVolta(spanner.value)->isFirstVolta()) {
             continue;
         }
 

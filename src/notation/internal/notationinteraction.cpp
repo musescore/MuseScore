@@ -5698,6 +5698,10 @@ void NotationInteraction::navigateToNextSyllable()
         }
     }
 
+    // This will be a partial dash at the start of a measure after a repeat
+    // We don't want toLyrics
+    toLyrics = hasPrecedingRepeat && !fromLyrics ? nullptr : toLyrics;
+
     // Make sure we end up with either the cr of toLyrics or cr on correct track
     cr = !toLyrics ? toChordRest(nextSegment->element(track)) : cr;
 
@@ -6429,7 +6433,7 @@ void NotationInteraction::addMelisma()
         }
     }
 
-    if (segmentsAreAdjacentInRepeatStructure(segment, nextSegment)) {
+    if (!segmentsAreAdjacentInRepeatStructure(segment, nextSegment)) {
         nextSegment = nullptr;
     }
 

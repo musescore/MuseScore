@@ -810,9 +810,15 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     }
 
     // Partial dashes after a repeat
-    if (!melisma && endLyrics && hasPrecedingJump && item->isPartialLyricsLineSegment()) {
-        const double lyricsLeftEdge = endLyrics->pageX() - systemPageX + endLyrics->ldata()->bbox().left();
-        return lyricsLeftEdge - style.styleMM(Sid::lyricsDashPad);
+    if (!melisma && hasPrecedingJump && item->isPartialLyricsLineSegment()) {
+        if (endLyrics) {
+            const double lyricsLeftEdge = endLyrics->pageX() - systemPageX + endLyrics->ldata()->bbox().left();
+            return lyricsLeftEdge - style.styleMM(Sid::lyricsDashPad);
+        } else if (endChordRest->isChord()) {
+            const Chord* endChord = toChord(endChordRest);
+            const Note* note = endChord->up() ? endChord->downNote() : endChord->upNote();
+            return note->pageX() - systemPageX + note->headWidth();
+        }
     }
 
     // Full dashes or melisma before a repeat - possibly with a partial dash/repeat on the other side of the repeat
