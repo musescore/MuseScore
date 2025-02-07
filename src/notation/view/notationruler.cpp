@@ -73,7 +73,7 @@ void NotationRuler::paint(Painter* painter, const NoteInputState& state)
         lineToSegment[line] = &segment;
     }
 
-    const size_t lineCount = timeSig->denominator() * 2;
+    const size_t lineCount = timeSig->numerator() * 2;
     const double spatium = staff->score()->style().spatium();
     const double aboveStaffSpacing = spatium * 2;
     const double lineY = measurePos.y() + sysStaff->y() - aboveStaffSpacing;
