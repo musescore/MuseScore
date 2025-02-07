@@ -372,9 +372,12 @@ bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)
 void PercussionPanelModel::onPadTriggered(int pitch, const PercussionPanelPadModel::PadAction& action)
 {
     switch (currentPanelMode()) {
-    case PanelMode::Mode::EDIT_LAYOUT: return;
-    case PanelMode::Mode::WRITE: writePitch(pitch, WRITE_ACTION_MAP.at(action)); // fall through
-    case PanelMode::Mode::SOUND_PREVIEW: playPitch(pitch);
+    case PanelMode::Mode::WRITE:
+        writePitch(pitch, WRITE_ACTION_MAP.at(action));
+        break;
+    case PanelMode::Mode::SOUND_PREVIEW:
+        playPitch(pitch);
+        break;
     default: break;
     }
 }
