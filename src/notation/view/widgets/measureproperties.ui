@@ -115,7 +115,7 @@
           <item row="0" column="3">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>/</string>
+             <string notr="true">/</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -151,7 +151,7 @@
           <item row="1" column="3">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>/</string>
+             <string notr="true">/</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
