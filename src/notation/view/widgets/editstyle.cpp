@@ -924,7 +924,7 @@ EditStyle::EditStyle(QWidget* parent)
     groupBox_noteline->layout()->addWidget(noteLineSection.widget);
 
     // ====================================================
-    // TIME SIG PAGE (QML)
+    // CLEF, KEY & TIME SIG PAGE (QML)
     // ====================================================
 
     auto clefKeyTimeSigPage = createQmlWidget(

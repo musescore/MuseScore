@@ -256,6 +256,7 @@ public:
 
     static void write(const Page* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PalmMute* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const Parenthesis* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Part* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PartialTie* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& ctx);

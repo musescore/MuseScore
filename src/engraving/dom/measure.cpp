@@ -839,10 +839,11 @@ void Measure::add(EngravingItem* e)
     }
     break;
     case ElementType::JUMP:
-        setRepeatJump(true);
-    // fall through
-
     case ElementType::MARKER:
+        if (e && (e->isJump() || muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()))) {
+            // "To coda" markings act like jumps
+            setRepeatJump(true);
+        }
         el().push_back(e);
         break;
 
@@ -1798,7 +1799,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce | SegmentType::KeySigAnnounce)) {
+                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType)) {
                     seg->setRtick(nl);
                 }
             }
@@ -1976,7 +1977,7 @@ bool Measure::isFinalMeasureOfSection() const
     return false;
 }
 
-LayoutBreak* Measure::sectionBreakElement(bool includeNextFrames)
+LayoutBreak* Measure::sectionBreakElement(bool includeNextFrames) const
 {
     const MeasureBase* mb = static_cast<const MeasureBase*>(this);
 
@@ -3458,6 +3459,22 @@ void Measure::checkTrailer()
             setTrailer(seg->trailer());
             break;
         }
+    }
+}
+
+void Measure::checkEndOfMeasureChange()
+{
+    bool found = false;
+    for (Segment* seg = last(); seg != first(); seg = seg->prev()) {
+        if (seg->enabled() && seg->endOfMeasureChange()) {
+            setEndOfMeasureChange(seg->endOfMeasureChange());
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        setEndOfMeasureChange(false);
     }
 }
 

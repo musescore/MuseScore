@@ -110,6 +110,7 @@
 
 #include "dom/page.h"
 #include "dom/palmmute.h"
+#include "dom/parenthesis.h"
 #include "dom/part.h"
 #include "dom/partialtie.h"
 #include "dom/pedal.h"
@@ -282,6 +283,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::PAGE:         write(item_cast<const Page*>(item), xml, ctx);
         break;
     case ElementType::PALM_MUTE:    write(item_cast<const PalmMute*>(item), xml, ctx);
+        break;
+    case ElementType::PARENTHESIS:    write(item_cast<const Parenthesis*>(item), xml, ctx);
         break;
     case ElementType::PARTIAL_LYRICSLINE:  write(item_cast<const PartialLyricsLine*>(item), xml, ctx);
         break;
@@ -1121,6 +1124,7 @@ void TWrite::write(const Clef* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::CLEF_TYPE_TRANSPOSING);
     writeProperty(item, xml, Pid::CLEF_TO_BARLINE_POS);
     writeProperty(item, xml, Pid::IS_HEADER);
+    writeProperty(item, xml, Pid::IS_COURTESY);
     if (!item->showCourtesy()) {
         xml.tag("showCourtesyClef", item->showCourtesy());
     }
@@ -2117,6 +2121,7 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
     if (!item->showCourtesy()) {
         xml.tag("showCourtesySig", item->showCourtesy());
     }
+    writeProperty(item, xml, Pid::IS_COURTESY);
     if (item->forInstrumentChange()) {
         xml.tag("forInstrumentChange", true);
     }
@@ -2386,6 +2391,18 @@ void TWrite::write(const PalmMute* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const Parenthesis* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::HORIZONTAL_DIRECTION);
+    writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
 
@@ -3085,6 +3102,7 @@ void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
         write(&item->groups(), xml, ctx);
     }
     writeProperty(item, xml, Pid::SHOW_COURTESY);
+    writeProperty(item, xml, Pid::IS_COURTESY);
     writeProperty(item, xml, Pid::SCALE);
 
     xml.endElement();

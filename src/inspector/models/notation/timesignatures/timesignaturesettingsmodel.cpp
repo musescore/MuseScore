@@ -21,8 +21,9 @@
  */
 #include "timesignaturesettingsmodel.h"
 
+#include "dom/layoutbreak.h"
+#include "dom/measure.h"
 #include "dataformatter.h"
-#include "log.h"
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -75,6 +76,26 @@ void TimeSignatureSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_shouldShowCourtesy);
+
+    bool enableCourtesy = true;
+
+    for (const mu::engraving::EngravingItem* element : m_elementList) {
+        if (element->generated()) {
+            m_isGenerated = true;
+        }
+
+        const engraving::Measure* measure = element->findMeasure();
+        const engraving::Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
+        const engraving::LayoutBreak* sectionBreak = prevMeasure ? prevMeasure->sectionBreakElement() : nullptr;
+        if (sectionBreak && !sectionBreak->showCourtesy()) {
+            enableCourtesy = false;
+            break;
+        }
+    }
+
+    m_shouldShowCourtesy->setIsEnabled(!m_isGenerated && enableCourtesy);
+    m_horizontalScale->setIsEnabled(!m_isGenerated);
+    m_verticalScale->setIsEnabled(!m_isGenerated);
 }
 
 void TimeSignatureSettingsModel::resetProperties()

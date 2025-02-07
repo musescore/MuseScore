@@ -93,6 +93,7 @@ enum class Pid {
     ARTICULATION_ANCHOR,
 
     DIRECTION,
+    HORIZONTAL_DIRECTION,
     STEM_DIRECTION,
     NO_STEM,
     SLUR_DIRECTION,
@@ -186,7 +187,7 @@ enum class Pid {
     VELO_CHANGE_METHOD,
     VELO_CHANGE_SPEED,
     DYNAMIC_TYPE,
-//100
+
     SINGLE_NOTE_DYNAMICS,
     CHANGE_METHOD,
     PLACEMENT,                // Goes with P_TYPE::PLACEMENT
@@ -310,7 +311,7 @@ enum class Pid {
 
     BRACKET_COLUMN,
     INAME_LAYOUT_POSITION,
-//200
+
     TEXT_STYLE,
 
     FONT_FACE,
@@ -455,6 +456,8 @@ enum class Pid {
     SYMBOL_ANGLE,
 
     APPLY_TO_ALL_STAVES,
+
+    IS_COURTESY,
 
     END
 };

@@ -401,27 +401,39 @@ enum class OffsetType : char {
 
 enum class SegmentType {
     ///.\{
-    Invalid            = 0x0,
-    BeginBarLine       = 0x1,
-    HeaderClef         = 0x2,
-    KeySig             = 0x4,
-    Ambitus            = 0x8,
-    TimeSig            = 0x10,
-    StartRepeatBarLine = 0x20,
-    Clef               = 0x40,
-    BarLine            = 0x80,
-    Breath             = 0x100,
+    Invalid               = 0x0,
+    BeginBarLine          = 0x1,
+    HeaderClef            = 0x2,
+    KeySig                = 0x4,
+    Ambitus               = 0x8,
+    TimeSig               = 0x10,
+    StartRepeatBarLine    = 0x20,
+    ClefStartRepeatAnnounce    = 0x40,
+    KeySigStartRepeatAnnounce  = 0x80,
+    TimeSigStartRepeatAnnounce = 0x100,
+    Clef                  = 0x200,
+    BarLine               = 0x400,
+    Breath                = 0x800,
     //--
-    TimeTick           = 0x200,
-    ChordRest          = 0x400,
+    TimeTick              = 0x1000,
+    ChordRest             = 0x2000,
     //--
-    EndBarLine         = 0x800,
-    KeySigAnnounce     = 0x1000,
-    TimeSigAnnounce    = 0x2000,
+    ClefRepeatAnnounce    = 0x4000,
+    KeySigRepeatAnnounce  = 0x8000,
+    TimeSigRepeatAnnounce = 0x10000,
     //--
-    All                = -1,   ///< Includes all barline types
+    EndBarLine            = 0x20000,
+    KeySigAnnounce        = 0x40000,
+    TimeSigAnnounce       = 0x80000,
+    //--
+    All                   = -1,   ///< Includes all barline types
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
-    BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
+    BarLineType           = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
+    CourtesyTimeSigType   = TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
+    CourtesyKeySigType    = KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
+    TimeSigType           = TimeSig | CourtesyTimeSigType,
+    KeySigType            = KeySig | CourtesyKeySigType,
+    ClefType              = Clef | HeaderClef | ClefRepeatAnnounce | ClefStartRepeatAnnounce,
     ///\}
 };
 

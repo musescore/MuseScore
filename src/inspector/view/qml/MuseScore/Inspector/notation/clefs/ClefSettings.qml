@@ -50,7 +50,9 @@ Column {
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart
 
-        text: qsTrc("inspector", "Show courtesy clef on previous system")
+        enabled: root.model ? root.model.isCourtesyClefAvailable : false
+
+        text: qsTrc("inspector", "Show courtesy clef")
         propertyItem: root.model ? root.model.shouldShowCourtesy : null
     }
 

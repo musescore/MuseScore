@@ -113,12 +113,15 @@ enum class ElementFlag {
     NO_BREAK               = 0x00100000,
     HEADER                 = 0x00200000,
     TRAILER                = 0x00400000,      // also used in segment
-    KEYSIG                 = 0x00800000,
+    COURTESY_KEYSIG        = 0x00800000,
+    COURTESY_TIMESIG       = 0x01000000,
+    COURTESY_CLEF          = 0x02000000,
 
     // segment flags
-    ENABLED                = 0x01000000,      // used for segments
-    EMPTY                  = 0x02000000,
-    WRITTEN                = 0x04000000,
+    ENABLED                = 0x04000000,      // used for segments
+    EMPTY                  = 0x08000000,
+    WRITTEN                = 0x10000000,
+    END_OF_MEASURE_CHANGE         = 0x20000000
 };
 
 typedef muse::Flags<ElementFlag> ElementFlags;

@@ -46,6 +46,7 @@
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/part.h"
+#include "dom/parenthesis.h"
 #include "dom/pedal.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -170,6 +171,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
             }
 
+            MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
+
             MeasureLayout::updateGraceNotes(m, ctx);
 
             curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
@@ -210,11 +213,13 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure() && ctx.state().prevMeasure()->system() == system) {
             Measure* m = toMeasure(ctx.mutState().prevMeasure());
 
+            MeasureLayout::createEndBarLines(m, false, ctx);
+
             if (m->trailer()) {
                 MeasureLayout::removeSystemTrailer(m);
             }
 
-            MeasureLayout::createEndBarLines(m, false, ctx);
+            MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
 
             MeasureLayout::updateGraceNotes(m, ctx);
 
@@ -311,6 +316,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                     } else {
                         MeasureLayout::removeSystemTrailer(m);
                     }
+
+                    MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
+
                     prevMeasureState.restoreMeasure();
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
@@ -610,7 +618,7 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
 
     for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (Segment& seg : measure->segments()) {
-            if (!seg.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+            if (!seg.isType(SegmentType::TimeSigType)) {
                 continue;
             }
 
@@ -773,7 +781,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         RectF r = TLayout::layoutRect(bl, ctx);
                         skyline.add(r.translated(bl->pos() + p + bl->staffOffset()), bl);
                     }
-                } else if (s.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+                } else if (s.isType(SegmentType::TimeSigType)) {
                     TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
                     if (ts && ts->addToSkyline() && ts->showOnThisStaff()) {
                         TimeSigPlacement timeSigPlacement = ts->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
@@ -1371,6 +1379,27 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     //-------------------------------------------------------------
+    // Parenthesis
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isParenthesis()) {
+                if (e->addToSkyline()) {
+                    EngravingItem* parent = e->parentItem(true);
+                    IF_ASSERT_FAILED(parent && parent->isSegment()) {
+                        continue;
+                    }
+                    staff_idx_t si = e->staffIdx();
+                    Segment* s = toSegment(parent);
+                    Measure* m = s->measure();
+                    system->staff(si)->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos() + e->staffOffset()));
+                }
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
     // TimeSig above staff
     //-------------------------------------------------------------
 
@@ -1380,7 +1409,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 continue;
             }
             for (Segment& s : toMeasure(mb)->segments()) {
-                if (s.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+                if (s.isType(SegmentType::TimeSigType)) {
                     for (EngravingItem* timeSig : s.elist()) {
                         if (timeSig && toTimeSig(timeSig)->showOnThisStaff()) {
                             Autoplace::autoplaceSegmentElement(timeSig, timeSig->mutldata());
@@ -2753,7 +2782,7 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
             continue;
         }
         for (Segment& segment : toMeasure(mb)->segments()) {
-            if (!segment.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+            if (!segment.isType(SegmentType::TimeSigType)) {
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {

@@ -51,7 +51,20 @@ ClefKeyTimeSigPageModel::ClefKeyTimeSigPageModel(QObject* parent)
                                          StyleId::timeSigCenterAcrossStaveGroup,
                                          StyleId::genCourtesyTimesig,
                                          StyleId::genKeysig,
-                                         StyleId::genCourtesyKeysig, })
+                                         StyleId::genCourtesyKeysig,
+                                         StyleId::changesBeforeBarlineRepeats,
+                                         StyleId::changesBeforeBarlineOtherJumps,
+                                         StyleId::placeClefsBeforeRepeats,
+                                         StyleId::changesBetweenEndStartRepeat,
+                                         StyleId::showCourtesiesRepeats,
+                                         StyleId::useParensRepeatCourtesies,
+                                         StyleId::showCourtesiesOtherJumps,
+                                         StyleId::useParensOtherJumpCourtesies,
+                                         StyleId::showCourtesiesAfterCancellingRepeats,
+                                         StyleId::useParensRepeatCourtesiesAfterCancelling,
+                                         StyleId::showCourtesiesAfterCancellingOtherJumps,
+                                         StyleId::useParensOtherJumpCourtesiesAfterCancelling,
+                                         StyleId::smallParens })
 {
 }
 
@@ -227,4 +240,69 @@ StyleItem* ClefKeyTimeSigPageModel::genKeysig() const
 StyleItem* ClefKeyTimeSigPageModel::genCourtesyKeysig() const
 {
     return styleItem(StyleId::genCourtesyKeysig);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::changesBeforeBarlineRepeats() const
+{
+    return styleItem(StyleId::changesBeforeBarlineRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::changesBeforeBarlineOtherJumps() const
+{
+    return styleItem(StyleId::changesBeforeBarlineOtherJumps);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::placeClefsBeforeRepeats() const
+{
+    return styleItem(StyleId::placeClefsBeforeRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::changesBetweenEndStartRepeat() const
+{
+    return styleItem(StyleId::changesBetweenEndStartRepeat);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesRepeats() const
+{
+    return styleItem(StyleId::showCourtesiesRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensRepeatCourtesies() const
+{
+    return styleItem(StyleId::useParensRepeatCourtesies);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesOtherJumps() const
+{
+    return styleItem(StyleId::showCourtesiesOtherJumps);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensOtherJumpCourtesies() const
+{
+    return styleItem(StyleId::useParensOtherJumpCourtesies);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesAfterCancellingRepeats() const
+{
+    return styleItem(StyleId::showCourtesiesAfterCancellingRepeats);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensRepeatCourtesiesAfterCancelling() const
+{
+    return styleItem(StyleId::useParensRepeatCourtesiesAfterCancelling);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::showCourtesiesAfterCancellingOtherJumps() const
+{
+    return styleItem(StyleId::showCourtesiesAfterCancellingOtherJumps);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::useParensOtherJumpCourtesiesAfterCancelling() const
+{
+    return styleItem(StyleId::useParensOtherJumpCourtesiesAfterCancelling);
+}
+
+StyleItem* ClefKeyTimeSigPageModel::smallParens() const
+{
+    return styleItem(StyleId::smallParens);
 }

@@ -45,6 +45,7 @@ set(MODULE_TEST_SRC
     #${CMAKE_CURRENT_LIST_DIR}/concertpitch_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/copypaste_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/copypastesymbollist_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/courtesy_changes_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationtype_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamic_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/earlymusic_tests.cpp

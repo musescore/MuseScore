@@ -66,6 +66,21 @@ class ClefKeyTimeSigPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * genKeysig READ genKeysig CONSTANT)
     Q_PROPERTY(StyleItem * genCourtesyKeysig READ genCourtesyKeysig CONSTANT)
 
+    Q_PROPERTY(StyleItem * changesBeforeBarlineRepeats READ changesBeforeBarlineRepeats CONSTANT)
+    Q_PROPERTY(StyleItem * changesBeforeBarlineOtherJumps READ changesBeforeBarlineOtherJumps CONSTANT)
+    Q_PROPERTY(StyleItem * placeClefsBeforeRepeats READ placeClefsBeforeRepeats CONSTANT)
+    Q_PROPERTY(StyleItem * changesBetweenEndStartRepeat READ changesBetweenEndStartRepeat CONSTANT)
+    Q_PROPERTY(StyleItem * showCourtesiesRepeats READ showCourtesiesRepeats CONSTANT)
+    Q_PROPERTY(StyleItem * useParensRepeatCourtesies READ useParensRepeatCourtesies CONSTANT)
+    Q_PROPERTY(StyleItem * showCourtesiesOtherJumps READ showCourtesiesOtherJumps CONSTANT)
+    Q_PROPERTY(StyleItem * useParensOtherJumpCourtesies READ useParensOtherJumpCourtesies CONSTANT)
+    Q_PROPERTY(StyleItem * showCourtesiesAfterCancellingRepeats READ showCourtesiesAfterCancellingRepeats CONSTANT)
+    Q_PROPERTY(StyleItem * useParensRepeatCourtesiesAfterCancelling READ useParensRepeatCourtesiesAfterCancelling CONSTANT)
+    Q_PROPERTY(StyleItem * showCourtesiesAfterCancellingOtherJumps READ showCourtesiesAfterCancellingOtherJumps CONSTANT)
+    Q_PROPERTY(StyleItem * useParensOtherJumpCourtesiesAfterCancelling READ useParensOtherJumpCourtesiesAfterCancelling CONSTANT)
+
+    Q_PROPERTY(StyleItem * smallParens READ smallParens CONSTANT)
+
 public:
     explicit ClefKeyTimeSigPageModel(QObject* parent = nullptr);
 
@@ -107,5 +122,20 @@ public:
 
     StyleItem* genKeysig() const;
     StyleItem* genCourtesyKeysig() const;
+
+    StyleItem* changesBeforeBarlineRepeats() const;
+    StyleItem* changesBeforeBarlineOtherJumps() const;
+    StyleItem* placeClefsBeforeRepeats() const;
+    StyleItem* changesBetweenEndStartRepeat() const;
+    StyleItem* showCourtesiesRepeats() const;
+    StyleItem* useParensRepeatCourtesies() const;
+    StyleItem* showCourtesiesOtherJumps() const;
+    StyleItem* useParensOtherJumpCourtesies() const;
+    StyleItem* showCourtesiesAfterCancellingRepeats() const;
+    StyleItem* useParensRepeatCourtesiesAfterCancelling() const;
+    StyleItem* showCourtesiesAfterCancellingOtherJumps() const;
+    StyleItem* useParensOtherJumpCourtesiesAfterCancelling() const;
+
+    StyleItem* smallParens() const;
 };
 }
