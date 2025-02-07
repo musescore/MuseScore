@@ -82,6 +82,13 @@ Item {
         menu.title = menuInfo.title
         menu.enabled = menuInfo.enabled
         menu.subitems = menuInfo.subitems
+
+        menuInfo.subitemsChanged.connect(function(subitems, menuId) {
+            if (menu.id === menuId) {
+                menu.subitems = subitems
+                menu.load()
+            }
+        })
     }
 
     function makeMenuItem(parentMenu, itemInfo) {

@@ -82,15 +82,15 @@ bool Workspace::isBuiltin() const
 
 bool Workspace::isEdited() const
 {
+    if (!isBuiltin()) {
+        return false;
+    }
+
     if (m_file->isNeedSave()) {
         return true;
     }
 
-    if (isBuiltin()) {
-        return io::absoluteDirpath(filePath()) == configuration()->userWorkspacesPath();
-    }
-
-    return false;
+    return io::absoluteDirpath(filePath()) == configuration()->userWorkspacesPath();
 }
 
 RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
