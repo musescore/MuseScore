@@ -1109,7 +1109,8 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
              TranslatableString("action", "Rest"),
-             TranslatableString("action", "Enter rest")
+             TranslatableString("action", "Enter rest"),
+             IconCode::Code::REST
              ),
     UiAction("rest-TAB",
              mu::context::UiCtxProjectOpened,
