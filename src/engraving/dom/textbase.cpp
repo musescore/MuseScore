@@ -3258,6 +3258,14 @@ void TextBase::editDrag(EditData& ed)
     }
 }
 
+void TextBase::endDrag(EditData& ed)
+{
+    if (m_cursor->editing()) {
+        return;
+    }
+    EngravingItem::endDrag(ed);
+}
+
 void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
 {
     ElementEditDataPtr eedThis = ed.getData(this);
@@ -3805,12 +3813,18 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         return;
     }
 
+    score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
+
+    if (m_cursor->editing()) {
+        // If we're in edit mode, changes will be propagated later when
+        // propagating the Pid::TEXT property, so don't propagate now.
+        return;
+    }
+
     const std::list<EngravingObject*> linkedObjects = linkListForPropertyPropagation();
     for (EngravingObject* linkedObject : linkedObjects) {
         TextBase* linkedText = toTextBase(linkedObject);
         if (linkedText == this) {
-            // can't use standard change property as Undo might set to "undefined"
-            score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
             continue;
         }
 
