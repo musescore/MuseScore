@@ -57,10 +57,17 @@ Column {
             enabled: mainContentArea.enabled
             hoverEnabled: true
 
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
             onPressed: function(event) {
                 ui.tooltip.hide(root)
 
                 if (!Boolean(root.padModel)) {
+                    return
+                }
+
+                if (event.button === Qt.RightButton) {
+                    root.openFooterContextMenu()
                     return
                 }
 
@@ -167,6 +174,8 @@ Column {
 
             anchors.fill: parent
             enabled: root.panelMode !== PanelMode.EDIT_LAYOUT
+
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             onClicked: {
                 root.openFooterContextMenu()
