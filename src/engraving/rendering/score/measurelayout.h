@@ -65,10 +65,6 @@ public:
     static void removeSystemHeader(Measure* m);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
     static void removeSystemTrailer(Measure* m);
-    static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
-    static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
-    static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
-    static void removeRepeatCourtesyParenthesesMeasure(Measure* m, const bool continuation, LayoutContext& ctx);
 
     static void setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx);
 
@@ -109,7 +105,12 @@ private:
                                 LayoutContext& ctx);
 
     static Parenthesis* findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track);
+    static void removeRepeatCourtesyParenthesesMeasure(Measure* m, const bool continuation, LayoutContext& ctx);
     static void removeRepeatCourtesyParenthesesSegment(Segment* seg, const track_idx_t track,
                                                        const DirectionH direction = DirectionH::AUTO);
+    static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
+    static void placeParentheses(const Segment* segment, track_idx_t trackIdx, LayoutContext& ctx);
+    static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
+    static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
 };
 }

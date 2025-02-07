@@ -40,8 +40,6 @@ public:
     static void computeChordsUp(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack, const LayoutContext& ctx);
 
     static void layoutChordsStem(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack, const LayoutContext& ctx);
-
-    static void placeParentheses(const Segment* segment, staff_idx_t staffIdx);
 };
 }
 

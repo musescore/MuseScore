@@ -1927,6 +1927,91 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     }
 }
 
+void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackIdx, LayoutContext& ctx)
+{
+    const EngravingItem* segItem = segment->elementAt(trackIdx);
+    const std::vector<EngravingItem*> parens = segment->findAnnotations(ElementType::PARENTHESIS, trackIdx, trackIdx);
+    assert(parens.size() <= 2);
+    if (parens.empty() || !segItem) {
+        return;
+    }
+
+    Shape dummySegShape = segment->staffShape(track2staff(trackIdx));
+    dummySegShape.remove_if([](ShapeElement& shapeEl) {
+        return shapeEl.item() && shapeEl.item()->isParenthesis();
+    });
+
+    if (parens.size() == 1) {
+        // 1 parenthesis
+        Parenthesis* paren = toParenthesis(parens.front());
+        const bool leftBracket = paren->direction() == DirectionH::LEFT;
+        TLayout::layoutParenthesis(paren, ctx);
+        if (!leftBracket) {
+            // Space against existing segment shape
+            const double minDist = HorizontalSpacing::minHorizontalDistance(dummySegShape, paren->shape().translated(
+                                                                                paren->pos()), paren->spatium());
+            paren->mutldata()->moveX(minDist);
+        } else {
+            // Space following segment shape against this
+            const double minDist = HorizontalSpacing::minHorizontalDistance(paren->shape().translated(
+                                                                                paren->pos()), dummySegShape, paren->spatium());
+            paren->mutldata()->moveX(-minDist);
+        }
+        return;
+    }
+
+    // 2 parentheses
+    Parenthesis* leftParen = nullptr;
+    Parenthesis* rightParen = nullptr;
+    for (EngravingItem* paren : parens) {
+        if (toParenthesis(paren)->direction() == DirectionH::LEFT) {
+            leftParen = toParenthesis(paren);
+            continue;
+        }
+
+        rightParen = toParenthesis(paren);
+    }
+
+    assert(leftParen && rightParen);
+
+    TLayout::layoutParenthesis(toParenthesis(leftParen), ctx);
+    TLayout::layoutParenthesis(toParenthesis(rightParen), ctx);
+
+    const double itemLeftX = segItem->pos().x();
+    const double itemRightX = itemLeftX + segItem->width();
+
+    const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftParen->pos()),
+                                                                             dummySegShape, leftParen->spatium());
+    leftParen->mutldata()->moveX(-leftParenPadding);
+    dummySegShape.add(leftParen->shape().translate(leftParen->pos() + leftParen->staffOffset()));
+
+    const double rightParenPadding = HorizontalSpacing::minHorizontalDistance(dummySegShape, rightParen->shape().translated(
+                                                                                  rightParen->pos()), rightParen->spatium());
+    rightParen->mutldata()->moveX(rightParenPadding);
+
+    // If the right parenthesis has been padded against the left parenthesis, this means the parenthesis -> parenthesis padding distance
+    // is larger than the width of the item the parentheses surrounds. In this case, the result is visually unbalanced.  Move both parens
+    // to the left (relative to the segment) in order to centre the item: (b  ) -> ( b )
+    const double itemWidth = segItem->width();
+    const double parenPadding = segment->score()->paddingTable().at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
+
+    if (itemWidth >= parenPadding) {
+        return;
+    }
+
+    // Move parentheses to place item in the middle
+    const double leftParenX = leftParen->pos().x() + leftParen->ldata()->bbox().x() + leftParen->ldata()->thickness;
+    const double rightParenX = rightParen->pos().x() + rightParen->ldata()->bbox().x() + rightParen->width()
+                               - rightParen->ldata()->thickness;
+
+    const double leftParenToItem = itemLeftX - leftParenX;
+    const double itemToRightParen = rightParenX - itemRightX;
+    const double parenToItemDist = (leftParenToItem + itemToRightParen) / 2;
+
+    leftParen->mutldata()->moveX(-std::abs(parenToItemDist - leftParenToItem));
+    rightParen->mutldata()->moveX(-std::abs(itemToRightParen - parenToItemDist));
+}
+
 Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)
 {
     if (!segment || !segment->element(track)) {
@@ -2036,6 +2121,14 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             rightParen->mutldata()->height.set_value(height);
             leftParen->mutldata()->startY.set_value(top);
             leftParen->mutldata()->height.set_value(height);
+        }
+
+        if (leftParen) {
+            placeParentheses(leftMostSeg, track2staff(track), ctx);
+        }
+
+        if (rightParen && rightMostSeg != leftMostSeg) {
+            placeParentheses(rightMostSeg, track2staff(track), ctx);
         }
     }
 }

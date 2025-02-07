@@ -30,7 +30,7 @@ class Parenthesis : public EngravingItem
     M_PROPERTY2(DirectionH, direction, setDirection, DirectionH::LEFT)
 
 public:
-    static constexpr double PARENTHESIS_END_WIDTH = 0.05;
+    static constexpr double PARENTHESIS_END_WIDTH = 0.1;
 
     Parenthesis(Segment* parent);
     Parenthesis(const Parenthesis& p);

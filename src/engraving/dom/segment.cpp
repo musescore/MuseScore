@@ -45,7 +45,6 @@
 #include "mscore.h"
 #include "note.h"
 #include "ornament.h"
-#include "parenthesis.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -56,7 +55,6 @@
 #include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
-#include "rendering/score/segmentlayout.h"
 
 #include "navigate.h"
 
@@ -769,9 +767,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::CLEF:
-        assert(
-            m_segmentType == SegmentType::Clef || m_segmentType == SegmentType::HeaderClef
-            || m_segmentType == SegmentType::ClefRepeatAnnounce || m_segmentType == SegmentType::ClefStartRepeatAnnounce);
+        assert(m_segmentType & SegmentType::ClefType);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
@@ -781,31 +777,25 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::TIMESIG:
-        assert(
-            segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce
-            || segmentType() == SegmentType::TimeSigRepeatAnnounce || segmentType() == SegmentType::TimeSigStartRepeatAnnounce);
+        assert(segmentType() & SegmentType::TimeSigType);
         checkElement(el, track);
         m_elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
         setEmpty(false);
-        if (segmentType() == SegmentType::TimeSigAnnounce
-            || segmentType() == SegmentType::TimeSigRepeatAnnounce || segmentType() == SegmentType::TimeSigStartRepeatAnnounce) {
+        if (segmentType() & SegmentType::CourtesyTimeSigType) {
             toTimeSig(el)->setIsCourtesy(true);
         }
         break;
 
     case ElementType::KEYSIG:
-        assert(
-            m_segmentType == SegmentType::KeySig || m_segmentType == SegmentType::KeySigAnnounce
-            || m_segmentType == SegmentType::KeySigRepeatAnnounce || m_segmentType == SegmentType::KeySigStartRepeatAnnounce);
+        assert(m_segmentType & SegmentType::KeySigType);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
             el->staff()->setKey(tick(), toKeySig(el)->keySigEvent());
         }
         setEmpty(false);
-        if (m_segmentType == SegmentType::KeySigAnnounce
-            || m_segmentType == SegmentType::KeySigRepeatAnnounce || m_segmentType == SegmentType::KeySigStartRepeatAnnounce) {
+        if (m_segmentType == SegmentType::CourtesyKeySigType) {
             toKeySig(el)->setIsCourtesy(true);
         }
         break;
@@ -1952,25 +1942,7 @@ Spanner* Segment::lastSpanner(staff_idx_t activeStaff) const
 
 bool Segment::notChordRestType() const
 {
-    if (segmentType() == SegmentType::KeySig
-        || segmentType() == SegmentType::TimeSig
-        || segmentType() == SegmentType::Clef
-        || segmentType() == SegmentType::HeaderClef
-        || segmentType() == SegmentType::BeginBarLine
-        || segmentType() == SegmentType::EndBarLine
-        || segmentType() == SegmentType::BarLine
-        || segmentType() == SegmentType::KeySigAnnounce
-        || segmentType() == SegmentType::TimeSigAnnounce
-        || segmentType() == SegmentType::ClefRepeatAnnounce
-        || segmentType() == SegmentType::TimeSigRepeatAnnounce
-        || segmentType() == SegmentType::KeySigRepeatAnnounce
-        || segmentType() == SegmentType::ClefStartRepeatAnnounce
-        || segmentType() == SegmentType::TimeSigStartRepeatAnnounce
-        || segmentType() == SegmentType::KeySigStartRepeatAnnounce) {
-        return true;
-    } else {
-        return false;
-    }
+    return segmentType() != SegmentType::ChordRest;
 }
 
 //---------------------------------------------------------
@@ -2563,8 +2535,6 @@ void Segment::createShape(staff_idx_t staffIdx)
             }
         }
     }
-
-    rendering::score::SegmentLayout::placeParentheses(this, staffIdx);
 
     for (EngravingItem* e : m_annotations) {
         if (!e || e->staffIdx() != staffIdx) {

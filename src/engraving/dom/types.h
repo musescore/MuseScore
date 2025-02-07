@@ -429,8 +429,10 @@ enum class SegmentType {
     All                   = -1,   ///< Includes all barline types
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
     BarLineType           = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
-    TimeSigType           = TimeSig | TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
-    KeySigType            = KeySig | KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
+    CourtesyTimeSigType   = TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
+    CourtesyKeySigType    = KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
+    TimeSigType           = TimeSig | CourtesyTimeSigType,
+    KeySigType            = KeySig | CourtesyKeySigType,
     ClefType              = Clef | HeaderClef | ClefRepeatAnnounce | ClefStartRepeatAnnounce,
     ///\}
 };

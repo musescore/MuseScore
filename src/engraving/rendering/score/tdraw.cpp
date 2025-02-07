@@ -2451,10 +2451,7 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
     painter->setBrush(Brush(pen.color()));
     pen.setCapStyle(PenCapStyle::RoundCap);
     pen.setJoinStyle(PenJoinStyle::RoundJoin);
-    // std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
-    // painter->setBrush(BrushStyle::NoBrush);
-    // pen.setDashPattern(dashed);
-    pen.setWidthF(/*Parenthesis::PARENTHESIS_END_WIDTH*/ 0.1 * item->spatium() * mag);
+    pen.setWidthF(Parenthesis::PARENTHESIS_END_WIDTH * item->spatium() * mag);
 
     painter->setPen(pen);
     painter->drawPath(item->ldata()->path());
