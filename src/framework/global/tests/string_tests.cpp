@@ -635,6 +635,15 @@ TEST_F(Global_Types_StringTests, String_Number)
         //! CHECK
         EXPECT_EQ(str, u"2.12");
     }
+
+    {
+        //! GIVEN Some double
+        double v = -0.01;
+        //! DO
+        String str = String::number(v, 1);
+        //! CHECK
+        EXPECT_EQ(str, u"0");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_ToInt)
