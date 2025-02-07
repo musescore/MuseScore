@@ -532,8 +532,8 @@ def noteheadtype(tag):
 
 def shortcut(tag):
     if tag == null or not tag:
-        return '0'
-    return 'Key_' + tag
+        return 'String()'
+    return '(muse::Char)Key_' + tag
 
 # Generate the standard drumset. This must be hard-coded in C++ to ensure it's
 # available at startup when systems are initialized (engraving, playback, MIDI

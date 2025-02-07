@@ -46,7 +46,7 @@ public:
     virtual bool usingNoteInputMethod(NoteInputMethod method) const = 0;
     virtual void setNoteInputMethod(NoteInputMethod method) = 0;
 
-    virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
+    virtual void addNote(const NoteInputParams& params, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
     virtual muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) = 0;
     virtual void removeNote(const muse::PointF& pos) = 0;
@@ -64,7 +64,7 @@ public:
     virtual void addLaissezVib() = 0;
 
     // Used in the input-by-duration mode
-    virtual void setInputNote(NoteName note) = 0;
+    virtual void setInputNote(const NoteInputParams& params) = 0;
     virtual void setInputNotes(const NoteValList& notes) = 0;
     virtual void moveInputNotes(bool up, PitchMode mode) = 0;
 

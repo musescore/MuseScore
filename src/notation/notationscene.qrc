@@ -77,5 +77,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-create_space.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyledImage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTieMenuRowItem.qml</file>
+        <file>qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml</file>
     </qresource>
 </RCC>

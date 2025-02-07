@@ -102,6 +102,7 @@ using Stem = mu::engraving::Stem;
 using Hook = mu::engraving::Hook;
 using Fraction = mu::engraving::Fraction;
 using NoteInputMethod = mu::engraving::NoteEntryMethod;
+using NoteInputParams = mu::engraving::NoteInputParams;
 using AccidentalType = mu::engraving::AccidentalType;
 using OttavaType = mu::engraving::OttavaType;
 using HairpinType = mu::engraving::HairpinType;

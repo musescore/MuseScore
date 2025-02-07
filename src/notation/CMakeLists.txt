@@ -181,6 +181,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/editpercussionshortcutmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/editpercussionshortcutmodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/percussionpanel/percussionpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/percussionpanel/percussionpanelmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/percussionpanel/percussionpanelpadlistmodel.cpp

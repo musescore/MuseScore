@@ -348,14 +348,11 @@ public:
     void addNoteLine();
     void padToggle(Pad p, bool toggleForSelectionOnly = false);
 
-    struct NoteInputParams {
-        int step = 0;
-        int drumPitch = 0;
-    };
-
     bool resolveNoteInputParams(int noteIdx, bool addFlag, NoteInputParams& out) const;
 
-    void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
+    void cmdAddPitch(const EditData&, const NoteInputParams& params, bool addFlag, bool insert);
+    void cmdAddPitch(int note, bool addFlag, bool insert);
+
     void cmdAddStretch(double);
     void cmdAddGrace(NoteType, int);
     void cmdResetNoteAndRestGroupings();
@@ -1013,7 +1010,6 @@ public:
     void setHeaderText(Text* t, int index) { m_headersText.at(index) = t; }
     void setFooterText(Text* t, int index) { m_footersText.at(index) = t; }
 
-    void cmdAddPitch(int note, bool addFlag, bool insert);
     void cmdToggleVisible();
     void forAllLyrics(std::function<void(Lyrics*)> f);
 

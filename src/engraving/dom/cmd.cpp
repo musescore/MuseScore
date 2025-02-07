@@ -4947,81 +4947,62 @@ void Score::cmdUnsetVisible()
 bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out) const
 {
     const InputState& is = inputState();
-    if (!is.isValid()) {
+
+    //! NOTE: Drumset params should be defined explicitly (see NotationViewInputController::tryPercussionShortcut)
+    if (!is.isValid() || is.drumset()) {
         return false;
     }
 
-    const Drumset* ds = is.drumset();
-
     int octave = 4;
-    if (ds) {
-        char note1 = "CDEFGAB"[note];
-        out.drumPitch = -1;
-        for (int i = 0; i < 127; ++i) {
-            if (!ds->isValid(i)) {
-                continue;
-            }
-            if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
-                out.drumPitch = i;
-                break;
-            }
-        }
-        if (out.drumPitch == -1) {
-            LOGD("  shortcut %c not defined in drumset", note1);
-            return false;
-        }
 
-        octave = out.drumPitch / 12;
+    static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
+
+    // if adding notes, add above the upNote of the current chord
+    EngravingItem* el = selection().element();
+    if (addFlag && el && el->isNote()) {
+        Chord* chord = toNote(el)->chord();
+        Note* n      = chord->upNote();
+        int tpc = n->tpc();
+        octave = (n->epitch() - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
+        if (note <= tpc2step(tpc)) {
+            octave++;
+        }
     } else {
-        static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
-
-        // if adding notes, add above the upNote of the current chord
-        EngravingItem* el = selection().element();
-        if (addFlag && el && el->isNote()) {
-            Chord* chord = toNote(el)->chord();
-            Note* n      = chord->upNote();
-            int tpc = n->tpc();
-            octave = (n->epitch() - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
-            if (note <= tpc2step(tpc)) {
-                octave++;
-            }
-        } else {
-            int curPitch = 60;
-            if (is.segment()) {
-                Staff* staff = Score::staff(is.track() / VOICES);
-                Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
-                while (seg) {
-                    if (seg->isChordRestType()) {
-                        EngravingItem* p = seg->element(is.track());
-                        if (p && p->isChord()) {
-                            Note* n = toChord(p)->downNote();
-                            // forget any accidental and/or adjustment due to key signature
-                            curPitch = n->epitch() - static_cast<int>(tpc2alter(n->tpc()));
+        int curPitch = 60;
+        if (is.segment()) {
+            Staff* staff = Score::staff(is.track() / VOICES);
+            Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
+            while (seg) {
+                if (seg->isChordRestType()) {
+                    EngravingItem* p = seg->element(is.track());
+                    if (p && p->isChord()) {
+                        Note* n = toChord(p)->downNote();
+                        // forget any accidental and/or adjustment due to key signature
+                        curPitch = n->epitch() - static_cast<int>(tpc2alter(n->tpc()));
+                        break;
+                    }
+                } else if (seg->isClefType() || seg->isHeaderClefType()) {
+                    EngravingItem* p = seg->element(trackZeroVoice(is.track()));                  // clef on voice 1
+                    if (p && p->isClef()) {
+                        Clef* clef = toClef(p);
+                        // check if it's an actual change or just a courtesy
+                        ClefType ctb = staff->clef(clef->tick() - Fraction::fromTicks(1));
+                        if (ctb != clef->clefType() || clef->tick().isZero()) {
+                            curPitch = line2pitch(4, clef->clefType(), Key::C);                     // C 72 for treble clef
                             break;
                         }
-                    } else if (seg->isClefType() || seg->isHeaderClefType()) {
-                        EngravingItem* p = seg->element(trackZeroVoice(is.track()));              // clef on voice 1
-                        if (p && p->isClef()) {
-                            Clef* clef = toClef(p);
-                            // check if it's an actual change or just a courtesy
-                            ClefType ctb = staff->clef(clef->tick() - Fraction::fromTicks(1));
-                            if (ctb != clef->clefType() || clef->tick().isZero()) {
-                                curPitch = line2pitch(4, clef->clefType(), Key::C);                 // C 72 for treble clef
-                                break;
-                            }
-                        }
                     }
-                    seg = seg->prev1MM(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
                 }
-                octave = curPitch / 12;
+                seg = seg->prev1MM(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
             }
+            octave = curPitch / 12;
+        }
 
-            int delta = octave * 12 + tab[note] - curPitch;
-            if (delta > 6) {
-                --octave;
-            } else if (delta < -6) {
-                ++octave;
-            }
+        int delta = octave * 12 + tab[note] - curPitch;
+        if (delta > 6) {
+            --octave;
+        } else if (delta < -6) {
+            ++octave;
         }
     }
 
@@ -5032,9 +5013,8 @@ bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out)
 //---------------------------------------------------------
 //   cmdAddPitch
 ///   insert note or add note to chord
-//    c d e f g a b entered:
 //---------------------------------------------------------
-void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
+void Score::cmdAddPitch(const EditData& ed, const NoteInputParams& params, bool addFlag, bool insert)
 {
     InputState& is = inputState();
     if (!is.isValid()) {
@@ -5043,12 +5023,6 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
     }
 
     is.setRest(false);
-
-    NoteInputParams params;
-    bool ok = resolveNoteInputParams(note, addFlag, params);
-    if (!ok) {
-        return;
-    }
 
     const Drumset* ds = is.drumset();
     if (ds) {

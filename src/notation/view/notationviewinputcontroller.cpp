@@ -31,6 +31,8 @@
 #include "commonscene/commonscenetypes.h"
 #include "abstractelementpopupmodel.h"
 
+#include "engraving/dom/drumset.h"
+
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -797,6 +799,41 @@ void NotationViewInputController::updateTextCursorPosition()
     }
 }
 
+bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
+{
+    INotationNoteInputPtr noteInput = viewInteraction()->noteInput();
+    const mu::engraving::Drumset* drumset = noteInput ? noteInput->state().drumset() : nullptr;
+    if (!drumset) {
+        return false;
+    }
+
+    const QKeyCombination noModifiers(Qt::Key(event->key()));
+    const int pitchToWrite = drumset->pitchForShortcut(QKeySequence(noModifiers).toString());
+    if (pitchToWrite < 0) {
+        return false;
+    }
+
+    const Qt::KeyboardModifiers mods = event->modifiers();
+    NoteAddingMode addingMode = NoteAddingMode::NextChord;
+
+    if (mods & Qt::ShiftModifier && (mods & Qt::ControlModifier || mods & Qt::MetaModifier)) {
+        addingMode = NoteAddingMode::InsertChord;
+    } else if (mods & Qt::ShiftModifier) {
+        addingMode = NoteAddingMode::CurrentChord;
+    } else if (mods & ~Qt::NoModifier) {
+        // Not a supported modifier combination...
+        return false;
+    }
+
+    NoteInputParams params;
+    params.drumPitch = pitchToWrite;
+
+    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
+    dispatcher()->dispatch("note-action", args);
+
+    return true;
+}
+
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 {
     if (viewInteraction()->isDragCopyStarted()) {
@@ -1018,13 +1055,14 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
 {
     if (viewInteraction()->isElementEditStarted()) {
         return viewInteraction()->isEditAllowed(event);
-    } else if (startTextEditingAllowed()) {
-        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-            return true;
-        }
     }
 
-    return false;
+    const bool editTextKeysFound = event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter;
+    if (editTextKeysFound && startTextEditingAllowed()) {
+        return true;
+    }
+
+    return tryPercussionShortcut(event);
 }
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)

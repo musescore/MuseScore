@@ -214,8 +214,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         drum.panelRow = row;
         drum.panelColumn = column;
 
-        const QString& shortcut = model->keyboardShortcut();
-        drum.shortcut = shortcut.isEmpty() ? '\0' : shortcut.toLatin1().at(0);
+        drum.shortcut = model->keyboardShortcut();
     }
 
     // Return if nothing changed after edit...
@@ -394,7 +393,7 @@ void PercussionPanelModel::onDuplicatePadRequested(int pitch)
 
     engraving::DrumInstrument duplicateDrum = updatedDrumset.drum(pitch);
 
-    duplicateDrum.shortcut = '\0'; // Don't steal the shortcut
+    duplicateDrum.shortcut.clear(); // Don't steal the shortcut
     duplicateDrum.panelRow = nextAvailableIndex / m_padListModel->numColumns();
     duplicateDrum.panelColumn = nextAvailableIndex % m_padListModel->numColumns();
 
@@ -427,9 +426,23 @@ void PercussionPanelModel::onDeletePadRequested(int pitch)
     undoStack->commitChanges();
 }
 
-void PercussionPanelModel::onDefinePadShortcutRequested(int)
+void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
 {
-    // TODO: Design in progress...
+    const std::pair<Instrument*, Part*> instAndPart = getCurrentInstrumentAndPart();
+    Instrument* inst = instAndPart.first;
+    Part* part = instAndPart.second;
+    IF_ASSERT_FAILED(inst && part) {
+        return;
+    }
+
+    Drumset updatedDrumset = *m_padListModel->drumset();
+    PercussionUtilities::editPercussionShortcut(updatedDrumset, pitch);
+
+    INotationUndoStackPtr undoStack = notation()->undoStack();
+
+    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion shortcut"));
+    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
+    undoStack->commitChanges();
 }
 
 void PercussionPanelModel::writePitch(int pitch)

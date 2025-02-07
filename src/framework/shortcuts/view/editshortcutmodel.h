@@ -51,7 +51,7 @@ public:
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers);
-    Q_INVOKABLE void applyNewSequence();
+    Q_INVOKABLE void trySave();
 
 signals:
     void originSequenceChanged();
