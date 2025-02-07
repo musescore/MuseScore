@@ -99,7 +99,7 @@ void SoundFlagSettingsModel::init()
 {
     TRACEFUNC;
 
-    connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRect&) {
+    connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRectF&) {
         QRect rect = iconRect();
         if (rect.isValid()) {
             emit iconRectChanged(rect);
