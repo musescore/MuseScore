@@ -8247,6 +8247,14 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                 const track_idx_t endtrack = staff2track(spannerStaff + 1);
                 spannerStop(this, starttrack, endtrack, seg->tick(), partRelStaffNo, spannersStopped);
 
+                // We check if there are additional annotations
+                for (EngravingItem* annotation : seg->annotations()) {
+                    if (annotation->track() != track || !annotation->isTextBase()) {
+                        continue;
+                    }
+                    // Just to include them
+                    annotations(this, strack, etrack, track, partRelStaffNo, seg);
+                }
                 continue;
             }
             EngravingItem* const el = seg->element(track);
