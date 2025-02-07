@@ -290,8 +290,10 @@ protected:
 #define SVG_POLYLINE    "<polyline"
 
 #define SVG_CLIP_PATH_BEGIN    "<clipPath"
-#define SVG_DEFS_BEGIN         "<defs>"
 #define SVG_CLIP_PATH_END      "</clipPath>"
+#define SVG_MASK_BEGIN         "<mask"
+#define SVG_MASK_END           "</mask>"
+#define SVG_DEFS_BEGIN         "<defs>"
 #define SVG_DEFS_END           "</defs>"
 #define SVG_ID                 " id=\""
 
@@ -320,9 +322,12 @@ protected:
 #define SVG_MATRIX    " transform=\"matrix("
 
 private:
+    void drawPathData(const QPainterPath& p);
+
     int _curClipPathId = 0;
-    void drawPathData(const QPainterPath& p, bool setClipRule = false);
-    void setClipPath(const QPainterPath& clipPath);
+    bool _replaceClipPathWithMask = false;
+    void defineClipPath(const QPainterPath& clipPath);
+    void setClipPath();
 
 public:
     SvgPaintEngine()
@@ -385,6 +390,8 @@ public:
         Q_ASSERT(!isActive());
         d_func()->resolution = resolution;
     }
+
+    void setReplaceClipPathWithMask(bool v) { _replaceClipPathWithMask = v; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // UNUSED GRADIENT CODE:
@@ -1027,6 +1034,11 @@ void SvgGenerator::setElement(const mu::engraving::EngravingItem* e)
     static_cast<SvgPaintEngine*>(paintEngine())->_element = e;
 }
 
+void SvgGenerator::setReplaceClipPathWithMask(bool v)
+{
+    static_cast<SvgPaintEngine*>(paintEngine())->setReplaceClipPathWithMask(v);
+}
+
 /*****************************************************************************
  * class SvgPaintEngine
  */
@@ -1218,6 +1230,11 @@ void SvgPaintEngine::updateState(const QPaintEngineState& s)
 
 void SvgPaintEngine::drawPath(const QPainterPath& p)
 {
+    QPainterPath clipPath = painter()->clipPath();
+    if (!clipPath.isEmpty()) {
+        defineClipPath(clipPath);
+    }
+
     stream() << SVG_PATH << stateString;
 
     // fill-rule is here because UpdateState() doesn't have a QPainterPath arg
@@ -1228,10 +1245,14 @@ void SvgPaintEngine::drawPath(const QPainterPath& p)
 
     drawPathData(p);
 
+    if (!clipPath.isEmpty()) {
+        setClipPath();
+    }
+
     stream() << SVG_ELEMENT_END << Qt::endl;
 }
 
-void SvgPaintEngine::drawPathData(const QPainterPath& p, bool setClipRule)
+void SvgPaintEngine::drawPathData(const QPainterPath& p)
 {
     // Path data
     stream() << SVG_D;
@@ -1269,18 +1290,35 @@ void SvgPaintEngine::drawPathData(const QPainterPath& p, bool setClipRule)
         }
     }
     stream() << SVG_QUOTE;
+}
 
-    if (setClipRule) {
-        stream() << SVG_CLIP_RULE;
+void SvgPaintEngine::defineClipPath(const QPainterPath& clipPath)
+{
+    _curClipPathId++;
+
+    if (_replaceClipPathWithMask) {
+        stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_MASK_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE << SVG_GT << SVG_SPACE;
+    } else {
+        stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_CLIP_PATH_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE << SVG_GT << SVG_SPACE;
+    }
+
+    stream() << SVG_PATH;
+    drawPathData(clipPath);
+
+    if (_replaceClipPathWithMask) {
+        stream() << SVG_FILL_RULE << SVG_FILL << "white\"" << SVG_ELEMENT_END << SVG_MASK_END << SVG_DEFS_END << Qt::endl;
+    } else {
+        stream() << SVG_CLIP_RULE << SVG_ELEMENT_END << SVG_CLIP_PATH_END << SVG_DEFS_END << Qt::endl;
     }
 }
 
-void SvgPaintEngine::setClipPath(const QPainterPath& clipPath)
+void SvgPaintEngine::setClipPath()
 {
-    stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_CLIP_PATH_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE << SVG_GT << SVG_SPACE;
-    stream() << SVG_PATH;
-    drawPathData(clipPath, true);
-    stream() << SVG_ELEMENT_END << SVG_CLIP_PATH_END << SVG_DEFS_END << Qt::endl;
+    if (_replaceClipPathWithMask) {
+        stream() << " mask=\"url(#" << _curClipPathId << ")\"";
+    } else {
+        stream() << " clip-path=\"url(#" << _curClipPathId << ")\"";
+    }
 }
 
 void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
@@ -1288,18 +1326,17 @@ void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
 {
     Q_ASSERT(pointCount >= 2);
 
-    QPainterPath clipPath = painter()->clipPath();
-    if (!clipPath.isEmpty()) {
-        ++_curClipPathId;
-        setClipPath(clipPath);
-    }
-
     QPainterPath path(points[0]);
     for (int i=1; i < pointCount; ++i) {
         path.lineTo(points[i]);
     }
 
     if (mode == PolylineMode) {
+        QPainterPath clipPath = painter()->clipPath();
+        if (!clipPath.isEmpty()) {
+            defineClipPath(clipPath);
+        }
+
         // fixes draw polyline
         painter()->setBrush(Qt::NoBrush);
         updateState(*this->state);
@@ -1314,9 +1351,11 @@ void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
             }
         }
         stream() << SVG_QUOTE << SVG_SPACE;
+
         if (!clipPath.isEmpty()) {
-            stream() << "clip-path=\"url(#" << _curClipPathId << ")\"";
+            setClipPath();
         }
+
         stream() << SVG_ELEMENT_END << Qt::endl;
     } else {
         path.closeSubpath();

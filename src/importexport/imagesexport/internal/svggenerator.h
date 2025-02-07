@@ -87,6 +87,8 @@ public:
 
     void setElement(const mu::engraving::EngravingItem* e);
 
+    void setReplaceClipPathWithMask(bool v);
+
 protected:
     QPaintEngine* paintEngine() const;
     int metric(QPaintDevice::PaintDeviceMetric metric) const;

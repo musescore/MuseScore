@@ -34,12 +34,14 @@ static const Settings::Key EXPORT_PDF_USE_TRANSPARENCY_KEY("iex_imagesexport", "
 static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY("iex_imagesexport", "export/png/resolution");
 static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/png/useTransparency");
 static const Settings::Key EXPORT_SVG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/svg/useTransparency");
+static const Settings::Key EXPORT_SVG_ILLUSTRATOR_COMPAT("iex_imagesexport", "export/svg/illustratorCompat");
 
 void ImagesExportConfiguration::init()
 {
     settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(mu::engraving::DPI));
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(mu::engraving::DPI));
     settings()->setDefaultValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(false));
+    settings()->setDefaultValue(EXPORT_SVG_ILLUSTRATOR_COMPAT, Val(false));
 }
 
 int ImagesExportConfiguration::exportPdfDpiResolution() const
@@ -99,6 +101,16 @@ bool ImagesExportConfiguration::exportSvgWithTransparentBackground() const
 void ImagesExportConfiguration::setExportSvgWithTransparentBackground(bool transparent)
 {
     settings()->setSharedValue(EXPORT_SVG_USE_TRANSPARENCY_KEY, Val(transparent));
+}
+
+bool ImagesExportConfiguration::exportSvgWithIllustratorCompat() const
+{
+    return settings()->value(EXPORT_SVG_ILLUSTRATOR_COMPAT).toBool();
+}
+
+void ImagesExportConfiguration::setExportSvgWithIllustratorCompat(bool compat)
+{
+    settings()->setSharedValue(EXPORT_SVG_ILLUSTRATOR_COMPAT, Val(compat));
 }
 
 int ImagesExportConfiguration::trimMarginPixelSize() const

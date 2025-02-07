@@ -40,6 +40,20 @@ ExportSettingsPage {
         }
     }
 
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Masking compatibility (Adobe Illustrator only)")
+
+        navigation.name: "IllustratorCompatCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 3
+
+        checked: root.model.svgIllustratorCompat
+        onClicked: {
+            root.model.svgIllustratorCompat = !checked
+        }
+    }
+
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each page of the selected parts will be exported as a separate %1 file.").arg("SVG")

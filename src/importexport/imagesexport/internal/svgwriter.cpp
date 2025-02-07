@@ -86,6 +86,8 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
     printer.setOutputDevice(&buf);
 
+    printer.setReplaceClipPathWithMask(configuration()->exportSvgWithIllustratorCompat());
+
     const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
 
     RectF pageRect = page->pageBoundingRect();
