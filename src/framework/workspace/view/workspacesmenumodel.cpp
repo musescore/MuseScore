@@ -27,6 +27,7 @@
 using namespace muse::workspace;
 using namespace muse::ui;
 using namespace muse::uicomponents;
+using namespace muse::actions;
 
 WorkspacesMenuModel::WorkspacesMenuModel(QObject* parent)
     : uicomponents::AbstractMenuModel(parent)

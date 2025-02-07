@@ -193,7 +193,7 @@ void Workspace::copyBuiltinWorkspaceToUserDir()
 {
     Ret ret = doSave();
     if (!ret) {
-        LOGE() << "Failed to copy builtin workspace, error: " << ret.toString();
+        LOGE() << "Failed to save builtin workspace, error: " << ret.toString();
     }
 
     io::path_t userFilePath = configuration()->userWorkspacesPath() + "/" + io::filename(filePath());

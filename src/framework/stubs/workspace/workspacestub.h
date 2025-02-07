@@ -29,13 +29,15 @@ class WorkspaceStub : public IWorkspace
 {
 public:
     std::string name() const override;
-    std::string title() const override;
+    void setName(const std::string& name) override;
 
-    bool isManaged(const DataKey& key) const override;
-    void setIsManaged(const DataKey& key, bool val) override;
+    bool isBuiltin() const override;
+    bool isEdited() const override;
 
     RetVal<QByteArray> rawData(const DataKey& key) const override;
     Ret setRawData(const DataKey& key, const QByteArray& data) override;
+
+    void reset() override;
 
     async::Notification reloadNotification() override;
 };
