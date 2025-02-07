@@ -60,7 +60,7 @@ Column {
             navigationRowStart: root.navigationRowStart
 
             titleText: qsTrc("inspector", "Scale")
-            measureUnitsSymbol: qsTrc("global", "%")
+            measureUnitsSymbol: "%"
             propertyItem: root.model ? root.model.symbolSize : null
 
             decimals: 0
