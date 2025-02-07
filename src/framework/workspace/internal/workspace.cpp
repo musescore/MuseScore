@@ -115,7 +115,7 @@ Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
 
 void Workspace::reset()
 {
-    if (!isEdited() || !isBuiltin()) {
+    if (!isEdited()) {
         return;
     }
 

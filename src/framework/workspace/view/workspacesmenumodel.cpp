@@ -22,6 +22,8 @@
 
 #include "workspacesmenumodel.h"
 
+#include "internal/workspaceutils.h"
+
 #include "log.h"
 
 using namespace muse::workspace;
@@ -43,9 +45,7 @@ void WorkspacesMenuModel::load()
     IWorkspacePtrList workspaces = workspacesManager()->workspaces();
     IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace();
 
-    std::sort(workspaces.begin(), workspaces.end(), [](const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2) {
-        return workspace1->name() < workspace2->name();
-    });
+    std::sort(workspaces.begin(), workspaces.end(), WorkspaceUtils::workspaceLessThan);
 
     int index = 0;
     for (const IWorkspacePtr& workspace : workspaces) {

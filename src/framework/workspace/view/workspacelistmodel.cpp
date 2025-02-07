@@ -22,8 +22,7 @@
 
 #include "workspacelistmodel.h"
 
-#include "ui/uitypes.h"
-#include "palette/palettetypes.h"
+#include "internal/workspaceutils.h"
 
 #include "log.h"
 
@@ -59,9 +58,7 @@ void WorkspaceListModel::load()
         m_workspaces << workspace;
     }
 
-    std::sort(m_workspaces.begin(), m_workspaces.end(), [](const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2) {
-        return workspace1->name() < workspace2->name();
-    });
+    std::sort(m_workspaces.begin(), m_workspaces.end(), WorkspaceUtils::workspaceLessThan);
 
     endResetModel();
 

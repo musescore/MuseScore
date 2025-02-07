@@ -228,7 +228,7 @@ Val WorkspaceFile::meta(const std::string& key) const
 
 void WorkspaceFile::setMeta(const std::string& key, const Val& val)
 {
-    if (muse::contains(m_meta, key) && m_meta[key] == val) {
+    if (this->meta(key) == val) {
         return;
     }
 
@@ -248,7 +248,7 @@ QByteArray WorkspaceFile::data(const std::string& name) const
 
 void WorkspaceFile::setData(const std::string& name, const QByteArray& data)
 {
-    if (muse::contains(m_data, name) && m_data[name] == data) {
+    if (this->data(name) == data) {
         return;
     }
 

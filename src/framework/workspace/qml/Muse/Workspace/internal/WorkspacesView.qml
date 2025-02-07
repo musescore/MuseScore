@@ -126,7 +126,7 @@ RadioButtonGroup {
 
             if (workspaceRadioButton.contentComponent !== workspaceNameLabel) {
                 workspaceRadioButton.contentComponent = workspaceNameLabel
-                root.incorrectTitleWarning = ""
+                listItem.incorrectNameWarning = ""
                 root.model.renameWorkspace(model.index, newName)
                 listItem.navigation.requestActive()
             }
@@ -150,6 +150,7 @@ RadioButtonGroup {
                 checked: model.isSelected
 
                 contentComponent: workspaceNameLabel
+                hoverEnabled: false
 
                 onClicked: {
                     root.model.selectWorkspace(model.index)
@@ -185,7 +186,6 @@ RadioButtonGroup {
 
         Component {
             id: workspaceNameLabel
-
 
             StyledTextLabel {
                 property string accessibleName: text
