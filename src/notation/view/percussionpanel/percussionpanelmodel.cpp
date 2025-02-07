@@ -452,17 +452,13 @@ void PercussionPanelModel::writePitch(int pitch)
         return;
     }
 
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter percussion note"));
-
     interaction()->noteInput()->startNoteInput(configuration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
-    score()->addMidiPitch(pitch, false, /*transpose*/ false);
-    undoStack->commitChanges();
+    NoteInputParams params;
+    params.drumPitch = pitch;
 
-    const mu::engraving::InputState& inputState = score()->inputState();
-    if (inputState.cr()) {
-        interaction()->showItem(inputState.cr());
-    }
+    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, NoteAddingMode::NextChord);
+    dispatcher()->dispatch("note-action", args);
 }
 
 void PercussionPanelModel::playPitch(int pitch)

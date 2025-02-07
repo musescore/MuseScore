@@ -109,6 +109,8 @@ signals:
     void padListModelChanged();
 
 private:
+    using ActionData = muse::actions::ActionData;
+
     void setUpConnections();
 
     void setDrumset(mu::engraving::Drumset* drumset);
