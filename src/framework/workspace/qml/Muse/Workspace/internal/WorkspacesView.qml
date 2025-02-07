@@ -188,6 +188,8 @@ RadioButtonGroup {
 
 
             StyledTextLabel {
+                property string accessibleName: text
+
                 text: model.name + (model.isEdited ? " (%1)".arg(qsTrc("workspace", "Edited")) : "")
 
                 horizontalAlignment: Qt.AlignLeft
@@ -199,9 +201,13 @@ RadioButtonGroup {
             id: editWorkspaceNameField
 
             RowLayout {
+                property string accessibleName: textField.currentText
+
                 spacing: 38
 
                 TextInputField {
+                    id: textField
+
                     Layout.fillWidth: true
 
                     navigation.panel: root.navigation.panel

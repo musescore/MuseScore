@@ -82,6 +82,10 @@ bool Workspace::isBuiltin() const
 
 bool Workspace::isEdited() const
 {
+    if (m_file->isNeedSave()) {
+        return true;
+    }
+
     if (isBuiltin()) {
         return io::absoluteDirpath(filePath()) == configuration()->userWorkspacesPath();
     }
@@ -116,6 +120,12 @@ void Workspace::reset()
     }
 
     io::path_t builtinWorkspacePath = this->builtinWorkspacePath();
+
+    if (builtinWorkspacePath == filePath()) {
+        //! if the user made changes and they were not saved, then just reload file
+        reload();
+        return;
+    }
 
     //! remove current file
     fileSystem()->remove(filePath());

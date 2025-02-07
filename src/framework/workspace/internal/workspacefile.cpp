@@ -56,6 +56,9 @@ io::path_t WorkspaceFile::filePath() const
 
 Ret WorkspaceFile::load()
 {
+    m_data.clear();
+    m_meta.clear();
+
     ZipReader zip(m_filePath);
 
     Meta::read(zip, m_meta);
@@ -78,6 +81,8 @@ Ret WorkspaceFile::load()
     }
 
     zip.close();
+
+    m_needSave = false;
 
     return make_ret(Ret::Code::Ok);
 }
@@ -117,6 +122,8 @@ Ret WorkspaceFile::save()
     }
 
     zip.close();
+
+    m_needSave = false;
 
     return make_ok();
 }
@@ -205,6 +212,11 @@ bool WorkspaceFile::isLoaded() const
     return !m_meta.empty();
 }
 
+bool WorkspaceFile::isNeedSave() const
+{
+    return m_needSave;
+}
+
 Val WorkspaceFile::meta(const std::string& key) const
 {
     auto it = m_meta.find(key);
@@ -216,6 +228,12 @@ Val WorkspaceFile::meta(const std::string& key) const
 
 void WorkspaceFile::setMeta(const std::string& key, const Val& val)
 {
+    if (muse::contains(m_meta, key) && m_meta[key] == val) {
+        return;
+    }
+
+    markDirty();
+
     m_meta[key] = val;
 }
 
@@ -230,5 +248,16 @@ QByteArray WorkspaceFile::data(const std::string& name) const
 
 void WorkspaceFile::setData(const std::string& name, const QByteArray& data)
 {
+    if (muse::contains(m_data, name) && m_data[name] == data) {
+        return;
+    }
+
+    markDirty();
+
     m_data[name] = data;
+}
+
+void WorkspaceFile::markDirty()
+{
+    m_needSave = true;
 }

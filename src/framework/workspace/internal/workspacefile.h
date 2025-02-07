@@ -49,6 +49,7 @@ public:
     Ret load();
     Ret save();
     bool isLoaded() const;
+    bool isNeedSave() const;
 
     Val meta(const std::string& key) const;
     void setMeta(const std::string& key, const Val& val);
@@ -69,9 +70,13 @@ private:
         static void read(ZipReader& zip, std::map<std::string, Val>& meta);
     };
 
+    void markDirty();
+
     io::path_t m_filePath;
     std::map<std::string, Val> m_meta;
     std::map<std::string, QByteArray> m_data;
+
+    std::atomic<bool> m_needSave = false;
 };
 }
 
