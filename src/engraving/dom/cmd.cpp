@@ -3189,10 +3189,13 @@ EngravingItem* Score::selectMove(const String& cmd)
     }
 
     ChordRest* el = nullptr;
+    ChordRestNavigateOptions options;
+    options.skipGrace = true;
+    options.skipMeasureRepeatRests = false;
     if (cmd == u"select-next-chord") {
-        el = nextChordRest(cr, true, false);
+        el = nextChordRest(cr, options);
     } else if (cmd == u"select-prev-chord") {
-        el = prevChordRest(cr, true, false);
+        el = prevChordRest(cr, options);
     } else if (cmd == u"select-next-measure") {
         el = nextMeasure(cr, true, true);
     } else if (cmd == u"select-prev-measure") {

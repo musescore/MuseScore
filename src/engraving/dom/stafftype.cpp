@@ -849,7 +849,9 @@ void TabDurationSymbol::layout2()
 
     // get 'grid' beam length from page positions of this' chord and previous chord
     Chord* chord       = toChord(explicitParent());
-    ChordRest* prevChord   = prevChordRest(chord, true);
+    ChordRestNavigateOptions options;
+    options.skipGrace = true;
+    ChordRest* prevChord   = prevChordRest(chord, options);
     if (chord == nullptr || prevChord == nullptr) {
         return;
     }

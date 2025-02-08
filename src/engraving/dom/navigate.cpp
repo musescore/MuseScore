@@ -27,6 +27,7 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "measurerepeat.h"
+#include "marker.h"
 #include "note.h"
 #include "rest.h"
 #include "score.h"
@@ -139,7 +140,7 @@ static EngravingItem* prevElementForSpannerSegment(const SpannerSegment* spanner
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -149,7 +150,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
         const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
-        if (skipGrace) {
+        if (options.skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
@@ -177,7 +178,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
             cr = pc;
         }
     } else { // cr is not a grace note
-        if (cr->isChord() && !skipGrace) {
+        if (cr->isChord() && !options.skipGrace) {
             const Chord* c = toChord(cr);
             if (!c->graceNotes().empty()) {
                 const GraceNotesGroup& group = c->graceNotesAfter();
@@ -190,14 +191,17 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
-
-    for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
+    Segment* curSeg = cr->segment();
+    for (Segment* seg = curSeg->next1MM(st); seg; seg = seg->next1MM(st)) {
+        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+            return nullptr;
+        }
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
-            if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
+            if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !skipGrace) {
+            if (e->isChord() && !options.skipGrace) {
                 Chord* c = toChord(e);
                 if (!c->graceNotes().empty()) {
                     const GraceNotesGroup& group = c->graceNotesBefore();
@@ -219,7 +223,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 //    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -229,7 +233,7 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
         const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
-        if (skipGrace) {
+        if (options.skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
@@ -257,7 +261,7 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
     } else {
         //
         // cr is not a grace note
-        if (cr->isChord() && !skipGrace) {
+        if (cr->isChord() && !options.skipGrace) {
             const Chord* c = toChord(cr);
             const GraceNotesGroup& group = c->graceNotesBefore();
             if (!group.empty()) {
@@ -268,13 +272,18 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
+    Segment* curSeg = cr->segment();
     for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
+        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+            return nullptr;
+        }
+
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
-            if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
+            if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !skipGrace) {
+            if (e->isChord() && !options.skipGrace) {
                 const GraceNotesGroup& group = toChord(e)->graceNotesAfter();
                 if (!group.empty()) {
                     return group.back();

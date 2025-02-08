@@ -1084,6 +1084,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     std::vector<Spanner*> pedal;
     std::vector<Spanner*> voltas;
     std::vector<Spanner*> tempoChangeLines;
+    std::vector<Spanner*> partialLyricsLines;
 
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
@@ -1116,6 +1117,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 hairpins.push_back(sp);
             } else if (sp->isGradualTempoChange()) {
                 tempoChangeLines.push_back(sp);
+            } else if (sp->isPartialLyricsLine()) {
+                partialLyricsLines.push_back(sp);
             } else if (!sp->isSlur() && !sp->isVolta() && !sp->isTrill()) {      // slurs are already
                 spanner.push_back(sp);
             }
@@ -1145,6 +1148,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     processLines(system, ctx, ottavas);
     processLines(system, ctx, pedal, /*align=*/ true);
+
+    for (Spanner* sp : partialLyricsLines) {
+        TLayout::layoutSystem(sp, system, ctx);
+    }
 
     //-------------------------------------------------------------
     // Lyric

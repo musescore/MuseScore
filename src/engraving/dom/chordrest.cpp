@@ -644,7 +644,9 @@ void ChordRest::replaceBeam(Beam* newBeam)
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
     if (secondChordRest == nullptr) {
-        secondChordRest = nextChordRest(const_cast<ChordRest*>(this));
+        ChordRestNavigateOptions options;
+        options.disableOverRepeats = true;
+        secondChordRest = nextChordRest(const_cast<ChordRest*>(this), options);
     }
     int currentTick = tick().ticks();
     Slur* result = nullptr;
@@ -1394,7 +1396,7 @@ bool ChordRest::hasPrecedingJumpItem() const
     // Voltas
     auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
     for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick()) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick() || toVolta(spanner.value)->isFirstVolta()) {
             continue;
         }
 

@@ -138,6 +138,9 @@ bool SlurSegment::edit(EditData& ed)
     const bool extendToBarLine = shiftMod && altMod;
     const bool isPartialSlur = sl->isIncoming() || sl->isOutgoing();
 
+    ChordRestNavigateOptions options;
+    options.disableOverRepeats = true;
+
     if (ed.key == Key_Left) {
         if (extendToBarLine) {
             const Measure* measure = e->measure();
@@ -153,11 +156,11 @@ bool SlurSegment::edit(EditData& ed)
         } else {
             if (start && sl->isIncoming()) {
                 sl->undoSetIncoming(false);
-                cr = prevChordRest(e);
+                cr = prevChordRest(e, options);
             } else if (!start && sl->isOutgoing()) {
                 sl->undoSetOutgoing(false);
             } else {
-                cr = prevChordRest(e);
+                cr = prevChordRest(e, options);
             }
         }
     } else if (ed.key == Key_Right) {
@@ -177,9 +180,9 @@ bool SlurSegment::edit(EditData& ed)
                 sl->undoSetIncoming(false);
             } else if (!start && sl->isOutgoing()) {
                 sl->undoSetOutgoing(false);
-                cr = nextChordRest(e);
+                cr = nextChordRest(e, options);
             } else {
-                cr = nextChordRest(e);
+                cr = nextChordRest(e, options);
             }
         }
     } else if (ed.key == Key_Up) {
@@ -447,6 +450,10 @@ void Slur::undoSetIncoming(bool incoming)
 
     PartialSpannerDirection dir = PartialSpannerDirection::INCOMING;
     if (incoming) {
+        SlurSegment* firstSeg = nsegments() > 0 ? frontSegment() : nullptr;
+        if (firstSeg) {
+            firstSeg->setSlurOffset(Grip::START, PointF(0, 0));
+        }
         dir = _partialSpannerDirection
               == PartialSpannerDirection::OUTGOING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::INCOMING;
     } else {
@@ -463,6 +470,10 @@ void Slur::undoSetOutgoing(bool outgoing)
 
     PartialSpannerDirection dir = PartialSpannerDirection::OUTGOING;
     if (outgoing) {
+        SlurSegment* lastSeg = nsegments() > 0 ? backSegment() : nullptr;
+        if (lastSeg) {
+            lastSeg->setSlurOffset(Grip::END, PointF(0, 0));
+        }
         dir = _partialSpannerDirection
               == PartialSpannerDirection::INCOMING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::OUTGOING;
     } else {

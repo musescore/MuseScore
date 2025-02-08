@@ -65,6 +65,7 @@
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/lyrics.h"
+#include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
@@ -2287,7 +2288,9 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
         }
 
         if (firstChordRest == secondItem && (!firstItem || firstItem->isChordRest())) {
-            secondItem = nextChordRest(toChordRest(firstItem));
+            ChordRestNavigateOptions options;
+            options.disableOverRepeats = true;
+            secondItem = nextChordRest(toChordRest(firstItem), options);
         }
 
         bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
@@ -2956,13 +2959,16 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
     }
     ChordRest* el = 0;
     switch (type) {
-    case MoveSelectionType::Chord:
+    case MoveSelectionType::Chord: {
+        ChordRestNavigateOptions options;
+        options.skipGrace = true;
         if (d == MoveDirection::Right) {
-            el = mu::engraving::nextChordRest(cr, true);
+            el = mu::engraving::nextChordRest(cr, options);
         } else {
-            el = mu::engraving::prevChordRest(cr, true);
+            el = mu::engraving::prevChordRest(cr, options);
         }
         break;
+    }
     case MoveSelectionType::Measure:
         if (d == MoveDirection::Right) {
             el = score()->nextMeasure(cr, true, true);
@@ -5676,6 +5682,11 @@ void NotationInteraction::navigateToNextSyllable()
             break;
         }
     }
+
+    if (!segmentsAreAdjacentInRepeatStructure(segment, nextSegment)) {
+        nextSegment = nullptr;
+    }
+
     if (!nextSegment && !hasFollowingRepeat) {
         return;
     }
@@ -5721,8 +5732,12 @@ void NotationInteraction::navigateToNextSyllable()
     }
 
     score()->startCmd(TranslatableString("undoableAction", "Navigate to next syllable"));
-    ChordRest* cr = toChordRest(nextSegment->element(toLyricTrack));
-    Lyrics* toLyrics = cr->lyrics(verse, placement);
+    ChordRest* cr = nextSegment ? toChordRest(nextSegment->element(toLyricTrack)) : nullptr;
+    Lyrics* toLyrics = cr ? cr->lyrics(verse, placement) : nullptr;
+
+    if (!toLyrics && !cr) {
+        return;
+    }
 
     // If no lyrics in current track, check others
     if (!toLyrics) {
@@ -5742,14 +5757,50 @@ void NotationInteraction::navigateToNextSyllable()
         }
     }
 
+    // This will be a partial dash at the start of a measure after a repeat
+    // We don't want toLyrics
+    toLyrics = hasPrecedingRepeat && !fromLyrics ? nullptr : toLyrics;
+
     // Make sure we end up with either the cr of toLyrics or cr on correct track
     cr = !toLyrics ? toChordRest(nextSegment->element(track)) : cr;
 
+    // Disallow dashes between non-adjacent repeat sections eg. 1st volta -> 2nd volta
+    // Instead, try to add partial dashes
+    if (cr && fromLyrics) {
+        Measure* toLyricsMeasure = cr->measure();
+        Measure* fromLyricsMeasure = fromLyrics->measure();
+
+        if (toLyricsMeasure != fromLyricsMeasure && fromLyricsMeasure->lastChordRest(track)->hasFollowingJumpItem()) {
+            const std::vector<Measure*> previousRepeats = findPreviousRepeatMeasures(toLyricsMeasure);
+            const bool inPrecedingRepeatSeg = muse::contains(previousRepeats, fromLyricsMeasure);
+            if (!previousRepeats.empty() && !inPrecedingRepeatSeg) {
+                fromLyrics = nullptr;
+            }
+        }
+    }
+
+    PartialLyricsLine* prevPartialLyricsLine = nullptr;
+
+    for (auto sp : score()->spannerMap().findOverlapping(initialCR->tick().ticks(), initialCR->tick().ticks())) {
+        if (!sp.value->isPartialLyricsLine() || sp.value->track() != track) {
+            continue;
+        }
+        PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
+        if (partialLine->isEndMelisma() || partialLine->no() != lyrics->no() || partialLine->placement() != lyrics->placement()) {
+            continue;
+        }
+        prevPartialLyricsLine = partialLine;
+        break;
+    }
+
     bool newLyrics = (toLyrics == 0);
-    if (!toLyrics) {
-        toLyrics = Factory::createLyrics(cr);
+    if (!toLyrics || hasPrecedingRepeat) {
+        // Don't advance cursor if we are after a repeat, there is no partial dash present and we are inputting a dash
+        ChordRest* toLyricsChord = hasPrecedingRepeat && !prevPartialLyricsLine && lyrics->xmlText().empty() ? initialCR : cr;
+
+        toLyrics = Factory::createLyrics(toLyricsChord);
         toLyrics->setTrack(track);
-        toLyrics->setParent(cr);
+        toLyrics->setParent(toLyricsChord);
 
         toLyrics->setNo(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
@@ -5785,18 +5836,22 @@ void NotationInteraction::navigateToNextSyllable()
         }
         // for the same reason, it cannot have a melisma
         fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, Fraction(0, 1));
-    } else if (hasPrecedingRepeat) {
+    } else if (hasPrecedingRepeat && !prevPartialLyricsLine) {
         // No from lyrics - create incoming partial dash
         PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
         dash->setIsEndMelisma(false);
         dash->setNo(verse);
         dash->setPlacement(lyrics->placement());
         dash->setTick(initialCR->tick());
-        dash->setTicks(initialCR->ticks());
+        dash->setTicks(hasPrecedingRepeat ? Fraction(0, 1) : initialCR->ticks());
         dash->setTrack(initialCR->track());
         dash->setTrack2(initialCR->track());
 
         score()->undoAddElement(dash);
+    } else if (prevPartialLyricsLine) {
+        const Fraction tickDiff = cr->tick() - prevPartialLyricsLine->tick2();
+        prevPartialLyricsLine->undoMoveEnd(tickDiff);
+        prevPartialLyricsLine->triggerLayout();
     }
 
     if (newLyrics) {
@@ -6437,6 +6492,10 @@ void NotationInteraction::addMelisma()
         }
     }
 
+    if (!segmentsAreAdjacentInRepeatStructure(segment, nextSegment)) {
+        nextSegment = nullptr;
+    }
+
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several underscores
     Lyrics* fromLyrics = nullptr;
@@ -6460,6 +6519,10 @@ void NotationInteraction::addMelisma()
                 }
 
                 prevPartialLyricsLine = lyricsLine;
+                break;
+            }
+
+            if (prevPartialLyricsLine) {
                 break;
             }
         }
@@ -6492,9 +6555,16 @@ void NotationInteraction::addMelisma()
                 fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::END));
                 break;
             }
-            if (fromLyrics->segment()->tick() < endTick) {
-                fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
+            if (fromLyrics->segment()->tick() < endTick
+                || (endTick + initialCR->actualTicks() == segment->measure()->endTick() && initialCR->hasFollowingJumpItem())) {
+                Fraction ticks = std::max(endTick - fromLyrics->segment()->tick(), Lyrics::TEMP_MELISMA_TICKS);
+                fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, ticks);
             }
+        }
+
+        if (prevPartialLyricsLine) {
+            const Fraction tickDiff = (segment->tick() + segment->ticks()) - prevPartialLyricsLine->tick2();
+            prevPartialLyricsLine->undoMoveEnd(tickDiff);
         }
 
         if (fromLyrics) {

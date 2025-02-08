@@ -23,7 +23,6 @@
 #include <map>
 #include <set>
 
-#include "dom/volta.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -57,6 +56,7 @@
 #include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
+#include "marker.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "measurerepeat.h"
@@ -94,6 +94,7 @@
 #include "tupletmap.h"
 #include "undo.h"
 #include "utils.h"
+#include "volta.h"
 
 #include "log.h"
 
@@ -662,7 +663,10 @@ Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool force
 Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate)
 {
     if (!secondChordRest) {
-        secondChordRest = nextChordRest(firstChordRest);
+        ChordRestNavigateOptions options;
+        options.disableOverRepeats = true;
+        secondChordRest = nextChordRest(firstChordRest, options);
+
         if (!secondChordRest) {
             secondChordRest = firstChordRest;
         }
@@ -7352,12 +7356,14 @@ void Score::undoRemoveStaleTieJumpPoints()
                 continue;
             }
 
-            // Remove invalid lyrics dashes
-            for (Lyrics* lyrics : toChordRest(e)->lyrics()) {
-                LyricsLine* separator = lyrics->separator();
-                if ((lyrics->syllabic() == LyricsSyllabic::BEGIN || lyrics->syllabic() == LyricsSyllabic::MIDDLE) && separator
-                    && !separator->nextLyrics() && !separator->isEndMelisma()) {
-                    lyrics->setNeedRemoveInvalidSegments();
+            if (!toChordRest(e)->hasFollowingJumpItem()) {
+                // Remove invalid lyrics dashes
+                for (Lyrics* lyrics : toChordRest(e)->lyrics()) {
+                    LyricsLine* separator = lyrics->separator();
+                    if ((lyrics->syllabic() == LyricsSyllabic::BEGIN || lyrics->syllabic() == LyricsSyllabic::MIDDLE) && separator
+                        && !separator->nextLyrics() && !separator->isEndMelisma()) {
+                        lyrics->setNeedRemoveInvalidSegments();
+                    }
                 }
             }
 
