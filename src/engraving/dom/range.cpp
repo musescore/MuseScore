@@ -24,6 +24,7 @@
 
 #include "barline.h"
 #include "chord.h"
+#include "spacer.h"
 #include "excerpt.h"
 #include "factory.h"
 #include "linkedobjects.h"
@@ -668,6 +669,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
 ScoreRange::~ScoreRange()
 {
     muse::DeleteAll(m_tracks);
+    deleteSpacers();
 }
 
 //---------------------------------------------------------
@@ -711,6 +713,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             m_tracks.push_back(dl);
         }
     }
+    backupSpacers(first, last);
 }
 
 //---------------------------------------------------------
@@ -769,6 +772,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
             score->undoAddElement(a.e);
         }
     }
+    restoreSpacers(score, tick);
     return true;
 }
 
@@ -825,6 +829,89 @@ bool ScoreRange::truncate(const Fraction& f)
 Fraction ScoreRange::ticks() const
 {
     return m_tracks.empty() ? Fraction() : m_tracks.front()->ticks();
+}
+
+//---------------------------------------------------------
+//   backupSpacers
+//---------------------------------------------------------
+
+void ScoreRange::backupSpacers(Segment* first, Segment* last)
+{
+    Measure* fm = first->measure();
+    Measure* lm = last->measure();
+
+    for (Measure* m = fm; m && m != lm->nextMeasure(); m = m->nextMeasure()) {
+        staff_idx_t nStaves = m->score()->nstaves();
+
+        for (staff_idx_t i = 0; i < nStaves; ++i) {
+            if (m->vspacerUp(i)) {
+                SpacerBackup sBackup;
+                sBackup.s = m->vspacerUp(i)->clone();
+                sBackup.sPosition =m->tick() + ((m->endTick() - m->tick()) / 2);
+                sBackup.staffIdx =i;
+                m_spacers.push_back(sBackup);
+            }
+            if (m->vspacerDown(i)) {
+                SpacerBackup sBackup;
+                sBackup.s = m->vspacerDown(i)->clone();
+                sBackup.sPosition = m->tick() + ((m->endTick() - m->tick()) / 2);
+                sBackup.staffIdx = i;
+                m_spacers.push_back(sBackup);
+            }
+        }
+        // Last Measure
+        if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+            break;
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   restoreSpacers
+//---------------------------------------------------------
+void ScoreRange::restoreSpacers(Score* score, const Fraction& tick) const
+{
+    //---------------------------------------------------------
+    //   addSpacer
+    //---------------------------------------------------------
+    auto addSpacer = [&](Measure* m, Spacer* s, staff_idx_t staffIdx)
+    {
+        // We only add an element if there isn't a previous one of the same Type (UP/DOWN)
+        if (((s->spacerType() == SpacerType::UP) && (!m->vspacerUp(staffIdx)))
+            || (((s->spacerType() == SpacerType::DOWN) || (s->spacerType() == SpacerType::FIXED)) && (!m->vspacerDown(staffIdx)))) {
+            Spacer* ns = Factory::createSpacer(m);
+            ns->setSpacerType(s->spacerType());
+            ns->setGap(s->gap());
+            ns->setTrack(staffIdx * VOICES);
+            m->add(ns);
+        }
+    };
+
+    // Spacers list
+    for (const SpacerBackup& sb : m_spacers) {
+        // Look for suitable measure
+        for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
+            if ((sb.sPosition >= m->tick()) && (sb.sPosition <= m->endTick())) {
+                addSpacer(m, sb.s, sb.staffIdx);
+                break;
+            }
+            // Last Measure
+            if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+                break;
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   deleteSpacers
+//---------------------------------------------------------
+void ScoreRange::deleteSpacers()
+{
+    // Spacers list
+    for (const SpacerBackup& sb : m_spacers) {
+        delete sb.s;
+    }
 }
 
 //---------------------------------------------------------
