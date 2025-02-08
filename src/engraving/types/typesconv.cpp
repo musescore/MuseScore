@@ -2804,22 +2804,22 @@ LyricsDashSystemStart TConv::fromXml(const AsciiStringView& tag, LyricsDashSyste
 }
 
 const std::array<const muse::TranslatableString, 17 > KEY_NAMES = { {
-    muse::TranslatableString("engraving", "C♭ major, A♭ minor"),
-    muse::TranslatableString("engraving", "G♭ major, E♭ minor"),
-    muse::TranslatableString("engraving", "D♭ major, B♭ minor"),
-    muse::TranslatableString("engraving", "A♭ major, F minor"),
-    muse::TranslatableString("engraving", "E♭ major, C minor"),
-    muse::TranslatableString("engraving", "B♭ major, G minor"),
-    muse::TranslatableString("engraving", "F major, D minor"),
-    muse::TranslatableString("engraving", "C major, A minor"),
-    muse::TranslatableString("engraving", "G major, E minor"),
-    muse::TranslatableString("engraving", "D major, B minor"),
-    muse::TranslatableString("engraving", "A major, F♯ minor"),
-    muse::TranslatableString("engraving", "E major, C♯ minor"),
-    muse::TranslatableString("engraving", "B major, G♯ minor"),
-    muse::TranslatableString("engraving", "F♯ major, D♯ minor"),
-    muse::TranslatableString("engraving", "C♯ major, A♯ minor"),
-    muse::TranslatableString("engraving", "Open/Atonal"),
+    muse::TranslatableString("engraving", "C♭ major / A♭ minor"),
+    muse::TranslatableString("engraving", "G♭ major / E♭ minor"),
+    muse::TranslatableString("engraving", "D♭ major / B♭ minor"),
+    muse::TranslatableString("engraving", "A♭ major / F minor"),
+    muse::TranslatableString("engraving", "E♭ major / C minor"),
+    muse::TranslatableString("engraving", "B♭ major / G minor"),
+    muse::TranslatableString("engraving", "F major / D minor"),
+    muse::TranslatableString("engraving", "C major / A minor"),
+    muse::TranslatableString("engraving", "G major / E minor"),
+    muse::TranslatableString("engraving", "D major / B minor"),
+    muse::TranslatableString("engraving", "A major / F♯ minor"),
+    muse::TranslatableString("engraving", "E major / C♯ minor"),
+    muse::TranslatableString("engraving", "B major / G♯ minor"),
+    muse::TranslatableString("engraving", "F♯ major / D♯ minor"),
+    muse::TranslatableString("engraving", "C♯ major / A♯ minor"),
+    muse::TranslatableString("engraving", "Open / Atonal"),
     muse::TranslatableString("engraving", "Custom")
 } };
 
