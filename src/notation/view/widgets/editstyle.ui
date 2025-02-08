@@ -3993,7 +3993,7 @@
             <item>
              <widget class="QGroupBox" name="keySigNaturalsGroup">
               <property name="title">
-               <string>♮ in key signatures</string>
+               <string>♮ on key signature changes</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_35">
                <item>
