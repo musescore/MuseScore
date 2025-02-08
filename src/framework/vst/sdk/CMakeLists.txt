@@ -20,11 +20,27 @@
 
 declare_module(vst_sdk_3)
 
-if (NOT MUSE_MODULE_VST_VST3_SDK_PATH)
-    message(FATAL_ERROR "VST3_SDK path is not setted")
-endif()
+if(MUSE_MODULE_VST_VST3_SDK_PATH)
+    set(VST3_SDK_PATH ${MUSE_MODULE_VST_VST3_SDK_PATH})
+else()
+    include(FetchContent)
 
-set(VST3_SDK_PATH ${MUSE_MODULE_VST_VST3_SDK_PATH})
+    FetchContent_Declare(
+        vst3sdk
+        GIT_REPOSITORY https://github.com/steinbergmedia/vst3sdk.git
+        GIT_TAG v3.7.12_build_20
+
+        # Hack: we don't want `vst3sdk`'s own CMakeLists.txt to be used, so we
+        # tell CMake to go look for it in a non-existent folder.
+        SOURCE_SUBDIR none
+    )
+
+    FetchContent_MakeAvailable(vst3sdk)
+    FetchContent_GetProperties(
+        vst3sdk
+        SOURCE_DIR VST3_SDK_PATH
+    )
+endif()
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -117,6 +133,8 @@ set(VST_PLUGIN_INTERFACES_SRC
 
 set(VST_SDK_COMMON_SRC
     ${VST3_SDK_PATH}/public.sdk/source/common/commoniids.cpp
+    ${VST3_SDK_PATH}/public.sdk/source/common/commonstringconvert.cpp
+    ${VST3_SDK_PATH}/public.sdk/source/common/commonstringconvert.h
     ${VST3_SDK_PATH}/public.sdk/source/common/openurl.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/openurl.h
     ${VST3_SDK_PATH}/public.sdk/source/common/threadchecker.h
