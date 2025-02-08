@@ -455,12 +455,14 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             targetElements = m_selection.elements();
             break;
         case SelState::RANGE:
-            for (EngravingItem* el : m_selection.elements()) {
-                if (el->isNote() || el->isRest()) {
-                    targetElements.push_back(el);
-                    break;
-                }
-            }
+            // TODO: make this as smart as `NotationInteraction::applyPaletteElement`,
+            // without duplicating logic. (Currently, for range selections, we only
+            // paste onto the "top-left corner".
+            mu::engraving::Segment* firstSegment = m_selection.startSegment();
+            staff_idx_t firstStaffIndex = m_selection.staffStart();
+
+            // The usage of `firstElementForNavigation` is inspired by `NotationInteraction::applyPaletteElement`.
+            targetElements = { firstSegment->firstElementForNavigation(firstStaffIndex) };
             break;
         }
 
