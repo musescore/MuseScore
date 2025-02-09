@@ -10469,8 +10469,8 @@ text x-height):</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
-        <source>Show Api dump</source>
-        <translation type="unfinished">Show Api dump</translation>
+        <source>Show API dump</source>
+        <translation type="unfinished">Show API dump</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
@@ -11014,8 +11014,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
-        <source>&amp;Vst</source>
-        <translation type="unfinished">&amp;Vst</translation>
+        <source>&amp;VST</source>
+        <translation type="unfinished">&amp;VST</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="492"/>
