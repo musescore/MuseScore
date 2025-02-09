@@ -42,7 +42,7 @@ static const UiActionList STATIC_ACTIONS = {
     UiAction("extensions-show-apidump",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
-             TranslatableString("action", "Show Api dump")
+             TranslatableString("action", "Show API dump")
              ),
 };
 
