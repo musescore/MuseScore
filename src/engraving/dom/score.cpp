@@ -3560,7 +3560,10 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
 
     if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
         if (ancestor->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-            return ancestor;
+            // https://github.com/musescore/MuseScore/pull/25821#issuecomment-2617369881
+            if (Segment* next = ancestor->nextCR(e->track(), true)) {
+                return next;
+            }
         }
     }
 
