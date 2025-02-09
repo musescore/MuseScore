@@ -90,7 +90,8 @@ muse::Progress* AbstractAudioWriter::progress()
 
 Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                                         io::IODevice& destinationDevice,
-                                        const SoundTrackFormat& format)
+                                        const SoundTrackFormat& format,
+                                        bool selectionOnly)
 {
     //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
     //!     on any call from background thread. Once we have our own implementation of QIODevice
@@ -111,9 +112,11 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
         playbackController()->setIsExportingAudio(false);
         playbackController()->setNotation(globalContext()->currentNotation());
     });
+    secs_t start = selectionOnly ? globalContext()->playbackState()->playbackPosition() : secs_t(0);
+    msecs_t duration = selectionOnly ? playbackController()->selectionDuration() : 0;
 
     playback()->sequenceIdList()
-    .onResolve(this, [this, path, &format](const TrackSequenceIdList& sequenceIdList) {
+    .onResolve(this, [this, path, &format, start, duration](const TrackSequenceIdList& sequenceIdList) {
         m_progress.started.notify();
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
@@ -122,7 +125,7 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                 m_progress.progressChanged.send(current, total, title);
             });
 
-            playback()->audioOutput()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
+            playback()->audioOutput()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format), start, duration)
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;
                 m_writeRet = muse::make_ok();

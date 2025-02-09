@@ -184,9 +184,9 @@ Promise<AudioSignalChanges> AudioOutputHandler::masterSignalChanges() const
 }
 
 Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
-                                                 const SoundTrackFormat& format)
+                                                 const SoundTrackFormat& format, const secs_t startPosition, const msecs_t duration)
 {
-    return Promise<bool>([this, sequenceId, destination, format](auto resolve, auto reject) {
+    return Promise<bool>([this, sequenceId, destination, format, startPosition, duration](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         IF_ASSERT_FAILED(mixer()) {
@@ -200,8 +200,8 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
 
 #ifdef MUSE_MODULE_AUDIO_EXPORT
         s->player()->stop();
-        s->player()->seek(0);
-        msecs_t totalDuration = s->player()->duration();
+        s->player()->seek(startPosition);
+        msecs_t totalDuration = duration == 0 ? s->player()->duration() : duration;
 
         SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer(), iocContext());
         m_saveSoundTracksWritersMap[sequenceId] = writer;
@@ -212,7 +212,7 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         });
 
         Ret ret = writer->write();
-        s->player()->seek(0);
+        s->player()->seek(startPosition);
 
         m_saveSoundTracksWritersMap.erase(sequenceId);
 

@@ -38,5 +38,5 @@ Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationD
         configuration()->exportMp3Bitrate()
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(notation, destinationDevice, format, configuration()->selectionOnly());
 }
