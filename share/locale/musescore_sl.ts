@@ -26235,7 +26235,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="236"/>
         <source>Hangul Jamo Extended-A</source>
-        <translation>Hangul džamo – razširitev A </translation>
+        <translation>Hangul džamo – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="237"/>

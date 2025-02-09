@@ -8847,7 +8847,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="65"/>
         <source>&amp;About MuseScore Studio…</source>
-        <translation>&amp;Om MuseScore Studio </translation>
+        <translation>&amp;Om MuseScore Studio…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="70"/>

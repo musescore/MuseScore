@@ -27222,7 +27222,7 @@ nije uspjelo.</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="62"/>
         <source>Mixer channel panel %1</source>
-        <translation>Panel kanala miksera %1 </translation>
+        <translation>Panel kanala miksera %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="675"/>

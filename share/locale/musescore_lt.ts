@@ -6501,8 +6501,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="102"/>
         <source>&amp;Export…</source>
-        <translation>&amp;Eksportuoti…
- </translation>
+        <translation>&amp;Eksportuoti…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="103"/>

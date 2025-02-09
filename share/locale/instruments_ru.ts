@@ -13,7 +13,7 @@
         <source>Winds</source>
         <comment>winds trackName</comment>
         <extracomment>trackName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Деревянные духовые</translation>
+        <translation>Духовые</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="210"/>
@@ -19593,7 +19593,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="203"/>
         <source>Woodwinds</source>
-        <translation>Деревянные духовые</translation>
+        <translation>Деревянные (язычковые) духовые</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1816"/>

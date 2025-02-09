@@ -2886,8 +2886,8 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4117"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation>Después de la armadura si se cambia a menos ♯ o ♭. 
-Antes si se cambia entre ♯ y ♭. </translation>
+        <translation>Después de la armadura si se cambia a menos ♯ o ♭.
+Antes si se cambia entre ♯ y ♭.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4127"/>
@@ -29806,7 +29806,7 @@ Si tiene cambios sin guardar, se le pedirá guardarlos antes de que MuseScore St
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation>Leer las notas de lanzamiento %1 </translation>
+        <translation>Leer las notas de lanzamiento %1</translation>
     </message>
     <message>
         <source>No thanks</source>

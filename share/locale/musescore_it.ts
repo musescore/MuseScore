@@ -15480,7 +15480,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="568"/>
         <source>Slashed (backwards)</source>
-        <translation> Barrato (all&apos;indietro)</translation>
+        <translation>Barrato (all&apos;indietro)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
@@ -20649,7 +20649,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
         <source>Pause before new section starts</source>
-        <translation>Pausa prima dell&apos;inizio della nuova sezione</translation>
+        <translation>Pausa prima che la nuova sezione inizi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="65"/>
