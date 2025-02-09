@@ -2107,7 +2107,7 @@ void Score::cmdToggleLaissezVib()
         return;
     }
 
-    startCmd(TranslatableString("undoableAction", "Toggle laissez vib"));
+    startCmd(TranslatableString("undoableAction", "Toggle laissez vibrer"));
 
     for (Note* note: noteList) {
         if (LaissezVib* lv = note->laissezVib()) {

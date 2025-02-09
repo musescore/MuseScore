@@ -178,7 +178,7 @@ StyledFlickable {
                         forceHeight: 120
                         source: pageModel.timeSigPlacement.value === 0 ? "timeSigImages/timesig-on_all_staves.png"
                               : pageModel.timeSigPlacement.value === 1 ? "timeSigImages/timesig-above_staves.png"
-                                                                              : "timeSigImages/timesig-across_staves.png"
+                                                                       : "timeSigImages/timesig-across_staves.png"
                     }
                 }
 
@@ -247,7 +247,7 @@ StyledFlickable {
                                 Layout.preferredWidth: styleGroupBox.labelWidth
                                 horizontalAlignment: Text.AlignLeft
                                 text: pageModel.timeSigPlacement.value === 1 ? qsTrc("notation/editstyle/timesignatures", "Alignment with barlines:")
-                                                                                    : qsTrc("notation/editstyle/timesignatures", "Alignment across staves:")
+                                                                             : qsTrc("notation/editstyle/timesignatures", "Alignment across staves:")
                             }
 
                             RadioButtonGroup {
@@ -479,7 +479,8 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            title: qsTrc("notation/editstyle/timesignatures", "Clef, key & time signatures at repeats and jumps")
+            title: qsTrc("notation/editstyle/timesignatures", "Clefs, key & time signatures at repeats and jumps")
+
             component CourtesyShowAndParenToggle: GridLayout {
                 required property StyleItem showStyleItem
                 required property StyleItem parensStyleItem
