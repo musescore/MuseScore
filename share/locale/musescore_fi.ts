@@ -9592,22 +9592,22 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
         <source>Syst&amp;em text</source>
-        <translation>Viiva&amp;storyhmän teksti</translation>
+        <translation>&amp;Viivastoryhmän teksti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1269"/>
         <source>St&amp;aff text</source>
-        <translation>&amp;Viivaston teksti</translation>
+        <translation>Viivaston &amp;teksti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1275"/>
         <source>E&amp;xpression text</source>
-        <translation>&amp;Määritelmäteksti</translation>
+        <translation>Ilmaisut&amp;eksti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1281"/>
         <source>&amp;Rehearsal mark</source>
-        <translation>&amp;Harjoitusmerkki</translation>
+        <translation>Harjoitus&amp;merkki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1287"/>
@@ -9622,12 +9622,12 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1299"/>
         <source>Stic&amp;king</source>
-        <translation>&amp;Kiinnittyvä</translation>
+        <translation>Kii&amp;nnittyvä</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1305"/>
         <source>Chor&amp;d symbol</source>
-        <translation>Soint&amp;umerkki</translation>
+        <translation>Sointumer&amp;kki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1311"/>

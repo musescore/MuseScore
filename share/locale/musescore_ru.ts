@@ -8031,13 +8031,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1499"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1500"/>
         <source>Select to beginning of line</source>
-        <translation>Выделить до начала строки</translation>
+        <translation>Выделить до начала системы</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1505"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1506"/>
         <source>Select to end of line</source>
-        <translation>Выделить до конца строки</translation>
+        <translation>Выделить до конца системы</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1511"/>
