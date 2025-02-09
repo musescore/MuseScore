@@ -79,14 +79,15 @@ void AsyncImpl::onCall(uint64_t key)
         }
 
         c = it->second;
+
         m_calls.erase(it);
+
+        if (c.caller) {
+            c.caller->disconnectAsync(this);
+        }
     }
 
     c.f->call();
-
-    if (c.caller) {
-        c.caller->disconnectAsync(this);
-    }
 
     delete c.f;
 }
