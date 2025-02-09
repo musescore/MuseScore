@@ -140,7 +140,7 @@ jobs:
     #     LUPDATE_ARGS: ""
     #     POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
     #   run: |
-    #     bash ./buildscripts/ci/translation/run_lupdate.sh
+    #     bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files
       if: env.DO_UPDATE_TS == 'true'
       run: |
@@ -160,7 +160,7 @@ jobs:
           cd /MuseScore && \
           export QT_SELECT=qt6 && \
           bash /MuseScore/buildscripts/ci/linux/setup-arm.sh --arch armv7l && \
-          bash /MuseScore/buildscripts/ci/translation/run_lupdate.sh && \
+          bash /MuseScore/tools/translations/run_lupdate.sh && \
           bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch armv7l && \
           bash /MuseScore/buildscripts/ci/linux/package.sh --arch armv7l && \
           bash /MuseScore/buildscripts/ci/tools/checksum.sh \
@@ -269,7 +269,7 @@ jobs:
     #     LUPDATE_ARGS: ""
     #     POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
     #   run: |
-    #     bash ./buildscripts/ci/translation/run_lupdate.sh
+    #     bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files
       if: env.DO_UPDATE_TS == 'true'
       run: |
@@ -289,7 +289,7 @@ jobs:
           cd /MuseScore && \
           export QT_SELECT=qt6 && \
           bash /MuseScore/buildscripts/ci/linux/setup-arm.sh --arch aarch64 && \
-          bash /MuseScore/buildscripts/ci/translation/run_lupdate.sh && \
+          bash /MuseScore/tools/translations/run_lupdate.sh && \
           bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch aarch64 && \
           bash /MuseScore/buildscripts/ci/linux/package.sh --arch aarch64 && \
           bash /MuseScore/buildscripts/ci/tools/checksum.sh \

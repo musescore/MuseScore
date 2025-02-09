@@ -252,7 +252,7 @@ endif()
 # Executable declaration
 ###########################################
 
-add_executable(MuseScoreStudio
+qt_add_executable(MuseScoreStudio
     WIN32 MACOSX_BUNDLE
     ${APP_RCC_SOURCES}
     ${MSCORE_APPEND_SRC}
@@ -310,7 +310,7 @@ endif(OS_IS_WASM)
 ###########################################
 
 if (NOT CC_IS_EMSCRIPTEN)
-    target_link_libraries(MuseScoreStudio ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
+    target_link_libraries(MuseScoreStudio PRIVATE ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
 else()
     target_link_libraries(MuseScoreStudio PRIVATE ${QT_LIBRARIES})
 
@@ -327,6 +327,19 @@ install(TARGETS MuseScoreStudio
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION bin
 )
+
+qt_generate_deploy_qml_app_script(
+    TARGET MuseScoreStudio
+    OUTPUT_SCRIPT deploy_script
+    MACOS_BUNDLE_POST_BUILD
+)
+
+if(OS_IS_WIN)
+    # Doing this only on Windows for now. On other platforms, it is not necessary
+    # for development builds because rpath exists, and it takes very long. However,
+    # on those platforms we must not forget to deploy manually during packaging.
+    install(SCRIPT ${deploy_script})
+endif()
 
 ###########################################
 # Windows
@@ -345,65 +358,6 @@ if (OS_IS_WIN)
                DESTINATION bin)
 
     endif(CC_IS_MINGW)
-
-    # Install Qt
-    foreach (QtLibrary ${QT_LIBRARIES})
-        #message(STATUS "Library ${QtLibrary}")
-        # always use release libs
-        # TODO: remove this
-        # That's not trivial, because for the libraries that are installed manually
-        # below, we would need to manually specify the correct debug/release names.
-        # The real solution would be to use windeployqt.
-        set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
-        get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
-        if (EXISTS ${QtSharedLibrary})
-            list (APPEND QtInstallLibraries ${QtSharedLibrary})
-        endif (EXISTS ${QtSharedLibrary})
-    endforeach (QtLibrary ${QT_LIBRARIES})
-    list(REMOVE_DUPLICATES QtInstallLibraries)
-
-    install(FILES
-            ${QtInstallLibraries}
-            #${QT_INSTALL_BINS}/libEGL.dll
-            #${QT_INSTALL_BINS}/libGLESv2.dll
-            ${QT_INSTALL_BINS}/opengl32sw.dll
-            ${QT_INSTALL_BINS}/d3dcompiler_47.dll
-            ${QT_INSTALL_BINS}/Qt6QuickControls2Impl.dll
-            ${QT_INSTALL_BINS}/Qt6QuickLayouts.dll
-            ${QT_INSTALL_BINS}/Qt6QmlModels.dll
-            ${QT_INSTALL_BINS}/Qt6QmlWorkerScript.dll
-            DESTINATION bin)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
-            DESTINATION bin/iconengines)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
-            ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
-            DESTINATION bin/imageformats)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
-            ${QT_INSTALL_PLUGINS}/platforms/qoffscreen.dll
-            DESTINATION bin/platforms)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/tls/qcertonlybackend.dll
-            ${QT_INSTALL_PLUGINS}/tls/qopensslbackend.dll
-            ${QT_INSTALL_PLUGINS}/tls/qschannelbackend.dll
-            DESTINATION bin/tls)
-
-    install(DIRECTORY
-            ${QT_INSTALL_QML}
-            DESTINATION .
-            REGEX ".*d\\.dll" EXCLUDE
-            REGEX ".pdb" EXCLUDE
-            REGEX ".*QtMultimedia.*" EXCLUDE
-            REGEX ".*QtSensors.*" EXCLUDE
-            REGEX ".*QtTest.*" EXCLUDE
-            REGEX ".*QtWebkit.*" EXCLUDE
-            )
 
     if (SNDFILE_DLL)
         install(FILES ${SNDFILE_DLL} DESTINATION bin)
@@ -496,7 +450,6 @@ elseif(OS_IS_WASM)
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
-
 
 #################################################
 # Miscellaneous Microsoft Visual Studio settings
