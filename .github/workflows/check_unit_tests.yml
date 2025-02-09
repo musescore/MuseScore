@@ -72,6 +72,16 @@ jobs:
         bash ./buildscripts/ci/linux/runutests.sh
       env:
         ASAN_OPTIONS: "detect_leaks=0"
+    - name: Upload unit test result
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: unit_test
+        path: |
+          ${{ github.workspace }}/build.debug/Testing/Temporary/**
+          ${{ github.workspace }}/build.debug/src/**/*.xml
+          ${{ github.workspace }}/build.debug/src/**/*.pdf
+          ${{ github.workspace }}/build.debug/src/**/*.mscx
 
     - name: Code coverage
       if: github.event_name == 'schedule' || inputs.code_coverage == 'true'
