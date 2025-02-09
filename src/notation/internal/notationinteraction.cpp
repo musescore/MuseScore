@@ -5253,7 +5253,7 @@ void NotationInteraction::removeSelectedMeasures()
 
     int numDeletedMeasures = 1 + lastMeasure->measureIndex() - firstMeasure->measureIndex();
 
-    startEdit(TranslatableString("undoableAction", "Delete %1 measure(s)", nullptr, numDeletedMeasures));
+    startEdit(TranslatableString("undoableAction", "Delete %n measure(s)", nullptr, numDeletedMeasures));
     score()->cmdTimeDelete();
     apply();
 }
