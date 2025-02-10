@@ -1852,18 +1852,11 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
         }
         const EngravingItem* el = actualClefSeg ? actualClefSeg->element(track) : nullptr;
         const Clef* actualClef = el ? toClef(el) : nullptr;
-        if (!actualClef && !isContinuationCourtesy) {
-            continue;
-        }
-
-        // Clef changes apply on a staff by staff basis so only apply if present
-        if (isContinuationCourtesy && !(prevCourtesySegment && prevCourtesySegment->elementAt(track))) {
-            continue;
-        }
 
         const ClefType refClef = staff->clef(refClefTick);
         const bool clefsMatch = staff->clef(m->tick()) != refClef;
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : clefsMatch;
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && isContinuationCourtesy
+                                   && prevCourtesySegment && prevCourtesySegment->elementAt(track) : clefsMatch;
         const bool show = actualClef && actualClef->showCourtesy() && needsCourtesy && ctx.conf().styleB(Sid::genCourtesyClef);
 
         if (!courtesyClefSeg) {
