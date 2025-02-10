@@ -2814,8 +2814,8 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         attrs.push_back({ "col", c });
         bool v = i->visible();
         attrs.push_back({ "visible", v });
-        if (i->color() != engravingConfiguration()->defaultColor()) {
-            attrs.push_back({ "color", item->color() });
+        if (i->color() != ctx.configuration()->defaultColor()) {
+            attrs.push_back({ "color", String::fromStdString(i->color().toString()) });
         }
         if (a != BracketType::NO_BRACKET || b > 0) {
             xml.tag("bracket", attrs);
