@@ -652,7 +652,9 @@ void HorizontalSpacing::checkCollisionsWithCrossStaffStems(const Segment* thisSe
 
         Stem* stem = potentialCollidingChord->stem();
         Shape prevStemShape = stem->shape().translated(stem->pos() + potentialCollidingChord->pos());
-        prevStemShape.adjust(0.0, -10000, 0.0, 10000);
+        // We don't know where this stem is vertically, but we know from the beam arrangement that
+        // it's going to be crossed anyway, so we can space to it as if it had infinite height.
+        prevStemShape.adjust(0.0, -100000, 0.0, 100000);
 
         const Shape& staffShape = nextSeg->staffShape(staffIdx);
 
