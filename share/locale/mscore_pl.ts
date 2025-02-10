@@ -28767,12 +28767,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3363"/>
         <source>Note Anchored Line</source>
-        <translation>Zakotwiczona nuta na linii tekstu</translation>
+        <translation>Linia zakotwiczona w nucie</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3364"/>
         <source>Note anchored line</source>
-        <translation>Zakotwiczona nuta na linii tekstu</translation>
+        <translation>Linia zakotwiczona w nucie</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3370"/>
