@@ -36,17 +36,12 @@ AsyncImpl* AsyncImpl::instance()
 void AsyncImpl::disconnectAsync(Asyncable* caller)
 {
     std::lock_guard locker(m_mutex);
-    uint64_t key = 0;
-    std::map<uint64_t, Call>::const_iterator it = m_calls.cbegin(), end = m_calls.cend();
-    for (; it != end; ++it) {
+
+    for (auto it = m_calls.cbegin(), end = m_calls.cend(); it != end; ++it) {
         if (it->second.caller == caller) {
-            key = it->first;
+            m_calls.erase(it);
             break;
         }
-    }
-
-    if (key) {
-        m_calls.erase(key);
     }
 }
 
@@ -79,14 +74,15 @@ void AsyncImpl::onCall(uint64_t key)
         }
 
         c = it->second;
+
         m_calls.erase(it);
+
+        if (c.caller) {
+            c.caller->disconnectAsync(this);
+        }
     }
 
     c.f->call();
-
-    if (c.caller) {
-        c.caller->disconnectAsync(this);
-    }
 
     delete c.f;
 }
