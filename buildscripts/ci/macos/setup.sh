@@ -27,9 +27,6 @@ export MACOSX_DEPLOYMENT_TARGET=10.14
 # Install build tools
 echo "Install build tools"
 brew install cmake ninja --formula --quiet
-brew install cmake --formula --quiet
-
-#brew install jack --formula --quiet
 
 wget -q https://github.com/jackaudio/jack2-releases/releases/download/v1.9.22/jack2-macOS-universal-v1.9.22.tar.gz
 tar xvf jack2-macOS-universal-v1.9.22.tar.gz
