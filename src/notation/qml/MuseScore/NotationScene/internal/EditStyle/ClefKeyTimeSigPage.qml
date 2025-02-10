@@ -298,6 +298,7 @@ StyledFlickable {
                                     decimals: 2
                                     measureUnitsSymbol: 'x'
                                     prefixIcon: IconCode.HORIZONTAL
+                                    minValue: 1.0
 
                                     currentValue: root.timeSigScale.value.width
                                     onValueEdited: function(newValue) {
@@ -314,6 +315,7 @@ StyledFlickable {
                                     decimals: 2
                                     measureUnitsSymbol: 'x'
                                     prefixIcon: IconCode.VERTICAL
+                                    minValue: 1.0
 
                                     currentValue: root.timeSigScale.value.height
                                     onValueEdited: function(newValue) {
