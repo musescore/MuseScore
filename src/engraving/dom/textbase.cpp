@@ -1685,13 +1685,13 @@ TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType
 {
     m_textLineSpacing        = 1.0;
     m_textStyleType          = tid;
-    m_bgColor                = Color::transparent;
-    m_frameColor             = Color::BLACK;
+    m_backgroundColor                = Color::transparent;
+    m_borderColor             = Color::BLACK;
     m_align                  = { AlignH::LEFT, AlignV::TOP };
-    m_frameType              = FrameType::NO_FRAME;
-    m_frameWidth             = Spatium(0.1);
-    m_paddingWidth           = Spatium(0.2);
-    m_frameRound             = 0;
+    m_borderType              = BorderType::NO_BORDER;
+    m_borderThickness             = Spatium(0.1);
+    m_padding           = Spatium(0.2);
+    m_borderRadius             = 0;
 
     m_cursor                 = new TextCursor(this);
     m_cursor->init();
@@ -1714,13 +1714,13 @@ TextBase::TextBase(const TextBase& st)
 
     m_textStyleType               = st.m_textStyleType;
     m_textLineSpacing             = st.m_textLineSpacing;
-    m_bgColor                     = st.m_bgColor;
-    m_frameColor                  = st.m_frameColor;
+    m_backgroundColor                     = st.m_backgroundColor;
+    m_borderColor                  = st.m_borderColor;
     m_align                       = st.m_align;
-    m_frameType                   = st.m_frameType;
-    m_frameWidth                  = st.m_frameWidth;
-    m_paddingWidth                = st.m_paddingWidth;
-    m_frameRound                  = st.m_frameRound;
+    m_borderType                   = st.m_borderType;
+    m_borderThickness                  = st.m_borderThickness;
+    m_padding                = st.m_padding;
+    m_borderRadius                  = st.m_borderRadius;
 
     m_voiceAssignment = st.m_voiceAssignment;
     m_direction = st.m_direction;
@@ -1895,7 +1895,8 @@ void TextBase::createBlocks(LayoutData* ldata) const
 
                         //char32_t code = score()->scoreFont()->symCode(id);
                         char32_t code = id
-                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
+                                        == SymId::space ? static_cast<char32_t>(' ')
+                                        : score()->engravingFonts()->fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code, ldata);
                         cursor.setFormat(fmt); // restore format
@@ -1992,15 +1993,15 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 }
 
 //---------------------------------------------------------
-//   layoutFrame
+//   layoutBorder
 //---------------------------------------------------------
 
-void TextBase::layoutFrame()
+void TextBase::layoutBorder()
 {
-    layoutFrame(mutldata());
+    layoutBorder(mutldata());
 }
 
-void TextBase::layoutFrame(LayoutData* ldata) const
+void TextBase::layoutBorder(LayoutData* ldata) const
 {
 //      if (empty()) {    // or bbox.width() <= 1.0
     if (ldata->bbox().width() <= 1.0 || ldata->bbox().height() < 1.0) {      // or bbox.width() <= 1.0
@@ -2008,31 +2009,31 @@ void TextBase::layoutFrame(LayoutData* ldata) const
         FontMetrics fm(font());
         double ch = fm.ascent();
         double cw = fm.width('n');
-        ldata->frame = RectF(0.0, -ch, cw, ch);
+        ldata->border = RectF(0.0, -ch, cw, ch);
     } else {
-        ldata->frame = ldata->bbox();
+        ldata->border = ldata->bbox();
     }
 
     if (square()) {
         // make sure width >= height
-        if (ldata->frame.height() > ldata->frame.width()) {
-            double w = ldata->frame.height() - ldata->frame.width();
-            ldata->frame.adjust(-w * .5, 0.0, w * .5, 0.0);
+        if (ldata->border.height() > ldata->border.width()) {
+            double w = ldata->border.height() - ldata->border.width();
+            ldata->border.adjust(-w * .5, 0.0, w * .5, 0.0);
         }
     } else if (circle()) {
-        if (ldata->frame.width() > ldata->frame.height()) {
-            ldata->frame.setTop(ldata->frame.y() + (ldata->frame.width() - ldata->frame.height()) * -.5);
-            ldata->frame.setHeight(ldata->frame.width());
+        if (ldata->border.width() > ldata->border.height()) {
+            ldata->border.setTop(ldata->border.y() + (ldata->border.width() - ldata->border.height()) * -.5);
+            ldata->border.setHeight(ldata->border.width());
         } else {
-            ldata->frame.setLeft(ldata->frame.x() + (ldata->frame.height() - ldata->frame.width()) * -.5);
-            ldata->frame.setWidth(ldata->frame.height());
+            ldata->border.setLeft(ldata->border.x() + (ldata->border.height() - ldata->border.width()) * -.5);
+            ldata->border.setWidth(ldata->border.height());
         }
     }
     double _spatium = spatium();
-    double w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
-    ldata->frame.adjust(-w, -w, w, w);
-    w = frameWidth().val() * _spatium;
-    ldata->setBbox(ldata->frame.adjusted(-w, -w, w, w));
+    double w = (padding() + borderThickness() * .5f).val() * _spatium;
+    ldata->border.adjust(-w, -w, w, w);
+    w = borderThickness().val() * _spatium;
+    ldata->setBbox(ldata->border.adjusted(-w, -w, w, w));
 }
 
 //---------------------------------------------------------
@@ -2760,18 +2761,18 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return static_cast<int>(m_cursor->selectedFragmentsFormat().style());
     case Pid::TEXT_LINE_SPACING:
         return textLineSpacing();
-    case Pid::FRAME_TYPE:
-        return static_cast<int>(frameType());
-    case Pid::FRAME_WIDTH:
-        return frameWidth();
-    case Pid::FRAME_PADDING:
-        return paddingWidth();
-    case Pid::FRAME_ROUND:
-        return frameRound();
-    case Pid::FRAME_FG_COLOR:
-        return PropertyValue::fromValue(frameColor());
-    case Pid::FRAME_BG_COLOR:
-        return PropertyValue::fromValue(bgColor());
+    case Pid::BORDER_TYPE:
+        return static_cast<int>(borderType());
+    case Pid::BORDER_WIDTH:
+        return borderThickness();
+    case Pid::BORDER_PADDING:
+        return padding();
+    case Pid::BORDER_ROUND:
+        return borderRadius();
+    case Pid::BORDER_FG_COLOR:
+        return PropertyValue::fromValue(borderColor());
+    case Pid::BORDER_BG_COLOR:
+        return PropertyValue::fromValue(backgroundColor());
     case Pid::ALIGN:
         return PropertyValue::fromValue(align());
     case Pid::TEXT_SCRIPT_ALIGN:
@@ -2818,23 +2819,23 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
     case Pid::TEXT_LINE_SPACING:
         setTextLineSpacing(v.toReal());
         break;
-    case Pid::FRAME_TYPE:
-        setFrameType(FrameType(v.toInt()));
+    case Pid::BORDER_TYPE:
+        setBorderType(BorderType(v.toInt()));
         break;
-    case Pid::FRAME_WIDTH:
-        setFrameWidth(v.value<Spatium>());
+    case Pid::BORDER_WIDTH:
+        setBorderThickness(v.value<Spatium>());
         break;
-    case Pid::FRAME_PADDING:
-        setPaddingWidth(v.value<Spatium>());
+    case Pid::BORDER_PADDING:
+        setPadding(v.value<Spatium>());
         break;
-    case Pid::FRAME_ROUND:
-        setFrameRound(v.toInt());
+    case Pid::BORDER_ROUND:
+        setBorderRadius(v.toInt());
         break;
-    case Pid::FRAME_FG_COLOR:
-        setFrameColor(v.value<Color>());
+    case Pid::BORDER_FG_COLOR:
+        setBorderColor(v.value<Color>());
         break;
-    case Pid::FRAME_BG_COLOR:
-        setBgColor(v.value<Color>());
+    case Pid::BORDER_BG_COLOR:
+        setBackgroundColor(v.value<Color>());
         break;
     case Pid::TEXT:
         setXmlText(v.value<String>());

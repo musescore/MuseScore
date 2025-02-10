@@ -885,7 +885,8 @@ public:
     void transposeDiatonicAlterations(TransposeDirection direction);
 
     struct InsertMeasureOptions {
-        InsertMeasureOptions() {}
+        InsertMeasureOptions() {
+        }
 
         bool createEmptyMeasures = false;
         bool moveSignaturesClef = true;
