@@ -83,7 +83,7 @@
           <line>-1</line>
           <voice>0</voice>
           <name>Stick Click</name>
-          <shortcut>E</shortcut>
+          <shortcut>G</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>6</panelColumn>
         </Drum>
@@ -92,7 +92,7 @@
           <line>1</line>
           <voice>0</voice>
           <name>Stick Shot</name>
-          <shortcut>F</shortcut>
+          <shortcut>E</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>4</panelColumn>
         </Drum>
@@ -101,7 +101,7 @@
           <line>2</line>
           <voice>0</voice>
           <name>Shell</name>
-          <shortcut>G</shortcut>
+          <shortcut>H</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>7</panelColumn>
         </Drum>
@@ -110,6 +110,7 @@
           <line>1</line>
           <voice>0</voice>
           <name>Backstick</name>
+          <shortcut>F</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>5</panelColumn>
         </Drum>
@@ -256,7 +257,7 @@
           <head>diamond</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>sticks</name>
+          <name>Sticks</name>
           <stem>2</stem>
           <panelRow>4</panelRow>
           <panelColumn>0</panelColumn>
@@ -764,6 +765,7 @@
           <line>0</line>
           <voice>0</voice>
           <name>Muted Tap</name>
+          <shortcut>H</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>7</panelColumn>
         </Drum>

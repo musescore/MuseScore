@@ -2421,11 +2421,12 @@ B. Tbn.</shortName>
         <voice>1</voice>
         <name>Bass Drum</name>
         <stem>2</stem>
+        <shortcut>A</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>0</panelColumn>
           </Drum>
           <Drum pitch="37">
-        <head>slashed1</head>
+        <head>cross</head>
         <line>3</line>
         <voice>0</voice>
         <name>Side Stick</name>
@@ -2439,6 +2440,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Snare</name>
         <stem>1</stem>
+        <shortcut>B</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>1</panelColumn>
           </Drum>
@@ -2448,6 +2450,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Tambourine</name>
         <stem>1</stem>
+        <shortcut>G</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>6</panelColumn>
           </Drum>
@@ -2475,6 +2478,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Suspended Cymbal</name>
         <stem>1</stem>
+        <shortcut>E</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>4</panelColumn>
           </Drum>
@@ -2493,6 +2497,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Hand Cymbals</name>
         <stem>1</stem>
+        <shortcut>F</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>5</panelColumn>
           </Drum>
@@ -2643,6 +2648,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Claves</name>
         <stem>1</stem>
+        <shortcut>H</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>7</panelColumn>
           </Drum>
@@ -2688,6 +2694,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Mute Triangle</name>
         <stem>1</stem>
+        <shortcut>D</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>3</panelColumn>
           </Drum>
@@ -2697,6 +2704,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Triangle</name>
         <stem>1</stem>
+        <shortcut>C</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>2</panelColumn>
           </Drum>
@@ -2877,11 +2885,12 @@ B. Tbn.</shortName>
         <voice>1</voice>
         <name>Bass Drum</name>
         <stem>2</stem>
+        <shortcut>A</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>0</panelColumn>
           </Drum>
           <Drum pitch="37">
-        <head>slashed1</head>
+        <head>cross</head>
         <line>3</line>
         <voice>0</voice>
         <name>Side Stick</name>
@@ -2895,6 +2904,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Snare</name>
         <stem>1</stem>
+        <shortcut>B</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>1</panelColumn>
           </Drum>
@@ -2904,6 +2914,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Tambourine</name>
         <stem>1</stem>
+        <shortcut>G</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>6</panelColumn>
           </Drum>
@@ -2931,6 +2942,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Suspended Cymbal</name>
         <stem>1</stem>
+        <shortcut>E</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>4</panelColumn>
           </Drum>
@@ -2949,6 +2961,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Hand Cymbals</name>
         <stem>1</stem>
+        <shortcut>F</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>5</panelColumn>
           </Drum>
@@ -3099,6 +3112,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Claves</name>
         <stem>1</stem>
+        <shortcut>H</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>7</panelColumn>
           </Drum>
@@ -3144,6 +3158,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Mute Triangle</name>
         <stem>1</stem>
+        <shortcut>D</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>3</panelColumn>
           </Drum>
@@ -3153,6 +3168,7 @@ B. Tbn.</shortName>
         <voice>0</voice>
         <name>Triangle</name>
         <stem>1</stem>
+        <shortcut>C</shortcut>
         <panelRow>0</panelRow>
         <panelColumn>2</panelColumn>
           </Drum>
