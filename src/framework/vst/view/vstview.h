@@ -27,6 +27,7 @@
 #include "../ivstinstancesregister.h"
 
 namespace muse::vst {
+class RunLoop;
 class VstView : public QQuickItem, public Steinberg::IPlugFrame
 {
     Q_OBJECT
@@ -73,5 +74,6 @@ private:
     ScreenMetrics m_screenMetrics;
     PluginViewPtr m_view;
     QString m_title;
+    RunLoop* m_runLoop = nullptr;
 };
 }
