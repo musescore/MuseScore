@@ -55,7 +55,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
     table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
-    table[ElementType::NOTE][ElementType::PARENTHESIS] = 0.35 * spatium;
+    table[ElementType::NOTE][ElementType::PARENTHESIS] = style.styleMM(Sid::noteBarDistance);
 
     table[ElementType::LEDGER_LINE][ElementType::NOTE] = table[ElementType::NOTE][ElementType::LEDGER_LINE];
     table[ElementType::LEDGER_LINE][ElementType::LEDGER_LINE] = ledgerPad;
@@ -245,7 +245,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::PARENTHESIS][ElementType::TIMESIG] = 0.2 * spatium;
     table[ElementType::PARENTHESIS][ElementType::CLEF] = 0.2 * spatium;
     table[ElementType::PARENTHESIS][ElementType::STEM] = 0.35 * spatium;
-    table[ElementType::PARENTHESIS][ElementType::NOTE] = 0.35 * spatium;
+    table[ElementType::PARENTHESIS][ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
     table[ElementType::PARENTHESIS][ElementType::REST] = 0.35 * spatium;
     table[ElementType::PARENTHESIS][ElementType::NOTEDOT] = 0.35 * spatium;
     table[ElementType::PARENTHESIS][ElementType::HOOK] = 0.35 * spatium;
