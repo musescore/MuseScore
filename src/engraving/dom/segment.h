@@ -290,6 +290,11 @@ public:
     bool isEndBarLineType() const { return m_segmentType == SegmentType::EndBarLine; }
     bool isKeySigAnnounceType() const { return m_segmentType == SegmentType::KeySigAnnounce; }
     bool isTimeSigAnnounceType() const { return m_segmentType == SegmentType::TimeSigAnnounce; }
+    bool isCourtesySegment() const
+    {
+        return m_segmentType & (SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType | SegmentType::CourtesyClefType);
+    }
+
     bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }
     bool isRightAligned() const { return isClefType() || isBreathType(); }
     bool isMMRestSegment() const { return isChordRestType() && m_elist.front() && m_elist.front()->isMMRest(); }

@@ -1262,6 +1262,9 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
     while (s1) {
         if (!s1->hasTimeSigAboveStaves() && !s1->allElementsInvisible()) {
             x1 = std::max(x1, s1->x() + s1->minRight());
+            if (s1->isCourtesySegment()) {
+                break;
+            }
         }
         s1 = s1->prevActive();
     }
@@ -2117,11 +2120,11 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
         }
 
         if (leftParen) {
-            placeParentheses(leftMostSeg, track2staff(track), ctx);
+            placeParentheses(leftMostSeg, track, ctx);
         }
 
         if (rightParen && rightMostSeg != leftMostSeg) {
-            placeParentheses(rightMostSeg, track2staff(track), ctx);
+            placeParentheses(rightMostSeg, track, ctx);
         }
     }
 }
