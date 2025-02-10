@@ -2316,11 +2316,11 @@
           <panelColumn>1</panelColumn>
         </Drum>
         <Drum pitch="43">
-          <head>diamond</head>
+          <head>plus</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Sticks</name>
-          <stem>2</stem>
+          <name>Stick Click</name>
+          <stem>1</stem>
           <panelRow>4</panelRow>
           <panelColumn>0</panelColumn>
         </Drum>
@@ -2572,7 +2572,7 @@
           <head>normal</head>
           <line>7</line>
           <voice>0</voice>
-          <name>Bass Drum 5</name>
+          <name>Drum 5</name>
           <stem>1</stem>
           <shortcut>A</shortcut>
           <panelRow>0</panelRow>
@@ -2582,7 +2582,7 @@
           <head>cross</head>
           <line>7</line>
           <voice>0</voice>
-          <name>Bass Drum 5 Rim Knock</name>
+          <name>Drum 5 Rim</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
           <panelColumn>0</panelColumn>
@@ -2591,7 +2591,7 @@
           <head>normal</head>
           <line>5</line>
           <voice>0</voice>
-          <name>Bass Drum 4</name>
+          <name>Drum 4</name>
           <stem>1</stem>
           <shortcut>B</shortcut>
           <panelRow>0</panelRow>
@@ -2601,7 +2601,7 @@
           <head>cross</head>
           <line>5</line>
           <voice>0</voice>
-          <name>Bass Drum 4 Rim Knock</name>
+          <name>Drum 4 Rim</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
           <panelColumn>1</panelColumn>
@@ -2610,7 +2610,7 @@
           <head>normal</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Bass Drum 3</name>
+          <name>Drum 3</name>
           <stem>1</stem>
           <shortcut>C</shortcut>
           <panelRow>0</panelRow>
@@ -2620,7 +2620,7 @@
           <head>cross</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Bass Drum 3 Rim Knock</name>
+          <name>Drum 3 Rim</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
           <panelColumn>2</panelColumn>
@@ -2629,7 +2629,7 @@
           <head>normal</head>
           <line>1</line>
           <voice>0</voice>
-          <name>Bass Drum 2</name>
+          <name>Drum 2</name>
           <stem>1</stem>
           <shortcut>D</shortcut>
           <panelRow>0</panelRow>
@@ -2639,7 +2639,7 @@
           <head>cross</head>
           <line>1</line>
           <voice>0</voice>
-          <name>Bass Drum 2 Rim Knock</name>
+          <name>Drum 2 Rim</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
           <panelColumn>3</panelColumn>
@@ -2648,7 +2648,7 @@
           <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Bass Drum 1</name>
+          <name>Drum 1</name>
           <stem>1</stem>
           <shortcut>E</shortcut>
           <panelRow>0</panelRow>
@@ -2658,7 +2658,7 @@
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Bass Drum 1 Rim Knock</name>
+          <name>Drum 1 Rim</name>
           <stem>1</stem>
           <panelRow>1</panelRow>
           <panelColumn>4</panelColumn>
@@ -2667,7 +2667,7 @@
           <head>slash</head>
           <line>4</line>
           <voice>0</voice>
-          <name>Simultaneous Hit</name>
+          <name>Unison</name>
           <stem>1</stem>
           <shortcut>F</shortcut>
           <panelRow>0</panelRow>
@@ -2763,7 +2763,7 @@
           <head>cross</head>
           <line>0</line>
           <voice>0</voice>
-          <name>High Hat</name>
+          <name>Hi-Hat</name>
           <shortcut>C</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>2</panelColumn>
@@ -2790,7 +2790,7 @@
           <head>do</head>
           <line>0</line>
           <voice>0</voice>
-          <name>Normal Tap</name>
+          <name>Tap</name>
           <shortcut>F</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>5</panelColumn>
@@ -2799,7 +2799,7 @@
           <head>do</head>
           <line>0</line>
           <voice>0</voice>
-          <name>Normal Tap-Choke</name>
+          <name>Tap-Choke</name>
           <shortcut>G</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>6</panelColumn>

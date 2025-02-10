@@ -2429,7 +2429,7 @@ B. Tbn.</shortName>
         <head>cross</head>
         <line>3</line>
         <voice>0</voice>
-        <name>Side Stick</name>
+        <name>Snare Rim</name>
         <stem>1</stem>
         <panelRow>1</panelRow>
         <panelColumn>1</panelColumn>
@@ -2893,7 +2893,7 @@ B. Tbn.</shortName>
         <head>cross</head>
         <line>3</line>
         <voice>0</voice>
-        <name>Side Stick</name>
+        <name>Snare Rim</name>
         <stem>1</stem>
         <panelRow>1</panelRow>
         <panelColumn>1</panelColumn>
