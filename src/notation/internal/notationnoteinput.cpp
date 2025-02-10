@@ -458,6 +458,13 @@ void NotationNoteInput::padNote(const Pad& pad)
     score()->padToggle(pad);
     apply();
 
+    if (pad >= Pad::NOTE00 && pad <= Pad::NOTE1024) {
+        const NoteInputState& is = score()->inputState();
+        if (!is.rest() && is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
+            score()->toggleAccidental(AccidentalType::NONE);
+        }
+    }
+
     notifyAboutStateChanged();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();

@@ -27,6 +27,7 @@
 
 #include "containers.h"
 
+#include "accidental.h"
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
@@ -1134,6 +1135,23 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     return halfsteps;
 }
 
+static void noteValToEffectivePitchAndTpc(const NoteVal& nval, const Staff* staff, const Fraction& tick, int& epitch, int& tpc)
+{
+    const bool concertPitch = staff->concertPitch();
+
+    if (concertPitch) {
+        epitch = nval.pitch;
+    } else {
+        const int pitchOffset = staff->part()->instrument(tick)->transpose().chromatic;
+        epitch = nval.pitch - pitchOffset;
+    }
+
+    tpc = nval.tpc(concertPitch);
+    if (tpc == static_cast<int>(mu::engraving::Tpc::TPC_INVALID)) {
+        tpc = pitch2tpc(epitch, staff->key(tick), mu::engraving::Prefer::NEAREST);
+    }
+}
+
 int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
 {
     if (staff->isDrumStaff(tick)) {
@@ -1147,16 +1165,28 @@ int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
         return staff->middleLine(tick);
     }
 
-    const bool concertPitch = staff->concertPitch();
-    const int pitchOffset = concertPitch ? 0 : staff->part()->instrument(tick)->transpose().chromatic;
-    const int epitch = nval.pitch - pitchOffset;
-
-    int tpc = nval.tpc(concertPitch);
-    if (tpc == static_cast<int>(mu::engraving::Tpc::TPC_INVALID)) {
-        tpc = pitch2tpc(epitch, staff->key(tick), mu::engraving::Prefer::NEAREST);
-    }
+    int epitch = nval.pitch;
+    int tpc = static_cast<int>(mu::engraving::Tpc::TPC_INVALID);
+    noteValToEffectivePitchAndTpc(nval, staff, tick, epitch, tpc);
 
     return relStep(epitch, tpc, staff->clef(tick));
+}
+
+AccidentalType noteValToAccidentalType(const NoteVal& nval, const Staff* staff, const Fraction& tick)
+{
+    if (nval.isRest()) {
+        return AccidentalType::NONE;
+    }
+
+    if (staff->isDrumStaff(tick)) {
+        return AccidentalType::NONE;
+    }
+
+    int epitch = nval.pitch;
+    int tpc = static_cast<int>(mu::engraving::Tpc::TPC_INVALID);
+    noteValToEffectivePitchAndTpc(nval, staff, tick, epitch, tpc);
+
+    return Accidental::value2subtype(tpc2alter(tpc));
 }
 
 int compareNotesPos(const Note* n1, const Note* n2)
