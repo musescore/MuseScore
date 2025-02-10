@@ -1645,8 +1645,9 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
     const bool isTrailer = courtesySegType == SegmentType::TimeSigAnnounce;
     const bool isContinuationCourtesy = courtesySegType == SegmentType::TimeSigStartRepeatAnnounce;
 
+    const Segment* actualSegAtMeasureStart = m->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
     const bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyTimeSig()
-                                        && !m->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+                                        && !(actualSegAtMeasureStart && actualSegAtMeasureStart->enabled());
     Segment* courtesySigSeg = m->findSegmentR(courtesySegType, courtesySigRTick);
     for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
         const Staff* staff = ctx.dom().staff(track2staff(track));
@@ -1742,8 +1743,9 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
     const bool isTrailer = courtesySegType == SegmentType::KeySigAnnounce;
     const bool isContinuationCourtesy = courtesySegType == SegmentType::KeySigStartRepeatAnnounce;
 
+    const Segment* actualSegAtMeasureStart = m->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
     const bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyKeySig()
-                                        && !m->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+                                        && !(actualSegAtMeasureStart && actualSegAtMeasureStart->enabled());
     Segment* courtesySigSeg = m->findSegmentR(courtesySegType, courtesySigRTick);
     for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
         const Staff* staff = ctx.dom().staff(track2staff(track));
@@ -1836,9 +1838,10 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
     const Segment* prevCourtesySegment
         = prevMeasure ? prevMeasure->findSegmentR(SegmentType::ClefRepeatAnnounce, prevMeasure->ticks()) : nullptr;
+    const Segment* actualSegAtMeasureStart = m->findSegmentR(SegmentType::Clef, Fraction(0, 1));
     bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyClef()
-                                  && !m->findSegmentR(SegmentType::Clef,
-                                                      Fraction(0, 1)) && prevCourtesySegment && prevCourtesySegment->enabled();
+                                  && !(actualSegAtMeasureStart && actualSegAtMeasureStart->enabled()) && prevCourtesySegment
+                                  && prevCourtesySegment->enabled();
     Segment* courtesyClefSeg = m->findSegmentR(courtesySegType, courtesyClefRTick);
     for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
         const Staff* staff = ctx.dom().staff(track2staff(track));
@@ -2055,12 +2058,71 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
         return seg && seg->enabled() && el && el->visible();
     };
 
-    for (track_idx_t track = 0; track <= ctx.dom().nstaves() * VOICES; track += VOICES) {
+    auto timeSigShouldHaveOwnParentheses = [&](const Segment* seg, const track_idx_t track) -> bool {
+        if (!segShouldHaveParenthesis(seg, track)) {
+            return false;
+        }
+
+        const EngravingItem* el = seg ? seg->element(track) : nullptr;
+        if (!el || !el->isTimeSig()) {
+            return false;
+        }
+
+        return ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL;
+    };
+
+    auto createParenthesesForSegments = [&](Segment* leftSeg, Segment* rightSeg, track_idx_t track) -> void {
         double top = DBL_MAX;
         double bottom = -DBL_MAX;
+        Parenthesis* leftParen = findOrCreateParenthesis(leftSeg, DirectionH::LEFT, track);
+        Parenthesis* rightParen = findOrCreateParenthesis(rightSeg, DirectionH::RIGHT, track);
+        bool needsBigTimeSigAdjust = leftSeg && rightSeg && leftSeg == rightSeg && leftSeg->isType(SegmentType::TimeSigType)
+                                     && ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>()
+                                     != TimeSigPlacement::NORMAL;
+        if ((ctx.conf().styleB(Sid::smallParens) || needsBigTimeSigAdjust) && leftParen && rightParen) {
+            const double spatium = leftParen->spatium();
+            calcParenTopBottom(leftParen, top, bottom);
+            calcParenTopBottom(rightParen, top, bottom);
+
+            double height = bottom - top;
+
+            if (!ctx.conf().styleB(Sid::smallParens)) {
+                top -= 1.25 * spatium;
+                height += 2.5 * spatium;
+            }
+
+            rightParen->mutldata()->startY.set_value(top);
+            rightParen->mutldata()->height.set_value(height);
+            leftParen->mutldata()->startY.set_value(top);
+            leftParen->mutldata()->height.set_value(height);
+        } else if (leftParen || rightParen) {
+            const Staff* staff = leftParen ? leftParen->staff() : rightParen->staff();
+            const double spatium = leftParen ? leftParen->spatium() : rightParen->spatium();
+            const Fraction tick = leftParen ? leftParen->tick() : rightParen->tick();
+            if (leftParen) {
+                leftParen->mutldata()->startY.set_value(-spatium);
+                leftParen->mutldata()->height.set_value(staff->staffHeight(tick) + 2 * spatium * leftParen->mag());
+            }
+            if (rightParen) {
+                rightParen->mutldata()->startY.set_value(-spatium);
+                rightParen->mutldata()->height.set_value(staff->staffHeight(tick) + 2 * spatium * rightParen->mag());
+            }
+        }
+
+        if (leftParen) {
+            placeParentheses(leftSeg, track, ctx);
+        }
+
+        if (rightParen && rightSeg != leftSeg) {
+            placeParentheses(rightSeg, track, ctx);
+        }
+    };
+
+    for (track_idx_t track = 0; track <= ctx.dom().nstaves() * VOICES; track += VOICES) {
         Segment* clefSeg = m->findSegmentR(clefSegType, sigTick);
         Segment* ksSeg = m->findSegmentR(ksSegType, sigTick);
         Segment* tsSeg = m->findSegmentR(tsSegType, sigTick);
+        bool separateTsParens = timeSigShouldHaveOwnParentheses(tsSeg, track);
 
         Segment* leftMostSeg = clefSeg;
 
@@ -2068,7 +2130,7 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             leftMostSeg = ksSeg;
         }
 
-        if (!segShouldHaveParenthesis(leftMostSeg, track)) {
+        if (!separateTsParens && !segShouldHaveParenthesis(leftMostSeg, track)) {
             leftMostSeg = tsSeg;
         }
 
@@ -2078,15 +2140,14 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
 
         // Remove stale parentheses
         for (Segment* seg : { clefSeg, ksSeg, tsSeg }) {
-            if (seg == leftMostSeg || !seg) {
+            if (seg == leftMostSeg || !seg || (seg == tsSeg && separateTsParens)) {
                 continue;
             }
             removeRepeatCourtesyParenthesesSegment(seg, track, DirectionH::LEFT);
         }
 
-        Parenthesis* leftParen = findOrCreateParenthesis(leftMostSeg, DirectionH::LEFT, track);
+        Segment* rightMostSeg = separateTsParens ? nullptr : tsSeg;
 
-        Segment* rightMostSeg = tsSeg;
         if (!segShouldHaveParenthesis(rightMostSeg, track)) {
             rightMostSeg = ksSeg;
         }
@@ -2101,30 +2162,16 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
 
         // Remove stale parentheses
         for (Segment* seg : { clefSeg, ksSeg, tsSeg }) {
-            if (seg == rightMostSeg || !seg) {
+            if (seg == rightMostSeg || !seg || (seg == tsSeg && separateTsParens)) {
                 continue;
             }
             removeRepeatCourtesyParenthesesSegment(seg, track, DirectionH::RIGHT);
         }
 
-        Parenthesis* rightParen = findOrCreateParenthesis(rightMostSeg, DirectionH::RIGHT, track);
-        if (ctx.conf().styleB(Sid::smallParens) && leftParen && rightParen) {
-            calcParenTopBottom(leftParen, top, bottom);
-            calcParenTopBottom(rightParen, top, bottom);
+        createParenthesesForSegments(leftMostSeg, rightMostSeg, track);
 
-            const double height = bottom - top;
-            rightParen->mutldata()->startY.set_value(top);
-            rightParen->mutldata()->height.set_value(height);
-            leftParen->mutldata()->startY.set_value(top);
-            leftParen->mutldata()->height.set_value(height);
-        }
-
-        if (leftParen) {
-            placeParentheses(leftMostSeg, track, ctx);
-        }
-
-        if (rightParen && rightMostSeg != leftMostSeg) {
-            placeParentheses(rightMostSeg, track, ctx);
+        if (separateTsParens) {
+            createParenthesesForSegments(tsSeg, tsSeg, track);
         }
     }
 }
