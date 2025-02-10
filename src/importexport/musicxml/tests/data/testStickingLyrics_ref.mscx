@@ -72,7 +72,7 @@
           <voice>1</voice>
           <name>Bass Drum 1</name>
           <stem>2</stem>
-          <shortcut>B</shortcut>
+          <shortcut>A</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>0</panelColumn>
           </Drum>
@@ -91,7 +91,7 @@
           <voice>0</voice>
           <name>Acoustic Snare</name>
           <stem>1</stem>
-          <shortcut>A</shortcut>
+          <shortcut>B</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>1</panelColumn>
           </Drum>
@@ -119,7 +119,7 @@
           <voice>0</voice>
           <name>Closed Hi-Hat</name>
           <stem>1</stem>
-          <shortcut>G</shortcut>
+          <shortcut>C</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>2</panelColumn>
           </Drum>
@@ -129,6 +129,7 @@
           <voice>0</voice>
           <name>High Floor Tom</name>
           <stem>1</stem>
+          <shortcut>H</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>7</panelColumn>
           </Drum>
@@ -138,7 +139,6 @@
           <voice>1</voice>
           <name>Pedal Hi-Hat</name>
           <stem>2</stem>
-          <shortcut>F</shortcut>
           <panelRow>1</panelRow>
           <panelColumn>2</panelColumn>
           </Drum>
@@ -157,6 +157,7 @@
           <voice>0</voice>
           <name>Open Hi-Hat</name>
           <stem>1</stem>
+          <shortcut>D</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>3</panelColumn>
           </Drum>
@@ -175,6 +176,7 @@
           <voice>0</voice>
           <name>Hi-Mid Tom</name>
           <stem>1</stem>
+          <shortcut>G</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>6</panelColumn>
           </Drum>
@@ -184,7 +186,7 @@
           <voice>0</voice>
           <name>Crash Cymbal 1</name>
           <stem>1</stem>
-          <shortcut>C</shortcut>
+          <shortcut>E</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>4</panelColumn>
           </Drum>
@@ -194,7 +196,6 @@
           <voice>0</voice>
           <name>High Tom</name>
           <stem>1</stem>
-          <shortcut>E</shortcut>
           <panelRow>1</panelRow>
           <panelColumn>4</panelColumn>
           </Drum>
@@ -204,7 +205,7 @@
           <voice>0</voice>
           <name>Ride Cymbal 1</name>
           <stem>1</stem>
-          <shortcut>D</shortcut>
+          <shortcut>F</shortcut>
           <panelRow>0</panelRow>
           <panelColumn>5</panelColumn>
           </Drum>
