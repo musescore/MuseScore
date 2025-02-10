@@ -545,7 +545,7 @@ void NotationNoteInput::setInputNotes(const NoteValList& notes)
         if (const Drumset* drumset = is.drumset()) {
             const int pitch = notes.front().pitch;
             is.setDrumNote(pitch);
-            is.setTrack(is.track() + drumset->voice(pitch));
+            is.setVoice(drumset->voice(pitch));
         }
     }
 
