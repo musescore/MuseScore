@@ -57,7 +57,7 @@ int AudioConfigurationStub::audioDelayCompensate() const
     return 0;
 }
 
-void AudioConfigurationStub::setAudioDelayCompensate(const int frames)
+void AudioConfigurationStub::setAudioDelayCompensate(const int)
 {
 }
 
