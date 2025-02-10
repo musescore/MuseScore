@@ -368,6 +368,11 @@ static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target
         return nullptr;
     }
 
+    if (srcData.element && srcData.element->isTimeSig()) {
+        // Don't allow copypasting time signatures
+        return nullptr;
+    }
+
     Score* targetScore = target->score();
     Staff* targetStaff = target->staff();
     if (!targetScore || !targetStaff) {

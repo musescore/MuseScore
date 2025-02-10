@@ -1452,7 +1452,7 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                 }
             }
 
-            if (isOnStaffTimeSig && seg.isTimeSigType()) {
+            if (isOnStaffTimeSig && seg.isType(SegmentType::TimeSigType)) {
                 for (EngravingItem* item : seg.elist()) {
                     if (!item || !item->isTimeSig()) {
                         continue;

@@ -742,6 +742,10 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
 
         const staff_idx_t staffIdx = staff->idx();
         for (EngravingItem* obj : topSystemObjects) {
+            if (obj->isTimeSig()) {
+                obj->triggerLayout();
+                continue;
+            }
             EngravingItem* copy = obj->linkedClone();
             copy->setStaffIdx(staffIdx);
             score->undoAddElement(copy, false /*addToLinkedStaves*/);
@@ -770,6 +774,10 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
     }
 
     for (EngravingItem* obj : systemObjects) {
+        if (obj->isTimeSig()) {
+            obj->triggerLayout();
+            continue;
+        }
         score->undoRemoveElement(obj, false /*removeLinked*/);
     }
 
@@ -799,6 +807,10 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
     }
 
     for (EngravingItem* item : systemObjects) {
+        if (item->isTimeSig()) {
+            item->triggerLayout();
+            continue;
+        }
         if (item->staff() == srcStaff) {
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         } else {
