@@ -418,22 +418,18 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             select(newEl);
         }
     } else if ((m_selection.isRange() || m_selection.isList()) && ms->hasFormat(mimeStaffListFormat)) {
-        ChordRest* cr = 0;
+        ChordRest* cr = nullptr;
         if (m_selection.isRange()) {
             cr = m_selection.firstChordRest();
         } else if (m_selection.isSingle()) {
-            EngravingItem* e = m_selection.element();
-            if (!e->isNote() && !e->isChordRest()) {
-                LOGD("cannot paste to %s", e->typeName());
+            cr = m_selection.element()->findChordRest();
+            if (!cr) {
+                LOGD("cannot paste to %s", m_selection.element()->typeName());
                 MScore::setError(MsError::DEST_NO_CR);
                 return {};
             }
-            if (e->isNote()) {
-                e = toNote(e)->chord();
-            }
-            cr  = toChordRest(e);
         }
-        if (cr == 0) {
+        if (!cr) {
             MScore::setError(MsError::NO_DEST);
             return {};
         } else if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
@@ -452,22 +448,18 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             }
         }
     } else if (ms->hasFormat(mimeSymbolListFormat)) {
-        ChordRest* cr = 0;
+        ChordRest* cr = nullptr;
         if (m_selection.isRange()) {
             cr = m_selection.firstChordRest();
         } else if (m_selection.isSingle()) {
-            EngravingItem* e = m_selection.element();
-            if (!e->isNote() && !e->isRest() && !e->isChord()) {
-                LOGD("cannot paste to %s", e->typeName());
+            cr = m_selection.element()->findChordRest();
+            if (!cr) {
+                LOGD("cannot paste to %s", m_selection.element()->typeName());
                 MScore::setError(MsError::DEST_NO_CR);
                 return {};
             }
-            if (e->isNote()) {
-                e = toNote(e)->chord();
-            }
-            cr  = toChordRest(e);
         }
-        if (cr == 0) {
+        if (!cr) {
             MScore::setError(MsError::NO_DEST);
             return {};
         } else {

@@ -184,6 +184,7 @@ public:
     const Measure* findMeasure() const;
     MeasureBase* findMeasureBase();
     const MeasureBase* findMeasureBase() const;
+    ChordRest* findChordRest();
 
     //!Note muse::Returns basic representative for the current element.
     //!     For example: notes->chord, chords->beam, etc.
