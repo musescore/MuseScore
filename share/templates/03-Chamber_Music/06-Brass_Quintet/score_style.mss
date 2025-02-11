@@ -870,7 +870,7 @@
     <rehearsalMarkFrameFgColor r="0" g="0" b="0" a="255"/>
     <rehearsalMarkFrameBgColor r="255" g="255" b="255" a="0"/>
     <rehearsalMarkPlacement>0</rehearsalMarkPlacement>
-    <rehearsalMarkPosAbove x="0" y="-3"/>
+    <rehearsalMarkPosAbove x="0" y="-2"/>
     <rehearsalMarkPosBelow x="0" y="4"/>
     <rehearsalMarkMinDistance>0.5</rehearsalMarkMinDistance>
     <repeatLeftFontFace>Edwin</repeatLeftFontFace>
