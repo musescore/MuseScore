@@ -203,6 +203,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utilities/engravingitempreviewpainter.h
     ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.h
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/scorerangeutilities.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/scorerangeutilities.h
 
     ${WIDGETS_SRC}
     ${STYLEDIALOG_SRC}

@@ -1431,11 +1431,13 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
 
 bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES])
 {
-    Segment* seg = tick2segment(baseTick, true, SegmentType::ChordRest);
-    if (!seg) {
-        LOGD("no segment to paste at tick %d", baseTick.ticks());
+    Measure* m = tick2measure(baseTick);
+    if (!m) {
+        LOGD() << "No measure to paste at tick " << baseTick.toString();
         return false;
     }
+
+    Segment* seg = m->undoGetSegment(SegmentType::ChordRest, baseTick);
     track_idx_t strack = staffIdx * VOICES;
     for (track_idx_t track = strack; track < strack + VOICES; track++) {
         if (voiceOffset[track - strack] == -1) {

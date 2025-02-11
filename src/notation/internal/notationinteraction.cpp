@@ -97,6 +97,8 @@
 #include "notationselection.h"
 #include "scorecallbacks.h"
 
+#include "utilities/scorerangeutilities.h"
+
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse;
@@ -208,7 +210,6 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     });
 
     m_dragData.ed = mu::engraving::EditData(&m_scoreCallbacks);
-    m_dropData.ed = mu::engraving::EditData(&m_scoreCallbacks);
 
     m_scoreCallbacks.setNotationInteraction(this);
 
@@ -347,14 +348,8 @@ void NotationInteraction::paint(Painter* painter)
     drawTextEditMode(painter);
     drawSelectionRange(painter);
     drawGripPoints(painter);
-
-    if (m_lasso && !m_lasso->isEmpty()) {
-        score()->renderer()->drawItem(m_lasso, painter);
-    }
-
-    if (m_dropData.dropRect.isValid()) {
-        painter->fillRect(m_dropData.dropRect, configuration()->dropRectColor());
-    }
+    drawLasso(painter);
+    drawDrop(painter);
 }
 
 INotationNoteInputPtr NotationInteraction::noteInput() const
@@ -1208,12 +1203,7 @@ muse::async::Notification NotationInteraction::dragChanged() const
     return m_dragChanged;
 }
 
-bool NotationInteraction::isDragCopyStarted() const
-{
-    return m_drag != nullptr;
-}
-
-bool NotationInteraction::dragCopyAllowed(const EngravingItem* element) const
+bool NotationInteraction::isOutgoingDragElementAllowed(const EngravingItem* element) const
 {
     if (!element) {
         return false;
@@ -1238,10 +1228,10 @@ bool NotationInteraction::dragCopyAllowed(const EngravingItem* element) const
 }
 
 //! NOTE: Copied from ScoreView::cloneElement
-void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* dragSource)
+void NotationInteraction::startOutgoingDragElement(const EngravingItem* element, QObject* dragSource)
 {
     if (isDragStarted()) {
-        endDragCopy();
+        endOutgoingDrag();
     }
 
     if (element->isSpannerSegment()) {
@@ -1251,11 +1241,11 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
     QMimeData* mimeData = new QMimeData();
     mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
 
-    m_drag = new QDrag(dragSource);
-    m_drag->setMimeData(mimeData);
+    m_outgoingDrag = new QDrag(dragSource);
+    m_outgoingDrag->setMimeData(mimeData);
 
-    QObject::connect(m_drag, &QDrag::destroyed, [this]() {
-        m_drag = nullptr;
+    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
+        m_outgoingDrag = nullptr;
     });
 
     const qreal adjustedRatio = 0.4;
@@ -1270,7 +1260,7 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
     QPainter qp(&pixmap);
     const qreal dpi = qp.device()->logicalDpiX();
 
-    Painter p(&qp, "startDragCopy");
+    Painter p(&qp, "prepareDragCopyElement");
     p.setAntialiasing(true);
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
@@ -1278,27 +1268,66 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
     p.scale(adjustedRatio, adjustedRatio);
     engravingRenderer()->drawItem(element, &p);
 
-    m_drag->setPixmap(pixmap);
-    m_drag->exec(Qt::CopyAction);
+    m_outgoingDrag->setPixmap(pixmap);
+
+    m_outgoingDrag->exec(Qt::CopyAction);
 }
 
-void NotationInteraction::endDragCopy()
+void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
 {
-    if (m_drag) {
-        delete m_drag;
-        m_drag = nullptr;
+    if (isDragStarted()) {
+        endOutgoingDrag();
+    }
+
+    if (!selection()->isRange() || !selection()->canCopy()) {
+        return;
+    }
+
+    QMimeData* mimeData = selection()->mimeData();
+    if (!mimeData) {
+        return;
+    }
+
+    m_outgoingDrag = new QDrag(dragSource);
+    m_outgoingDrag->setMimeData(mimeData);
+
+    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
+        m_outgoingDrag = nullptr;
+    });
+
+    QPixmap pixmap(1, 1);
+    pixmap.fill(Qt::transparent);
+    m_outgoingDrag->setPixmap(pixmap);
+
+    m_outgoingDrag->exec(Qt::MoveAction | Qt::CopyAction);
+}
+
+bool NotationInteraction::isOutgoingDragStarted() const
+{
+    return m_outgoingDrag != nullptr;
+}
+
+void NotationInteraction::endOutgoingDrag()
+{
+    if (m_outgoingDrag) {
+        delete m_outgoingDrag;
+        m_outgoingDrag = nullptr;
     }
 }
 
 //! NOTE Copied from ScoreView::dragEnterEvent
-void NotationInteraction::startDrop(const QByteArray& edata)
+bool NotationInteraction::startDropSingle(const QByteArray& edata)
 {
-    resetDropElement();
+    resetDropData();
+
+    m_dropData.elementDropData = ElementDropData();
+    ElementDropData& edd = m_dropData.elementDropData.value();
+    edd.ed = mu::engraving::EditData(&m_scoreCallbacks);
 
     mu::engraving::XmlReader e(edata);
-    m_dropData.ed.dragOffset = QPointF();
+    edd.ed.dragOffset = QPointF();
     Fraction duration;      // dummy
-    ElementType type = EngravingItem::readType(e, &m_dropData.ed.dragOffset, &duration);
+    ElementType type = EngravingItem::readType(e, &edd.ed.dragOffset, &duration);
 
     EngravingItem* el = engraving::Factory::createItem(type, score()->dummy());
     if (el) {
@@ -1306,15 +1335,45 @@ void NotationInteraction::startDrop(const QByteArray& edata)
             double spatium = score()->style().spatium();
             el->setHeight(spatium * 5);
         }
-        m_dropData.ed.dropElement = el;
+        edd.ed.dropElement = el;
 
-        rw::RWRegister::reader()->readItem(m_dropData.ed.dropElement, e);
+        rw::RWRegister::reader()->readItem(edd.ed.dropElement, e);
 
-        engravingRenderer()->layoutItem(m_dropData.ed.dropElement);
+        engravingRenderer()->layoutItem(edd.ed.dropElement);
+        return true;
     }
+
+    resetDropData();
+    return false;
 }
 
-bool NotationInteraction::startDrop(const QUrl& url)
+bool NotationInteraction::startDropRange(const QByteArray& data)
+{
+    resetDropData();
+
+    m_dropData.rangeDropData = RangeDropData();
+    RangeDropData& rdd = m_dropData.rangeDropData.value();
+
+    mu::engraving::XmlReader reader(data);
+    while (reader.readNextStartElement()) {
+        if (reader.name() == "StaffList") {
+            rdd.sourceTick = Fraction::fromString(reader.attribute("tick"));
+            rdd.tickLength = Fraction::fromString(reader.attribute("len"));
+            rdd.sourceStaffIdx = static_cast<staff_idx_t>(reader.intAttribute("staff", -1));
+            rdd.numStaves = reader.intAttribute("staves", 0);
+            break;
+        }
+    }
+
+    if (rdd.tickLength.isZero() || rdd.numStaves == 0) {
+        resetDropData();
+        return false;
+    }
+
+    return true;
+}
+
+bool NotationInteraction::startDropImage(const QUrl& url)
 {
     if (url.scheme() != "file") {
         return false;
@@ -1325,21 +1384,31 @@ bool NotationInteraction::startDrop(const QUrl& url)
         return false;
     }
 
-    resetDropElement();
+    resetDropData();
 
-    m_dropData.ed.dropElement = image;
-    m_dropData.ed.dragOffset = QPointF();
-    m_dropData.ed.dropElement->setParent(nullptr);
+    m_dropData.elementDropData = ElementDropData();
+    ElementDropData& edd = m_dropData.elementDropData.value();
+    edd.ed = mu::engraving::EditData(&m_scoreCallbacks);
 
-    engravingRenderer()->layoutItem(m_dropData.ed.dropElement);
+    edd.ed.dropElement = image;
+    edd.ed.dragOffset = QPointF();
+    edd.ed.dropElement->setParent(nullptr);
+
+    engravingRenderer()->layoutItem(edd.ed.dropElement);
 
     return true;
 }
 
 //! NOTE Copied from ScoreView::dragMoveEvent
-bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
-    EngravingItem* dropElem = m_dropData.ed.dropElement;
+    if (!m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    EngravingItem* dropElem = edd.ed.dropElement;
     if (!dropElem) {
         return false;
     }
@@ -1358,8 +1427,8 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::STAFFTYPE_CHANGE:
     case ElementType::STRING_TUNINGS:
     case ElementType::VOLTA: {
-        m_dropData.ed.modifiers = keyboardModifier(modifiers);
-        return dragMeasureAnchorElement(pos);
+        edd.ed.modifiers = keyboardModifier(modifiers);
+        return prepareDropMeasureAnchorElement(pos);
     }
     case ElementType::PEDAL:
     case ElementType::LET_RING:
@@ -1369,8 +1438,8 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::TRILL:
     case ElementType::HAIRPIN:
     case ElementType::TEXTLINE: {
-        m_dropData.ed.modifiers = keyboardModifier(modifiers);
-        return dragTimeAnchorElement(pos);
+        edd.ed.modifiers = keyboardModifier(modifiers);
+        return prepareDropTimeAnchorElement(pos);
     }
     case ElementType::IMAGE:
     case ElementType::SYMBOL:
@@ -1412,7 +1481,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::LYRICS:
     case ElementType::FRET_DIAGRAM:
     case ElementType::HARP_DIAGRAM: {
-        return dragStandardElement(pos, modifiers);
+        return prepareDropStandardElement(pos, modifiers);
     }
     //! NOTE: See Measure::acceptDrop
     case ElementType::ACTION_ICON: {
@@ -1424,11 +1493,11 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
         case ActionIconType::MEASURE:
         case ActionIconType::SYSTEM_LOCK:
         case ActionIconType::STAFF_TYPE_CHANGE: {
-            m_dropData.ed.modifiers = keyboardModifier(modifiers);
-            return dragMeasureAnchorElement(pos);
+            edd.ed.modifiers = keyboardModifier(modifiers);
+            return prepareDropMeasureAnchorElement(pos);
         }
         // Other action icons (e.g parenthesis) can be dragged normally
-        default: return dragStandardElement(pos, modifiers);
+        default: return prepareDropStandardElement(pos, modifiers);
         }
     }
     default:
@@ -1438,41 +1507,177 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     return false;
 }
 
-//! NOTE Copied from ScoreView::dropEvent
-bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifiers)
+static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
+                              Segment** segment)
 {
-    if (!m_dropData.ed.dropElement) {
+    IF_ASSERT_FAILED(score && staffIdx && segment) {
+        return;
+    }
+
+    static constexpr double spacingFactor = 0.5;
+    static constexpr bool useTimeAnchors = true;
+
+    // First, get an approximate location
+    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
+    if (*staffIdx == muse::nidx || !*segment) {
+        return;
+    }
+
+    // Determine the measures range
+    Fraction startTick = (*segment)->tick();
+    Fraction endTick = startTick + tickLength;
+
+    Measure* startMeasure = (*segment)->measure();
+    if (!startMeasure) {
+        return;
+    }
+
+    Measure* endMeasure = score->tick2measure(endTick);
+    if (!endMeasure) {
+        endMeasure = score->lastMeasure();
+
+        if (!endMeasure) {
+            return;
+        }
+    }
+
+    IF_ASSERT_FAILED(startMeasure == endMeasure || startMeasure->isBefore(endMeasure)) {
+        return;
+    }
+
+    const staff_idx_t endStaffIdx = std::min(*staffIdx + numStaves, score->nstaves());
+
+    // Add time tick anchors throughout these measures
+    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (staff_idx_t i = 0; i < endStaffIdx; ++i) {
+            EditTimeTickAnchors::updateAnchors(toMeasure(mb), i);
+        }
+    }
+
+    // Get precise location using the newly created time tick anchors
+    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
+    if (*staffIdx == muse::nidx || !*segment) {
+        return;
+    }
+
+    startTick = (*segment)->tick();
+    endTick = startTick + tickLength;
+
+    score->setShowAnchors(ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
+                                      startMeasure->tick(), endMeasure->endTick()));
+
+    // Invalidate BSP tree of affected pages
+    System* lastSeenSystem = nullptr;
+    Page* lastSeenPage = nullptr;
+    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+        System* s = mb->system();
+        if (!s || s == lastSeenSystem) {
+            continue;
+        }
+
+        lastSeenSystem = s;
+
+        Page* p = s->page();
+        if (!p || p == lastSeenPage) {
+            continue;
+        }
+
+        lastSeenPage = p;
+
+        p->invalidateBspTree();
+    }
+}
+
+bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
+{
+    IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;
     }
 
-    IF_ASSERT_FAILED(m_dropData.ed.dropElement->score() == score()) {
+    RangeDropData& rdd = m_dropData.rangeDropData.value();
+
+    staff_idx_t staffIdx = muse::nidx;
+    Segment* segment = nullptr;
+
+    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
+    if (staffIdx == muse::nidx || !segment) {
+        return false;
+    }
+
+    rdd.targetSegment = segment;
+    rdd.targetStaffIdx = staffIdx;
+
+    const Segment* endSegment = score()->tick2rightSegment(segment->tick() + rdd.tickLength,
+                                                           true,
+                                                           Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+
+    if (endSegment && !endSegment->enabled()) {
+        endSegment = endSegment->next1MMenabled();
+    }
+
+    if (!endSegment) {
+        endSegment = score()->lastSegmentMM();
+    }
+
+    if (!endSegment) {
+        return false;
+    }
+
+    const staff_idx_t endStaffIdx = std::min(staffIdx + rdd.numStaves, score()->nstaves());
+
+    rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
+                                                      segment, endSegment,
+                                                      staffIdx, endStaffIdx);
+
+    notifyAboutDragChanged();
+
+    return true;
+}
+
+//! NOTE Copied from ScoreView::dropEvent
+bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+{
+    if (!m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    if (!edd.ed.dropElement) {
+        return false;
+    }
+
+    IF_ASSERT_FAILED(edd.ed.dropElement->score() == score()) {
         return false;
     }
 
     bool accepted = false;
 
     // If the drop position hasn't been set already through isDropAccepted's helper methods, use the mouse position
-    if (m_dropData.ed.pos.isNull()) {
-        m_dropData.ed.pos = pos;
+    if (edd.ed.pos.isNull()) {
+        edd.ed.pos = pos;
     }
 
-    m_dropData.ed.modifiers = keyboardModifier(modifiers);
-    m_dropData.ed.dropElement->styleChanged();
+    edd.ed.modifiers = keyboardModifier(modifiers);
+    edd.ed.dropElement->styleChanged();
 
     bool systemStavesOnly = false;
     bool applyUserOffset = false;
 
     startEdit(TranslatableString("undoableAction", "Drop element"));
-    score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-    ElementType et = m_dropData.ed.dropElement->type();
+    score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
+    ElementType et = edd.ed.dropElement->type();
     switch (et) {
     case ElementType::TEXTLINE:
-        systemStavesOnly = m_dropData.ed.dropElement->systemFlag();
+        systemStavesOnly = edd.ed.dropElement->systemFlag();
         [[fallthrough]];
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
-        systemStavesOnly = systemStavesOnly || !(m_dropData.ed.modifiers & Qt::ControlModifier);
+        systemStavesOnly = systemStavesOnly || !(edd.ed.modifiers & Qt::ControlModifier);
         [[fallthrough]];
     case ElementType::OTTAVA:
     case ElementType::TRILL:
@@ -1482,7 +1687,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::PALM_MUTE:
     case ElementType::HAIRPIN:
     {
-        mu::engraving::Spanner* spanner = ptr::checked_cast<mu::engraving::Spanner>(m_dropData.ed.dropElement);
+        mu::engraving::Spanner* spanner = ptr::checked_cast<mu::engraving::Spanner>(edd.ed.dropElement);
         score()->cmdAddSpanner(spanner, pos, systemStavesOnly);
         score()->setUpdateAll();
         accepted = true;
@@ -1548,21 +1753,21 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         accepted = doDropStandard();
         break;
     case ElementType::STAFFTYPE_CHANGE: {
-        EngravingItem* el = dropTarget(m_dropData.ed);
+        EngravingItem* el = dropTarget(edd.ed);
         if (el->isMeasure()) {
             Measure* m = toMeasure(el);
             System* s = m->system();
             double y = pos.y() - s->canvasPos().y();
             staff_idx_t staffIndex = s->searchStaff(y);
-            StaffTypeChange* stc = toStaffTypeChange(m_dropData.ed.dropElement);
+            StaffTypeChange* stc = toStaffTypeChange(edd.ed.dropElement);
             score()->cmdAddStaffTypeChange(toMeasure(el), staffIndex, stc);
         }
     }
     break;
     case ElementType::SLUR:
     {
-        EngravingItem* el = dropTarget(m_dropData.ed);
-        mu::engraving::Slur* dropElement = toSlur(m_dropData.ed.dropElement);
+        EngravingItem* el = dropTarget(edd.ed);
+        mu::engraving::Slur* dropElement = toSlur(edd.ed.dropElement);
         if (toNote(el)->chord()) {
             doAddSlur(toNote(el)->chord(), nullptr, dropElement);
             accepted = true;
@@ -1570,13 +1775,13 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     }
     break;
     default:
-        resetDropElement();
+        resetDropData();
         break;
     }
 
-    m_dropData.ed.dropElement = nullptr;
-    m_dropData.ed.pos = PointF();
-    m_dropData.ed.modifiers = {};
+    edd.ed.dropElement = nullptr;
+    edd.ed.pos = PointF();
+    edd.ed.modifiers = {};
 
     setDropTarget(nullptr); // this also resets dropRectangle and dropAnchor
     apply();
@@ -1593,25 +1798,31 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for majority of elements (returns "accepted")
 bool NotationInteraction::doDropStandard()
 {
-    EngravingItem* el = m_dropData.dropTarget ? m_dropData.dropTarget : dropTarget(m_dropData.ed);
+    if (!m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    EngravingItem* el = edd.dropTarget ? edd.dropTarget : dropTarget(edd.ed);
     if (!el) {
-        if (!dropCanvas(m_dropData.ed.dropElement)) {
-            LOGD("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->typeName(), m_dropData.ed.dropElement);
-            resetDropElement();
+        if (!dropCanvas(edd.ed.dropElement)) {
+            LOGD("cannot drop %s(%p) to canvas", edd.ed.dropElement->typeName(), edd.ed.dropElement);
+            resetDropData();
         }
         return false;
     }
     score()->addRefresh(el->canvasBoundingRect());
 
     // TODO: HACK ALERT!
-    if (el->isMeasure() && m_dropData.ed.dropElement->isLayoutBreak()) {
+    if (el->isMeasure() && edd.ed.dropElement->isLayoutBreak()) {
         Measure* m = toMeasure(el);
         if (m->isMMRest()) {
             el = m->mmRestLast();
         }
     }
 
-    EngravingItem* dropElement = el->drop(m_dropData.ed);
+    EngravingItem* dropElement = el->drop(edd.ed);
 
     if (dropElement && dropElement->isInstrumentChange()) {
         if (!selectInstrument(toInstrumentChange(dropElement))) {
@@ -1633,41 +1844,109 @@ bool NotationInteraction::doDropStandard()
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for text base items & symbols (returns "accepted")
 bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset)
 {
-    EngravingItem* el = m_dropData.dropTarget ? m_dropData.dropTarget : elementAt(pos);
+    IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    EngravingItem* el = edd.dropTarget ? edd.dropTarget : elementAt(pos);
     if (el == 0 || el->type() == ElementType::STAFF_LINES) {
         mu::engraving::staff_idx_t staffIdx;
         mu::engraving::Segment* seg;
         PointF offset;
         el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
         if (el && el->isMeasure()) {
-            m_dropData.ed.dropElement->setTrack(staffIdx * mu::engraving::VOICES);
-            m_dropData.ed.dropElement->setParent(seg);
+            edd.ed.dropElement->setTrack(staffIdx * mu::engraving::VOICES);
+            edd.ed.dropElement->setParent(seg);
 
             if (applyUserOffset) {
-                m_dropData.ed.dropElement->setOffset(offset);
+                edd.ed.dropElement->setOffset(offset);
             }
 
-            score()->undoAddElement(m_dropData.ed.dropElement);
+            score()->undoAddElement(edd.ed.dropElement);
         } else {
             LOGD("cannot drop here");
-            resetDropElement();
+            resetDropData();
         }
     } else {
         score()->addRefresh(el->canvasBoundingRect());
-        score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+        score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
 
-        if (!el->acceptDrop(m_dropData.ed)) {
-            LOGD("drop %s onto %s not accepted", m_dropData.ed.dropElement->typeName(), el->typeName());
+        if (!el->acceptDrop(edd.ed)) {
+            LOGD("drop %s onto %s not accepted", edd.ed.dropElement->typeName(), el->typeName());
             return false;
         }
-        m_dropData.ed.pos = pos;
-        EngravingItem* dropElement = el->drop(m_dropData.ed);
+        edd.ed.pos = pos;
+        EngravingItem* dropElement = el->drop(edd.ed);
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
             selectAndStartEditIfNeeded(dropElement);
             score()->addRefresh(dropElement->canvasBoundingRect());
         }
     }
+
+    return true;
+}
+
+bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, bool deleteSourceMaterial)
+{
+    IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
+        return false;
+    }
+
+    RangeDropData& rdd = m_dropData.rangeDropData.value();
+
+    if (rdd.tickLength.isZero() || rdd.numStaves == 0) {
+        return false;
+    }
+
+    staff_idx_t staffIdx = muse::nidx;
+    Segment* segment = nullptr;
+
+    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
+    if (staffIdx == muse::nidx || !segment) {
+        return false;
+    }
+
+    rdd.targetSegment = segment;
+    rdd.targetStaffIdx = staffIdx;
+
+    startEdit(deleteSourceMaterial
+              ? TranslatableString("undoableAction", "Move range")
+              : TranslatableString("undoableAction", "Copy range"));
+
+    if (deleteSourceMaterial && rdd.sourceStaffIdx != muse::nidx) {
+        Segment* sourceStartSegment = score()->tick2leftSegmentMM(rdd.sourceTick);
+        if (sourceStartSegment && !sourceStartSegment->enabled()) {
+            sourceStartSegment = sourceStartSegment->next1MMenabled();
+        }
+
+        Segment* sourceEndSegment = score()->tick2rightSegment(rdd.sourceTick + rdd.tickLength,
+                                                               true,
+                                                               Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        if (sourceEndSegment && !sourceEndSegment->enabled()) {
+            sourceEndSegment = sourceEndSegment->next1MMenabled();
+        }
+        if (!sourceEndSegment) {
+            sourceEndSegment = score()->lastSegmentMM();
+        }
+
+        if (sourceStartSegment && sourceEndSegment) {
+            score()->deleteRange(sourceStartSegment, sourceEndSegment,
+                                 engraving::staff2track(rdd.sourceStaffIdx),
+                                 engraving::staff2track(rdd.sourceStaffIdx + rdd.numStaves),
+                                 score()->selectionFilter());
+        }
+    }
+
+    XmlReader e(data);
+    score()->pasteStaff(e, segment, staffIdx);
+
+    apply();
+    endDrop();
+
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
     return true;
 }
@@ -2386,13 +2665,11 @@ bool NotationInteraction::notesHaveActiculation(const std::vector<Note*>& notes,
 //! NOTE Copied from ScoreView::dragLeaveEvent
 void NotationInteraction::endDrop()
 {
-    if (m_dropData.ed.dropElement) {
-        score()->setUpdateAll();
-        resetDropElement();
-        score()->update();
-    }
-    m_dropData.ed.pos = PointF();
+    score()->hideAnchors();
+    score()->setUpdateAll();
     setDropTarget(nullptr);
+    resetDropData();
+    score()->update();
 }
 
 muse::async::Notification NotationInteraction::dropChanged() const
@@ -2449,17 +2726,23 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
     return nullptr;
 }
 
-bool NotationInteraction::dragStandardElement(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
+    IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
     Page* page = point2page(pos, true);
     if (!page) {
         return false;
     }
 
     // Update the tree when starting a new drag (ed.pos hasn't been set yet), if the modifier changed, or when crossing a page
-    if (m_dropData.ed.pos.isNull() || m_dropData.ed.modifiers != modifiers || page != m_currentDropPage) {
+    if (edd.ed.pos.isNull() || edd.ed.modifiers != modifiers || page != m_currentDropPage) {
         m_currentDropPage = page;
-        m_dropData.ed.modifiers = keyboardModifier(modifiers);
+        edd.ed.modifiers = keyboardModifier(modifiers);
 
         // Where "m" is the number of page elements and "n" is the number of elements accepting a drop...
         // O(log m) operation
@@ -2467,7 +2750,7 @@ bool NotationInteraction::dragStandardElement(const PointF& pos, Qt::KeyboardMod
 
         // O(m log n) operation
         for (EngravingItem* elem : page->elements()) {
-            if (elem->acceptDrop(m_dropData.ed)) {
+            if (elem->acceptDrop(edd.ed)) {
                 m_droppableTree.insert(elem);
             }
         }
@@ -2476,7 +2759,7 @@ bool NotationInteraction::dragStandardElement(const PointF& pos, Qt::KeyboardMod
     PointF posInPage(pos.x() - page->pos().x(), pos.y() - page->pos().y());
     // O(log n) operation
     EngravingItem* targetElem = m_droppableTree.nearestNeighbor(posInPage);
-    EngravingItem* dropElem = m_dropData.ed.dropElement;
+    EngravingItem* dropElem = edd.ed.dropElement;
 
     if (!targetElem || !dropElem) {
         return false;
@@ -2492,24 +2775,30 @@ bool NotationInteraction::dragStandardElement(const PointF& pos, Qt::KeyboardMod
 
             RectF measureRect = targetMeasure->staffPageBoundingRect(targetElem->staffIdx());
             measureRect.adjust(page->x(), page->y(), page->x(), page->y());
-            m_dropData.ed.pos = measureRect.center();
+            edd.ed.pos = measureRect.center();
             setAnchorLines({ LineF(pos, measureRect.topLeft()) });
 
-            return targetMeasure->acceptDrop(m_dropData.ed);
+            return targetMeasure->acceptDrop(edd.ed);
         }
     }
 
     setDropTarget(targetElem, true);
-    m_dropData.ed.pos = targetElem->canvasBoundingRect().center();
+    edd.ed.pos = targetElem->canvasBoundingRect().center();
     setAnchorLines({ LineF(pos, targetElem->canvasBoundingRect().center()) });
 
     return true;
 }
 
 //! NOTE Copied from ScoreView::dragMeasureAnchorElement
-bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
+bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
 {
-    EngravingItem* dropElem = m_dropData.ed.dropElement;
+    IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    EngravingItem* dropElem = edd.ed.dropElement;
     Page* page = point2page(pos);
     if (!dropElem || !page) {
         return false;
@@ -2526,7 +2815,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
     case ElementType::KEYSIG:
     case ElementType::TIMESIG: {
         // If ctrl is pressed, break and target a specific staff
-        if (m_dropData.ed.modifiers & Qt::ControlModifier) {
+        if (edd.ed.modifiers & Qt::ControlModifier) {
             break;
         }
     }
@@ -2554,9 +2843,9 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 
         RectF measureRect = targetMeasure->staffPageBoundingRect(staffIdx);
         measureRect.adjust(page->x(), page->y(), page->x(), page->y());
-        m_dropData.ed.pos = measureRect.center();
+        edd.ed.pos = measureRect.center();
 
-        const bool dropAccepted = targetMeasure->acceptDrop(m_dropData.ed);
+        const bool dropAccepted = targetMeasure->acceptDrop(edd.ed);
         if (dropAccepted) {
             setAnchorLines({ LineF(pos, measureRect.topLeft()) });
         }
@@ -2569,8 +2858,14 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 }
 
 //! NOTE Copied from ScoreView::dragTimeAnchorElement
-bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
+bool NotationInteraction::prepareDropTimeAnchorElement(const PointF& pos)
 {
+    IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
     mu::engraving::staff_idx_t staffIdx = 0;
     mu::engraving::Segment* seg = nullptr;
     mu::engraving::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
@@ -2582,14 +2877,14 @@ bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
         qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
         PointF anchor(seg->canvasBoundingRect().x(), y);
         setAnchorLines({ LineF(pos, anchor) });
-        m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-        m_dropData.ed.dropElement->setTrack(track);
-        m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+        edd.ed.dropElement->score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
+        edd.ed.dropElement->setTrack(track);
+        edd.ed.dropElement->score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
         notifyAboutDragChanged();
         return true;
     }
 
-    m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+    edd.ed.dropElement->score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
     setDropTarget(nullptr);
 
     return false;
@@ -2598,22 +2893,28 @@ bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
 //! NOTE Copied from ScoreView::setDropTarget
 void NotationInteraction::setDropTarget(EngravingItem* item, bool notify)
 {
-    if (m_dropData.dropTarget != item) {
-        if (m_dropData.dropTarget) {
-            m_dropData.dropTarget->setDropTarget(false);
-            m_dropData.dropTarget = nullptr;
+    if (!m_dropData.elementDropData.has_value()) {
+        return;
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    if (edd.dropTarget != item) {
+        if (edd.dropTarget) {
+            edd.dropTarget->setDropTarget(false);
+            edd.dropTarget = nullptr;
         }
 
-        m_dropData.dropTarget = item;
-        if (m_dropData.dropTarget) {
-            m_dropData.dropTarget->setDropTarget(true);
+        edd.dropTarget = item;
+        if (edd.dropTarget) {
+            edd.dropTarget->setDropTarget(true);
         }
     }
 
     resetAnchorLines();
 
-    if (m_dropData.dropRect.isValid()) {
-        m_dropData.dropRect = RectF();
+    if (edd.dropRect.isValid()) {
+        edd.dropRect = RectF();
     }
 
     if (notify) {
@@ -2624,20 +2925,26 @@ void NotationInteraction::setDropTarget(EngravingItem* item, bool notify)
 //! NOTE: Copied from ScoreView::setDropRectangle
 void NotationInteraction::setDropRect(const RectF& rect)
 {
-    if (m_dropData.dropRect == rect) {
+    if (!m_dropData.elementDropData.has_value()) {
         return;
     }
 
-    m_dropData.dropRect = rect;
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    if (edd.dropRect == rect) {
+        return;
+    }
+
+    edd.dropRect = rect;
 
     if (rect.isValid()) {
         score()->addRefresh(rect);
     }
 
-    if (m_dropData.dropTarget) {
-        m_dropData.dropTarget->setDropTarget(false);
-        score()->addRefresh(m_dropData.dropTarget->canvasBoundingRect());
-        m_dropData.dropTarget = nullptr;
+    if (edd.dropTarget) {
+        edd.dropTarget->setDropTarget(false);
+        score()->addRefresh(edd.dropTarget->canvasBoundingRect());
+        edd.dropTarget = nullptr;
     } else if (!m_anchorLines.empty()) {
         RectF rf;
         rf.setTopLeft(m_anchorLines.front().p1());
@@ -2649,12 +2956,13 @@ void NotationInteraction::setDropRect(const RectF& rect)
     notifyAboutDragChanged();
 }
 
-void NotationInteraction::resetDropElement()
+void NotationInteraction::resetDropData()
 {
-    if (m_dropData.ed.dropElement) {
-        delete m_dropData.ed.dropElement;
-        m_dropData.ed.dropElement = nullptr;
+    if (m_dropData.elementDropData.has_value()) {
+        delete m_dropData.elementDropData->ed.dropElement;
     }
+
+    m_dropData = {};
 }
 
 void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
@@ -2831,7 +3139,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
 
     painter->setBrush(BrushStyle::NoBrush);
 
-    QColor selectionColor = configuration()->selectionColor();
+    Color selectionColor = configuration()->selectionColor();
     double penWidth = 3.0 / currentScaling(painter);
     double minPenWidth = 0.20 * m_selection->range()->measureRange().startMeasure->spatium();
     penWidth = std::max(penWidth, minPenWidth);
@@ -2847,7 +3155,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
         PainterPath path;
         path.addRoundedRect(rect, 4, 4);
 
-        QColor fillColor = selectionColor;
+        Color fillColor = selectionColor;
         fillColor.setAlpha(10);
         painter->fillPath(path, fillColor);
         painter->drawPath(path);
@@ -2889,6 +3197,51 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
 
     editedElement->updateGrips(m_editData);
     editedElement->drawEditMode(painter, m_editData, scaling);
+}
+
+void NotationInteraction::drawLasso(muse::draw::Painter* painter)
+{
+    if (!m_lasso || m_lasso->isEmpty()) {
+        return;
+    }
+
+    score()->renderer()->drawItem(m_lasso, painter);
+}
+
+void NotationInteraction::drawDrop(muse::draw::Painter* painter)
+{
+    if (m_dropData.elementDropData.has_value()) {
+        const ElementDropData& edd = m_dropData.elementDropData.value();
+
+        if (edd.dropRect.isValid()) {
+            painter->fillRect(edd.dropRect, configuration()->dropRectColor());
+        }
+    }
+
+    if (m_dropData.rangeDropData.has_value()) {
+        const RangeDropData& rdd = m_dropData.rangeDropData.value();
+
+        Color selectionColor = configuration()->selectionColor();
+        double penWidth = 3.0 / currentScaling(painter);
+        double minPenWidth = 0.20 * score()->style().spatium();
+        penWidth = std::max(penWidth, minPenWidth);
+
+        Pen pen;
+        pen.setColor(selectionColor);
+        pen.setWidthF(penWidth);
+        pen.setStyle(PenStyle::SolidLine);
+        painter->setPen(pen);
+
+        for (const RectF& rect: rdd.dropRects) {
+            PainterPath path;
+            path.addRoundedRect(rect, 4, 4);
+
+            Color fillColor = selectionColor;
+            fillColor.setAlpha(10);
+            painter->fillPath(path, fillColor);
+            painter->drawPath(path);
+        }
+    }
 }
 
 ChordRest* activeCr(mu::engraving::Score* score)
