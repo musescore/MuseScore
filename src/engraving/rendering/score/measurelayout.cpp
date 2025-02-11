@@ -1758,7 +1758,7 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
 
         const KeySigEvent refKey = staff->keySigEvent(refSigTick);
         // Get info from correct tick for repeats
-        const bool sigsDifferent = staff->key(m->tick()) != refKey.key();
+        const bool sigsDifferent = staff->key(m->endTick() - Fraction::eps()) != refKey.key();
         const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : sigsDifferent;
         const bool staffIsPitchedAtNextMeas = ctx.dom().lastMeasure() == m
                                               || (m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick()));
@@ -1860,7 +1860,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
         const Clef* actualClef = el ? toClef(el) : nullptr;
 
         const ClefType refClef = staff->clef(refClefTick);
-        const bool clefsMatch = staff->clef(m->tick()) != refClef;
+        const bool clefsMatch = staff->clef(m->endTick() - Fraction::eps()) != refClef;
         const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && isContinuationCourtesy
                                    && prevCourtesySegment && prevCourtesySegment->elementAt(track) : clefsMatch;
         const bool show = actualClef && actualClef->showCourtesy() && needsCourtesy && ctx.conf().styleB(Sid::genCourtesyClef);
