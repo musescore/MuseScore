@@ -19588,7 +19588,7 @@ Spowoduje to ponowną ocenę wszystkich wtyczek, wykrywając wszystkie możliwe 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1427"/>
         <source>Play chord symbol when editing</source>
-        <translation>Odtwarzaj symbol akordu podczas edycji</translation>
+        <translation>Odtwarzaj symbol akordu podczas edytowania</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1447"/>
@@ -20300,12 +20300,12 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1373"/>
         <source>Play Notes When Editing</source>
-        <translation>Odtwarzaj nuty podczas edycji</translation>
+        <translation>Odtwarzaj nuty podczas edytowania</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1398"/>
         <source>Play whole chord when editing</source>
-        <translation>Odtwarzaj cały akord podczas edycji</translation>
+        <translation>Odtwarzaj cały akord podczas edytowania</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1827"/>
