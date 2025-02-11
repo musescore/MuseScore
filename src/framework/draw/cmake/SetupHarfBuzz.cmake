@@ -39,7 +39,7 @@ endif()
 
 set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
 set(remote_url ${REMOTE_ROOT_URL}/harfbuzz/7.1.0)
-set(local_path ${CMAKE_CURRENT_LIST_DIR}/../_deps/harfbuzz)
+set(local_path ${PROJECT_BINARY_DIR}/_deps/harfbuzz)
 if (NOT EXISTS ${local_path}/harfbuzz.cmake)
     file(MAKE_DIRECTORY ${local_path})
     file(DOWNLOAD ${remote_url}/harfbuzz.cmake ${local_path}/harfbuzz.cmake
@@ -54,7 +54,7 @@ cmake_language(CALL harfbuzz_Populate ${remote_url} ${local_path} "source" "" ""
 
 set(HB_HAVE_FREETYPE ON)
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../_deps/harfbuzz/harfbuzz harfbuzz)
+add_subdirectory(${local_path}/harfbuzz harfbuzz)
 
 target_no_warning(harfbuzz -Wno-conversion)
 target_no_warning(harfbuzz -Wno-unused-parameter)
@@ -65,4 +65,4 @@ target_no_warning(harfbuzz -WMSVC-no-unreachable)
 #add_subdirectory(thirdparty/msdfgen)
 
 set(HARFBUZZ_LIBRARIES harfbuzz)
-set(HARFBUZZ_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/../_deps/harfbuzz/harfbuzz/harfbuzz/src)
+set(HARFBUZZ_INCLUDE_DIRS ${local_path}/harfbuzz/harfbuzz/src)

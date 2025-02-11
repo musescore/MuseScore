@@ -23,23 +23,27 @@ declare_module(vst_sdk_3)
 if(MUSE_MODULE_VST_VST3_SDK_PATH)
     set(VST3_SDK_PATH ${MUSE_MODULE_VST_VST3_SDK_PATH})
 else()
-    include(FetchContent)
 
-    FetchContent_Declare(
-        vst3sdk
-        GIT_REPOSITORY https://github.com/steinbergmedia/vst3sdk.git
-        GIT_TAG v3.7.12_build_20
+    # If not set MUSE_MODULE_VST_VST3_SDK_PATH
+    # download vst3sdk source
 
-        # Hack: we don't want `vst3sdk`'s own CMakeLists.txt to be used, so we
-        # tell CMake to go look for it in a non-existent folder.
-        SOURCE_SUBDIR none
-    )
+    set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
+    set(remote_url ${REMOTE_ROOT_URL}/vst3sdk/v3.7.12_build_20)
+    set(local_path ${PROJECT_BINARY_DIR}/_deps/vst3sdk)
+    if (NOT EXISTS ${local_path}/vst3sdk.cmake)
+        file(MAKE_DIRECTORY ${local_path})
+        file(DOWNLOAD ${remote_url}/vst3sdk.cmake ${local_path}/vst3sdk.cmake
+            HTTPHEADER "Cache-Control: no-cache"
+        )
+    endif()
 
-    FetchContent_MakeAvailable(vst3sdk)
-    FetchContent_GetProperties(
-        vst3sdk
-        SOURCE_DIR VST3_SDK_PATH
-    )
+    include(${local_path}/vst3sdk.cmake)
+
+    # func from ${name}.cmake)
+    cmake_language(CALL vst3sdk_Populate ${remote_url} ${local_path} "source" "" "")
+
+    set(VST3_SDK_PATH ${local_path})
+
 endif()
 
 include(GetPlatformInfo)
