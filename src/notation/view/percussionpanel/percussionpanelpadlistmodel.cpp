@@ -130,38 +130,9 @@ void PercussionPanelPadListModel::endPadSwap(int endIndex)
 
     movePad(m_padSwapStartIndex, endIndex);
 
-    if (!m_padModels.at(m_padSwapStartIndex) || !m_padModels.at(endIndex)) {
-        // Swapping with an empty pad - no extra options...
-        endSwap();
-        return;
-    }
-
-    // Give Qt a chance to process pending UI updates before opening the options dialog...
-    QMetaObject::invokeMethod(this, [this, endSwap, endIndex]() {
-        bool moveMidiNotesAndShortcuts = configuration()->percussionPanelMoveMidiNotesAndShortcuts();
-
-        if (configuration()->showPercussionPanelPadSwapDialog()) {
-            const muse::RetVal<muse::Val> rv = openPadSwapDialog();
-            if (!rv.ret) {
-                // Cancelled, revert the swap...
-                movePad(m_padSwapStartIndex, endIndex);
-                endSwap();
-                return;
-            }
-
-            const QVariantMap vals = rv.val.toQVariant().toMap();
-            moveMidiNotesAndShortcuts = vals["moveMidiNotesAndShortcuts"].toBool();
-        }
-
-        if (moveMidiNotesAndShortcuts) {
-            // MIDI notes and shortcuts were moved with the pad itself, so we can return...
-            endSwap();
-            return;
-        }
-
-        swapMidiNotesAndShortcuts(m_padSwapStartIndex, endIndex);
-        endSwap();
-    }, Qt::QueuedConnection);
+    //! NOTE: "Pad swap options" and the associated dialog were dropped from percussion panel MVP (version 4.5).
+    //! See PR #25810 when re-implementing...
+    endSwap();
 }
 
 void PercussionPanelPadListModel::setDrumset(const engraving::Drumset* drumset)

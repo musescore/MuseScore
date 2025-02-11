@@ -66,103 +66,14 @@ PreferencesPage {
             }
         }
 
-        Column {
-            id: swappingOptionsColumn
+        //! NOTE: "Pad swap options" and the associated dialog were dropped from percussion panel MVP (version 4.5).
+        //! See PR #25810 when re-implementing...
+        // Column {
+        //     id: swappingOptionsColumn
+        //     ...
+        // }
 
-            width: parent.width
-            spacing: 12
-
-            StyledTextLabel {
-                id: padSwapInfo
-
-                enabled: percussionPreferencesModel.useNewPercussionPanel
-                width: parent.width
-
-                horizontalAlignment: Text.AlignLeft
-                wrapMode: Text.Wrap
-                text: qsTrc("notation/percussion", "When swapping the positions of two drum pads:")
-            }
-
-            RadioButtonGroup {
-                id: radioButtons
-
-                property int navigationRowStart: unpitchedSelectedCheckbox.navigation.row + 1
-                property int navigationRowEnd: radioButtons.navigationRowStart + model.length
-
-                enabled: percussionPreferencesModel.useNewPercussionPanel
-
-                width: parent.width
-                spacing: swappingOptionsColumn.spacing
-
-                orientation: ListView.Vertical
-
-                model: [
-                    { text: qsTrc("notation/percussion", "Move MIDI notes and keyboard shortcuts with their sounds"), value: true },
-                    { text: qsTrc("notation/percussion", "Leave MIDI notes and keyboard shortcuts fixed to original pad positions"), value: false }
-                ]
-
-                delegate: Row {
-                    width: parent.width
-                    spacing: 6
-
-                    RoundedRadioButton {
-                        id: radioButton
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        navigation.name: modelData.text
-                        navigation.panel: percussionPanelPreferences.navigation
-                        navigation.row: radioButtons.navigationRowStart + model.index
-
-                        checked: modelData.value === percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts
-
-                        onToggled: {
-                            percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts = modelData.value
-                        }
-                    }
-
-                    //! NOTE: Can't use radioButton.text because it won't wrap
-                    StyledTextLabel {
-                        width: parent.width - parent.spacing - radioButton.width
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.Wrap
-                        text: modelData.text
-
-                        MouseArea {
-                            id: mouseArea
-
-                            anchors.fill: parent
-
-                            onClicked: {
-                                percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts = modelData.value
-                            }
-                        }
-                    }
-                }
-            }
-
-            CheckBox {
-                id: alwaysAsk
-
-                enabled: percussionPreferencesModel.useNewPercussionPanel
-                width: parent.width
-
-                text: qsTrc("global", "Always ask")
-
-                navigation.name: "AlwaysAskCheckBox"
-                navigation.panel: percussionPanelPreferences.navigation
-                navigation.row: radioButtons.navigationRowEnd
-
-                checked: percussionPreferencesModel.showPercussionPanelPadSwapDialog
-
-                onClicked:  {
-                    percussionPreferencesModel.showPercussionPanelPadSwapDialog = !alwaysAsk.checked
-                }
-            }
-        }
+        SeparatorLine {}
 
         Row {
             id: useLegacyToggleRow
