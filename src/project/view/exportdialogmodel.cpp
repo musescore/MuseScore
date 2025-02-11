@@ -466,6 +466,21 @@ void ExportDialogModel::setSvgTransparentBackground(const bool& transparent)
     emit svgTransparentBackgroundChanged(transparent);
 }
 
+bool ExportDialogModel::svgIllustratorCompat() const
+{
+    return imageExportConfiguration()->exportSvgWithIllustratorCompat();
+}
+
+void ExportDialogModel::setSvgIllustratorCompat(bool compat)
+{
+    if (compat == svgIllustratorCompat()) {
+        return;
+    }
+
+    imageExportConfiguration()->setExportSvgWithIllustratorCompat(compat);
+    emit svgIllustratorCompatChanged(compat);
+}
+
 QList<int> ExportDialogModel::availableSampleRates() const
 {
     const std::vector<int>& rates = audioExportConfiguration()->availableSampleRates();

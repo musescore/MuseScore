@@ -2031,7 +2031,7 @@ void TextBase::layoutFrame(LayoutData* ldata) const
     double _spatium = spatium();
     double w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
     ldata->frame.adjust(-w, -w, w, w);
-    w = frameWidth().val() * _spatium;
+    w = 0.5 * frameWidth().val() * _spatium;
     ldata->setBbox(ldata->frame.adjusted(-w, -w, w, w));
 }
 

@@ -45,6 +45,8 @@ public:
 
     bool exportSvgWithTransparentBackground() const override;
     void setExportSvgWithTransparentBackground(bool transparent) override;
+    bool exportSvgWithIllustratorCompat() const override;
+    void setExportSvgWithIllustratorCompat(bool compat) override;
 
     int trimMarginPixelSize() const override;
     void setTrimMarginPixelSize(std::optional<int> pixelSize) override;
