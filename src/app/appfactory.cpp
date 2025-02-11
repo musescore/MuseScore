@@ -357,9 +357,21 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new muse::draw::DrawModule());
     app->addModule(new muse::midi::MidiModule());
     app->addModule(new muse::mpe::MpeModule());
+
 #ifdef MUSE_MODULE_MUSESAMPLER
-    app->addModule(new muse::musesampler::MuseSamplerModule());
+    bool shouldAddMuseSamplerModule = true;
+#ifndef MUSE_MODULE_MUSESAMPLER_LOAD_IN_DEBUG
+    if (runtime::isDebug()) {
+        shouldAddMuseSamplerModule = false;
+        LOGI() << "Not adding MuseSampler module in a debug build";
+    }
 #endif
+
+    if (shouldAddMuseSamplerModule) {
+        app->addModule(new muse::musesampler::MuseSamplerModule());
+    }
+#endif
+
     app->addModule(new muse::network::NetworkModule());
     app->addModule(new muse::shortcuts::ShortcutsModule());
 #ifdef MUSE_MODULE_UI
