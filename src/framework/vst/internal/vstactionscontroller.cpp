@@ -44,6 +44,13 @@ void VstActionsController::fxEditor(const actions::ActionQuery& actionQuery)
 {
     LOGD() << actionQuery.toString();
 
+#ifdef Q_OS_LINUX
+    if (!isUsedNewView()) {
+        LOGW() << "Old (QWidget) VST View not support Linux";
+        return;
+    }
+#endif
+
     std::string resourceId = actionQuery.param("resourceId").toString();
     IF_ASSERT_FAILED(!resourceId.empty()) {
         LOGE() << "not set resourceId";
@@ -72,6 +79,13 @@ void VstActionsController::fxEditor(const actions::ActionQuery& actionQuery)
 void VstActionsController::instEditor(const actions::ActionQuery& actionQuery)
 {
     LOGD() << actionQuery.toString();
+
+#ifdef Q_OS_LINUX
+    if (!isUsedNewView()) {
+        LOGW() << "Old (QWidget) VST View not support Linux";
+        return;
+    }
+#endif
 
     std::string resourceId = actionQuery.param("resourceId").toString();
     IF_ASSERT_FAILED(!resourceId.empty()) {
@@ -133,12 +147,17 @@ void VstActionsController::useView(bool isNew)
     m_actionCheckedChanged.send({ "vst-use-oldview", "vst-use-newview" });
 }
 
+bool VstActionsController::isUsedNewView() const
+{
+    return configuration()->usedVstView() == "newview";
+}
+
 bool VstActionsController::actionChecked(const actions::ActionCode& act) const
 {
     if (act == "vst-use-oldview") {
-        return configuration()->usedVstView() != "newview";
+        return !isUsedNewView();
     } else if (act == "vst-use-newview") {
-        return configuration()->usedVstView() == "newview";
+        return isUsedNewView();
     }
 
     return false;

@@ -51,6 +51,7 @@ public:
 
     void setupUsedView();
     void useView(bool isNew);
+    bool isUsedNewView() const;
     bool actionChecked(const actions::ActionCode& act) const;
     async::Channel<actions::ActionCodeList> actionCheckedChanged() const;
 
