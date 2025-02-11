@@ -354,12 +354,6 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
             clef->m_clefToBarlinePosition = newPos;
         }
     }
-
-    if (newPos == ClefToBarlinePosition::AFTER) {
-        undoChangeProperty(Pid::SHOW_COURTESY, false, propertyFlags(Pid::SHOW_COURTESY));
-    } else {
-        undoChangeProperty(Pid::SHOW_COURTESY, true, PropertyFlags::STYLED);
-    }
 }
 
 void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)

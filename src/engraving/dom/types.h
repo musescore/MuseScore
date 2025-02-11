@@ -433,9 +433,10 @@ enum class SegmentType {
     BarLineType           = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
     CourtesyTimeSigType   = TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
     CourtesyKeySigType    = KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
+    CourtesyClefType      = ClefRepeatAnnounce | ClefStartRepeatAnnounce,
     TimeSigType           = TimeSig | CourtesyTimeSigType,
     KeySigType            = KeySig | CourtesyKeySigType,
-    ClefType              = Clef | HeaderClef | ClefRepeatAnnounce | ClefStartRepeatAnnounce,
+    ClefType              = Clef | HeaderClef | CourtesyClefType,
     ///\}
 };
 

@@ -4510,6 +4510,8 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
 
 void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 {
+    UNUSED(ctx);
+
     Parenthesis::LayoutData* ldata = item->mutldata();
     ldata->setPos(PointF());
     ldata->clearShape();
@@ -4527,13 +4529,8 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
     const StaffType* st = staff->staffType(tick);
     const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
 
-    double startY = -spatium;
-    double height = staff->staffHeight(item->tick()) + 2 * spatium * mag;       // 6sp for a standard 5 line stave
-
-    if (ctx.conf().styleB(Sid::smallParens)) {
-        startY = ldata->startY;
-        height = ldata->height;
-    }
+    double startY = ldata->startY;
+    double height = ldata->height;
 
     if (isClefSeg && seg->rtick() == seg->measure()->ticks()) {
         double offset = st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);

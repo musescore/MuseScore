@@ -342,7 +342,8 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
         }
 
         bool timeSigAboveBarlineCase = segmentHasTimeSigAboveStaff && prevSeg->isEndBarLineType() && prevSeg->tick() == segment->tick();
-        bool timeSigAboveKeySigCase = segmentHasTimeSigAboveStaff && prevSeg->isKeySigType() && prevSeg->tick() == segment->tick();
+        bool timeSigAboveKeySigCase = segmentHasTimeSigAboveStaff && prevSeg->isType(SegmentType::KeySigType)
+                                      && prevSeg->tick() == segment->tick();
 
         if (timeSigAboveBarlineCase) {
             x = xPrevSeg + prevSeg->minRight() - 0.5 * prevSeg->style().styleMM(Sid::barWidth); // align to the preceding barline
