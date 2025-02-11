@@ -251,7 +251,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+muse::Ret Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
     if (out) {
@@ -278,9 +278,9 @@ Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "Score") {
             if (!readScore302(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
-                    return Err::FileCriticallyCorrupted;
+                    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
                 }
-                return Err::FileBadFormat;
+                return make_ret(Err::FileBadFormat, e.errorString());
             }
 
             if (ctx.overrideSpatium() && out) {
@@ -291,7 +291,7 @@ Err Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 void Read302::fixInstrumentId(Instrument* instrument)
