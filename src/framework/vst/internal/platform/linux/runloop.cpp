@@ -24,6 +24,8 @@
 #include <QSocketNotifier>
 #include <QTimer>
 
+#include "global/containers.h"
+
 #include "log.h"
 
 using namespace muse::vst;
@@ -159,17 +161,9 @@ Steinberg::tresult RunLoop::unregisterTimer(Steinberg::Linux::ITimerHandler* han
 
 void RunLoop::stop()
 {
-    for (auto it = m_handlers.begin(); it != m_handlers.end(); ++it) {
-        Handler* h = *it;
-        delete h;
-    }
-
+    muse::DeleteAll(m_handlers);
     m_handlers.clear();
 
-    for (auto it = m_timers.begin(); it != m_timers.end(); ++it) {
-        Timer* t = *it;
-        delete t;
-    }
-
+    muse::DeleteAll(m_timers);
     m_timers.clear();
 }

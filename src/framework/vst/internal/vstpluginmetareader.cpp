@@ -31,19 +31,6 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::vst;
 
-namespace muse::vst {
-static bool hasNativeEditorSupport()
-{
-#ifdef Q_OS_LINUX
-    //!Note Host applications on Linux should provide their own event loop via VST3 API,
-    //!     otherwise it'll be impossible to launch native VST editor views
-    return false;
-#else
-    return true;
-#endif
-}
-}
-
 bool VstPluginMetaReader::canReadMeta(const io::path_t& pluginPath) const
 {
     return io::suffix(pluginPath) == VST3_PACKAGE_EXTENSION;
@@ -69,7 +56,7 @@ RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t& pl
         meta.type = muse::audio::AudioResourceType::VstPlugin;
         meta.attributes.emplace(muse::audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()));
         meta.vendor = classInfo.vendor();
-        meta.hasNativeEditorSupport = hasNativeEditorSupport();
+        meta.hasNativeEditorSupport = true;
 
         result.emplace_back(std::move(meta));
         break;
