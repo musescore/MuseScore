@@ -350,6 +350,7 @@ public:
     virtual void editCopy(EditData&) override;
     virtual void endEdit(EditData&) override;
     virtual void editDrag(EditData&) override;
+    virtual void endDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
     virtual void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
