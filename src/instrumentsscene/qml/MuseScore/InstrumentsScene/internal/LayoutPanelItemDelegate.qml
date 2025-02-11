@@ -36,11 +36,12 @@ FocusableControl {
     property var index: styleData.index
     property string filterKey
 
-    readonly property int type: item ? item.type : InstrumentsTreeItemType.UNDEFINED
+    readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
     readonly property bool isSelected: item && item.isSelected
-    readonly property bool isDragAvailable: item && item.isSelectable
+    readonly property bool isSelectable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
-    readonly property bool isEditable: item && item.isEditable
+    readonly property bool settingsAvailable: item && item.settingsAvailable
+    readonly property bool settingsEnabled: item && item.settingsEnabled
 
     property int sideMargin: 0
 
@@ -85,12 +86,12 @@ FocusableControl {
     implicitWidth: 248
 
     Drag.keys: [ root.filterKey ]
-    Drag.active: prv.dragged && isDragAvailable
+    Drag.active: prv.dragged && root.isSelectable
     Drag.source: root
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
 
-    navigation.name: "InstrumentsTreeItemDelegate"
+    navigation.name: "LayoutPanelItemDelegate"
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
@@ -105,6 +106,7 @@ FocusableControl {
 
     mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
     mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
+    mouseArea.enabled: root.isSelectable
 
     mouseArea.drag.target: root
     mouseArea.drag.axis: Drag.YAxis
@@ -197,6 +199,14 @@ FocusableControl {
         }
     }
 
+    Component {
+        id: systemObjectsLayerSettingsComp
+
+        SystemObjectsLayerSettingsPopup {
+            anchorItem: popupAnchorItem
+        }
+    }
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin
@@ -208,7 +218,7 @@ FocusableControl {
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
 
-            objectName: "VisibleBtnInstrument"
+            objectName: "VisibleBtn"
             navigation.panel: root.navigation.panel
             navigation.row: root.navigation.row
             navigation.column: 1
@@ -238,8 +248,9 @@ FocusableControl {
                 anchors.left: parent.left
 
                 visible: root.isExpandable
+                width: expandButton.visible || styleData.depth !== 0 ? expandButton.implicitWidth : 0
 
-                objectName: "ExpandBtnInstrument"
+                objectName: "ExpandBtn"
                 enabled: expandButton.visible
                 navigation.panel: root.navigation.panel
                 navigation.row: root.navigation.row
@@ -276,7 +287,7 @@ FocusableControl {
                 opacity: model && model.itemRole.isVisible ? 1 : 0.75
 
                 font: {
-                    if (Boolean(model) && root.type === InstrumentsTreeItemType.PART && model.itemRole.isVisible) {
+                    if (Boolean(model) && root.type === LayoutPanelItemType.PART && model.itemRole.isVisible) {
                         return ui.theme.bodyBoldFont
                     }
 
@@ -291,14 +302,14 @@ FocusableControl {
             Layout.alignment: Qt.AlignRight
             Layout.preferredWidth: width
 
-            visible: root.isEditable
+            visible: root.settingsAvailable
+            enabled: root.visible && root.settingsEnabled
 
-            objectName: "SettingsBtnInstrument"
-            enabled: root.visible
+            objectName: "SettingsBtn"
             navigation.panel: root.navigation.panel
             navigation.row: root.navigation.row
             navigation.column: 3
-            navigation.accessible.name: qsTrc("instruments", "Settings")
+            navigation.accessible.name: qsTrc("layout", "Settings")
 
             icon: IconCode.SETTINGS_COG
 
@@ -311,15 +322,19 @@ FocusableControl {
                 let comp = null
                 let item = {}
 
-                if (root.type === InstrumentsTreeItemType.PART) {
+                if (root.type === LayoutPanelItemType.PART) {
                     comp = instrumentSettingsComp
 
                     item["partId"] = model.itemRole.id
                     item["instrumentId"] = model.itemRole.instrumentId()
-                } else if (root.type === InstrumentsTreeItemType.STAFF) {
+                } else if (root.type === LayoutPanelItemType.STAFF) {
                     comp = staffSettingsComp
 
                     item["id"] = model.itemRole.id
+                } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
+                    comp = systemObjectsLayerSettingsComp
+
+                    item["staffId"] = model.itemRole.staffId()
                 }
 
                 popupLoader.openPopup(comp, this, item)
@@ -405,7 +420,7 @@ FocusableControl {
         State {
             name: "PART_EXPANDED"
             when: styleData.isExpanded && !root.isSelected &&
-                  root.type === InstrumentsTreeItemType.PART
+                  root.type === LayoutPanelItemType.PART
 
             PropertyChanges {
                 target: root.background
@@ -417,8 +432,19 @@ FocusableControl {
         State {
             name: "PARENT_EXPANDED"
             when: root.visible && !root.isSelected &&
-                  (root.type === InstrumentsTreeItemType.INSTRUMENT ||
-                   root.type === InstrumentsTreeItemType.STAFF)
+                  (root.type === LayoutPanelItemType.INSTRUMENT ||
+                   root.type === LayoutPanelItemType.STAFF)
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.textFieldColor
+                opacity: 1
+            }
+        },
+
+        State {
+            name: "SYSTEM_OBJECTS_LAYER_NORMAL"
+            when: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
             PropertyChanges {
                 target: root.background

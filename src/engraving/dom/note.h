@@ -157,7 +157,7 @@ public:
 
     ~Note();
 
-    std::vector<const Note*> compoundNotes() const;
+    std::vector<Note*> compoundNotes() const;
 
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
@@ -288,11 +288,7 @@ public:
     void setTieFor(Tie* t);
     void setTieBack(Tie* t);
     Note* firstTiedNote(bool ignorePlayback = true) const;
-    const Note* lastTiedNote(bool ignorePlayback = true) const;
-    Note* lastTiedNote(bool ignorePlayback = true)
-    {
-        return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote(ignorePlayback));
-    }
+    Note* lastTiedNote(bool ignorePlayback = true) const;
 
     int unisonIndex() const;
     void disconnectTiedNotes();

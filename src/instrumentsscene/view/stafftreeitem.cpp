@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,9 +27,9 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, masterNotation, notation, parent)
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::STAFF, masterNotation, notation, parent)
 {
-    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
+    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
         if (!m_isInited) {
             return;
         }
@@ -40,8 +40,10 @@ StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr not
         this->notation()->parts()->setStaffVisible(id(), isVisible);
     });
 
-    setIsEditable(true);
+    setSettingsAvailable(true);
+    setSettingsEnabled(true);
     setIsRemovable(true);
+    setIsSelectable(true);
 }
 
 void StaffTreeItem::init(const Staff* masterStaff)
@@ -60,16 +62,11 @@ void StaffTreeItem::init(const Staff* masterStaff)
     QString staffName = staff->staffName();
 
     //: Prefix for the display name for a linked staff. Preferably, keep this short.
-    QString title = masterStaff->isLinked() ? muse::qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
+    QString title = masterStaff->isLinked() ? muse::qtrc("layout", "[LINK] %1").arg(staffName) : staffName;
 
     setId(staff->id());
     setTitle(title);
     setIsVisible(visible);
 
     m_isInited = true;
-}
-
-bool StaffTreeItem::isSelectable() const
-{
-    return true;
 }

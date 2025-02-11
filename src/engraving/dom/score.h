@@ -419,6 +419,7 @@ public:
 
     void clearSystemObjectStaves();
     void addSystemObjectStaff(Staff* staff);
+    void removeSystemObjectStaff(Staff* staff);
     const std::vector<Staff*>& systemObjectStaves() const { return m_systemObjectStaves; }
     bool isSystemObjectStaff(Staff* staff) const;
 
@@ -1060,8 +1061,6 @@ private:
     friend class write::Writer;
 
     static std::set<Score*> validScores;
-
-    ScoreChangesRange changesRange() const;
 
     Note* getSelectedNote();
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);

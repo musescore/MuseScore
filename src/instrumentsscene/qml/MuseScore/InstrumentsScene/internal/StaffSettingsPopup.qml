@@ -64,7 +64,7 @@ StyledPopupView {
 
         StyledTextLabel {
             id: typeLabel
-            text: qsTrc("instruments", "Staff type")
+            text: qsTrc("layout", "Staff type")
         }
 
         StyledDropdown {
@@ -91,7 +91,7 @@ StyledPopupView {
 
         StyledTextLabel {
             visible: !settingsModel.isMainScore
-            text: qsTrc("instruments", "Voices visible in the score")
+            text: qsTrc("layout", "Voices visible in the score")
         }
 
         Row {
@@ -140,7 +140,7 @@ StyledPopupView {
             navigation.panel: root.navigationPanel
             navigation.row: 20 // Should be more than a voices checkbox
 
-            text: qsTrc("instruments", "Small staff")
+            text: qsTrc("layout", "Small staff")
             checked: settingsModel.isSmallStaff
 
             onClicked: {
@@ -156,7 +156,7 @@ StyledPopupView {
             navigation.panel: root.navigationPanel
             navigation.row: 21 // after small staff CheckBox
 
-            text: qsTrc("instruments", "Hide all measures that do not contain notation (cutaway)")
+            text: qsTrc("layout", "Hide all measures that do not contain notation (cutaway)")
 
             checked: settingsModel.cutawayEnabled
 
@@ -173,7 +173,7 @@ StyledPopupView {
             navigation.panel: root.navigationPanel
             navigation.row: 22 // after cutaway CheckBox
 
-            text: qsTrc("instruments", "Create a linked staff")
+            text: qsTrc("layout", "Create a linked staff")
 
             onClicked: {
                 settingsModel.createLinkedStaff()
@@ -184,7 +184,7 @@ StyledPopupView {
         StyledTextLabel {
             width: parent.width
 
-            text: qsTrc("instruments", "Note: linked staves contain identical information.")
+            text: qsTrc("layout", "Note: linked staves contain identical information.")
             wrapMode: Text.WordWrap
         }
     }

@@ -99,7 +99,7 @@ enum class PlayEventType : char;
 
 #define UNDO_TYPE(t) CommandType type() const override { return t; }
 #define UNDO_NAME(a) const char* name() const override { return a; }
-#define UNDO_CHANGED_OBJECTS(...) std::vector<const EngravingObject*> objectItems() const override { return __VA_ARGS__; }
+#define UNDO_CHANGED_OBJECTS(...) std::vector<EngravingObject*> objectItems() const override { return __VA_ARGS__; }
 
 class UndoCommand
 {
@@ -130,7 +130,7 @@ public:
     size_t childCount() const { return childList.size(); }
     void unwind();
     const std::list<UndoCommand*>& commands() const { return childList; }
-    virtual std::vector<const EngravingObject*> objectItems() const { return {}; }
+    virtual std::vector<EngravingObject*> objectItems() const { return {}; }
     virtual void cleanup(bool undo);
 // #ifndef QT_NO_DEBUG
     virtual const char* name() const { return "UndoCommand"; }
@@ -176,12 +176,12 @@ public:
 
     struct ChangesInfo {
         ElementTypeSet changedObjectTypes;
-        std::set<const EngravingItem*> changedItems;
+        std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
         StyleIdSet changedStyleIdSet;
         PropertyIdSet changedPropertyIdSet;
     };
 
-    ChangesInfo changesInfo() const;
+    ChangesInfo changesInfo(bool undo = false) const;
     const TranslatableString& actionName() const;
 
     static bool canRecordSelectedElement(const EngravingItem* e);
@@ -365,6 +365,38 @@ public:
 
     UNDO_TYPE(CommandType::RemoveStaff)
     UNDO_NAME("RemoveStaff")
+    UNDO_CHANGED_OBJECTS({ staff })
+};
+
+class AddSystemObjectStaff : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddSystemObjectStaff)
+
+    Staff* staff = nullptr;
+
+public:
+    AddSystemObjectStaff(Staff*);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+    UNDO_TYPE(CommandType::AddSystemObjectStaff)
+    UNDO_NAME("AddSystemObjectStaff")
+    UNDO_CHANGED_OBJECTS({ staff })
+};
+
+class RemoveSystemObjectStaff : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveSystemObjectStaff)
+
+    Staff* staff = nullptr;
+
+public:
+    RemoveSystemObjectStaff(Staff*);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+    UNDO_TYPE(CommandType::RemoveSystemObjectStaff)
+    UNDO_NAME("RemoveSystemObjectStaff")
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
@@ -666,7 +698,7 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::AddElement)
 };
@@ -702,7 +734,7 @@ public:
     void cleanup(bool undo) override;
 
     UNDO_NAME("AddSystemLock")
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 };
 
 class RemoveSystemLock : public UndoCommand
@@ -717,7 +749,7 @@ public:
     void cleanup(bool undo) override;
 
     UNDO_NAME("RemoveSystemLock")
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 };
 
 class ChangePatch : public UndoCommand
@@ -998,7 +1030,7 @@ public:
     void undo(EditData*) override;
     void redo(EditData*) override;
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::AddExcerpt)
     UNDO_NAME("AddExcerpt")
@@ -1019,7 +1051,7 @@ public:
     void undo(EditData*) override;
     void redo(EditData*) override;
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::RemoveExcerpt)
     UNDO_NAME("RemoveExcerpt")
@@ -1182,7 +1214,7 @@ public:
     UNDO_TYPE(CommandType::ChangeProperty)
     UNDO_NAME("ChangeProperty")
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
@@ -1678,7 +1710,7 @@ public:
 
     UNDO_NAME("ChangeHarpPedalState")
 //    UNDO_CHANGED_OBJECTS({ diagram })
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 };
 
 //---------------------------------------------------------
@@ -1705,7 +1737,7 @@ public:
 
     UNDO_NAME("ChangeSingleHarpPedal")
 //    UNDO_CHANGED_OBJECTS({ diagram });
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 };
 
 class ChangeStringData : public UndoCommand

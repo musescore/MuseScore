@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTPANELTREEMODEL_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTPANELTREEMODEL_H
+
+#pragma once
 
 #include <QAbstractItemModel>
 #include <QVariant>
 
-#include "abstractinstrumentspaneltreeitem.h"
+#include "abstractlayoutpaneltreeitem.h"
 #include "modularity/ioc.h"
 #include "notation/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
@@ -34,6 +34,7 @@
 #include "actions/actionable.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
+#include "layoutpanelutils.h"
 
 Q_MOC_INCLUDE(< QItemSelectionModel >)
 
@@ -44,7 +45,8 @@ class ItemMultiSelectionModel;
 class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
-class InstrumentsPanelTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::actions::Actionable
+class PartTreeItem;
+class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -60,11 +62,11 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public muse::async:
     Q_PROPERTY(bool isAddingAvailable READ isAddingAvailable NOTIFY isAddingAvailableChanged)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
-    Q_PROPERTY(bool isInstrumentSelected READ isInstrumentSelected NOTIFY isInstrumentSelectedChanged)
+    Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
 
 public:
-    explicit InstrumentsPanelTreeModel(QObject* parent = nullptr);
-    ~InstrumentsPanelTreeModel() override;
+    explicit LayoutPanelTreeModel(QObject* parent = nullptr);
+    ~LayoutPanelTreeModel() override;
 
     QModelIndex index(int row, int column, const QModelIndex& parent) const override;
     QModelIndex parent(const QModelIndex& child) const override;
@@ -79,13 +81,14 @@ public:
     bool isAddingAvailable() const;
     bool isEmpty() const;
     QString addInstrumentsKeyboardShortcut() const;
-    bool isInstrumentSelected() const;
+    int selectedItemsType() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void setInstrumentsPanelVisible(bool visible);
+    Q_INVOKABLE void setLayoutPanelVisible(bool visible);
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE void clearSelection();
     Q_INVOKABLE void addInstruments();
+    Q_INVOKABLE void addSystemMarkings();
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
@@ -106,14 +109,14 @@ signals:
     void isRemovingAvailableChanged(bool isRemovingAvailable);
     void isEmptyChanged();
     void addInstrumentsKeyboardShortcutChanged();
-    void isInstrumentSelectedChanged(bool isInstrumentSelected);
+    void selectedItemsTypeChanged(int type);
 
 private slots:
     void updateRearrangementAvailability();
     void updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
     void updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
     void updateRemovingAvailability();
-    void updateIsInstrumentSelected();
+    void updateSelectedItemsType();
 
 private:
     bool removeRows(int row, int count, const QModelIndex& parent) override;
@@ -142,26 +145,32 @@ private:
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
-    void setIsInstrumentSelected(bool isInstrumentSelected);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
     bool warnAboutRemovingInstrumentsIfNecessary(int count);
 
-    AbstractInstrumentsPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
-    AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
-    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
-    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
-    AbstractInstrumentsPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
+    AbstractLayoutPanelTreeItem* buildMasterPartItem(const notation::Part* masterPart);
+    AbstractLayoutPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
+    AbstractLayoutPanelTreeItem* buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff,
+                                                             const SystemObjectGroups& systemObjects);
+    AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
+    AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
+
+    void updateSystemObjectLayers();
+
+    const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;
+    const notation::Staff* resolveNewSystemObjectStaff() const;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
-    bool m_isInstrumentSelected = false;
     bool m_isLoadingBlocked = false;
     bool m_notationChangedWhileLoadingWasBlocked = false;
 
-    AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
+    LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
+
+    AbstractLayoutPanelTreeItem* m_rootItem = nullptr;
     muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
     mu::notation::INotationPtr m_notation = nullptr;
@@ -170,12 +179,10 @@ private:
     using NotationKey = QString;
     QHash<NotationKey, QList<muse::ID> > m_sortedPartIdList;
 
-    bool m_instrumentsPanelVisible = true;
+    bool m_layoutPanelVisible = true;
 
     bool m_dragInProgress = false;
-    bool m_activeDragIsStave = false;
+    AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
     MoveParams m_activeDragMoveParams;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTPANELTREEMODEL_H

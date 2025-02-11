@@ -127,8 +127,8 @@ const UiActionList ApplicationUiActions::m_actions = {
     UiAction("toggle-instruments",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Instr&uments"),
-             TranslatableString("action", "Open instruments dialog…"),
+             TranslatableString("action", "&Layout"),
+             TranslatableString("action", "Show/hide layout panel"),
              Checkable::Yes
              ),
     UiAction("inspector",
@@ -329,7 +329,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
 
         { "toggle-palettes", PALETTES_PANEL_NAME },
-        { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
+        { "toggle-instruments", LAYOUT_PANEL_NAME },
         { "inspector", INSPECTOR_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
         { "toggle-undo-history-panel", UNDO_HISTORY_PANEL_NAME },

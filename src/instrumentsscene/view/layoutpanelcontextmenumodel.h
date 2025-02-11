@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTPANELCONTEXTMENUMODEL_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTPANELCONTEXTMENUMODEL_H
+
+#pragma once
 
 #include "uicomponents/view/abstractmenumodel.h"
 #include "actions/actionable.h"
@@ -31,7 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
+class LayoutPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -40,7 +40,7 @@ class InstrumentsPanelContextMenuModel : public muse::uicomponents::AbstractMenu
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
-    explicit InstrumentsPanelContextMenuModel(QObject* parent = nullptr);
+    explicit LayoutPanelContextMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
 
@@ -56,9 +56,8 @@ private:
 
     muse::uicomponents::MenuItem* createInstrumentsOrderingItem();
     muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
+
     notation::IMasterNotationPtr m_masterNotation;
     notation::ScoreOrderList m_orders;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTPANELCONTEXTMENUMODEL_H

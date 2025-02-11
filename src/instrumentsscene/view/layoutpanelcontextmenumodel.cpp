@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "instrumentspanelcontextmenumodel.h"
+#include "layoutpanelcontextmenumodel.h"
 
 #include "actions/actiontypes.h"
 #include "types/translatablestring.h"
@@ -41,14 +41,14 @@ static const ActionCode COLLAPSE_ALL_CODE("collapse-all-instruments");
 
 static const QString ORDERING_MENU_ID("ordering-menu");
 
-InstrumentsPanelContextMenuModel::InstrumentsPanelContextMenuModel(QObject* parent)
+LayoutPanelContextMenuModel::LayoutPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
 }
 
-void InstrumentsPanelContextMenuModel::load()
+void LayoutPanelContextMenuModel::load()
 {
-    dispatcher()->reg(this, SET_INSTRUMENTS_ORDER_CODE, this, &InstrumentsPanelContextMenuModel::setInstrumentsOrder);
+    dispatcher()->reg(this, SET_INSTRUMENTS_ORDER_CODE, this, &LayoutPanelContextMenuModel::setInstrumentsOrder);
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         updateMenu();
@@ -57,7 +57,7 @@ void InstrumentsPanelContextMenuModel::load()
     updateMenu();
 }
 
-void InstrumentsPanelContextMenuModel::updateMenu()
+void LayoutPanelContextMenuModel::updateMenu()
 {
     INotationPtr notation = globalContext()->currentNotation();
     m_masterNotation = globalContext()->currentMasterNotation();
@@ -79,7 +79,7 @@ void InstrumentsPanelContextMenuModel::updateMenu()
     });
 }
 
-void InstrumentsPanelContextMenuModel::loadInstrumentOrders()
+void LayoutPanelContextMenuModel::loadInstrumentOrders()
 {
     TRACEFUNC;
 
@@ -97,7 +97,7 @@ void InstrumentsPanelContextMenuModel::loadInstrumentOrders()
     }
 }
 
-void InstrumentsPanelContextMenuModel::buildMenu(bool includeInstrumentsOrdering)
+void LayoutPanelContextMenuModel::buildMenu(bool includeInstrumentsOrdering)
 {
     MenuItemList items;
     if (includeInstrumentsOrdering) {
@@ -116,7 +116,7 @@ void InstrumentsPanelContextMenuModel::buildMenu(bool includeInstrumentsOrdering
     setItems(items);
 }
 
-void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const ActionData& args)
+void LayoutPanelContextMenuModel::setInstrumentsOrder(const ActionData& args)
 {
     if (args.empty()) {
         return;
@@ -134,7 +134,7 @@ void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const ActionData& arg
     updateOrderingMenu(newOrderId);
 }
 
-void InstrumentsPanelContextMenuModel::updateOrderingMenu(const QString& newOrderId)
+void LayoutPanelContextMenuModel::updateOrderingMenu(const QString& newOrderId)
 {
     MenuItem& orderingMenu = findMenu(ORDERING_MENU_ID);
 
@@ -145,7 +145,7 @@ void InstrumentsPanelContextMenuModel::updateOrderingMenu(const QString& newOrde
     }
 }
 
-MenuItem* InstrumentsPanelContextMenuModel::createInstrumentsOrderingItem()
+MenuItem* LayoutPanelContextMenuModel::createInstrumentsOrderingItem()
 {
     ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
 
@@ -179,18 +179,18 @@ MenuItem* InstrumentsPanelContextMenuModel::createInstrumentsOrderingItem()
         }
     }
 
-    return makeMenu(TranslatableString("instruments", "Instrument ordering"), orderItems, ORDERING_MENU_ID);
+    return makeMenu(TranslatableString("layout", "Instrument ordering"), orderItems, ORDERING_MENU_ID);
 }
 
-MenuItem* InstrumentsPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
+MenuItem* LayoutPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
 {
     MenuItem* item = new MenuItem(this);
     item->setId(QString::fromStdString(expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE));
 
     UiAction action;
     action.title = expand
-                   ? TranslatableString("instruments", "Expand all instruments")
-                   : TranslatableString("instruments", "Collapse all instruments");
+                   ? TranslatableString("layout", "Expand all instruments")
+                   : TranslatableString("layout", "Collapse all instruments");
     action.code = expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE;
     item->setAction(action);
 

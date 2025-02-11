@@ -5102,7 +5102,7 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
     if (element->parentItem() == parent && staffIdx == element->staffIdx()) {
         return;
     }
-    Staff* originStaff = element->staff();
+
     Staff* destStaff = staff(staffIdx);
     bool recreateItemNeeded = false;
 
@@ -5110,8 +5110,8 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
     for (EngravingObject* obj : links) {
         EngravingItem* item = toEngravingItem(obj);
         Score* linkedScore = item->score();
-        Staff* linkedOrigin = originStaff->findLinkedInScore(linkedScore);
-        Staff* linkedDest = destStaff->findLinkedInScore(linkedScore);
+        Staff* linkedOrigin = item->staff();
+        Staff* linkedDest = linkedScore != this ? destStaff->findLinkedInScore(linkedScore) : linkedOrigin; // don't allow staff-change of linked elements within the same score
 
         if (!linkedScore) {
             continue;

@@ -45,6 +45,7 @@
 #include "sig.h"
 #include "staff.h"
 #include "system.h"
+#include "spanner.h"
 #include "tuplet.h"
 #include "drumset.h"
 
@@ -1422,6 +1423,69 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
             chords.push_back(chord);
         }
     }
+}
+
+std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves)
+{
+    TRACEFUNC;
+
+    std::vector<EngravingItem*> result;
+
+    const TimeSigPlacement timeSigPlacement = score->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
+    const bool isOnStaffTimeSig = timeSigPlacement != TimeSigPlacement::NORMAL;
+
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (const Segment& seg : measure->segments()) {
+            if (seg.isChordRestType()) {
+                for (EngravingItem* annotation : seg.annotations()) {
+                    if (!annotation || !annotation->systemFlag()) {
+                        continue;
+                    }
+
+                    if (!staves.empty()) {
+                        if (muse::contains(staves, annotation->staff())) {
+                            result.push_back(annotation);
+                        }
+                    } else if (annotation->isTopSystemObject()) {
+                        result.push_back(annotation);
+                    }
+                }
+            }
+
+            if (isOnStaffTimeSig && seg.isType(SegmentType::TimeSigType)) {
+                for (EngravingItem* item : seg.elist()) {
+                    if (!item || !item->isTimeSig()) {
+                        continue;
+                    }
+
+                    if (!staves.empty()) {
+                        if (muse::contains(staves, item->staff())) {
+                            result.push_back(item);
+                        }
+                    } else if (item->staffIdx() == 0) {
+                        result.push_back(item);
+                    }
+                }
+            }
+        }
+    }
+
+    for (const auto& pair : score->spanner()) {
+        Spanner* spanner = pair.second;
+        if (!spanner->systemFlag()) {
+            continue;
+        }
+
+        if (!staves.empty()) {
+            if (muse::contains(staves, spanner->staff())) {
+                result.push_back(spanner);
+            }
+        } else if (spanner->isTopSystemObject()) {
+            result.push_back(spanner);
+        }
+    }
+
+    return result;
 }
 
 String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames)

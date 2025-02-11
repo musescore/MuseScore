@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_STAFFCONTROLTREEITEM_H
-#define MU_INSTRUMENTSSCENE_STAFFCONTROLTREEITEM_H
 
-#include "abstractinstrumentspaneltreeitem.h"
+#pragma once
+
+#include "abstractlayoutpaneltreeitem.h"
 
 #include "notation/inotationparts.h"
 
 namespace mu::instrumentsscene {
-class StaffControlTreeItem : public AbstractInstrumentsPanelTreeItem
+class StaffControlTreeItem : public AbstractLayoutPanelTreeItem
 {
     Q_OBJECT
 
@@ -42,5 +42,3 @@ private:
     muse::ID m_partId;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_STAFFCONTROLTREEITEM_H

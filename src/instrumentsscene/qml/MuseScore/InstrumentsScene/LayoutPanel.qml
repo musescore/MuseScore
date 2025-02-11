@@ -39,7 +39,7 @@ Item {
     property alias contextMenuModel: contextMenuModel
 
     onVisibleChanged: {
-        instrumentsTreeModel.setInstrumentsPanelVisible(root.visible)
+        treeModel.setLayoutPanelVisible(root.visible)
     }
 
     Rectangle {
@@ -53,16 +53,16 @@ Item {
             anchors.fill: parent
 
             onClicked: {
-                instrumentsTreeModel.clearSelection()
+                treeModel.clearSelection()
             }
         }
     }
 
-    InstrumentsPanelContextMenuModel {
+    LayoutPanelContextMenuModel {
         id: contextMenuModel
 
         onExpandCollapseAllRequested: function(expand) {
-            instrumentsTreeView.expandCollapseAll(expand)
+            layoutPanelTreeView.expandCollapseAll(expand)
         }
     }
 
@@ -84,7 +84,7 @@ Item {
         readonly property int sideMargin: 12
         spacing: sideMargin
 
-        InstrumentsControlPanel {
+        LayoutControlPanel {
             id: controlPanel
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
@@ -95,26 +95,30 @@ Item {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart
 
-            isMovingUpAvailable: instrumentsTreeModel.isMovingUpAvailable
-            isMovingDownAvailable: instrumentsTreeModel.isMovingDownAvailable
-            isAddingAvailable: instrumentsTreeModel.isAddingAvailable
-            isRemovingAvailable: instrumentsTreeModel.isRemovingAvailable
-            isInstrumentSelected: instrumentsTreeModel.isInstrumentSelected
+            isMovingUpAvailable: treeModel.isMovingUpAvailable
+            isMovingDownAvailable: treeModel.isMovingDownAvailable
+            isAddingAvailable: treeModel.isAddingAvailable
+            isRemovingAvailable: treeModel.isRemovingAvailable
+            selectedItemsType: treeModel.selectedItemsType
 
-            onAddRequested: {
-                instrumentsTreeModel.addInstruments()
+            onAddInstrumentRequested: {
+                treeModel.addInstruments()
+            }
+
+            onAddSystemMarkingsRequested: {
+                treeModel.addSystemMarkings()
             }
 
             onMoveUpRequested: {
-                instrumentsTreeModel.moveSelectedRowsUp()
+                treeModel.moveSelectedRowsUp()
             }
 
             onMoveDownRequested: {
-                instrumentsTreeModel.moveSelectedRowsDown()
+                treeModel.moveSelectedRowsDown()
             }
 
             onRemovingRequested: {
-                instrumentsTreeModel.removeSelectedRows()
+                treeModel.removeSelectedRows()
             }
         }
 
@@ -125,13 +129,13 @@ Item {
             Layout.leftMargin: 20
             Layout.rightMargin: 20
 
-            text: Boolean(instrumentsTreeModel.addInstrumentsKeyboardShortcut)
-                  //: Keep in sync with the text of the "Add" button at the top of the Instruments panel (InstrumentsControlPanel.qml)
-                  ? qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
-                    .arg("<b>" + instrumentsTreeModel.addInstrumentsKeyboardShortcut + "</b>")
-                  //: Keep in sync with the text of the "Add" button at the top of the Instruments panel (InstrumentsControlPanel.qml)
-                  : qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>.")
-            visible: instrumentsTreeModel.isEmpty && instrumentsTreeModel.isAddingAvailable
+            text: Boolean(treeModel.addInstrumentsKeyboardShortcut)
+                  //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
+                  ? qsTrc("layout", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
+                    .arg("<b>" + treeModel.addInstrumentsKeyboardShortcut + "</b>")
+                  //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
+                  : qsTrc("layout", "There are no instruments in your score. To choose some, press <b>Add</b>.")
+            visible: treeModel.isEmpty && treeModel.isAddingAvailable
 
             verticalAlignment: Qt.AlignTop
             wrapMode: Text.WordWrap
@@ -144,10 +148,10 @@ Item {
             Layout.fillHeight: true
 
             contentWidth: width
-            contentHeight: instrumentsTreeView.implicitHeight
+            contentHeight: layoutPanelTreeView.implicitHeight
 
             TreeView {
-                id: instrumentsTreeView
+                id: layoutPanelTreeView
 
                 readonly property real delegateHeight: 38
 
@@ -158,13 +162,13 @@ Item {
                 implicitHeight: flickableItem.contentHeight
                 flickableItem.interactive: false
 
-                visible: !instrumentsTreeModel.isEmpty
+                visible: !treeModel.isEmpty
 
-                model: InstrumentsPanelTreeModel {
-                    id: instrumentsTreeModel
+                model: LayoutPanelTreeModel {
+                    id: treeModel
                 }
 
-                selection: instrumentsTreeModel ? instrumentsTreeModel.selectionModel() : null
+                selection: treeModel ? treeModel.selectionModel() : null
 
                 alternatingRowColors: false
                 backgroundVisible: false
@@ -172,14 +176,14 @@ Item {
                 frameVisible: false
 
                 function expandCollapseAll(expand) {
-                    for (let row = 0; row < instrumentsTreeView.model.rowCount(); row++) {
-                        const instrumentIndex = instrumentsTreeView.model.index(row, 0);
-                        const instrumentsTreeItemDelegate = instrumentsTreeView.model.data(instrumentIndex);
-                        if (instrumentsTreeItemDelegate.isExpandable){
+                    for (let row = 0; row < layoutPanelTreeView.model.rowCount(); row++) {
+                        const instrumentIndex = layoutPanelTreeView.model.index(row, 0);
+                        const itemDelegate = layoutPanelTreeView.model.data(instrumentIndex);
+                        if (itemDelegate.isExpandable){
                             if (expand) {
-                                instrumentsTreeView.expand(instrumentIndex)
+                                layoutPanelTreeView.expand(instrumentIndex)
                             } else {
-                                instrumentsTreeView.collapse(instrumentIndex)
+                                layoutPanelTreeView.collapse(instrumentIndex)
                             }
                         }
                     }
@@ -187,21 +191,21 @@ Item {
                 }
 
                 function scrollToFocusedItem(focusedIndex) {
-                    let targetScrollPosition = focusedIndex * instrumentsTreeView.delegateHeight
+                    let targetScrollPosition = focusedIndex * layoutPanelTreeView.delegateHeight
                     let visibleAreaEnd = flickable.contentY + flickable.height
 
-                    if (targetScrollPosition + instrumentsTreeView.delegateHeight > visibleAreaEnd) {
-                        flickable.contentY = Math.min(targetScrollPosition + instrumentsTreeView.delegateHeight - flickable.height, flickable.contentHeight - flickable.height)
+                    if (targetScrollPosition + layoutPanelTreeView.delegateHeight > visibleAreaEnd) {
+                        flickable.contentY = Math.min(targetScrollPosition + layoutPanelTreeView.delegateHeight - flickable.height, flickable.contentHeight - flickable.height)
                     } else if (targetScrollPosition < flickable.contentY) {
                         flickable.contentY = Math.max(targetScrollPosition, 0)
                     }
                 }
 
                 property NavigationPanel navigationTreePanel : NavigationPanel {
-                    name: "InstrumentsTree"
+                    name: "LayoutPanelTree"
                     section: root.navigationSection
                     direction: NavigationPanel.Both
-                    enabled: instrumentsTreeView.enabled && instrumentsTreeView.visible
+                    enabled: layoutPanelTreeView.enabled && layoutPanelTreeView.visible
                     order: controlPanel.navigation.order + 1
 
                     onNavigationEvent: function(event) {
@@ -216,8 +220,8 @@ Item {
                 }
 
                 function isControl(itemType) {
-                    return itemType === InstrumentsTreeItemType.CONTROL_ADD_STAFF ||
-                            itemType === InstrumentsTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+                    return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF ||
+                           itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
                 }
 
                 style: TreeViewStyle {
@@ -233,7 +237,7 @@ Item {
                     backgroundColor: "transparent"
 
                     rowDelegate: Item {
-                        height: instrumentsTreeView.delegateHeight
+                        height: layoutPanelTreeView.delegateHeight
                         width: parent.width
                     }
                 }
@@ -244,37 +248,41 @@ Item {
                     Loader {
                         id: treeItemDelegateLoader
 
-                        property int delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
+                        property int delegateType: model ? model.itemRole.type : LayoutPanelItemType.UNDEFINED
 
                         height: parent.height
                         width: parent.width
 
-                        sourceComponent: instrumentsTreeView.isControl(delegateType) ?
+                        sourceComponent: layoutPanelTreeView.isControl(delegateType) ?
                                              controlItemDelegateComponent : treeItemDelegateComponent
 
                         Component {
                             id: treeItemDelegateComponent
 
-                            InstrumentsTreeItemDelegate {
-                                treeView: instrumentsTreeView
+                            LayoutPanelItemDelegate {
+                                id: itemDelegate
+
+                                treeView: layoutPanelTreeView
                                 item: model ? model.itemRole : null
                                 originalParent: treeItemDelegateLoader
 
                                 sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
 
-                                navigation.name: model ? model.itemRole.title : "ItemInstrumentsTree"
-                                navigation.panel: instrumentsTreeView.navigationTreePanel
+                                navigation.name: model ? model.itemRole.title : "LayoutPanelItemDelegate"
+                                navigation.panel: layoutPanelTreeView.navigationTreePanel
                                 navigation.row: model ? model.index : 0
                                 navigation.onActiveChanged: {
                                     if (navigation.active) {
                                         prv.currentItemNavigationName = navigation.name
-                                        instrumentsTreeView.scrollToFocusedItem(model.index)
+                                        layoutPanelTreeView.scrollToFocusedItem(model.index)
                                     }
                                 }
 
                                 onClicked: {
-                                    instrumentsTreeModel.selectRow(styleData.index)
+                                    if (itemDelegate.isSelectable) {
+                                        treeModel.selectRow(styleData.index)
+                                    }
                                 }
 
                                 onDoubleClicked: {
@@ -283,14 +291,14 @@ Item {
                                     }
 
                                     if (!styleData.isExpanded) {
-                                        instrumentsTreeView.expand(styleData.index)
+                                        layoutPanelTreeView.expand(styleData.index)
                                     } else {
-                                        instrumentsTreeView.collapse(styleData.index)
+                                        layoutPanelTreeView.collapse(styleData.index)
                                     }
                                 }
 
                                 onRemoveSelectionRequested: {
-                                    instrumentsTreeModel.removeSelectedRows()
+                                    treeModel.removeSelectedRows()
                                 }
 
                                 property real contentYBackup: 0
@@ -312,15 +320,15 @@ Item {
                                 }
 
                                 onVisibilityChanged: function(visible) {
-                                    instrumentsTreeModel.toggleVisibilityOfSelectedRows(visible);
+                                    treeModel.toggleVisibilityOfSelectedRows(visible);
                                 }
 
                                 onDragStarted: {
-                                    instrumentsTreeModel.startActiveDrag()
+                                    treeModel.startActiveDrag()
                                 }
 
                                 onDropped: {
-                                    instrumentsTreeModel.endActiveDrag()
+                                    treeModel.endActiveDrag()
                                 }
                             }
                         }
@@ -328,10 +336,10 @@ Item {
                         Component {
                             id: controlItemDelegateComponent
 
-                            InstrumentsTreeItemControl {
+                            LayoutPanelItemControl {
                                 isSelected: model ? model.itemRole.isSelected : false
 
-                                navigation.panel: instrumentsTreeView.navigationTreePanel
+                                navigation.panel: layoutPanelTreeView.navigationTreePanel
                                 navigation.row: model ? model.index : 0
 
                                 sideMargin: contentColumn.sideMargin
@@ -348,7 +356,7 @@ Item {
                             return
                         }
 
-                        instrumentsTreeModel.moveRows(drag.source.index.parent,
+                        treeModel.moveRows(drag.source.index.parent,
                                                      drag.source.index.row,
                                                      1,
                                                      styleData.index.parent,

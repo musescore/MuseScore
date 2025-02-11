@@ -821,7 +821,9 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
         return result;
     }
 
-    for (const EngravingItem* item : changesRange.changedItems) {
+    for (const auto& pair : changesRange.changedItems) {
+        const EngravingItem* item = pair.first;
+
         if (item->isNote()) {
             const Note* note = toNote(item);
             const Chord* chord = note->chord();
