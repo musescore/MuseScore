@@ -236,8 +236,8 @@ void PartTreeItem::replaceInstrument()
 
 void PartTreeItem::resetAllFormatting()
 {
-    std::string title = muse::trc("instruments", "Are you sure you want to reset all formatting?");
-    std::string body = muse::trc("instruments", "This action can not be undone");
+    std::string title = muse::trc("layout", "Are you sure you want to reset all formatting?");
+    std::string body = muse::trc("layout", "This action can not be undone");
 
     IInteractive::Button button = interactive()->question(title, body, {
         IInteractive::Button::No,

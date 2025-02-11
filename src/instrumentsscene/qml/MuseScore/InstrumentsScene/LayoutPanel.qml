@@ -131,10 +131,10 @@ Item {
 
             text: Boolean(treeModel.addInstrumentsKeyboardShortcut)
                   //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
-                  ? qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
+                  ? qsTrc("layout", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
                     .arg("<b>" + treeModel.addInstrumentsKeyboardShortcut + "</b>")
                   //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
-                  : qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>.")
+                  : qsTrc("layout", "There are no instruments in your score. To choose some, press <b>Add</b>.")
             visible: treeModel.isEmpty && treeModel.isAddingAvailable
 
             verticalAlignment: Qt.AlignTop

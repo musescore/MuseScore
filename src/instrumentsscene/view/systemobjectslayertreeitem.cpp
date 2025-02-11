@@ -35,7 +35,7 @@ using namespace mu::engraving;
 static QString formatLayerTitle(const SystemObjectGroups& groups)
 {
     if (groups.empty()) {
-        return muse::qtrc("instruments", "System objects");
+        return muse::qtrc("layout", "System objects");
     }
 
     QString title;
@@ -62,7 +62,7 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
     }
 
     if (title.isEmpty()) {
-        title = muse::qtrc("instruments", "System objects hidden");
+        title = muse::qtrc("layout", "System objects hidden");
     }
 
     return title;

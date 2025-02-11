@@ -179,7 +179,7 @@ MenuItem* LayoutPanelContextMenuModel::createInstrumentsOrderingItem()
         }
     }
 
-    return makeMenu(TranslatableString("instruments", "Instrument ordering"), orderItems, ORDERING_MENU_ID);
+    return makeMenu(TranslatableString("layout", "Instrument ordering"), orderItems, ORDERING_MENU_ID);
 }
 
 MenuItem* LayoutPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
@@ -189,8 +189,8 @@ MenuItem* LayoutPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
 
     UiAction action;
     action.title = expand
-                   ? TranslatableString("instruments", "Expand all instruments")
-                   : TranslatableString("instruments", "Collapse all instruments");
+                   ? TranslatableString("layout", "Expand all instruments")
+                   : TranslatableString("layout", "Collapse all instruments");
     action.code = expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE;
     item->setAction(action);
 
