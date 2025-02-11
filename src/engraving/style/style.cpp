@@ -25,6 +25,7 @@
 #include "types/constants.h"
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
+#include "rw/compat/compatutils.h"
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 #include "types/typesconv.h"
@@ -531,6 +532,12 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                    || tag == "defaultFontSpatiumDependent"
                    || tag == "usePre_3_6_defaults") {
             e.skipCurrentElement(); // obsolete
+        } else if (tag == "articulationAnchorDefault" && m_version < 410) {
+            set(Sid::articulationAnchorDefault, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
+        } else if (tag == "articulationAnchorLuteFingering" && m_version < 410) {
+            set(Sid::articulationAnchorLuteFingering, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
+        } else if (tag == "articulationAnchorOther" && m_version < 410) {
+            set(Sid::articulationAnchorOther, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
         } else if (tag == "lineEndToSystemEndDistance") { // renamed in 4.5
             set(Sid::lineEndToBarlineDistance, Spatium(e.readDouble()));
         } else if (!readProperties(e)) {
