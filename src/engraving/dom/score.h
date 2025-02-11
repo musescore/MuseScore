@@ -144,15 +144,15 @@ struct Interval;
 struct NoteVal;
 struct ShowAnchors;
 
-enum class BeatType : char;
-enum class Key;
+enum class BeatType : unsigned char;
+enum class Key : signed char;
 enum class HairpinType : signed char;
 enum class SegmentType;
-enum class OttavaType : char;
+enum class OttavaType : unsigned char;
 enum class Voicing : signed char;
 enum class HDuration : signed char;
-enum class AccidentalType;
-enum class LayoutBreakType;
+enum class AccidentalType : unsigned char;
+enum class LayoutBreakType : unsigned char;
 
 enum class LoopBoundaryType : signed char {
     Unknown = -1,
@@ -510,7 +510,7 @@ public:
     void doUndoRemoveElement(EngravingItem*);
     bool containsElement(const EngravingItem*) const;
 
-    enum class AddToChord {
+    enum class AddToChord : unsigned char {
         None,
         AtPreviousPosition,
         AtCurrentPosition,

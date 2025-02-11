@@ -143,7 +143,7 @@ enum class UpDownMode : char {
 //   MScoreError
 //---------------------------------------------------------
 
-enum class MsError {
+enum class MsError : unsigned char {
     MS_NO_ERROR,
     NO_NOTE_SELECTED,
     NO_CHORD_REST_SELECTED,

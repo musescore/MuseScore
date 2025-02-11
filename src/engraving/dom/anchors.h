@@ -47,7 +47,7 @@ public:
 
     TimeTickAnchor* clone() const override { return new TimeTickAnchor(*this); }
 
-    enum class DrawRegion {
+    enum class DrawRegion : unsigned char {
         OUT_OF_RANGE,
         EXTENDED_REGION,
         MAIN_REGION

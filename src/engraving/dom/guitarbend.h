@@ -30,7 +30,7 @@
 #include "types.h"
 
 namespace mu::engraving {
-enum class QuarterOffset {
+enum class QuarterOffset : unsigned char {
     QUARTER_FLAT,
     NONE,
     QUARTER_SHARP

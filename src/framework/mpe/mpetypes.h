@@ -136,7 +136,7 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
 };
 
 // Pitch
-enum class PitchClass {
+enum class PitchClass : signed char {
     Undefined = -1,
     C = 0,
     C_sharp = 1,
@@ -184,7 +184,7 @@ constexpr inline size_t pitchStepsCount(const pitch_level_t pitchRange)
 // Expression
 using ArticulationFamily = mpe::SoundCategory;
 
-enum class ArticulationType {
+enum class ArticulationType : signed char {
     Undefined = -1,
 
     // single note articulations

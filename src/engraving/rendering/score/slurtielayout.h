@@ -36,7 +36,7 @@ class Chord;
 class TieSegment;
 class Tie;
 class TremoloTwoChord;
-enum class Grip;
+enum class Grip : signed char;
 class Note;
 class PartialTie;
 class PartialTieSegment;

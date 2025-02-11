@@ -61,8 +61,8 @@ class Tie;
 class Trill;
 class Tuplet;
 class Volta;
-enum class TupletBracketType : char;
-enum class TupletNumberType : char;
+enum class TupletBracketType : unsigned char;
+enum class TupletNumberType : unsigned char;
 }
 
 namespace mu::iex::musicxml {
@@ -79,7 +79,7 @@ using Beams = std::map<muse::String, engraving::Beam*>;
 //   MusicXmlSlash
 //---------------------------------------------------------
 
-enum class MusicXmlSlash : char {
+enum class MusicXmlSlash : unsigned char {
     NONE, RHYTHM, SLASH
 };
 
@@ -111,7 +111,7 @@ struct MusicXmlTupletDesc {
 class SlurDesc
 {
 public:
-    enum class State : char {
+    enum class State : unsigned char {
         NONE, START, STOP
     };
     SlurDesc()

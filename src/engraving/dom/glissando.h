@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_GLISSANDO_H
-#define MU_ENGRAVING_GLISSANDO_H
+#pragma once
 
 #include "engravingitem.h"
 #include "line.h"
@@ -31,7 +30,7 @@
 namespace mu::engraving {
 class Glissando;
 class Note;
-enum class GlissandoType;
+enum class GlissandoType : unsigned char;
 
 //---------------------------------------------------------
 //   @@ GlissandoSegment
@@ -106,5 +105,3 @@ private:
     std::optional<bool> m_isHarpGliss = std::nullopt;
 };
 } // namespace mu::engraving
-
-#endif

@@ -31,7 +31,7 @@
 namespace mu::engraving {
 class MidiNote;
 class Note;
-enum class Key;
+enum class Key : signed char;
 
 const int INVALID_PITCH      = -1;
 

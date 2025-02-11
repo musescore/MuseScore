@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BEAMTREMOLOLAYOUT_DEV_H
-#define MU_ENGRAVING_BEAMTREMOLOLAYOUT_DEV_H
+#pragma once
 
 #include <vector>
 
@@ -35,12 +34,12 @@ class Chord;
 class ChordRest;
 class Beam;
 class TremoloTwoChord;
-enum class ActionIconType;
-enum class SpannerSegmentType;
-enum class ChordBeamAnchorType;
+enum class ActionIconType : signed char;
+enum class SpannerSegmentType : unsigned char;
+enum class ChordBeamAnchorType : unsigned char;
 }
 
-enum class SlopeConstraint
+enum class SlopeConstraint : char
 {
     NO_CONSTRAINT,
     FLAT,
@@ -102,4 +101,3 @@ private:
     static bool computeTremoloUp(const BeamBase::LayoutData* ldata);
 };
 } // namespace mu::engraving
-#endif

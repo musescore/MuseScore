@@ -122,7 +122,7 @@ private:
 class TextCursor
 {
 public:
-    enum class MoveOperation {
+    enum class MoveOperation : unsigned char {
         Start,
         Up,
         StartOfLine,
@@ -135,7 +135,7 @@ public:
         Right
     };
 
-    enum class MoveMode {
+    enum class MoveMode : unsigned char {
         MoveAnchor,
         KeepAnchor
     };

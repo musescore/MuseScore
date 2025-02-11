@@ -463,14 +463,14 @@ enum class Pid {
 };
 
 // Determines propagation of properties between score and parts
-enum class PropertyPropagation {
+enum class PropertyPropagation : unsigned char {
     NONE,
     PROPAGATE,
     UNLINK,
 };
 
 // Each group can be propagated differently between score and parts
-enum class PropertyGroup {
+enum class PropertyGroup : unsigned char {
     POSITION,
     TEXT,
     APPEARANCE,

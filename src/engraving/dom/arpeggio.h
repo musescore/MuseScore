@@ -33,7 +33,7 @@ class Chord;
 //   @@ Arpeggio
 //---------------------------------------------------------
 
-enum class AnchorRebaseDirection : char {
+enum class AnchorRebaseDirection : unsigned char {
     UP,
     DOWN
 };

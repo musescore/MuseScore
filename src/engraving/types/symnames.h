@@ -19,12 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SYMNAMES_H
-#define MU_ENGRAVING_SYMNAMES_H
+#pragma once
 
-#include <vector>
 #include <array>
-#include <unordered_map>
+#include <map>
 
 #include "types/string.h"
 #include "types/translatablestring.h"
@@ -53,5 +51,3 @@ private:
     static const std::map<muse::AsciiStringView, SymId> s_oldNameToSymIdHash;
 };
 }
-
-#endif // MU_ENGRAVING_SYMNAMES_H

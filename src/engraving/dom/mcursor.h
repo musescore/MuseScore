@@ -33,7 +33,7 @@ class MasterScore;
 class TDuration;
 class TimeSig;
 class Chord;
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //   MCursor

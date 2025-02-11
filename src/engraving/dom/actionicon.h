@@ -26,7 +26,7 @@
 #include "engravingitem.h"
 
 namespace mu::engraving {
-enum class ActionIconType {
+enum class ActionIconType : signed char {
     UNDEFINED = -1,
 
     ACCIACCATURA,
