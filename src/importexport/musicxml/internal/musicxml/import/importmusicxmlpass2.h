@@ -266,7 +266,7 @@ public:
     Notation(const muse::String& name, const muse::String& parent = {},
              const engraving::SymId& symId = engraving::SymId::noSym) { m_name = name; m_parent = parent; m_symId = symId; }
     void addAttribute(const muse::String& name, const muse::String& value);
-    muse::String attribute(const muse::String& name) const;
+    muse::String attribute(const char* name) const;
     const std::map<muse::String, muse::String>& attributes() const { return m_attributes; }
     muse::String name() const { return m_name; }
     muse::String parent() const { return m_parent; }
