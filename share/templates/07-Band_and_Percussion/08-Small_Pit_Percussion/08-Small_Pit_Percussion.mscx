@@ -1539,8 +1539,8 @@
           <voice>0</voice>
           <name>Drum 4 Shell</name>
           <stem>1</stem>
-          <panelRow>4</panelRow>
-          <panelColumn>1</panelColumn>
+          <panelRow>3</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
         <Drum pitch="43">
           <head>plus</head>
@@ -1548,8 +1548,8 @@
           <voice>0</voice>
           <name>Stick Click</name>
           <stem>1</stem>
-          <panelRow>4</panelRow>
-          <panelColumn>0</panelColumn>
+          <panelRow>3</panelRow>
+          <panelColumn>6</panelColumn>
         </Drum>
         <Drum pitch="48">
           <head>normal</head>
@@ -1594,8 +1594,8 @@
           <voice>0</voice>
           <name>Drum 3 Shell</name>
           <stem>1</stem>
-          <panelRow>4</panelRow>
-          <panelColumn>2</panelColumn>
+          <panelRow>3</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
         <Drum pitch="60">
           <head>normal</head>
@@ -1972,7 +1972,7 @@
         <useDrumset>1</useDrumset>
         <Drum pitch="72">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Full Crash</name>
           <shortcut>A</shortcut>
@@ -1981,7 +1981,7 @@
         </Drum>
         <Drum pitch="74">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Half Crash</name>
           <shortcut>B</shortcut>
@@ -1990,7 +1990,7 @@
         </Drum>
         <Drum pitch="76">
           <head>cross</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>High Hat</name>
           <shortcut>C</shortcut>
@@ -1999,7 +1999,7 @@
         </Drum>
         <Drum pitch="77">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Sizzle</name>
           <shortcut>D</shortcut>
@@ -2008,7 +2008,7 @@
         </Drum>
         <Drum pitch="79">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Crash-Choke</name>
           <shortcut>E</shortcut>
@@ -2017,7 +2017,7 @@
         </Drum>
         <Drum pitch="81">
           <head>do</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Tap</name>
           <shortcut>F</shortcut>
@@ -2026,7 +2026,7 @@
         </Drum>
         <Drum pitch="83">
           <head>do</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Tap-Choke</name>
           <shortcut>G</shortcut>
@@ -2035,7 +2035,7 @@
         </Drum>
         <Drum pitch="84">
           <head>diamond</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Bell Tap</name>
           <panelRow>1</panelRow>
@@ -2043,7 +2043,7 @@
         </Drum>
         <Drum pitch="86">
           <head>diamond</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Bell Tap-Choke</name>
           <panelRow>1</panelRow>
@@ -2051,7 +2051,7 @@
         </Drum>
         <Drum pitch="88">
           <head>plus</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Muted Tap</name>
           <panelRow>0</panelRow>
@@ -2065,7 +2065,7 @@
                 <whole>noteheadXOrnate</whole>
                 <breve>noteheadXOrnate</breve>
           </noteheads>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Smash</name>
           <panelRow>1</panelRow>
@@ -2073,7 +2073,7 @@
         </Drum>
         <Drum pitch="91">
           <head>slashed1</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Zing</name>
           <panelRow>1</panelRow>
@@ -2081,7 +2081,7 @@
         </Drum>
         <Drum pitch="93">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Roll</name>
           <panelRow>1</panelRow>
