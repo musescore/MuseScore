@@ -1574,7 +1574,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         break;
     }
 
-    EngravingItem* elementToSelect = m_dropData.ed.dropElement;
     m_dropData.ed.dropElement = nullptr;
     m_dropData.ed.pos = PointF();
     m_dropData.ed.modifiers = {};
@@ -1584,10 +1583,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
 
     if (accepted) {
         notifyAboutDropChanged();
-
-        if (elementToSelect) {
-            selectAndStartEditIfNeeded(elementToSelect);
-        }
     }
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -1628,7 +1623,7 @@ bool NotationInteraction::doDropStandard()
     score()->addRefresh(el->canvasBoundingRect());
     if (dropElement) {
         if (!score()->noteEntryMode()) {
-            doSelect({ dropElement }, SelectType::SINGLE);
+            selectAndStartEditIfNeeded(dropElement);
         }
         score()->addRefresh(dropElement->canvasBoundingRect());
     }
@@ -1669,7 +1664,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool apply
         EngravingItem* dropElement = el->drop(m_dropData.ed);
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
-            doSelect({ dropElement }, SelectType::SINGLE);
+            selectAndStartEditIfNeeded(dropElement);
             score()->addRefresh(dropElement->canvasBoundingRect());
         }
     }

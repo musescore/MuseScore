@@ -332,6 +332,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
     }
 
+    if (system->staves().empty()) {
+        // Edge case. Can only happen if all instruments have been deleted.
+        return system;
+    }
+
     /*************************************************************
      * SYSTEM NOW HAS A COMPLETE SET OF MEASURES
      * Now perform all operation to finalize system.
