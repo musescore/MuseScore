@@ -65,7 +65,7 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
             updateInputState();
         } else if (shouldSetupInputNote()) {
             const NoteInputState& is = state();
-            const staff_idx_t prevStaffIdx = mu::engraving::staff2track(is.prevTrack());
+            const staff_idx_t prevStaffIdx = mu::engraving::track2staff(is.prevTrack());
 
             if (prevStaffIdx != is.staffIdx()) {
                 setupInputNote();
