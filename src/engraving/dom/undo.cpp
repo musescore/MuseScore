@@ -2077,6 +2077,9 @@ void ChangeStyle::flip(EditData*)
 
     score->setStyle(style, overlap);
     changeChordStyle(score);
+    if (tmp.spatium() != style.spatium()) {
+        score->spatiumChanged(tmp.spatium(), style.spatium());
+    }
     score->styleChanged();
     style = tmp;
 }
