@@ -563,28 +563,45 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
 {
     TRACEFUNC;
 
-    PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+    const PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+    if (m_currentElementPopupType == modelType) {
+        // Don't do anything if a popup of this type is already open...
+        return;
+    }
 
     emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRectF());
 }
 
-void AbstractNotationPaintView::hideElementPopup()
+void AbstractNotationPaintView::hideElementPopup(const ElementType& elementType)
 {
     TRACEFUNC;
 
-    if (m_isPopupOpen) {
+    if (m_currentElementPopupType == PopupModelType::TYPE_UNDEFINED) {
+        // Popup is already hidden...
+        return;
+    }
+
+    const PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+    // Hide the popup if the model type matches the currently open model type, or if no element type was specified...
+    if (modelType == m_currentElementPopupType || elementType == ElementType::INVALID) {
         emit hideElementPopupRequested();
     }
 }
 
 void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const RectF& elementRect)
 {
-    if (m_isPopupOpen) {
-        hideElementPopup();
+    if (m_currentElementPopupType != PopupModelType::TYPE_UNDEFINED) {
+        hideElementPopup(elementType);
         return;
     }
 
     showElementPopup(elementType, elementRect);
+}
+
+bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementType) const
+{
+    const PopupModelType modelType = AbstractElementPopupModel::modelTypeFromElement(elementType);
+    return m_currentElementPopupType == modelType;
 }
 
 void AbstractNotationPaintView::paint(QPainter* qp)
@@ -1124,9 +1141,9 @@ void AbstractNotationPaintView::onContextMenuIsOpenChanged(bool open)
     m_isContextMenuOpen = open;
 }
 
-void AbstractNotationPaintView::onElementPopupIsOpenChanged(bool open)
+void AbstractNotationPaintView::onElementPopupIsOpenChanged(const PopupModelType& popupType)
 {
-    m_isPopupOpen = open;
+    m_currentElementPopupType = popupType;
 }
 
 void AbstractNotationPaintView::mousePressEvent(QMouseEvent* event)
