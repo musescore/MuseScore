@@ -1031,7 +1031,8 @@ void AccidentalsLayout::collectVerticalSets(
         double x1 = xPosRelativeToSegment(acc1);
         for (size_t j = i + 1; j < ctx.allAccidentals.size(); ++j) {
             Accidental* acc2 = ctx.allAccidentals[j];
-            if (acc2->accidentalType() != acc1->accidentalType() || muse::contains(accidentalsAlreadyGrouped, acc2)) {
+            if (acc2->accidentalType() != acc1->accidentalType() || muse::contains(accidentalsAlreadyGrouped, acc2)
+                || !muse::RealIsEqual(acc1->mag(), acc2->mag())) {
                 continue;
             }
             int column2 = acc2->ldata()->column;
