@@ -5295,18 +5295,31 @@ void NotationInteraction::toggleDynamicPopup()
 
     if (el->isHairpinSegment()) {
         HairpinSegment* hairpinSeg = toHairpinSegment(el);
+        Hairpin* hairpin = hairpinSeg->hairpin();
+
+        auto addDynamic = [this](Fraction tick, track_idx_t track, VoiceAssignment voiceAssignment) {
+            startEdit(TranslatableString("undoableAction", "Add dynamic"));
+            Measure* measure = score()->tick2measure(tick);
+            Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
+            Dynamic* dynamic = Factory::createDynamic(segment);
+            dynamic->setParent(segment);
+            dynamic->setTrack(track);
+            dynamic->setVoiceAssignment(voiceAssignment);
+            score()->undoAddElement(dynamic);
+            apply();
+            startEditText(dynamic);
+        };
 
         switch (m_editData.curGrip) {
         case Grip::START: {
-            EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore();
-            if (startDynOrExp != nullptr) {
+            if (EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore()) {
                 select({ startDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
                 if (startDynOrExp->isDynamic()) {
                     startEditElement(startDynOrExp, false);
                     autoFlipHairpinsType(toDynamic(startDynOrExp));
                 }
             } else {
-                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->startCR());
+                addDynamic(hairpin->tick(), hairpin->track(), hairpin->voiceAssignment());
             }
         }
             return;
@@ -5319,7 +5332,7 @@ void NotationInteraction::toggleDynamicPopup()
                     autoFlipHairpinsType(toDynamic(endDynOrExp));
                 }
             } else {
-                addTextToItem(TextStyleType::DYNAMICS, hairpinSeg->spanner()->endCR());
+                addDynamic(hairpin->tick2(), hairpin->track2(), hairpin->voiceAssignment());
             }
         }
             return;
