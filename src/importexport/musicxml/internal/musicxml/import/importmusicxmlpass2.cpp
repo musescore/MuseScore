@@ -6009,6 +6009,8 @@ static bool determineTimeSig(const String& beats, const String& beatType, const 
         st = TimeSigType::ALLA_BREVE;
     } else if (timeSymbol == u"common") {
         st = TimeSigType::FOUR_FOUR;
+    } else if (timeSymbol == u"single-number") {
+        // let pass
     } else if (!timeSymbol.empty() && timeSymbol != u"normal") {
         LOGD("determineTimeSig: time symbol <%s> not recognized", muPrintable(timeSymbol)); // TODO
         return false;
@@ -6074,10 +6076,12 @@ void MusicXmlParserPass2::time(const String& partId, Measure* measure, const Fra
                 track_idx_t track = m_pass1.trackForPart(partId) + i * VOICES;
                 timesig->setTrack(track);
                 timesig->setSig(fractionTSig, st);
-                // handle simple compound time signature
+                // handle simple compound and single time signatures
                 if (beats.contains(Char(u'+'))) {
                     timesig->setNumeratorString(beats);
                     timesig->setDenominatorString(beatType);
+                } else if (timeSymbol == u"single-number") {
+                    timesig->setNumeratorString(beats);
                 }
                 s->add(timesig);
             }
