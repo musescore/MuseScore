@@ -1337,6 +1337,20 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     //-------------------------------------------------------------
+    // RehearsalMark
+    //-------------------------------------------------------------
+    // Layout before tempo text but autoplace after
+    std::vector<RehearsalMark*> rehearsMarks;
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isRehearsalMark()) {
+                TLayout::layoutItem(e, ctx);
+                rehearsMarks.push_back(toRehearsalMark(e));
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
     // TempoText, tempo change lines
     //-------------------------------------------------------------
 
@@ -1360,6 +1374,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     AlignmentLayout::alignItemsWithTheirSnappingChain(tempoElementsToAlign, system);
 
+    for (RehearsalMark* rehearsMark : rehearsMarks) {
+        Autoplace::autoplaceSegmentElement(rehearsMark, rehearsMark->mutldata());
+    }
+
     //-------------------------------------------------------------
     // Marker and Jump
     //-------------------------------------------------------------
@@ -1371,18 +1389,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         Measure* m = toMeasure(mb);
         for (EngravingItem* e : m->el()) {
             if (e->isMarker() || e->isJump()) {
-                TLayout::layoutItem(e, ctx);
-            }
-        }
-    }
-
-    //-------------------------------------------------------------
-    // RehearsalMark
-    //-------------------------------------------------------------
-
-    for (const Segment* s : sl) {
-        for (EngravingItem* e : s->annotations()) {
-            if (e->isRehearsalMark()) {
                 TLayout::layoutItem(e, ctx);
             }
         }

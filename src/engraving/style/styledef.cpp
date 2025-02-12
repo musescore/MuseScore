@@ -1216,7 +1216,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rehearsalMarkFrameFgColor,                  PropertyValue::fromValue(Color::BLACK)),
     styleDef(rehearsalMarkFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
     styleDef(rehearsalMarkPlacement,                     PlacementV::ABOVE),
-    styleDef(rehearsalMarkPosAbove,                      PointF(.0, -3.0)),
+    styleDef(rehearsalMarkPosAbove,                      PointF(.0, -2.0)),
     styleDef(rehearsalMarkPosBelow,                      PointF(.0, 4.0)),
     styleDef(rehearsalMarkMinDistance,                   Spatium(0.5)),
 
