@@ -76,7 +76,7 @@ std::string AudioMidiManager::name() const
 
 bool AudioMidiManager::open(const Spec& spec, Spec* activeSpec)
 {
-    // re-initialize devide
+    // re-initialize device
     m_current_audioDriverState->setAudioDelayCompensate(m_audioDelayCompensate);
 
     if (!m_current_audioDriverState->open(spec, activeSpec)) {
