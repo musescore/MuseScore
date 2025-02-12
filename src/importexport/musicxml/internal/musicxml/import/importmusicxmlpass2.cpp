@@ -8791,7 +8791,8 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
             const Chord* startChord = startNote ? startNote->chord() : nullptr;
             const Chord* endChord = note->chord();
             const Measure* startMeasure = startChord ? startChord->measure() : nullptr;
-            if (startMeasure == endChord->measure() || (startChord && startChord->tick() + startChord->actualTicks() == endChord->tick())) {
+            if (startMeasure == endChord->measure()
+                || (startChord && startChord->tick() + startChord->measure()->ticks() >= endChord->tick())) {
                 // only connect if they're in the same bar, or there are no notes/rests in the same voice between them
                 currTie->setEndNote(note);
                 note->setTieBack(currTie);
