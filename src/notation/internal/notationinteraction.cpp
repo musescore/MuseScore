@@ -174,10 +174,15 @@ static AccidentalType accidentalType(const InputState& is, const NoteVal& nval, 
     }
 
     bool error = false;
-    const AccidentalType type = mu::engraving::noteValToAccidentalType(nval, is.staff(), is.tick());
+    const AccidentalVal accVal = mu::engraving::noteValToAccidentalVal(nval, is.staff(), is.tick());
     const AccidentalVal existingAccVal = is.segment()->measure()->findAccidental(is.segment(), is.staffIdx(), line, error);
 
-    if (!error && type != Accidental::value2subtype(existingAccVal)) {
+    if (!error && accVal != existingAccVal) {
+        AccidentalType type = Accidental::value2subtype(accVal);
+        if (type == AccidentalType::NONE) {
+            type = AccidentalType::NATURAL;
+        }
+
         return type;
     }
 

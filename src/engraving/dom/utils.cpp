@@ -1172,21 +1172,21 @@ int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
     return relStep(epitch, tpc, staff->clef(tick));
 }
 
-AccidentalType noteValToAccidentalType(const NoteVal& nval, const Staff* staff, const Fraction& tick)
+AccidentalVal noteValToAccidentalVal(const NoteVal& nval, const Staff* staff, const Fraction& tick)
 {
     if (nval.isRest()) {
-        return AccidentalType::NONE;
+        return AccidentalVal::NATURAL;
     }
 
     if (staff->isDrumStaff(tick)) {
-        return AccidentalType::NONE;
+        return AccidentalVal::NATURAL;
     }
 
     int epitch = nval.pitch;
     int tpc = static_cast<int>(mu::engraving::Tpc::TPC_INVALID);
     noteValToEffectivePitchAndTpc(nval, staff, tick, epitch, tpc);
 
-    return Accidental::value2subtype(tpc2alter(tpc));
+    return tpc2alter(tpc);
 }
 
 int compareNotesPos(const Note* n1, const Note* n2)
