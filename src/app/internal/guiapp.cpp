@@ -314,4 +314,6 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
     if (options.app.loggerLevel) {
         m_globalModule.setLoggerLevel(options.app.loggerLevel.value());
     }
+
+    audioConfiguration()->setAudioDelayCompensate(options.audio.audioDelayCompensate.value_or(1024)); // FIX: equal to buffer-size
 }

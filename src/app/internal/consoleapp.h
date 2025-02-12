@@ -38,7 +38,6 @@
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
 #include "audioplugins/iregisteraudiopluginsscenario.h"
-#include "audio/iaudioconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
 #include "ui/iuiconfiguration.h"
@@ -69,7 +68,6 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::Inject<notation::INotationConfiguration> notationConfiguration;
     muse::Inject<project::IProjectConfiguration> projectConfiguration;
     muse::Inject<playback::ISoundProfilesRepository> soundProfilesRepository;
-    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::Inject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
     muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration;
     muse::Inject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
