@@ -26,15 +26,19 @@
 #include <QQuickItem>
 #include <QTimer>
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
 
 #include "../itoursprovider.h"
 
 namespace muse::tours {
-class ToursProvider : public QObject, public IToursProvider, public Injectable
+class ToursProvider : public QObject, public IToursProvider, public async::Asyncable, public Injectable
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool canControlTourPopupClosing READ canControlTourPopupClosing CONSTANT)
 
     Inject<ui::INavigationController> navigationController = { this };
 
@@ -45,15 +49,24 @@ public:
 
     Q_INVOKABLE void showNext();
 
+    Q_INVOKABLE void onTourStepClosed(QQuickItem* parentItem);
+
+    bool canControlTourPopupClosing() const;
+
 private slots:
     void doShow();
 
 signals:
     void openTourStep(const QQuickItem* parentItem, const QString& title, const QString& description, const QString& videoExplanationUrl,
                       size_t index, size_t total);
+    void closeCurrentTourStep();
 
 private:
-    QQuickItem* findControl(const Uri& controlUri);
+    const ui::INavigationControl* findControl(const Uri& controlUri);
+
+    void clear();
+
+    void setBlockShowingTooltipForItem(QQuickItem* item, bool block);
 
     void onApplicationStateChanged(Qt::ApplicationState state);
 

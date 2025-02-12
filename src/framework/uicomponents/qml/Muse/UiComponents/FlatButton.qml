@@ -40,6 +40,8 @@ FocusScope {
     property string toolTipTitle: ""
     property string toolTipDescription: ""
     property string toolTipShortcut: ""
+    //!NOTE: Needed to avoid showing a tooltip when tour is shown, see tours provider
+    property bool toolTipShowLocked: false
 
     property font iconFont: ui.theme.iconsFont
     property color iconColor: ui.theme.fontPrimaryColor
@@ -125,6 +127,7 @@ FocusScope {
         onTriggered: {
             if (navCtrl.enabled && root.isClickOnKeyNavTriggered) {
                 root.clicked(null)
+                navCtrl.notifyAboutControlWasTriggered()
             }
         }
     }
@@ -301,6 +304,7 @@ FocusScope {
 
         onClicked: function(mouse) {
             navigation.requestActiveByInteraction()
+            navigation.notifyAboutControlWasTriggered()
 
             root.clicked(mouse)
         }
@@ -310,7 +314,7 @@ FocusScope {
         }
 
         onContainsMouseChanged: {
-            if (!Boolean(root.toolTipTitle)) {
+            if (!Boolean(root.toolTipTitle) || root.toolTipShowLocked) {
                 return
             }
 

@@ -194,7 +194,8 @@ void PopupView::componentComplete()
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
 {
-    if (QEvent::UpdateRequest == event->type()) {
+    if (QEvent::UpdateRequest == event->type()
+        || (event->type() == QEvent::Move && watched == mainWindow()->qWindow())) {
         repositionWindowIfNeed();
     }
 
