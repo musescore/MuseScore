@@ -35,8 +35,10 @@ StyledPopupView {
     property int index: 0
     property int total: 0
 
-    padding: 8
+    padding: 12
     margins: 8
+
+    background.border.color: ui.theme.accentColor
 
     signal hideRequested()
     signal nextRequested()
@@ -53,7 +55,7 @@ StyledPopupView {
         id: content
 
         anchors.fill: parent
-        spacing: 8
+        spacing: 0
 
         RowLayout {
             id: row
@@ -65,26 +67,8 @@ StyledPopupView {
 
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
-                wrapMode: Text.Wrap
-                maximumLineCount: 3
-            }
-
-            Rectangle {
-                Layout.preferredWidth: newLabel.implicitWidth + 4
-                Layout.preferredHeight: newLabel.implicitHeight + 4
-
-                color: ui.theme.fontPrimaryColor
-                radius: 2
-
-                StyledTextLabel {
-                    id: newLabel
-
-                    anchors.centerIn: parent
-
-                    text: qsTrc("tours", "New")
-                    font: ui.theme.bodyBoldFont
-                    color: ui.theme.backgroundPrimaryColor
-                }
+                wrapMode: Text.WordWrap
+                maximumLineCount: 2
             }
 
             Item {
@@ -101,7 +85,9 @@ StyledPopupView {
 
         StyledTextLabel {
             id: descriptionLabel
+
             Layout.fillWidth: true
+            Layout.topMargin: 4
 
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
@@ -113,6 +99,7 @@ StyledPopupView {
             id: box
 
             Layout.fillWidth: true
+            Layout.topMargin: 8
             //! hack: it looks like ButtonBox doesn't work well in ColumnLayout
             Layout.leftMargin: -4
 
