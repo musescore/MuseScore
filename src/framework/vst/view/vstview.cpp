@@ -175,7 +175,7 @@ Steinberg::tresult VstView::resizeView(Steinberg::IPlugView* view, Steinberg::Vi
 
 //! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the fixed size.
 //! Otherwise, the user will get an extremely large window and won't be able to resize it
-#ifdef Q_OS_WIN
+#ifndef Q_OS_MAC
     newWidth = newWidth / m_screenMetrics.devicePixelRatio;
     newHeight = newHeight / m_screenMetrics.devicePixelRatio;
 #endif
