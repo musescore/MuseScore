@@ -3219,6 +3219,10 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                     }
 
                     for (const NoteVal& nval : m_is.notes()) {
+                        if (chordContainsNoteVal(chord, nval)) {
+                            continue;
+                        }
+
                         NoteVal copy(nval);
                         const Note* note = nullptr;
 
