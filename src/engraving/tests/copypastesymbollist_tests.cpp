@@ -42,11 +42,25 @@ static const String CPSYMBOLLIST_DATA_DIR(u"copypastesymbollist_data/");
 
 class Engraving_CopyPasteSymbolListTests : public ::testing::Test
 {
-public:
+protected:
+    void SetUp() override
+    {
+        m_useRead302 = MScore::useRead302InTestMode;
+        MScore::useRead302InTestMode = false;
+    }
+
+    void TearDown() override
+    {
+        MScore::useRead302InTestMode = m_useRead302;
+    }
+
     void copypastecommon(MasterScore*, const char16_t*);
     void copypaste(const char16_t*, ElementType);
     void copypastepart(const char16_t*, ElementType);
     void copypastedifferentvoice(const char16_t*, ElementType);
+
+private:
+    bool m_useRead302 = false;
 };
 
 //---------------------------------------------------------
@@ -104,6 +118,11 @@ TEST_F(Engraving_CopyPasteSymbolListTests, copypasteArticulation)
     copypaste(u"articulation", ElementType::ARTICULATION);
 }
 
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteOrnament)
+{
+    copypaste(u"ornament", ElementType::ORNAMENT);
+}
+
 TEST_F(Engraving_CopyPasteSymbolListTests, copypasteChordNames)
 {
     copypaste(u"chordnames", ElementType::HARMONY);
@@ -132,6 +151,11 @@ TEST_F(Engraving_CopyPasteSymbolListTests, copypasteStaffText)
 TEST_F(Engraving_CopyPasteSymbolListTests, copypasteSticking)
 {
     copypaste(u"sticking", ElementType::STICKING);
+}
+
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteTremoloSingleChord)
+{
+    copypaste(u"tremolo-single-chord", ElementType::TREMOLO_SINGLECHORD);
 }
 
 TEST_F(Engraving_CopyPasteSymbolListTests, copypasteArticulationRest)

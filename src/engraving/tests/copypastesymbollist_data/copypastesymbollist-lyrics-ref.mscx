@@ -3,23 +3,22 @@
   <Score>
     <Division>480</Division>
     <Style>
-      <maskBarlinesForText>0</maskBarlinesForText>
-      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <pageNumberFontSize>9</pageNumberFontSize>
-      <pageNumberFontStyle>0</pageNumberFontStyle>
-      <spatium>1.76389</spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <open>1</open>
     <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
@@ -254,10 +253,6 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Lyrics>
-              <syllabic>begin</syllabic>
-              <text>mez</text>
-              </Lyrics>
             <Note>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -266,8 +261,8 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <syllabic>end</syllabic>
-              <text>zo</text>
+              <syllabic>begin</syllabic>
+              <text>mez</text>
               </Lyrics>
             <Note>
               <pitch>76</pitch>
@@ -277,7 +272,8 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <text>del</text>
+              <syllabic>end</syllabic>
+              <text>zo</text>
               </Lyrics>
             <Note>
               <pitch>77</pitch>
@@ -295,8 +291,7 @@
           <Chord>
             <durationType>eighth</durationType>
             <Lyrics>
-              <syllabic>begin</syllabic>
-              <text>cam</text>
+              <text>del</text>
               </Lyrics>
             <Note>
               <pitch>79</pitch>
@@ -312,12 +307,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Lyrics>
-              <syllabic>end</syllabic>
-              <ticks>480</ticks>
-              <ticks_f>1/4</ticks_f>
-              <text>min</text>
-              </Lyrics>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -336,6 +325,10 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
+            <Lyrics>
+              <syllabic>begin</syllabic>
+              <text>cam</text>
+              </Lyrics>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -343,9 +336,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Lyrics>
-              <text>di</text>
-              </Lyrics>
             <Note>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -353,10 +343,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Lyrics>
-              <syllabic>begin</syllabic>
-              <text>no</text>
-              </Lyrics>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -364,10 +350,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Lyrics>
-              <syllabic>end</syllabic>
-              <text>stra</text>
-              </Lyrics>
             <Note>
               <pitch>77</pitch>
               <tpc>13</tpc>
@@ -380,8 +362,8 @@
           <Chord>
             <durationType>half</durationType>
             <Lyrics>
-              <syllabic>begin</syllabic>
-              <text>vi</text>
+              <syllabic>end</syllabic>
+              <text>min</text>
               </Lyrics>
             <Note>
               <pitch>76</pitch>
@@ -390,6 +372,10 @@
             </Chord>
           <Chord>
             <durationType>half</durationType>
+            <Lyrics>
+              <syllabic>begin</syllabic>
+              <text>no</text>
+              </Lyrics>
             <Note>
               <pitch>74</pitch>
               <tpc>16</tpc>

@@ -837,7 +837,6 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                        || tag == "Ornament"
                        || tag == "Arpeggio"
                        || tag == "TremoloSingleChord"
-                       || tag == "Sticking"
                        || tag == "Lyrics") {
                 // Elements that can be attached only to a Chord
                 Measure* meas = score->tick2measure(destTick);
@@ -895,6 +894,7 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                        || tag == "Expression"
                        || tag == "StaffText"
                        || tag == "PlayTechAnnotation"
+                       || tag == "Sticking"
                        || tag == "Capo"
                        || tag == "HarpPedalDiagram"
                        || tag == "StringTunings") {
