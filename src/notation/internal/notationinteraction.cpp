@@ -44,6 +44,7 @@
 #include "draw/types/pen.h"
 #include "engraving/internal/qmimedataadapter.h"
 
+#include "engraving/dom/accidental.h"
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/anchors.h"
 #include "engraving/dom/articulation.h"
@@ -362,23 +363,24 @@ bool NotationInteraction::showShadowNote(const PointF& pos)
     const mu::engraving::InputState& inputState = score()->inputState();
     mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
 
-    mu::engraving::Position position;
-    if (!score()->getPosition(&position, pos, inputState.voice())) {
+    ShadowNoteParams params;
+    if (!score()->getPosition(&params.position, pos, inputState.voice())) {
         shadowNote.setVisible(false);
         return false;
     }
 
-    ShadowNoteParams params;
     params.duration = inputState.duration();
     params.accidentalType = inputState.accidentalType();
     params.articulationIds = inputState.articulationIds();
 
-    showShadowNoteAtPosition(shadowNote, params, position);
+    showShadowNote(shadowNote, params);
     return true;
 }
 
-void NotationInteraction::showShadowNoteAtPosition(ShadowNote& shadowNote, const ShadowNoteParams& params, Position& position)
+void NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParams& params)
 {
+    Position& position = params.position;
+
     const mu::engraving::InputState& inputState = score()->inputState();
     const Staff* staff = score()->staff(position.staffIdx);
     const mu::engraving::Instrument* instr = staff->part()->instrument();
@@ -2981,20 +2983,21 @@ double NotationInteraction::currentScaling(Painter* painter) const
     return painter->worldTransform().m11() / guiScaling;
 }
 
-std::vector<Position> NotationInteraction::inputPositions() const
+std::vector<NotationInteraction::ShadowNoteParams> NotationInteraction::previewNotes() const
 {
-    std::vector<Position> result;
+    std::vector<ShadowNoteParams> result;
 
     const InputState& is = score()->inputState();
     if (!is.isValid()) {
         return result;
     }
 
+    Segment* segment = is.segment();
     const staff_idx_t staffIdx = is.staffIdx();
     const Staff* staff = score()->staff(staffIdx);
-    const System* system = is.segment()->system();
+    const System* system = segment->system();
     const SysStaff* sysStaff = system ? system->staff(staffIdx) : nullptr;
-    const Measure* measure = is.segment()->measure();
+    const Measure* measure = segment->measure();
 
     if (!staff || !sysStaff || !measure) {
         return result;
@@ -3007,20 +3010,45 @@ std::vector<Position> NotationInteraction::inputPositions() const
                             * staff->staffMag(tick)
                             * score()->style().spatium();
 
-    Position pos;
-    pos.segment = is.segment();
-    pos.staffIdx = staffIdx;
-
-    for (const NoteVal& nval : is.notes()) {
-        pos.line = mu::engraving::noteValToLine(nval, staff, tick);
-        const double y = sysStaff->y() + pos.line * lineDist;
-        pos.pos = PointF(is.segment()->x(), y) + measurePos;
-
-        result.push_back(pos);
+    NoteValList nvals;
+    if (is.rest()) {
+        nvals.push_back(NoteVal());
+    } else {
+        nvals = is.notes();
     }
 
-    std::sort(result.begin(), result.end(), [](const Position& p1, const Position& p2) {
-        return p1.line < p2.line;
+    ShadowNoteParams params;
+    params.duration = is.rest() ? is.duration() : TDuration();
+    params.position.segment = segment;
+    params.position.staffIdx = staffIdx;
+
+    if (!is.rest() && is.accidentalType() != AccidentalType::NONE) {
+        params.accidentalType = is.accidentalType();
+    }
+
+    for (const NoteVal& nval : nvals) {
+        const int line = mu::engraving::noteValToLine(nval, staff, tick);
+        const double y = sysStaff->y() + line * lineDist;
+
+        if (params.accidentalType == AccidentalType::NONE) {
+            const AccidentalType type = mu::engraving::noteValToAccidentalType(nval, staff, tick);
+            if (type != AccidentalType::NATURAL) {
+                bool error = false;
+                const AccidentalVal existingAccVal = measure->findAccidental(segment, staffIdx, line, error);
+                if (!error && type != Accidental::value2subtype(existingAccVal)) {
+                    params.accidentalType = type;
+                }
+            }
+        }
+
+        params.position.line = line;
+        params.position.pos = PointF(segment->x(), y) + measurePos;
+
+        result.push_back(params);
+    }
+
+    std::sort(result.begin(), result.end(), [](const ShadowNoteParams& p1, const ShadowNoteParams& p2) {
+        return p1.position.line < p2.position.line;
     });
 
     return result;
@@ -3033,31 +3061,28 @@ bool NotationInteraction::shouldDrawInputPreview() const
 
 void NotationInteraction::drawInputPreview(Painter* painter)
 {
-    std::vector<Position> positions = inputPositions();
-    if (positions.empty()) {
+    std::vector<ShadowNoteParams> paramsList = previewNotes();
+    if (paramsList.empty()) {
         return;
     }
 
-    std::vector<ShadowNote*> notes;
-    notes.reserve(positions.size());
+    std::vector<ShadowNote*> previewList;
+    previewList.reserve(paramsList.size());
 
     const InputState& is = score()->inputState();
 
-    ShadowNoteParams params;
-    params.duration = is.rest() ? is.duration() : TDuration();
-
-    for (Position& pos : positions) {
-        ShadowNote* note = new ShadowNote(score());
-        showShadowNoteAtPosition(*note, params, pos);
-        notes.push_back(note);
+    for (ShadowNoteParams& params : paramsList) {
+        ShadowNote* preview = new ShadowNote(score());
+        showShadowNote(*preview, params);
+        previewList.push_back(preview);
     }
 
-    const bool isUp = !is.rest() && notes.front()->computeUp();
+    const bool isUp = !is.rest() && previewList.front()->computeUp();
     bool isLeft = isUp;
     int prevLine = INT_MAX;
 
     auto correctNotePositionIfNeed = [&](ShadowNote* note) {
-        if (positions.size() == 1) {
+        if (paramsList.size() == 1) {
             return;
         }
 
@@ -3082,18 +3107,18 @@ void NotationInteraction::drawInputPreview(Painter* painter)
     };
 
     if (isUp) {
-        for (auto it = notes.rbegin(); it != notes.rend(); ++it) {
+        for (auto it = previewList.rbegin(); it != previewList.rend(); ++it) {
             correctNotePositionIfNeed(*it);
             score()->renderer()->drawItem(*it, painter);
         }
     } else {
-        for (auto it = notes.begin(); it != notes.end(); ++it) {
+        for (auto it = previewList.begin(); it != previewList.end(); ++it) {
             correctNotePositionIfNeed(*it);
             score()->renderer()->drawItem(*it, painter);
         }
     }
 
-    DeleteAll(notes);
+    DeleteAll(previewList);
 }
 
 void NotationInteraction::drawAnchorLines(Painter* painter)

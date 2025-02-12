@@ -3203,17 +3203,34 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                     // Enter a rest
                     setNoteRest(m_is.segment(), m_is.track(), NoteVal(), m_is.duration().fraction());
                     m_is.moveToNextInputPos();
-                } else if (!m_is.notes().empty()) {
-                    const ChordRest* cr = m_is.cr();
-                    AddToChord addType = AddToChord::None;
+                } else {
+                    if (usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+                        const EngravingItem* selectedItem = score()->selection().element();
+                        if (selectedItem && selectedItem->isNote()) {
+                            m_is.setNotes({ toNote(selectedItem)->noteVal() });
+                        }
+                    }
+
+                    ChordRest* cr = m_is.cr();
+                    Chord* chord = nullptr;
+
                     if (cr && cr->isChord() && cr->durationType() == m_is.duration()) {
-                        addType = AddToChord::AtCurrentPosition;
+                        chord = toChord(cr);
                     }
 
                     for (const NoteVal& nval : m_is.notes()) {
                         NoteVal copy(nval);
-                        addPitch(copy, addType);
-                        addType = AddToChord::AtCurrentPosition;
+                        const Note* note = nullptr;
+
+                        if (chord) {
+                            note = addPitchToChord(copy, chord);
+                        } else {
+                            note = addPitch(copy, false /*addFlag*/);
+                        }
+
+                        if (note) {
+                            chord = note->chord();
+                        }
                     }
                 }
             } else {

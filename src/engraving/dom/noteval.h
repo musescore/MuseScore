@@ -58,6 +58,11 @@ struct NoteVal {
     {
         return concertPitch ? tpc1 : tpc2;
     }
+
+    bool isRest() const
+    {
+        return pitch == -1;
+    }
 };
 
 using NoteValList = std::vector<NoteVal>;

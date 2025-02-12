@@ -65,7 +65,7 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
             updateInputState();
         } else if (shouldSetupInputNote()) {
             const NoteInputState& is = state();
-            const staff_idx_t prevStaffIdx = mu::engraving::staff2track(is.prevTrack());
+            const staff_idx_t prevStaffIdx = mu::engraving::track2staff(is.prevTrack());
 
             if (prevStaffIdx != is.staffIdx()) {
                 setupInputNote();
@@ -419,6 +419,10 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
     }
 
     is.setNoteEntryMethod(method);
+    if (shouldSetupInputNote()) {
+        setupInputNote();
+    }
+
     notifyAboutStateChanged();
 }
 
@@ -453,6 +457,13 @@ void NotationNoteInput::padNote(const Pad& pad)
     startEdit(TranslatableString("undoableAction", "Pad note"));
     score()->padToggle(pad);
     apply();
+
+    if (pad >= Pad::NOTE00 && pad <= Pad::NOTE1024) {
+        const NoteInputState& is = score()->inputState();
+        if (!is.rest() && is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
+            score()->toggleAccidental(AccidentalType::NONE);
+        }
+    }
 
     notifyAboutStateChanged();
 
@@ -541,7 +552,7 @@ void NotationNoteInput::setInputNotes(const NoteValList& notes)
         if (const Drumset* drumset = is.drumset()) {
             const int pitch = notes.front().pitch;
             is.setDrumNote(pitch);
-            is.setTrack(is.track() + drumset->voice(pitch));
+            is.setVoice(drumset->voice(pitch));
         }
     }
 

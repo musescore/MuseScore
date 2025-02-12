@@ -253,7 +253,7 @@ void NotationConfiguration::init()
         m_isPlayChordSymbolsChanged.notify();
     });
 
-    settings()->setDefaultValue(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED, Val(false));
+    settings()->setDefaultValue(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED, Val(true));
     settings()->valueChanged(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED).onReceive(nullptr, [this](const Val&) {
         m_isPlayNotesPreviewInInputByDurationChanged.notify();
     });

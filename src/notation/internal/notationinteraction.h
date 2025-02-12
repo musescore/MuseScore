@@ -324,9 +324,10 @@ private:
         mu::engraving::TDuration duration;
         mu::engraving::AccidentalType accidentalType = mu::engraving::AccidentalType::NONE;
         std::set<SymId> articulationIds;
+        mu::engraving::Position position;
     };
 
-    void showShadowNoteAtPosition(mu::engraving::ShadowNote& note, const ShadowNoteParams& params, mu::engraving::Position& pos);
+    void showShadowNote(mu::engraving::ShadowNote& note, ShadowNoteParams& params);
 
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
@@ -383,7 +384,7 @@ private:
 
     double currentScaling(muse::draw::Painter* painter) const;
 
-    std::vector<mu::engraving::Position> inputPositions() const;
+    std::vector<ShadowNoteParams> previewNotes() const;
 
     bool shouldDrawInputPreview() const;
     void drawInputPreview(muse::draw::Painter* painter);
