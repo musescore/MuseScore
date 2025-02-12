@@ -32,7 +32,15 @@ ShadowNotePopupModel::ShadowNotePopupModel(QObject* parent)
 
 bool ShadowNotePopupModel::canOpen(const EngravingItem* element)
 {
-    // TODO: Determine based on context
+    if (!element || !element->isShadowNote() || !element->visible()) {
+        return false;
+    }
+
+    if (element->staff() && element->staff()->isDrumStaff(element->tick())) {
+        // Can open with PERCUSSON_CONTENT type
+        return true;
+    }
+
     return false;
 }
 
@@ -51,7 +59,15 @@ void ShadowNotePopupModel::init()
 
 ShadowNotePopupContent::ContentType ShadowNotePopupModel::currentPopupType() const
 {
-    // TODO: Determine based on context
+    const mu::engraving::ShadowNote* shadowNote = interaction()->shadowNote();
+    if (!shadowNote || !shadowNote->visible()) {
+        return ShadowNotePopupContent::ContentType::NONE;
+    }
+
+    if (shadowNote->staff() && shadowNote->staff()->isDrumStaff(shadowNote->tick())) {
+        return ShadowNotePopupContent::ContentType::PERCUSSION_CONTENT;
+    }
+
     return ShadowNotePopupContent::ContentType::NONE;
 }
 

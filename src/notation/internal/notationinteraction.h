@@ -329,7 +329,7 @@ private:
         mu::engraving::Position position;
     };
 
-    void showShadowNote(mu::engraving::ShadowNote& note, ShadowNoteParams& params);
+    bool showShadowNote(mu::engraving::ShadowNote& note, ShadowNoteParams& params);
 
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);

@@ -97,5 +97,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-2.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-1.png</file>
         <file>qml/MuseScore/NotationScene/internal/ShadowNotePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PercussionNotePopupContent.qml</file>
     </qresource>
 </RCC>

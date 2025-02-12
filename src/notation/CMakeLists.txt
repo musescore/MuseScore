@@ -176,8 +176,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/dynamicpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/shadownotepopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/shadownotepopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp

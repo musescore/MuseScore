@@ -80,7 +80,17 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             break;
         }
         const Drumset* ds = instr->drumset();
-        nval.pitch        = m_is.drumNote();
+        nval.pitch = m_is.drumNote();
+        if (nval.pitch < 0 || !ds->isValid(nval.pitch) || ds->line(nval.pitch) != line) {
+            // Drum note from input state is not valid - fall back to the first valid pitch for this line...
+            for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
+                if (!ds->isValid(pitch) || ds->line(pitch) != line) {
+                    continue;
+                }
+                nval.pitch = pitch;
+                break;
+            }
+        }
         if (nval.pitch < 0) {
             error = true;
             return nval;
@@ -447,6 +457,7 @@ Ret Score::putNote(const Position& p, bool replace)
 
         if (ds) {
             stemDirection = ds->stemDirection(nval.pitch);
+            m_is.setVoice(ds->voice(nval.pitch));
         }
         break;
     }
