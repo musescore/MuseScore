@@ -50,6 +50,7 @@ AudioMidiManager::~AudioMidiManager()
 
 void AudioMidiManager::init()
 {
+#ifndef Q_OS_MACOS
     m_devicesListener.startWithCallback([this]() {
         return availableOutputDevices();
     });
@@ -57,6 +58,7 @@ void AudioMidiManager::init()
     m_devicesListener.devicesChanged().onNotify(this, [this]() {
         m_availableOutputDevicesChanged.notify();
     });
+#endif
 
     // notify driver if when musescore changes play-position or play/pause
     playbackController()->isPlayingChanged().onNotify(this, [this]() {

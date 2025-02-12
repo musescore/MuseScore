@@ -89,7 +89,9 @@ private:
     muse::async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;
+#ifndef Q_OS_MACOS
     AudioDevicesListener m_devicesListener;
+#endif
     muse::async::Notification m_availableOutputDevicesChanged;
 
     std::string m_deviceId;
