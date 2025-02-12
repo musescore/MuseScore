@@ -119,28 +119,23 @@ bool AudioMidiManager::makeDevice(const AudioDeviceID& deviceId)
     if (deviceId == "jack") {
         bool transportEnable = playbackConfiguration()->jackTransportEnable();
         m_current_audioDriverState = std::make_unique<JackDriverState>(this, transportEnable);
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    } else if (deviceId == "alsa") {
-        m_current_audioDriverState = std::make_unique<AlsaDriverState>();
+        return true;
+    }
 #endif
-//#ifdef Q_OS_MACOS
-//    } else if (deviceId == "osx") {
-//        m_current_audioDriverState = std::make_unique<OSXAudioDriverState>();
-//#endif
-#else
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     if (deviceId == "alsa") {
         m_current_audioDriverState = std::make_unique<AlsaDriverState>();
+        return true;
+    }
 #endif
 //#ifdef Q_OS_MACOS
-//    m_current_audioDriverState = std::make_unique<OSXAudioDriverState>();
+//    if (deviceId == "osx") {
+//        m_current_audioDriverState = std::make_unique<OSXAudioDriverState>();
+//        return true;
+//    }
 //#endif
-#endif
-    } else {
-        LOGE() << "Unknown device name: " << deviceId;
-        return false;
-    }
-    return true;
+    LOGE() << "Unknown device name: " << deviceId;
+    return false;
 }
 
 // reopens the same device (if m_spec has changed)
