@@ -79,10 +79,10 @@ Row {
         id: labelRow
 
         height: root.height
-        spacing: 4
+        spacing: 6
 
-        rightPadding: 4
-        leftPadding: 4
+        leftPadding: 6
+        rightPadding: 6
 
         StyledTextLabel {
             id: percussionNoteName

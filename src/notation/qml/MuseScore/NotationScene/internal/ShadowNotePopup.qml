@@ -36,6 +36,7 @@ StyledPopupView {
     contentWidth: contentLoader.width
     contentHeight: contentLoader.height
 
+    useDropShadow: false
     showArrow: false
     openPolicies: PopupView.NoActivateFocus
     takeFocusOnClick: false
