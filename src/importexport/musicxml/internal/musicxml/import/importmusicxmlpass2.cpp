@@ -622,6 +622,20 @@ static void updatePartWithInstrumentChange(Part* const part, const MusicXmlInstr
     }
 }
 
+static void setPercussionInstrument(MusicXmlInstrument& mxmlInstr, const String& partName)
+{
+    // If there are multiple unpitched instruments we should set the part's instrument to drumkit or percussion
+    if (partName.contains(u"drumset",
+                          CaseSensitivity::CaseInsensitive) || partName.contains(u"drumkit", CaseSensitivity::CaseInsensitive)) {
+        mxmlInstr = MusicXmlInstrument();
+        mxmlInstr.name = u"Drum Kit";
+    } else if (partName.contains(u"percussion", CaseSensitivity::CaseInsensitive)) {
+        mxmlInstr = MusicXmlInstrument();
+        mxmlInstr.name = u"Percussion";
+        mxmlInstr.sound = u"drum.group.set";
+    }
+}
+
 //---------------------------------------------------------
 //   setPartInstruments
 //---------------------------------------------------------
@@ -638,7 +652,8 @@ static void setPartInstruments(MusicXmlLogger* logger, const XmlStreamReader* xm
                                const Score* score,
                                const MusicXmlInstrList& instrList,
                                const MusicXmlIntervalList& intervList,
-                               const MusicXmlInstruments& instruments)
+                               const MusicXmlInstruments& instruments,
+                               const String& partName)
 {
     if (instruments.empty()) {
         // no instrument details found, create a default instrument
@@ -651,6 +666,9 @@ static void setPartInstruments(MusicXmlLogger* logger, const XmlStreamReader* xm
         // do not create multiple instruments for a drum part
         //LOGD("hasDrumset");
         MusicXmlInstrument mxmlInstr = instruments.begin()->second;
+        if (instruments.size() > 1) {
+            setPercussionInstrument(mxmlInstr, partName);
+        }
         updatePartWithInstrument(part, mxmlInstr, {}, true);
         return;
     }
@@ -2141,13 +2159,11 @@ void MusicXmlParserPass2::part()
     const MusicXmlInstruments& instruments = m_pass1.getInstruments(id);
     m_hasDrumset = hasDrumset(instruments);
 
-    // set the parts first instrument
-    Part* part = m_pass1.getPart(id);
-    setPartInstruments(m_logger, &m_e, part, id, m_score, m_pass1.getInstrList(id), m_pass1.getIntervals(id), instruments);
-
     // set the part name
+    Part* part = m_pass1.getPart(id);
     MusicXmlPart mxmlPart = m_pass1.getMusicXmlPart(id);
     String partName = mxmlPart.getName();
+    setPartInstruments(m_logger, &m_e, part, id, m_score, m_pass1.getInstrList(id), m_pass1.getIntervals(id), instruments, partName);
     partName = replacePartNameAccidentals(partName);
     part->setPartName(partName);
     if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(partName)) {
@@ -2160,6 +2176,7 @@ void MusicXmlParserPass2::part()
     } else {
         m_pass1.getPart(id)->setPlainShortNameAll(u"");
     }
+    // set the parts first instrument
     // try to prevent an empty track name
     if (part->partName() == "") {
         String instrId = m_pass1.getInstrList(id).instrument(Fraction(0, 1));
