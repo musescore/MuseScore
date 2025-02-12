@@ -1533,7 +1533,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         continue;
                     }
                     bool systemObject = e->systemFlag() && e->track() == 0;
-                    bool alreadyCloned = bool(e->findLinkedInScore(score)) && e->parent() == ns;
+                    EngravingItem* linkedElement = e->findLinkedInScore(score);
+                    bool alreadyCloned = linkedElement && linkedElement->parent() == ns;
                     bool cloneAnnotation = !alreadyCloned && (e->elementAppliesToTrack(srcTrack) || systemObject);
 
                     if (!cloneAnnotation) {
