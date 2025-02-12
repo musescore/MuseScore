@@ -48,7 +48,7 @@ Item {
     }
 
     function resizePanelToContentHeight() {
-        var newHeight = (padGrid.numRows * padGrid.cellHeight) + (soundTitleLabel.height * 2)
+        var newHeight = (Math.min(padGrid.numRows, 2) * padGrid.cellHeight) + (soundTitleLabel.height * 2)
         root.resizeRequested(root.width, newHeight)
     }
 
