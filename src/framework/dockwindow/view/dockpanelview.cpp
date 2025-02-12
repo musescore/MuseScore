@@ -210,6 +210,13 @@ void DockPanelView::componentComplete()
             dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(m_toolbarComponent));
         }
     });
+
+    connect(this, &DockBase::frameCurrentWidgetChanged, this, [this, dockWidget](){
+        const KDDockWidgets::Frame* frame = dockWidget ? dockWidget->frame() : nullptr;
+        if (frame && frame->currentDockWidget() == dockWidget) {
+            emit panelShown();
+        }
+    });
 }
 
 AbstractMenuModel* DockPanelView::contextMenuModel() const

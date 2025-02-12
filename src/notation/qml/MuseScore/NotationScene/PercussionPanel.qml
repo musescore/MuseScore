@@ -47,10 +47,14 @@ Item {
         panelWidth: root.width
     }
 
-    Component.onCompleted: {
-        padGrid.model.init()
+    function resizePanelToContentHeight() {
         var newHeight = (padGrid.numRows * padGrid.cellHeight) + (soundTitleLabel.height * 2)
         root.resizeRequested(root.width, newHeight)
+    }
+
+    Component.onCompleted: {
+        padGrid.model.init()
+        root.resizePanelToContentHeight()
     }
 
     PercussionPanelModel {
@@ -343,8 +347,7 @@ Item {
                             }
 
                             function onNumPadsChanged() {
-                                var newHeight = (padGrid.numRows * padGrid.cellHeight) + (soundTitleLabel.height * 2)
-                                root.resizeRequested(root.width, newHeight)
+                                root.resizePanelToContentHeight()
                             }
                         }
                     }

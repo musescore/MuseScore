@@ -419,6 +419,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(mixerPanel.location)
 
             MixerPanel {
+                id: mixerPanelComponent
+
                 navigationSection: mixerPanel.navigationSection
                 contentNavigationPanelOrderStart: mixerPanel.contentNavigationPanelOrderStart
 
@@ -434,6 +436,13 @@ DockPage {
 
                 onResizeRequested: function(newWidth, newHeight) {
                     mixerPanel.resize(newWidth, newHeight)
+                }
+
+                Connections {
+                    target: mixerPanel
+                    function onPanelShown() {
+                        mixerPanelComponent.resizePanelToContentHeight()
+                    }
                 }
             }
         },
@@ -544,6 +553,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(percussionPanel.location)
 
             PercussionPanel {
+                id: percussionComponent
+
                 navigationSection: percussionPanel.navigationSection
                 contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
 
@@ -557,6 +568,13 @@ DockPage {
 
                 onResizeRequested: function(newWidth, newHeight) {
                     percussionPanel.resize(newWidth, newHeight)
+                }
+
+                Connections {
+                    target: percussionPanel
+                    function onPanelShown() {
+                        percussionComponent.resizePanelToContentHeight()
+                    }
                 }
             }
         }
