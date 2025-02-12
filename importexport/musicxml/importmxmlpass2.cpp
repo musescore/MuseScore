@@ -5604,6 +5604,8 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             st = TimeSigType::ALLA_BREVE;
       else if (timeSymbol == "common")
             st = TimeSigType::FOUR_FOUR;
+      else if (timeSymbol == "single-number")
+            ; // let pass
       else if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
             qDebug("determineTimeSig: time symbol <%s> not recognized", qPrintable(timeSymbol)); // TODO
             return false;
@@ -5665,11 +5667,13 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const Fr
                         int track = _pass1.trackForPart(partId) + i * VOICES;
                         timesig->setTrack(track);
                         timesig->setSig(fractionTSig, st);
-                        // handle simple compound time signature
+                        // handle simple compound and single time signatures
                         if (beats.contains(QChar('+'))) {
                               timesig->setNumeratorString(beats);
                               timesig->setDenominatorString(beatType);
                               }
+                        else if (timeSymbol == "single-number")
+                              timesig->setNumeratorString(beats);
                         Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
                         s->add(timesig);
                         }

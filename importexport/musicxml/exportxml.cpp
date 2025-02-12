@@ -343,7 +343,7 @@ class ExportMusicXml {
       void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff, const std::vector<Lyrics*>* ll);
       void clef(int staff, const ClefType ct, const QString& extraAttributes = QString());
-      void timesig(TimeSig* tsig, int staff);
+      void timesig(const TimeSig* tsig, int staff);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(const Measure* const m, const int track);
       void barlineMiddle(const BarLine* bl);
@@ -2061,13 +2061,13 @@ void ExportMusicXml::moveToTickIfNeed(const Fraction& t, const Fraction& stretch
 //   timesig
 //---------------------------------------------------------
 
-void ExportMusicXml::timesig(TimeSig* tsig, int staff)
+void ExportMusicXml::timesig(const TimeSig* tsig, int staff)
       {
-      TimeSigType st = tsig->timeSigType();
-      Fraction ts = tsig->sig();
-      int z = ts.numerator();
-      int n = ts.denominator();
-      QString ns = tsig->numeratorString();
+      const TimeSigType st = tsig->timeSigType();
+      const Fraction ts = tsig->sig();
+      const int z = ts.numerator();
+      const int n = ts.denominator();
+      const QString ns = tsig->numeratorString();
 
       _attr.doAttr(_xml, true);
       QString tagName = "time";
@@ -2075,6 +2075,8 @@ void ExportMusicXml::timesig(TimeSig* tsig, int staff)
             tagName += " symbol=\"common\"";
       else if (st == TimeSigType::ALLA_BREVE)
             tagName += " symbol=\"cut\"";
+      else if (!ns.isEmpty() && tsig->denominatorString().isEmpty())
+            tagName += " symbol=\"single-number\"";
       if (staff)
             tagName += QString(" number=\"%1\"").arg(staff);
       if (!tsig->visible())
