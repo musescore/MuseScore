@@ -461,12 +461,12 @@ Ret Score::putNote(const Position& p, bool replace)
 
     expandVoice();
 
-    ChordRest* cr = m_is.cr();
-
     // If there's an overlapping ChordRest at the current input position, shorten it...
-    if (!cr) {
+    if (!m_is.cr()) {
         handleOverlappingChordRest(m_is);
     }
+
+    ChordRest* cr = m_is.cr();
 
     auto checkTied = [&]() {
         if (!cr || !cr->isChord()) {
