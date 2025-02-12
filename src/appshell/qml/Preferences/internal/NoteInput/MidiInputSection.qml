@@ -120,7 +120,7 @@ BaseSection {
                 id: delayBetweenNotesControl
 
                 enabled: root.midiInputEnabled
-                title: qsTrc("appshell/preferences", "Delay between notes")
+                title: qsTrc("appshell/preferences", "Delay between notes:")
 
                 currentValue: root.delayBetweenNotes
 
