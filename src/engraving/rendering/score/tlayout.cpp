@@ -4607,6 +4607,21 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
         item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
+    Text* endText = item->endText();
+    if (endText && !endText->empty()) { // Rosette
+        PointF endPoint = item->pos2();
+        double endTextWidth = endText->ldata()->bbox().width();
+        double xEndText = endPoint.x() - endTextWidth;
+        if (const Text* startText = item->text()) {
+            xEndText = std::max(xEndText, startText->ldata()->bbox().width());
+        }
+        endText->mutldata()->setPosX(xEndText);
+
+        double lineTextGap = item->getProperty(Pid::GAP_BETWEEN_TEXT_AND_LINE).toDouble() * item->spatium();
+        PointF& endOfLine = item->pointsRef()[1];
+        endOfLine.setX(xEndText - lineTextGap);
+    }
+
     Shape sh = textLineBaseSegmentShape(item);
     ldata->setShape(sh);
 
