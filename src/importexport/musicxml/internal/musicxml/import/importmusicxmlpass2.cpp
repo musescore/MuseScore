@@ -8859,7 +8859,7 @@ void Notation::addAttribute(const String& name, const String& value)
 
 String Notation::attribute(const char* name) const
 {
-    const auto it = m_attributes.find(String(name));
+    const auto it = m_attributes.find(String(*name));
     return (it != m_attributes.end()) ? it->second : String();
 }
 
