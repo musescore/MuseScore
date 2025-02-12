@@ -398,11 +398,8 @@ Ret ProjectActionsController::doFinishOpenProject()
             mut.resetOnReceive(this);
 
             QTimer::singleShot(1000, [this]() {
-                toursService()->onEvent(u"project_opened");
-            });
-
-            QTimer::singleShot(5000, [this]() {
                 museSoundsCheckUpdateScenario()->checkForUpdate();
+                toursService()->onEvent(u"project_opened");
             });
         });
     });
