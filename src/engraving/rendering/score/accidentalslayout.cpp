@@ -1057,10 +1057,12 @@ void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, Accidental
         // Align the set
         double x = DBL_MAX;
         for (Accidental* acc : vertSet) {
-            x = std::min(x, xPosRelativeToSegment(acc));
+            double rightEdge = acc->ldata()->bbox().right() + xPosRelativeToSegment(acc);
+            x = std::min(x, rightEdge);
         }
         for (Accidental* acc : vertSet) {
-            setXposRelativeToSegment(acc, x);
+            double bboxRight = acc->ldata()->bbox().right();
+            setXposRelativeToSegment(acc, x - bboxRight);
         }
 
         // Re-check the outer ones for collisions
