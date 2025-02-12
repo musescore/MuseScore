@@ -2459,6 +2459,38 @@ void Score::cmdFlip()
     }
 }
 
+void Score::cmdFlipHorizontally()
+{
+    const std::vector<EngravingItem*>& el = selection().elements();
+    if (el.empty()) {
+        MScore::setError(MsError::NO_FLIPPABLE_SELECTED);
+        return;
+    }
+
+    std::set<const EngravingItem*> alreadyFlippedElements;
+    auto flipOnce = [&alreadyFlippedElements](const EngravingItem* element, std::function<void()> flipFunction) -> void {
+        if (alreadyFlippedElements.insert(element).second) {
+            flipFunction();
+        }
+    };
+
+    for (EngravingItem* e : el) {
+        if (e->isHairpinSegment()) {
+            e = toHairpinSegment(e)->hairpin();
+        }
+        if (e->isHairpin()) {
+            Hairpin* h = toHairpin(e);
+            flipOnce(h, [h] {
+                if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+                } else if (h->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
+                    h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+                }
+            });
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   deleteItem
 //---------------------------------------------------------

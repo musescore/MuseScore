@@ -363,6 +363,10 @@
     <seq>X</seq>
     </SC>
   <SC>
+    <key>flip-horizontally</key>
+    <seq>Alt+X</seq>
+    </SC>
+  <SC>
     <key>pitch-up</key>
     <seq>Up</seq>
     </SC>

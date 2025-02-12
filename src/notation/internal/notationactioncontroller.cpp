@@ -223,6 +223,7 @@ void NotationActionController::init()
     registerAction("notation-delete", &Interaction::deleteSelection, &Controller::hasSelection);
 
     registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
+    registerAction("flip-horizontally", &Interaction::flipSelectionHorizontally, &Controller::hasSelection);
     registerAction("tie", &Controller::addTie);
     registerAction("chord-tie", &Controller::chordTie);
     registerAction("lv", &Controller::addLaissezVib);

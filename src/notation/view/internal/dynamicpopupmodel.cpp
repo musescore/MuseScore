@@ -163,7 +163,7 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
 
     INotationInteractionPtr interaction = currentNotation()->interaction();
 
-    interaction->flipHairpinsType(toDynamic(m_item));
+    interaction->autoFlipHairpinsType(toDynamic(m_item));
 
     // Hide the bounding box which appears when called using Ctrl+D shortcut
     if (interaction->isTextEditingStarted()) {

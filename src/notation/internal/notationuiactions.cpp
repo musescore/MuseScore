@@ -1643,6 +1643,11 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Flip direction"),
              IconCode::Code::NOTE_FLIP
              ),
+    UiAction("flip-horizontally",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Flip horizontally"),
+             TranslatableString("action", "Flip horizontally")),
     UiAction(TOGGLE_CONCERT_PITCH_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
