@@ -1393,7 +1393,12 @@ String String::number(double n, int prec)
         --correctedIdx;
     }
 
-    return fromAscii(s.c_str(), correctedIdx + 1);
+    String result = fromAscii(s.c_str(), correctedIdx + 1);
+    if (result == "-0") {
+        result = u"0";
+    }
+
+    return result;
 }
 
 float String::toFloat(bool* ok) const
