@@ -2730,9 +2730,6 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("defaultTransposingClef", TConv::toXml(ct.transposingClef));
     }
 
-    if (item->isLinesInvisible(Fraction(0, 1))) {
-        xml.tag("invisible", item->isLinesInvisible(Fraction(0, 1)));
-    }
     if (item->hideWhenEmpty() != Staff::HideMode::AUTO) {
         xml.tag("hideWhenEmpty", int(item->hideWhenEmpty()));
     }
@@ -2766,7 +2763,6 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_FROM);
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_TO);
     writeProperty(item, xml, Pid::STAFF_USERDIST);
-    writeProperty(item, xml, Pid::STAFF_COLOR);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE1);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE2);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE3);
