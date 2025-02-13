@@ -132,16 +132,12 @@ Item {
             navigation.order: Boolean(itemModel) ? itemModel.order : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
-                if (menuLoader.isMenuOpened || btn.hasMenu) {
+                if (btn.hasMenu) {
                     toggleMenuOpened()
                 } else {
                     handleMenuItem()
                 }
             }
-
-            mouseArea.acceptedButtons: btn.hasMenu
-                                       ? Qt.LeftButton | Qt.RightButton
-                                       : Qt.LeftButton
 
             function toggleMenuOpened() {
                 menuLoader.toggleOpened(item.subitems)
@@ -151,15 +147,10 @@ Item {
                 Qt.callLater(noteInputModel.handleMenuItem, item.id)
             }
 
-            onClicked: function(mouse) {
-                if (menuLoader.isMenuOpened // If already menu open, close it
-                        || (btn.hasMenu // Or if can open menu
-                            && mouse.button === Qt.RightButton)) {
+            onClicked: {
+                if (btn.hasMenu) {
                     toggleMenuOpened()
-                    return
-                }
-
-                if (mouse.button === Qt.LeftButton) {
+                } else {
                     handleMenuItem()
                 }
             }
