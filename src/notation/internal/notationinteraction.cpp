@@ -163,6 +163,32 @@ static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* 
     return boundPos;
 }
 
+static AccidentalType accidentalType(const InputState& is, const NoteVal& nval, int line)
+{
+    if (is.rest()) {
+        return AccidentalType::NONE;
+    }
+
+    if (is.accidentalType() != AccidentalType::NONE) {
+        return is.accidentalType();
+    }
+
+    bool error = false;
+    const AccidentalVal accVal = mu::engraving::noteValToAccidentalVal(nval, is.staff(), is.tick());
+    const AccidentalVal existingAccVal = is.segment()->measure()->findAccidental(is.segment(), is.staffIdx(), line, error);
+
+    if (!error && accVal != existingAccVal) {
+        AccidentalType type = Accidental::value2subtype(accVal);
+        if (type == AccidentalType::NONE) {
+            type = AccidentalType::NATURAL;
+        }
+
+        return type;
+    }
+
+    return AccidentalType::NONE;
+}
+
 inline QString extractSyllable(const QString& text)
 {
     QString _text = text;
@@ -3022,25 +3048,11 @@ std::vector<NotationInteraction::ShadowNoteParams> NotationInteraction::previewN
     params.position.segment = segment;
     params.position.staffIdx = staffIdx;
 
-    if (!is.rest() && is.accidentalType() != AccidentalType::NONE) {
-        params.accidentalType = is.accidentalType();
-    }
-
     for (const NoteVal& nval : nvals) {
         const int line = mu::engraving::noteValToLine(nval, staff, tick);
         const double y = sysStaff->y() + line * lineDist;
 
-        if (params.accidentalType == AccidentalType::NONE) {
-            const AccidentalType type = mu::engraving::noteValToAccidentalType(nval, staff, tick);
-            if (type != AccidentalType::NATURAL) {
-                bool error = false;
-                const AccidentalVal existingAccVal = measure->findAccidental(segment, staffIdx, line, error);
-                if (!error && type != Accidental::value2subtype(existingAccVal)) {
-                    params.accidentalType = type;
-                }
-            }
-        }
-
+        params.accidentalType = accidentalType(is, nval, line);
         params.position.line = line;
         params.position.pos = PointF(segment->x(), y) + measurePos;
 
