@@ -22,6 +22,8 @@
 
 #include "percussionpreferencesmodel.h"
 
+using namespace mu::notation;
+
 PercussionPreferencesModel::PercussionPreferencesModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
@@ -37,6 +39,10 @@ void PercussionPreferencesModel::init()
         emit percussionPanelAutoShowModeChanged();
     });
 
+    configuration()->autoClosePercussionPanelChanged().onNotify(this, [this]() {
+        emit autoClosePercussionPanelChanged();
+    });
+
     configuration()->showPercussionPanelPadSwapDialogChanged().onNotify(this, [this]() {
         emit showPercussionPanelPadSwapDialogChanged();
     });
@@ -44,6 +50,52 @@ void PercussionPreferencesModel::init()
     configuration()->percussionPanelMoveMidiNotesAndShortcutsChanged().onNotify(this, [this]() {
         emit percussionPanelMoveMidiNotesAndShortcutsChanged();
     });
+}
+
+QVariantList PercussionPreferencesModel::autoShowModes() const
+{
+    QVariantList result;
+
+    for (const AutoShowMode& mode: allAutoShowModes()) {
+        QVariantMap obj;
+        obj["title"] = mode.title;
+        obj["checked"] = mode.checked;
+
+        result << obj;
+    }
+
+    return result;
+}
+
+bool PercussionPreferencesModel::neverAutoShow() const
+{
+    return configuration()->percussionPanelAutoShowMode() == PercussionPanelAutoShowMode::NEVER;
+}
+
+bool PercussionPreferencesModel::autoClosePercussionPanel() const
+{
+    return configuration()->autoClosePercussionPanel();
+}
+
+void PercussionPreferencesModel::setAutoClosePercussionPanel(bool autoClose)
+{
+    configuration()->setAutoClosePercussionPanel(autoClose);
+}
+
+void PercussionPreferencesModel::setAutoShowMode(int modeIndex)
+{
+    QList<AutoShowMode> modes = allAutoShowModes();
+
+    if (modeIndex < 0 || modeIndex >= modes.size()) {
+        return;
+    }
+
+    const PercussionPanelAutoShowMode selectedMode = modes[modeIndex].type;
+    if (selectedMode == configuration()->percussionPanelAutoShowMode()) {
+        return;
+    }
+
+    configuration()->setPercussionPanelAutoShowMode(selectedMode);
 }
 
 bool PercussionPreferencesModel::useNewPercussionPanel() const
@@ -54,16 +106,6 @@ bool PercussionPreferencesModel::useNewPercussionPanel() const
 void PercussionPreferencesModel::setUseNewPercussionPanel(bool use)
 {
     configuration()->setUseNewPercussionPanel(use);
-}
-
-mu::notation::PercussionPanelAutoShowMode PercussionPreferencesModel::percussionPanelAutoShowMode() const
-{
-    return configuration()->percussionPanelAutoShowMode();
-}
-
-void PercussionPreferencesModel::setPercussionPanelAutoShowMode(mu::notation::PercussionPanelAutoShowMode autoShowMode)
-{
-    configuration()->setPercussionPanelAutoShowMode(autoShowMode);
 }
 
 bool PercussionPreferencesModel::showPercussionPanelPadSwapDialog() const
@@ -84,4 +126,33 @@ bool PercussionPreferencesModel::percussionPanelMoveMidiNotesAndShortcuts() cons
 void PercussionPreferencesModel::setPercussionPanelMoveMidiNotesAndShortcuts(bool move)
 {
     configuration()->setPercussionPanelMoveMidiNotesAndShortcuts(move);
+}
+
+QList<PercussionPreferencesModel::AutoShowMode> PercussionPreferencesModel::allAutoShowModes() const
+{
+    const QMap<PercussionPanelAutoShowMode, QString> modeTitles {
+        { PercussionPanelAutoShowMode::UNPITCHED_STAFF,
+          muse::qtrc("notation/percussion", "When an unpitched percussion staff is selected") },
+
+        { PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT,
+          muse::qtrc("notation/percussion", "When inputting notation on an unpitched percussion staff") },
+
+        { PercussionPanelAutoShowMode::NEVER,
+          muse::qtrc("notation/percussion", "Never") },
+    };
+
+    const PercussionPanelAutoShowMode currentMode = configuration()->percussionPanelAutoShowMode();
+
+    QList<AutoShowMode> modes;
+
+    for (PercussionPanelAutoShowMode type : modeTitles.keys()) {
+        AutoShowMode mode;
+        mode.type = type;
+        mode.title = modeTitles[type];
+        mode.checked = currentMode == type;
+
+        modes << mode;
+    }
+
+    return modes;
 }

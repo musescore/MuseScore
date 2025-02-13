@@ -33,10 +33,13 @@ class PercussionPreferencesModel : public QObject, public muse::Injectable, publ
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool useNewPercussionPanel READ useNewPercussionPanel WRITE setUseNewPercussionPanel NOTIFY useNewPercussionPanelChanged)
+    Q_PROPERTY(QVariantList autoShowModes READ autoShowModes NOTIFY percussionPanelAutoShowModeChanged)
+    Q_PROPERTY(bool neverAutoShow READ neverAutoShow NOTIFY percussionPanelAutoShowModeChanged)
 
-    Q_PROPERTY(mu::notation::PercussionPanelAutoShowMode percussionPanelAutoShowMode READ percussionPanelAutoShowMode
-               WRITE setPercussionPanelAutoShowMode NOTIFY percussionPanelAutoShowModeChanged)
+    Q_PROPERTY(bool autoClosePercussionPanel READ autoClosePercussionPanel
+               WRITE setAutoClosePercussionPanel NOTIFY autoClosePercussionPanelChanged)
+
+    Q_PROPERTY(bool useNewPercussionPanel READ useNewPercussionPanel WRITE setUseNewPercussionPanel NOTIFY useNewPercussionPanelChanged)
 
     Q_PROPERTY(bool showPercussionPanelPadSwapDialog READ showPercussionPanelPadSwapDialog
                WRITE setShowPercussionPanelPadSwapDialog NOTIFY showPercussionPanelPadSwapDialogChanged)
@@ -51,11 +54,16 @@ public:
 
     Q_INVOKABLE void init();
 
+    QVariantList autoShowModes() const;
+    Q_INVOKABLE void setAutoShowMode(int modeIndex);
+
+    bool neverAutoShow() const;
+
+    bool autoClosePercussionPanel() const;
+    void setAutoClosePercussionPanel(bool autoClose);
+
     bool useNewPercussionPanel() const;
     void setUseNewPercussionPanel(bool use);
-
-    mu::notation::PercussionPanelAutoShowMode percussionPanelAutoShowMode() const;
-    void setPercussionPanelAutoShowMode(mu::notation::PercussionPanelAutoShowMode autoShowMode);
 
     bool showPercussionPanelPadSwapDialog() const;
     void setShowPercussionPanelPadSwapDialog(bool show);
@@ -66,6 +74,17 @@ public:
 signals:
     void useNewPercussionPanelChanged();
     void percussionPanelAutoShowModeChanged();
+    void autoClosePercussionPanelChanged();
     void showPercussionPanelPadSwapDialogChanged();
     void percussionPanelMoveMidiNotesAndShortcutsChanged();
+
+private:
+    struct AutoShowMode
+    {
+        mu::notation::PercussionPanelAutoShowMode type = mu::notation::PercussionPanelAutoShowMode::UNPITCHED_STAFF;
+        QString title;
+        bool checked = false;
+    };
+
+    QList<AutoShowMode> allAutoShowModes() const;
 };

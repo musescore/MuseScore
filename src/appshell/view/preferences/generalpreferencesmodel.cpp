@@ -197,7 +197,7 @@ QVariantList GeneralPreferencesModel::startupModes() const
 
 GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes() const
 {
-    static const QMap<StartupModeType, QString> modeTitles {
+    const QMap<StartupModeType, QString> modeTitles {
         { StartupModeType::StartEmpty,  muse::qtrc("appshell/preferences", "Start empty") },
         { StartupModeType::ContinueLastSession, muse::qtrc("appshell/preferences", "Continue last session") },
         { StartupModeType::StartWithNewScore, muse::qtrc("appshell/preferences", "Start with new score") },
@@ -206,6 +206,8 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
 
     StartModeList modes;
 
+    const QString currentPath = configuration()->startupScorePath().toQString();
+
     for (StartupModeType type : modeTitles.keys()) {
         bool canSelectScorePath = (type == StartupModeType::StartWithScore);
 
@@ -213,7 +215,7 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
         mode.type = type;
         mode.title = modeTitles[type];
         mode.checked = configuration()->startupModeType() == type;
-        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().toQString() : QString();
+        mode.scorePath = canSelectScorePath ? currentPath : QString();
         mode.canSelectScorePath = canSelectScorePath;
 
         modes << mode;

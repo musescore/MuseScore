@@ -155,8 +155,8 @@ void NotationPageModel::onNotationChanged()
         return;
     }
 
+    INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
     if (!notationConfiguration()->useNewPercussionPanel()) {
-        INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
         noteInput->stateChanged().onNotify(this, [this]() {
             updateDrumsetPanelVisibility();
             updatePercussionPanelVisibility();
@@ -167,6 +167,14 @@ void NotationPageModel::onNotationChanged()
     INotationInteractionPtr notationInteraction = notation->interaction();
     notationInteraction->selectionChanged().onNotify(this, [this]() {
         updateDrumsetPanelVisibility();
+        updatePercussionPanelVisibility();
+    });
+
+    noteInput->noteInputStarted().onReceive(this, [this](bool) {
+        updatePercussionPanelVisibility();
+    });
+
+    noteInput->noteInputEnded().onNotify(this, [this]() {
         updatePercussionPanelVisibility();
     });
 }
