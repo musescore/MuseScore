@@ -89,7 +89,7 @@ public:
     DockingHolderView* holder(DockType type, Location location) const;
     QList<DockPanelView*> possiblePanelsForTab(const DockPanelView* tab) const;
 
-    bool isDockOpen(const QString& dockName) const;
+    bool isDockOpenAndCurrentInFrame(const QString& dockName) const;
     void toggleDock(const QString& dockName);
     void setDockOpen(const QString& dockName, bool open);
 

@@ -249,9 +249,9 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     }
 }
 
-bool DockWindow::isDockOpen(const QString& dockName) const
+bool DockWindow::isDockOpenAndCurrentInFrame(const QString& dockName) const
 {
-    return m_currentPage && m_currentPage->isDockOpen(dockName);
+    return m_currentPage && m_currentPage->isDockOpenAndCurrentInFrame(dockName);
 }
 
 void DockWindow::toggleDock(const QString& dockName)

@@ -198,7 +198,7 @@ void NotationPageModel::updateDrumsetPanelVisibility()
     }
 
     auto setDrumsetPanelOpen = [this, window](bool open) {
-        if (open == window->isDockOpen(DRUMSET_PANEL_NAME)) {
+        if (open == window->isDockOpenAndCurrentInFrame(DRUMSET_PANEL_NAME)) {
             return;
         }
         dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, open));
@@ -232,7 +232,7 @@ void NotationPageModel::updatePercussionPanelVisibility()
     }
 
     auto setPercussionPanelOpen = [this, window](bool open) {
-        if (open == window->isDockOpen(PERCUSSION_PANEL_NAME)) {
+        if (open == window->isDockOpenAndCurrentInFrame(PERCUSSION_PANEL_NAME)) {
             return;
         }
         dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PERCUSSION_PANEL_NAME, open));

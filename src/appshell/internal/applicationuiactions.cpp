@@ -309,7 +309,7 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
     }
 
     const IDockWindow* window = dockWindowProvider()->window();
-    return window ? window->isDockOpen(dockName) : false;
+    return window ? window->isDockOpenAndCurrentInFrame(dockName) : false;
 }
 
 muse::async::Channel<ActionCodeList> ApplicationUiActions::actionEnabledChanged() const
