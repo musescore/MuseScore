@@ -370,10 +370,6 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
             durationInSamples = microSecsToSamples(duration, m_sampleRate);
         }
 
-        if (durationInSamples == 0) {
-            continue;
-        }
-
         IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
             break;
         }
@@ -399,6 +395,10 @@ bool FluidSynth::processSequence(const FluidSequencer::EventSequence& sequence, 
     }
 
     fluid_synth_tune_notes(m_fluid->synth, 0, 0, m_tuning.size(), m_tuning.keys.data(), m_tuning.pitches.data(), true);
+
+    if (samples == 0) {
+        return true;
+    }
 
     int result = fluid_synth_write_float(m_fluid->synth, samples,
                                          buffer, 0, FLUID_AUDIO_CHANNELS_COUNT,
