@@ -287,6 +287,9 @@ enum class SoundSubCategory
     Pad,
     Plucked,
 
+    FourPiece,
+    FivePiece,
+
     Temple,
     Military,
     Ride,
@@ -704,6 +707,9 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::Female, String(u"female") },
     { SoundSubCategory::Pad, String(u"pad") },
     { SoundSubCategory::Plucked, String(u"plucked") },
+
+    { SoundSubCategory::FourPiece, String(u"4_piece") },
+    { SoundSubCategory::FivePiece, String(u"5_piece") },
 
     { SoundSubCategory::Temple, String(u"temple") },
     { SoundSubCategory::Military, String(u"military") },
