@@ -42,7 +42,7 @@ void MidiConfiguration::init()
         m_useRemoteControlChanged.send(val.toBool());
     });
 
-    settings()->setDefaultValue(MIDI_INPUT_DEVICE_ID, Val(NONE_DEVICE_ID));
+    settings()->setDefaultValue(MIDI_INPUT_DEVICE_ID, Val("")); // "" makes MuseScore select the first available device
     settings()->valueChanged(MIDI_INPUT_DEVICE_ID).onReceive(nullptr, [this](const Val&) {
         m_midiInputDeviceIdChanged.notify();
     });
