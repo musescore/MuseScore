@@ -82,7 +82,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
     } else {
         state.setPage(dom.pages()[state.pageIdx()]);
         std::vector<System*>& systems = state.page()->systems();
-        state.setPageOldMeasure(systems.empty() ? nullptr : systems.back()->measures().back());
+        state.setPageOldMeasure(systems.empty() || systems.back()->measures().empty() ? nullptr : systems.back()->measures().back());
         const system_idx_t i = muse::indexOf(systems, state.curSystem());
         if ((i < systems.size()) && i > 0 && systems[i - 1]->page() == state.page()) {
             // Current and previous systems are on the current page.
