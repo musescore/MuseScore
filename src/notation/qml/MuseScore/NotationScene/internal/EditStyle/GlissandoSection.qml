@@ -68,7 +68,7 @@ Rectangle {
 
             labelComponent: CheckBox {
                 id: showTextCheckBox
-                text: qsTrc("notation", "Show text")
+                text: qsTrc("notation", "Show text:")
 
                 checked: glissandoSectionModel.glissandoShowText && Boolean(glissandoSectionModel.glissandoShowText.value)
                 onClicked: {
