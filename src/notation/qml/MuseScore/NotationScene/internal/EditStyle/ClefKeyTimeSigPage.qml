@@ -157,7 +157,7 @@ StyledFlickable {
 
                             model: [
                                 {text: qsTrc("notation/editstyle/timesignatures", "On all staves"), value: 0 },
-                                {text: qsTrc("notation/editstyle/timesignatures", "Above staves"), value: 1 },
+                                {text: qsTrc("notation/editstyle/timesignatures", "Above system"), value: 1 },
                                 {text: qsTrc("notation/editstyle/timesignatures", "Across staves"), value: 2 },
                             ]
 
