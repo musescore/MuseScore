@@ -88,22 +88,23 @@ bool NotationSelectionRange::containsPoint(const PointF& point) const
     return false;
 }
 
-bool NotationSelectionRange::containsItem(const EngravingItem* item) const
+/// When `item` is a Measure, use `staffIdx` to query whether a specific staff is contained in the selection.
+bool NotationSelectionRange::containsItem(const EngravingItem* item, engraving::staff_idx_t staffIdx) const
 {
     Fraction itemTick = item->tick();
     Fraction selectionStartTick = startTick();
     Fraction selectionEndTick = endTick();
 
-    if (item->isMeasure()) {
-        return itemTick >= selectionStartTick && itemTick < selectionEndTick;
-    }
-
-    if (itemTick < selectionStartTick || itemTick > selectionEndTick) {
+    if (itemTick < selectionStartTick || itemTick >= selectionEndTick) {
         return false;
     }
 
-    if (itemTick == selectionEndTick) {
-        return item->rtick() > Fraction(0, 1);
+    if (item->isMeasure()) {
+        if (staffIdx != muse::nidx) {
+            return startStaffIndex() <= staffIdx && staffIdx < endStaffIndex();
+        }
+
+        return true;
     }
 
     track_idx_t itemTrack = item->track();

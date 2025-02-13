@@ -813,24 +813,11 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
 {
     Fraction end = tick() + actualTicks();
     for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
-        // chordrest ends at afrac+actualFraction
-        // we return the segment at or after the end of the chordrest
-        // Segment::afrac() is based on ticks; use DurationElement::afrac() if possible
-        EngravingItem* e = s;
-        if (s->isChordRestType()) {
-            // Find the first non-NULL element in the segment
-            for (EngravingItem* ee : s->elist()) {
-                if (ee) {
-                    e = ee;
-                    break;
-                }
-            }
-        }
-        if (e->tick() >= end) {
+        if (s->tick() >= end) {
             return s;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------

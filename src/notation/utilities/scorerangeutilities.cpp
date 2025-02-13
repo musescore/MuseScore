@@ -73,7 +73,7 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
         }
 
         double x1 = section.startSegment->pagePos().x();
-        const double x2 = section.endSegment->pageBoundingRect().topRight().x();
+        const double x2 = section.endSegment->pageBoundingRect().right();
         const int padding = 0.5 * scoreFirstStaff->spatium(startSegment->tick());
         const double y1 = topY + segmentFirstStaff->y() + section.startSegment->pagePos().y() - padding;
         const double y2 = bottomY + segmentLastStaff->y() + section.endSegment->pagePos().y() + padding;
@@ -98,7 +98,7 @@ std::vector<ScoreRangeUtilities::RangeSection> ScoreRangeUtilities::splitRangeBy
     const Segment* startSegment = rangeStartSegment;
     const Fraction rangeEndTick = rangeEndSegment->tick();
 
-    for (const Segment* segment = startSegment; segment && segment != rangeEndSegment && segment->tick() <= rangeEndTick;) {
+    for (const Segment* segment = startSegment; segment && segment != rangeEndSegment && segment->tick() < rangeEndTick;) {
         const System* currentSegmentSystem = segment->measure()->system();
 
         const Segment* nextSegment = segment->next1MMenabled();
@@ -123,7 +123,7 @@ std::vector<ScoreRangeUtilities::RangeSection> ScoreRangeUtilities::splitRangeBy
             }
         }
 
-        if (nextSegmentSystem != currentSegmentSystem || nextSegment == rangeEndSegment) {
+        if (nextSegmentSystem != currentSegmentSystem || nextSegment->tick() >= rangeEndTick) {
             RangeSection section;
             section.system = currentSegmentSystem;
             section.startSegment = startSegment;

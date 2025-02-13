@@ -1082,6 +1082,9 @@ private:
     void selectAdd(EngravingItem* e);
     void selectRange(EngravingItem* e, staff_idx_t staffIdx);
 
+    bool trySelectSimilarInRange(EngravingItem* e);
+    bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
+
     muse::Ret putNote(const Position&, bool replace);
     void handleOverlappingChordRest(InputState& inputState);
 
