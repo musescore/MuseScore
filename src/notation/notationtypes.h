@@ -615,6 +615,12 @@ struct StringTuningsInfo
 };
 
 using InstrumentStringTuningsMap = std::map<std::string, std::vector<StringTuningsInfo> >;
+
+enum class PercussionPanelAutoShowMode {
+    NEVER,
+    UNPITCHED_STAFF,
+    UNPITCHED_STAFF_NOTE_INPUT,
+};
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

@@ -35,8 +35,8 @@ class PercussionPreferencesModel : public QObject, public muse::Injectable, publ
 
     Q_PROPERTY(bool useNewPercussionPanel READ useNewPercussionPanel WRITE setUseNewPercussionPanel NOTIFY useNewPercussionPanelChanged)
 
-    Q_PROPERTY(bool autoShowPercussionPanel READ autoShowPercussionPanel
-               WRITE setAutoShowPercussionPanel NOTIFY autoShowPercussionPanelChanged)
+    Q_PROPERTY(mu::notation::PercussionPanelAutoShowMode percussionPanelAutoShowMode READ percussionPanelAutoShowMode
+               WRITE setPercussionPanelAutoShowMode NOTIFY percussionPanelAutoShowModeChanged)
 
     Q_PROPERTY(bool showPercussionPanelPadSwapDialog READ showPercussionPanelPadSwapDialog
                WRITE setShowPercussionPanelPadSwapDialog NOTIFY showPercussionPanelPadSwapDialogChanged)
@@ -54,8 +54,8 @@ public:
     bool useNewPercussionPanel() const;
     void setUseNewPercussionPanel(bool use);
 
-    bool autoShowPercussionPanel() const;
-    void setAutoShowPercussionPanel(bool autoShow);
+    mu::notation::PercussionPanelAutoShowMode percussionPanelAutoShowMode() const;
+    void setPercussionPanelAutoShowMode(mu::notation::PercussionPanelAutoShowMode autoShowMode);
 
     bool showPercussionPanelPadSwapDialog() const;
     void setShowPercussionPanelPadSwapDialog(bool show);
@@ -65,7 +65,7 @@ public:
 
 signals:
     void useNewPercussionPanelChanged();
-    void autoShowPercussionPanelChanged();
+    void percussionPanelAutoShowModeChanged();
     void showPercussionPanelPadSwapDialogChanged();
     void percussionPanelMoveMidiNotesAndShortcutsChanged();
 };

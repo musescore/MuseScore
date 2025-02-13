@@ -33,8 +33,8 @@ void PercussionPreferencesModel::init()
         emit useNewPercussionPanelChanged();
     });
 
-    configuration()->autoShowPercussionPanelChanged().onNotify(this, [this]() {
-        emit autoShowPercussionPanelChanged();
+    configuration()->percussionPanelAutoShowModeChanged().onNotify(this, [this]() {
+        emit percussionPanelAutoShowModeChanged();
     });
 
     configuration()->showPercussionPanelPadSwapDialogChanged().onNotify(this, [this]() {
@@ -56,14 +56,14 @@ void PercussionPreferencesModel::setUseNewPercussionPanel(bool use)
     configuration()->setUseNewPercussionPanel(use);
 }
 
-bool PercussionPreferencesModel::autoShowPercussionPanel() const
+mu::notation::PercussionPanelAutoShowMode PercussionPreferencesModel::percussionPanelAutoShowMode() const
 {
-    return configuration()->autoShowPercussionPanel();
+    return configuration()->percussionPanelAutoShowMode();
 }
 
-void PercussionPreferencesModel::setAutoShowPercussionPanel(bool autoShow)
+void PercussionPreferencesModel::setPercussionPanelAutoShowMode(mu::notation::PercussionPanelAutoShowMode autoShowMode)
 {
-    configuration()->setAutoShowPercussionPanel(autoShow);
+    configuration()->setPercussionPanelAutoShowMode(autoShowMode);
 }
 
 bool PercussionPreferencesModel::showPercussionPanelPadSwapDialog() const

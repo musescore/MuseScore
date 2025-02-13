@@ -47,25 +47,6 @@ PreferencesPage {
 
         navigation.section: root.navigationSection
 
-        CheckBox {
-            id: unpitchedSelectedCheckbox
-
-            enabled: percussionPreferencesModel.useNewPercussionPanel
-            width: parent.width
-
-            text: qsTrc("appshell/preferences", "Open the percussion panel when an unpitched staff is selected")
-
-            navigation.name: "UnpitchedSelectedCheckbox"
-            navigation.panel: percussionPanelPreferences.navigation
-            navigation.row: 0
-
-            checked: percussionPreferencesModel.autoShowPercussionPanel
-
-            onClicked:  {
-                percussionPreferencesModel.autoShowPercussionPanel = !unpitchedSelectedCheckbox.checked
-            }
-        }
-
         //! NOTE: "Pad swap options" and the associated dialog were dropped from percussion panel MVP (version 4.5).
         //! See PR #25810 when re-implementing...
         // Column {

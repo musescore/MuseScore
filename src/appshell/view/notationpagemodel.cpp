@@ -244,34 +244,58 @@ void NotationPageModel::updatePercussionPanelVisibility()
         return;
     }
 
+    const PercussionPanelAutoShowMode autoShowMode = notationConfiguration()->percussionPanelAutoShowMode();
+    const bool autoClose = notationConfiguration()->autoClosePercussionPanel();
+
     const INotationPtr notation = globalContext()->currentNotation();
-    if (!notation || !notation->elements() || !notationConfiguration()->autoShowPercussionPanel()) {
+    if (!notation || !notation->elements() || autoShowMode == PercussionPanelAutoShowMode::NEVER) {
+        return;
+    }
+
+    const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+    if (noteInput && !noteInput->isNoteInputMode() && autoShowMode == PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) {
+        if (autoClose) {
+            setPercussionPanelOpen(false);
+        }
         return;
     }
 
     const mu::engraving::Score* score = notation->elements()->msScore();
     const INotationSelectionPtr selection = notation->interaction()->selection();
     if (!score || !selection || selection->isNone()) {
+        if (autoClose) {
+            setPercussionPanelOpen(false);
+        }
         return;
     }
 
-    //! NOTE: Unlike the old drumset panel, this panel shouldn't automatically close when a non-drum staff is selected...
     if (selection->isRange()) {
         const INotationSelectionRangePtr rangeSelection = selection->range();
         if (!rangeSelection) {
+            if (autoClose) {
+                setPercussionPanelOpen(false);
+            }
             return;
         }
         for (const Part* p : rangeSelection->selectedParts()) {
-            if (!p->hasDrumStaff()) {
-                return;
+            if (p->hasDrumStaff()) {
+                continue;
             }
+            if (autoClose) {
+                setPercussionPanelOpen(false);
+            }
+            return;
         }
     } else {
         for (const EngravingItem* e : selection->elements()) {
             const Staff* staff = e->staff();
-            if (!staff || !staff->isDrumStaff(e->tick())) {
-                return;
+            if (staff && staff->isDrumStaff(e->tick())) {
+                continue;
             }
+            if (autoClose) {
+                setPercussionPanelOpen(false);
+            }
+            return;
         }
     }
 
