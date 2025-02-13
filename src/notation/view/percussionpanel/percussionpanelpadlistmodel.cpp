@@ -68,7 +68,7 @@ void PercussionPanelPadListModel::init()
     addEmptyRow();
 }
 
-void PercussionPanelPadListModel::addEmptyRow()
+void PercussionPanelPadListModel::addEmptyRow(bool focusFirstInNewRow)
 {
     for (size_t i = 0; i < NUM_COLUMNS; ++i) {
         m_padModels.append(nullptr);
@@ -76,8 +76,10 @@ void PercussionPanelPadListModel::addEmptyRow()
     emit layoutChanged();
     emit numPadsChanged();
 
-    const int indexToFocus = numPads() - NUM_COLUMNS;
-    emit padFocusRequested(indexToFocus);
+    if (focusFirstInNewRow) {
+        const int indexToFocus = numPads() - NUM_COLUMNS;
+        emit padFocusRequested(indexToFocus);
+    }
 }
 
 void PercussionPanelPadListModel::deleteRow(int row)

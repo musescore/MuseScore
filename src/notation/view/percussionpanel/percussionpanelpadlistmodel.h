@@ -56,7 +56,7 @@ public:
 
     Q_INVOKABLE void init();
 
-    Q_INVOKABLE void addEmptyRow();
+    Q_INVOKABLE void addEmptyRow(bool focusFirstInNewRow = false);
     Q_INVOKABLE void deleteRow(int row);
 
     void removeEmptyRows();
