@@ -22,19 +22,23 @@
 #ifndef MUSE_WORKSPACE_WORKSPACEMANAGER_H
 #define MUSE_WORKSPACE_WORKSPACEMANAGER_H
 
-#include "iworkspacemanager.h"
+#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
-#include "../iworkspaceconfiguration.h"
 #include "io/ifilesystem.h"
+#include "iinteractive.h"
+#include "../iworkspaceconfiguration.h"
+
 #include "workspace.h"
+
+#include "iworkspacemanager.h"
 
 namespace muse::workspace {
 class WorkspaceManager : public IWorkspaceManager, public Injectable, public async::Asyncable
 {
-    Inject<IWorkspaceConfiguration> configuration = { this };
     Inject<io::IFileSystem> fileSystem = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<IWorkspaceConfiguration> configuration = { this };
 
 public:
 
@@ -48,7 +52,6 @@ public:
     IWorkspacePtr defaultWorkspace() const override;
 
     IWorkspacePtr currentWorkspace() const override;
-    void prepareCurrentWorkspaceForChange() override;
     async::Notification currentWorkspaceAboutToBeChanged() const override;
     async::Notification currentWorkspaceChanged() const override;
 
@@ -57,6 +60,10 @@ public:
     async::Notification workspacesListChanged() const override;
 
     IWorkspacePtr cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const override;
+
+    void changeCurrentWorkspace(const std::string& newWorkspaceName) override;
+    void createAndAppendNewWorkspace() override;
+    void openConfigureWorkspacesDialog() override;
 
 private:
     void load();
@@ -72,6 +79,7 @@ private:
     void setupDefaultWorkspace();
     void setupCurrentWorkspace();
     void saveCurrentWorkspace();
+    void prepareCurrentWorkspaceForChange();
 
     Ret removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList);
     Ret removeWorkspace(const IWorkspacePtr& workspace);

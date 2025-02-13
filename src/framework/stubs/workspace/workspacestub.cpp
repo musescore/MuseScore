@@ -29,10 +29,6 @@ std::string WorkspaceStub::name() const
     return std::string();
 }
 
-void WorkspaceStub::setName(const std::string&)
-{
-}
-
 bool WorkspaceStub::isBuiltin() const
 {
     return false;
@@ -60,4 +56,8 @@ void WorkspaceStub::reset()
 async::Notification WorkspaceStub::reloadNotification()
 {
     return async::Notification();
+}
+
+void muse::workspace::WorkspaceStub::assignNewName(const std::string&)
+{
 }

@@ -36,7 +36,6 @@ public:
     virtual ~IWorkspace() = default;
 
     virtual std::string name() const = 0;
-    virtual void setName(const std::string& name) = 0;
 
     virtual bool isBuiltin() const = 0;
     virtual bool isEdited() const = 0;
@@ -45,6 +44,7 @@ public:
     virtual Ret setRawData(const DataKey& key, const QByteArray& data) = 0;
 
     virtual void reset() = 0;
+    virtual void assignNewName(const std::string& newName) = 0;
 
     virtual async::Notification reloadNotification() = 0;
 };

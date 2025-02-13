@@ -21,6 +21,8 @@
  */
 #include "workspacemanager.h"
 
+#include "types/uri.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -66,11 +68,6 @@ IWorkspacePtr WorkspaceManager::currentWorkspace() const
     return m_currentWorkspace;
 }
 
-void WorkspaceManager::prepareCurrentWorkspaceForChange()
-{
-    m_currentWorkspaceAboutToBeChanged.notify();
-}
-
 async::Notification WorkspaceManager::currentWorkspaceAboutToBeChanged() const
 {
     return m_currentWorkspaceAboutToBeChanged;
@@ -112,6 +109,68 @@ async::Notification WorkspaceManager::workspacesListChanged() const
 IWorkspacePtr WorkspaceManager:: cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const
 {
     return std::make_shared<Workspace>(makeNewWorkspacePath(newWorkspaceName), dynamic_cast<Workspace*>(workspace.get()), iocContext());
+}
+
+void WorkspaceManager::changeCurrentWorkspace(const std::string& newWorkspaceName)
+{
+    if (configuration()->currentWorkspaceName() == newWorkspaceName || newWorkspaceName.empty()) {
+        return;
+    }
+
+    prepareCurrentWorkspaceForChange();
+
+    configuration()->setCurrentWorkspaceName(newWorkspaceName);
+}
+
+void WorkspaceManager::createAndAppendNewWorkspace()
+{
+    prepareCurrentWorkspaceForChange();
+
+    IWorkspacePtrList workspaces = this->workspaces();
+
+    QStringList workspaceNames;
+    for (const IWorkspacePtr& workspace: workspaces) {
+        workspaceNames << QString::fromStdString(workspace->name());
+    }
+
+    UriQuery uri("muse://workspace/create");
+    uri.addParam("sync", Val(true));
+    uri.addParam("workspaceNames", Val(workspaceNames.join(',')));
+
+    RetVal<Val> obj = interactive()->open(uri);
+    if (!obj.ret) {
+        return;
+    }
+
+    QVariantMap meta = obj.val.toQVariant().toMap();
+    QString name = meta.value("name").toString();
+    IF_ASSERT_FAILED(!name.isEmpty()) {
+        return;
+    }
+
+    IWorkspacePtr newWorkspace = cloneWorkspace(currentWorkspace(), name.toStdString());
+    if (!newWorkspace) {
+        return;
+    }
+
+    workspaces.emplace_back(newWorkspace);
+
+    setWorkspaces(workspaces);
+
+    configuration()->setCurrentWorkspaceName(name.toStdString());
+}
+
+void WorkspaceManager::openConfigureWorkspacesDialog()
+{
+    prepareCurrentWorkspaceForChange();
+
+    RetVal<Val> result = interactive()->open("muse://workspace/select?sync=true");
+    if (!result.ret) {
+        return;
+    }
+
+    std::string selectedWorkspace = result.val.toString();
+    changeCurrentWorkspace(selectedWorkspace);
 }
 
 WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) const
@@ -365,4 +424,9 @@ void WorkspaceManager::saveCurrentWorkspace()
     if (!ret) {
         LOGE() << "failed save current workspace, err: " << ret.toString();
     }
+}
+
+void WorkspaceManager::prepareCurrentWorkspaceForChange()
+{
+    m_currentWorkspaceAboutToBeChanged.notify();
 }

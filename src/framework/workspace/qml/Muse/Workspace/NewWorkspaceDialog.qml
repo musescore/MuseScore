@@ -113,9 +113,9 @@ StyledDialogView {
             navigationPanel.order: 2
 
             FlatButton {
-                text: qsTrc("global", "Select")
+                text: qsTrc("global", "Create")
                 buttonRole: ButtonBoxModel.AcceptRole
-                buttonId: ButtonBoxModel.Select
+                buttonId: ButtonBoxModel.CustomButton + 1
                 accentButton: true
                 enabled: workspaceModel.isWorkspaceNameAllowed
 

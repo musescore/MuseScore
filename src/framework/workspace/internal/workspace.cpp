@@ -54,26 +54,6 @@ std::string Workspace::name() const
     return io::completeBasename(m_file->filePath()).toStdString();
 }
 
-void Workspace::setName(const std::string& name)
-{
-    io::path_t filePath = m_file->filePath();
-    io::path_t newPath = io::absoluteDirpath(filePath) + "/" + name + "." + io::suffix(filePath);
-
-    if (filePath == newPath) {
-        return;
-    }
-
-    Ret ret = doSave();
-    if (!ret) {
-        LOGE() << "Failed to save workspace, error: " << ret.toString();
-    }
-
-    fileSystem()->move(filePath, newPath);
-
-    m_file = std::make_shared<WorkspaceFile>(newPath);
-    load();
-}
-
 bool Workspace::isBuiltin() const
 {
     io::path_t builtinWorkspacePath = this->builtinWorkspacePath();
@@ -134,6 +114,26 @@ void Workspace::reset()
     m_file = std::make_shared<WorkspaceFile>(builtinWorkspacePath);
 
     reload();
+}
+
+void Workspace::assignNewName(const std::string& newName)
+{
+    io::path_t filePath = m_file->filePath();
+    io::path_t newPath = io::absoluteDirpath(filePath) + "/" + newName + "." + io::suffix(filePath);
+
+    if (filePath == newPath) {
+        return;
+    }
+
+    Ret ret = doSave();
+    if (!ret) {
+        LOGE() << "Failed to save workspace, error: " << ret.toString();
+    }
+
+    fileSystem()->move(filePath, newPath);
+
+    m_file = std::make_shared<WorkspaceFile>(newPath);
+    load();
 }
 
 async::Notification Workspace::reloadNotification()

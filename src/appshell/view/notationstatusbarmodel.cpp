@@ -111,6 +111,8 @@ QVariant NotationStatusBarModel::currentWorkspaceItem()
                    .arg(muse::TranslatableString("workspace", "Workspace:"),
                         String::fromStdString(workspaceConfiguration()->currentWorkspaceName()));
 
+    m_currentWorkspaceItem->setAction(action);
+
 #ifdef MUSE_MODULE_WORKSPACE
     m_currentWorkspaceItem->setSubitems(m_workspacesMenuModel->items());
 #endif

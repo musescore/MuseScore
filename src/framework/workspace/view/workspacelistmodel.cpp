@@ -247,7 +247,7 @@ QString WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& n
     }
 
     IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
-    workspace->setName(newName.toStdString());
+    workspace->assignNewName(newName.toStdString());
 
     QModelIndex modelIndex = index(workspaceIndex);
     emit dataChanged(modelIndex, modelIndex, { RoleName });

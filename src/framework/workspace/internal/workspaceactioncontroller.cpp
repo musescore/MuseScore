@@ -35,75 +35,18 @@ void WorkspaceActionController::init()
     dispatcher()->reg(this, "create-workspace", this, &WorkspaceActionController::createNewWorkspace);
 }
 
-void WorkspaceActionController::prepareCurrentWorkspaceForChange()
-{
-    manager()->prepareCurrentWorkspaceForChange();
-}
-
 void WorkspaceActionController::selectWorkspace(const ActionData& args)
 {
-    prepareCurrentWorkspaceForChange();
-
     std::string selectedWorkspace = !args.empty() ? args.arg<std::string>(0) : "";
-    setCurrentWorkspaceName(selectedWorkspace);
+    manager()->changeCurrentWorkspace(selectedWorkspace);
 }
 
 void WorkspaceActionController::openConfigureWorkspacesDialog()
 {
-    prepareCurrentWorkspaceForChange();
-
-    RetVal<Val> result = interactive()->open("muse://workspace/select?sync=true");
-    if (!result.ret) {
-        return;
-    }
-
-    std::string selectedWorkspace = result.val.toString();
-    setCurrentWorkspaceName(selectedWorkspace);
+    manager()->openConfigureWorkspacesDialog();
 }
 
 void muse::workspace::WorkspaceActionController::createNewWorkspace()
 {
-    prepareCurrentWorkspaceForChange();
-
-    IWorkspacePtrList workspaces = manager()->workspaces();
-
-    QStringList workspaceNames;
-    for (const IWorkspacePtr& workspace: workspaces) {
-        workspaceNames << QString::fromStdString(workspace->name());
-    }
-
-    UriQuery uri("muse://workspace/create");
-    uri.addParam("sync", Val(true));
-    uri.addParam("workspaceNames", Val(workspaceNames.join(',')));
-
-    RetVal<Val> obj = interactive()->open(uri);
-    if (!obj.ret) {
-        return;
-    }
-
-    QVariantMap meta = obj.val.toQVariant().toMap();
-    QString name = meta.value("name").toString();
-    IF_ASSERT_FAILED(!name.isEmpty()) {
-        return;
-    }
-
-    IWorkspacePtr newWorkspace = manager()->cloneWorkspace(manager()->currentWorkspace(), name.toStdString());
-    if (!newWorkspace) {
-        return;
-    }
-
-    workspaces.emplace_back(newWorkspace);
-
-    manager()->setWorkspaces(workspaces);
-
-    setCurrentWorkspaceName(name.toStdString());
-}
-
-void WorkspaceActionController::setCurrentWorkspaceName(const std::string& workspaceName)
-{
-    if (configuration()->currentWorkspaceName() == workspaceName || workspaceName.empty()) {
-        return;
-    }
-
-    configuration()->setCurrentWorkspaceName(workspaceName);
+    manager()->createAndAppendNewWorkspace();
 }

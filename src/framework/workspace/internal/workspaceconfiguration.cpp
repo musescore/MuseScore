@@ -54,11 +54,11 @@ io::paths_t WorkspaceConfiguration::builtinWorkspacesFilePaths() const
 {
     io::paths_t result;
 
-    StringList builtinWorkspacesFiles = String::fromStdString(m_config.value("builtin_workspace_files").toString()).split(';');
+    ValList builtinWorkspacesFiles = m_config.value("builtin_workspace_files").toList();
     io::path_t appDir = globalConfiguration()->appDataPath();
 
-    for (const String& builtinWorkspaceFile : builtinWorkspacesFiles) {
-        result.emplace_back(appDir + "/workspaces/" + builtinWorkspaceFile);
+    for (const Val& builtinWorkspaceFileVal : builtinWorkspacesFiles) {
+        result.emplace_back(appDir + "/workspaces/" + builtinWorkspaceFileVal.toString());
     }
 
     return result;

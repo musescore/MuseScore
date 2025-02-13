@@ -31,7 +31,6 @@ public:
     IWorkspacePtr defaultWorkspace() const override;
 
     IWorkspacePtr currentWorkspace() const override;
-    void prepareCurrentWorkspaceForChange() override;
     async::Notification currentWorkspaceAboutToBeChanged() const override;
     async::Notification currentWorkspaceChanged() const override;
 
@@ -40,6 +39,10 @@ public:
     async::Notification workspacesListChanged() const override;
 
     IWorkspacePtr cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const override;
+
+    void changeCurrentWorkspace(const std::string& newWorkspaceName) override;
+    void createAndAppendNewWorkspace() override;
+    void openConfigureWorkspacesDialog() override;
 };
 }
 

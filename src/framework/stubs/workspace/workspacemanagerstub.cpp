@@ -37,10 +37,6 @@ IWorkspacePtr WorkspaceManagerStub::currentWorkspace() const
     return p;
 }
 
-void WorkspaceManagerStub::prepareCurrentWorkspaceForChange()
-{
-}
-
 async::Notification WorkspaceManagerStub::currentWorkspaceAboutToBeChanged() const
 {
     return async::Notification();
@@ -69,4 +65,16 @@ async::Notification WorkspaceManagerStub::workspacesListChanged() const
 IWorkspacePtr WorkspaceManagerStub::cloneWorkspace(const IWorkspacePtr&, const std::string&)const
 {
     return std::make_shared<WorkspaceStub>();
+}
+
+void muse::workspace::WorkspaceManagerStub::changeCurrentWorkspace(const std::string&)
+{
+}
+
+void muse::workspace::WorkspaceManagerStub::createAndAppendNewWorkspace()
+{
+}
+
+void muse::workspace::WorkspaceManagerStub::openConfigureWorkspacesDialog()
+{
 }
