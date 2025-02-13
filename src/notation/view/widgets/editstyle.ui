@@ -2993,7 +2993,7 @@
            <item row="2" column="3" rowspan="2">
             <widget class="QLabel" name="measureNumberPosAboveLabel">
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -3033,7 +3033,7 @@
            <item row="4" column="3" rowspan="2">
             <widget class="QLabel" name="measureNumberPosBelowLabel">
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -3049,7 +3049,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -3059,7 +3059,7 @@
            <item row="0" column="3">
             <widget class="QLabel" name="label_921">
              <property name="text">
-              <string>Vertical placement:</string>
+              <string>Vertical position:</string>
              </property>
              <property name="buddy">
               <cstring>measureNumberVPlacement</cstring>
@@ -3072,7 +3072,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -3082,7 +3082,7 @@
            <item row="1" column="3">
             <widget class="QLabel" name="label_93">
              <property name="text">
-              <string>Horizontal placement:</string>
+              <string>Horizontal position:</string>
              </property>
              <property name="buddy">
               <cstring>measureNumberHPlacement</cstring>
@@ -3207,7 +3207,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -3239,7 +3239,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -3298,7 +3298,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -3321,7 +3321,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5709,7 +5709,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5832,6 +5832,33 @@
                   <property name="bottomMargin">
                    <number>10</number>
                   </property>
+                  <item row="4" column="3">
+                   <widget class="QToolButton" name="mmRestMaxMeasuresReset">
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QRadioButton" name="mmRestWidthProportional">
+                    <property name="text">
+                     <string>Proportional to time signature</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QSpinBox" name="mmRestRefDuration">
+                    <property name="minimum">
+                     <number>2</number>
+                    </property>
+                    <property name="maximum">
+                     <number>8</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QSpinBox" name="mmRestMaxMeasures"/>
+                  </item>
                   <item row="3" column="0">
                    <widget class="QLabel" name="label_16">
                     <property name="sizePolicy">
@@ -5845,46 +5872,6 @@
                     </property>
                     <property name="buddy">
                      <cstring>minMeasureWidth</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QToolButton" name="resetMinMMRestWidth">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Minimum width of measure' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="4">
-                   <spacer name="horizontalSpacer_32">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QRadioButton" name="mmRestWidthConstant">
-                    <property name="text">
-                     <string>Fixed, based on time signature of:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QRadioButton" name="mmRestWidthProportional">
-                    <property name="text">
-                     <string>Proportional to time signature</string>
                     </property>
                    </widget>
                   </item>
@@ -5904,6 +5891,32 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="3" column="3">
+                   <widget class="QToolButton" name="resetMinMMRestWidth">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Minimum width of measure' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="5">
+                   <spacer name="horizontalSpacer_32">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
                   <item row="4" column="0">
                    <widget class="QLabel" name="label_5">
                     <property name="text">
@@ -5911,37 +5924,31 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1">
-                   <widget class="QSpinBox" name="mmRestRefDuration">
-                    <property name="suffix">
-                     <string> / 4</string>
+                  <item row="2" column="3">
+                   <widget class="QToolButton" name="resetMMRestRefDuration">
+                    <property name="text">
+                     <string notr="true"/>
                     </property>
-                    <property name="minimum">
-                     <number>2</number>
-                    </property>
-                    <property name="maximum">
-                     <number>8</number>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QRadioButton" name="mmRestWidthConstant">
+                    <property name="text">
+                     <string>Fixed, based on time signature of:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="4" column="2">
-                   <widget class="QToolButton" name="mmRestMaxMeasuresReset">
+                   <widget class="QLabel" name="label_2">
                     <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QSpinBox" name="mmRestMaxMeasures">
-                    <property name="suffix">
-                     <string> measures</string>
+                     <string>measure(s)</string>
                     </property>
                    </widget>
                   </item>
                   <item row="2" column="2">
-                   <widget class="QToolButton" name="resetMMRestRefDuration">
+                   <widget class="QLabel" name="label_17">
                     <property name="text">
-                     <string notr="true"/>
+                     <string>quarters</string>
                     </property>
                    </widget>
                   </item>
@@ -8341,7 +8348,7 @@
                <item row="4" column="0">
                 <widget class="QLabel" name="label_223">
                  <property name="text">
-                  <string>Position below:</string>
+                  <string>Offset below:</string>
                  </property>
                 </widget>
                </item>
@@ -8351,7 +8358,7 @@
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Position below' value</string>
+                  <string>Reset 'Offset below' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -8400,7 +8407,7 @@
                <item row="3" column="0">
                 <widget class="QLabel" name="label_221">
                  <property name="text">
-                  <string>Position above:</string>
+                  <string>Offset above:</string>
                  </property>
                 </widget>
                </item>
@@ -8458,7 +8465,7 @@
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Position above' value</string>
+                  <string>Reset 'Offset above' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -8554,7 +8561,7 @@
                <item row="0" column="0">
                 <widget class="QLabel" name="label_95">
                  <property name="text">
-                  <string>Position above:</string>
+                  <string>Offset above:</string>
                  </property>
                  <property name="buddy">
                   <cstring>hairpinPosAbove</cstring>
@@ -8603,7 +8610,7 @@
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Position above' value</string>
+                  <string>Reset 'Offset above' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -8674,7 +8681,7 @@
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Position below' value</string>
+                  <string>Reset 'Offset below' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -8704,7 +8711,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="label_129">
                  <property name="text">
-                  <string>Position below:</string>
+                  <string>Offset below:</string>
                  </property>
                  <property name="buddy">
                   <cstring>hairpinPosBelow</cstring>
@@ -9152,7 +9159,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_81">
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>ottavaPosAbove</cstring>
@@ -9171,7 +9178,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9214,7 +9221,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_130">
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>ottavaPosBelow</cstring>
@@ -9447,7 +9454,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9603,7 +9610,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9636,7 +9643,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_139">
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePosBelow</cstring>
@@ -9649,7 +9656,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9669,7 +9676,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_96">
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePosAbove</cstring>
@@ -9715,7 +9722,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_124">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePlacement</cstring>
@@ -9741,7 +9748,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9897,7 +9904,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_97">
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePosAbove</cstring>
@@ -9923,7 +9930,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9947,7 +9954,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_125">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePlacement</cstring>
@@ -9960,7 +9967,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9970,7 +9977,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_140">
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePosBelow</cstring>
@@ -9983,7 +9990,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10033,7 +10040,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_971">
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>vibratoLinePosAbove</cstring>
@@ -10059,7 +10066,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10083,7 +10090,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_1251">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>vibratoLinePlacement</cstring>
@@ -10096,7 +10103,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10106,7 +10113,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_1401">
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>vibratoLinePosBelow</cstring>
@@ -10119,7 +10126,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10470,7 +10477,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePosBelow</cstring>
@@ -10497,7 +10504,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10510,7 +10517,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10526,7 +10533,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePosAbove</cstring>
@@ -10539,7 +10546,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10549,7 +10556,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_72">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -10618,7 +10625,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>systemTextLinePosBelow</cstring>
@@ -10645,7 +10652,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10658,7 +10665,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10674,7 +10681,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>systemTextLinePosAbove</cstring>
@@ -10687,7 +10694,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10697,7 +10704,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_214">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -11115,7 +11122,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_168">
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>fermataPosAbove</cstring>
@@ -11148,7 +11155,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11158,7 +11165,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_167">
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>fermataPosBelow</cstring>
@@ -11171,7 +11178,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11236,7 +11243,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11246,7 +11253,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_178">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>staffTextPlacement</cstring>
@@ -11294,7 +11301,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11314,7 +11321,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11337,7 +11344,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>staffTextPosBelow</cstring>
@@ -11367,7 +11374,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>staffTextPosAbove</cstring>
@@ -11380,7 +11387,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11432,7 +11439,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>tempoTextPosBelow</cstring>
@@ -11459,7 +11466,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11472,7 +11479,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11488,7 +11495,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>tempoTextPosAbove</cstring>
@@ -11501,7 +11508,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11511,7 +11518,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_128">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>tempoTextPlacement</cstring>
@@ -11748,7 +11755,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Position above' value</string>
+                    <string>Reset 'Offset above' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -11774,7 +11781,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Position below:</string>
+                    <string>Offset below:</string>
                    </property>
                   </widget>
                  </item>
@@ -11797,7 +11804,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Placement' value</string>
+                    <string>Reset 'Position' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -11820,7 +11827,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Position below' value</string>
+                    <string>Reset 'Offset below' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -12027,7 +12034,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Position above:</string>
+                    <string>Offset above:</string>
                    </property>
                   </widget>
                  </item>
@@ -12072,8 +12079,11 @@
                  </item>
                  <item row="5" column="2">
                   <widget class="QToolButton" name="resetLyricsAvoidBarlines">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
                    <property name="accessibleName">
-                    <string>Reset avoid barlines</string>
+                    <string>Reset 'Avoid barlines'</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -12332,6 +12342,9 @@ text x-height):</string>
                     <widget class="QDoubleSpinBox" name="lyricsDashYposRatio">
                      <property name="keyboardTracking">
                       <bool>false</bool>
+                     </property>
+                     <property name="suffix">
+                      <string>%</string>
                      </property>
                     </widget>
                    </item>
@@ -12698,7 +12711,7 @@ first note of the system</string>
            <item row="2" column="0">
             <widget class="QLabel" name="label_150">
              <property name="text">
-              <string>Position below:</string>
+              <string>Offset below:</string>
              </property>
              <property name="buddy">
               <cstring>rehearsalMarkPosBelow</cstring>
@@ -12725,7 +12738,7 @@ first note of the system</string>
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12738,7 +12751,7 @@ first note of the system</string>
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Offset below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12748,7 +12761,7 @@ first note of the system</string>
            <item row="1" column="0">
             <widget class="QLabel" name="label_151">
              <property name="text">
-              <string>Position above:</string>
+              <string>Offset above:</string>
              </property>
              <property name="buddy">
               <cstring>rehearsalMarkPosAbove</cstring>
@@ -12761,7 +12774,7 @@ first note of the system</string>
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position above' value</string>
+              <string>Reset 'Offset above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12771,7 +12784,7 @@ first note of the system</string>
            <item row="0" column="0">
             <widget class="QLabel" name="label_152">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>rehearsalMarkPlacement</cstring>
