@@ -321,7 +321,7 @@ void NotationConfiguration::init()
         m_midiInputUseWrittenPitch.set(val.toBool());
     });
 
-    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false)); // TODO: true when new percussion panel is ready
+    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(true));
     settings()->valueChanged(USE_NEW_PERCUSSION_PANEL_KEY).onReceive(this, [this](const Val&) {
         m_useNewPercussionPanelChanged.notify();
     });
