@@ -46,6 +46,8 @@ static constexpr msecs_t MIN_NOTE_LENGTH = 10;
 static constexpr unsigned int FLUID_AUDIO_CHANNELS_PAIR = 1;
 static constexpr unsigned int FLUID_AUDIO_CHANNELS_COUNT = FLUID_AUDIO_CHANNELS_PAIR * 2;
 
+static constexpr bool STAFF_TO_MIDIOUT_CHANNEL = true;
+
 struct muse::audio::synth::Fluid {
     fluid_settings_t* settings = nullptr;
     fluid_synth_t* synth = nullptr;
@@ -161,6 +163,46 @@ void FluidSynth::allNotesOff()
         setControllerValue(i, midi::SOSTENUTO_PEDAL_CONTROLLER, 0);
         setPitchBend(i, 8192);
     }
+
+    auto port = midiOutPort();
+    if (port->isConnected()) {
+        // Send all notes off to connected midi ports.
+        // Room for improvement:
+        // - We could record which groups/channels we sent something or which channels were scheduled in the sequencer.
+        // - We could send all events at once.
+        int lowerBound = 0;
+        int upperBound = 0;
+        if (STAFF_TO_MIDIOUT_CHANNEL) {
+            int channel = m_sequencer.lastStaff();
+            if (channel < 0) {
+                return;
+            }
+            channel = channel % 16;
+            lowerBound = channel;
+            upperBound = channel + 1;
+        } else {
+            upperBound = min(lastChannelIdx, 16);
+        }
+        for (int i = lowerBound; i < upperBound; i++) {
+            muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
+            e.setChannel(i);
+            e.setIndex(123); // CC#123 = All notes off
+            port->sendEvent(e);
+        }
+        for (int i = lowerBound; i < upperBound; i++) {
+            muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
+            e.setChannel(i);
+            e.setIndex(midi::SUSTAIN_PEDAL_CONTROLLER);
+            e.setData(0);
+            port->sendEvent(e);
+        }
+        for (int i = lowerBound; i < upperBound; i++) {
+            muse::midi::Event e(muse::midi::Event::Opcode::PitchBend, muse::midi::Event::MessageType::ChannelVoice20);
+            e.setChannel(i);
+            e.setData(0x80000000);
+            port->sendEvent(e);
+        }
+    }
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -168,7 +210,8 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     int ret = FLUID_OK;
     switch (event.opcode()) {
     case Event::Opcode::NoteOn: {
-        ret = fluid_synth_noteon(m_fluid->synth, event.channel(), event.note(), event.velocity());
+        // fluid_synth_noteon expects 0...127
+        ret = fluid_synth_noteon(m_fluid->synth, event.channel(), event.note(), event.velocity7());
         m_tuning.add(event.note(), event.pitchTuningCents());
     } break;
     case Event::Opcode::NoteOff: {
@@ -177,16 +220,16 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     } break;
     case Event::Opcode::ControlChange: {
         if (event.index() == muse::midi::EXPRESSION_CONTROLLER) {
-            ret = setExpressionLevel(event.data());
+            ret = setExpressionLevel(event.data7());
         } else {
-            ret = fluid_synth_cc(m_fluid->synth, event.channel(), event.index(), event.data());
+            ret = fluid_synth_cc(m_fluid->synth, event.channel(), event.index(), event.data7());
         }
     } break;
     case Event::Opcode::ProgramChange: {
         fluid_synth_program_change(m_fluid->synth, event.channel(), event.program());
     } break;
     case Event::Opcode::PitchBend: {
-        ret = setPitchBend(event.channel(), event.data());
+        ret = setPitchBend(event.channel(), event.pitchBend14());
     } break;
     default: {
         LOGD() << "not supported event type: " << event.opcodeString();
@@ -194,7 +237,17 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     }
     }
 
-    midiOutPort()->sendEvent(event);
+    if (STAFF_TO_MIDIOUT_CHANNEL && event.isChannelVoice()) {
+        int staff = m_sequencer.lastStaff();
+        if (staff >= 0) {
+            int channel = staff % 16;
+            midi::Event me(event);
+            me.setChannel(channel);
+            midiOutPort()->sendEvent(me);
+        }
+    } else {
+        midiOutPort()->sendEvent(event);
+    }
 
     return ret == FLUID_OK;
 }

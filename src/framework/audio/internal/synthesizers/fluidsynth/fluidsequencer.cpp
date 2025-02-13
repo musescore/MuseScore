@@ -100,6 +100,11 @@ const ChannelMap& FluidSequencer::channels() const
     return m_channels;
 }
 
+int FluidSequencer::lastStaff() const
+{
+    return m_lastStaff;
+}
+
 void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
 {
     SostenutoTimeAndDurations sostenutoTimeAndDurations;
@@ -114,6 +119,9 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
             timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+            // Assumption: 1:1 mapping between staff and instrument and FluidSynth and FluidSequencer instances.
+            // So staffLayerIndex is constant. It changes only when moving staffs.
+            m_lastStaff = noteEvent.arrangementCtx().staffLayerIndex;
 
             channel_t channelIdx = channel(noteEvent);
             note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
@@ -295,7 +303,7 @@ tuning_t FluidSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int n
 
 velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
-    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
+    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = std::numeric_limits<midi::velocity_t>::max();
 
     const mpe::ExpressionContext& expressionCtx = noteEvent.expressionCtx();
 
@@ -310,7 +318,7 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
     }
 
     dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
-    return expressionLevel(dynamicLevel);
+    return expressionLevel(dynamicLevel) << 9; // midi::Event::scaleUp(7,16)
 }
 
 int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
