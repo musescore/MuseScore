@@ -7901,7 +7901,8 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
         const Color lineColor = st->color(Fraction(0, 1));
         const bool invis = st->isLinesInvisible(Fraction(0, 1));
         const bool needsLineDetails = invis || lineColor != engravingConfiguration()->defaultColor();
-        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0) || !st->show() || needsLineDetails) {
+        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0)
+            || !st->show() || needsLineDetails) {
             XmlWriter::Attributes attributes;
             if (staves > 1) {
                 attributes.push_back({ "number", i + 1 });
