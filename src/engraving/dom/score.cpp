@@ -4542,11 +4542,31 @@ ChordRest* Score::findCR(Fraction tick, track_idx_t track) const
 }
 
 //---------------------------------------------------------
-//   findCRinStaff
+//   findChordRestEndingBeforeTickInStaff
 //    find last chord/rest on staff that ends before tick
 //---------------------------------------------------------
 
 ChordRest* Score::findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const
+{
+    return findChordRestEndingBeforeTickInStaffAndVoice(tick, staffIdx, false, 0);
+}
+
+//-----------------------------------------------------------------
+//   findChordRestEndingBeforeTickInStaffAndVoice
+//    find last chord/rest on staff and voice that ends before tick
+//-----------------------------------------------------------------
+ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, voice_idx_t voice) const
+{
+    return findChordRestEndingBeforeTickInStaffAndVoice(tick, staffIdx, true, voice);
+}
+
+//-----------------------------------------------------------------
+//   findChordRestEndingBeforeTickInStaffAndVoice
+//    find last chord/rest on staff and voice that ends before tick
+//    allow no specific voice
+//-----------------------------------------------------------------
+ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, bool forceVoice,
+                                                               voice_idx_t voice) const
 {
     Fraction ptick = tick - Fraction::fromTicks(1);
     Measure* m = tick2measureMM(ptick);
@@ -4559,9 +4579,9 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaff(const Fraction& tick, sta
         ptick = m->tick();
     }
 
-    Segment* s      = m->first(SegmentType::ChordRest);
-    track_idx_t strack      = staffIdx * VOICES;
-    track_idx_t etrack      = strack + VOICES;
+    Segment* s = m->first(SegmentType::ChordRest);
+    track_idx_t strack = forceVoice ? staffIdx * VOICES + voice : staffIdx * VOICES;
+    track_idx_t etrack = forceVoice ? strack + 1 : strack + VOICES;
     track_idx_t actualTrack = strack;
 
     Fraction lastTick = Fraction(-1, 1);
@@ -4572,7 +4592,7 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaff(const Fraction& tick, sta
         // found a segment; now find longest cr on this staff that does not overlap tick
         for (track_idx_t t = strack; t < etrack; ++t) {
             ChordRest* cr = toChordRest(ns->element(t));
-            if (cr) {
+            if ((cr) && ((!forceVoice) || voice == cr->voice())) {
                 Fraction endTick = cr->tick() + cr->actualTicks();
                 if (endTick >= lastTick && endTick <= tick) {
                     s = ns;

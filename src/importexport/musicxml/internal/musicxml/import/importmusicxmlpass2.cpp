@@ -8743,15 +8743,18 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
     if (!wavyLineType.empty()) {
         const Fraction ticks = cr->ticks();
         const track_idx_t track = cr->track();
-        const track_idx_t trk = (track / VOICES) * VOICES;           // first track of staff
         Trill*& trill = trills[wavyLineNo];
         if (wavyLineType == u"start" || wavyLineType == u"startstop") {
             if (trill) {
                 logger->logError(String(u"overlapping wavy-line number %1").arg(wavyLineNo + 1), xmlreader);
             } else {
                 trill = Factory::createTrill(cr->score()->dummy());
-                trill->setTrack(trk);
-                trill->setTrack2(trk);
+                trill->setTrack(track);
+                trill->setTrack2(track);
+
+                trill->setOrnament(Factory::createOrnament(cr));
+                trill->ornament()->setAnchor(ArticulationAnchor::AUTO);
+
                 if (wavyLineType == u"start") {
                     spanners[trill] = std::pair<int, int>(tick.ticks(), -1);
                     // LOGD("trill=%p inserted at first tick %d", trill, tick);

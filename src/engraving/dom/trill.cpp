@@ -452,6 +452,6 @@ String Trill::accessibleInfo() const
 
 void Trill::doComputeEndElement()
 {
-    setEndElement(score()->findChordRestEndingBeforeTickInStaff(tick2(), track2staff(track2())));
+    setEndElement(score()->findChordRestEndingBeforeTickInStaffAndVoice(tick2(), track2staff(track2()), voice()));
 }
 }
