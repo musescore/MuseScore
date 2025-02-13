@@ -7918,8 +7918,8 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
 
             xml.tag("staff-lines", st->lines(Fraction(0, 1)));
             if (needsLineDetails) {
-                for (int ii = 0; ii < st->lines(Fraction(0, 1)); ii++) {
-                    String ld = String(u"line-detail line=\"%1\"").arg(ii + 1);
+                for (int lineIdx = 0; lineIdx < st->lines(Fraction(0, 1)); ++lineIdx) {
+                    String ld = String(u"line-detail line=\"%1\"").arg(lineIdx + 1);
                     if (lineColor != engravingConfiguration()->defaultColor()) {
                         ld += String(u" color=\"%1\"").arg(String::fromStdString(lineColor.toString()));
                     }
