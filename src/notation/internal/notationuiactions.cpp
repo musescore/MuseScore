@@ -1233,9 +1233,10 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("add-noteline",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "&Note anchored line"),
-             TranslatableString("action", "Add note anchored line")
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Note-anchored line"),
+             TranslatableString("action", "Add note-anchored line"),
+             IconCode::Code::NOTE_ANCHORED_LINE
              ),
     UiAction("chord-tie",
              mu::context::UiCtxProjectOpened,
@@ -2503,13 +2504,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
-             ),
-    UiAction("add-noteline",
-             mu::context::UiCtxProjectFocused,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Note-anchored line"),
-             TranslatableString("action", "Note-anchored line"),
-             IconCode::Code::NOTE_ANCHORED_LINE
              ),
 };
 
