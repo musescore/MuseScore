@@ -417,21 +417,26 @@ static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target
 
 std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
 {
-    std::vector<EngravingItem*> droppedElements;
-
-    if (ms == 0) {
-        LOGD("no application mime data");
-        MScore::setError(MsError::NO_MIME);
+    if (!ms) {
+        LOGE() << "No MIME data given";
         return {};
     }
 
-    if (ms->hasFormat(mimeSymbolFormat) && !m_selection.isNone()) {
+    if (m_selection.isNone()) {
+        LOGE() << "No target selection";
+        MScore::setError(MsError::NO_DEST);
+        return {};
+    }
+
+    std::vector<EngravingItem*> droppedElements;
+
+    if (ms->hasFormat(mimeSymbolFormat)) {
         muse::ByteArray data = ms->data(mimeSymbolFormat);
 
         PointF dragOffset;
         Fraction duration(1, 4);
-        std::unique_ptr<EngravingItem> el(EngravingItem::readMimeData(this, data, &dragOffset, &duration));
 
+        std::unique_ptr<EngravingItem> el(EngravingItem::readMimeData(this, data, &dragOffset, &duration));
         if (!el) {
             return {};
         }
@@ -441,28 +446,36 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             return {};
         }
 
-        std::vector<EngravingItem*> els;
-        if (m_selection.isSingle()) {
-            els.push_back(m_selection.element());
-        } else if (m_selection.isList()) {
-            els.insert(els.begin(), m_selection.elements().begin(), m_selection.elements().end());
-        } else if (m_selection.isRange()) {
-            if (!el->systemFlag()) {
-                return {};
-            }
+        std::vector<EngravingItem*> targetElements;
+        switch (m_selection.state()) {
+        case SelState::NONE:
+            UNREACHABLE;
+            return {};
+        case SelState::LIST:
+            targetElements = m_selection.elements();
+            break;
+        case SelState::RANGE:
+            // TODO: make this as smart as `NotationInteraction::applyPaletteElement`,
+            // without duplicating logic. (Currently, for range selections, we only
+            // paste onto the "top-left corner".
+            mu::engraving::Segment* firstSegment = m_selection.startSegment();
+            staff_idx_t firstStaffIndex = m_selection.staffStart();
 
-            for (EngravingItem* el : m_selection.elements()) {
-                if (el->isNote() || el->isRest()) {
-                    els.push_back(el);
-                    break;
-                }
-            }
+            // The usage of `firstElementForNavigation` is inspired by `NotationInteraction::applyPaletteElement`.
+            targetElements = { firstSegment->firstElementForNavigation(firstStaffIndex) };
+            break;
         }
 
-        EngravingItem* newEl = 0;
-        for (EngravingItem* target : els) {
-            el->setTrack(target->track());
+        if (targetElements.empty()) {
+            LOGE() << "No valid target elements in selection";
+            MScore::setError(MsError::NO_DEST);
+            return {};
+        }
+
+        for (EngravingItem* target : targetElements) {
             addRefresh(target->pageBoundingRect()); // layout() ?!
+            el->setTrack(target->track());
+
             EditData ddata(view);
             ddata.dropElement = el.get();
             ddata.pos = target->pageBoundingRect().topLeft();
@@ -472,7 +485,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
                     ddata.dropElement = el->clone();
 
                     if (ddata.dropElement->systemFlag()) {
-                        newEl = pasteSystemObject(ddata, target);
+                        EngravingItem* newEl = pasteSystemObject(ddata, target);
                         if (newEl) {
                             droppedElements.emplace_back(newEl);
                         }
@@ -482,23 +495,22 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
 
                     EngravingItem* dropped = target->drop(ddata);
                     if (dropped) {
-                        newEl = dropped;
                         droppedElements.emplace_back(dropped);
                     }
                 }
             }
         }
-        if (newEl) {
-            select(newEl);
+        if (!droppedElements.empty()) {
+            select(droppedElements.back());
         }
-    } else if (ms->hasFormat(mimeStaffListFormat) && (m_selection.isRange() || m_selection.isList())) {
+    } else if (ms->hasFormat(mimeStaffListFormat)) {
         ChordRest* cr = 0;
         if (m_selection.isRange()) {
             cr = m_selection.firstChordRest();
         } else if (m_selection.isSingle()) {
             EngravingItem* e = m_selection.element();
             if (!e->isNote() && !e->isChordRest()) {
-                LOGD("cannot paste to %s", e->typeName());
+                LOGE() << "Cannot paste staff list onto " << e->typeName();
                 MScore::setError(MsError::DEST_NO_CR);
                 return {};
             }
@@ -507,23 +519,29 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             }
             cr  = toChordRest(e);
         }
-        if (cr == 0) {
+
+        if (!cr) {
             MScore::setError(MsError::NO_DEST);
             return {};
-        } else if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
+        }
+
+        if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
             MScore::setError(MsError::DEST_TUPLET);
             return {};
-        } else {
-            muse::ByteArray data = ms->data(mimeStaffListFormat);
-            if (MScore::debugMode) {
-                LOGD("paste <%s>", data.data());
-            }
-            if (canPasteStaff(data, scale)) {
-                XmlReader e(data);
-                if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale)) {
-                    return {};
-                }
-            }
+        }
+
+        muse::ByteArray data = ms->data(mimeStaffListFormat);
+        if (MScore::debugMode) {
+            LOGD() << "Pasting staff list: " << data.data();
+        }
+
+        if (!canPasteStaff(data, scale)) {
+            return {};
+        }
+
+        XmlReader e(data);
+        if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale)) {
+            return {};
         }
     } else if (ms->hasFormat(mimeSymbolListFormat)) {
         ChordRest* cr = 0;
@@ -532,7 +550,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
         } else if (m_selection.isSingle()) {
             EngravingItem* e = m_selection.element();
             if (!e->isNote() && !e->isRest() && !e->isChord()) {
-                LOGD("cannot paste to %s", e->typeName());
+                LOGE() << "Cannot paste element list onto " << e->typeName();
                 MScore::setError(MsError::DEST_NO_CR);
                 return {};
             }
@@ -544,14 +562,15 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
         if (cr == 0) {
             MScore::setError(MsError::NO_DEST);
             return {};
-        } else {
-            muse::ByteArray data = ms->data(mimeSymbolListFormat);
-            if (MScore::debugMode) {
-                LOGD("paste <%s>", data.data());
-            }
-            XmlReader e(data);
-            pasteSymbols(e, cr);
         }
+
+        muse::ByteArray data = ms->data(mimeSymbolListFormat);
+        if (MScore::debugMode) {
+            LOGD() << "Pasting element list: " << data.data();
+        }
+
+        XmlReader e(data);
+        pasteSymbols(e, cr);
     } else if (ms->hasImage()) {
         muse::ByteArray ba;
         Buffer buffer(&ba);
@@ -560,22 +579,18 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
         auto px = ms->imageData();
         imageProvider()->saveAsPng(px, &buffer);
 
-        Image* image = new Image(this->dummy());
+        std::unique_ptr<Image> image(new Image(this->dummy()));
         image->setImageType(ImageType::RASTER);
-        image->loadFromData("dragdrop", ba);
+        image->loadFromData("paste", ba);
 
-        std::vector<EngravingItem*> els;
-        if (m_selection.isSingle()) {
-            els.push_back(m_selection.element());
-        } else {
-            els.insert(els.begin(), m_selection.elements().begin(), m_selection.elements().end());
-        }
-
-        for (EngravingItem* target : els) {
-            EngravingItem* nel = image->clone();
+        std::vector<EngravingItem*> targetElements = m_selection.elements();
+        for (EngravingItem* target : targetElements) {
             addRefresh(target->pageBoundingRect()); // layout() ?!
+
+            EngravingItem* nel = image->clone();
             EditData ddata(view);
-            ddata.dropElement    = nel;
+            ddata.dropElement = nel;
+
             if (target->acceptDrop(ddata)) {
                 EngravingItem* dropped = target->drop(ddata);
                 if (dropped) {
@@ -587,12 +602,8 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
                 }
             }
         }
-        delete image;
     } else {
-        LOGD("cannot paste selState %d staffList %s", int(m_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
-        for (const std::string& s : ms->formats()) {
-            LOGD() << " format: " << s;
-        }
+        LOGE() << "Unsupported MIME data (formats: " << ms->formats() << ")";
     }
 
     return droppedElements;
