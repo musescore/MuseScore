@@ -7177,7 +7177,11 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
       for (int i = 0; i < staves; i++) {
             Staff* st = part->staff(i);
             const qreal staffMag = st->mag(Fraction(0, 1));
-            if (st->lines(Fraction(0,1)) != 5 || st->isTabStaff(Fraction(0,1)) || !qFuzzyCompare(staffMag, 1.0) || !st->show()) {
+            const QColor lineColor = st->color(Fraction(0, 1));
+            const bool invis = st->invisible(Fraction(0, 1));
+            const bool needsLineDetails = invis || lineColor != MScore::defaultColor;
+            if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !qFuzzyCompare(staffMag, 1.0)
+                || !st->show() || needsLineDetails) {
                   QString details = "staff-details";
                   if (staves > 1)
                         details += QString(" number=\"%1\"").arg(i+1);
@@ -7187,6 +7191,17 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
                   if (st->links() && st->links()->contains(part->staff(i - 1)))
                         xml.tag("staff-type", "alternate");
                   xml.tag("staff-lines", st->lines(Fraction(0,1)));
+                  if (needsLineDetails) {
+                        for (int lineIdx = 0; lineIdx < st->lines(Fraction(0, 1)); lineIdx++) {
+                              QString ld = QString("line-detail line=\"%1\"").arg(lineIdx + 1);
+                              if (lineColor != MScore::defaultColor)
+                                    ld += QString(" color=\"%1\"").arg(lineColor.name().toUpper());
+                              if (invis)
+                                    ld += " print-object=\"no\"";
+                              xml.tagE(ld);
+                              }
+                        }
+
                   if (st->isTabStaff(Fraction(0,1)) && instrument->stringData()) {
                         QList<instrString> l = instrument->stringData()->stringList();
                         for (int ii = 0; ii < l.size(); ii++) {
