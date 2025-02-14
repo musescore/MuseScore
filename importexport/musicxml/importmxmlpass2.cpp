@@ -2486,7 +2486,7 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direction sd, Beam*& beam, bool hasBeamingInfo)
+static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direction sd, Beam*& beam, bool hasBeamingInfo, QColor beamColor)
       {
       if (!cr) return;
       // create a new beam
@@ -2500,6 +2500,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
             beam = new Beam(cr->score());
             beam->setTrack(cr->track());
             beam->setBeamDirection(sd);
+            if (beamColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+                  beam->setColor(beamColor);
             }
       // add ChordRest to beam
       if (beam) {
@@ -6169,6 +6171,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       const QColor noteColor = _e.attributes().value("color").toString();
       QColor noteheadColor = QColor::Invalid;
       QColor stemColor = QColor::Invalid;
+      QColor beamColor = QColor::Invalid;
       bool noteheadParentheses = false;
       QString noteheadFilled;
       int velocity = round(_e.attributes().value("dynamics").toDouble() * 0.9);
@@ -6191,8 +6194,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else if (mnd.readProperties(_e)) {
                   // element handled
                   }
-            else if (_e.name() == "beam")
+            else if (_e.name() == "beam") {
+                  beamColor.setNamedColor(_e.attributes().value("color").toString());
                   beam(beamTypes);
+                  }
             else if (_e.name() == "chord") {
                   chord = true;
                   _e.skipCurrentElement();  // skip but don't log
@@ -6449,7 +6454,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   // regular note
                   // handle beam
                   if (!chord)
-                        handleBeamAndStemDir(c, bm, stemDir, currBeam, _pass1.hasBeamingInfo());
+                        handleBeamAndStemDir(c, bm, stemDir, currBeam, _pass1.hasBeamingInfo(), beamColor);
 
                   // append any grace chord after chord to the previous chord
                   Chord*const prevChord = measure->findChord(prevSTime, msTrack + msVoice);
