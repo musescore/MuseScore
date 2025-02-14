@@ -283,6 +283,8 @@ MenuItemList NotationStatusBarModel::makeAvailableZoomList()
         return {};
     }
 
+    TRACEFUNC;
+
     MenuItemList result;
 
     int currZoomPercentage = currentZoomPercentage();
