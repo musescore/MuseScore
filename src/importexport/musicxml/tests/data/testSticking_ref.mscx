@@ -302,8 +302,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -314,8 +313,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -326,8 +324,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -337,8 +334,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -354,8 +350,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -366,8 +361,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -378,8 +372,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -389,8 +382,7 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
@@ -425,8 +417,7 @@
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Beam>
@@ -450,8 +441,7 @@
               </Articulation>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -461,8 +451,7 @@
             <durationType>eighth</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -478,8 +467,7 @@
             <durationType>eighth</durationType>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
@@ -507,8 +495,7 @@
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -526,8 +513,7 @@
               </Articulation>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
@@ -570,8 +556,7 @@
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -584,8 +569,7 @@
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -598,8 +582,7 @@
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -612,8 +595,7 @@
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -625,8 +607,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>

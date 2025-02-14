@@ -533,8 +533,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -543,8 +542,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -553,8 +551,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -563,8 +560,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -577,8 +573,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>43</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -586,8 +581,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>43</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -595,8 +589,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>43</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -604,8 +597,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>43</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           </voice>
@@ -617,8 +609,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>44</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -627,8 +618,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>44</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -637,8 +627,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>44</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -647,8 +636,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>44</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -664,8 +652,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>45</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -673,8 +660,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>45</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -682,8 +668,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>45</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -691,8 +676,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>45</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           </voice>
@@ -704,8 +688,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>46</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -714,8 +697,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>46</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -724,8 +706,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>46</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -734,8 +715,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>46</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -748,8 +728,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>47</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -757,8 +736,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>47</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -766,8 +744,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>47</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -775,8 +752,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>47</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           </voice>
@@ -788,8 +764,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>48</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -797,8 +772,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>48</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -806,8 +780,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>48</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -815,8 +788,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>48</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
@@ -831,8 +803,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>49</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -841,8 +812,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>49</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -851,8 +821,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>49</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -861,8 +830,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>49</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -875,8 +843,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>50</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -884,8 +851,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>50</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -893,8 +859,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>50</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -902,8 +867,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>50</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           </voice>
@@ -915,8 +879,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>51</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -925,8 +888,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>51</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -935,8 +897,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>51</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -945,8 +906,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>51</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -959,8 +919,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -969,8 +928,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -979,8 +937,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -989,8 +946,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1006,8 +962,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>53</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1016,8 +971,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>53</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1026,8 +980,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>53</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1036,8 +989,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>53</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1050,8 +1002,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1060,8 +1011,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1070,8 +1020,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1080,8 +1029,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -1094,8 +1042,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1104,8 +1051,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1114,8 +1060,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1124,8 +1069,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1138,8 +1082,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -1148,8 +1091,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -1158,8 +1100,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -1168,8 +1109,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -1185,8 +1125,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>57</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1195,8 +1134,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>57</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1205,8 +1143,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>57</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1215,8 +1152,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>57</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1229,8 +1165,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1239,8 +1174,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1249,8 +1183,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1259,8 +1192,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1273,8 +1205,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1283,8 +1214,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1293,8 +1223,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1303,8 +1232,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1317,8 +1245,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1327,8 +1254,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1337,8 +1263,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1347,8 +1272,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1364,8 +1288,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>35</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1373,8 +1296,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>35</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1382,8 +1304,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>35</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1391,8 +1312,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>35</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1404,8 +1324,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1413,8 +1332,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1422,8 +1340,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1431,8 +1348,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1444,8 +1360,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1454,8 +1369,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1464,8 +1378,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1474,8 +1387,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1488,8 +1400,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1497,8 +1408,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1506,8 +1416,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1515,8 +1424,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1531,8 +1439,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>40</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1540,8 +1447,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>40</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1549,8 +1455,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>40</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1558,8 +1463,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>40</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1571,8 +1475,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>41</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1580,8 +1483,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>41</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1589,8 +1491,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>41</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1598,8 +1499,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>41</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1611,8 +1511,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1621,8 +1520,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1631,8 +1529,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -1641,8 +1538,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>42</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2134,8 +2030,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2143,8 +2038,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2152,8 +2046,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2161,8 +2054,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2174,8 +2066,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>39</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2183,8 +2074,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>39</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2192,8 +2082,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>39</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2201,8 +2090,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>39</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2214,8 +2102,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2224,8 +2111,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2234,8 +2120,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2244,8 +2129,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>54</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2258,8 +2142,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2268,8 +2151,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2278,8 +2160,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2288,8 +2169,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2302,8 +2182,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -2312,8 +2191,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -2322,8 +2200,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -2332,8 +2209,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <head>triangle-down</head>
               </Note>
             </Chord>
@@ -2346,8 +2222,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>58</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2356,8 +2231,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>58</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2366,8 +2240,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>58</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2376,8 +2249,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>58</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2390,8 +2262,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2400,8 +2271,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2410,8 +2280,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2420,8 +2289,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2434,8 +2302,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>62</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2444,8 +2311,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>62</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2454,8 +2320,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>62</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2464,8 +2329,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>62</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2478,8 +2342,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2488,8 +2351,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2498,8 +2360,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2508,8 +2369,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>63</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2522,8 +2382,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2532,8 +2391,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2542,8 +2400,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2552,8 +2409,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2566,8 +2422,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>70</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2575,8 +2430,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>70</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2584,8 +2438,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>70</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2593,8 +2446,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>70</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2606,8 +2458,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>75</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2615,8 +2466,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>75</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2624,8 +2474,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>75</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2633,8 +2482,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>75</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2646,8 +2494,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>81</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2656,8 +2503,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>81</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2666,8 +2512,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>81</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2676,8 +2521,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>81</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <head>diamond</head>
               </Note>
             </Chord>
@@ -2690,8 +2534,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>82</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2699,8 +2542,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>82</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2708,8 +2550,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>82</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2717,8 +2558,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>82</pitch>
-              <tpc>-9</tpc>
-              <tpc2>12</tpc2>
+              <tpc>12</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2730,8 +2570,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>84</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2740,8 +2579,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>84</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2750,8 +2588,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>84</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2760,8 +2597,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>84</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2774,8 +2610,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>27</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2784,8 +2619,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>27</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2794,8 +2628,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>27</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2804,8 +2637,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>27</pitch>
-              <tpc>-9</tpc>
-              <tpc2>11</tpc2>
+              <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2818,8 +2650,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>28</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2828,8 +2659,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>28</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2838,8 +2668,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>28</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2848,8 +2677,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>28</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2862,8 +2690,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>29</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2872,8 +2699,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>29</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2882,8 +2708,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>29</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2892,8 +2717,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>29</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2906,8 +2730,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>30</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2916,8 +2739,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>30</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2926,8 +2748,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>30</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2936,8 +2757,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>30</pitch>
-              <tpc>-9</tpc>
-              <tpc2>20</tpc2>
+              <tpc>20</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -2950,8 +2770,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2959,8 +2778,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2968,8 +2786,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -2977,8 +2794,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>36</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
@@ -2990,8 +2806,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -3000,8 +2815,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -3010,8 +2824,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -3020,8 +2833,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>37</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
@@ -3034,8 +2846,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -3043,8 +2854,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -3052,8 +2862,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -3061,8 +2870,7 @@
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           </voice>

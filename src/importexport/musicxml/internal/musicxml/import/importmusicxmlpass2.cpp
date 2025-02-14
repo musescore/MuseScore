@@ -6508,8 +6508,7 @@ static void setPitch(Note* note, const MusicXmlInstruments& instruments, const S
             // get pitch from instrument definition in drumset instead
             int unpitched = instruments.at(instrumentId).unpitched;
             note->setPitch(std::clamp(unpitched, 0, 127));
-            // TODO - does this need to be key-aware?
-            note->setTpc(pitch2tpc(unpitched, Key::C, Prefer::NEAREST));             // TODO: necessary ?
+            note->setTpcFromPitch();
         } else {
             //LOGD("disp step %d oct %d", displayStep, displayOctave);
             xmlSetPitch(note, mnp.displayStep(), 0, 0.0, mnp.displayOctave(), 0, instrument);
