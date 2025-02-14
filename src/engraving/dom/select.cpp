@@ -36,10 +36,13 @@
 #include "arpeggio.h"
 #include "articulation.h"
 #include "beam.h"
+#include "breath.h"
 #include "chord.h"
 #include "dynamic.h"
 #include "engravingitem.h"
+#include "expression.h"
 #include "figuredbass.h"
+#include "fingering.h"
 #include "hairpin.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
@@ -63,6 +66,7 @@
 #include "stemslash.h"
 #include "sticking.h"
 #include "stringtunings.h"
+#include "text.h"
 #include "tie.h"
 #include "guitarbend.h"
 #include "fret.h"
@@ -1084,117 +1088,43 @@ muse::ByteArray Selection::symbolListMimeData() const
     // scan selection element list, inserting relevant elements in a tick-sorted map
     for (EngravingItem* e : m_el) {
         switch (e->type()) {
-        /* All these element types are ignored:
-
-        Enabling copying of more element types requires enabling pasting in Score::pasteSymbols() in dom/paste.cpp
-
-                          case ElementType::SYMBOL:
-                          case ElementType::TEXT:
-                          case ElementType::INSTRUMENT_NAME:
-                          case ElementType::SLUR_SEGMENT:
-                          case ElementType::TIE_SEGMENT:
-                          case ElementType::STAFF_LINES:
-                          case ElementType::BAR_LINE:
-                          case ElementType::STEM_SLASH:
-                          case ElementType::LINE:
-                          case ElementType::BRACKET:
-                          case ElementType::ARPEGGIO:
-                          case ElementType::ACCIDENTAL:
-                          case ElementType::STEM:
-                          case ElementType::NOTE:
-                          case ElementType::CLEF:
-                          case ElementType::KEYSIG:
-                          case ElementType::TIMESIG:
-                          case ElementType::REST:
-                          case ElementType::MMREST:
-                          case ElementType::BREATH:
-                          case ElementType::GLISSANDO:
-                          case ElementType::MEASURE_REPEAT:
-                          case ElementType::IMAGE:
-                          case ElementType::TIE:
-                          case ElementType::CHORDLINE:
-                          case ElementType::BEAM:
-                          case ElementType::HOOK:
-                          case ElementType::MARKER:
-                          case ElementType::JUMP:
-                          case ElementType::FINGERING:
-                          case ElementType::TUPLET:
-                          case ElementType::TEMPO_TEXT:
-                          case ElementType::STAFF_TEXT:
-                          case ElementType::SYSTEM_TEXT:
-                          case ElementType::REHEARSAL_MARK:
-                          case ElementType::INSTRUMENT_CHANGE:
-                          case ElementType::BEND:
-                          case ElementType::TREMOLOBAR:
-                          case ElementType::VOLTA:
-                          case ElementType::OTTAVA_SEGMENT:
-                          case ElementType::TRILL_SEGMENT:
-                          case ElementType::VIBRATO_SEGMENT:
-                          case ElementType::TEXTLINE_SEGMENT:
-                          case ElementType::VOLTA_SEGMENT:
-                          case ElementType::PEDAL_SEGMENT:
-                          case ElementType::LAYOUT_BREAK:
-                          case ElementType::SPACER:
-                          case ElementType::STAFF_STATE:
-                          case ElementType::LEDGER_LINE:
-                          case ElementType::NOTEHEAD:
-                          case ElementType::NOTEDOT:
-                          case ElementType::TREMOLO:
-                          case ElementType::MEASURE:
-                          case ElementType::SELECTION:
-                          case ElementType::LASSO:
-                          case ElementType::SHADOW_NOTE:
-                          case ElementType::RUBBERBAND:
-                          case ElementType::TAB_DURATION_SYMBOL:
-                          case ElementType::FSYMBOL:
-                          case ElementType::PAGE:
-                          case ElementType::OTTAVA:
-                          case ElementType::PEDAL:
-                          case ElementType::TRILL:
-                          case ElementType::TEXTLINE:
-                          case ElementType::NOTELINE:
-                          case ElementType::SEGMENT:
-                          case ElementType::SYSTEM:
-                          case ElementType::COMPOUND:
-                          case ElementType::CHORD:
-                          case ElementType::SLUR:
-                          case ElementType::ELEMENT:
-                          case ElementType::ELEMENT_LIST:
-                          case ElementType::STAFF_LIST:
-                          case ElementType::MEASURE_LIST:
-                          case ElementType::LAYOUT:
-                          case ElementType::HBOX:
-                          case ElementType::VBOX:
-                          case ElementType::TBOX:
-                          case ElementType::FBOX:
-                          case ElementType::ACTION_ICON:
-                          case ElementType::OSSIA:
-                          case ElementType::BAGPIPE_EMBELLISHMENT:
-                                continue;
-        */
         case ElementType::ARTICULATION:
-            // ignore articulations not attached to chords/rest
-            if (e->explicitParent()->isChord()) {
-                Chord* par = toChord(e->explicitParent());
-                seg = par->segment();
-                break;
-            } else if (e->explicitParent()->isRest()) {
-                Rest* par = toRest(e->explicitParent());
-                seg = par->segment();
-                break;
+        case ElementType::ORNAMENT:
+        case ElementType::ARPEGGIO:
+        case ElementType::TREMOLO_SINGLECHORD: {
+            // ignore articulations not attached to chords/rest or segment
+            if (!e->explicitParent()->isChordRest()) {
+                continue;
             }
-            continue;
+            ChordRest* cr = toChordRest(e->explicitParent());
+            seg = cr->segment();
+        } break;
+        case ElementType::FERMATA:
+            seg = toFermata(e)->segment();
+            break;
+        case ElementType::BREATH:
+            seg = toBreath(e)->segment();
+            break;
         case ElementType::PLAYTECH_ANNOTATION:
         case ElementType::CAPO:
         case ElementType::STRING_TUNINGS:
         case ElementType::STAFF_TEXT:
             seg = toStaffTextBase(e)->segment();
             break;
+        case ElementType::EXPRESSION:
+            seg = toExpression(e)->segment();
+            break;
         case ElementType::STICKING:
             seg = toSticking(e)->segment();
             break;
         case ElementType::FIGURED_BASS:
             seg = toFiguredBass(e)->segment();
+            break;
+        case ElementType::LYRICS:
+            seg = toLyrics(e)->segment();
+            break;
+        case ElementType::DYNAMIC:
+            seg = toDynamic(e)->segment();
             break;
         case ElementType::HARMONY:
         case ElementType::FRET_DIAGRAM:
@@ -1204,22 +1134,42 @@ muse::ByteArray Selection::symbolListMimeData() const
                 break;
             }
             continue;
-        case ElementType::LYRICS:
-            seg = toLyrics(e)->segment();
-            break;
-        case ElementType::DYNAMIC:
-            seg = toDynamic(e)->segment();
-            break;
-        case ElementType::HAIRPIN_SEGMENT:
-            e = toHairpinSegment(e)->hairpin();
-        // fall through
-        case ElementType::HAIRPIN:
-            seg = toHairpin(e)->startSegment();
-            break;
         case ElementType::HARP_DIAGRAM:
             seg = toHarpPedalDiagram(e)->segment();
             break;
+        case ElementType::SLUR_SEGMENT:
+        case ElementType::HAIRPIN_SEGMENT:
+        case ElementType::OTTAVA_SEGMENT:
+        case ElementType::TRILL_SEGMENT:
+        case ElementType::LET_RING_SEGMENT:
+        case ElementType::VIBRATO_SEGMENT:
+        case ElementType::PALM_MUTE_SEGMENT:
+        case ElementType::WHAMMY_BAR_SEGMENT:
+        case ElementType::RASGUEADO_SEGMENT:
+        case ElementType::HARMONIC_MARK_SEGMENT:
+        case ElementType::PICK_SCRAPE_SEGMENT:
+        case ElementType::TEXTLINE_SEGMENT:
+        case ElementType::PEDAL_SEGMENT:
+            e = toSpannerSegment(e)->spanner();
+            [[fallthrough]];
+        case ElementType::SLUR:
+        case ElementType::HAIRPIN:
+        case ElementType::OTTAVA:
+        case ElementType::TRILL:
+        case ElementType::LET_RING:
+        case ElementType::VIBRATO:
+        case ElementType::PALM_MUTE:
+        case ElementType::WHAMMY_BAR:
+        case ElementType::RASGUEADO:
+        case ElementType::HARMONIC_MARK:
+        case ElementType::PICK_SCRAPE:
+        case ElementType::TEXTLINE:
+        case ElementType::PEDAL:
+            seg = toSpanner(e)->startSegment();
+            break;
         default:
+            // Elements of other types are ignored. To allow copying them,
+            // add support for them here and in `Score::pasteSymbols`.
             continue;
         }
         track_idx_t track = e->track();

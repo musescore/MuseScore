@@ -3,23 +3,22 @@
   <Score>
     <Division>480</Division>
     <Style>
-      <maskBarlinesForText>0</maskBarlinesForText>
-      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <pageNumberFontSize>9</pageNumberFontSize>
-      <pageNumberFontStyle>0</pageNumberFontStyle>
-      <spatium>1.76389</spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <open>1</open>
     <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
@@ -256,9 +255,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Sticking>
-            <text>2</text>
-            </Sticking>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -267,7 +263,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <text>3</text>
+            <text>2</text>
             </Sticking>
           <Chord>
             <durationType>quarter</durationType>
@@ -277,7 +273,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <text>4</text>
+            <text>3</text>
             </Sticking>
           <Chord>
             <durationType>quarter</durationType>
@@ -291,7 +287,7 @@
       <Measure>
         <voice>
           <Sticking>
-            <text>5</text>
+            <text>4</text>
             </Sticking>
           <Beam>
             <l1>30</l1>
@@ -304,9 +300,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Sticking>
-            <text>6</text>
-            </Sticking>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -314,9 +307,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Sticking>
-            <text>7</text>
-            </Sticking>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -324,9 +314,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Sticking>
-            <text>8</text>
-            </Sticking>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -335,7 +322,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <text>9</text>
+            <text>5</text>
             </Sticking>
           <Beam>
             <l1>34</l1>
@@ -348,9 +335,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Sticking>
-            <text>10</text>
-            </Sticking>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -359,7 +343,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <text>11</text>
+            <text>6</text>
             </Sticking>
           <Chord>
             <durationType>eighth</durationType>
@@ -368,9 +352,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Sticking>
-            <text>12</text>
-            </Sticking>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -383,7 +364,7 @@
       <Measure>
         <voice>
           <Sticking>
-            <text>13</text>
+            <text>7</text>
             </Sticking>
           <Chord>
             <durationType>whole</durationType>
@@ -392,12 +373,54 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>-7/8</fractions>
+            </location>
+          <Sticking>
+            <text>8</text>
+            </Sticking>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Sticking>
+            <text>9</text>
+            </Sticking>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Sticking>
+            <text>10</text>
+            </Sticking>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Sticking>
+            <text>11</text>
+            </Sticking>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Sticking>
+            <text>12</text>
+            </Sticking>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Sticking>
+            <text>13</text>
+            </Sticking>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Sticking>
+            <text>14</text>
+            </Sticking>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Sticking>
-            <text>14</text>
+            <text>15</text>
             </Sticking>
           <Chord>
             <durationType>whole</durationType>
