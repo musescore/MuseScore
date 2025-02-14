@@ -70,8 +70,6 @@ public:
     QVariant currentViewMode();
     bool zoomEnabled() const;
     int currentZoomPercentage() const;
-    muse::uicomponents::MenuItemList makeAvailableViewModeList();
-    muse::uicomponents::MenuItemList makeAvailableZoomList();
 
     Q_INVOKABLE void load();
 
@@ -104,6 +102,9 @@ private:
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
+    void initAvailableViewModeList();
+    void initAvailableZoomList();
+
     muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode);
 
     void dispatch(const muse::actions::ActionCode& code, const muse::actions::ActionData& args = muse::actions::ActionData());
@@ -120,6 +121,11 @@ private:
     QVariantList availableZoomList_property();
 
     QVariantList menuItemListToVariantList(const muse::uicomponents::MenuItemList& list) const;
+
+    muse::uicomponents::MenuItem* m_currentWorkspaceItem = nullptr;
+    muse::uicomponents::MenuItem* m_concertPitchItem = nullptr;
+    muse::uicomponents::MenuItemList m_availableViewModeList;
+    muse::uicomponents::MenuItemList m_availableZoomList;
 };
 }
 
