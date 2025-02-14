@@ -325,6 +325,7 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
         fluid_synth_bank_select(m_fluid->synth, channelIdx, program.bank);
         fluid_synth_program_change(m_fluid->synth, channelIdx, program.program);
         fluid_synth_cc(m_fluid->synth, channelIdx, 7, DEFAULT_MIDI_VOLUME);
+        fluid_synth_cc(m_fluid->synth, channelIdx, muse::midi::EXPRESSION_CONTROLLER, m_sequencer.naturalExpressionLevel());
         fluid_synth_cc(m_fluid->synth, channelIdx, 74, 0);
         fluid_synth_set_portamento_mode(m_fluid->synth, channelIdx, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
         fluid_synth_set_legato_mode(m_fluid->synth, channelIdx, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
