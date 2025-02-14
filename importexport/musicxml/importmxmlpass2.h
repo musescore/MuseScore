@@ -274,6 +274,7 @@ private:
       QString _wavyLineType;
       int _wavyLineNo { 0 };
       QString _arpeggioType;
+      QColor _arpeggioColor;
       bool _slurStop { false };
       bool _slurStart { false };
       bool _wavyLineStop { false };

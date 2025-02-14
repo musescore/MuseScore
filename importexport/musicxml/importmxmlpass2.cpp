@@ -8071,7 +8071,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
 //   addArpeggio
 //---------------------------------------------------------
 
-static void addArpeggio(ChordRest* cr, const QString& arpeggioType)
+static void addArpeggio(ChordRest* cr, const QString& arpeggioType, QColor arpeggioColor)
       {
       // no support for arpeggio on rest
       if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
@@ -8083,6 +8083,8 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType)
                   arpeggio->setArpeggioType(ArpeggioType::DOWN);
             else if (arpeggioType == "non-arpeggiate")
                   arpeggio->setArpeggioType(ArpeggioType::BRACKET);
+            if (arpeggioColor.isValid())
+                  arpeggio->setColor(arpeggioColor);
             // there can be only one
             if (!(static_cast<Chord*>(cr))->arpeggio()) {
                   cr->add(arpeggio.release());
@@ -8401,6 +8403,9 @@ void MusicXMLParserNotations::parse()
                   _arpeggioType = _e.attributes().value("direction").toString();
                   if (_arpeggioType.isEmpty())
                         _arpeggioType = "none";
+                  QColor color = _e.attributes().value("color").toString();
+                  if (color.isValid())
+                        _arpeggioColor = color;
                   _e.skipCurrentElement();  // skip but don't log
                   }
             else if (_e.name() == "articulations") {
@@ -8500,7 +8505,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                                          TrillStack& trills, MusicXMLTieMap& ties, std::vector<Note*>& unstartedTieNotes,
                                          std::vector<Note*>& unendedTieNotes)
       {
-      addArpeggio(cr, _arpeggioType);
+      addArpeggio(cr, _arpeggioType, _arpeggioColor);
       addWavyLine(cr, Fraction::fromTicks(tick), _wavyLineNo, _wavyLineType, spanners, trills, _logger, &_e);
 
       for (const Notation& notation : _notations) {

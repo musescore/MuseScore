@@ -197,6 +197,9 @@
         <stem>down</stem>
         <notehead color="#9437FF">normal</notehead>
         <beam number="1" color="#FF0000">begin</beam>
+        <notations>
+          <arpeggiate color="#FF0000"/>
+          </notations>
         </note>
       <note>
         <pitch>
