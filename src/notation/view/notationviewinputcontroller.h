@@ -74,8 +74,10 @@ public:
     virtual void hideContextMenu() = 0;
 
     virtual void showElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
-    virtual void hideElementPopup() = 0;
+    virtual void hideElementPopup(const ElementType& elementType = ElementType::INVALID) = 0;
     virtual void toggleElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
+
+    virtual bool elementPopupIsOpen(const ElementType& elementType) const = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
@@ -166,6 +168,7 @@ private:
     void startDragElements(ElementType elementsType, const muse::PointF& elementsOffset);
 
     void togglePopupForItemIfSupports(const EngravingItem* item);
+    void updateShadowNotePopupVisibility(bool forceHide = false);
 
     float hitWidth() const;
 

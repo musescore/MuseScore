@@ -259,6 +259,11 @@ void PopupWindow_QQuickView::setOnHidden(const std::function<void()>& callback)
     m_onHidden = callback;
 }
 
+void PopupWindow_QQuickView::setTakeFocusOnClick(bool takeFocusOnClick)
+{
+    m_takeFocusOnClick = takeFocusOnClick;
+}
+
 bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == m_view) {
@@ -272,7 +277,7 @@ bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
             m_view->rootObject()->forceActiveFocus();
         }
 
-        if (event->type() == QEvent::MouseButtonPress) {
+        if (m_takeFocusOnClick && event->type() == QEvent::MouseButtonPress) {
             forceActiveFocus();
         }
     }

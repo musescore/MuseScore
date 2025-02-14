@@ -41,7 +41,7 @@ Item {
                                         ? loader.item.navigationOrderEnd
                                         : navigationOrderStart
 
-    signal opened()
+    signal opened(var popupType)
     signal closed()
 
     QtObject {
@@ -55,6 +55,7 @@ Item {
             case Notation.TYPE_SOUND_FLAG: return soundFlagComp
             case Notation.TYPE_DYNAMIC: return dynamicComp
             case Notation.TYPE_PARTIAL_TIE: return partialTieComp
+            case Notation.TYPE_SHADOW_NOTE: return shadowNoteComp
             }
 
             return null
@@ -70,12 +71,10 @@ Item {
         }
     }
 
-    function show(elementType, elementRect) {
+    function show(popupType, elementRect) {
         close()
 
-        var component = prv.componentByType(elementType)
-
-        var popup = loader.loadPopup(component, elementRect)
+        var popup = loader.loadPopup(popupType, elementRect)
         popup.open()
     }
 
@@ -91,8 +90,8 @@ Item {
         anchors.fill: parent
         active: false
 
-        function loadPopup(comp, elementRect) {
-            loader.sourceComponent = comp
+        function loadPopup(popupType, elementRect) {
+            loader.sourceComponent = prv.componentByType(popupType)
             loader.active = true
 
             const popup = loader.item
@@ -101,7 +100,7 @@ Item {
             popup.parent = container
 
             popup.opened.connect(function() {
-                container.opened()
+                container.opened(popupType)
             })
 
             popup.closed.connect(function() {
@@ -165,6 +164,12 @@ Item {
     Component {
         id: partialTieComp
         PartialTiePopup {
+        }
+    }
+
+    Component {
+        id: shadowNoteComp
+        ShadowNotePopup {
         }
     }
 }

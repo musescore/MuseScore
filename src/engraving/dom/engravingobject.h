@@ -190,6 +190,7 @@ class VoltaSegment;
 class WhammyBar;
 class WhammyBarSegment;
 class FretCircle;
+class ShadowNote;
 
 class LinkedObjects;
 
@@ -456,6 +457,7 @@ public:
     CONVERT(StringTunings, STRING_TUNINGS)
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
     CONVERT(Parenthesis, PARENTHESIS)
+    CONVERT(ShadowNote, SHADOW_NOTE)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -871,5 +873,6 @@ CONVERT(PartialTie)
 CONVERT(PartialLyricsLine)
 CONVERT(PartialLyricsLineSegment)
 CONVERT(Parenthesis)
+CONVERT(ShadowNote)
 #undef CONVERT
 }
