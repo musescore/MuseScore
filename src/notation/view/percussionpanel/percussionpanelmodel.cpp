@@ -39,7 +39,8 @@ static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
 using namespace muse;
-using namespace ui;
+using namespace muse::actions;
+using namespace muse::ui;
 using namespace mu::notation;
 
 static const std::unordered_map<PercussionPanelPadModel::PadAction, NoteAddingMode> WRITE_ACTION_MAP = {
