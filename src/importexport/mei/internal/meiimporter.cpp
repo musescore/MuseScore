@@ -1942,7 +1942,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     if (accidNode) {
         meiAccid.Read(accidNode);
     } else {
-        // Support for non MEI-Basic accid and accid.ges encoded in <note> - this is not academic...
+        // Support for non MEI Basic accid and accid.ges encoded in <note> - this is not academic...
         meiAccid.Read(noteNode);
         // Remove the xml:id read from the note in that case
         meiAccid.m_xmlId = "";

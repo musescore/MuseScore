@@ -1978,7 +1978,7 @@ libmei::RepeatMark Convert::markerToMEI(const engraving::Marker* marker, String&
         break;
     case (engraving::MarkerType::VARCODA):
     case (engraving::MarkerType::VARSEGNO):
-        // Here we could as @glyph.auth and @glyph.name but there as not in MEI-Basic
+        // Here we could use @glyph.auth and @glyph.name, but they are not included in MEI Basic
         break;
     case (engraving::MarkerType::TOCODASYM):
         text = "To 𝄌";
