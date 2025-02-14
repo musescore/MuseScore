@@ -144,7 +144,7 @@ void MidiDeviceMappingModel::load()
     };
 
     for (const ActionCode& actionCode : allMidiActions()) {
-        UiAction action = uiActionsRegister()->action(actionCode);
+        const UiAction& action = uiActionsRegister()->action(actionCode);
 
         if (action.isValid()) {
             MidiControlsMapping midiMapping(actionCode);
