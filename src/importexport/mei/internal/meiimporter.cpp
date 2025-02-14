@@ -1942,7 +1942,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     if (accidNode) {
         meiAccid.Read(accidNode);
     } else {
-        // Support for non MEI-Basic accid and accid.ges encoded in <note> - this is not academic...
+        // Support for non MEI Basic accid and accid.ges encoded in <note> - this is not academic...
         meiAccid.Read(noteNode);
         // Remove the xml:id read from the note in that case
         meiAccid.m_xmlId = "";
@@ -3256,6 +3256,8 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
         const int staffIdx = this->getStaffIndex(meiStaffDef.GetN());
         staff->setId(staffIdx);
         staff->setLines(Fraction(0, 1), staffSt.lines);
+        staff->staffType(Fraction(0, 1))->setInvisible(staffSt.invisible);
+        staff->staffType(Fraction(0, 1))->setUserMag(staffSt.scale / 100);
         part->instrument()->setTranspose(staffSt.interval);
 
         m_score->appendStaff(staff);

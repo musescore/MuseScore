@@ -1978,7 +1978,7 @@ libmei::RepeatMark Convert::markerToMEI(const engraving::Marker* marker, String&
         break;
     case (engraving::MarkerType::VARCODA):
     case (engraving::MarkerType::VARSEGNO):
-        // Here we could as @glyph.auth and @glyph.name but there as not in MEI-Basic
+        // Here we could use @glyph.auth and @glyph.name, but they are not included in MEI Basic
         break;
     case (engraving::MarkerType::TOCODASYM):
         text = "To 𝄌";
@@ -2773,6 +2773,8 @@ Convert::StaffStruct Convert::staffFromMEI(const libmei::StaffDef& meiStaffDef, 
     if (meiStaffDef.HasLines()) {
         staffSt.lines = meiStaffDef.GetLines();
     }
+    staffSt.invisible = meiStaffDef.GetLinesVisible() == libmei::BOOLEAN_false;
+    staffSt.scale = meiStaffDef.HasScale() ? meiStaffDef.GetScale() : 100;
 
     // Set it only if both are given
     if (meiStaffDef.HasTransDiat() && meiStaffDef.HasTransSemi()) {
@@ -2803,6 +2805,15 @@ libmei::StaffDef Convert::staffToMEI(const engraving::Staff* staff)
     const engraving::StaffType* staffType = staff->staffType(engraving::Fraction(0, 1));
     if (staffType) {
         meiStaffDef.SetLines(staffType->lines());
+    }
+    // @lines.visible
+    if (staff->isLinesInvisible(engraving::Fraction(0, 1))) {
+        meiStaffDef.SetLinesVisible(libmei::BOOLEAN_false);
+    }
+    // @scale
+    const double scale = staff->staffMag(engraving::Fraction(0, 1));
+    if (!muse::RealIsEqual(scale, 1.0)) {
+        meiStaffDef.SetScale(scale * 100);
     }
     return meiStaffDef;
 }
