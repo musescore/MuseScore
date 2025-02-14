@@ -417,7 +417,7 @@ class GuitarPro5 : public GuitarPro
     int readBeatEffects(int track, mu::engraving::Segment* segment) override;
     ReadNoteResult readNote(int string, Note* note);
     bool readMixChange(Measure* measure) override;
-    void readMeasure(Measure* measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
+    void readMeasure(Measure * measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
     bool readTracks();
     void readMeasures(int startingTempo);
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);

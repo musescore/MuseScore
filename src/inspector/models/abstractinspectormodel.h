@@ -193,7 +193,7 @@ protected:
     PointFPropertyItem* buildPointFPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
                                                                                                   const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
-    using ConvertPropertyValueFunc = std::function<QVariant(const QVariant&)>;
+    using ConvertPropertyValueFunc = std::function<QVariant (const QVariant&)>;
     void loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc = nullptr);
     void loadPropertyItem(PropertyItem* propertyItem, const QList<engraving::EngravingItem*>& elements,
                           ConvertPropertyValueFunc convertElementPropertyValueFunc = nullptr);

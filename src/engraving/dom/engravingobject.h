@@ -293,7 +293,7 @@ protected:
     void addChild(EngravingObject* o);
     void removeChild(EngravingObject* o);
 
-    const ElementStyle* m_elementStyle {& EMPTY_STYLE };
+    const ElementStyle* m_elementStyle { &EMPTY_STYLE };
     PropertyFlags* m_propertyFlagsList = nullptr;
     LinkedObjects* m_links = nullptr;
     Score* m_score = nullptr;
