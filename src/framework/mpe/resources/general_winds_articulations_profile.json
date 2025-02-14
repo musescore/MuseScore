@@ -3660,7 +3660,7 @@
         "Mute": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 8000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
