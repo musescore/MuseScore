@@ -179,7 +179,7 @@ void PercussionPanelPadListModel::setDrumset(const engraving::Drumset* drumset)
     removeEmptyRows();
 }
 
-mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const engraving::Drumset* defaultDrumset) const
+mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const engraving::Drumset& defaultDrumset) const
 {
     //! NOTE: The idea of this method is take a "default" (template) drumset, find matching drums in the current drumset, and evaluate/return
     //! the default panel layout based on this information. The reason we can't simply revert to the default drumset in its entirety is that
@@ -192,20 +192,20 @@ mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const
     QList<int /*pitch*/> noTemplateFound;
 
     for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
-        if (defaultDrumset->isValid(pitch) && !defaultLayout.isValid(pitch)) {
+        if (defaultDrumset.isValid(pitch) && !defaultLayout.isValid(pitch)) {
             // Pitch was deleted - restore it...
-            defaultLayout.drum(pitch) = defaultDrumset->drum(pitch);
+            defaultLayout.drum(pitch) = defaultDrumset.drum(pitch);
             continue;
         }
         //! NOTE: Pitch + drum name isn't exactly the most robust identifier, but this will probably change with the new percussion ID system
-        if (!defaultDrumset->isValid(pitch) || defaultLayout.name(pitch) != defaultDrumset->name(pitch)) {
+        if (!defaultDrumset.isValid(pitch) || defaultLayout.name(pitch) != defaultDrumset.name(pitch)) {
             // Drum is valid, but we can't find a template for it. Set the position chromatically later...
             noTemplateFound.emplaceBack(pitch);
             continue;
         }
 
-        const int templateRow = defaultDrumset->drum(pitch).panelRow;
-        const int templateColumn = defaultDrumset->drum(pitch).panelColumn;
+        const int templateRow = defaultDrumset.drum(pitch).panelRow;
+        const int templateColumn = defaultDrumset.drum(pitch).panelColumn;
 
         defaultLayout.drum(pitch).panelRow = templateRow;
         defaultLayout.drum(pitch).panelColumn = templateColumn;

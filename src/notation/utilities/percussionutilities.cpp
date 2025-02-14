@@ -33,6 +33,23 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
+void PercussionUtilities::readDrumset(const muse::ByteArray& drumMapping, Drumset& drumset)
+{
+    XmlReader reader(drumMapping);
+
+    while (reader.readNextStartElement()) {
+        if (reader.name() == "museScore") {
+            while (reader.readNextStartElement()) {
+                if (reader.name() == "Drum") {
+                    drumset.load(reader);
+                } else {
+                    reader.unknown();
+                }
+            }
+        }
+    }
+}
+
 /// Returns a drum note prepared for preview.
 std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset* drumset, int pitch)
 {

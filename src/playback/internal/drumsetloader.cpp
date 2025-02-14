@@ -23,8 +23,7 @@
 #include "drumsetloader.h"
 
 #include "notation/notationtypes.h"
-
-#include "engraving/rw/xmlreader.h"
+#include "notation/utilities/percussionutilities.h"
 
 #include "global/types/bytearray.h"
 
@@ -32,23 +31,6 @@ using namespace mu::playback;
 using namespace muse::audio;
 using namespace mu::notation;
 using namespace mu::engraving;
-
-static void readDrumset(const muse::ByteArray& drumMapping, Drumset& drumset)
-{
-    XmlReader reader(drumMapping);
-
-    while (reader.readNextStartElement()) {
-        if (reader.name() == "museScore") {
-            while (reader.readNextStartElement()) {
-                if (reader.name() == "Drum") {
-                    drumset.load(reader);
-                } else {
-                    reader.unknown();
-                }
-            }
-        }
-    }
-}
 
 void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& trackId, const AudioResourceMeta& resourceMeta)
 {
@@ -93,7 +75,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
     }
 
     Drumset drumset;
-    readDrumset(drumMapping, drumset);
+    PercussionUtilities::readDrumset(drumMapping, drumset);
     replaceDrumset(notation, trackId, drumset);
 
     m_drumsetCache.emplace(instrumentId, std::move(drumset));

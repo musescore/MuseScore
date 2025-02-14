@@ -490,16 +490,14 @@ void PercussionPanelModel::resetLayout()
     Instrument* inst = instAndPart.first;
     Part* part = instAndPart.second;
 
-    IF_ASSERT_FAILED(inst && inst->drumset() && part) {
+    IF_ASSERT_FAILED(audioSettings() && inst && part) {
         return;
     }
 
-    const InstrumentTemplate& instTemplate = instrumentsRepository()->instrumentTemplate(inst->id());
-    const Drumset* defaultDrumset = instTemplate.drumset;
+    const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
+    const bool isMuseSamplerDrumset = resourceMeta.type == muse::audio::AudioResourceType::MuseSamplerSoundPack;
 
-    IF_ASSERT_FAILED(defaultDrumset) {
-        return;
-    }
+    Drumset defaultDrumset = isMuseSamplerDrumset ? museSamplerDefaultDrumset() : standardDefaultDrumset();
 
     Drumset defaultLayout = m_padListModel->constructDefaultLayout(defaultDrumset);
     if (defaultLayout == *m_padListModel->drumset()) {
@@ -512,6 +510,45 @@ void PercussionPanelModel::resetLayout()
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Reset percussion panel layout"));
     score()->undo(new engraving::ChangeDrumset(inst, defaultLayout, part));
     undoStack->commitChanges();
+}
+
+Drumset PercussionPanelModel::standardDefaultDrumset() const
+{
+    const std::pair<Instrument*, Part*> instAndPart = getCurrentInstrumentAndPart();
+    const Instrument* inst = instAndPart.first;
+    const Part* part = instAndPart.second;
+
+    IF_ASSERT_FAILED(inst && inst->drumset() && part) {
+        return Drumset();
+    }
+
+    const InstrumentTemplate& instTemplate = instrumentsRepository()->instrumentTemplate(inst->id());
+    IF_ASSERT_FAILED(instTemplate.drumset) {
+        return Drumset();
+    }
+
+    return *instTemplate.drumset;
+}
+
+Drumset PercussionPanelModel::museSamplerDefaultDrumset() const
+{
+    IF_ASSERT_FAILED(audioSettings()) {
+        return Drumset();
+    }
+
+    const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
+
+    const int instrumentId = resourceMeta.attributeVal(u"museUID").toInt();
+
+    const muse::ByteArray drumMapping = museSampler()->drumMapping(instrumentId);
+    IF_ASSERT_FAILED(!drumMapping.empty()) {
+        return Drumset();
+    }
+
+    Drumset defaultDrumset;
+    PercussionUtilities::readDrumset(drumMapping, defaultDrumset);
+
+    return defaultDrumset;
 }
 
 InstrumentTrackId PercussionPanelModel::currentTrackId() const

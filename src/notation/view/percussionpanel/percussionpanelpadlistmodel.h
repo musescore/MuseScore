@@ -77,7 +77,7 @@ public:
 
     QList<PercussionPanelPadModel*> padList() const { return m_padModels; }
 
-    mu::engraving::Drumset constructDefaultLayout(const engraving::Drumset* templateDrumset) const;
+    mu::engraving::Drumset constructDefaultLayout(const engraving::Drumset& templateDrumset) const;
     int nextAvailableIndex(int pitch) const; //! NOTE: This may be equal to m_padModels.size()
     int nextAvailablePitch(int pitch) const;
 
