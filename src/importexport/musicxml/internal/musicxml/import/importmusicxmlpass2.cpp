@@ -2376,7 +2376,7 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo)
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo, Color beamColor)
 {
     if (!cr) {
         return;
@@ -2392,6 +2392,9 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         beam = Factory::createBeam(cr->score()->dummy()->system());
         beam->setTrack(cr->track());
         beam->setDirection(sd);
+        if (beamColor.isValid()) {
+            beam->setColor(beamColor);
+        }
     }
     // add ChordRest to beam
     if (beam) {
@@ -6661,6 +6664,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     const Color noteColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     Color noteheadColor;
     Color stemColor;
+    Color beamColor;
     bool noteheadParentheses = false;
     String noteheadFilled;
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
@@ -6684,6 +6688,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
         } else if (mnd.readProperties(m_e)) {
             // element handled
         } else if (m_e.name() == "beam") {
+            beamColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             beam(beamTypes);
         } else if (m_e.name() == "chord") {
             chord = true;
@@ -6951,7 +6956,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // regular note
             // handle beam
             if (!chord) {
-                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo());
+                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor);
             }
 
             // append any grace chord after chord to the previous chord
