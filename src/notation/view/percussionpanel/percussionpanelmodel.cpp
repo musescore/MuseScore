@@ -285,22 +285,22 @@ void PercussionPanelModel::setUpConnections()
 
     m_padListModel->padActionRequested().onReceive(this, [this](PercussionPanelPadModel::PadAction action, int pitch) {
         switch (action) {
-        case PercussionPanelPadModel::PadAction::TRIGGER_STANDARD:
-        case PercussionPanelPadModel::PadAction::TRIGGER_ADD:
-        case PercussionPanelPadModel::PadAction::TRIGGER_INSERT:
-            onPadTriggered(pitch, action);
-            break;
-        case PercussionPanelPadModel::PadAction::DUPLICATE:
-            onDuplicatePadRequested(pitch);
-            break;
-        case PercussionPanelPadModel::PadAction::DELETE:
-            onDeletePadRequested(pitch);
-            break;
-        case PercussionPanelPadModel::PadAction::DEFINE_SHORTCUT:
-            onDefinePadShortcutRequested(pitch);
-            break;
-        default:
-            break;
+            case PercussionPanelPadModel::PadAction::TRIGGER_STANDARD:
+            case PercussionPanelPadModel::PadAction::TRIGGER_ADD:
+            case PercussionPanelPadModel::PadAction::TRIGGER_INSERT:
+                onPadTriggered(pitch, action);
+                break;
+            case PercussionPanelPadModel::PadAction::DUPLICATE:
+                onDuplicatePadRequested(pitch);
+                break;
+            case PercussionPanelPadModel::PadAction::DELETE:
+                onDeletePadRequested(pitch);
+                break;
+            case PercussionPanelPadModel::PadAction::DEFINE_SHORTCUT:
+                onDefinePadShortcutRequested(pitch);
+                break;
+            default:
+                break;
         }
     });
 

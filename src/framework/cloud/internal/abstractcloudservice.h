@@ -114,7 +114,7 @@ protected:
 
     RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
 
-    using RequestCallback = std::function<Ret()>;
+    using RequestCallback = std::function<Ret ()>;
     Ret executeRequest(const RequestCallback& requestCallback);
 
     Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
