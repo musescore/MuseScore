@@ -3256,6 +3256,8 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
         const int staffIdx = this->getStaffIndex(meiStaffDef.GetN());
         staff->setId(staffIdx);
         staff->setLines(Fraction(0, 1), staffSt.lines);
+        staff->staffType(Fraction(0, 1))->setInvisible(staffSt.invisible);
+        staff->staffType(Fraction(0, 1))->setUserMag(staffSt.scale / 100);
         part->instrument()->setTranspose(staffSt.interval);
 
         m_score->appendStaff(staff);
