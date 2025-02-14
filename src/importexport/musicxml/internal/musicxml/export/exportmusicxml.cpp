@@ -7898,7 +7898,11 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
     for (size_t i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
         const double mag = st->staffMag(Fraction(0, 1));
-        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0) || !st->show()) {
+        const Color lineColor = st->color(Fraction(0, 1));
+        const bool invis = st->isLinesInvisible(Fraction(0, 1));
+        const bool needsLineDetails = invis || lineColor != engravingConfiguration()->defaultColor();
+        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0)
+            || !st->show() || needsLineDetails) {
             XmlWriter::Attributes attributes;
             if (staves > 1) {
                 attributes.push_back({ "number", i + 1 });
@@ -7913,6 +7917,19 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             }
 
             xml.tag("staff-lines", st->lines(Fraction(0, 1)));
+            if (needsLineDetails) {
+                for (int lineIdx = 0; lineIdx < st->lines(Fraction(0, 1)); ++lineIdx) {
+                    String ld = String(u"line-detail line=\"%1\"").arg(lineIdx + 1);
+                    if (lineColor != engravingConfiguration()->defaultColor()) {
+                        ld += String(u" color=\"%1\"").arg(String::fromStdString(lineColor.toString()));
+                    }
+                    if (invis) {
+                        ld += u" print-object=\"no\"";
+                    }
+                    xml.tagRaw(ld);
+                }
+            }
+
             if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
                 std::vector<instrString> l = instrument->stringData()->stringList();
                 for (size_t ii = 0; ii < l.size(); ii++) {

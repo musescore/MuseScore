@@ -830,6 +830,9 @@ TEST_F(MusicXml_Tests, lines3) {
 TEST_F(MusicXml_Tests, lines4) {
     musicXmlMscxExportTestRef("testLines4");
 }
+TEST_F(MusicXml_Tests, lineDetails) {
+    musicXmlMscxExportTestRef("testLineDetails");
+}
 TEST_F(MusicXml_Tests, lyricBracket) {
     musicXmlImportTestRef("testLyricBracket");
 }
