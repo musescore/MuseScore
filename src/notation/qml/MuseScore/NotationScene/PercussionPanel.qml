@@ -421,7 +421,7 @@ Item {
                 drawFocusBorderInsideRect: true
 
                 onClicked: {
-                    padGrid.model.addEmptyRow()
+                    padGrid.model.addEmptyRow(/*focusFirstInNewRow*/ true)
                     flickable.goToBottom()
                 }
             }

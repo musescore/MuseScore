@@ -236,9 +236,13 @@ public:
     void setUseNewPercussionPanel(bool use) override;
     muse::async::Notification useNewPercussionPanelChanged() const override;
 
-    bool autoShowPercussionPanel() const override;
-    void setAutoShowPercussionPanel(bool autoShow) override;
-    muse::async::Notification autoShowPercussionPanelChanged() const override;
+    PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
+    void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode percussionPanelAutoShowMode) override;
+    muse::async::Notification percussionPanelAutoShowModeChanged() const override;
+
+    bool autoClosePercussionPanel() const override;
+    void setAutoClosePercussionPanel(bool autoClose) override;
+    muse::async::Notification autoClosePercussionPanelChanged() const override;
 
     bool showPercussionPanelPadSwapDialog() const override;
     void setShowPercussionPanelPadSwapDialog(bool show) override;
@@ -295,7 +299,8 @@ private:
     muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;
     muse::async::Notification m_useNewPercussionPanelChanged;
-    muse::async::Notification m_autoShowPercussionPanelChanged;
+    muse::async::Notification m_percussionPanelAutoShowModeChanged;
+    muse::async::Notification m_autoClosePercussionPanelChanged;
     muse::async::Notification m_showPercussionPanelPadSwapDialogChanged;
     muse::async::Notification m_percussionPanelMoveMidiNotesAndShortcutsChanged;
 
