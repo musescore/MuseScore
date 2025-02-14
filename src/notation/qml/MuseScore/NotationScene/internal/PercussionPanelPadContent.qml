@@ -57,14 +57,14 @@ Column {
             enabled: mainContentArea.enabled
             hoverEnabled: true
 
-            onPressed: {
+            onPressed: function(event) {
                 ui.tooltip.hide(root)
 
                 if (!Boolean(root.padModel)) {
                     return
                 }
 
-                root.padModel.triggerPad()
+                root.padModel.triggerPad(event.modifiers)
             }
 
             onContainsMouseChanged: {

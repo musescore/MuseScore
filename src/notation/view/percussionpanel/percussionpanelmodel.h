@@ -119,12 +119,12 @@ private:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void onPadTriggered(int pitch);
+    void onPadTriggered(int pitch, const PercussionPanelPadModel::PadAction& action);
     void onDuplicatePadRequested(int pitch);
     void onDeletePadRequested(int pitch);
     void onDefinePadShortcutRequested(int pitch);
 
-    void writePitch(int pitch);
+    void writePitch(int pitch, const NoteAddingMode& addingMode);
     void playPitch(int pitch);
 
     void resetLayout();

@@ -42,6 +42,12 @@ using namespace muse;
 using namespace ui;
 using namespace mu::notation;
 
+static const std::unordered_map<PercussionPanelPadModel::PadAction, NoteAddingMode> WRITE_ACTION_MAP = {
+    { PercussionPanelPadModel::PadAction::TRIGGER_STANDARD, NoteAddingMode::NextChord },
+    { PercussionPanelPadModel::PadAction::TRIGGER_ADD, NoteAddingMode::CurrentChord },
+    { PercussionPanelPadModel::PadAction::TRIGGER_INSERT, NoteAddingMode::InsertChord }
+};
+
 PercussionPanelModel::PercussionPanelModel(QObject* parent)
     : QObject(parent)
 {
@@ -278,8 +284,10 @@ void PercussionPanelModel::setUpConnections()
 
     m_padListModel->padActionRequested().onReceive(this, [this](PercussionPanelPadModel::PadAction action, int pitch) {
         switch (action) {
-        case PercussionPanelPadModel::PadAction::TRIGGER:
-            onPadTriggered(pitch);
+        case PercussionPanelPadModel::PadAction::TRIGGER_STANDARD:
+        case PercussionPanelPadModel::PadAction::TRIGGER_ADD:
+        case PercussionPanelPadModel::PadAction::TRIGGER_INSERT:
+            onPadTriggered(pitch, action);
             break;
         case PercussionPanelPadModel::PadAction::DUPLICATE:
             onDuplicatePadRequested(pitch);
@@ -361,11 +369,11 @@ bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)
     return true;
 }
 
-void PercussionPanelModel::onPadTriggered(int pitch)
+void PercussionPanelModel::onPadTriggered(int pitch, const PercussionPanelPadModel::PadAction& action)
 {
     switch (currentPanelMode()) {
     case PanelMode::Mode::EDIT_LAYOUT: return;
-    case PanelMode::Mode::WRITE: writePitch(pitch); // fall through
+    case PanelMode::Mode::WRITE: writePitch(pitch, WRITE_ACTION_MAP.at(action)); // fall through
     case PanelMode::Mode::SOUND_PREVIEW: playPitch(pitch);
     default: break;
     }
@@ -445,7 +453,7 @@ void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
     undoStack->commitChanges();
 }
 
-void PercussionPanelModel::writePitch(int pitch)
+void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMode)
 {
     INotationUndoStackPtr undoStack = notation()->undoStack();
     if (!interaction() || !undoStack) {
@@ -457,7 +465,7 @@ void PercussionPanelModel::writePitch(int pitch)
     NoteInputParams params;
     params.drumPitch = pitch;
 
-    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, NoteAddingMode::NextChord);
+    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
     dispatcher()->dispatch("note-action", args);
 }
 

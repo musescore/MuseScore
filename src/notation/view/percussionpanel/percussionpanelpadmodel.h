@@ -67,10 +67,12 @@ public:
     QList<QVariantMap> footerContextMenuItems() const;
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
-    Q_INVOKABLE void triggerPad();
+    Q_INVOKABLE void triggerPad(const Qt::KeyboardModifiers& modifiers);
 
     enum class PadAction {
-        TRIGGER,
+        TRIGGER_STANDARD,
+        TRIGGER_ADD,
+        TRIGGER_INSERT,
         DUPLICATE,
         DELETE,
         DEFINE_SHORTCUT,

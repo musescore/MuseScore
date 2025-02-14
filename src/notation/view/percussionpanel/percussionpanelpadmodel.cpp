@@ -115,7 +115,15 @@ void PercussionPanelPadModel::handleMenuItem(const QString& itemId)
     }
 }
 
-void PercussionPanelPadModel::triggerPad()
+void PercussionPanelPadModel::triggerPad(const Qt::KeyboardModifiers& mods)
 {
-    m_padActionTriggered.send(PadAction::TRIGGER);
+    PadAction action = PadAction::TRIGGER_STANDARD;
+
+    if (mods & Qt::ShiftModifier && (mods & Qt::ControlModifier || mods & Qt::MetaModifier)) {
+        action = PadAction::TRIGGER_INSERT;
+    } else if (mods & Qt::ShiftModifier) {
+        action = PadAction::TRIGGER_ADD;
+    }
+
+    m_padActionTriggered.send(action);
 }
