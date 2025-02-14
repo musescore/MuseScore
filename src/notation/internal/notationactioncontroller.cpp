@@ -2439,8 +2439,8 @@ void NotationActionController::registerAction(const ActionCode& code, void (INot
 
 void NotationActionController::notifyAccessibilityAboutActionTriggered(const ActionCode& ActionCode)
 {
-    const muse::ui::UiAction action = actionRegister()->action(ActionCode);
-    std::string titleStr  = action.title.qTranslatedWithoutMnemonic().toStdString();
+    const muse::ui::UiAction& action = actionRegister()->action(ActionCode);
+    std::string titleStr = action.title.qTranslatedWithoutMnemonic().toStdString();
 
     notifyAccessibilityAboutVoiceInfo(titleStr);
 }
