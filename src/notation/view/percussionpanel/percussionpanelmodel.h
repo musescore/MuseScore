@@ -30,6 +30,7 @@
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
+#include "musesampler/imusesamplerinfo.h"
 #include "iinstrumentsrepository.h"
 #include "inotationconfiguration.h"
 
@@ -54,6 +55,7 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
     muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
     muse::Inject<INotationConfiguration> configuration = { this };
 
@@ -126,6 +128,8 @@ private:
     void playPitch(int pitch);
 
     void resetLayout();
+    Drumset standardDefaultDrumset() const;
+    Drumset museSamplerDefaultDrumset() const;
 
     mu::engraving::InstrumentTrackId currentTrackId() const;
 
