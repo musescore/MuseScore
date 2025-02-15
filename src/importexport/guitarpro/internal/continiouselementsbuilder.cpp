@@ -339,7 +339,7 @@ void ContiniousElementsBuilder::setupAddedElement(track_idx_t trackIdx, ImportTy
     {
         if (lineElem->isHairpin()) {
             toHairpin(lineElem)->setHairpinType(
-                importType == ImportType::HAIRPIN_CRESCENDO ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
+                importType == ImportType::HAIRPIN_CRESCENDO ? HairpinType::CRESC_HAIRPIN : HairpinType::DIM_HAIRPIN);
         }
 
         break;

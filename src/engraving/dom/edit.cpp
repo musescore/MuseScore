@@ -3885,7 +3885,7 @@ Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2)
     if (type == HairpinType::CRESC_LINE) {
         hairpin->setBeginText(u"cresc.");
         hairpin->setContinueText(u"(cresc.)");
-    } else if (type == HairpinType::DECRESC_LINE) {
+    } else if (type == HairpinType::DIM_LINE) {
         hairpin->setBeginText(u"dim.");
         hairpin->setContinueText(u"(dim.)");
     }
@@ -3990,7 +3990,7 @@ Hairpin* Score::addHairpinToDynamicOnGripDrag(Dynamic* dynamic, bool isLeftGrip,
     }
 
     Hairpin* hairpin = Factory::createHairpin(dummy()->segment());
-    hairpin->setHairpinType(isLeftGrip ? HairpinType::DECRESC_HAIRPIN : HairpinType::CRESC_HAIRPIN);
+    hairpin->setHairpinType(isLeftGrip ? HairpinType::DIM_HAIRPIN : HairpinType::CRESC_HAIRPIN);
 
     hairpin->setTrack(track);
     hairpin->setTrack2(track);
