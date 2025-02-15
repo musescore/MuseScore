@@ -5530,7 +5530,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             tag += positioningAttributes(hp, isStart);
         } else {
             tag += u"\"stop\"";
-            if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
+            if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DIM_HAIRPIN) {
                 tag += u" niente=\"yes\"";
             }
         }

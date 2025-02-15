@@ -358,7 +358,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
     const std::map<int, int> f_to_n_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(n - f), ChangeMethod::NORMAL);
     const std::map<int, int> n_to_f_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(f - n), ChangeMethod::NORMAL);
 
-    // 1st measure: Decresc. al niente with 'n' dynamic
+    // 1st measure: Dim. al niente with 'n' dynamic
     for (const auto& pair : f_to_n_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first);
         expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));

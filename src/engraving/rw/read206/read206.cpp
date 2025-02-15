@@ -2186,8 +2186,8 @@ void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                 h->setHairpinType(HairpinType::CRESC_LINE);
-            } else if (h->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
-                h->setHairpinType(HairpinType::DECRESC_LINE);
+            } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
+                h->setHairpinType(HairpinType::DIM_LINE);
             }
             useText = true;
         } else if (!readTextLineProperties(e, ctx, h)) {

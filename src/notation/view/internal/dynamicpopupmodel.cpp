@@ -66,7 +66,7 @@ static const QList<QList<DynamicPopupModel::PageItem> > DYN_POPUP_PAGES = {
     },
     {   // Page 6 - Hairpins
         { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Crescendo },
-        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Decrescendo },
+        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Diminuendo },
     },
     {   // Page 7
         { DynamicType::PPPPP,  64, 2.0, DynamicPopupModel::Dynamic },
@@ -183,7 +183,7 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
 
     HairpinType hairpinType = itemType == ItemType::Crescendo
                               ? HairpinType::CRESC_HAIRPIN
-                              : HairpinType::DECRESC_HAIRPIN;
+                              : HairpinType::DIM_HAIRPIN;
 
     if (Hairpin* existingHairpin = dynamic->rightHairpin()) {
         if (existingHairpin->hairpinType() == hairpinType) {

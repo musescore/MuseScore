@@ -1050,7 +1050,7 @@ void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList
     // @type
     if (textLineBase->isHairpin()) {
         engraving::Hairpin* hairpin = engraving::toHairpin(textLineBase);
-        engraving::HairpinType hairpinType = engraving::HairpinType::DECRESC_LINE;
+        engraving::HairpinType hairpinType = engraving::HairpinType::DIM_LINE;
         if (Convert::hasTypeValue(meiDir.GetType(), std::string(DIR_TYPE) + "cresc")) {
             hairpinType = engraving::HairpinType::CRESC_LINE;
         }
@@ -1121,7 +1121,7 @@ libmei::Dir Convert::dirToMEI(const engraving::TextLineBase* textLineBase, Strin
         if (hairpin->hairpinType() == engraving::HairpinType::CRESC_LINE) {
             dirType += "cresc";
         } else {
-            dirType += "decresc";
+            dirType += "dim";
         }
     }
     meiDir.SetType(dirType);
@@ -1650,7 +1650,7 @@ void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin&
     if (meiHairpin.GetForm() == libmei::hairpinLog_FORM_cres) {
         hairpin->setHairpinType(engraving::HairpinType::CRESC_HAIRPIN);
     } else {
-        hairpin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
+        hairpin->setHairpinType(engraving::HairpinType::DIM_HAIRPIN);
     }
 
     // @lform

@@ -316,7 +316,7 @@ mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, O
         types.emplace(mpe::ArticulationType::Crescendo);
         break;
     case SymId::dynamicDiminuendoHairpin:
-        types.emplace(mpe::ArticulationType::Decrescendo);
+        types.emplace(mpe::ArticulationType::Diminuendo);
         break;
     case SymId::ornamentUpPrall:
         types.emplace(mpe::ArticulationType::UpPrall);
