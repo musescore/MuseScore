@@ -259,9 +259,9 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
 
     static const std::vector<HairpinType> hairpins {
         HairpinType::CRESC_LINE,
-        HairpinType::DECRESC_LINE,
+        HairpinType::DIM_LINE,
         HairpinType::CRESC_HAIRPIN,
-        HairpinType::DECRESC_HAIRPIN,
+        HairpinType::DIM_HAIRPIN,
     };
 
     const qreal w = gpaletteScore->style().spatium() * 8;
@@ -270,8 +270,8 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
-        qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DECRESC_LINE) ? 1 : 0.9;
-        const QPointF offset = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DECRESC_LINE)
+        qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DIM_LINE) ? 1 : 0.9;
+        const QPointF offset = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DIM_LINE)
                                ? QPointF(1, 0.25) : QPointF(0, 0);
         sp->appendElement(hairpin, hairpin->subtypeUserName(), mag, offset);
     }
@@ -1151,9 +1151,9 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     static const std::vector<HairpinType> hairpins {
         HairpinType::CRESC_HAIRPIN,
-        HairpinType::DECRESC_HAIRPIN,
+        HairpinType::DIM_HAIRPIN,
         HairpinType::CRESC_LINE,
-        HairpinType::DECRESC_LINE
+        HairpinType::DIM_LINE
     };
 
     for (HairpinType hairpinType : hairpins) {

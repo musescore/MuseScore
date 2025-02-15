@@ -111,7 +111,7 @@ enum class BdatType : unsigned char {
     Harmony               = 0x11,
     Clef                  = 0x12,
     Dynamics              = 0x13,
-    Wedge                 = 0x14, // crescendo, decrescendo
+    Wedge                 = 0x14, // crescendo, diminuendo
     Glissando             = 0x15,
     Decorator             = 0x16, // measure repeat | piano pedal | dotted barline
     Key                   = 0x17,
@@ -391,11 +391,11 @@ enum class DynamicsType : char {
 };
 
 enum class WedgeType : char {
-    Cres_Line = 0, // <
-    Double_Line,   // <>, not appear in xml
-    Decresc_Line,  // >
-    Cres,          // cresc., not appear in xml, will create Expression
-    Decresc        // decresc., not appear in xml, will create Expression
+    Cresc_Line = 0, // <
+    Double_Line,    // <>, not appear in xml
+    Dim_Line,       // >
+    Cresc,          // cresc., not appear in xml, will create Expression
+    Dim             // dim., not appear in xml, will create Expression
 };
 
 enum class KuoHaoType : char {

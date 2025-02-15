@@ -127,9 +127,9 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
 
 static const QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
     { mu::engraving::HairpinType::CRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
-    { mu::engraving::HairpinType::DECRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { mu::engraving::HairpinType::DIM_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
     { mu::engraving::HairpinType::CRESC_LINE, InspectorModelType::TYPE_CRESCENDO },
-    { mu::engraving::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
+    { mu::engraving::HairpinType::DIM_LINE, InspectorModelType::TYPE_DIMINUENDO },
 };
 
 static const QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
