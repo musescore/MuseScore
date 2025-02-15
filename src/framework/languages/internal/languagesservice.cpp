@@ -154,7 +154,7 @@ void LanguagesService::loadLanguages()
     }
 
     m_placeholderLanguage.code = PLACEHOLDER_LANGUAGE_CODE;
-    m_placeholderLanguage.name = "«Placeholder translations»";
+    m_placeholderLanguage.name = muse::qtrc("languages", "«Placeholder translations»");
 }
 
 void LanguagesService::setCurrentLanguage(const QString& languageCode)

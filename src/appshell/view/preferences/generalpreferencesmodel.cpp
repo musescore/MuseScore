@@ -94,7 +94,7 @@ QVariantList GeneralPreferencesModel::languages() const
     if (languagesService()->hasPlaceholderLanguage()) {
         QVariantMap placeholderLanguageObj;
         placeholderLanguageObj["code"] = PLACEHOLDER_LANGUAGE_CODE;
-        placeholderLanguageObj["name"] = "«Placeholder translations»";
+        placeholderLanguageObj["name"] = muse::qtrc("appshell/preferences", "«Placeholder translations»");
         result.prepend(placeholderLanguageObj);
     }
 
