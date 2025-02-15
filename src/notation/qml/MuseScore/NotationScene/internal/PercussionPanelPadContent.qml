@@ -57,14 +57,21 @@ Column {
             enabled: mainContentArea.enabled
             hoverEnabled: true
 
-            onPressed: {
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onPressed: function(event) {
                 ui.tooltip.hide(root)
 
                 if (!Boolean(root.padModel)) {
                     return
                 }
 
-                root.padModel.triggerPad()
+                if (event.button === Qt.RightButton) {
+                    root.openFooterContextMenu()
+                    return
+                }
+
+                root.padModel.triggerPad(event.modifiers)
             }
 
             onContainsMouseChanged: {
@@ -167,6 +174,8 @@ Column {
 
             anchors.fill: parent
             enabled: root.panelMode !== PanelMode.EDIT_LAYOUT
+
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             onClicked: {
                 root.openFooterContextMenu()

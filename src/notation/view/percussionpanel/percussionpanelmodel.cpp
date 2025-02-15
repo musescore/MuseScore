@@ -39,8 +39,15 @@ static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
 using namespace muse;
-using namespace ui;
+using namespace muse::actions;
+using namespace muse::ui;
 using namespace mu::notation;
+
+static const std::unordered_map<PercussionPanelPadModel::PadAction, NoteAddingMode> WRITE_ACTION_MAP = {
+    { PercussionPanelPadModel::PadAction::TRIGGER_STANDARD, NoteAddingMode::NextChord },
+    { PercussionPanelPadModel::PadAction::TRIGGER_ADD, NoteAddingMode::CurrentChord },
+    { PercussionPanelPadModel::PadAction::TRIGGER_INSERT, NoteAddingMode::InsertChord }
+};
 
 PercussionPanelModel::PercussionPanelModel(QObject* parent)
     : QObject(parent)
@@ -278,8 +285,10 @@ void PercussionPanelModel::setUpConnections()
 
     m_padListModel->padActionRequested().onReceive(this, [this](PercussionPanelPadModel::PadAction action, int pitch) {
         switch (action) {
-        case PercussionPanelPadModel::PadAction::TRIGGER:
-            onPadTriggered(pitch);
+        case PercussionPanelPadModel::PadAction::TRIGGER_STANDARD:
+        case PercussionPanelPadModel::PadAction::TRIGGER_ADD:
+        case PercussionPanelPadModel::PadAction::TRIGGER_INSERT:
+            onPadTriggered(pitch, action);
             break;
         case PercussionPanelPadModel::PadAction::DUPLICATE:
             onDuplicatePadRequested(pitch);
@@ -361,12 +370,15 @@ bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)
     return true;
 }
 
-void PercussionPanelModel::onPadTriggered(int pitch)
+void PercussionPanelModel::onPadTriggered(int pitch, const PercussionPanelPadModel::PadAction& action)
 {
     switch (currentPanelMode()) {
-    case PanelMode::Mode::EDIT_LAYOUT: return;
-    case PanelMode::Mode::WRITE: writePitch(pitch); // fall through
-    case PanelMode::Mode::SOUND_PREVIEW: playPitch(pitch);
+    case PanelMode::Mode::WRITE:
+        writePitch(pitch, WRITE_ACTION_MAP.at(action));
+        break;
+    case PanelMode::Mode::SOUND_PREVIEW:
+        playPitch(pitch);
+        break;
     default: break;
     }
 }
@@ -445,24 +457,20 @@ void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
     undoStack->commitChanges();
 }
 
-void PercussionPanelModel::writePitch(int pitch)
+void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMode)
 {
     INotationUndoStackPtr undoStack = notation()->undoStack();
     if (!interaction() || !undoStack) {
         return;
     }
 
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter percussion note"));
-
     interaction()->noteInput()->startNoteInput(configuration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
-    score()->addMidiPitch(pitch, false, /*transpose*/ false);
-    undoStack->commitChanges();
+    NoteInputParams params;
+    params.drumPitch = pitch;
 
-    const mu::engraving::InputState& inputState = score()->inputState();
-    if (inputState.cr()) {
-        interaction()->showItem(inputState.cr());
-    }
+    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
+    dispatcher()->dispatch("note-action", args);
 }
 
 void PercussionPanelModel::playPitch(int pitch)
