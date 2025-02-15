@@ -297,7 +297,7 @@ enum class ArticulationType : signed char {
     // multi-note articulations
     Trill,
     Crescendo,
-    Decrescendo,
+    Diminuendo,
     DiscreteGlissando,
     Legato,
     Pedal,
@@ -318,7 +318,7 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
     static const ArticulationTypeSet MULTI_TYPES = {
         ArticulationType::Trill,
         ArticulationType::Crescendo,
-        ArticulationType::Decrescendo,
+        ArticulationType::Diminuendo,
         ArticulationType::DiscreteGlissando,
         ArticulationType::Legato,
         ArticulationType::Pedal,
