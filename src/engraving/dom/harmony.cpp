@@ -1064,6 +1064,9 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
     Fraction tick = this->tick();
     const Staff* st = staff();
+    IF_ASSERT_FAILED(st) {
+        return m_realizedHarmony;
+    }
 
     const CapoParams& capo = st->capo(tick);
 
