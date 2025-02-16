@@ -863,12 +863,12 @@ bool LayoutPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
         //: Please omit `%n` in the translation in this case; it's only there so that you
         //: have the possibility to provide translations with the correct numerus form,
         //: i.e. to show "instrument" or "instruments" as appropriate.
-        muse::trc("layout", "Are you sure you want to delete the selected %n instrument(s)?", nullptr, count),
+        muse::trc("layoutpanel", "Are you sure you want to delete the selected %n instrument(s)?", nullptr, count),
 
         //: Please omit `%n` in the translation in this case; it's only there so that you
         //: have the possibility to provide translations with the correct numerus form,
         //: i.e. to show "instrument" or "instruments" as appropriate.
-        muse::trc("layout", "This will remove the %n instrument(s) from the full score and all part scores.", nullptr, count),
+        muse::trc("layoutpanel", "This will remove the %n instrument(s) from the full score and all part scores.", nullptr, count),
 
         { IInteractive::Button::No, IInteractive::Button::Yes })
            .standardButton() == IInteractive::Button::Yes;
