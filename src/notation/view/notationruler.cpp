@@ -82,7 +82,7 @@ void NotationRuler::paint(Painter* painter, const NoteInputState& state)
     bool currentPositionPainted = false;
 
     for (size_t i = 0; i < lineCount; ++i) {
-        const int lineTicks = measureTicks + subdivisionTicks * i;
+        const int lineTicks = measureTicks + subdivisionTicks * static_cast<int>(i);
         double lineX = 0.0;
 
         auto it = lineToSegment.find(i);

@@ -1852,9 +1852,9 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
                                                     refClefElementTick - refMeasure->tick()) : nullptr;
         if (!actualClefSeg && refMeasure && refMeasure->prevMeasure()) {
             // Check previous measure
-            Measure* prevMeasure = refMeasure->prevMeasure();
+            Measure* refPrevMeasure = refMeasure->prevMeasure();
             actualClefSeg
-                = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, refClefElementTick - prevMeasure->tick());
+                = refPrevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, refClefElementTick - refPrevMeasure->tick());
         }
         const EngravingItem* el = actualClefSeg ? actualClefSeg->element(track) : nullptr;
         const Clef* actualClef = el ? toClef(el) : nullptr;

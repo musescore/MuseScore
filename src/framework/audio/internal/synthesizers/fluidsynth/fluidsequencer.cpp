@@ -143,8 +143,8 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             destination[timestampTo].emplace(std::move(noteOff));
 
-            for (const auto& pair : noteEvent.expressionCtx().articulations) {
-                const mpe::ArticulationMeta& meta = pair.second.meta;
+            for (const auto& artPair : noteEvent.expressionCtx().articulations) {
+                const mpe::ArticulationMeta& meta = artPair.second.meta;
 
                 if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
                     appendPitchBend(destination, noteEvent, meta, channelIdx);
