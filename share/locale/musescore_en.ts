@@ -22844,18 +22844,18 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="38"/>
-        <source>Add instruments or system markings</source>
-        <translation type="unfinished">Add instruments or system markings</translation>
+        <source>Add instruments or system objects</source>
+        <translation type="unfinished">Add instruments or system objects</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="47"/>
+        <source>System objects (tempo, rehearsal marks, etc.)</source>
+        <translation type="unfinished">System objects (tempo, rehearsal marks, etc.)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="45"/>
         <source>New instrument</source>
         <translation type="unfinished">New instrument</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="47"/>
-        <source>System markings (tempo, rehearsal, etc.)</source>
-        <translation type="unfinished">System markings (tempo, rehearsal, etc.)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="312"/>
