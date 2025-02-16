@@ -5282,16 +5282,10 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
 
 void NotationInteraction::toggleDynamicPopup()
 {
-    if (selection()->isNone()) {
-        return;
-    }
-
-    // If multiple selected selection()->element() returns null
-    if (!selection()->element()) {
-        return;
-    }
-
     EngravingItem* el = selection()->element();
+    if (!el) {
+        return;
+    }
 
     if (el->isHairpinSegment()) {
         HairpinSegment* hairpinSeg = toHairpinSegment(el);
@@ -5311,9 +5305,10 @@ void NotationInteraction::toggleDynamicPopup()
         };
 
         switch (m_editData.curGrip) {
-        case Grip::START: {
+        case Grip::START:
             if (EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore()) {
-                select({ startDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+                // If there is already a dynamic, select it instead of opening an empty popup
+                select({ startDynOrExp });
                 if (startDynOrExp->isDynamic()) {
                     startEditElement(startDynOrExp, false);
                     autoFlipHairpinsType(toDynamic(startDynOrExp));
@@ -5321,12 +5316,11 @@ void NotationInteraction::toggleDynamicPopup()
             } else {
                 addDynamic(hairpin->tick(), hairpin->track(), hairpin->voiceAssignment());
             }
-        }
-            return;
-        case Grip::END: {
-            EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter();
-            if (endDynOrExp != nullptr) {
-                select({ endDynOrExp }); // If there is already a dynamic select it instead of opening an empty popup
+            break;
+        case Grip::END:
+            if (EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter()) {
+                // If there is already a dynamic, select it instead of opening an empty popup
+                select({ endDynOrExp });
                 if (endDynOrExp->isDynamic()) {
                     startEditElement(endDynOrExp, false);
                     autoFlipHairpinsType(toDynamic(endDynOrExp));
@@ -5334,14 +5328,14 @@ void NotationInteraction::toggleDynamicPopup()
             } else {
                 addDynamic(hairpin->tick2(), hairpin->track2(), hairpin->voiceAssignment());
             }
-        }
-            return;
+            break;
         default:
-            return;
+            break;
         }
-    } else {
-        addTextToItem(TextStyleType::DYNAMICS, el);
+        return;
     }
+
+    addTextToItem(TextStyleType::DYNAMICS, el);
 }
 
 bool NotationInteraction::toggleLayoutBreakAvailable() const
