@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONCONFIGURATION_H
-#define MU_NOTATION_NOTATIONCONFIGURATION_H
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -308,5 +307,3 @@ private:
     int m_styleDialogLastSubPageIndex = 0;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONCONFIGURATION_H

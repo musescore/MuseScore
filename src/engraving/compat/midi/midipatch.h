@@ -32,9 +32,9 @@ namespace mu::engraving {
 
 struct MidiPatch {
     bool drum;
-    String synti;
+    muse::String synti;
     int bank, prog, sfid;
-    String name;
+    muse::String name;
 };
 }
 #endif
