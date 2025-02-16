@@ -35,7 +35,7 @@ MenuButton {
     text: qsTrc("layoutpanel", "Add")
 
     navigation.name: "Add"
-    accessible.name: qsTrc("layoutpanel", "Add instruments or system objects")
+    accessible.name: qsTrc("layoutpanel", "Add instruments or system markings")
 
     icon: IconCode.NONE
     transparent: false
@@ -44,7 +44,7 @@ MenuButton {
     menuModel: [
         { id: "ADD_INSTRUMENT", title: qsTrc("layoutpanel", "New instrument")  },
         {},
-        { id: "ADD_SYSTEM_MARKINGS", title: qsTrc("layoutpanel", "System objects (tempo, rehearsal marks, etc.)") },
+        { id: "ADD_SYSTEM_MARKINGS", title: qsTrc("layoutpanel", "System markings (tempo, rehearsal marks, etc.)") },
     ]
 
     onHandleMenuItem: function(itemId) {
