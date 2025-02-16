@@ -54,7 +54,7 @@ StyledPopupView {
         spacing: 12
 
         StyledTextLabel {
-            text: qsTrc("layout", "Display at this position on the score")
+            text: qsTrc("layoutpanel", "Display at this position on the score")
             font: ui.theme.bodyBoldFont
         }
 

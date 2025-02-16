@@ -309,7 +309,7 @@ FocusableControl {
             navigation.panel: root.navigation.panel
             navigation.row: root.navigation.row
             navigation.column: 3
-            navigation.accessible.name: qsTrc("layout", "Settings")
+            navigation.accessible.name: qsTrc("layoutpanel", "Settings")
 
             icon: IconCode.SETTINGS_COG
 

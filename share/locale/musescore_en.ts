@@ -18929,10 +18929,8 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="117"/>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="35"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="532"/>
         <source>Add</source>
-        <extracomment>Keep in sync with the message that appears if there are no instruments in the score (LayoutPanel.qml)</extracomment>
         <translation type="unfinished">Add</translation>
     </message>
     <message>
@@ -22792,7 +22790,7 @@ pickup measure</translation>
     </message>
 </context>
 <context>
-    <name>layout</name>
+    <name>layoutpanel</name>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="90"/>
         <source>Move selected instruments up</source>
@@ -22837,6 +22835,12 @@ pickup measure</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="142"/>
         <source>Remove selected system objects</source>
         <translation type="unfinished">Remove selected system objects</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="35"/>
+        <source>Add</source>
+        <extracomment>Keep in sync with the message that appears if there are no instruments in the score (LayoutPanel.qml)</extracomment>
+        <translation type="unfinished">Add</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="38"/>
