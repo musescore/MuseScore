@@ -152,91 +152,104 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+          <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>Appearance (visual only; will not affect actual measure duration)</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <property name="verticalSpacing">
+            <number>0</number>
+           </property>
+           <item row="3" column="0">
+            <widget class="QRadioButton" name="otherButton">
+             <property name="text">
+              <string>Other:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="textButton">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
              </property>
              <property name="text">
               <string>Text:</string>
              </property>
-             <property name="buddy">
-              <cstring>zText</cstring>
-             </property>
             </widget>
            </item>
-           <item>
-            <widget class="QLineEdit" name="zText">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>60</width>
-               <height>16777215</height>
-              </size>
-             </property>
+           <item row="2" column="0">
+            <widget class="QRadioButton" name="allaBreveButton">
              <property name="text">
-              <string>4</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QLabel" name="label_8">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="fourfourButton">
              <property name="text">
-              <string>/</string>
-             </property>
-             <property name="buddy">
-              <cstring>nText</cstring>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QLineEdit" name="nText">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>60</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>4</string>
-             </property>
-            </widget>
+           <item row="0" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout1">
+             <item>
+              <widget class="QLineEdit" name="zText"/>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>/</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="nText"/>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_21">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
+           <item row="3" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_41">
+             <item>
+              <widget class="QComboBox" name="otherCombo">
+               <property name="maxVisibleItems">
+                <number>12</number>
+               </property>
+               <property name="maxCount">
+                <number>24</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
           </layout>
+         </widget>
          </item>
         </layout>
        </item>

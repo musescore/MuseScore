@@ -26,6 +26,7 @@
 #include "ui_note_groups.h"
 
 #include "engraving/dom/groups.h"
+#include "engraving/dom/timesig.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
@@ -48,6 +49,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups, public muse::Injectable
     engraving::Groups _groups;
     engraving::Fraction _sig;
     QString _z, _n;
+    engraving::TimeSigType _tst;
 
     engraving::Score* createScore(int n, engraving::DurationType t, std::vector<engraving::Chord*>* chords);
     void updateBeams(engraving::Chord*, engraving::BeamMode);
@@ -59,7 +61,7 @@ private slots:
 
 public:
     NoteGroups(QWidget* parent);
-    void setSig(engraving::Fraction sig, const engraving::Groups&, const QString& zText, const QString& nText);
+    void setSig(engraving::Fraction sig, const engraving::Groups&, const QString& zText, const QString& nText, engraving::TimeSigType tst);
     engraving::Groups groups();
 };
 }

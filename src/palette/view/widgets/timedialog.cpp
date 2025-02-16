@@ -29,13 +29,17 @@
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
 
+#include "engraving/iengravingfont.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/compat/dummyelement.h"
 
+#include "ui/view/musicalsymbolcodes.h"
+
 using namespace mu::palette;
 using namespace mu::engraving;
+using namespace muse::ui;
 
 TimeDialog::TimeDialog(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
@@ -54,6 +58,44 @@ TimeDialog::TimeDialog(QWidget* parent)
     sp->setReadOnly(false);
     sp->setSelectable(true);
 
+    QString musicalFontFamily = QString::fromStdString(uiConfiguration()->musicalFontFamily());
+    int musicalFontSize = uiConfiguration()->musicalFontSize();
+
+    QString radioButtonStyle = QString("QRadioButton { font-family: %1; font-size: %2px }")
+                               .arg(musicalFontFamily)
+                               .arg(musicalFontSize);
+
+    fourfourButton->setStyleSheet(radioButtonStyle);
+    fourfourButton->setText(musicalSymbolToString(MusicalSymbolCodes::Code::TIMESIG_COMMON));
+    fourfourButton->setMaximumHeight(30);
+    allaBreveButton->setStyleSheet(radioButtonStyle);
+    allaBreveButton->setText(musicalSymbolToString(MusicalSymbolCodes::Code::TIMESIG_CUT));
+    allaBreveButton->setMaximumHeight(30);
+
+    static const SymIdList prolatioList = {
+        SymId::mensuralProlation1,  // tempus perfectum, prol. perfecta
+        SymId::mensuralProlation2,  // tempus perfectum, prol. imperfecta
+        SymId::mensuralProlation3,  // tempus perfectum, prol. imperfecta, dimin.
+        SymId::mensuralProlation4,  // tempus perfectum, prol. perfecta, dimin.
+        SymId::mensuralProlation5,  // tempus imperf. prol. perfecta
+        SymId::mensuralProlation7,  // tempus imperf., prol. imperfecta, reversed
+        SymId::mensuralProlation8,  // tempus imperf., prol. perfecta, dimin.
+        SymId::mensuralProlation10, // tempus imperf., prol imperfecta, dimin., reversed
+        SymId::mensuralProlation11, // tempus inperf., prol. perfecta, reversed
+    };
+
+    IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
+
+    otherCombo->clear();
+    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2px; max-height: 30px } ")
+                              .arg(QString::fromStdString(symbolFont->family())).arg(musicalFontSize));
+
+    for (SymId prolatio : prolatioList) {
+        const QString& str = symbolFont->toString(prolatio);
+        if (str.size() > 0) {
+            otherCombo->addItem(str, int(prolatio));
+        }
+    }
     connect(zNominal, &QSpinBox::editingFinished, this, &TimeDialog::zChanged);
     connect(nNominal, &QComboBox::currentIndexChanged, this, &TimeDialog::nChanged);
     connect(sp, &PaletteWidget::boxClicked, this, &TimeDialog::paletteChanged);
@@ -61,6 +103,11 @@ TimeDialog::TimeDialog(QWidget* parent)
     connect(addButton, &QPushButton::clicked, this, &TimeDialog::addClicked);
     connect(zText, &QLineEdit::textChanged, this, &TimeDialog::textChanged);
     connect(nText, &QLineEdit::textChanged, this, &TimeDialog::textChanged);
+    connect(textButton, &QRadioButton::toggled, this, &TimeDialog::textToggled);
+    connect(fourfourButton, &QRadioButton::toggled, this, &TimeDialog::fourfourToggled);
+    connect(allaBreveButton, &QRadioButton::toggled, this, &TimeDialog::allaBreveToggled);
+    connect(otherButton, &QRadioButton::toggled, this, &TimeDialog::otherToggled);
+    connect(otherCombo, &QComboBox::currentIndexChanged, this, &TimeDialog::otherChanged);
 
     _timePalette = new PaletteScrollArea(sp);
     QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -73,7 +120,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     if (configuration()->useFactorySettings() || !sp->readFromFile(configuration()->timeSignaturesDirPath().toQString())) {
         Fraction sig(4, 4);
-        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
     }
     for (int i = 0; i < sp->actualCellCount(); ++i) { // cells can be changed
         sp->setCellReadOnly(i, false);
@@ -106,15 +153,33 @@ bool TimeDialog::showTimePalette() const
 
 void TimeDialog::addClicked()
 {
+    TimeSigType tst = TimeSigType::NORMAL;
+    if (textButton->isChecked() || otherButton->isChecked()) {
+        tst = TimeSigType::NORMAL;
+    } else if (fourfourButton->isChecked()) {
+        tst = TimeSigType::FOUR_FOUR;
+    } else if (allaBreveButton->isChecked()) {
+        tst = TimeSigType::ALLA_BREVE;
+    }
+
     auto ts = mu::engraving::Factory::makeTimeSig(gpaletteScore->dummy()->segment());
-    ts->setSig(Fraction(zNominal->value(), denominator()));
+    ts->setSig(Fraction(zNominal->value(), denominator()), tst);
     ts->setGroups(groups->groups());
 
-    // check for special text
-    if ((QString("%1").arg(zNominal->value()) != zText->text())
-        || (QString("%1").arg(denominator()) != nText->text())) {
-        ts->setNumeratorString(zText->text());
-        ts->setDenominatorString(nText->text());
+    if (otherButton->isChecked()) {
+        IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
+        SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
+        // ...and set numerator to font string for symbol and denominator to empty string
+        ts->setNumeratorString(symbolFont->toString(symId));
+        ts->setDenominatorString(QString());
+    }
+    if (textButton->isChecked()) {
+        // check for special text
+        if ((QString("%1").arg(zNominal->value()) != zText->text())
+            || (QString("%1").arg(denominator()) != nText->text())) {
+            ts->setNumeratorString(zText->text());
+            ts->setDenominatorString(nText->text());
+        }
     }
     // extend palette:
     sp->appendElement(ts, "");
@@ -150,13 +215,15 @@ void TimeDialog::save()
 
 void TimeDialog::zChanged()
 {
-    int numerator = zNominal->value();
-    int denominator = this->denominator();
+    if (textButton->isChecked()) {
+        int numerator = zNominal->value();
+        int denominator = this->denominator();
 
-    Fraction sig(numerator, denominator);
+        Fraction sig(numerator, denominator);
 
-    // Update beam groups view
-    groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+        // Update beam groups view
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
+    }
 }
 
 //---------------------------------------------------------
@@ -165,9 +232,11 @@ void TimeDialog::zChanged()
 
 void TimeDialog::nChanged(int val)
 {
-    Q_UNUSED(val);
-    Fraction sig(zNominal->value(), denominator());
-    groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+    if (textButton->isChecked()) {
+        Q_UNUSED(val);
+        Fraction sig(zNominal->value(), denominator());
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
+    }
 }
 
 //---------------------------------------------------------
@@ -242,6 +311,11 @@ void TimeDialog::paletteChanged(int idx)
         nText->setEnabled(false);
         groups->setEnabled(false);
         addButton->setEnabled(false);
+        textButton->setEnabled(false);
+        fourfourButton->setEnabled(false);
+        allaBreveButton->setEnabled(false);
+        otherCombo->setEnabled(false);
+        otherButton->setEnabled(false);
         return;
     }
 
@@ -251,6 +325,11 @@ void TimeDialog::paletteChanged(int idx)
     nText->setEnabled(true);
     groups->setEnabled(true);
     addButton->setEnabled(true);
+    textButton->setEnabled(true);
+    fourfourButton->setEnabled(true);
+    allaBreveButton->setEnabled(true);
+    otherCombo->setEnabled(true);
+    otherButton->setEnabled(true);
 
     Fraction sig(timeSig->sig());
     Groups g = timeSig->groups();
@@ -262,7 +341,8 @@ void TimeDialog::paletteChanged(int idx)
     nNominal->setCurrentIndex(denominator2Idx(sig.denominator()));
     zText->setText(timeSig->numeratorString());
     nText->setText(timeSig->denominatorString());
-    groups->setSig(sig, g, zText->text(), nText->text());
+    textButton->setChecked(true);
+    groups->setSig(sig, g, zText->text(), nText->text(), TimeSigType::NORMAL);
 }
 
 //---------------------------------------------------------
@@ -271,8 +351,53 @@ void TimeDialog::paletteChanged(int idx)
 
 void TimeDialog::textChanged()
 {
-    Fraction sig(zNominal->value(), denominator());
-    groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+    if (textButton->isChecked()) {
+        Fraction sig(zNominal->value(), denominator());
+        groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text(), TimeSigType::NORMAL);
+    }
+}
+
+void TimeDialog::textToggled()
+{
+    if (textButton->isChecked()) {
+        this->textChanged();
+    }
+}
+
+void TimeDialog::fourfourToggled()
+{
+    if (fourfourButton->isChecked()) {
+        Fraction sig(zNominal->value(), denominator());
+        groups->setSig(sig, Groups::endings(sig), QString(), QString(), TimeSigType::FOUR_FOUR);
+    }
+}
+
+void TimeDialog::allaBreveToggled()
+{
+    if (allaBreveButton->isChecked()) {
+        Fraction sig(zNominal->value(), denominator());
+        groups->setSig(sig, Groups::endings(sig), QString(), QString(), TimeSigType::ALLA_BREVE);
+    }
+}
+
+void TimeDialog::otherToggled()
+{
+    if (otherButton->isChecked()) {
+        Fraction sig(zNominal->value(), denominator());
+        IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
+        SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
+        groups->setSig(sig, Groups::endings(sig), symbolFont->toString(symId), QString(), TimeSigType::NORMAL);
+    }
+}
+
+void TimeDialog::otherChanged(int idx)
+{
+    if (otherButton->isChecked()) {
+        Fraction sig(zNominal->value(), denominator());
+        IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
+        SymId symId = (SymId)(otherCombo->itemData(idx).toInt());
+        groups->setSig(sig, Groups::endings(sig), symbolFont->toString(symId), QString(), TimeSigType::NORMAL);
+    }
 }
 
 void TimeDialog::setDirty()

@@ -52,6 +52,8 @@ Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chord
     if (!_n.isEmpty()) {
         nts->setDenominatorString(_n);
     }
+    // Just to display complete and cut time correctly
+    nts->setProperty(mu::engraving::Pid::TIMESIG_TYPE, static_cast<int>(_tst));
     GroupNode node { 0, 0 };
     Groups ng;
     ng.addNode(node);
@@ -109,12 +111,13 @@ NoteGroups::NoteGroups(QWidget* parent)
     connect(view32, &NoteGroupsExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
 }
 
-void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n)
+void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n, TimeSigType tst)
 {
     _sig    = sig;
     _z      = z;
     _n      = n;
     _groups = g;
+    _tst    = tst;
     chords8.clear();
     chords16.clear();
     chords32.clear();
@@ -144,7 +147,7 @@ Groups NoteGroups::groups()
 
 void NoteGroups::resetClicked()
 {
-    setSig(_sig, _groups, _z, _n);
+    setSig(_sig, _groups, _z, _n, _tst);
 }
 
 void NoteGroups::noteClicked(Note* note)

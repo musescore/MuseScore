@@ -153,7 +153,8 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     if (g.empty()) {
         g = Groups::endings(m_editedTimeSig->sig()); // initialize with default
     }
-    groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString());
+    groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString(),
+                   m_editedTimeSig->timeSigType());
 
     WidgetStateStore::restoreGeometry(this);
 }
