@@ -1219,6 +1219,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Ottava 8va &bassa"),
              TranslatableString("action", "Add ottava 8va bassa")
              ),
+    UiAction("add-dynamic",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Dynamic"),
+             TranslatableString("action", "Add dynamic")
+             ),
     UiAction("add-hairpin",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
@@ -1295,12 +1301,6 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "St&aff text"),
              TranslatableString("action", "Add text: staff text")
-             ),
-    UiAction("dynamics",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "&Dynamic"),
-             TranslatableString("action", "Add text: dynamic")
              ),
     UiAction("expression-text",
              mu::context::UiCtxProjectOpened,
@@ -1643,6 +1643,11 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Flip direction"),
              IconCode::Code::NOTE_FLIP
              ),
+    UiAction("flip-horizontally",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Flip horizontally"),
+             TranslatableString("action", "Flip horizontally")),
     UiAction(TOGGLE_CONCERT_PITCH_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

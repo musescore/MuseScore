@@ -4893,6 +4893,17 @@ void NotationInteraction::flipSelection()
     apply();
 }
 
+void NotationInteraction::flipSelectionHorizontally()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Flip horizontally"));
+    score()->cmdFlipHorizontally();
+    apply();
+}
+
 void NotationInteraction::addTieToSelection()
 {
     // Calls `startEdit` internally
@@ -5224,6 +5235,107 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
               : TranslatableString("undoableAction", "Decrease duration"));
     score()->cmdIncDecDuration(steps, stepByDots);
     apply();
+}
+
+void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
+{
+    if (!selDyn) {
+        return;
+    }
+
+    if (selDyn->dynamicType() == DynamicType::OTHER || selDyn->dynamicType() >= DynamicType::FP) {
+        return;
+    }
+
+    selDyn->findAdjacentHairpins();
+
+    startEdit(TranslatableString("undoableAction", "Change hairpin type"));
+
+    if (Hairpin* leftHp = selDyn->leftHairpin()) {
+        const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
+        if (startDyn
+            && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
+            && !leftHp->isLineType()) {
+            if (int(startDyn->dynamicType()) > int(selDyn->dynamicType())) {
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+            } else {
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+            }
+        }
+    }
+
+    if (Hairpin* rightHp = selDyn->rightHairpin()) {
+        const Dynamic* endDyn = rightHp->dynamicSnappedAfter();
+        if (endDyn
+            && !(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP)
+            && !rightHp->isLineType()) {
+            if (int(endDyn->dynamicType()) > int(selDyn->dynamicType())) {
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+            } else {
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+            }
+        }
+    }
+
+    apply();
+}
+
+void NotationInteraction::toggleDynamicPopup()
+{
+    EngravingItem* el = selection()->element();
+    if (!el) {
+        return;
+    }
+
+    if (el->isHairpinSegment()) {
+        HairpinSegment* hairpinSeg = toHairpinSegment(el);
+        Hairpin* hairpin = hairpinSeg->hairpin();
+
+        auto addDynamic = [this](Fraction tick, track_idx_t track, VoiceAssignment voiceAssignment) {
+            startEdit(TranslatableString("undoableAction", "Add dynamic"));
+            Measure* measure = score()->tick2measure(tick);
+            Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
+            Dynamic* dynamic = Factory::createDynamic(segment);
+            dynamic->setParent(segment);
+            dynamic->setTrack(track);
+            dynamic->setVoiceAssignment(voiceAssignment);
+            score()->undoAddElement(dynamic);
+            apply();
+            startEditText(dynamic);
+        };
+
+        switch (m_editData.curGrip) {
+        case Grip::START:
+            if (EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore()) {
+                // If there is already a dynamic, select it instead of opening an empty popup
+                select({ startDynOrExp });
+                if (startDynOrExp->isDynamic()) {
+                    startEditElement(startDynOrExp, false);
+                    autoFlipHairpinsType(toDynamic(startDynOrExp));
+                }
+            } else {
+                addDynamic(hairpin->tick(), hairpin->track(), hairpin->voiceAssignment());
+            }
+            break;
+        case Grip::END:
+            if (EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter()) {
+                // If there is already a dynamic, select it instead of opening an empty popup
+                select({ endDynOrExp });
+                if (endDynOrExp->isDynamic()) {
+                    startEditElement(endDynOrExp, false);
+                    autoFlipHairpinsType(toDynamic(endDynOrExp));
+                }
+            } else {
+                addDynamic(hairpin->tick2(), hairpin->track2(), hairpin->voiceAssignment());
+            }
+            break;
+        default:
+            break;
+        }
+        return;
+    }
+
+    addTextToItem(TextStyleType::DYNAMICS, el);
 }
 
 bool NotationInteraction::toggleLayoutBreakAvailable() const

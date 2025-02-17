@@ -185,6 +185,7 @@ public:
     virtual void swapSelection() = 0;
     virtual void deleteSelection() = 0;
     virtual void flipSelection() = 0;
+    virtual void flipSelectionHorizontally() = 0;
     virtual void addTieToSelection() = 0;
     virtual void addTiedNoteToChord() = 0;
     virtual void addLaissezVibToSelection() = 0;
@@ -205,6 +206,9 @@ public:
 
     virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
 
+    virtual void autoFlipHairpinsType(engraving::Dynamic* selDyn) = 0;
+
+    virtual void toggleDynamicPopup() = 0;
     virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
     virtual void moveMeasureToPrevSystem() = 0;

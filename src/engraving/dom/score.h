@@ -378,6 +378,7 @@ public:
     void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
     void cmdFlip();
+    void cmdFlipHorizontally();
     void resetUserStretch();
     void cmdResetToDefaultLayout();
     void cmdResetBeamMode();

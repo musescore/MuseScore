@@ -189,6 +189,7 @@ public:
     void swapSelection() override;
     void deleteSelection() override;
     void flipSelection() override;
+    void flipSelectionHorizontally() override;
     void addTieToSelection() override;
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
@@ -209,6 +210,9 @@ public:
 
     void increaseDecreaseDuration(int steps, bool stepByDots) override;
 
+    void autoFlipHairpinsType(engraving::Dynamic* selDyn) override;
+
+    void toggleDynamicPopup() override;
     bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
     void moveMeasureToPrevSystem() override;

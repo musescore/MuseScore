@@ -372,6 +372,10 @@
     <seq>X</seq>
     </SC>
   <SC>
+    <key>flip-horizontally</key>
+    <seq>Alt+X</seq>
+    </SC>
+  <SC>
     <key>pitch-up</key>
     <seq>Up</seq>
     </SC>
@@ -546,6 +550,10 @@
   <SC>
     <key>add-slur</key>
     <seq>S</seq>
+    </SC>
+  <SC>
+    <key>add-dynamic</key>
+    <seq>Ctrl+D</seq>
     </SC>
   <SC>
     <key>add-hairpin</key>
@@ -768,10 +776,6 @@
   <SC>
     <key>staff-text</key>
     <seq>Ctrl+T</seq>
-    </SC>
-  <SC>
-    <key>dynamics</key>
-    <seq>Ctrl+D</seq>
     </SC>
   <SC>
     <key>expression-text</key>
