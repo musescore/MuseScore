@@ -99,6 +99,9 @@ public:
     TranslatableString subtypeUserName() const override;
 
     bool canBeExcludedFromOtherParts() const override { return true; }
+
+private:
+    void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys) override;
 };
 
 //---------------------------------------------------------
