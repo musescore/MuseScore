@@ -394,6 +394,14 @@ muse::TranslatableString OttavaSegment::subtypeUserName() const
     return ottava()->subtypeUserName();
 }
 
+void OttavaSegment::rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys)
+{
+    if (grip == Grip::MIDDLE || grip == Grip::END) {
+        ottava()->computeEndElement();
+    }
+    LineSegment::rebaseOffsetsOnAnchorChanged(grip, oldPos, sys);
+}
+
 int OttavaSegment::subtype() const
 {
     return ottava()->subtype();
