@@ -944,8 +944,8 @@ static void addInferredStickings(ChordRest* cr, const std::vector<Sticking*>& nu
 //   addElemOffset
 //---------------------------------------------------------
 
-static void addElemOffset(EngravingItem* el, track_idx_t track, const String& placement, Measure* measure, const Fraction& tick,
-                          MusicXmlParserPass2& _pass2)
+void MusicXmlParserPass2::addElemOffset(engraving::EngravingItem* el, engraving::track_idx_t track, const muse::String& placement,
+                                        engraving::Measure* measure, const engraving::Fraction& tick)
 {
     if (!measure) {
         return;
@@ -985,13 +985,20 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
     }
 
     if (el->systemFlag()) {
+        const bool finale = m_pass1.exporterSoftware() == MusicXmlExporterSoftware::FINALE;
         Score* score = measure->score();
         Staff* st = score->staff(track2staff(track));
+
         if (!score->isSystemObjectStaff(st) && st->idx() != 0) {
+            if (finale) {
+                delete el;
+                return;
+            }
             score->addSystemObjectStaff(st);
         }
+
         bool found = false;
-        for (EngravingItem* existingEl : muse::values(_pass2.systemElements(), elTick.ticks())) {
+        for (EngravingItem* existingEl : muse::values(systemElements(), elTick.ticks())) {
             if (el->type() == existingEl->type()) {
                 if (el->isTextBase()) {
                     TextBase* elText = toTextBase(el);
@@ -1009,7 +1016,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
         }
         if (!found) {
             el->setParent(s);
-            _pass2.addSystemElement(el, elTick);
+            addSystemElement(el, elTick);
         }
     } else {
         s->add(el);
@@ -2048,7 +2055,8 @@ void MusicXmlParserPass2::scorePartwise()
                     = existingEl->isTextBase() ? toTextBase(existingEl)->plainText() : toTextLineBase(existingEl)->beginText();
                 const bool textMatches = existingText == sysElText;
                 const bool placementMatches = existingEl->placement() == sysEl->placement();
-                if (textMatches && !existingEl->systemFlag() && placementMatches) {
+                const bool staffMatches = existingEl->staffIdx() == sysEl->staffIdx();
+                if (textMatches && (!existingEl->systemFlag() || staffMatches) && placementMatches) {
                     m_score->removeElement(existingEl);
                 }
             }
@@ -2771,7 +2779,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
 
                     m_score->setTempo(tick, tpo);
 
-                    addElemOffset(t, m_pass1.trackForPart(partId), u"above", measure, tick, *this);
+                    addElemOffset(t, m_pass1.trackForPart(partId), u"above", measure, tick);
                 }
             }
             m_e.skipCurrentElement();
@@ -2869,8 +2877,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     }
               );
     for (MusicXmlDelayedDirectionElement* direction : delayedDirections) {
-        direction->addElem(*this);
-        delete direction;
+        addElemOffset(direction->element(), direction->track(), direction->placement(), direction->measure(), direction->tick());
     }
 
     // TODO:
@@ -3243,11 +3250,6 @@ static void preventNegativeTick(const Fraction& tick, Fraction& offset, MusicXml
     }
 }
 
-void MusicXmlDelayedDirectionElement::addElem(MusicXmlParserPass2& _pass2)
-{
-    addElemOffset(m_element, m_track, m_placement, m_measure, m_tick, _pass2);
-}
-
 String MusicXmlParserDirection::placement() const
 {
     if (m_placement.empty() && hasTotalY()) {
@@ -3413,7 +3415,7 @@ void MusicXmlParserDirection::direction(const String& partId,
         }
         tt->setVisible(m_visible);
 
-        addElemOffset(tt, m_track, placement(), measure, tick + m_offset, m_pass2);
+        m_pass2.addElemOffset(tt, m_track, placement(), measure, tick + m_offset);
         tempoTextAdded = true;
     } else if (isLikelyTempoLine(m_track)) {
         String simplifiedText = MScoreTextToMusicXml::toPlainText(m_wordsText).simplified();
@@ -3443,7 +3445,7 @@ void MusicXmlParserDirection::direction(const String& partId,
                 totalY(), sticking, m_track, placement(), measure, tick + m_offset);
             delayedDirections.push_back(delayedDirection);
         } else {
-            addElemOffset(sticking, m_track, placement(), measure, tick + m_offset, m_pass2);
+            m_pass2.addElemOffset(sticking, m_track, placement(), measure, tick + m_offset);
         }
     } else if (isLikelyDynamicRange()) {
         isDynamicRange = true;
@@ -3542,7 +3544,7 @@ void MusicXmlParserDirection::direction(const String& partId,
                         totalY(), t, m_track, placement(), measure, tick + m_offset);
                     delayedDirections.push_back(delayedDirection);
                 } else {
-                    addElemOffset(t, m_track, placement(), measure, tick + m_offset, m_pass2);
+                    m_pass2.addElemOffset(t, m_track, placement(), measure, tick + m_offset);
                 }
             }
         }
@@ -3562,7 +3564,7 @@ void MusicXmlParserDirection::direction(const String& partId,
             // TBD may want ro use tick + _offset if sound is affected
             m_score->setTempo(tick, tpo);
 
-            addElemOffset(t, m_track, placement(), measure, tick + m_offset, m_pass2);
+            m_pass2.addElemOffset(t, m_track, placement(), measure, tick + m_offset);
             tempoTextAdded = true;
         }
     }
@@ -3630,7 +3632,7 @@ void MusicXmlParserDirection::direction(const String& partId,
                 totalY(), elem, m_track, placement(), measure, tick + m_offset);
             delayedDirections.push_back(delayedDirection);
         } else {
-            addElemOffset(elem, m_track, placement(), measure, tick + m_offset, m_pass2);
+            m_pass2.addElemOffset(elem, m_track, placement(), measure, tick + m_offset);
         }
     }
 
@@ -9070,7 +9072,7 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     for (const String& d : std::as_const(m_dynamicsList)) {
         Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(d);
-        addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick), m_pass2);
+        m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
     }
 }
 

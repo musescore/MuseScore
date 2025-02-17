@@ -143,6 +143,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <SystemObjects>
+      <Instance staffId="1" barNumbers="false"/>
+      <Instance staffId="4" barNumbers="false"/>
+      <Instance staffId="8" barNumbers="false"/>
+      <Instance staffId="11" barNumbers="false"/>
+      <Instance staffId="14" barNumbers="false"/>
+      <Instance staffId="17" barNumbers="false"/>
+      </SystemObjects>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">

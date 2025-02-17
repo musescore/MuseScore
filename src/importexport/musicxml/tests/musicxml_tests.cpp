@@ -622,6 +622,9 @@ TEST_F(MusicXml_Tests, finaleInstr) {
 TEST_F(MusicXml_Tests, finaleInstr2) {
     musicXmlImportTestRef("testFinaleInstr2");
 }
+TEST_F(MusicXml_Tests, finaleSystemObjects) {
+    musicXmlImportTestRef("testFinaleSystemObjects");
+}
 TEST_F(MusicXml_Tests, formattedThings) {
     musicXmlIoTest("testFormattedThings");
 }

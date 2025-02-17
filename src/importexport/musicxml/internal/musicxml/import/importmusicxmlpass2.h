@@ -430,6 +430,9 @@ public:
         m_inferredPerc.push_back(instr);
     }
 
+    void addElemOffset(engraving::EngravingItem* el, engraving::track_idx_t track, const muse::String& placement,
+                       engraving::Measure* measure, const engraving::Fraction& tick);
+
 private:
     void addError(const muse::String& error);      // Add an error to be shown in the GUI
     void initPartState(const muse::String& partId);
@@ -656,12 +659,12 @@ public:
                                     muse::String placement, engraving::Measure* measure, engraving::Fraction tick)
         : m_totalY(totalY),  m_element(element), m_track(track), m_placement(placement),
         m_measure(measure), m_tick(tick) {}
-    void addElem(MusicXmlParserPass2& _pass2);
     double totalY() const { return m_totalY; }
-    const engraving::EngravingItem* element() const { return m_element; }
+    engraving::EngravingItem* element() const { return m_element; }
     engraving::track_idx_t track() const { return m_track; }
     const engraving::Fraction& tick() const { return m_tick; }
     const muse::String& placement() const { return m_placement; }
+    engraving::Measure* measure() const { return m_measure; }
 
 private:
     double m_totalY = 0.0;
