@@ -457,7 +457,7 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
 
     staff_idx_t nextSystemObjectStaff = muse::nidx;
     const std::vector<Staff*>& systemObjectStaves = m_score->systemObjectStaves();
-    for (size_t i = 1; i < systemObjectStaves.size(); ++i) {
+    for (size_t i = 0; i < systemObjectStaves.size(); ++i) {
         staff_idx_t idx = systemObjectStaves[i]->idx();
         if (idx > originalStaffIdx) {
             nextSystemObjectStaff = idx;
