@@ -55,10 +55,14 @@ signals:
 private:
     QQuickItem* findControl(const Uri& controlUri);
 
+    void onApplicationStateChanged(Qt::ApplicationState state);
+
     QTimer m_openTimer;
 
     Tour m_tour;
     size_t m_currentStep = 0;
     size_t m_totalSteps = 0;
+
+    bool m_needShowTourAfterApplicationActivation = false;
 };
 }

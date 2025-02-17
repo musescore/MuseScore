@@ -21,6 +21,8 @@
  */
 #include "toursprovider.h"
 
+#include <QApplication>
+
 #include "log.h"
 
 using namespace muse;
@@ -29,7 +31,9 @@ using namespace muse::tours;
 ToursProvider::ToursProvider(const modularity::ContextPtr& iocCtx)
     : QObject(), Injectable(iocCtx)
 {
-    QObject::connect(&m_openTimer, &QTimer::timeout, this, &ToursProvider::doShow);
+    connect(&m_openTimer, &QTimer::timeout, this, &ToursProvider::doShow);
+
+    connect(qApp, &QApplication::applicationStateChanged, this, &ToursProvider::onApplicationStateChanged);
 }
 
 void ToursProvider::showTour(const Tour& tour)
@@ -49,6 +53,11 @@ void ToursProvider::showNext()
 void ToursProvider::doShow()
 {
     m_openTimer.stop();
+
+    if (qApp->applicationState() != Qt::ApplicationActive) {
+        m_needShowTourAfterApplicationActivation = true;
+        return;
+    }
 
     const TourStep& step = m_tour.steps[m_currentStep];
     size_t index = m_currentStep + 1;
@@ -79,4 +88,15 @@ QQuickItem* ToursProvider::findControl(const Uri& controlUri)
 
     const ui::INavigationControl* control = navigationController()->findControl(section, panel, controlName);
     return control ? control->visualItem() : nullptr;
+}
+
+void ToursProvider::onApplicationStateChanged(Qt::ApplicationState state)
+{
+    if (!m_needShowTourAfterApplicationActivation) {
+        return;
+    }
+
+    if (state == Qt::ApplicationActive) {
+        doShow();
+    }
 }
