@@ -206,7 +206,7 @@ private:
     void navigateToTextElementByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 
-    void startNoteInputIfNeed();
+    void startNoteInput();
 
     bool hasSelection() const;
     mu::engraving::EngravingItem* selectedElement() const;
