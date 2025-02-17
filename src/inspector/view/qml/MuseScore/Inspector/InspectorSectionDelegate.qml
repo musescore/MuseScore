@@ -55,6 +55,34 @@ ExpandableBlank {
 
     title: root.sectionModel ? root.sectionModel.title : ""
 
+    // Update the QML view when the C++ model is changed
+    Binding on isExpanded {
+        when: sectionModel
+        value: sectionModel.isExpanded
+    }
+
+    // Update the C++ model when the QML view is changed
+    onIsExpandedChanged: {
+        if (sectionModel) {
+            sectionModel.isExpanded = root.isExpanded
+        }
+    }
+
+    // isExpanded: sectionModel && sectionModel.isExpanded // breaks when expanded manually
+
+    // property bool sectionExpanded: sectionModel && sectionModel.isExpanded
+
+    // onSectionExpandedChanged: {
+    //     root.isExpanded = sectionExpanded
+    // }
+
+    // Binding {
+    //     target: sectionModel
+    //     when: sectionModel
+    //     property: "isExpanded"
+    //     value: root.isExpanded
+    // }
+
     contentItemComponent: {
         if (!root.sectionModel) {
             return undefined

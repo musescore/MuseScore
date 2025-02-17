@@ -86,6 +86,9 @@ public:
     MOCK_METHOD(PreferredScoreCreationMode, preferredScoreCreationMode, (), (const, override));
     MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
 
+    MOCK_METHOD(bool, inspectorExpandAccessibilitySection, (), (const, override));
+    MOCK_METHOD(void, setInspectorExpandAccessibilitySection, (bool), (override));
+
     MOCK_METHOD(MigrationOptions, migrationOptions, (MigrationType), (const, override));
     MOCK_METHOD(void, setMigrationOptions, (MigrationType, const MigrationOptions&, bool), (override));
 

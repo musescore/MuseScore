@@ -109,6 +109,9 @@ public:
     virtual PreferredScoreCreationMode preferredScoreCreationMode() const = 0;
     virtual void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) = 0;
 
+    virtual bool inspectorExpandAccessibilitySection() const = 0;
+    virtual void setInspectorExpandAccessibilitySection(bool expand) = 0;
+
     virtual MigrationOptions migrationOptions(MigrationType type) const = 0;
     virtual void setMigrationOptions(MigrationType type, const MigrationOptions& opt, bool persistent = true) = 0;
 

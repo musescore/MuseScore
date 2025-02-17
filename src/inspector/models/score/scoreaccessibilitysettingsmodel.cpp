@@ -34,6 +34,7 @@ ScoreAccessibilitySettingsModel::ScoreAccessibilitySettingsModel(QObject* parent
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_ACCESSIBILITY);
     setTitle(muse::qtrc("inspector", "Accessibility"));
+    setIsExpanded(projectConfiguration()->inspectorExpandAccessibilitySection());
 
     notationStyle()->styleChanged().onNotify(this, [this]() {
         if (!m_ignoreStyleChanges && !m_currentPresetEdited) {
@@ -42,6 +43,17 @@ ScoreAccessibilitySettingsModel::ScoreAccessibilitySettingsModel(QObject* parent
             emit possibleStylePresetsChanged();
             emit currentStylePresetIndexChanged();
         }
+    });
+
+    connect(this, &ScoreAccessibilitySettingsModel::isExpandedChanged, [this]() {
+        projectConfiguration()->setInspectorExpandAccessibilitySection(isExpanded());
+
+        // if (isExpanded()) {
+        //     QTimer::singleShot(2000, this, [this]() {
+        //         setIsExpanded(false);
+        //         LOGW() << "Accessibility Timer Expired";
+        //     });
+        // }
     });
 }
 

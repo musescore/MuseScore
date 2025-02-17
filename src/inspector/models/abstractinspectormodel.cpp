@@ -217,6 +217,21 @@ InspectorModelType AbstractInspectorModel::modelType() const
     return m_modelType;
 }
 
+bool AbstractInspectorModel::isExpanded() const
+{
+    return m_isExpanded;
+}
+
+void AbstractInspectorModel::setIsExpanded(bool expanded)
+{
+    if (m_isExpanded == expanded) {
+        return;
+    }
+
+    m_isExpanded = expanded;
+    emit isExpandedChanged();
+}
+
 ElementKey AbstractInspectorModel::makeKey(const EngravingItem* item)
 {
     switch (item->type()) {
