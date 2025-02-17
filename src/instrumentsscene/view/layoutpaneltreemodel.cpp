@@ -545,13 +545,21 @@ void LayoutPanelTreeModel::endActiveDrag()
     setLoadingBlocked(false);
 }
 
-void LayoutPanelTreeModel::toggleVisibilityOfSelectedRows(bool visible)
+void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
 {
     for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
-        AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
-
-        item->setIsVisible(visible);
+        changeVisibility(index, visible);
     }
+}
+
+void LayoutPanelTreeModel::changeVisibility(const QModelIndex& index, bool visible)
+{
+    setLoadingBlocked(true);
+
+    AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
+    item->setIsVisible(visible);
+
+    setLoadingBlocked(false);
 }
 
 QItemSelectionModel* LayoutPanelTreeModel::selectionModel() const

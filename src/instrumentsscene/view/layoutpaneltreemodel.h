@@ -92,7 +92,8 @@ public:
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
-    Q_INVOKABLE void toggleVisibilityOfSelectedRows(bool visible);
+    Q_INVOKABLE void changeVisibilityOfSelectedRows(bool visible);
+    Q_INVOKABLE void changeVisibility(const QModelIndex& index, bool visible);
 
     Q_INVOKABLE void startActiveDrag();
     Q_INVOKABLE void endActiveDrag();

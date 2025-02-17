@@ -319,8 +319,12 @@ Item {
                                     flickable.contentY = contentYBackup
                                 }
 
-                                onVisibilityChanged: function(visible) {
-                                    treeModel.toggleVisibilityOfSelectedRows(visible);
+                                onChangeVisibilityOfSelectedRowsRequested: function(visible) {
+                                    treeModel.changeVisibilityOfSelectedRows(visible);
+                                }
+
+                                onChangeVisibilityRequested: function(index, visible) {
+                                    treeModel.changeVisibility(index, visible)
                                 }
 
                                 onDragStarted: {
