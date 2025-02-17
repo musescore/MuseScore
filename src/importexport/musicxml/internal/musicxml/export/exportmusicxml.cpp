@@ -998,15 +998,15 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
     String tagName;
     if (gli->glissandoType() == GlissandoType::STRAIGHT) {
         switch (gli->lineStyle()) {
-            case LineType::SOLID:
-                tagName = u"slide line-type=\"solid\"";
-                break;
-            case LineType::DASHED:
-                tagName = u"slide line-type=\"dashed\"";
-                break;
-            case LineType::DOTTED:
-                tagName = u"slide line-type=\"dotted\"";
-                break;
+        case LineType::SOLID:
+            tagName = u"slide line-type=\"solid\"";
+            break;
+        case LineType::DASHED:
+            tagName = u"slide line-type=\"dashed\"";
+            break;
+        case LineType::DOTTED:
+            tagName = u"slide line-type=\"dotted\"";
+            break;
         }
     } else {
         tagName = u"glissando line-type=\"wavy\"";
