@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_LINUXAUDIODRIVER_H
-#define MUSE_AUDIO_LINUXAUDIODRIVER_H
+#ifndef MUSE_AUDIO_PWAUDIODRIVER_H
+#define MUSE_AUDIO_PWAUDIODRIVER_H
 
 #include "async/asyncable.h"
 
@@ -29,12 +29,24 @@
 
 #include "audiodeviceslistener.h"
 
+struct pw_thread_loop;
+struct pw_context;
+struct pw_core;
+
 namespace muse::audio {
-class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
+class PwRegistry;
+class PwStream;
+
+class PwAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
-    LinuxAudioDriver();
-    ~LinuxAudioDriver();
+    PwAudioDriver();
+    ~PwAudioDriver();
+
+    bool connectedToPwServer() const
+    {
+        return m_core != nullptr;
+    }
 
     void init() override;
 
@@ -56,13 +68,11 @@ public:
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
-
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
     async::Notification outputDeviceSampleRateChanged() const override;
-
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
     void resume() override;
@@ -71,14 +81,19 @@ public:
 private:
     async::Notification m_outputDeviceChanged;
 
-    mutable std::mutex m_devicesMutex;
-    AudioDevicesListener m_devicesListener;
-    async::Notification m_availableOutputDevicesChanged;
-
     std::string m_deviceId;
 
     async::Notification m_bufferSizeChanged;
     async::Notification m_sampleRateChanged;
+
+    Spec m_formatSpec;
+
+    pw_thread_loop* m_loop = nullptr;
+    pw_context* m_context = nullptr;
+    pw_core* m_core = nullptr;
+
+    std::unique_ptr<PwRegistry> m_registry;
+    std::unique_ptr<PwStream> m_stream;
 };
 }
 
