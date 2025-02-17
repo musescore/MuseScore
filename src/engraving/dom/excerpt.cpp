@@ -573,6 +573,10 @@ void MasterScore::initExcerpt(Excerpt* excerpt)
 
     Excerpt::createExcerpt(excerpt);
     excerpt->setInited(true);
+
+    if (!score->style().isDefault(Sid::timeSigPlacement)) {
+        score->resetStyleValue(Sid::timeSigPlacement);
+    }
 }
 
 void MasterScore::initParts(Excerpt* excerpt)
