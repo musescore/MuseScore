@@ -1469,6 +1469,19 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
     const bool isOnStaffTimeSig = timeSigPlacement != TimeSigPlacement::NORMAL;
 
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (EngravingItem* measureElement : measure->el()) {
+            if (!measureElement || !measureElement->systemFlag()) {
+                continue;
+            }
+            if (!staves.empty()) {
+                if (muse::contains(staves, measureElement->staff())) {
+                    result.push_back(measureElement);
+                }
+            } else if (measureElement->isTopSystemObject()) {
+                result.push_back(measureElement);
+            }
+        }
+
         for (const Segment& seg : measure->segments()) {
             if (seg.isChordRestType()) {
                 for (EngravingItem* annotation : seg.annotations()) {
