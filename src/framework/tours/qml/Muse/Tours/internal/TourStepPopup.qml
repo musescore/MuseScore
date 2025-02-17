@@ -35,10 +35,11 @@ StyledPopupView {
     property int index: 0
     property int total: 0
 
-    padding: 12
-    margins: 8
+    padding: 8
+    margins: 12
 
     background.border.color: ui.theme.accentColor
+    anchorItem: ui.rootItem
 
     signal hideRequested()
     signal nextRequested()
