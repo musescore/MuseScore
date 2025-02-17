@@ -45,7 +45,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: defaultNoteInputMethodDropdown
 
-        title: qsTrc("appshell/preferences", "Default input mode")
+        title: qsTrc("appshell/preferences", "Default input mode:")
 
         currentIndex: defaultNoteInputMethodDropdown.indexOfValue(root.defaultNoteInputMethod)
 
@@ -59,7 +59,7 @@ BaseSection {
     }
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell/preferences", "Apply accidentals, augmentation dots, and articulations")
+        title: qsTrc("appshell/preferences", "Apply accidentals, augmentation dots, and articulations:")
 
         navigation.name: "AddAccidentalDotsArticulationsToNextNoteEnteredDropdown"
         navigation.panel: root.navigation
@@ -78,7 +78,7 @@ BaseSection {
     }
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell/preferences", "Input by duration mode cursor")
+        title: qsTrc("appshell/preferences", "Input by duration mode cursor:")
 
         navigation.name: "InputByDurationModeCursorDropdown"
         navigation.panel: root.navigation
