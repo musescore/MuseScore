@@ -182,6 +182,8 @@ private:
 
     bool m_layoutPanelVisible = true;
 
+    bool m_shouldUpdateSystemObjectLayers = false;
+
     bool m_dragInProgress = false;
     AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
     MoveParams m_activeDragMoveParams;

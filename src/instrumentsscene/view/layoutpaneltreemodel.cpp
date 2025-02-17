@@ -33,7 +33,6 @@
 
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
-#include "async/async.h"
 #include "defer.h"
 #include "log.h"
 
@@ -152,6 +151,8 @@ bool LayoutPanelTreeModel::removeRows(int row, int count, const QModelIndex& par
 
     emit isEmptyChanged();
 
+    updateSystemObjectLayers();
+
     return true;
 }
 
@@ -223,10 +224,10 @@ void LayoutPanelTreeModel::setupPartsConnections()
     });
 
     m_notation->parts()->systemObjectStavesChanged().onNotify(this, [this]() {
-        // Wait until parts are fully loaded / updated
-        async::Async::call(this, [this]() {
+        m_shouldUpdateSystemObjectLayers = true;
+        if (!m_isLoadingBlocked) {
             updateSystemObjectLayers();
-        });
+        }
     });
 }
 
@@ -521,6 +522,7 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     endMoveRows();
 
     updateRearrangementAvailability();
+    updateSystemObjectLayers();
 
     return true;
 }
@@ -543,6 +545,8 @@ void LayoutPanelTreeModel::endActiveDrag()
     m_dragInProgress = false;
 
     setLoadingBlocked(false);
+
+    updateSystemObjectLayers();
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
@@ -936,9 +940,11 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 {
     TRACEFUNC;
 
-    if (!m_masterNotation || !m_rootItem) {
+    if (!m_masterNotation || !m_rootItem || !m_shouldUpdateSystemObjectLayers) {
         return;
     }
+
+    m_shouldUpdateSystemObjectLayers = false;
 
     // Create copy, because we're going to modify them
     std::vector<Staff*> newSystemObjectStaves = m_masterNotation->notation()->parts()->systemObjectStaves();
