@@ -104,6 +104,8 @@ public slots:
     void setState(const ui::UiActionState& state);
     void setSelectable(bool selectable);
     void setSelected(bool selected);
+    void setCheckable(bool checkable);
+    void setChecked(bool checked);
     void setRole(muse::uicomponents::MenuItemRole role);
     void setSubitems(const QList<uicomponents::MenuItem*>& subitems);
     void setAction(const ui::UiAction& action);
