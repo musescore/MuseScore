@@ -48,29 +48,33 @@ void MuseSoundsCheckUpdateScenario::delayedInit()
     }
 }
 
-void MuseSoundsCheckUpdateScenario::checkForUpdate()
+bool MuseSoundsCheckUpdateScenario::hasUpdate() const
 {
     if (isCheckStarted() || !service()->needCheckForUpdate()) {
-        return;
+        return false;
     }
 
     RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
-    if (lastCheckResult.ret) {
-        //! NOTE: recheck if we already shown the info
-        if (shouldIgnoreUpdate(lastCheckResult.val)) {
-            return;
-        }
-
-        showReleaseInfo(lastCheckResult.val);
-        return;
+    if (!lastCheckResult.ret) {
+        return false;
     }
 
     bool noUpdate = lastCheckResult.ret.code() == static_cast<int>(Err::NoUpdate);
     if (noUpdate) {
+        return false;
+    }
+
+    return !shouldIgnoreUpdate(lastCheckResult.val);
+}
+
+void MuseSoundsCheckUpdateScenario::showUpdate()
+{
+    RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
         return;
     }
 
-    doCheckForUpdate(true);
+    showReleaseInfo(lastCheckResult.val);
 }
 
 bool MuseSoundsCheckUpdateScenario::isCheckStarted() const

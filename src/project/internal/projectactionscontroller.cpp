@@ -393,7 +393,10 @@ Ret ProjectActionsController::doFinishOpenProject()
     //! Show Tours & Muse Sounds update if need
     auto showToursAndMuseSoundsUpdate = [=](){
         QTimer::singleShot(1000, [this]() {
-            museSoundsCheckUpdateScenario()->checkForUpdate();
+            if (museSoundsCheckUpdateScenario()->hasUpdate()) {
+                museSoundsCheckUpdateScenario()->showUpdate();
+            }
+
             toursService()->onEvent(u"project_opened");
         });
     };
