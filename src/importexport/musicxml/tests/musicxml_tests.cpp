@@ -893,6 +893,9 @@ TEST_F(MusicXml_Tests, measureStyleSlash) {
 TEST_F(MusicXml_Tests, midiPortExport) {
     musicXmlMscxExportTestRef("testMidiPortExport");
 }
+TEST_F(MusicXml_Tests, ms3KitAndPerc) {
+    musicXmlImportTestRef("testMS3KitAndPerc");
+}
 TEST_F(MusicXml_Tests, multiInstrumentPart1) {
     musicXmlIoTest("testMultiInstrumentPart1");
 }
