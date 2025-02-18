@@ -54,7 +54,8 @@ FocusableControl {
     signal popupOpened(var popupX, var popupY, var popupHeight)
     signal popupClosed()
 
-    signal visibilityChanged(bool visible)
+    signal changeVisibilityOfSelectedRowsRequested(bool visible)
+    signal changeVisibilityRequested(var index, bool visible)
 
     signal dragStarted()
     signal dropped()
@@ -231,9 +232,9 @@ FocusableControl {
                 }
 
                 if (root.isSelected) {
-                    root.visibilityChanged(!isVisible)
+                    root.changeVisibilityOfSelectedRowsRequested(!isVisible)
                 } else {
-                    model.itemRole.isVisible = !isVisible
+                    root.changeVisibilityRequested(styleData.index, !isVisible)
                 }
             }
         }

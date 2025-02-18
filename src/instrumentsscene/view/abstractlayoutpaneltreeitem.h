@@ -51,7 +51,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(QString id READ idStr CONSTANT)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(int type READ typeInt CONSTANT)
-    Q_PROPERTY(bool isVisible READ isVisible WRITE setIsVisible NOTIFY isVisibleChanged)
+    Q_PROPERTY(bool isVisible READ isVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
     Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
