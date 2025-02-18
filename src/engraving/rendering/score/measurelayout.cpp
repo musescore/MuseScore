@@ -2034,15 +2034,21 @@ Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const Dire
     return paren;
 }
 
-static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom)
+static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom, LayoutContext& ctx)
 {
     Segment* seg = item->segment();
     EngravingItem* el = seg->element(item->track());
     const double spatium = item->spatium();
-    if (el) {
-        top = std::min(top, el->shape().top() + el->pos().y() + spatium / 4);
-        bottom = std::max(bottom, el->shape().bottom() + el->pos().y() - spatium / 4);
+    if (!el) {
+        return;
     }
+
+    if (!el->ldata()->isValid()) {
+        TLayout::layoutItem(el, ctx);
+    }
+
+    top = std::min(top, el->shape().top() + el->pos().y() + spatium / 4);
+    bottom = std::max(bottom, el->shape().bottom() + el->pos().y() - spatium / 4);
 }
 
 void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continuation, LayoutContext& ctx)
@@ -2081,8 +2087,8 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
                                      != TimeSigPlacement::NORMAL;
         if ((ctx.conf().styleB(Sid::smallParens) || needsBigTimeSigAdjust) && leftParen && rightParen) {
             const double spatium = leftParen->spatium();
-            calcParenTopBottom(leftParen, top, bottom);
-            calcParenTopBottom(rightParen, top, bottom);
+            calcParenTopBottom(leftParen, top, bottom, ctx);
+            calcParenTopBottom(rightParen, top, bottom, ctx);
 
             double height = bottom - top;
 
