@@ -4514,7 +4514,7 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 
     Parenthesis::LayoutData* ldata = item->mutldata();
     ldata->setPos(PointF());
-    ldata->clearShape();
+    ldata->reset();
     ldata->path.reset();
 
     const Staff* staff = item->staff();
