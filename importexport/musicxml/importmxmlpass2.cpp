@@ -8014,10 +8014,11 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
                               MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
       {
       int glissandoNumber = notation.attribute("number").toInt();
-      if (glissandoNumber > 0) glissandoNumber--;
+      if (glissandoNumber > 0)
+            glissandoNumber--;
       const QString glissandoType = notation.attribute("type");
-      int glissandoTag = notation.name() == "slide" ? 0 : 1;
-      //                  QString lineType  = ee.attribute(QString("line-type"), "solid");
+      const bool glissandoTag = notation.name() != "slide";
+      const QString lineType  = notation.attribute("line-type");
       Glissando*& gliss = glissandi[glissandoNumber][glissandoTag];
 
       const Fraction tick = note->tick();
@@ -8042,8 +8043,14 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
                   gliss->setParent(note);
                   if (glissandoColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         gliss->setLineColor(glissandoColor);
+                  if (lineType == "dashed")
+                      gliss->setLineStyle(Qt::DashLine);
+                  else if (lineType == "dotted")
+                      gliss->setLineStyle(Qt::DotLine);
+                  else if (lineType == "solid" || lineType.isEmpty())
+                      gliss->setLineStyle(Qt::SolidLine);
                   gliss->setText(glissandoText);
-                  gliss->setGlissandoType(glissandoTag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
+                  gliss->setGlissandoType(glissandoTag || (lineType == "wavy") ? GlissandoType::WAVY : GlissandoType::STRAIGHT);
                   spanners[gliss] = QPair<int, int>(tick.ticks(), -1);
                   // qDebug("glissando/slide=%p inserted at first tick %d", gliss, tick);
                   }

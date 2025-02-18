@@ -147,6 +147,7 @@ private slots:
       void fractionTicks() { mxmlIoTestRef("testFractionTicks"); }
       void fretboardDiagrams() { mxmlImportTestRef("testFretboardDiagrams"); }
       void fretDiagramLayoutOrder() { mxmlImportTestRef("testFretDiagramLayoutOrder"); }
+      void glissandoLines() { mxmlIoTest("testGlissandoLines"); }
       void grace1() { mxmlIoTest("testGrace1"); }
       void grace2() { mxmlIoTest("testGrace2"); }
       void grace3() { mxmlIoTest("testGrace3"); }

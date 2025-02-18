@@ -881,18 +881,25 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
       {
       GlissandoType st = gli->glissandoType();
       QString tagName;
-      switch (st) {
-            case GlissandoType::STRAIGHT:
-                  tagName = "slide line-type=\"solid\"";
-                  break;
-            case GlissandoType::WAVY:
-                  tagName = "glissando line-type=\"wavy\"";
-                  break;
-            default:
-                  qDebug("unknown glissando subtype %d", int(st));
-                  return;
-                  break;
+      if (st == GlissandoType::STRAIGHT) {
+            switch (gli->lineStyle()) {
+                  case Qt::SolidLine:
+                        tagName = "slide line-type=\"solid\"";
+                        break;
+                  case Qt::DashLine:
+                        tagName = "slide line-type=\"dashed\"";
+                        break;
+                  case Qt::DotLine:
+                        tagName = "slide line-type=\"dotted\"";
+                        break;
+                  default:
+                        qDebug("Unknown glissando subtype %d", int(st));
+                        break;
+                  }
             }
+      else
+            tagName = "glissando line-type=\"wavy\"";
+
       tagName += QString(" number=\"%1\" type=\"%2\"").arg(number).arg(start ? "start" : "stop");
       if (start) {
             tagName += color2xml(gli);
