@@ -344,9 +344,13 @@ void LayoutPanelTreeModel::load()
     SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(systemObjectStaves);
 
     for (const Part* part : masterParts) {
-        for (Staff* staff : part->staves()) {
-            if (muse::contains(systemObjectStaves, staff)) {
-                m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
+        if (m_notation->isMaster()) {
+            // Only show system object staves in master score
+            // TODO: extend system object staves logic to parts
+            for (Staff* staff : part->staves()) {
+                if (muse::contains(systemObjectStaves, staff)) {
+                    m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
+                }
             }
         }
 
@@ -360,6 +364,7 @@ void LayoutPanelTreeModel::load()
 
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
+    emit isAddingSystemMarkingsAvailableChanged(isAddingSystemMarkingsAvailable());
 }
 
 void LayoutPanelTreeModel::sortParts(notation::PartList& parts)
@@ -683,6 +688,11 @@ bool LayoutPanelTreeModel::isRemovingAvailable() const
 bool LayoutPanelTreeModel::isAddingAvailable() const
 {
     return m_notation != nullptr;
+}
+
+bool LayoutPanelTreeModel::isAddingSystemMarkingsAvailable() const
+{
+    return isAddingAvailable() && m_notation->isMaster();
 }
 
 bool LayoutPanelTreeModel::isEmpty() const

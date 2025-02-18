@@ -60,6 +60,7 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyn
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY isRemovingAvailableChanged)
     Q_PROPERTY(bool isAddingAvailable READ isAddingAvailable NOTIFY isAddingAvailableChanged)
+    Q_PROPERTY(bool isAddingSystemMarkingsAvailable READ isAddingSystemMarkingsAvailable NOTIFY isAddingSystemMarkingsAvailableChanged)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
     Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
@@ -79,6 +80,7 @@ public:
     bool isMovingDownAvailable() const;
     bool isRemovingAvailable() const;
     bool isAddingAvailable() const;
+    bool isAddingSystemMarkingsAvailable() const;
     bool isEmpty() const;
     QString addInstrumentsKeyboardShortcut() const;
     int selectedItemsType() const;
@@ -107,6 +109,7 @@ signals:
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
     void isMovingDownAvailableChanged(bool isMovingDownAvailable);
     void isAddingAvailableChanged(bool isAddingAvailable);
+    void isAddingSystemMarkingsAvailableChanged(bool isAddingSystemMarkingsAvailable);
     void isRemovingAvailableChanged(bool isRemovingAvailable);
     void isEmptyChanged();
     void addInstrumentsKeyboardShortcutChanged();

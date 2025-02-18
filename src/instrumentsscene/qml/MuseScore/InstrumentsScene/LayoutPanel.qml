@@ -98,6 +98,7 @@ Item {
             isMovingUpAvailable: treeModel.isMovingUpAvailable
             isMovingDownAvailable: treeModel.isMovingDownAvailable
             isAddingAvailable: treeModel.isAddingAvailable
+            isAddingSystemMarkingsAvailable: treeModel.isAddingSystemMarkingsAvailable
             isRemovingAvailable: treeModel.isRemovingAvailable
             selectedItemsType: treeModel.selectedItemsType
 
