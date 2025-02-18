@@ -2057,7 +2057,7 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
     const SegmentType ksSegType = continuation ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
     const SegmentType clefSegType = continuation ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
 
-    const Fraction sigTick = continuation ? Fraction(0, 0) : m->ticks();
+    const Fraction sigTick = continuation ? Fraction(0, 1) : m->ticks();
 
     auto segShouldHaveParenthesis = [&](const Segment* seg, const track_idx_t track) -> bool {
         const EngravingItem* el = seg ? seg->element(track) : nullptr;
@@ -2188,7 +2188,7 @@ void MeasureLayout::removeRepeatCourtesyParenthesesMeasure(Measure* m, const boo
     const SegmentType ksSegType = continuation ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
     const SegmentType clefSegType = continuation ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
 
-    const Fraction sigTick = continuation ? Fraction(0, 0) : m->ticks();
+    const Fraction sigTick = continuation ? Fraction(0, 1) : m->ticks();
 
     Segment* clefSeg = m->findSegmentR(clefSegType, sigTick);
     Segment* ksSeg = m->findSegmentR(ksSegType, sigTick);
@@ -2477,7 +2477,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                 const System* sys = searchMeasure->system();
                 if (isFirstClef && searchMeasure->tick() >= clefTick) {
                     // Need to check previous measure for clef change if one not found in this measure
-                    Segment* clefSeg = searchMeasure->findFirstR(SegmentType::Clef | SegmentType::HeaderClef, Fraction(0, 0));
+                    Segment* clefSeg = searchMeasure->findFirstR(SegmentType::Clef | SegmentType::HeaderClef, Fraction(0, 1));
                     Measure* prevMeas = searchMeasure->prevMeasure();
                     if (prevMeas && !clefSeg) {
                         clefSeg = prevMeas->findSegment(SegmentType::Clef, m->tick());
