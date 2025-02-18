@@ -49,6 +49,7 @@
 #include "harmony.h"
 #include "key.h"
 #include "laissezvib.h"
+#include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "masterscore.h"
@@ -2771,7 +2772,7 @@ void Score::cmdResetMeasuresLayout()
         }
 
         for (EngravingItem* item : mb->el()) {
-            if (item->isLayoutBreak()) {
+            if (item->isLayoutBreak() && !toLayoutBreak(item)->isSectionBreak()) {
                 itemsToRemove.push_back(item);
             }
         }
