@@ -40,6 +40,8 @@ class Spanner;
 class ScoreRange;
 class ChordRest;
 class Score;
+class Marker;
+class Jump;
 
 //---------------------------------------------------------
 //   TrackList
@@ -110,9 +112,20 @@ protected:
 
 private:
 
+    bool endOfMeasure(EngravingItem* e) const;
+    void backupJumpsAndMarkers(Segment* first, Segment* last);
+    void restoreJumpsAndMarkers(Score* score, const Fraction& tick) const;
+    void deleteJumpsAndMarkers();
     friend class TrackList;
 
+    struct JumpsMarkersBackup
+    {
+        Fraction sPosition;
+        EngravingItem* e = nullptr;
+    };
+
     std::list<TrackList*> m_tracks;
+    std::list<JumpsMarkersBackup> m_jumpsMarkers;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
 };
