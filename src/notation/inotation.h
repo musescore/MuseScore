@@ -69,6 +69,8 @@ public:
 
     virtual bool hasVisibleParts() const = 0;
 
+    virtual bool isMaster() const = 0;
+
     // draw
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& viewMode) = 0;

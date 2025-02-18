@@ -238,6 +238,11 @@ bool Notation::hasVisibleParts() const
     return false;
 }
 
+bool Notation::isMaster() const
+{
+    return m_score->isMaster();
+}
+
 void Notation::notifyAboutNotationChanged()
 {
     m_notationChanged.notify();

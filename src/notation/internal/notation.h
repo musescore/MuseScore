@@ -60,6 +60,8 @@ public:
 
     bool hasVisibleParts() const override;
 
+    bool isMaster() const override;
+
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& viewMode) override;
     muse::async::Notification viewModeChanged() const override;

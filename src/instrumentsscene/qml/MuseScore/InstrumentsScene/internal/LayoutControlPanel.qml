@@ -34,6 +34,7 @@ RowLayout {
     property bool isMovingDownAvailable: false
     property bool isRemovingAvailable: false
     property bool isAddingAvailable: value
+    property bool isAddingSystemMarkingsAvailable: value
 
     property int selectedItemsType: LayoutPanelItemType.UNDEFINED
 
@@ -68,6 +69,7 @@ RowLayout {
         navigation.order: 1
 
         enabled: root.isAddingAvailable
+        addSystemMarkingsAvailable: root.isAddingSystemMarkingsAvailable
 
         onAddInstrumentRequested: {
             root.addInstrumentRequested()
