@@ -70,6 +70,9 @@ void ToursService::initTours()
         return;
     }
 
+    QString languageCode = languagesConfiguration()->currentLanguageCode().val;
+    std::string locale = QLocale(languageCode).bcp47Name().toStdString();
+
     for (const std::string& eventCode : obj.keys()) {
         Tour tour;
 
@@ -88,10 +91,25 @@ void ToursService::initTours()
             }
 
             TourStep step;
-            step.title = itemObj.value("title").toString();
-            step.description = itemObj.value("description").toString();
             step.videoExplanationUrl = itemObj.value("video_explanation_url").toString();
             step.controlUri = Uri(itemObj.value("control_uri").toString());
+
+            JsonObject itemLocaleObj = itemObj.value("locale").toObject();
+
+            if (!itemLocaleObj.contains(locale)) {
+                static const std::string DEFAULT_LOCALE = "en";
+                locale = DEFAULT_LOCALE;
+
+                if (!itemLocaleObj.contains(locale)) {
+                    LOGE() << "failed parse, no tour content";
+                    return;
+                }
+            }
+
+            JsonObject itemCurrentLocaleObj = itemLocaleObj.value(locale).toObject();
+
+            step.title = itemCurrentLocaleObj.value("title").toString();
+            step.description = itemCurrentLocaleObj.value("description").toString();
 
             tour.steps.emplace_back(step);
         }

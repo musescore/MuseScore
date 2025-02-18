@@ -4,9 +4,49 @@
         "steps" : [
             {
                 "control_uri": "control://NoteInputSection/NoteInputBar/note-input-by-duration",
-                "title": "Note input modes",
-                "description": "Discover different ways to input notes in MuseScore Studio.",
-                "video_explanation_url": "https://www.youtube.com/watch?v=OUXf7Y2CPQE&t"
+                "video_explanation_url": "https://www.youtube.com/watch?v=OUXf7Y2CPQE&t",
+                "locale": {
+                    "en": {
+                        "title": "Note input modes",
+                        "description": "Discover different ways to input notes in MuseScore Studio."
+                    },
+                    "es": {
+                        "title": "Modos de introducción de notas",
+                        "description": "Descubre diferentes formas de introducir notas en MuseScore Studio."
+                    },
+                    "zh": {
+                        "title": "音符输入模式",
+                        "description": "探索在 MuseScore Studio 中输入音符的不同方式。"
+                    },
+                    "pt": {
+                        "title": "Modos de entrada de notas",
+                        "description": "Descubra diferentes maneiras de inserir notas no MuseScore Studio."
+                    },
+                    "ru": {
+                        "title": "Режимы ввода нот",
+                        "description": "Откройте для себя различные способы ввода нот в MuseScore Studio."
+                    },
+                    "ja": {
+                        "title": "音符入力モード",
+                        "description": "MuseScore Studio で音符を入力するさまざまな方法を発見しましょう。"
+                    },
+                    "de": {
+                        "title": "Noteneingabemodi",
+                        "description": "Entdecken Sie verschiedene Möglichkeiten zur Eingabe von Noten in MuseScore Studio."
+                    },
+                    "ko": {
+                        "title": "음표 입력 모드",
+                        "description": "MuseScore Studio에서 음표를 입력하는 다양한 방법을 알아보세요."
+                    },
+                    "it": {
+                        "title": "Modalità di inserimento delle note",
+                        "description": "Scopri diversi modi per inserire le note in MuseScore Studio."
+                    },
+                    "fr": {
+                        "title": "Modes de saisie des notes",
+                        "description": "Découvrez différentes façons de saisir des notes dans MuseScore Studio."
+                    }
+                }
             }
         ]
     }
