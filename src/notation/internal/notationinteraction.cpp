@@ -2653,7 +2653,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
 
         if (!adjacentCr) {
             for (track_idx_t track = cr->vStaffIdx() * VOICES; track < (cr->vStaffIdx() + 1) * VOICES; track++) {
-                EngravingItem* adjacentItem = adjacentCrSeg->element(track);
+                adjacentItem = adjacentCrSeg->element(track);
                 if (!adjacentItem || !adjacentItem->isChordRest()) {
                     continue;
                 }
