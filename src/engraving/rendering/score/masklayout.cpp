@@ -155,7 +155,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
 
 void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength)
 {
-    for (int i = 0; i < mask.size(); ++i) {
+    for (size_t i = 0; i < mask.size(); ++i) {
         ShapeElement& el = mask.elements()[i];
 
         if (el.top() - itemShape.top() < minFragmentLength) {
@@ -172,7 +172,7 @@ void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFrag
             el.adjust(0.0, 0.0, minFragmentLength, 0.0);
         }
 
-        for (int j = i + 1; j < mask.size(); ++j) {
+        for (size_t j = i + 1; j < mask.size(); ++j) {
             ShapeElement& otherEl = mask.elements()[j];
             if (intersects(el.left(), el.right(), otherEl.left(), otherEl.right())) {
                 bool otherIsBelow = otherEl.y() > el.y();
