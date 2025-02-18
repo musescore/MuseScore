@@ -731,7 +731,7 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
     Score* score = this->score();
     std::vector<EngravingItem*> topSystemObjects = engraving::collectSystemObjects(score);
 
-    startEdit(TranslatableString("undoableAction", "Add system objects"));
+    startEdit(TranslatableString("undoableAction", "Add system markings"));
 
     for (Staff* staff : staves) {
         if (score->isSystemObjectStaff(staff)) {
@@ -765,7 +765,7 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
     Score* score = this->score();
     std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score, staves);
 
-    startEdit(TranslatableString("undoableAction", "Remove system objects"));
+    startEdit(TranslatableString("undoableAction", "Remove system markings"));
 
     for (Staff* staff : staves) {
         if (score->isSystemObjectStaff(staff)) {
@@ -799,7 +799,7 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
     const std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score(), { srcStaff, dstStaff });
     const staff_idx_t dstStaffIdx = dstStaff->idx();
 
-    startEdit(TranslatableString("undoableAction", "Move system objects"));
+    startEdit(TranslatableString("undoableAction", "Move system markings"));
 
     score()->undo(new mu::engraving::RemoveSystemObjectStaff(srcStaff));
     if (!score()->isSystemObjectStaff(dstStaff)) {

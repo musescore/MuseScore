@@ -44,7 +44,7 @@ MenuButton {
     menuModel: [
         { id: "ADD_INSTRUMENT", title: qsTrc("layoutpanel", "New instrument")  },
         {},
-        { id: "ADD_SYSTEM_MARKINGS", title: qsTrc("layoutpanel", "System markings (tempo, rehearsal, etc.)") },
+        { id: "ADD_SYSTEM_MARKINGS", title: qsTrc("layoutpanel", "System markings (tempo, rehearsal marks, etc.)") },
     ]
 
     onHandleMenuItem: function(itemId) {
