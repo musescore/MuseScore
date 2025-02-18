@@ -206,26 +206,25 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     prepareAuxBuffers(outBufferSize);
 
-    samples_t masterChannelSampleCount = 0;
-
     for (auto& pair : tracksData) {
-        const std::vector<float>& trackBuffer = pair.second;
+        auto channelIt = m_trackChannels.find(pair.first);
+        if (channelIt == m_trackChannels.cend()) {
+            continue;
+        }
 
-        bool outBufferIsSilent = false;
-        mixOutputFromChannel(outBuffer, trackBuffer.data(), samplesPerChannel, outBufferIsSilent);
-        masterChannelSampleCount = std::max(samplesPerChannel, masterChannelSampleCount);
-
-        if (!outBufferIsSilent) {
+        const MixerChannelPtr channel = channelIt->second;
+        if (!channel->isSilent()) {
             m_isSilence = false;
         } else if (m_isSilence) {
             continue;
         }
 
-        const AuxSendsParams& auxSends = m_trackChannels.at(pair.first)->outputParams().auxSends;
-        writeTrackToAuxBuffers(trackBuffer.data(), auxSends, samplesPerChannel);
+        const std::vector<float>& trackBuffer = pair.second;
+        mixOutputFromChannel(outBuffer, trackBuffer.data(), samplesPerChannel);
+        writeTrackToAuxBuffers(trackBuffer.data(), channel->outputParams().auxSends, samplesPerChannel);
     }
 
-    if (m_masterParams.muted || masterChannelSampleCount == 0 || m_isSilence) {
+    if (m_masterParams.muted || samplesPerChannel == 0 || m_isSilence) {
         notifyNoAudioSignal();
         return 0;
     }
@@ -239,7 +238,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         }
     }
 
-    return masterChannelSampleCount;
+    return samplesPerChannel;
 }
 
 void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData)
@@ -429,13 +428,11 @@ void Mixer::setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds)
     m_tracksToProcessWhenIdle = std::move(trackIds);
 }
 
-void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, bool& outBufferIsSilent)
+void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const
 {
     IF_ASSERT_FAILED(outBuffer && inBuffer) {
         return;
     }
-
-    outBufferIsSilent = true;
 
     if (m_masterParams.muted) {
         return;
@@ -448,10 +445,6 @@ void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsign
             size_t idx = samplePos + audioChNum;
             float sample = inBuffer[idx];
             outBuffer[idx] += sample;
-
-            if (outBufferIsSilent && !RealIsNull(sample)) {
-                outBufferIsSilent = false;
-            }
         }
     }
 }
@@ -516,8 +509,9 @@ void Mixer::processAuxChannels(float* buffer, samples_t samplesPerChannel)
         float* auxBuffer = aux.buffer.data();
         aux.channel->process(auxBuffer, samplesPerChannel);
 
-        static bool isSilent = false;
-        mixOutputFromChannel(buffer, auxBuffer, samplesPerChannel, isSilent);
+        if (!aux.channel->isSilent()) {
+            mixOutputFromChannel(buffer, auxBuffer, samplesPerChannel);
+        }
     }
 }
 
@@ -527,14 +521,11 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
         return;
     }
 
-    m_isSilence = true;
-
     float totalSquaredSum = 0.f;
     float volume = muse::db_to_linear(m_masterParams.volume);
 
     for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
         float singleChannelSquaredSum = 0.f;
-
         gain_t totalGain = dsp::balanceGain(m_masterParams.balance, audioChNum) * volume;
 
         for (samples_t s = 0; s < samplesPerChannel; ++s) {
@@ -542,10 +533,6 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
 
             float resultSample = buffer[idx] * totalGain;
             buffer[idx] = resultSample;
-
-            if (m_isSilence && !RealIsNull(resultSample)) {
-                m_isSilence = false;
-            }
 
             float squaredSample = resultSample * resultSample;
             totalSquaredSum += squaredSample;
@@ -556,6 +543,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
         m_audioSignalNotifier.updateSignalValues(audioChNum, rms);
     }
 
+    m_isSilence = RealIsNull(totalSquaredSum);
     m_audioSignalNotifier.notifyAboutChanges();
 
     if (!m_limiter->isActive()) {
