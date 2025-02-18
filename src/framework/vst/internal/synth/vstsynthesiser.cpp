@@ -214,10 +214,6 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
             durationInSamples = microSecsToSamples(duration, m_sampleRate);
         }
 
-        if (durationInSamples == 0) {
-            continue;
-        }
-
         IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
             break;
         }
@@ -240,6 +236,10 @@ samples_t VstSynthesiser::processSequence(const VstSequencer::EventSequence& seq
             muse::audio::gain_t newGain = std::get<muse::audio::gain_t>(event);
             m_vstAudioClient->setVolumeGain(newGain);
         }
+    }
+
+    if (samples == 0) {
+        return 0;
     }
 
     return m_vstAudioClient->process(buffer, samples);
