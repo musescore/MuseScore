@@ -2643,18 +2643,23 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     if (firstItem && secondItem && (firstItem->isBarLine() != secondItem->isBarLine())) {
         const bool outgoing = firstItem->isChordRest();
         const BarLine* bl = outgoing ? toBarLine(secondItem) : toBarLine(firstItem);
+        const ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
 
         // Check the barline is the start of a repeat section
         const Segment* adjacentCrSeg
             = outgoing ? bl->segment()->prev1(SegmentType::ChordRest) : bl->segment()->next1(SegmentType::ChordRest);
-        ChordRest* adjacentCr = nullptr;
-        for (track_idx_t track = 0; track < score()->ntracks(); track++) {
-            EngravingItem* adjacentItem = adjacentCrSeg->element(track);
-            if (!adjacentItem || !adjacentItem->isChordRest()) {
-                continue;
+        EngravingItem* adjacentItem = adjacentCrSeg->element(cr->track());
+        ChordRest* adjacentCr = adjacentItem ? toChordRest(adjacentItem) : nullptr;
+
+        if (!adjacentCr) {
+            for (track_idx_t track = cr->vStaffIdx() * VOICES; track < (cr->vStaffIdx() + 1) * VOICES; track++) {
+                EngravingItem* adjacentItem = adjacentCrSeg->element(track);
+                if (!adjacentItem || !adjacentItem->isChordRest()) {
+                    continue;
+                }
+                adjacentCr = toChordRest(adjacentItem);
+                break;
             }
-            adjacentCr = toChordRest(adjacentItem);
-            break;
         }
 
         if (!adjacentCr || (outgoing && !adjacentCr->hasFollowingJumpItem()) || (!outgoing && !adjacentCr->hasPrecedingJumpItem())) {
