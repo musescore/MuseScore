@@ -3457,7 +3457,7 @@ void TextBase::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
         if (itemBefore->isTextBase() && itemBefore->parent() != newSeg) {
             score()->undoChangeParent(itemBefore, newSeg, itemBefore->staffIdx());
             toTextBase(itemBefore)->moveSnappedItems(newSeg, tickDiff);
-        } else if (itemBefore->isTextLineSegment()) {
+        } else if (itemBefore->isTextLineBaseSegment()) {
             TextLineBase* textLine = ((TextLineBaseSegment*)itemBefore)->textLineBase();
             if (textLine->tick2() != newSeg->tick()) {
                 textLine->undoMoveEnd(tickDiff);
