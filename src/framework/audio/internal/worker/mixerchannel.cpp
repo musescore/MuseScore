@@ -192,12 +192,13 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     samples_t processedSamplesCount = samplesPerChannel;
 
-    if (m_audioSource && !m_params.muted) {
-        processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
+    if (m_audioSource) {
+        if (!m_params.muted || !m_isSilent) {
+            processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
+        }
     }
 
-    if (processedSamplesCount == 0 || m_params.muted) {
-        m_isSilent = true;
+    if (processedSamplesCount == 0 || (m_params.muted && m_isSilent)) {
         std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
         notifyNoAudioSignal();
 

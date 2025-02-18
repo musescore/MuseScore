@@ -58,7 +58,6 @@ public:
     async::Channel<secs_t> playbackPositionChanged() const override;
 
 private:
-    void setAllTracksActive(bool active);
     void seekAllTracks(const msecs_t newPositionMsecs);
 
     IGetTracks* m_getTracks = nullptr;

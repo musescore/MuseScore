@@ -68,6 +68,10 @@ void EventAudioSource::setIsActive(const bool active)
         return;
     }
 
+    if (m_synth->isActive() == active) {
+        return;
+    }
+
     m_synth->setIsActive(active);
     m_synth->flushSound();
 }

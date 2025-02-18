@@ -83,7 +83,12 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
             return;
         }
 
+        ITrackAudioInputPtr source = std::static_pointer_cast<ITrackAudioInput>(channel->source());
+
         if (channel->muted()) {
+            if (source) {
+                source->setIsActive(false);
+            }
             if (m_nonMutedTrackCount != 0) {
                 m_nonMutedTrackCount--;
             }
@@ -92,8 +97,8 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
 
         m_nonMutedTrackCount++;
 
-        ITrackAudioInputPtr source = std::static_pointer_cast<ITrackAudioInput>(channel->source());
         if (source) {
+            source->setIsActive(isActive());
             source->seek(currentTime());
         }
     });
@@ -271,7 +276,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 continue;
             }
 
-            if (pair.second->muted()) {
+            if (pair.second->muted() && pair.second->isSilent()) {
                 pair.second->notifyNoAudioSignal();
                 continue;
             }
@@ -289,7 +294,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 continue;
             }
 
-            if (pair.second->muted()) {
+            if (pair.second->muted() && pair.second->isSilent()) {
                 pair.second->notifyNoAudioSignal();
                 continue;
             }
@@ -320,8 +325,16 @@ void Mixer::setIsActive(bool arg)
 
     AbstractAudioSource::setIsActive(arg);
 
-    for (const auto& channel : m_trackChannels) {
-        channel.second->setIsActive(arg);
+    for (auto& channel : m_trackChannels) {
+        if (!channel.second->muted()) {
+            channel.second->setIsActive(arg);
+        }
+    }
+
+    for (auto& aux : m_auxChannelInfoList) {
+        if (!aux.channel->muted()) {
+            aux.channel->setIsActive(arg);
+        }
     }
 }
 
