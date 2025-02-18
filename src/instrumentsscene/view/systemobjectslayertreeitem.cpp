@@ -76,7 +76,7 @@ static bool isLayerVisible(const SystemObjectGroups& groups)
         }
     }
 
-    return true;
+    return false;
 }
 
 SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
