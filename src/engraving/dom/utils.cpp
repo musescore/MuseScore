@@ -1470,7 +1470,7 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
 
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (EngravingItem* measureElement : measure->el()) {
-            if (!measureElement || !measureElement->systemFlag()) {
+            if (!measureElement || !measureElement->systemFlag() || measureElement->isLayoutBreak()) {
                 continue;
             }
             if (!staves.empty()) {
