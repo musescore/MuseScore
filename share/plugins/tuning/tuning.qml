@@ -37,7 +37,7 @@ MuseScore {
 
     property var history: 0;
 
-    // set true if customisations are made to the tuning
+    // set true if customizations are made to the tuning
     property var modified: false;
 
     /**
@@ -1296,7 +1296,7 @@ MuseScore {
         id: quitDialog
         title: "Quit?"
         text: "Do you want to quit the plugin?"
-        detailedText: "It looks like you have made customisations to this tuning, you could save them to a file before quitting if you like."
+        detailedText: "It looks like you have made customizations to this tuning, you could save them to a file before quitting if you like."
         standardButtons: [StandardButton.Ok, StandardButton.Cancel]
         onAccepted: {
             quit()
