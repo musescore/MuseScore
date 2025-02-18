@@ -6912,9 +6912,10 @@ void NotationInteraction::addMelisma()
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several underscores
+    Segment* curSeg = segment;
     Lyrics* fromLyrics = nullptr;
     PartialLyricsLine* prevPartialLyricsLine = nullptr;
-    while (segment) {
+    while (segment && segmentsAreAdjacentInRepeatStructure(segment, curSeg)) {
         ChordRest* cr = toChordRest(segment->element(track));
         if (cr) {
             fromLyrics = cr->lyrics(verse, placement);
@@ -6976,7 +6977,19 @@ void NotationInteraction::addMelisma()
             }
         }
 
-        if (prevPartialLyricsLine) {
+        if (hasPrecedingRepeat && !prevPartialLyricsLine) {
+            // No from lyrics - create incoming partial melisma
+            PartialLyricsLine* melisma = Factory::createPartialLyricsLine(score()->dummy());
+            melisma->setIsEndMelisma(true);
+            melisma->setNo(verse);
+            melisma->setPlacement(lyrics->placement());
+            melisma->setTick(initialCR->tick());
+            melisma->setTicks(initialCR->ticks());
+            melisma->setTrack(initialCR->track());
+            melisma->setTrack2(initialCR->track());
+
+            score()->undoAddElement(melisma);
+        } else if (prevPartialLyricsLine) {
             const Fraction tickDiff = (segment->tick() + segment->ticks()) - prevPartialLyricsLine->tick2();
             prevPartialLyricsLine->undoMoveEnd(tickDiff);
         }
