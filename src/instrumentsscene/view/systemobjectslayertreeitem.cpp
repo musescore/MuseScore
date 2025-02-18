@@ -164,7 +164,7 @@ void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreCh
             isSystemObj = toTimeSig(item)->timeSigPlacement() != TimeSigPlacement::NORMAL;
         }
 
-        if (!isSystemObj || item->staffIdx() != m_staffIdx) {
+        if (!isSystemObj || item->staffIdx() != m_staffIdx || item->isLayoutBreak()) {
             continue;
         }
 
