@@ -28,7 +28,6 @@
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
-#include "score/scoreaccessibilitysettingsmodel.h"
 #include "notation/inotationinteraction.h"
 
 #include "internal/services/elementrepositoryservice.h"
@@ -74,8 +73,7 @@ void InspectorListModel::buildModelsForEmptySelection()
 
     static const InspectorSectionTypeSet persistentSections {
         InspectorSectionType::SECTION_SCORE_DISPLAY,
-        InspectorSectionType::SECTION_SCORE_APPEARANCE,
-        InspectorSectionType::SECTION_SCORE_ACCESSIBILITY
+        InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
     removeUnusedModels({}, false /*isRangeSelection*/, {}, persistentSections);
@@ -196,9 +194,6 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
             break;
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
             newModel = new ScoreAppearanceSettingsModel(this, m_repository);
-            break;
-        case InspectorSectionType::SECTION_SCORE_ACCESSIBILITY:
-            newModel = new ScoreAccessibilitySettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_PARTS:
             newModel = new PartsSettingsModel(this, m_repository);

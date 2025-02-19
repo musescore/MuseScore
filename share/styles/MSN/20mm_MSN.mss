@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.40">
-  <Style preset="20mm MSN" edited="false">
+  <Style>
     <pageWidth>16.54</pageWidth>
     <pageHeight>11.69</pageHeight>
     <pagePrintableWidth>15.7526</pagePrintableWidth>
