@@ -3112,6 +3112,19 @@ void ChangeDrumset::flip(EditData*)
 {
     Drumset d = *instrument->drumset();
     instrument->setDrumset(&drumset);
+
+    // Update identical drumsets in this part...
+    for (auto pair : part->instruments()) {
+        Instrument* otherInst = pair.second;
+        if (!otherInst || otherInst == instrument) {
+            continue;
+        }
+        if (otherInst->drumset() && instrument->id() == otherInst->id()) {
+            otherInst->setDrumset(&drumset);
+            return;
+        }
+    }
+
     drumset = d;
 
     if (part->staves().size() > 0) {
