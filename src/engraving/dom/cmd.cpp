@@ -3009,6 +3009,7 @@ EngravingItem* Score::move(const String& cmd)
         }
     } else if (cmd == u"prev-chord" && cr) {
         // note input cursor
+        bool noteEntryPos = false;
         if (noteEntryMode() && m_is.segment()) {
             Measure* m = m_is.segment()->measure();
             Segment* s = m_is.segment()->prev1(SegmentType::ChordRest);
@@ -3016,6 +3017,8 @@ EngravingItem* Score::move(const String& cmd)
             for (; s; s = s->prev1(SegmentType::ChordRest)) {
                 if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
                     if (s->element(track)) {
+                        el = s->nextChordRest(track, true);
+                        noteEntryPos = true;
                         if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
                             continue;
                         }
@@ -3033,7 +3036,7 @@ EngravingItem* Score::move(const String& cmd)
 
         // Skip gap rests if we're not in note entry mode...
         while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
-            el = prevChordRest(toChordRest(el));
+            el = noteEntryPos ? el : prevChordRest(toChordRest(el));
         }
         if (el && noteEntryMode()) {
             // do not use if not in original or new measure (don't skip measures)
