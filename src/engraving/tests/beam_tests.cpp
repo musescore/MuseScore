@@ -305,3 +305,44 @@ TEST_F(Engraving_BeamTests, deleteBeamStemDirection)
 
     EXPECT_TRUE(cr1->ldata()->up);
 }
+
+TEST_F(Engraving_BeamTests, drumKitBeam)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "drumKitBeam.mscx");
+    EXPECT_TRUE(score);
+    score->setLayoutAll();
+    score->doLayout();
+    Measure* m = score->firstMeasure();
+    Chord* cr1 = toChord(m->findSegment(SegmentType::ChordRest, Fraction(0, 1))->element(0));
+    EXPECT_TRUE(cr1);
+    EXPECT_TRUE(cr1->up() && cr1->stemDirection() == DirectionV::UP);
+    Chord* cr2 = toChord(m->findSegment(SegmentType::ChordRest, Fraction(2, 8))->element(0));
+    EXPECT_TRUE(cr2);
+    EXPECT_TRUE(cr2->up() && cr2->stemDirection() == DirectionV::UP);
+    Chord* cr3 = toChord(m->findSegment(SegmentType::ChordRest, Fraction(3, 8))->element(0));
+    EXPECT_TRUE(cr3);
+    EXPECT_TRUE(cr3->up() && cr3->stemDirection() == DirectionV::UP);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
+    score->select({ cr1, cr2, cr3 }, SelectType::RANGE);
+    score->cmdFlip();
+    score->setLayoutAll();
+    score->doLayout();
+    score->endCmd();
+
+    EXPECT_TRUE(!cr1->up() && cr1->stemDirection() == DirectionV::DOWN);
+    EXPECT_TRUE(!cr2->up() && cr2->stemDirection() == DirectionV::DOWN);
+    EXPECT_TRUE(!cr3->up() && cr3->stemDirection() == DirectionV::DOWN);
+
+    score->undoRedo(true, nullptr);
+
+    EXPECT_TRUE(cr1->up() && cr1->stemDirection() == DirectionV::UP);
+    // These chords inherit their direction from the beam
+    EXPECT_TRUE(cr2->up() && cr2->stemDirection() == DirectionV::AUTO);
+    EXPECT_TRUE(cr3->up() && cr3->stemDirection() == DirectionV::AUTO);
+
+    MScore::useRead302InTestMode = useRead302;
+}
