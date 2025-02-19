@@ -354,7 +354,7 @@ void PainterPath::closeSubpath()
     m_requireMoveTo = true;
     const Element& first = m_elements.at(m_cStart);
     Element& last = m_elements.back();
-    if (first.x != last.x || first.y != last.y) {
+    if (!RealIsEqual(first.x, last.x) || !RealIsEqual(first.y, last.y)) {
         if (RealIsEqual(first.x, last.x) && RealIsEqual(first.y, last.y)) {
             last.x = first.x;
             last.y = first.y;

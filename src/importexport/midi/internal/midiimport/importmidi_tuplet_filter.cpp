@@ -26,6 +26,7 @@
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
 #include "engraving/dom/mscore.h"
+#include "realfn.h"
 
 #include <set>
 
@@ -59,7 +60,7 @@ public:
                        - div(relativeUsedChordPlaces, er.relativeUsedChordPlaces)
                        + div(sumLengthOfRests.numerator() * 1.0 / sumLengthOfRests.denominator(),
                              er.sumLengthOfRests.numerator() * 1.0 / er.sumLengthOfRests.denominator());
-        if (value == 0) {
+        if (muse::RealIsNull(value)) {
             value = div(voiceCount, er.voiceCount)
                     + div(tupletCount, er.tupletCount);
         }
@@ -69,7 +70,7 @@ public:
 private:
     static double div(double val1, double val2)
     {
-        if (val1 == val2) {
+        if (muse::RealIsEqual(val1, val2)) {
             return 0;
         }
         return (val1 - val2) / qMax(val1, val2);
