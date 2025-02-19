@@ -46,6 +46,8 @@ public:
 
     void init();
 
+    void registerTour(const String& eventCode, const Tour& tour) override;
+
     void onEvent(const String& eventCode) override;
 
 private:

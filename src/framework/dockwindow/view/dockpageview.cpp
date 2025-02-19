@@ -426,3 +426,46 @@ void DockPageView::setDefaultNavigationControl(muse::ui::NavigationControl* cont
     muse::ui::INavigationControl* _control = dynamic_cast<muse::ui::INavigationControl*>(control);
     navigationController()->setDefaultNavigationControl(_control);
 }
+
+QVariant DockPageView::tours() const
+{
+    return m_tours;
+}
+
+void DockPageView::setTours(const QVariant& newTours)
+{
+    if (m_tours == newTours) {
+        return;
+    }
+
+    for (const QVariant& tourVar: newTours.toList()) {
+        QVariantMap tourMap = tourVar.toMap();
+
+        String eventCode = tourMap.value("eventCode").toString();
+
+        QVariantMap tourInfoMap = tourMap.value("tour").toMap();
+
+        tours::Tour tour;
+
+        tour.id = tourInfoMap.value("id").toString();
+
+        for (const QVariant& stepVar: tourInfoMap.value("steps").toList()) {
+            QVariantMap stepMap = stepVar.toMap();
+
+            tours::TourStep step;
+            step.title = stepMap.value("title").toString();
+            step.description = stepMap.value("description").toString();
+            step.videoExplanationUrl = stepMap.value("videoExplanationUrl").toString();
+            step.controlUri = Uri(stepMap.value("controlUri").toString());
+
+            tour.steps.emplace_back(step);
+        }
+
+        if (!tour.steps.empty()) {
+            toursService()->registerTour(eventCode, tour);
+        }
+    }
+
+    m_tours = newTours;
+    emit toursChanged();
+}

@@ -33,6 +33,15 @@ void ToursService::init()
     initTours();
 }
 
+void ToursService::registerTour(const String& eventCode, const Tour& tour)
+{
+    if (muse::contains(m_eventsMap, eventCode)) {
+        return;
+    }
+
+    m_eventsMap.insert({ eventCode, tour });
+}
+
 void ToursService::onEvent(const String& eventCode)
 {
     if (!muse::contains(m_eventsMap, eventCode)) {
