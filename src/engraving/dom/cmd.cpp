@@ -2877,8 +2877,8 @@ EngravingItem* Score::move(const String& cmd)
         // to catch up with the cursor and not move the selection by 2 positions
         cr = selection().cr();
         if (cr && (cr->isGrace() || cmd == u"next-chord" || cmd == u"prev-chord")) {
-        } else {
-            cr = inputState().cr();
+        } else if (auto is = inputState().cr()) {
+            cr = is;
         }
     } else if (selection().activeCR()) {
         cr = selection().activeCR();
@@ -3029,8 +3029,11 @@ EngravingItem* Score::move(const String& cmd)
         // selection "cursor"
         // find previous chordrest, which might be a grace note
         // this may override note input cursor
-        el = prevChordRest(cr);
-
+        if (auto pcr = prevChordRest(cr)) {
+            if (prevChordRest(cr)->isGrace()) {
+                el = pcr;
+            }
+        }
         // Skip gap rests if we're not in note entry mode...
         while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
             el = prevChordRest(toChordRest(el));
