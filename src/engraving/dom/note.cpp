@@ -2363,14 +2363,30 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 void Note::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);
-    if (m_tieFor) {
+    if (tieForNonPartial()) {
         m_tieFor->setTrack(val);
         for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
             seg->setTrack(val);
         }
     }
-    if (m_tieBack) {
+    if (tieBackNonPartial()) {
         m_tieBack->setTrack2(val);
+    }
+    if (laissezVib() || outgoingPartialTie()) {
+        m_tieFor->setTrack(val);
+        m_tieFor->setTrack2(val);
+        for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
+            seg->setTrack(val);
+            seg->setTrack(val);
+        }
+    }
+    if (incomingPartialTie()) {
+        m_tieBack->setTrack(val);
+        m_tieBack->setTrack2(val);
+        for (SpannerSegment* seg : m_tieBack->spannerSegments()) {
+            seg->setTrack(val);
+            seg->setTrack(val);
+        }
     }
     for (Spanner* s : m_spannerFor) {
         s->setTrack(val);
