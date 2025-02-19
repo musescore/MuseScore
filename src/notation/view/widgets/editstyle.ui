@@ -795,7 +795,7 @@
                        <bool>false</bool>
                       </property>
                       <property name="suffix">
-                       <string>%</string>
+                       <string notr="true">%</string>
                       </property>
                       <property name="minimum">
                        <number>25</number>
@@ -8410,7 +8410,7 @@
                   <bool>false</bool>
                  </property>
                  <property name="suffix">
-                  <string>%</string>
+                  <string notr="true">%</string>
                  </property>
                  <property name="decimals">
                   <number>0</number>
@@ -11868,7 +11868,7 @@
                     <bool>false</bool>
                    </property>
                    <property name="suffix">
-                    <string>%</string>
+                    <string notr="true">%</string>
                    </property>
                    <property name="minimum">
                     <double>50.000000000000000</double>
@@ -14951,7 +14951,7 @@ first note of the system</string>
                 <bool>false</bool>
                </property>
                <property name="suffix">
-                <string>%</string>
+                <string notr="true">%</string>
                </property>
                <property name="decimals">
                 <number>0</number>
