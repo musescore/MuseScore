@@ -1237,7 +1237,12 @@ void NotationInteraction::doEndDrag()
     }
 
     m_dragData.reset();
-    setDropTarget(nullptr, false);
+
+    if (m_dropData.elementDropData.has_value()) {
+        setDropTarget(nullptr, false);
+    } else {
+        resetAnchorLines();
+    }
 }
 
 void NotationInteraction::endDrag()
