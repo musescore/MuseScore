@@ -1432,7 +1432,7 @@
                   <bool>false</bool>
                  </property>
                  <property name="suffix">
-                  <string notr="true">%</string>
+                  <string>%</string>
                  </property>
                  <property name="maximum">
                   <number>100</number>
@@ -2103,7 +2103,7 @@
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string notr="true">%</string>
+              <string>%</string>
              </property>
              <property name="minimum">
               <number>10</number>
@@ -2186,7 +2186,7 @@
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string notr="true">%</string>
+              <string>%</string>
              </property>
              <property name="minimum">
               <number>10</number>
@@ -2211,7 +2211,7 @@
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string notr="true">%</string>
+              <string>%</string>
              </property>
              <property name="minimum">
               <number>10</number>
@@ -2268,7 +2268,7 @@
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string notr="true">%</string>
+              <string>%</string>
              </property>
              <property name="minimum">
               <number>10</number>
@@ -5626,7 +5626,7 @@
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string notr="true">%</string>
+              <string>%</string>
              </property>
              <property name="minimum">
               <number>50</number>
@@ -10816,7 +10816,7 @@
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string notr="true">%</string>
+              <string>%</string>
              </property>
              <property name="maximum">
               <number>300</number>
@@ -12971,7 +12971,7 @@ first note of the system</string>
                 <bool>false</bool>
                </property>
                <property name="suffix">
-                <string notr="true">%</string>
+                <string>%</string>
                </property>
                <property name="minimum">
                 <number>1</number>
