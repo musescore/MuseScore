@@ -608,4 +608,21 @@ DockPage {
             id: content
         }
     }
+
+    tours: [
+        {
+            "eventCode": "project_opened",
+            "tour": {
+                "id": "input-by-duration",
+                "steps": [
+                    {
+                        "title": qsTrc("notation", "Note input modes"),
+                        "description": qsTrc("notation", "Discover different ways to input notes in MuseScore Studio."),
+                        "controlUri": "control://NoteInputSection/NoteInputBar/note-input-by-duration",
+                        "videoExplanationUrl": "https://www.youtube.com/watch?v=OUXf7Y2CPQE&t"
+                    }
+                ]
+            }
+        }
+    ]
 }

@@ -391,21 +391,29 @@ Ret ProjectActionsController::doFinishOpenProject()
     extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
 
     //! Show Tours & Muse Sounds update if need
-    async::Channel<Uri> opened = interactive()->opened();
-    opened.onReceive(this, [this, opened](const Uri&) {
-        async::Async::call(this, [this, opened]() {
-            async::Channel<Uri> mut = opened;
-            mut.resetOnReceive(this);
+    auto showToursAndMuseSoundsUpdate = [=](){
+        QTimer::singleShot(1000, [this]() {
+            if (museSoundsCheckUpdateScenario()->hasUpdate()) {
+                museSoundsCheckUpdateScenario()->showUpdate();
+            }
 
-            QTimer::singleShot(1000, [this]() {
-                toursService()->onEvent(u"project_opened");
-            });
+            toursService()->onEvent(u"project_opened");
+        });
+    };
 
-            QTimer::singleShot(5000, [this]() {
-                museSoundsCheckUpdateScenario()->checkForUpdate();
+    if (interactive()->isOpened(NOTATION_PAGE_URI).val) {
+        showToursAndMuseSoundsUpdate();
+    } else {
+        async::Channel<Uri> opened = interactive()->opened();
+        opened.onReceive(this, [=](const Uri&) {
+            async::Async::call(this, [=]() {
+                async::Channel<Uri> mut = opened;
+                mut.resetOnReceive(this);
+
+                showToursAndMuseSoundsUpdate();
             });
         });
-    });
+    }
 
     return openPageIfNeed(NOTATION_PAGE_URI);
 }

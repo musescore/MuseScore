@@ -47,12 +47,18 @@ Item {
         active: false
 
         sourceComponent: TourStepPopup {
+            closePolicies: root.provider.canControlTourPopupClosing ? PopupView.NoAutoClose : PopupView.CloseOnPressOutsideParent
+
             onHideRequested: {
                 Qt.callLater(unloadTourStep)
             }
 
             onNextRequested: {
                 Qt.callLater(root.provider.showNext)
+            }
+
+            onClosed: {
+                root.provider.onTourStepClosed(root.parent)
             }
         }
 
@@ -109,6 +115,10 @@ Item {
 
         function onOpenTourStep(parent, title, description, videoExplanationUrl, index, total) {
             tourStepLoader.open(parent, title, description, videoExplanationUrl, index, total)
+        }
+
+        function onCloseCurrentTourStep() {
+            tourStepLoader.close()
         }
     }
 }

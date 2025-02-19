@@ -117,6 +117,8 @@ public:
     virtual INavigationPanel* panel() const = 0;
 
     virtual void trigger() = 0;
+    virtual async::Notification triggered() const = 0;
+
     virtual void requestActive(bool enableHighlight = false) = 0;
 };
 

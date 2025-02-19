@@ -23,6 +23,11 @@
 
 using namespace muse::update;
 
-void MuseSoundsCheckUpdateScenarioStub::checkForUpdate()
+bool MuseSoundsCheckUpdateScenarioStub::hasUpdate() const
+{
+    return false;
+}
+
+void MuseSoundsCheckUpdateScenarioStub::showUpdate()
 {
 }
