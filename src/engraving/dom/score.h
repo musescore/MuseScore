@@ -666,6 +666,8 @@ public:
     void setPrinting(bool val) { m_printing = val; }
     virtual bool playlistDirty() const;
     virtual void setPlaylistDirty();
+    bool hasCorruptedMeasures() const { return m_corrupted; }
+    void setHasCorruptedMeasures(bool val) { m_corrupted = val; }
 
     bool isOpen() const;
     void setIsOpen(bool open);
@@ -1165,6 +1167,7 @@ private:
     bool m_showInstrumentNames = true;
     bool m_printing = false;                // True if we are drawing to a printer
     bool m_savedCapture = false;            // True if we saved an image capture
+    bool m_corrupted = false;
 
     ShowAnchors m_showAnchors;
 
