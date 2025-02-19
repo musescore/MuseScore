@@ -872,6 +872,9 @@ void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool
 {
     for (const QModelIndex& index : indexes) {
         if (AbstractLayoutPanelTreeItem* item = modelIndexToItem(index)) {
+            if (!item->isSelectable()) {
+                continue;
+            }
             item->setIsSelected(selected);
         }
     }
