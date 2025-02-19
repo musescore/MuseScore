@@ -5411,10 +5411,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     const bool up = item->up();
     const double _up = up ? -1.0 : 1.0;
 
-    //Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
-    //! NOTE A lot of spam
-    // LD_CONDITION(note->ldata()->mirror.has_value());
-
+    double x  = 0.0; // horizontal displacement to match note attach point
     double y1 = 0.0; // vertical displacement to match note attach point
     double y2 = _up * (item->length());
 
@@ -5443,13 +5440,60 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
             // in other TAB types, no correction
         } else { // non-TAB
             // move stem start to note attach point
-            Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
-            if ((up && !note->ldata()->mirror.value(LD_ACCESS::BAD)) || (!up && note->ldata()->mirror.value(LD_ACCESS::BAD))) {
+            const Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
+            //! NOTE A lot of spam
+            // LD_CONDITION(note->ldata()->mirror.has_value());
+            const bool mirror = note->ldata()->mirror.value(LD_ACCESS::BAD);
+            const double lw = item->lineWidthMag();
+            SymId symId = note->noteHead();
+            if ((up && !mirror) || (!up && mirror)) {
+                // default offsets for all fonts, fits for most
+                x  = note->stemUpSE().x() - .5 * lw;
                 y1 = note->stemUpSE().y();
+                if (symId == SymId::noteheadHalf) {
+                    //x -= .25 * lw;
+                } else if (symId == SymId::noteheadDoubleWhole) {
+                    x  += .5 * note->headWidth() + lw; // move to the qlyph's right edge, seems almost all fonts don't have stemUpSE stem up properly here
+                    y1 -= .5 * item->spatium(); // less overlap with the glyph's vertical bar
+                }
+                // some fonts' qlyphs need special treatment, suitable offsets found after lots of trial and error
+                const String musicalFont = conf.styleSt(Sid::musicalSymbolFont);
+                if (musicalFont == "Bravura") { // we can't really change this font
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x -= .9 * lw; // apparently this glyph`s stemUpSE caters for stem width
+                    } else if (symId == SymId::noteheadHalf) {
+                        x += 1.2 * lw; // apparently this glyph`s stemUpSE caters for stem width, but need an extra 0.2 to prevent a 'hump'
+                    } else if (symId == SymId::noteheadBlack) {
+                        x += 1.2 * lw; // apparently this glyph`s stemUpSE caters for stem width, but need an extra 0.2 to prevent a slight 'hump'
+                    }
+                } else if (musicalFont == "Leland") {
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x += 1.25 * lw;
+                    } else if (symId == SymId::noteheadHalf) {
+                        //x += .5 * lw; // we should be able to fix this in the metadata
+                    }
+                } else if (musicalFont == "MuseJazz") {
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x -= .555 * lw; // we should be able to fix this in the metadata
+                    } else if (symId == SymId::noteheadHalf) {
+                        x += .35 * lw; // we should be able to fix this in the metadata
+                    }
+                } else if (musicalFont == "Petaluma") { // we can't really change this font
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x -= .25 * lw;
+                    } else if (symId == SymId::noteheadHalf) {
+                        x += .2 * lw;
+                    }
+                }
             } else {
+                x  = note->stemDownNW().x() + 0.5 * lw;
                 y1 = note->stemDownNW().y();
+                if (symId == SymId::noteheadDoubleWhole) {
+                    y1 += 0.5 * item->spatium(); // less overlap with the glyph's vertical bar
+                }
             }
 
+            ldata->setPosX(note->ldata()->pos().x());
             ldata->setPosY(note->ldata()->pos().y());
         }
 
@@ -5465,13 +5509,12 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     }
 
     double lineWidthCorrection = item->lineWidthMag() * 0.5;
-    double lineX = isTabStaff ? 0.0 : _up * lineWidthCorrection;
 
-    LineF line = LineF(lineX, y1, lineX, y2);
+    LineF line = LineF(x, y1, x, y2);
     ldata->line = line;
 
     // compute line and bounding rectangle
-    RectF rect(line.p1(), line.p2() + PointF(0.0, ldata->beamCorrection));
+    RectF rect(line.p1(), line.p2());
     ldata->setBbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
