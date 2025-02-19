@@ -50,6 +50,7 @@ static const Settings::Key SHOULD_WARN_BEFORE_PUBLISH(module_name, "project/shou
 static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD(module_name, "project/shouldWarnBeforeSavingPubliclyToCloud");
 static const Settings::Key HOME_SCORES_PAGE_VIEW_TYPE(module_name, "project/homeScoresPageViewType");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
+static const Settings::Key INSPECTOR_EXPAND_ACCESSIBILITY_SECTION_KEY(module_name, "project/inspectorExpandAccessibilitySection");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
@@ -83,6 +84,8 @@ void ProjectConfiguration::init()
 
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
+
+    settings()->setDefaultValue(INSPECTOR_EXPAND_ACCESSIBILITY_SECTION_KEY, Val(false));
 
     settings()->setDefaultValue(HOME_SCORES_PAGE_VIEW_TYPE, Val(HomeScoresPageViewType::Grid));
 
@@ -425,6 +428,16 @@ ProjectConfiguration::PreferredScoreCreationMode ProjectConfiguration::preferred
 void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
     settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(mode));
+}
+
+bool ProjectConfiguration::inspectorExpandAccessibilitySection() const
+{
+    return settings()->value(INSPECTOR_EXPAND_ACCESSIBILITY_SECTION_KEY).toBool();
+}
+
+void ProjectConfiguration::setInspectorExpandAccessibilitySection(bool expand)
+{
+    settings()->setSharedValue(INSPECTOR_EXPAND_ACCESSIBILITY_SECTION_KEY, Val(expand));
 }
 
 static MigrationType migrationTypeFromString(const QString& str)

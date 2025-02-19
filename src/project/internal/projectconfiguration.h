@@ -104,6 +104,9 @@ public:
     PreferredScoreCreationMode preferredScoreCreationMode() const override;
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
+    bool inspectorExpandAccessibilitySection() const override;
+    void setInspectorExpandAccessibilitySection(bool mode) override;
+
     MigrationOptions migrationOptions(MigrationType type) const override;
     void setMigrationOptions(MigrationType type, const MigrationOptions& opt, bool persistent = true) override;
 

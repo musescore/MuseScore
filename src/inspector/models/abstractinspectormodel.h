@@ -43,7 +43,7 @@
 #include "types/commontypes.h"
 
 namespace mu::inspector {
-class AbstractInspectorModel : public QObject, public muse::async::Asyncable
+class AbstractInspectorModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
 
@@ -52,11 +52,12 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(InspectorSectionType sectionType READ sectionType CONSTANT)
     Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
+    Q_PROPERTY(bool isExpanded READ isExpanded WRITE setIsExpanded NOTIFY isExpandedChanged)
 
-public:
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
+protected:
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
     enum class InspectorSectionType {
@@ -153,6 +154,9 @@ public:
     InspectorSectionType sectionType() const;
     InspectorModelType modelType() const;
 
+    bool isExpanded() const;
+    void setIsExpanded(bool expanded);
+
     static ElementKey makeKey(const mu::engraving::EngravingItem* item);
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static std::set<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
@@ -181,6 +185,7 @@ signals:
 
     void modelReseted();
     void isEmptyChanged();
+    void isExpandedChanged();
 
     void requestReloadPropertyItems();
 
@@ -249,6 +254,7 @@ private:
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     mu::engraving::ElementType m_elementType = mu::engraving::ElementType::INVALID;
     bool m_updatePropertiesAllowed = false;
+    bool m_isExpanded = true;
 };
 
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;

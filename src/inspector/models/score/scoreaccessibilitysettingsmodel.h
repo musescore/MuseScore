@@ -24,8 +24,8 @@
 #include <QObject>
 
 #include "models/abstractinspectormodel.h"
-#include "context/iglobalcontext.h"
 #include "global/iglobalconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 #include "engraving/types/types.h"
 
@@ -33,9 +33,6 @@ namespace mu::inspector {
 class ScoreAccessibilitySettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
-    INJECT(mu::context::IGlobalContext, globalContext)
-    INJECT(muse::IGlobalConfiguration, globalConfiguration);
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration);
 
     Q_PROPERTY(QVariantList possibleStylePresets
                READ possibleStylePresets
@@ -45,6 +42,10 @@ class ScoreAccessibilitySettingsModel : public AbstractInspectorModel
                READ currentStylePresetIndex
                WRITE setCurrentStylePresetIndex
                NOTIFY currentStylePresetIndexChanged);
+
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
+    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     explicit ScoreAccessibilitySettingsModel(QObject* parent, IElementRepositoryService* repository);
