@@ -43,7 +43,7 @@ class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(QVariant notationPreviewItem READ notationPreviewItemVariant NOTIFY notationPreviewItemChanged)
 
-    Q_PROPERTY(QList<QVariantMap> footerContextMenuItems READ footerContextMenuItems CONSTANT)
+    Q_PROPERTY(QList<QVariantMap> contextMenuItems READ contextMenuItems CONSTANT)
 
 public:
     explicit PercussionPanelPadModel(QObject* parent = nullptr);
@@ -64,7 +64,7 @@ public:
 
     const QVariant notationPreviewItemVariant() const;
 
-    QList<QVariantMap> footerContextMenuItems() const;
+    QList<QVariantMap> contextMenuItems() const;
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
     Q_INVOKABLE void triggerPad(const Qt::KeyboardModifiers& modifiers);
