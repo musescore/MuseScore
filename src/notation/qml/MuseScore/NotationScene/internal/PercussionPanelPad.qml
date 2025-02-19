@@ -197,7 +197,7 @@ DropArea {
                     Connections {
                         target: footerNavCtrl
                         function onTriggered() {
-                            padContent.openFooterContextMenu()
+                            padContent.openContextMenu(null)
                         }
                     }
                 }
