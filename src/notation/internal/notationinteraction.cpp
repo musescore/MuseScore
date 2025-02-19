@@ -1296,12 +1296,13 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
         endOutgoingDrag();
     }
 
-    if (element->isSpannerSegment()) {
-        element = toSpannerSegment(element)->spanner();
-    }
-
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
+    if (element->isSpannerSegment()) {
+        Spanner* s = toSpannerSegment(element)->spanner();
+        mimeData->setData(mu::engraving::mimeSymbolFormat, s->mimeData().toQByteArray());
+    } else {
+        mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
+    }
 
     m_outgoingDrag = new QDrag(dragSource);
     m_outgoingDrag->setMimeData(mimeData);
