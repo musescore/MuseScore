@@ -302,16 +302,12 @@ Ret LanguagesService::loadLanguage(Language& lang)
         lang.files[resourceName] = useUserPath ? userFilePath : appFilePath;
     }
 
-    assert([&lang]() {
-        for (const QString& resourceName : LANGUAGE_RESOURCE_NAMES) {
-            if (!lang.files.contains(resourceName)) {
-                LOGE() << "Could not find resource " << resourceName << " for language " << lang.code;
-                return false;
-            }
+    for (const QString& resourceName : LANGUAGE_RESOURCE_NAMES) {
+        if (!lang.files.contains(resourceName)) {
+            LOGE() << "Could not find resource " << resourceName << " for language " << lang.code;
+            return muse::make_ret(muse::Ret::Code::InternalError);
         }
-
-        return true;
-    }());
+    }
 
     return muse::make_ok();
 }
