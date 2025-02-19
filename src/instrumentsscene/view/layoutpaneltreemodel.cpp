@@ -997,7 +997,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
         const int partRow = partItem->row();
         const int layerRow = layerItem->row();
 
-        if (partRow < layerRow) {
+        if (layerRow != partRow - 1) {
             beginMoveRows(QModelIndex(), layerRow, layerRow, QModelIndex(), partRow);
             m_rootItem->moveChildren(layerRow, 1, m_rootItem, partRow, false /*updateNotation*/);
             endMoveRows();
