@@ -182,6 +182,9 @@ void LayoutPanelTreeModel::onBeforeChangeNotation()
     QList<muse::ID> partIdList;
 
     for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        if (item->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER) {
+            continue;
+        }
         partIdList << item->id();
     }
 
