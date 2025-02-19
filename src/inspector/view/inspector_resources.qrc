@@ -50,7 +50,6 @@
         <file>qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml</file>
-        <file>qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/TextSection.qml</file>

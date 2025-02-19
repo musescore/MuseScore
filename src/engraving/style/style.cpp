@@ -309,8 +309,6 @@ bool MStyle::read(IODevice* device, bool ign)
             readVersion(e.attribute("version"));
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
-                    m_preset = TConv::fromXml(e.asciiAttribute("preset", "Default"), ScoreStylePreset::DEFAULT);
-                    m_presetEdited = e.attribute("edited", String(u"false")) == "true";
                     read(e, nullptr);
                 } else {
                     e.unknown();
@@ -574,17 +572,7 @@ bool MStyle::write(IODevice* device)
 
 void MStyle::save(XmlWriter& xml, bool optimize)
 {
-    muse::XmlStreamWriter::Attributes attributes;
-
-    if (preset() != ScoreStylePreset::DEFAULT) {
-        attributes.push_back({ "preset", TConv::toXml(preset()) });
-    }
-
-    if (presetEdited()) {
-        attributes.push_back({ "edited", String(u"true") });
-    }
-
-    xml.startElement("Style", attributes);
+    xml.startElement("Style");
 
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         Sid idx = st.styleIdx();

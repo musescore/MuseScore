@@ -86,8 +86,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreaccessibilitysettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreaccessibilitysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/internal/pagetypelistmodel.cpp
