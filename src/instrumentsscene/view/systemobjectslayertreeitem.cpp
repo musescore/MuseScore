@@ -178,6 +178,7 @@ void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreCh
     }
 
     if (shouldUpdateState) {
+        m_systemObjectGroups = collectSystemObjectGroups(m_staff);
         updateState();
     }
 }
