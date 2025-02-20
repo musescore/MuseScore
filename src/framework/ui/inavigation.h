@@ -33,6 +33,7 @@
 #include "async/notification.h"
 
 class QWindow;
+class QQuickItem;
 
 namespace muse::ui {
 class INavigationSection;
