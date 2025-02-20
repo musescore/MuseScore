@@ -1852,7 +1852,6 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
     const Segment* seg = chord->segment();
     const Measure* measure = seg->measure();
     const System* system = measure->system();
-    double width = item->style().styleS(Sid::minHangingTieLength).val() * item->spatium();
 
     if (seg->measure()->isFirstInSystem() && !outgoing) {
         sPos.p1 = PointF((system ? system->firstNoteRestSegmentX(true) : 0), sPos.p2.y());
@@ -1864,19 +1863,19 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
         adjSeg = outgoing ? seg->next() : seg->prev();
     }
 
+    double widthToSegment = 0.0;
     if (adjSeg) {
         EngravingItem* element = adjSeg->element(staff2track(item->vStaffIdx()));
         const double elementWidth = element ? element->width() : 0.0;
-        double widthToSegment = outgoing ? adjSeg->xPosInSystemCoords() - sPos.p1.x() : sPos.p2.x()
-                                - (adjSeg->xPosInSystemCoords() + elementWidth);
+        widthToSegment = outgoing ? adjSeg->xPosInSystemCoords() - sPos.p1.x() : sPos.p2.x()
+                         - (adjSeg->xPosInSystemCoords() + elementWidth);
         widthToSegment -= 0.25 * item->spatium();
-        width = std::max(widthToSegment, width);
     }
 
     if (outgoing) {
-        sPos.p2 = PointF(sPos.p1.x() + width, sPos.p1.y());
+        sPos.p2 = PointF(sPos.p1.x() + widthToSegment, sPos.p1.y());
     } else {
-        sPos.p1 = PointF(sPos.p2.x() - width, sPos.p2.y());
+        sPos.p1 = PointF(sPos.p2.x() - widthToSegment, sPos.p2.y());
     }
 }
 
