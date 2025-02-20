@@ -2971,6 +2971,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::STEM_SLASH:                   // cannot delete this elements
     case ElementType::HOOK:
+    case ElementType::GUITAR_BEND_TEXT:
         LOGD("cannot remove %s", el->typeName());
         break;
 
