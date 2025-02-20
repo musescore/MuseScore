@@ -8,7 +8,7 @@ mkdir -p $MU_DIR
 
 echo "=== Install MuseScore ${MU_VERSION} ==="
 MU_DISTRO=MuseScore-${MU_VERSION}
-wget -q --show-progress -O $MU_DIR/$MU_DISTRO.7z "$S3_URL/$MU_DISTRO.7z"
+wget --show-progress -O $MU_DIR/$MU_DISTRO.7z "$S3_URL/$MU_DISTRO.7z"
 7z x -y $MU_DIR/$MU_DISTRO.7z -o"$MU_DIR/"
 $MU_DIR/convertor -v
 
