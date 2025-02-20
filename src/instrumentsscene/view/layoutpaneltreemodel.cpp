@@ -182,10 +182,9 @@ void LayoutPanelTreeModel::onBeforeChangeNotation()
     QList<muse::ID> partIdList;
 
     for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
-        if (item->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER) {
-            continue;
+        if (item->type() == LayoutPanelItemType::ItemType::PART) {
+            partIdList << item->id();
         }
-        partIdList << item->id();
     }
 
     m_sortedPartIdList[notationToKey(m_notation)] = partIdList;
