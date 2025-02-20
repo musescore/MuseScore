@@ -36,6 +36,7 @@
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/elementgroup.h"
+#include "engraving/types/symid.h"
 #include "scorecallbacks.h"
 
 namespace mu::engraving {
@@ -329,7 +330,7 @@ private:
     struct ShadowNoteParams {
         mu::engraving::TDuration duration;
         mu::engraving::AccidentalType accidentalType = mu::engraving::AccidentalType::NONE;
-        std::set<SymId> articulationIds;
+        std::set<mu::engraving::SymId> articulationIds;
         mu::engraving::Position position;
     };
 
