@@ -95,16 +95,18 @@ InspectorSectionView {
         }
 
         RowLayout {
+            id: moveSystemLayout
+
             Layout.topMargin: 8
             visible: model.scoreIsInPageView
 
-            Layout.fillWidth: true
+            width: parent.width
             spacing: 4
 
             FlatButton {
                 id: upSystem
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "SystemUp"
@@ -123,7 +125,7 @@ InspectorSectionView {
             FlatButton {
                 id: downSystem
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "SystemDown"
