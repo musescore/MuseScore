@@ -554,8 +554,8 @@ RectX<T> RectX<T>::united(const RectX<T>& r) const
 template<typename T>
 RectX<T> RectX<T>::intersected(const RectX<T>& r) const
 {
-    T l1 = m_x;
-    T r1 = m_x;
+    number_t<T> l1 = m_x;
+    number_t<T> r1 = m_x;
     if (m_w.is_negative()) {
         l1 += m_w;
     } else {
@@ -564,8 +564,8 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     if (l1 == r1) {   // null rect
         return RectX<T>();
     }
-    T l2 = r.m_x;
-    T r2 = r.m_x;
+    number_t<T> l2 = r.m_x;
+    number_t<T> r2 = r.m_x;
     if (r.m_w.is_negative()) {
         l2 += r.m_w;
     } else {
@@ -577,8 +577,8 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     if (l1 >= r2 || l2 >= r1) {
         return RectX<T>();
     }
-    T t1 = m_y;
-    T b1 = m_y;
+    number_t<T> t1 = m_y;
+    number_t<T> b1 = m_y;
     if (m_h.is_negative()) {
         t1 += m_h;
     } else {
@@ -587,8 +587,8 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     if (t1 == b1) {   // null rect
         return RectX<T>();
     }
-    T t2 = r.m_y;
-    T b2 = r.m_y;
+    number_t<T> t2 = r.m_y;
+    number_t<T> b2 = r.m_y;
     if (r.m_h.is_negative()) {
         t2 += r.m_h;
     } else {
@@ -611,47 +611,47 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
 template<typename T>
 bool RectX<T>::intersects(const RectX<T>& r) const
 {
-    T l1 = m_x;
-    T r1 = m_x;
+    number_t<T> l1 = m_x;
+    number_t<T> r1 = m_x;
     if (m_w.is_negative()) {
         l1 += m_w;
     } else {
         r1 += m_w;
     }
-    if (isEqual(l1, r1)) { // null rect
+    if (l1 == r1) { // null rect
         return false;
     }
-    T l2 = r.m_x;
-    T r2 = r.m_x;
+    number_t<T> l2 = r.m_x;
+    number_t<T> r2 = r.m_x;
     if (r.m_w.is_negative()) {
         l2 += r.m_w;
     } else {
         r2 += r.m_w;
     }
-    if (isEqual(l2, r2)) { // null rect
+    if (l2 == r2) { // null rect
         return false;
     }
     if (l1 >= r2 || l2 >= r1) {
         return false;
     }
-    T t1 = m_y;
-    T b1 = m_y;
+    number_t<T> t1 = m_y;
+    number_t<T> b1 = m_y;
     if (m_h.is_negative()) {
         t1 += m_h;
     } else {
         b1 += m_h;
     }
-    if (isEqual(t1, b1)) { // null rect
+    if (t1 == b1) { // null rect
         return false;
     }
-    T t2 = r.m_y;
-    T b2 = r.m_y;
+    number_t<T> t2 = r.m_y;
+    number_t<T> b2 = r.m_y;
     if (r.m_h.is_negative()) {
         t2 += r.m_h;
     } else {
         b2 += r.m_h;
     }
-    if (isEqual(t2, b2)) { // null rect
+    if (t2 == b2) { // null rect
         return false;
     }
     if (t1 >= b2 || t2 >= b1) {
@@ -663,27 +663,27 @@ bool RectX<T>::intersects(const RectX<T>& r) const
 template<typename T>
 bool RectX<T>::contains(const PointX<T>& p) const
 {
-    T l = m_x;
-    T r = m_x;
+    number_t<T> l = m_x;
+    number_t<T> r = m_x;
     if (m_w.is_negative()) {
         l += m_w;
     } else {
         r += m_w;
     }
-    if (isEqual(l, r)) { // null rect
+    if (l == r) { // null rect
         return false;
     }
     if (p.x() < l || p.x() > r) {
         return false;
     }
-    T t = m_y;
-    T b = m_y;
+    number_t<T> t = m_y;
+    number_t<T> b = m_y;
     if (m_h.is_negative()) {
         t += m_h;
     } else {
         b += m_h;
     }
-    if (isEqual(t, b)) { // null rect
+    if (t == b) { // null rect
         return false;
     }
     if (p.y() < t || p.y() > b) {
@@ -695,47 +695,47 @@ bool RectX<T>::contains(const PointX<T>& p) const
 template<typename T>
 bool RectX<T>::contains(const RectX<T>& r) const
 {
-    T l1 = m_x;
-    T r1 = m_x;
+    number_t<T> l1 = m_x;
+    number_t<T> r1 = m_x;
     if (m_w.is_negative()) {
         l1 += m_w;
     } else {
         r1 += m_w;
     }
-    if (isEqual(l1, r1)) { // null rect
+    if (l1 == r1) { // null rect
         return false;
     }
-    T l2 = r.m_x;
-    T r2 = r.m_x;
+    number_t<T> l2 = r.m_x;
+    number_t<T> r2 = r.m_x;
     if (r.m_w.is_negative()) {
         l2 += r.m_w;
     } else {
         r2 += r.m_w;
     }
-    if (isEqual(l2, r2)) { // null rect
+    if (l2 == r2) { // null rect
         return false;
     }
     if (l2 < l1 || r2 > r1) {
         return false;
     }
-    T t1 = m_y;
-    T b1 = m_y;
+    number_t<T> t1 = m_y;
+    number_t<T> b1 = m_y;
     if (m_h.is_negative()) {
         t1 += m_h;
     } else {
         b1 += m_h;
     }
-    if (isEqual(t1, b1)) { // null rect
+    if (t1 == b1) { // null rect
         return false;
     }
-    T t2 = r.m_y;
-    T b2 = r.m_y;
+    number_t<T> t2 = r.m_y;
+    number_t<T> b2 = r.m_y;
     if (r.m_h.is_negative()) {
         t2 += r.m_h;
     } else {
         b2 += r.m_h;
     }
-    if (isEqual(t2, b2)) { // null rect
+    if (t2 == b2) { // null rect
         return false;
     }
     if (t2 < t1 || b2 > b1) {
@@ -747,8 +747,8 @@ bool RectX<T>::contains(const RectX<T>& r) const
 template<typename T>
 T RectX<T>::distanceTo(const PointX<T>& p) const
 {
-    T dx = std::max({ bottomLeft().x() - p.x(), 0.0, p.x() - bottomRight().x() });
-    T dy = std::max({ bottomLeft().y() - p.y(), 0.0, p.y() - topLeft().y() });
+    number_t<T> dx = std::max({ bottomLeft().x() - p.x(), 0.0, p.x() - bottomRight().x() });
+    number_t<T> dy = std::max({ bottomLeft().y() - p.y(), 0.0, p.y() - topLeft().y() });
     return std::sqrt(dx * dx + dy * dy);
 }
 
