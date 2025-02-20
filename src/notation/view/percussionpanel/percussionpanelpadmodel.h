@@ -67,7 +67,7 @@ public:
     QList<QVariantMap> contextMenuItems() const;
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
-    Q_INVOKABLE void triggerPad(const Qt::KeyboardModifiers& modifiers);
+    Q_INVOKABLE void triggerPad(const Qt::KeyboardModifiers& modifiers = Qt::KeyboardModifier::NoModifier);
 
     enum class PadAction {
         TRIGGER_STANDARD,
