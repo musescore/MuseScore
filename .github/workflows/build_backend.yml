@@ -110,7 +110,7 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       run: |
         pip install jenkinsapi
-        python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION }} --api_token ${{ secrets.JENKINS_API_TOKEN }}
+        python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION_MAJOR_MINOR }} --api_token ${{ secrets.JENKINS_API_TOKEN }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
