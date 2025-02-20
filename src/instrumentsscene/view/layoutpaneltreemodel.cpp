@@ -802,7 +802,9 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
 
     // exclude the control item
     bool hasControlItem = parentItem->type() != LayoutPanelItemType::ROOT;
-    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0);
+    const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
+    bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
+    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0) - (lastSelectedIsSystemObjectLayer? 1 : 0);
 
     bool isRowInBoundaries = lastSelectedRowIndex.isValid() && lastSelectedRowIndex.row() < lastItemRowIndex;
 
