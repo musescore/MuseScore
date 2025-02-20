@@ -69,12 +69,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/IconAndTextButtonSelector.qml</file>
         <file>qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTiePopup.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-above_staves.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-across_staves.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-hang.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-right_align.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-on_all_staves.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-create_space.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyledImage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTieMenuRowItem.qml</file>
         <file>qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml</file>
@@ -98,5 +92,11 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-1.png</file>
         <file>qml/MuseScore/NotationScene/internal/ShadowNotePopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionNotePopupContent.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-above_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-across_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-hang.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-inset.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-right_align.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-on_all_staves.png</file>
     </qresource>
 </RCC>
