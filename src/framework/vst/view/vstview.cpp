@@ -114,6 +114,8 @@ void VstView::init()
         return;
     }
 
+    updateScreenMetrics();
+
     m_view->setFrame(this);
 
     m_window = new QWindow(window());
@@ -131,7 +133,6 @@ void VstView::init()
         updateViewGeometry();
     });
 
-    updateScreenMetrics();
     updateViewGeometry();
 
     m_window->show();
