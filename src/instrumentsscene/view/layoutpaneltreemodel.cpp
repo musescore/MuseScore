@@ -969,9 +969,9 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 
     // Remove old system object layers
     std::vector<const PartTreeItem*> partItems;
-    std::vector<const SystemObjectsLayerTreeItem*> existingSystemObjectLayers;
+    std::vector<SystemObjectsLayerTreeItem*> existingSystemObjectLayers;
 
-    for (const AbstractLayoutPanelTreeItem* item : children) {
+    for (AbstractLayoutPanelTreeItem* item : children) {
         if (item->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
             if (item->type() == LayoutPanelItemType::PART) {
                 partItems.push_back(static_cast<const PartTreeItem*>(item));
@@ -979,7 +979,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             continue;
         }
 
-        auto layerItem = static_cast<const SystemObjectsLayerTreeItem*>(item);
+        auto layerItem = static_cast<SystemObjectsLayerTreeItem*>(item);
         if (muse::remove(newSystemObjectStaves, const_cast<Staff*>(layerItem->staff()))) {
             existingSystemObjectLayers.push_back(layerItem);
             continue;
@@ -992,7 +992,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
     }
 
     // Update position of existing layers if changed
-    for (const SystemObjectsLayerTreeItem* layerItem : existingSystemObjectLayers) {
+    for (SystemObjectsLayerTreeItem* layerItem : existingSystemObjectLayers) {
         const PartTreeItem* partItem = findPartItemByStaff(layerItem->staff());
         IF_ASSERT_FAILED(partItem) {
             continue;
@@ -1006,6 +1006,8 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             m_rootItem->moveChildren(layerRow, 1, m_rootItem, partRow, false /*updateNotation*/);
             endMoveRows();
         }
+
+        layerItem->updateSystemObjects();
     }
 
     if (newSystemObjectStaves.empty()) {

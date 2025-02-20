@@ -127,6 +127,12 @@ void SystemObjectsLayerTreeItem::setStaff(const Staff* staff)
     }
 }
 
+void SystemObjectsLayerTreeItem::updateSystemObjects()
+{
+    m_systemObjectGroups = collectSystemObjectGroups(m_staff);
+    updateState();
+}
+
 QString SystemObjectsLayerTreeItem::staffId() const
 {
     const Staff* s = staff();
@@ -178,7 +184,6 @@ void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreCh
     }
 
     if (shouldUpdateState) {
-        m_systemObjectGroups = collectSystemObjectGroups(m_staff);
         updateState();
     }
 }
