@@ -63,7 +63,6 @@
         <file>qml/Muse/UiComponents/internal/ArrowScrollButton.qml</file>
         <file>qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml</file>
         <file>qml/Muse/UiComponents/internal/DirectoriesView.qml</file>
-        <file>qml/Muse/UiComponents/internal/DropdownItem.qml</file>
         <file>qml/Muse/UiComponents/internal/GridViewDelegate.qml</file>
         <file>qml/Muse/UiComponents/internal/GridViewSection.qml</file>
         <file>qml/Muse/UiComponents/internal/MenuMetrics.qml</file>
