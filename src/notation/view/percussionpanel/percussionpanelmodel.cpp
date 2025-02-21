@@ -439,7 +439,9 @@ void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
     }
 
     Drumset updatedDrumset = *m_padListModel->drumset();
-    PercussionUtilities::editPercussionShortcut(updatedDrumset, pitch);
+    if (!PercussionUtilities::editPercussionShortcut(updatedDrumset, pitch)) {
+        return;
+    }
 
     const InstrumentKey key = { inst->id(), part->id() };
     notation()->parts()->replaceDrumset(key, updatedDrumset);

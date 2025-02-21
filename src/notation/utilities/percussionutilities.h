@@ -48,7 +48,7 @@ class PercussionUtilities
 public:
     static void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);
     static std::shared_ptr<mu::engraving::Chord> getDrumNoteForPreview(const mu::engraving::Drumset* drumset, int pitch);
-    static void editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
+    static bool editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
 
 private:
     static muse::RetVal<muse::Val> openPercussionShortcutDialog(const mu::engraving::Drumset& drumset, int originPitch);
