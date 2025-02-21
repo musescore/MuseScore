@@ -6222,7 +6222,7 @@ void NotationInteraction::navigateToNextSyllable()
         nextSegment = nullptr;
     }
 
-    if (!nextSegment && !hasFollowingRepeat) {
+    if (!nextSegment && !hasFollowingRepeat && !hasPrecedingRepeat) {
         return;
     }
 
@@ -6230,8 +6230,9 @@ void NotationInteraction::navigateToNextSyllable()
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several dashes
-    Lyrics* fromLyrics = 0;
-    while (segment) {
+    Lyrics* fromLyrics = nullptr;
+    Segment* curSeg = segment;
+    while (segment && segmentsAreAdjacentInRepeatStructure(segment, curSeg)) {
         ChordRest* cr = toChordRest(segment->element(track));
         if (!cr) {
             segment = segment->prev1(SegmentType::ChordRest);
@@ -6244,26 +6245,67 @@ void NotationInteraction::navigateToNextSyllable()
         segment = segment->prev1(SegmentType::ChordRest);
     }
 
-    if (!nextSegment && hasFollowingRepeat && fromLyrics) {
-        // Allow dash with no end syllable if there is a repeat
+    if (!nextSegment) {
         score()->startCmd(TranslatableString("undoableAction", "Navigate to next syllable"));
-        switch (fromLyrics->syllabic()) {
-        case LyricsSyllabic::BEGIN:
-        case LyricsSyllabic::MIDDLE:
-            break;
-        case LyricsSyllabic::SINGLE:
-            fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::BEGIN));
-            break;
-        case LyricsSyllabic::END:
-            fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::MIDDLE));
-            break;
+        if (fromLyrics && hasFollowingRepeat) {
+            // Allow dash with no end syllable if there is a repeat
+            switch (fromLyrics->syllabic()) {
+            case LyricsSyllabic::BEGIN:
+            case LyricsSyllabic::MIDDLE:
+                break;
+            case LyricsSyllabic::SINGLE:
+                fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::BEGIN));
+                break;
+            case LyricsSyllabic::END:
+                fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::MIDDLE));
+                break;
+            }
+            fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, Fraction(0, 1));
+            score()->setLayoutAll();
+            score()->endCmd();
+            return;
         }
-        fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, Fraction(0, 1));
 
-        score()->endCmd();
-        score()->setLayoutAll();
+        if (hasPrecedingRepeat) {
+            score()->endCmd();
+            // No from lyrics - create incoming partial dash
+            PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
+            dash->setIsEndMelisma(false);
+            dash->setNo(verse);
+            dash->setPlacement(placement);
+            dash->setTick(initialCR->tick());
+            dash->setTicks(Fraction(0, 1));
+            dash->setTrack(initialCR->track());
+            dash->setTrack2(initialCR->track());
 
-        return;
+            score()->undoAddElement(dash);
+
+            // Don't advance cursor
+
+            Lyrics* toLyrics = Factory::createLyrics(initialCR);
+            toLyrics->setTrack(track);
+            toLyrics->setParent(initialCR);
+
+            toLyrics->setNo(verse);
+            const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
+            toLyrics->setTextStyleType(styleType);
+
+            toLyrics->setPlacement(placement);
+            toLyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
+            toLyrics->setSyllabic(LyricsSyllabic::END);
+            toLyrics->setFontStyle(fStyle);
+            toLyrics->setPropertyFlags(Pid::FONT_STYLE, fFlags);
+
+            score()->undoAddElement(toLyrics);
+            score()->endCmd();
+            score()->select(toLyrics, SelectType::SINGLE, 0);
+            score()->setLayoutAll();
+            startEditText(toLyrics, PointF());
+            toLyrics->selectAll(toLyrics->cursor());
+            showItem(toLyrics);
+
+            return;
+        }
     }
 
     score()->startCmd(TranslatableString("undoableAction", "Navigate to next syllable"));
@@ -7033,9 +7075,10 @@ void NotationInteraction::addMelisma()
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several underscores
+    Segment* curSeg = segment;
     Lyrics* fromLyrics = nullptr;
     PartialLyricsLine* prevPartialLyricsLine = nullptr;
-    while (segment) {
+    while (segment && segmentsAreAdjacentInRepeatStructure(segment, curSeg)) {
         ChordRest* cr = toChordRest(segment->element(track));
         if (cr) {
             fromLyrics = cr->lyrics(verse, placement);
@@ -7097,7 +7140,19 @@ void NotationInteraction::addMelisma()
             }
         }
 
-        if (prevPartialLyricsLine) {
+        if (hasPrecedingRepeat && !prevPartialLyricsLine) {
+            // No from lyrics - create incoming partial melisma
+            PartialLyricsLine* melisma = Factory::createPartialLyricsLine(score()->dummy());
+            melisma->setIsEndMelisma(true);
+            melisma->setNo(verse);
+            melisma->setPlacement(lyrics->placement());
+            melisma->setTick(initialCR->tick());
+            melisma->setTicks(initialCR->ticks());
+            melisma->setTrack(initialCR->track());
+            melisma->setTrack2(initialCR->track());
+
+            score()->undoAddElement(melisma);
+        } else if (prevPartialLyricsLine) {
             const Fraction tickDiff = (segment->tick() + segment->ticks()) - prevPartialLyricsLine->tick2();
             prevPartialLyricsLine->undoMoveEnd(tickDiff);
         }
