@@ -308,16 +308,15 @@ io::paths_t WorkspaceManager::findWorkspaceFiles() const
     };
 
     io::paths_t builtinWorkspacesPaths = configuration()->builtinWorkspacesFilePaths();
-
-    io::paths_t userWorkspacesPaths = findFiles(configuration()->userWorkspacesPath());
-    std::set<io::path_t> userWorkspacesFileNames;
-    for (const io::path_t& dirPath : userWorkspacesPaths) {
-        userWorkspacesFileNames.insert(io::filename(dirPath));
+    std::set<io::path_t> builtinWorkspacesFileNames;
+    for (const io::path_t& dirPath : builtinWorkspacesPaths) {
+        builtinWorkspacesFileNames.insert(io::filename(dirPath));
     }
 
-    muse::remove_if(builtinWorkspacesPaths, [=](const io::path_t& path) -> bool {
+    io::paths_t userWorkspacesPaths = findFiles(configuration()->userWorkspacesPath());
+    muse::remove_if(userWorkspacesPaths, [=](const io::path_t& path) -> bool {
         io::path_t fileName = io::filename(path);
-        return muse::contains(userWorkspacesFileNames, fileName);
+        return muse::contains(builtinWorkspacesFileNames, fileName);
     });
 
     io::paths_t result;
