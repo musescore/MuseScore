@@ -205,7 +205,6 @@ PropertyValue Box::getProperty(Pid propertyId) const
 
 bool Box::setProperty(Pid propertyId, const PropertyValue& v)
 {
-    score()->addRefresh(canvasBoundingRect(LD_ACCESS::BAD));
     switch (propertyId) {
     case Pid::BOX_HEIGHT:
         m_boxHeight = v.value<Spatium>();
@@ -668,18 +667,156 @@ void VBox::startEditDrag(EditData& ed)
 ///   Add new EngravingItem \a e to fret diagram box
 //---------------------------------------------------------
 
+FBox::FBox(System* parent)
+    : VBox(ElementType::FBOX, parent)
+{
+    init();
+
+    //! hack: needed for the case when we need to check whether the height was set by the user
+    //! or we need to take the height that we calculated from the content
+    setBoxHeight(Spatium(-1.0));
+
+    resetProperty(Pid::FRET_FRAME_TEXT_SCALE);
+    resetProperty(Pid::FRET_FRAME_DIAGRAM_SCALE);
+    resetProperty(Pid::FRET_FRAME_COLUMN_GAP);
+    resetProperty(Pid::FRET_FRAME_ROW_GAP);
+    resetProperty(Pid::FRET_FRAME_CHORDS_PER_ROW);
+    resetProperty(Pid::FRET_FRAME_H_ALIGN);
+
+    resetProperty(Pid::LEFT_MARGIN);
+    resetProperty(Pid::RIGHT_MARGIN);
+    resetProperty(Pid::TOP_MARGIN);
+    resetProperty(Pid::BOTTOM_MARGIN);
+    resetProperty(Pid::TOP_GAP);
+    resetProperty(Pid::BOTTOM_GAP);
+}
+
 void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
-//            FretDiagram* fd = toFretDiagram(e);
-//            fd->setFlag(ElementFlag::MOVABLE, false);
+        FretDiagram* fd = toFretDiagram(e);
+        fd->setFlag(ElementFlag::MOVABLE, false);
+        m_fretDiagrams.push_back(fd);
     } else {
         LOGD("FBox::add: element not allowed");
         return;
     }
-    el().push_back(e);
     e->added();
+}
+
+PropertyValue FBox::getProperty(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::BOX_HEIGHT: {
+        double boxHeight = this->boxHeight().val();
+        return boxHeight > 0.0 ? boxHeight : propertyDefault(propertyId);
+    }
+    case Pid::FRET_FRAME_TEXT_SCALE:
+        return m_textScale;
+    case Pid::FRET_FRAME_DIAGRAM_SCALE:
+        return m_diagramScale;
+    case Pid::FRET_FRAME_COLUMN_GAP:
+        return m_columnGap;
+    case Pid::FRET_FRAME_ROW_GAP:
+        return m_rowGap;
+    case Pid::FRET_FRAME_CHORDS_PER_ROW:
+        return m_chordsPerRow;
+    case Pid::FRET_FRAME_H_ALIGN:
+        return static_cast<int>(m_contentAlignmentH);
+    case Pid::LEFT_MARGIN:
+        return m_contentAlignmentH == AlignH::LEFT ? VBox::getProperty(propertyId) : PropertyValue();
+    case Pid::RIGHT_MARGIN:
+        return m_contentAlignmentH == AlignH::RIGHT ? VBox::getProperty(propertyId) : PropertyValue();
+    default:
+        return VBox::getProperty(propertyId);
+    }
+}
+
+bool FBox::setProperty(Pid propertyId, const PropertyValue& val)
+{
+    switch (propertyId) {
+    case Pid::FRET_FRAME_TEXT_SCALE:
+        m_textScale = val.toDouble();
+        break;
+    case Pid::FRET_FRAME_DIAGRAM_SCALE:
+        m_diagramScale = val.toDouble();
+        break;
+    case Pid::FRET_FRAME_COLUMN_GAP:
+        m_columnGap = val.value<Spatium>();
+        break;
+    case Pid::FRET_FRAME_ROW_GAP:
+        m_rowGap = val.value<Spatium>();
+        break;
+    case Pid::FRET_FRAME_CHORDS_PER_ROW:
+        m_chordsPerRow = val.toInt();
+        break;
+    case Pid::FRET_FRAME_H_ALIGN:
+        m_contentAlignmentH = static_cast<AlignH>(val.toInt());
+        resetProperty(Pid::LEFT_MARGIN);
+        resetProperty(Pid::RIGHT_MARGIN);
+        break;
+    default:
+        return VBox::setProperty(propertyId, val);
+    }
+
+    triggerLayout();
+    return true;
+}
+
+PropertyValue FBox::propertyDefault(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::BOX_HEIGHT:
+        return ldata() && !muse::RealIsNull(ldata()->totalTableHeight)
+               ? std::ceil(ldata()->totalTableHeight / spatium())
+               : PropertyValue();
+    case Pid::FRET_FRAME_TEXT_SCALE:
+    case Pid::FRET_FRAME_DIAGRAM_SCALE:
+        return 1.0;
+    case Pid::FRET_FRAME_COLUMN_GAP:
+    case Pid::FRET_FRAME_ROW_GAP:
+        return Spatium(4.0);
+    case Pid::FRET_FRAME_CHORDS_PER_ROW:
+        return 8;
+    case Pid::FRET_FRAME_H_ALIGN:
+        return static_cast<int>(AlignH::HCENTER);
+    case Pid::TOP_GAP:
+    case Pid::BOTTOM_GAP:
+        return 0.0;
+    default:
+        return VBox::propertyDefault(propertyId);
+    }
+}
+
+void FBox::init()
+{
+    for (FretDiagram* fretDiagram : m_fretDiagrams) {
+        fretDiagram->deleteLater();
+    }
+
+    m_fretDiagrams.clear();
+
+    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+         segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
+        for (EngravingItem* item : segment->annotations()) {
+            if (!item || !item->part()) {
+                continue;
+            }
+
+            FretDiagram* fretDiagram = nullptr;
+
+            if (item->isHarmony()) {
+                continue; // todo: create new fret diagram and attach harmony
+            } else if (item->isFretDiagram()) {
+                fretDiagram = toFretDiagram(item)->clone();
+                fretDiagram->harmony()->setAutoplace(false);
+                fretDiagram->setAutoplace(false);
+            }
+
+            add(fretDiagram);
+        }
+    }
 }
 
 //---------------------------------------------------------

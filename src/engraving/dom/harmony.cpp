@@ -1337,7 +1337,8 @@ void Harmony::render()
     m_fontList.clear();
     for (const ChordFont& cf : chordList->fonts) {
         Font ff(font());
-        ff.setPointSizeF(ff.pointSizeF() * cf.mag);
+        double mag = m_userMag.value_or(cf.mag);
+        ff.setPointSizeF(ff.pointSizeF() * mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
             ff.setFamily(cf.family, Font::Type::Harmony);
         }
@@ -1890,5 +1891,14 @@ Sid Harmony::getPropertyStyle(Pid pid) const
         }
     }
     return TextBase::getPropertyStyle(pid);
+}
+
+double Harmony::mag() const
+{
+    if (m_userMag.has_value()) {
+        return m_userMag.value();
+    }
+
+    return EngravingItem::mag();
 }
 }

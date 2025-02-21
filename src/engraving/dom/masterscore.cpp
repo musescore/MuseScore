@@ -36,6 +36,7 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "factory.h"
+#include "box.h"
 #include "linkedobjects.h"
 #include "repeatlist.h"
 #include "rest.h"
@@ -453,6 +454,21 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
         for (const auto& pair : p->instruments()) {
             pair.second->switchExpressive(this, synth, expressive, force);
         }
+    }
+}
+
+void MasterScore::rebuildFretDiagramLegend()
+{
+    for (MeasureBase* measure = first(); measure; measure = measure->next()) {
+        if (!measure->isFBox()) {
+            continue;
+        }
+
+        FBox* fbox = toFBox(measure);
+        fbox->init();
+        fbox->triggerLayout();
+
+        break;
     }
 }
 

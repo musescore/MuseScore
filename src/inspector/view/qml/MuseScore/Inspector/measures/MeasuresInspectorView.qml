@@ -89,7 +89,7 @@ InspectorSectionView {
         StyledTextLabel {
             Layout.fillWidth: true
             Layout.topMargin: 12
-            visible: model.scoreIsInPageView
+            visible: root.model ? model.scoreIsInPageView : false
             horizontalAlignment: Qt.AlignLeft
             text: qsTrc("inspector", "Move to system")
         }
@@ -172,7 +172,7 @@ InspectorSectionView {
 
         FlatButton {
             id: makeIntoOneSystem
-            enabled: model.isMakeIntoSystemAvailable
+            enabled: root.model ? model.isMakeIntoSystemAvailable : false
 
             Layout.topMargin: 4
             Layout.fillWidth: true

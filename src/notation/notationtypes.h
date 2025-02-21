@@ -203,7 +203,8 @@ enum class BoxType : unsigned char
     Vertical,
     Horizontal,
     Measure,
-    Text
+    Text,
+    Fret
 };
 
 enum class AddBoxesTarget : unsigned char {
