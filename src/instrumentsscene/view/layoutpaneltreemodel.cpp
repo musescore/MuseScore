@@ -553,6 +553,17 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
 
+    int lastRow = m_rootItem->childCount() - 1;
+    AbstractLayoutPanelTreeItem* lastItem = m_rootItem->childAtRow(m_rootItem->childCount() - 1);
+    if (lastItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+        bool restore = m_isRemovingAvailable;
+        m_isRemovingAvailable = true;
+
+        removeRow(lastRow);
+
+        m_isRemovingAvailable = restore;
+    }
+
     updateRearrangementAvailability();
     updateSystemObjectLayers();
 
