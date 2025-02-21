@@ -814,6 +814,7 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
         if (item->staff() == srcStaff) {
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         } else {
+            item->undoUnlink();
             score()->undoRemoveElement(item, false /*removeLinked*/);
         }
     }

@@ -127,6 +127,12 @@ void SystemObjectsLayerTreeItem::setStaff(const Staff* staff)
     }
 }
 
+void SystemObjectsLayerTreeItem::updateSystemObjects()
+{
+    m_systemObjectGroups = collectSystemObjectGroups(m_staff);
+    updateState();
+}
+
 QString SystemObjectsLayerTreeItem::staffId() const
 {
     const Staff* s = staff();
