@@ -3622,6 +3622,11 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
 //        return;
 //    }
 
+    // We do not show keys if the key is for instrument change and we are in concert pitch mode
+    if (item->forInstrumentChange() && item->concertPitch()) {
+        return;
+    }
+
     double spatium = item->spatium();
     double step = spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
 
