@@ -134,7 +134,7 @@ muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesP
     // Send playback position (in samples) to plug-in
     m_processContext.projectTimeSamples = (m_playbackPosition / 1000000.f) * m_samplesInfo.sampleRate;
 
-     if (samplesPerChannel > m_samplesInfo.maxSamplesPerBlock) {
+    if (samplesPerChannel > m_samplesInfo.maxSamplesPerBlock) {
         setMaxSamplesPerBlock(samplesPerChannel);
     }
 
@@ -415,7 +415,7 @@ bool VstAudioClient::fillOutputBufferInstrument(samples_t sampleCount, float* ou
 
     bool isSilence = true;
 
-     for (const int busIndex : m_activeOutputBusses) {
+    for (const int busIndex : m_activeOutputBusses) {
         Steinberg::Vst::AudioBusBuffers bus = m_processData.outputs[busIndex];
 
         for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
