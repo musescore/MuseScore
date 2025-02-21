@@ -130,7 +130,11 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
     staff_layer_idx_t staffIdx = static_cast<staff_layer_idx_t>(chordSymbol->staffIdx());
-    Key key = chordSymbol->staff()->key(chordSymbol->tick());
+    Staff* staff = chordSymbol->staff();
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+    Key key = staff->key(chordSymbol->tick());
 
     ArticulationMap articulations = makeStandardArticulationMap(profile, eventTimestamp, duration);
 
