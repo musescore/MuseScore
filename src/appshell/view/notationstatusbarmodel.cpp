@@ -24,6 +24,12 @@
 
 #include "types/translatablestring.h"
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_WORKSPACE
+#include "workspace/view/workspacesmenumodel.h"
+#endif
+
 #include "defer.h"
 #include "log.h"
 
@@ -33,6 +39,7 @@ using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;
+using namespace muse::workspace;
 
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");
@@ -69,6 +76,9 @@ static ActionCode zoomTypeToActionCode(ZoomType type)
 NotationStatusBarModel::NotationStatusBarModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel = std::make_shared<WorkspacesMenuModel>(this);
+#endif
 }
 
 QString NotationStatusBarModel::accessibilityInfo() const
@@ -102,6 +112,10 @@ QVariant NotationStatusBarModel::currentWorkspaceItem()
                         String::fromStdString(workspaceConfiguration()->currentWorkspaceName()));
 
     m_currentWorkspaceItem->setAction(action);
+
+#ifdef MUSE_MODULE_WORKSPACE
+    m_currentWorkspaceItem->setSubitems(m_workspacesMenuModel->items());
+#endif
 
     return QVariant::fromValue(m_currentWorkspaceItem);
 }
@@ -214,17 +228,12 @@ void NotationStatusBarModel::load()
         onCurrentNotationChanged();
     });
 
-    workspaceConfiguration()->currentWorkspaceNameChanged().onReceive(this, [this](const std::string&) {
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel->load();
+    connect(m_workspacesMenuModel.get(), &WorkspacesMenuModel::itemsChanged, this, [this](){
         emit currentWorkspaceActionChanged();
     });
-
-    actionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codeList) {
-        for (const ActionCode& code : codeList) {
-            if (code == SELECT_WORKSPACE_CODE) {
-                emit currentWorkspaceActionChanged();
-            }
-        }
-    });
+#endif
 }
 
 void NotationStatusBarModel::onCurrentNotationChanged()
@@ -271,11 +280,6 @@ void NotationStatusBarModel::listenChangesInAccessibility()
     accessibility()->accessibilityInfo().ch.onReceive(this, [this](const std::string&) {
         emit accessibilityInfoChanged();
     });
-}
-
-void NotationStatusBarModel::selectWorkspace()
-{
-    dispatch(SELECT_WORKSPACE_CODE);
 }
 
 void NotationStatusBarModel::toggleConcertPitch()
@@ -398,6 +402,13 @@ void NotationStatusBarModel::zoomOut()
 void NotationStatusBarModel::handleAction(const QString& actionCode)
 {
     dispatch(codeFromQString(actionCode));
+}
+
+void NotationStatusBarModel::handleWorkspacesMenuItem(const QString& itemId)
+{
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel->handleMenuItem(itemId);
+#endif
 }
 
 INotationPtr NotationStatusBarModel::notation() const

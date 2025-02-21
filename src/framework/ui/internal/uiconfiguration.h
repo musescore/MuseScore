@@ -111,6 +111,10 @@ public:
     void setIsVisible(const QString& key, bool val) override;
     async::Notification isVisibleChanged(const QString& key) const override;
 
+    QString uiItemState(const QString& itemName) const override;
+    void setUiItemState(const QString& itemName, const QString& value) override;
+    async::Notification uiItemStateChanged(const QString& itemName) const override;
+
     ToolConfig toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const override;
     void setToolConfig(const QString& toolName, const ToolConfig& config) override;
     async::Notification toolConfigChanged(const QString& toolName) const override;

@@ -662,6 +662,21 @@ async::Notification UiConfiguration::isVisibleChanged(const QString& key) const
     return m_uiArrangement.valueChanged(key);
 }
 
+QString UiConfiguration::uiItemState(const QString& itemName) const
+{
+    return m_uiArrangement.value(itemName);
+}
+
+void UiConfiguration::setUiItemState(const QString& itemName, const QString& value)
+{
+    m_uiArrangement.setValue(itemName, value);
+}
+
+Notification UiConfiguration::uiItemStateChanged(const QString& itemName) const
+{
+    return m_uiArrangement.valueChanged(itemName);
+}
+
 ToolConfig UiConfiguration::toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const
 {
     ToolConfig config = m_uiArrangement.toolConfig(toolName);

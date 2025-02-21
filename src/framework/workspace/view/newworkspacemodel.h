@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_WORKSPACESCENE_NEWWORKSPACEMODEL_H
-#define MU_WORKSPACESCENE_NEWWORKSPACEMODEL_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
 
-namespace mu::workspacescene {
+namespace muse::workspace {
 class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
@@ -34,12 +33,6 @@ class NewWorkspaceModel : public QObject
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY workspaceNameChanged)
     Q_PROPERTY(bool isWorkspaceNameAllowed READ isWorkspaceNameAllowed NOTIFY workspaceNameChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY workspaceNameChanged)
-
-    Q_PROPERTY(bool useUiPreferences READ useUiPreferences WRITE setUseUiPreferences NOTIFY useUiPreferencesChanged)
-    Q_PROPERTY(bool useUiArrangement READ useUiArrangement WRITE setUseUiArrangement NOTIFY useUiArrangementChanged)
-    Q_PROPERTY(bool usePalettes READ usePalettes WRITE setUsePalettes NOTIFY usePalettesChanged)
-    Q_PROPERTY(bool useToolbarCustomization READ useToolbarCustomization
-               WRITE setUseToolbarCustomization NOTIFY useToolbarCustomizationChanged)
 
 public:
     explicit NewWorkspaceModel(QObject* parent = nullptr);
@@ -51,24 +44,11 @@ public:
     QString errorMessage() const;
     bool isWorkspaceNameAllowed() const;
 
-    bool useUiPreferences() const;
-    bool useUiArrangement() const;
-    bool usePalettes() const;
-    bool useToolbarCustomization() const;
-
 public slots:
     void setWorkspaceName(const QString& name);
-    void setUseUiPreferences(bool needUse);
-    void setUseUiArrangement(bool needUse);
-    void setUsePalettes(bool needUse);
-    void setUseToolbarCustomization(bool needUse);
 
 signals:
     void workspaceNameChanged();
-    void useUiPreferencesChanged();
-    void useUiArrangementChanged();
-    void usePalettesChanged();
-    void useToolbarCustomizationChanged();
 
 private:
     void validateWorkspaceName();
@@ -76,13 +56,6 @@ private:
     QString m_workspaceName;
     QString m_errorMessage;
 
-    bool m_useUiPreferences = false;
-    bool m_useUiArrangement = false;
-    bool m_usePalettes = false;
-    bool m_useToolbarCustomization = false;
-
     QStringList m_workspaceNames;
 };
 }
-
-#endif // MU_WORKSPACESCENE_NEWWORKSPACEMODEL_H

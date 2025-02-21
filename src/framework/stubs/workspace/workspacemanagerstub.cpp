@@ -62,7 +62,19 @@ async::Notification WorkspaceManagerStub::workspacesListChanged() const
     return async::Notification();
 }
 
-IWorkspacePtr WorkspaceManagerStub::newWorkspace(const std::string&) const
+IWorkspacePtr WorkspaceManagerStub::cloneWorkspace(const IWorkspacePtr&, const std::string&)const
 {
     return std::make_shared<WorkspaceStub>();
+}
+
+void muse::workspace::WorkspaceManagerStub::changeCurrentWorkspace(const std::string&)
+{
+}
+
+void muse::workspace::WorkspaceManagerStub::createAndAppendNewWorkspace()
+{
+}
+
+void muse::workspace::WorkspaceManagerStub::openConfigureWorkspacesDialog()
+{
 }

@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.Workspace 1.0
+import Muse.Workspace 1.0
 
 import "internal"
 
@@ -63,7 +63,7 @@ StyledDialogView {
             Layout.preferredHeight: childrenRect.height
 
             firstWorkspaceTitle: view.firstWorkspaceTitle
-            canRemove: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
+            canRemove: Boolean(workspacesModel.selectedWorkspace) && !workspacesModel.selectedWorkspace.isBuiltin
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 3
@@ -90,6 +90,7 @@ StyledDialogView {
             Layout.leftMargin: -parent.anchors.leftMargin
             Layout.rightMargin: -parent.anchors.rightMargin
             leftPadding: parent.anchors.leftMargin
+            rightPadding: parent.anchors.rightMargin
 
             model: workspacesModel
 

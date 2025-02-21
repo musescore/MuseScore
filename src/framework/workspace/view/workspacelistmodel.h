@@ -20,26 +20,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_WORKSPACES_WORKSPACELISTMODEL_H
-#define MU_WORKSPACES_WORKSPACELISTMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
-#include "modularity/ioc.h"
-#include "workspace/iworkspacemanager.h"
-#include "global/iinteractive.h"
-
 #include "global/async/asyncable.h"
 
-namespace mu::workspacescene {
-class WorkspaceListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
+#include "modularity/ioc.h"
+#include "global/iinteractive.h"
+#include "iworkspacemanager.h"
+
+namespace muse::workspace {
+class WorkspaceListModel : public QAbstractListModel, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
 
-    Inject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
-    Inject<muse::IInteractive> interactive = { this };
+    Inject<IWorkspaceManager> workspacesManager = { this };
+    Inject<IInteractive> interactive = { this };
 
 public:
     explicit WorkspaceListModel(QObject* parent = nullptr);
@@ -53,27 +52,31 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
     Q_INVOKABLE void createNewWorkspace();
+
     Q_INVOKABLE void selectWorkspace(int workspaceIndex);
     Q_INVOKABLE void removeWorkspace(int workspaceIndex);
+    Q_INVOKABLE void resetWorkspace(int workspaceIndex);
+    Q_INVOKABLE QString renameWorkspace(int workspaceIndex, const QString& newName);
 
 signals:
     void selectedWorkspaceChanged(QVariant selectedWorkspace);
 
 private:
-    void setSelectedWorkspace(muse::workspace::IWorkspacePtr workspace);
+    void setSelectedWorkspace(IWorkspacePtr workspace);
 
-    QVariantMap workspaceToObject(muse::workspace::IWorkspacePtr workspace) const;
+    QVariantMap workspaceToObject(IWorkspacePtr workspace) const;
     bool isIndexValid(int index) const;
+
+    Ret doValidateWorkspaceName(int workspaceIndex, const QString& name) const;
 
     enum Roles {
         RoleName = Qt::UserRole + 1,
         RoleIsSelected,
-        RoleIsRemovable
+        RoleIsBuiltin,
+        RoleIsEdited
     };
 
-    QList<muse::workspace::IWorkspacePtr> m_workspaces;
-    muse::workspace::IWorkspacePtr m_selectedWorkspace;
+    QList<IWorkspacePtr> m_workspaces;
+    IWorkspacePtr m_selectedWorkspace;
 };
 }
-
-#endif // MU_WORKSPACES_WORKSPACELISTMODEL_H

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_WORKSPACE_WORKSPACECONFIGURATIONSTUB_H
-#define MUSE_WORKSPACE_WORKSPACECONFIGURATIONSTUB_H
 
-#include "workspace/iworkspaceconfiguration.h"
+#pragma once
+
+#include "../iworkspace.h"
 
 namespace muse::workspace {
-class WorkspaceConfigurationStub : public IWorkspaceConfiguration
+class WorkspaceUtils
 {
 public:
-
-    io::paths_t workspacePaths() const override;
-
-    io::paths_t builtinWorkspacesFilePaths() const override;
-    io::path_t userWorkspacesPath() const override;
-
-    std::string defaultWorkspaceName() const override;
-
-    std::string currentWorkspaceName() const override;
-    void setCurrentWorkspaceName(const std::string& workspaceName) override;
-    async::Channel<std::string> currentWorkspaceNameChanged() const override;
+    static bool workspaceLessThan(const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2);
 };
 }
-
-#endif // MU_WORKSPACE_WORKSPACECONFIGURATIONSTUB_H

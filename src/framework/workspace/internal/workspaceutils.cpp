@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,28 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_WORKSPACE_WORKSPACESTUB_H
-#define MUSE_WORKSPACE_WORKSPACESTUB_H
+#include "workspaceutils.h"
 
-#include "workspace/iworkspace.h"
+using namespace muse::workspace;
 
-namespace muse::workspace {
-class WorkspaceStub : public IWorkspace
+bool WorkspaceUtils::workspaceLessThan(const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2)
 {
-public:
-    std::string name() const override;
+    bool isWorkspace1Builtin = workspace1->isBuiltin();
+    bool isWorkspace2Builtin = workspace2->isBuiltin();
+    if (isWorkspace1Builtin != isWorkspace2Builtin) {
+        return isWorkspace1Builtin;
+    }
 
-    bool isBuiltin() const override;
-    bool isEdited() const override;
-
-    RetVal<QByteArray> rawData(const DataKey& key) const override;
-    Ret setRawData(const DataKey& key, const QByteArray& data) override;
-
-    void reset() override;
-    void assignNewName(const std::string& newName) override;
-
-    async::Notification reloadNotification() override;
-};
+    return workspace1->name() < workspace2->name();
 }
-
-#endif // MUSE_WORKSPACE_WORKSPACESTUB_H

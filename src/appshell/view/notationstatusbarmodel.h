@@ -27,7 +27,9 @@
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
+
 #include "uicomponents/view/menuitem.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -73,7 +75,6 @@ public:
 
     Q_INVOKABLE void load();
 
-    Q_INVOKABLE void selectWorkspace();
     Q_INVOKABLE void toggleConcertPitch();
     Q_INVOKABLE void setCurrentViewMode(const QString& modeCode);
 
@@ -84,6 +85,7 @@ public:
     Q_INVOKABLE void zoomOut();
 
     Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void handleWorkspacesMenuItem(const QString& itemId);
 
 public slots:
     void setCurrentZoomPercentage(int zoomPercentage);
@@ -126,6 +128,8 @@ private:
     muse::uicomponents::MenuItem* m_concertPitchItem = nullptr;
     muse::uicomponents::MenuItemList m_availableViewModeList;
     muse::uicomponents::MenuItemList m_availableZoomList;
+
+    std::shared_ptr<muse::uicomponents::AbstractMenuModel> m_workspacesMenuModel;
 };
 }
 

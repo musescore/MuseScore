@@ -136,7 +136,6 @@ set(LINK_LIB
     context
     muse::shortcuts
     muse::workspace
-    workspacescene
     muse::audio
     muse::mpe
     muse::midi

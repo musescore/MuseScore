@@ -23,6 +23,12 @@
 
 #include "types/translatablestring.h"
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_WORKSPACE
+#include "workspace/view/workspacesmenumodel.h"
+#endif
+
 #include "log.h"
 
 using namespace muse;
@@ -45,6 +51,9 @@ static QString makeId(const ActionCode& actionCode, int itemIndex)
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel = std::make_shared<WorkspacesMenuModel>(this);
+#endif
 }
 
 void AppMenuModel::load()
@@ -52,6 +61,10 @@ void AppMenuModel::load()
     TRACEFUNC;
 
     AbstractMenuModel::load();
+
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel->load();
+#endif
 
     MenuItemList items {
         makeFileMenu(),
@@ -103,15 +116,12 @@ void AppMenuModel::setupConnections()
         recentScoreListItem.setSubitems(recentScoresList);
     });
 
-    workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
+#ifdef MUSE_MODULE_WORKSPACE
+    connect(m_workspacesMenuModel.get(), &WorkspacesMenuModel::itemsChanged, this, [this](){
         MenuItem& workspacesItem = findMenu("menu-workspaces");
-        workspacesItem.setSubitems(makeWorkspacesItems());
+        workspacesItem.setSubitems(m_workspacesMenuModel->items());
     });
-
-    workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("menu-workspaces");
-        workspacesItem.setSubitems(makeWorkspacesItems());
-    });
+#endif
 
     extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
         MenuItem& pluginsMenu = findMenu("menu-plugins");
@@ -264,13 +274,17 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
-        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
-        makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
-        makeSeparator(),
-        makeMenu(TranslatableString("appshell/menu/view", "&Show"), makeShowItems(), "menu-show"),
-        makeSeparator(),
-        makeMenuItem("dock-restore-default-layout")
+        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
     };
+
+#ifdef MUSE_MODULE_WORKSPACE
+    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
+#endif
+
+    viewItems << makeSeparator()
+              << makeMenu(TranslatableString("appshell/menu/view", "&Show"), makeShowItems(), "menu-show")
+              << makeSeparator()
+              << makeMenuItem("dock-restore-default-layout");
 
     return makeMenu(TranslatableString("appshell/menu/view", "&View"), viewItems, "menu-view");
 }
@@ -682,44 +696,6 @@ MenuItemList AppMenuModel::makeToolbarsItems()
         makeMenuItem("toggle-noteinput"),
         makeMenuItem("toggle-statusbar")
     };
-
-    return items;
-}
-
-MenuItemList AppMenuModel::makeWorkspacesItems()
-{
-    MenuItemList items;
-
-    IWorkspacePtrList workspaces = workspacesManager()->workspaces();
-    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace();
-
-    std::sort(workspaces.begin(), workspaces.end(), [](const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2) {
-        return workspace1->name() < workspace2->name();
-    });
-
-    int index = 0;
-    for (const IWorkspacePtr& workspace : workspaces) {
-        MenuItem* item = new MenuItem(uiActionsRegister()->action("select-workspace"), this);
-        item->setId(makeId(item->action().code, index++));
-
-        UiAction action = item->action();
-        action.title = TranslatableString::untranslatable(String::fromStdString(workspace->title()));
-
-        item->setAction(action);
-        item->setArgs(ActionData::make_arg1<std::string>(workspace->name()));
-        item->setSelectable(true);
-        item->setSelected(workspace == currentWorkspace);
-
-        UiActionState state;
-        state.enabled = true;
-        state.checked = item->selected();
-        item->setState(state);
-
-        items << item;
-    }
-
-    items << makeSeparator()
-          << makeMenuItem("configure-workspaces");
 
     return items;
 }

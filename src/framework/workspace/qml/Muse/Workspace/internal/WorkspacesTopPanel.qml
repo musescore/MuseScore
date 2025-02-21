@@ -76,7 +76,9 @@ Column {
         FlatButton {
             Layout.alignment: Qt.AlignRight
 
-            text: qsTrc("workspace", "Create new workspace")
+            text: qsTrc("workspace", "Save layout as new workspace")
+            icon: IconCode.SAVE
+            orientation: Qt.Horizontal
 
             navigation.name: "CreateNewWorkspaceButton"
             navigation.panel: root.navigationPanel

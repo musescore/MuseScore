@@ -22,18 +22,17 @@
 
 #include "workspacelistmodel.h"
 
-#include "ui/uitypes.h"
-#include "palette/palettetypes.h"
+#include "internal/workspaceutils.h"
 
 #include "log.h"
 
-using namespace mu::workspacescene;
-using namespace muse;
 using namespace muse::workspace;
+using namespace muse;
 
 static const QString NAME_KEY("name");
 static const QString IS_SELECTED_KEY("isSelected");
-static const QString IS_REMOVABLE_KEY("isRemovable");
+static const QString IS_BUILTIN_KEY("isBuiltin");
+static const QString IS_EDITED_KEY("isEdited");
 static const QString INDEX_KEY("index");
 
 WorkspaceListModel::WorkspaceListModel(QObject* parent)
@@ -59,9 +58,7 @@ void WorkspaceListModel::load()
         m_workspaces << workspace;
     }
 
-    std::sort(m_workspaces.begin(), m_workspaces.end(), [](const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2) {
-        return workspace1->name() < workspace2->name();
-    });
+    std::sort(m_workspaces.begin(), m_workspaces.end(), WorkspaceUtils::workspaceLessThan);
 
     endResetModel();
 
@@ -89,8 +86,10 @@ QVariant WorkspaceListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleName:
         return workspace[NAME_KEY];
-    case RoleIsRemovable:
-        return workspace[IS_REMOVABLE_KEY];
+    case RoleIsBuiltin:
+        return workspace[IS_BUILTIN_KEY];
+    case RoleIsEdited:
+        return workspace[IS_EDITED_KEY];
     case RoleIsSelected:
         return workspace[IS_SELECTED_KEY];
     }
@@ -125,7 +124,8 @@ QVariantMap WorkspaceListModel::workspaceToObject(IWorkspacePtr workspace) const
 
     QVariantMap result;
     result[NAME_KEY] = QString::fromStdString(workspaceName);
-    result[IS_REMOVABLE_KEY] = workspaceName != DEFAULT_WORKSPACE_NAME;
+    result[IS_BUILTIN_KEY] = workspace->isBuiltin();
+    result[IS_EDITED_KEY] = workspace->isEdited();
     result[IS_SELECTED_KEY] = workspaceName == selectedWorkspaceName;
     result[INDEX_KEY] = m_workspaces.indexOf(workspace);
 
@@ -140,9 +140,10 @@ int WorkspaceListModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> WorkspaceListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
-        { RoleName, NAME_KEY.toUtf8() },
+        { RoleName,       NAME_KEY.toUtf8() },
         { RoleIsSelected, IS_SELECTED_KEY.toUtf8() },
-        { RoleIsRemovable, IS_REMOVABLE_KEY.toUtf8() }
+        { RoleIsBuiltin,  IS_BUILTIN_KEY.toUtf8() },
+        { RoleIsEdited,   IS_EDITED_KEY.toUtf8() }
     };
 
     return roles;
@@ -170,11 +171,10 @@ void WorkspaceListModel::createNewWorkspace()
         return;
     }
 
-    IWorkspacePtr newWorkspace = workspacesManager()->newWorkspace(name.toStdString());
-    newWorkspace->setIsManaged(muse::ui::WS_UiSettings, meta.value(muse::ui::WS_UiSettings).toBool());
-    newWorkspace->setIsManaged(muse::ui::WS_UiStates, meta.value(muse::ui::WS_UiStates).toBool());
-    newWorkspace->setIsManaged(muse::ui::WS_UiToolConfigs, meta.value(muse::ui::WS_UiToolConfigs).toBool());
-    newWorkspace->setIsManaged(palette::WS_Palettes, meta.value(palette::WS_Palettes).toBool());
+    IWorkspacePtr newWorkspace = workspacesManager()->cloneWorkspace(m_selectedWorkspace, name.toStdString());
+    if (!newWorkspace) {
+        return;
+    }
 
     int newWorkspaceIndex = m_workspaces.size();
 
@@ -207,6 +207,73 @@ void WorkspaceListModel::removeWorkspace(int workspaceIndex)
     if (removedWorkspace == m_selectedWorkspace) {
         setSelectedWorkspace(workspacesManager()->defaultWorkspace());
     }
+}
+
+void WorkspaceListModel::resetWorkspace(int workspaceIndex)
+{
+    if (!isIndexValid(workspaceIndex)) {
+        return;
+    }
+
+    int resetButton = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+    std::string question = muse::trc("workspace",
+                                     "This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?");
+
+    IInteractive::Button btn = interactive()->warning(muse::trc("workspace", "Resetting workspaces"), question, {
+        IInteractive::ButtonData(resetButton, muse::trc("workspace", "Reset workspace"), true, false, IInteractive::ButtonRole::AcceptRole),
+        interactive()->buttonData(IInteractive::Button::Cancel)
+    }).standardButton();
+
+    if (static_cast<int>(btn) != resetButton) {
+        return;
+    }
+
+    IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
+    workspace->reset();
+
+    QModelIndex modelIndex = index(workspaceIndex);
+    emit dataChanged(modelIndex, modelIndex);
+}
+
+QString WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& newName)
+{
+    if (!isIndexValid(workspaceIndex)) {
+        return {};
+    }
+
+    Ret ret = doValidateWorkspaceName(workspaceIndex, newName);
+    if (!ret) {
+        return QString::fromStdString(ret.text());
+    }
+
+    IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
+    workspace->assignNewName(newName.toStdString());
+
+    QModelIndex modelIndex = index(workspaceIndex);
+    emit dataChanged(modelIndex, modelIndex, { RoleName });
+
+    return {};
+}
+
+Ret WorkspaceListModel::doValidateWorkspaceName(int workspaceIndex, const QString& name) const
+{
+    if (name.isEmpty()) {
+        return false;
+    }
+
+    QString nameLower = name.toLower();
+
+    for (int i = 0; i < m_workspaces.size(); ++i) {
+        if (i == workspaceIndex) {
+            continue;
+        }
+
+        if (QString::fromStdString(m_workspaces[i]->name()).toLower() == nameLower) {
+            return make_ret(Ret::Code::UnknownError, muse::trc("workspace", "Name already exists"));
+        }
+    }
+
+    return true;
 }
 
 bool WorkspaceListModel::apply()

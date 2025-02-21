@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,20 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACESCENE_WORKSPACESCENEMODULE_H
-#define MU_WORKSPACESCENE_WORKSPACESCENEMODULE_H
 
-#include "modularity/imodulesetup.h"
+#pragma once
 
-namespace mu::workspacescene {
-class WorkspaceSceneModule : public muse::modularity::IModuleSetup
+#include "modularity/ioc.h"
+#include "ui/iuiactionsregister.h"
+#include "workspace/iworkspacemanager.h"
+
+#include "uicomponents/view/abstractmenumodel.h"
+
+namespace muse::workspace {
+class WorkspacesMenuModel : public uicomponents::AbstractMenuModel
 {
+    Q_OBJECT
+
+    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
+    Inject<IWorkspaceManager> workspacesManager = { this };
+
 public:
-    std::string moduleName() const override;
-    void resolveImports() override;
-    void registerUiTypes() override;
-    void registerResources() override;
+    explicit WorkspacesMenuModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void load() override;
 };
 }
-
-#endif // MU_WORKSPACESCENE_WORKSPACESCENEMODULE_H

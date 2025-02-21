@@ -22,19 +22,23 @@
 #ifndef MUSE_WORKSPACE_WORKSPACEMANAGER_H
 #define MUSE_WORKSPACE_WORKSPACEMANAGER_H
 
-#include "iworkspacemanager.h"
+#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
-#include "../iworkspaceconfiguration.h"
 #include "io/ifilesystem.h"
+#include "iinteractive.h"
+#include "../iworkspaceconfiguration.h"
+
 #include "workspace.h"
+
+#include "iworkspacemanager.h"
 
 namespace muse::workspace {
 class WorkspaceManager : public IWorkspaceManager, public Injectable, public async::Asyncable
 {
-    Inject<IWorkspaceConfiguration> configuration = { this };
     Inject<io::IFileSystem> fileSystem = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<IWorkspaceConfiguration> configuration = { this };
 
 public:
 
@@ -55,7 +59,11 @@ public:
     Ret setWorkspaces(const IWorkspacePtrList& workspaces) override;
     async::Notification workspacesListChanged() const override;
 
-    IWorkspacePtr newWorkspace(const std::string& workspaceName) const override;
+    IWorkspacePtr cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const override;
+
+    void changeCurrentWorkspace(const std::string& newWorkspaceName) override;
+    void createAndAppendNewWorkspace() override;
+    void openConfigureWorkspacesDialog() override;
 
 private:
     void load();
@@ -63,6 +71,7 @@ private:
     io::paths_t findWorkspaceFiles() const;
 
     WorkspacePtr doNewWorkspace(const std::string& workspaceName) const;
+    io::path_t makeNewWorkspacePath(const std::string& workspaceName) const;
 
     void appendNewWorkspace(WorkspacePtr workspace);
     void setupConnectionsToNewWorkspace(const IWorkspacePtr workspace);
@@ -70,10 +79,11 @@ private:
     void setupDefaultWorkspace();
     void setupCurrentWorkspace();
     void saveCurrentWorkspace();
+    void prepareCurrentWorkspaceForChange();
 
     Ret removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList);
     Ret removeWorkspace(const IWorkspacePtr& workspace);
-    bool canRemoveWorkspace(const std::string& workspaceName) const;
+    bool canRemoveWorkspace(const IWorkspacePtr& workspace) const;
 
     Ret addNonExistentWorkspaces(const IWorkspacePtrList& newWorkspaceList);
     Ret addWorkspace(IWorkspacePtr workspace);

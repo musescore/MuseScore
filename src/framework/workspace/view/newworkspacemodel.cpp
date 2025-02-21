@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::workspacescene;
+using namespace muse::workspace;
 
 NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
     : QObject(parent)
@@ -41,36 +41,12 @@ void NewWorkspaceModel::load(const QString& workspaceNames)
 {
     m_workspaceNames = workspaceNames.split(',');
 
-    setWorkspaceName(muse::qtrc("workspace", "My new workspace"));
-    setUseUiPreferences(true);
-    setUseUiArrangement(true);
-    setUsePalettes(true);
-    setUseToolbarCustomization(true);
+    setWorkspaceName(muse::qtrc("workspace", "New"));
 }
 
 QString NewWorkspaceModel::workspaceName() const
 {
     return m_workspaceName;
-}
-
-bool NewWorkspaceModel::useUiPreferences() const
-{
-    return m_useUiPreferences;
-}
-
-bool NewWorkspaceModel::useUiArrangement() const
-{
-    return m_useUiArrangement;
-}
-
-bool NewWorkspaceModel::usePalettes() const
-{
-    return m_usePalettes;
-}
-
-bool NewWorkspaceModel::useToolbarCustomization() const
-{
-    return m_useToolbarCustomization;
 }
 
 QString NewWorkspaceModel::errorMessage() const
@@ -112,53 +88,9 @@ void NewWorkspaceModel::validateWorkspaceName()
     }
 }
 
-void NewWorkspaceModel::setUseUiPreferences(bool needUse)
-{
-    if (m_useUiPreferences == needUse) {
-        return;
-    }
-
-    m_useUiPreferences = needUse;
-    emit useUiPreferencesChanged();
-}
-
-void NewWorkspaceModel::setUseUiArrangement(bool needUse)
-{
-    if (m_useUiArrangement == needUse) {
-        return;
-    }
-
-    m_useUiArrangement = needUse;
-    emit useUiArrangementChanged();
-}
-
-void NewWorkspaceModel::setUsePalettes(bool needUse)
-{
-    if (m_usePalettes == needUse) {
-        return;
-    }
-
-    m_usePalettes = needUse;
-    emit usePalettesChanged();
-}
-
-void NewWorkspaceModel::setUseToolbarCustomization(bool needUse)
-{
-    if (m_useToolbarCustomization == needUse) {
-        return;
-    }
-
-    m_useToolbarCustomization = needUse;
-    emit useToolbarCustomizationChanged();
-}
-
 QVariant NewWorkspaceModel::createWorkspace() const
 {
     QVariantMap meta;
     meta["name"] = m_workspaceName;
-    meta[muse::ui::WS_UiSettings] = useUiPreferences();
-    meta[muse::ui::WS_UiStates] = useUiArrangement();
-    meta[muse::ui::WS_UiToolConfigs] = useToolbarCustomization();
-    meta[palette::WS_Palettes] = usePalettes();
     return meta;
 }
