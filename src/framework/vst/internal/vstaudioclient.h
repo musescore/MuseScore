@@ -54,6 +54,8 @@ public:
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
 
+    void setPlaybackPosition(const muse::audio::msecs_t newPosition);
+
 private:
     struct SamplesInfo {
         unsigned int sampleRate = 0;
@@ -107,6 +109,8 @@ private:
 
     audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
     audio::audioch_t m_audioChannelsCount = 0;
+
+    mutable muse::audio::msecs_t m_playbackPosition = 0;
 };
 }
 

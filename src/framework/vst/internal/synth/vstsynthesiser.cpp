@@ -171,6 +171,7 @@ void VstSynthesiser::setPlaybackPosition(const muse::audio::msecs_t newPosition)
 
     if (isActive()) {
         m_vstAudioClient->setVolumeGain(m_sequencer.currentGain());
+        m_vstAudioClient->setPlaybackPosition(newPosition);
     }
 }
 
@@ -202,6 +203,9 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
+
+    m_vstAudioClient->setPlaybackPosition(m_sequencer.playbackPosition());
+
     samples_t sampleOffset = 0;
     samples_t processedSamples = 0;
 
