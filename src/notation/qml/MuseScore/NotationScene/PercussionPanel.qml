@@ -168,7 +168,7 @@ Item {
                 onNavigationEvent: {
                     // Use the last known "pad navigation row" and tab to the associated delete button if it exists
                     var padNavigationRow = navigationPrv.currentPadNavigationIndex[0]
-                    if (padGrid.model.rowIsEmpty(padNavigationRow)) {
+                    if (padGrid.numRows > 1) {
                         event.setData("controlIndex", [padNavigationRow, 0])
                     }
                 }
@@ -202,7 +202,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
 
-                            visible: padGrid.numRows > 1 && padGrid.model.rowIsEmpty(model.index)
+                            visible: padGrid.numRows > 1
 
                             icon: IconCode.DELETE_TANK
                             backgroundRadius: deleteButton.width / 2
@@ -215,17 +215,6 @@ Item {
 
                             onClicked: {
                                 padGrid.model.deleteRow(model.index)
-                            }
-
-                            Connections {
-                                target: padGrid.model
-
-                                function onRowIsEmptyChanged(row, isEmpty) {
-                                    if (row !== model.index) {
-                                        return
-                                    }
-                                    deleteButton.visible = padGrid.numRows > 1 && isEmpty
-                                }
                             }
                         }
                     }
