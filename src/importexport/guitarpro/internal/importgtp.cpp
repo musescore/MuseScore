@@ -1249,6 +1249,11 @@ void GuitarPro::createMeasures()
         //            m->setRepeatFlags(bars[i].repeatFlags);
         m->setRepeatCount(bars[i].repeats);           // supported in gp5
 
+        if (bars[i].repeatFlags == (mu::engraving::Repeat::START | mu::engraving::Repeat::END)) {
+            m->setRepeatEnd(true);
+            m->setRepeatStart(true);
+            voltaSequence = 1;
+        }
         // reset the volta sequence if we have an opening repeat
         if (bars[i].repeatFlags == mu::engraving::Repeat::START) {
             voltaSequence = 1;
