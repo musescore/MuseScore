@@ -3745,14 +3745,12 @@ bool MStyle::readProperties440(XmlReader& e, int mscVersion)
 
 bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
       {
-      if (mscVersion > 450)
-            qDebug("Yet unknown version detected");
+      if (/*mscVersion >= 460 && */readProperties460(e, mscVersion))
+            return true;
 
       const QStringRef& tag(e.name());
 
-      if (tag == "defaultsVersion")                                 // 4mm -> 4nn, let's skip, i.e. reset to Mu3's 302
-            e.skipCurrentElement();
-      else if (tag == "lyricsAvoidBarlines")                        // Mu4.5+ only, let's skip
+      if (     tag == "lyricsAvoidBarlines")                        // Mu4.5+ only, let's skip
             e.skipCurrentElement();
       else if (tag == "maskBarlinesForText")                        // Mu4.5+ only, let's skip
             e.skipCurrentElement();
@@ -3815,6 +3813,294 @@ bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
             e.skipCurrentElement();
       else if (tag == "spatium")                                    // pre-4.5(?) typo
             set(Sid::spatium, e.readDouble() * DPMM);
+      else // still no match
+            return false;
+      return true;
+      }
+
+bool  MStyle::readProperties460(XmlReader& e, int mscVersion)
+      {
+      if (mscVersion > 460)
+            qDebug("Yet unknown version detected");
+
+      const QStringRef& tag(e.name());
+
+      if (     tag == "lyricsLimitDashCount"
+            || tag == "lyricsMaxDashCount"
+            || tag == "lyricsCenterDashedSyllables"
+            || tag == "lyricsOddPosition"
+            || tag == "lyricsEvenPosition")                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "paddingToNotationAbove"
+            || tag == "paddingToNotationBelow")                     // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "systemHeaderMinStartOfSystemDistance")       // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "minNoteDistance") {                          // 0.5 -> 0.35
+            qreal minNoteDistance = e.readDouble();
+            if (!qFuzzyCompare(minNoteDistance, 3.5))               // Changed from 4.6+ default
+                  set(Sid::minNoteDistance, minNoteDistance);
+            }
+      else if (tag == "spacingDensity")                             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "accidentalDistance") {                       // 0.25 -> 0.22
+            qreal accidentalDistance = e.readDouble();
+            if (!qFuzzyCompare(accidentalDistance, 0.22))           // Changed from 4.6+ default
+                  set(Sid::accidentalDistance, accidentalDistance);
+            }
+      else if (tag == "articulationAnchorLuteFingering") {          // 1 -> 4
+            int articulationAnchorLuteFingering = e.readInt();
+            if (articulationAnchorLuteFingering != 4)               // Changed from 4.6+ default
+                  set(Sid::articulationAnchorLuteFingering, articulationAnchorLuteFingering);
+            }
+      else if (tag == "hairpinPosition")                            // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "pedalFontSize") {                            // 10 -> 12
+            int pedalFontSize = e.readInt();
+            if (pedalFontSize != 12)                                // Changed from 4.6+ default
+                  set(Sid::pedalFontSize, pedalFontSize);
+            }
+      else if (tag == "pedalPosition")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      //else if (tag == "chordSymbolAAlign")                        // left,baseline -> center,baseline ToDo/Let's pass
+      //      return false;
+      //else if (tag == "chordSymbolBAlign")                        // left,baseline -> center,baseline ToDo/Let's pass
+      //      return false;
+      else if (tag == "fretFrets") {                                // 5 -> 4
+            int fretFrets = e.readInt();
+            if (fretFrets != 4)                                     // Changed from 4.6+ default
+                  set(Sid::fretFrets, fretFrets);
+            }
+      else if (tag == "fretFretSpacing") {                          // 0.7 -> 0.8
+            qreal fretFretSpacing = e.readDouble();
+            if (!qFuzzyCompare(fretFretSpacing, 0.22))              // Changed from 4.6+ default
+                  set(Sid::fretFretSpacing, fretFretSpacing);
+            }
+      else if (tag == "barreLineWidth") {                           // 0.85 -> 1
+            qreal barreLineWidth = e.readDouble();
+            if (!qFuzzyCompare(barreLineWidth, 1))                  // Changed from 4.6+ default
+                  set(Sid::barreLineWidth, barreLineWidth);
+            }
+      else if (tag == "barlineBeforeSigChange"
+            || tag == "doubleBarlineBeforeKeySig"
+            || tag == "doubleBarlineBeforeTimeSig")                 // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "chordSymbolSpelling") {                      // New in 4.6, replacing the 5 previous ones
+            QString chordSymbolSpelling = e.readElementText();
+            if (chordSymbolSpelling != "standard") {                // Changed from 4.6+ default (no need to set otherwise)
+                  set(Sid::useStandardNoteNames, chordSymbolSpelling == "standard");
+                  set(Sid::useGermanNoteNames, chordSymbolSpelling == "german");
+                  set(Sid::useFullGermanNoteNames, chordSymbolSpelling == "germanPure");
+                  set(Sid::useSolfeggioNoteNames, chordSymbolSpelling == "solfeggio");
+                  set(Sid::useFrenchNoteNames, chordSymbolSpelling == "french");
+                  }
+            }
+      else if (tag == "verticallyStackModifiers"
+            || tag == "chordStackedModiferMag"
+            || tag == "chordBassNoteStagger"
+            || tag == "chordBassNoteScale"
+            || tag == "polychordDividerThickness"
+            || tag == "polychordDividerSpacing"
+            || tag == "verticallyAlignChordSymbols"
+            || tag == "chordSymPosition"
+            || tag == "chordAlignmentToFretboard"
+            || tag == "chordAlignmentExcludeModifiers")             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "angleHangingSlursAwayFromStaff")             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "barlineToLineStartDistance")                 // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "voltaPosition"
+            || tag == "voltaAlignStartBeforeKeySig"
+            || tag == "voltaAlignEndLeftOfBarline")                 // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "ottavaPosition")                             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "tupletPosition"
+            || tag == "tupletExtendToEndOfDuration"
+            || tag == "tupletNumberRythmicCenter")                  // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "textLineLineWidth"
+            || tag == "textLineLineStyle"
+            || tag == "textLineDashLineLen"
+            || tag == "textLineDashGapLen"
+            || tag == "textLineHookHeight")                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "textLinePosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "systemTextLineLineWidth"
+            || tag == "systemTextLineLineStyle"
+            || tag == "systemTextLineDashLineLen"
+            || tag == "systemTextLineDashGapLen"
+            || tag == "systemTextLineHookHeight")                   // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "systemTextLinePosition")                     // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "defaultPosition")                            // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "titlePosition")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "subTitlePosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "composerPosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "lyricistPosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "fingeringPosition"
+            || tag.startsWith("tabFretNumber"))                     // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "lhGuitarFingeringPosition")                  // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "rhGuitarFingeringPosition"
+            || tag.startsWith("hammerOnPullOffTapping")
+            || tag.startsWith("hopo")
+            || tag.startsWith("lhTapping")
+            || tag.startsWith("rhTapping"))                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "stringNumberPosition")                       // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "stringNumberPosition")                       // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      //else if (tag == "harpPedalDiagramPosition")                 // Mu4.6+ only, skipped in readProperties400() already, via wildcard)
+      //      e.skipCurrentElement();
+      //else if (tag == "harpPedalTextDiagramPosition")             // Mu4.6+ only, skipped in readProperties400() already, via wildcard)
+      //      e.skipCurrentElement();
+      else if (tag.startsWith("articulationFont")
+            || tag == "articulationLineSpacing"
+            || tag == "articulationColor"
+            || tag == "articulationAlign"
+            || tag.startsWith("articulationFrame")
+            || tag == "articulationOffset"
+            || tag == "articulationPosition")                       // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "longInstrumentPosition")                     // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "shortInstrumentPosition")                    // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "partInstrumentPosition")                     // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "dynamicsPosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "expressionPosition")                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "tempoPosition")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "tempoChangePosition")                        // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "metronomePosition")                          // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "measureNumberHPlacement") {                  // 0 (AKA HPlacement::LEFT) -> left
+            QString measureNumberHPlacement = e.readElementText();
+            if (measureNumberHPlacement != "left") {                // Changed from 4.6+ default
+                  if (measureNumberHPlacement == "center")
+                        set(Sid::measureNumberHPlacement, int(HPlacement::CENTER));
+                  else if (measureNumberHPlacement == "right")
+                        set(Sid::measureNumberHPlacement, int(HPlacement::RIGHT));
+                  }
+            }
+      else if (tag == "measureNumberPosition"
+            || tag == "measureNumberTextStyle"
+            || tag == "measureNumberAlignToBarline"
+            || tag.startsWith("measureNumberAlternate"))            // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "mmRestRangeHPlacement") {                    // 1 (AKA HPlacement::CENTER) -> center
+            QString mmRestRangeHPlacement = e.readElementText();
+            if (mmRestRangeHPlacement != "center") {                // Changed from 4.6+ default
+                  if (mmRestRangeHPlacement == "left")
+                        set(Sid::mmRestRangeHPlacement, int(HPlacement::LEFT));
+                  else if (mmRestRangeHPlacement == "right")
+                        set(Sid::mmRestRangeHPlacement, int(HPlacement::RIGHT));
+                  }
+            }
+      else if (tag == "mmRestRangePosition"
+            || tag == "mmRestRangeTextStyle")                       // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "translatorPosition")                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "systemTextPosition")                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "staffTextPosition")                          // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "fretDiagramFingeringPosition")               // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "fretDiagramFretNumberPosition")              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "rehearsalMarkPosition")                      // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag.startsWith("repeatPlayCount"))                   // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "repeatLeftFontSize") {                       // 18 -> 10
+            int repeatLeftFontSize = e.readInt();
+            if (repeatLeftFontSize != 10)                           // Changed from 4.6+ default
+                  set(Sid::repeatLeftFontSize, repeatLeftFontSize);
+            }
+      else if (tag == "repeatLeftPosition")                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "repeatRightFontSize") {                      // 11 -> 10
+            int repeatRightFontSize = e.readInt();
+            if (repeatRightFontSize != 10)                          // Changed from 4.6+ default
+                  set(Sid::repeatRightFontSize, repeatRightFontSize);
+            }
+      else if (tag == "repeatRightPosition")                        // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "framePosition")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "noteLinePosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "glissandoPosition")                          // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "bendPosition")                               // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      //else if (tag == "headerAlign")                              // center,top -> center,center ToDo/Let's pass
+      //      e.skipCurrentElement();
+      else if (tag == "headerPosition")                             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      //else if (tag == "footerAlign")                              // center,top -> center,center ToDo/Let's pass
+      //      e.skipCurrentElement();
+      else if (tag == "footerPosition")                             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "copyrightPosition")                          // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "pageNumberPosition")                         // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "instrumentChangePosition")                   // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "stickingPosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user1Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user2Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user3Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user4Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user5Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user6Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user7Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user8Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user9Position")                              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user10Position")                             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user11Position")                             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "user12Position")                             // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "letRingPosition")                            // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "palmMutePosition")                           // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "defaultsVersion")                            // 4mm -> 4nn, let's skip, i.e. reset to Mu3's 302
+            e.skipCurrentElement();
+      else if (tag.startsWith("repeatPlayCount"))                   // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "systemObjectsBelowBottomStaff")              // Mu4.6+ only, let's skip
+            e.skipCurrentElement();
       else // still no match
             return false;
       return true;
