@@ -182,7 +182,9 @@ void LayoutPanelTreeModel::onBeforeChangeNotation()
     QList<muse::ID> partIdList;
 
     for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
-        partIdList << item->id();
+        if (item->type() == LayoutPanelItemType::ItemType::PART) {
+            partIdList << item->id();
+        }
     }
 
     m_sortedPartIdList[notationToKey(m_notation)] = partIdList;
@@ -799,7 +801,9 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
 
     // exclude the control item
     bool hasControlItem = parentItem->type() != LayoutPanelItemType::ROOT;
-    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0);
+    const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
+    bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
+    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0) - (lastSelectedIsSystemObjectLayer ? 1 : 0);
 
     bool isRowInBoundaries = lastSelectedRowIndex.isValid() && lastSelectedRowIndex.row() < lastItemRowIndex;
 
@@ -869,6 +873,9 @@ void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool
 {
     for (const QModelIndex& index : indexes) {
         if (AbstractLayoutPanelTreeItem* item = modelIndexToItem(index)) {
+            if (!item->isSelectable()) {
+                continue;
+            }
             item->setIsSelected(selected);
         }
     }
@@ -962,9 +969,9 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 
     // Remove old system object layers
     std::vector<const PartTreeItem*> partItems;
-    std::vector<const SystemObjectsLayerTreeItem*> existingSystemObjectLayers;
+    std::vector<SystemObjectsLayerTreeItem*> existingSystemObjectLayers;
 
-    for (const AbstractLayoutPanelTreeItem* item : children) {
+    for (AbstractLayoutPanelTreeItem* item : children) {
         if (item->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
             if (item->type() == LayoutPanelItemType::PART) {
                 partItems.push_back(static_cast<const PartTreeItem*>(item));
@@ -972,7 +979,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             continue;
         }
 
-        auto layerItem = static_cast<const SystemObjectsLayerTreeItem*>(item);
+        auto layerItem = static_cast<SystemObjectsLayerTreeItem*>(item);
         if (muse::remove(newSystemObjectStaves, const_cast<Staff*>(layerItem->staff()))) {
             existingSystemObjectLayers.push_back(layerItem);
             continue;
@@ -985,7 +992,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
     }
 
     // Update position of existing layers if changed
-    for (const SystemObjectsLayerTreeItem* layerItem : existingSystemObjectLayers) {
+    for (SystemObjectsLayerTreeItem* layerItem : existingSystemObjectLayers) {
         const PartTreeItem* partItem = findPartItemByStaff(layerItem->staff());
         IF_ASSERT_FAILED(partItem) {
             continue;
@@ -994,11 +1001,13 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
         const int partRow = partItem->row();
         const int layerRow = layerItem->row();
 
-        if (partRow < layerRow) {
+        if (layerRow != partRow - 1) {
             beginMoveRows(QModelIndex(), layerRow, layerRow, QModelIndex(), partRow);
             m_rootItem->moveChildren(layerRow, 1, m_rootItem, partRow, false /*updateNotation*/);
             endMoveRows();
         }
+
+        layerItem->updateSystemObjects();
     }
 
     if (newSystemObjectStaves.empty()) {
