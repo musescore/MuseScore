@@ -105,15 +105,15 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
 }
 
 /// Opens the percussion shortcut dialog, modifies drumset with user input
-void PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPitch)
+bool PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPitch)
 {
     IF_ASSERT_FAILED(drumset.isValid(originPitch)) {
-        return;
+        return false;
     }
 
     const muse::RetVal<muse::Val> rv = openPercussionShortcutDialog(drumset, originPitch);
     if (!rv.ret) {
-        return;
+        return false;
     }
 
     const QVariantMap vals = rv.val.toQVariant().toMap();
@@ -124,6 +124,8 @@ void PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPit
     if (conflictShortcutPitch > -1 && drumset.isValid(conflictShortcutPitch)) {
         drumset.drum(conflictShortcutPitch).shortcut.clear();
     }
+
+    return true;
 }
 
 muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const Drumset& drumset, int originPitch)
