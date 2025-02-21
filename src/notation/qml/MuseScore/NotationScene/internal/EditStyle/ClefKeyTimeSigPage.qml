@@ -175,7 +175,9 @@ StyledFlickable {
                     }
 
                     StyledImage {
-                        forceHeight: 120
+                        forceHeight: 144
+                        horizontalPadding: 0
+                        verticalPadding: 0
                         source: pageModel.timeSigPlacement.value === 0 ? "timeSigImages/timesig-on_all_staves.png"
                               : pageModel.timeSigPlacement.value === 1 ? "timeSigImages/timesig-above_staves.png"
                                                                        : "timeSigImages/timesig-across_staves.png"
@@ -433,10 +435,12 @@ StyledFlickable {
                         }
 
                         StyledImage {
-                            forceWidth: 120
+                            forceHeight: 94
+                            horizontalPadding: 0
+                            verticalPadding: 0
                             source: root.timeSigVsMargin.value === 0 ? "timeSigImages/timesig-courtesy-hang.png"
                                   : root.timeSigVsMargin.value === 1 ? "timeSigImages/timesig-courtesy-right_align.png"
-                                                                     : "timeSigImages/timesig-courtesy-create_space.png"
+                                                                     : "timeSigImages/timesig-courtesy-inset.png"
                         }
                     }
                 }
