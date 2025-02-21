@@ -63,13 +63,13 @@ void ProgressDialogModel::load(const QVariant& progressObj)
         return;
     }
 
-    m_progress->progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+    m_progress->progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
         setValue(current);
         setTo(total);
         setStatusMessage(QString::fromStdString(status));
     });
 
-    m_progress->finished.onReceive(this, [this](const ProgressResult& res) {
+    m_progress->finished().onReceive(this, [this](const ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret.toString();
         }

@@ -31,21 +31,54 @@
 namespace muse {
 using ProgressResult = RetVal<Val>;
 
-struct Progress
+class Progress
 {
-    // Communication from the creator of the progress to the clients
-    async::Notification started;
-    async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/> progressChanged;
-    async::Channel<ProgressResult> finished;
+public:
 
-    // Communication from the clients to the creator of the progress that it should cancel its work
-    async::Notification cancelRequested;
+    // start
+    void start()
+    {
+        m_isStarted = true;
+        m_started.notify();
+    }
+
+    async::Notification& started() { return m_started; }
+    bool isStarted() const { return m_isStarted; }
+
+    // progress
+    void progress(int64_t current, int64_t total, const std::string& msg) { m_progressChanged.send(current, total, msg); }
+    async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/>& progressChanged()
+    {
+        return m_progressChanged;
+    }
+
+    // finish or cancel
+    void finish(const ProgressResult& res)
+    {
+        m_isStarted = false;
+        m_finished.send(res);
+    }
+
+    async::Channel<ProgressResult>& finished() { return m_finished; }
 
     void cancel()
     {
-        cancelRequested.notify();
-        finished.send(make_ret(Ret::Code::Cancel));
+        m_isCanceled = true;
+        m_canceled.notify();
+        finish(make_ret(Ret::Code::Cancel));
     }
+
+    async::Notification& canceled() { return m_canceled; }
+    bool isCanceled() const { return m_isCanceled; }
+
+private:
+    async::Notification m_started;
+    async::Channel<ProgressResult> m_finished;
+    async::Notification m_canceled;
+    bool m_isStarted = false;
+    bool m_isCanceled = false;
+
+    async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/> m_progressChanged;
 };
 
 using ProgressPtr = std::shared_ptr<Progress>;

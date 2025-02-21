@@ -205,8 +205,8 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     auto createAudioCallback = [this, manager, &audioData, title, audioFormat, existingUrl, visibility, replaceExisting]() {
@@ -219,7 +219,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
     };
 
     async::Async::call(this, [this, progress, createAudioCallback, uploadCallback]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
 
@@ -241,7 +241,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
         m_currentUploadingAudioId.clear();
         m_currentUploadingAudioInfo = {};
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;

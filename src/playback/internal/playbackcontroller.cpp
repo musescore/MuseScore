@@ -121,7 +121,7 @@ void PlaybackController::init()
             return;
         }
 
-        m_loadingProgress.started.notify();
+        m_loadingProgress.start();
 
         playback()->addSequence().onResolve(this, [this](const TrackSequenceId& sequenceId) {
             setupNewCurrentSequence(sequenceId);
@@ -1294,10 +1294,10 @@ void PlaybackController::setupSequenceTracks()
         m_loadingTrackCount--;
 
         size_t current = trackCount - m_loadingTrackCount;
-        m_loadingProgress.progressChanged.send(current, trackCount, title);
+        m_loadingProgress.progress(current, trackCount, title);
 
         if (m_loadingTrackCount == 0) {
-            m_loadingProgress.finished.send(muse::make_ok());
+            m_loadingProgress.finish(muse::make_ok());
             m_isPlayAllowedChanged.notify();
         }
     };
@@ -1310,7 +1310,7 @@ void PlaybackController::setupSequenceTracks()
         addAuxTrack(idx, onAddFinished);
     }
 
-    m_loadingProgress.progressChanged.send(0, trackCount, title);
+    m_loadingProgress.progress(0, trackCount, title);
 
     notationPlayback()->trackAdded().onReceive(this, [this, onAddFinished](const InstrumentTrackId& instrumentTrackId) {
         addTrack(instrumentTrackId, onAddFinished);

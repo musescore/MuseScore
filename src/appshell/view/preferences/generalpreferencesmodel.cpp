@@ -61,11 +61,11 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 
     m_languageUpdateProgress = languagesService()->update(languageCode);
 
-    m_languageUpdateProgress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+    m_languageUpdateProgress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
         emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
     });
 
-    m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](const ProgressResult& res) {
+    m_languageUpdateProgress.finished().onReceive(this, [this, languageCode](const ProgressResult& res) {
         if (res.ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
             QString msg = muse::qtrc("appshell/preferences", "Your version of %1 is up to date.")
                           .arg(languagesService()->language(languageCode).name);

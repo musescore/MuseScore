@@ -89,15 +89,15 @@ size_t Mp3Encoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
 
 size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    m_progress.progressChanged.send(0, 100, "");
+    m_progress.progress(0, 100, "");
 
     int encodedBytes = lame_encode_buffer_interleaved_ieee_float(m_handler->flags, input, samplesPerChannel,
                                                                  m_outputBuffer.data(),
                                                                  static_cast<int>(m_outputBuffer.size()));
 
-    m_progress.progressChanged.send(50, 100, "");
+    m_progress.progress(50, 100, "");
     size_t result = std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
-    m_progress.progressChanged.send(100, 100, "");
+    m_progress.progress(100, 100, "");
 
     return result;
 }

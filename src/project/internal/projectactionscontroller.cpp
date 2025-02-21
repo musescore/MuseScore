@@ -485,7 +485,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     m_projectBeingDownloaded.scoreId = scoreId;
     m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData, hash, secret);
 
-    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, info, isOwner, projectData](const ProgressResult& res) {
+    m_projectBeingDownloaded.progress->finished().onReceive(this, [this, localPath, info, isOwner, projectData](const ProgressResult& res) {
         projectData->deleteLater();
 
         m_projectBeingDownloaded = {};
@@ -871,18 +871,18 @@ void ProjectActionsController::shareAudio(const AudioFile& existingAudio)
                                                               project->cloudAudioInfo().url, cloudAudioInfo.visibility,
                                                               cloudAudioInfo.replaceExisting);
 
-    m_uploadingAudioProgress->started.onNotify(this, [this]() {
+    m_uploadingAudioProgress->started().onNotify(this, [this]() {
         LOGD() << "Uploading audio started";
         showUploadProgressDialog();
     });
 
-    m_uploadingAudioProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+    m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         if (total > 0) {
             LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
         }
     });
 
-    m_uploadingAudioProgress->finished.onReceive(this, [this, audio, project, cloudAudioInfo](const ProgressResult& res) {
+    m_uploadingAudioProgress->finished().onReceive(this, [this, audio, project, cloudAudioInfo](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
 
         audio.device->deleteLater();
@@ -1249,19 +1249,19 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
     m_uploadingProjectProgress = museScoreComService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl,
                                                                     info.revisionId);
 
-    m_uploadingProjectProgress->started.onNotify(this, [this]() {
+    m_uploadingProjectProgress->started().onNotify(this, [this]() {
         showUploadProgressDialog();
         LOGD() << "Uploading project started";
     });
 
-    m_uploadingProjectProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+    m_uploadingProjectProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         if (total > 0) {
             LOGD() << "Uploading project progress: " << current << " / " << total << " bytes";
         }
     });
 
-    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, info, audio, openEditUrl, publishMode,
-                                                          isFirstSave, &ret, &eventLoop](const ProgressResult& res) {
+    m_uploadingProjectProgress->finished().onReceive(this, [this, project, projectData, info, audio, openEditUrl, publishMode,
+                                                            isFirstSave, &ret, &eventLoop](const ProgressResult& res) {
         DEFER {
             eventLoop.quit();
         };
@@ -1320,17 +1320,17 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
 {
     m_uploadingAudioProgress = museScoreComService()->uploadAudio(*audio.device, audio.format, sourceUrl);
 
-    m_uploadingAudioProgress->started.onNotify(this, []() {
+    m_uploadingAudioProgress->started().onNotify(this, []() {
         LOGD() << "Uploading audio started";
     });
 
-    m_uploadingAudioProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+    m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         if (total > 0) {
             LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
         }
     });
 
-    m_uploadingAudioProgress->finished.onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode](const ProgressResult& res) {
+    m_uploadingAudioProgress->finished().onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
 
         if (!res.ret) {
