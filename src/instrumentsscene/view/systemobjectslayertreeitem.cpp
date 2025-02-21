@@ -98,10 +98,6 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGrou
 
     updateState();
 
-    notation()->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& changes) {
-        onUndoStackChanged(changes);
-    });
-
     connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
         onVisibleChanged(isVisible);
     });
@@ -144,7 +140,7 @@ bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
     return false;
 }
 
-void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreChangesRange& changes)
+void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChangesRange& changes)
 {
     if (muse::contains(changes.changedPropertyIdSet, Pid::TRACK)) {
         updateStaff();

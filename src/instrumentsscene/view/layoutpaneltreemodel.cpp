@@ -269,10 +269,14 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& stavesPartId)
     });
 }
 
-void LayoutPanelTreeModel::listenNotationSelectionChanged()
+void LayoutPanelTreeModel::setupNotationConnections()
 {
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateSelectedRows();
+    });
+
+    m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
+        onScoreChanged(changes);
     });
 }
 
@@ -304,6 +308,17 @@ void LayoutPanelTreeModel::updateSelectedRows()
         if (item) {
             m_selectionModel->select(createIndex(item->row(), 0, item), QItemSelectionModel::Select);
         }
+    }
+}
+
+void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChangesRange& changes)
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        item->onScoreChanged(changes);
     }
 }
 
@@ -362,7 +377,7 @@ void LayoutPanelTreeModel::load()
     endResetModel();
 
     setupPartsConnections();
-    listenNotationSelectionChanged();
+    setupNotationConnections();
 
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);

@@ -140,8 +140,10 @@ private:
 
     void setupPartsConnections();
     void setupStavesConnections(const muse::ID& stavesPartId);
-    void listenNotationSelectionChanged();
+    void setupNotationConnections();
+
     void updateSelectedRows();
+    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes);
 
     void clear();
     void deleteItems();
