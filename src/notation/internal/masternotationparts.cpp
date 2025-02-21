@@ -94,8 +94,7 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
         impl->setBracketsAndBarlines();
     }
 
-    updatePartList();
-    updateSystemObjectStaves();
+    updatePartsAndSystemObjectStaves();
     endGlobalEdit();
 }
 

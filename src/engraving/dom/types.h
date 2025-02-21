@@ -553,6 +553,23 @@ struct ScoreChangesRange {
     {
         return isValidBoundary() || !changedTypes.empty();
     }
+
+    void clear()
+    {
+        *this = ScoreChangesRange();
+    }
+
+    void combine(const ScoreChangesRange& r)
+    {
+        tickFrom = std::min(tickFrom, r.tickFrom);
+        tickTo = std::max(tickTo, r.tickTo);
+        staffIdxFrom = std::min(staffIdxFrom, r.staffIdxFrom);
+        staffIdxTo = std::max(staffIdxTo, r.staffIdxTo);
+        changedItems.insert(r.changedItems.begin(), r.changedItems.end());
+        changedTypes.insert(r.changedTypes.begin(), r.changedTypes.end());
+        changedPropertyIdSet.insert(r.changedPropertyIdSet.begin(), r.changedPropertyIdSet.end());
+        changedStyleIdSet.insert(r.changedStyleIdSet.begin(), r.changedStyleIdSet.end());
+    }
 };
 } // namespace mu::engraving
 
