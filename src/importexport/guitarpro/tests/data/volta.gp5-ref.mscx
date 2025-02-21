@@ -922,7 +922,7 @@
           </voice>
         </Measure>
       <Measure>
-        <endRepeat>3</endRepeat>
+        <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="Volta">
             <Volta>
