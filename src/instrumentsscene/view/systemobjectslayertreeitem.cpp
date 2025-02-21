@@ -134,7 +134,7 @@ QString SystemObjectsLayerTreeItem::staffId() const
 
 bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
 {
-    return false;
+    return m_staffIdx != 0; // all except the first
 }
 
 void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChangesRange& changes)
