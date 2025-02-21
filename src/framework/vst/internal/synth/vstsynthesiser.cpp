@@ -204,6 +204,7 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
 
+    // TODO: this is not a good way of doing this, please comment!
     m_vstAudioClient->setPlaybackPosition(m_sequencer.playbackPosition());
 
     samples_t sampleOffset = 0;
