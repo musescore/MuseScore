@@ -31,5 +31,9 @@ bool WorkspaceUtils::workspaceLessThan(const IWorkspacePtr& workspace1, const IW
         return isWorkspace1Builtin;
     }
 
+    if (isWorkspace1Builtin && isWorkspace2Builtin) {
+        return false;
+    }
+
     return workspace1->name() < workspace2->name();
 }

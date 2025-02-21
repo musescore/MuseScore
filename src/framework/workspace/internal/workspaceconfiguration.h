@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+#include "io/ifilesystem.h"
 
 #include "../iworkspaceconfiguration.h"
 
@@ -34,6 +35,7 @@ namespace muse::workspace {
 class WorkspaceConfiguration : public IWorkspaceConfiguration, public Injectable, public async::Asyncable
 {
     Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
     WorkspaceConfiguration(const modularity::ContextPtr& iocCtx)
