@@ -88,15 +88,12 @@ SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr master
 
 void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGroups& systemObjects)
 {
-    m_systemObjectGroups = systemObjects;
-
     setStaff(staff);
+    setSystemObjects(systemObjects);
 
     bool isTopLayer = staff->score()->staff(0) == staff;
     setIsRemovable(!isTopLayer);
     setIsSelectable(!isTopLayer);
-
-    updateState();
 
     connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
         onVisibleChanged(isVisible);
@@ -123,9 +120,9 @@ void SystemObjectsLayerTreeItem::setStaff(const Staff* staff)
     }
 }
 
-void SystemObjectsLayerTreeItem::updateSystemObjects()
+void SystemObjectsLayerTreeItem::setSystemObjects(const SystemObjectGroups& systemObjects)
 {
-    m_systemObjectGroups = collectSystemObjectGroups(m_staff);
+    m_systemObjectGroups = systemObjects;
     updateState();
 }
 
