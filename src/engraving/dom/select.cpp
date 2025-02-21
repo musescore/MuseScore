@@ -813,8 +813,9 @@ void Selection::updateSelectedElements()
             if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() <= etick)) {
                 EngravingItem* startCR = sp->startCR();
                 EngravingItem* endCR = sp->endCR();
-                const bool canSelectStart = (sp->startElement()->isTimeTickAnchor() || canSelect(startCR));
-                const bool canSelectEnd = (sp->endElement()->isTimeTickAnchor() || canSelect(endCR));
+                const bool canSelectStart
+                    = (sp->startElement()->isTimeTickAnchor() || sp->startElement()->isSegment() || canSelect(startCR));
+                const bool canSelectEnd = (sp->endElement()->isTimeTickAnchor() || sp->endElement()->isSegment() || canSelect(endCR));
                 if (canSelectStart && canSelectEnd) {
                     for (auto seg : sp->spannerSegments()) {
                         appendFiltered(seg);               // spanner with start or end in range selection
