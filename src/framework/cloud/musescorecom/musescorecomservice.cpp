@@ -309,19 +309,19 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     async::Async::call(this, [this, manager, scoreId, &scoreData, hash, secret, progress]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
         result.ret = executeRequest([this, manager, scoreId, &scoreData, hash, secret]() {
             return doDownloadScore(manager, scoreId, scoreData, hash, secret);
         });
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;
@@ -363,8 +363,8 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
@@ -377,13 +377,13 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
     };
 
     async::Async::call(this, [this, progress, uploadCallback, scoreUrlMap]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
         result.ret = executeRequest(uploadCallback);
         result.val = Val(*scoreUrlMap);
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;
@@ -394,8 +394,8 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     auto uploadCallback = [this, manager, &audioData, audioFormat, sourceUrl]() {
@@ -403,9 +403,9 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     };
 
     async::Async::call(this, [this, progress, uploadCallback]() {
-        progress->started.notify();
+        progress->start();
         Ret ret = executeRequest(uploadCallback);
-        progress->finished.send(ret);
+        progress->finish(ret);
     });
 
     return progress;

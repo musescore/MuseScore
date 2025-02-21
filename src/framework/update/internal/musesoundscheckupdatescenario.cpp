@@ -95,11 +95,11 @@ void MuseSoundsCheckUpdateScenario::setIgnoredUpdate(const std::string& version)
 void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started.onNotify(this, [this]() {
+    m_checkProgressChannel->started().onNotify(this, [this]() {
         m_checkProgress = true;
     });
 
-    m_checkProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
             m_checkProgress = false;
         };
@@ -130,7 +130,7 @@ void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
 
 void MuseSoundsCheckUpdateScenario::th_checkForUpdate()
 {
-    m_checkProgressChannel->started.notify();
+    m_checkProgressChannel->start();
 
     RetVal<ReleaseInfo> retVal = service()->checkForUpdate();
 
@@ -138,7 +138,7 @@ void MuseSoundsCheckUpdateScenario::th_checkForUpdate()
     result.ret = retVal.ret;
     result.val = Val(releaseInfoToValMap(retVal.val));
 
-    m_checkProgressChannel->finished.send(result);
+    m_checkProgressChannel->finish(result);
 }
 
 void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)

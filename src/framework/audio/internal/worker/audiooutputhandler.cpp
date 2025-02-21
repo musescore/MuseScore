@@ -207,8 +207,8 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         m_saveSoundTracksWritersMap[sequenceId] = writer;
 
         Progress progress = saveSoundTrackProgress(sequenceId);
-        writer->progress().progressChanged.onReceive(this, [&progress](int64_t current, int64_t total, std::string title) {
-            progress.progressChanged.send(current, total, title);
+        writer->progress().progressChanged().onReceive(this, [&progress](int64_t current, int64_t total, std::string title) {
+            progress.progress(current, total, title);
         });
 
         Ret ret = writer->write();
