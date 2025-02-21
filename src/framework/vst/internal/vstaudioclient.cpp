@@ -425,7 +425,7 @@ bool VstAudioClient::fillOutputBufferInstrument(samples_t sampleCount, float* ou
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
                 output[offset + audioChannelIndex] += sample * m_volumeGain;
 
-                if (isSilence && !RealIsNull(sample)) {
+                if (isSilence && sample != 0.f) {
                     isSilence = false;
                 }
             }
@@ -453,7 +453,7 @@ bool VstAudioClient::fillOutputBufferFx(samples_t sampleCount, float* output)
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
                 output[offset + audioChannelIndex] = sample * m_volumeGain;
 
-                if (isSilence && !RealIsNull(sample)) {
+                if (isSilence && sample != 0.f) {
                     isSilence = false;
                 }
             }
