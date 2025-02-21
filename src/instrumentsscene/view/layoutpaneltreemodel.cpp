@@ -276,6 +276,11 @@ void LayoutPanelTreeModel::setupNotationConnections()
     });
 
     m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
+        if (!m_layoutPanelVisible) {
+            m_scoreChangesCache.combine(changes);
+            return;
+        }
+
         onScoreChanged(changes);
     });
 }
@@ -420,6 +425,11 @@ void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
 
     if (visible) {
         updateSelectedRows();
+
+        if (m_scoreChangesCache.isValid()) {
+            onScoreChanged(m_scoreChangesCache);
+            m_scoreChangesCache.clear();
+        }
     }
 }
 
