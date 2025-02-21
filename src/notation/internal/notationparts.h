@@ -101,9 +101,7 @@ private:
     friend class MasterNotationParts;
 
     void listenUndoStackChanges();
-
-    void updatePartList();
-    void updateSystemObjectStaves();
+    void updatePartsAndSystemObjectStaves();
 
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);

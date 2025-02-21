@@ -23,14 +23,13 @@
 #pragma once
 
 #include "abstractlayoutpaneltreeitem.h"
-#include "async/asyncable.h"
 
 #include "notation/inotationparts.h"
 
 #include "layoutpanelutils.h"
 
 namespace mu::instrumentsscene {
-class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem, public muse::async::Asyncable
+class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem
 {
     Q_OBJECT
 
@@ -41,13 +40,13 @@ public:
 
     const mu::engraving::Staff* staff() const;
     void setStaff(const mu::engraving::Staff* staff);
-    void updateSystemObjects();
+    void setSystemObjects(const SystemObjectGroups& systemObjects);
 
     Q_INVOKABLE QString staffId() const;
     Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
 private:
-    void onUndoStackChanged(const mu::engraving::ScoreChangesRange& changes);
+    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes) override;
     void onVisibleChanged(bool isVisible);
 
     bool addSystemObject(mu::engraving::EngravingItem* obj);
