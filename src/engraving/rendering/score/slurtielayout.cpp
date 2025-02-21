@@ -1861,7 +1861,7 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
 
     const Segment* adjSeg = outgoing ? seg->next() : seg->prev();
     while (adjSeg && (!adjSeg->isActive() || !adjSeg->enabled())) {
-        adjSeg = outgoing ? seg->next() : seg->prev();
+        adjSeg = outgoing ? adjSeg->next() : adjSeg->prev();
     }
 
     if (adjSeg) {
