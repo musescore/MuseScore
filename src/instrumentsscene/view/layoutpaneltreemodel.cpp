@@ -839,6 +839,13 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
     bool hasControlItem = parentItem->type() != LayoutPanelItemType::ROOT;
     const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
     bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
+
+    IF_ASSERT_FAILED(!(lastSelectedIsSystemObjectLayer && lastSelectedRowIndex.row() == 0)) {
+        // Selecting/moving the top system object layer not allowed
+        setIsMovingDownAvailable(false);
+        return;
+    }
+
     int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0) - (lastSelectedIsSystemObjectLayer ? 1 : 0);
 
     bool isRowInBoundaries = lastSelectedRowIndex.isValid() && lastSelectedRowIndex.row() < lastItemRowIndex;
@@ -1063,7 +1070,10 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             m_rootItem->insertChild(newItem, row);
             endInsertRows();
 
-            m_selectionModel->select(createIndex(row, 0, newItem));
+            if (row != 0) {
+                m_selectionModel->select(createIndex(row, 0, newItem));
+            }
+
             break;
         }
     }
