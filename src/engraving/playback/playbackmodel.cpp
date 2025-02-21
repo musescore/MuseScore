@@ -385,6 +385,10 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         collectChangesTracks(trackId, trackChanges);
     }
 
+    if (segment->isTimeTickType()) {
+        return; // optimization: search only for annotations
+    }
+
     for (const EngravingItem* item : segment->elist()) {
         if (!item || !item->isChordRest() || !item->part()) {
             continue;
@@ -457,7 +461,7 @@ void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const Mea
     bool isFirstSegmentOfRepeatedMeasure = true;
 
     for (const Segment* seg = referringMeasure->first(); seg; seg = seg->next()) {
-        if (!seg->isChordRestType()) {
+        if (!seg->isChordRestType() && !seg->isTimeTickType()) {
             continue;
         }
 
@@ -497,7 +501,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
             bool isFirstSegmentOfMeasure = true;
 
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-                if (!segment->isChordRestType()) {
+                if (!segment->isChordRestType() && !segment->isTimeTickType()) {
                     continue;
                 }
 

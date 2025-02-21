@@ -554,7 +554,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     staff(staffIdx)->addTimeSig(ts);
                 }
             }
-        } else if (segment.isChordRestType()) {
+        } else if (segment.isChordRestType() || segment.isTimeTickType()) {
             if (!isMaster()) {
                 continue;
             }
