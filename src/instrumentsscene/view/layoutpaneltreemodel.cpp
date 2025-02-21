@@ -69,6 +69,7 @@ LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
         updateRearrangementAvailability();
         updateRemovingAvailability();
         updateSelectedItemsType();
+        emit isAddingSystemMarkingsAvailableChanged(isAddingSystemMarkingsAvailable());
     });
 
     connect(this, &LayoutPanelTreeModel::rowsInserted, this, [this]() {
@@ -453,6 +454,8 @@ void LayoutPanelTreeModel::addSystemMarkings()
     if (const Staff* staff = resolveNewSystemObjectStaff()) {
         m_masterNotation->parts()->addSystemObjects({ staff->id() });
     }
+
+    emit isAddingSystemMarkingsAvailableChanged(isAddingSystemMarkingsAvailable());
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsUp()
@@ -730,7 +733,18 @@ bool LayoutPanelTreeModel::isAddingAvailable() const
 
 bool LayoutPanelTreeModel::isAddingSystemMarkingsAvailable() const
 {
-    return isAddingAvailable() && m_notation->isMaster();
+    if (!isAddingAvailable() || !m_notation->isMaster()) {
+        return false;
+    }
+
+    int systemLayerCount = 0;
+    for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            ++systemLayerCount;
+        }
+    }
+
+    return systemLayerCount < 0.5 * m_rootItem->childCount();
 }
 
 bool LayoutPanelTreeModel::isEmpty() const
