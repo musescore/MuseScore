@@ -25,9 +25,6 @@
 #include "global/translation.h"
 #include "global/io/path.h"
 
-#include "ui/uitypes.h"
-#include "palette/palettetypes.h"
-
 #include "log.h"
 
 using namespace muse::workspace;

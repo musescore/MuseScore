@@ -24,7 +24,6 @@
 
 namespace muse::workspace {
 using DataKey = const char*;
-inline constexpr DataKey WS_Undefined("");
 }
 
 #endif // MUSE_WORKSPACE_WORKSPACETYPES_H

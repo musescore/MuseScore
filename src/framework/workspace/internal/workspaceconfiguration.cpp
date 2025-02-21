@@ -25,8 +25,6 @@
 
 #include "global/configreader.h"
 
-#include "workspacetypes.h"
-
 using namespace muse;
 using namespace muse::workspace;
 
@@ -34,6 +32,8 @@ static const muse::Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
 
 void WorkspaceConfiguration::init()
 {
+    fileSystem()->makePath(userWorkspacesPath());
+
     m_config = ConfigReader::read(":/configs/workspaces.cfg");
 
     settings()->setDefaultValue(CURRENT_WORKSPACE, Val(defaultWorkspaceName()));
