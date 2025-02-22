@@ -103,8 +103,9 @@ FocusScope {
     }
 
     signal clicked(var mouse)
-    // There are intentionally no "forwarded" signals here from the MouseArea, like `pressAndHold`
-    // See https://github.com/musescore/MuseScore/issues/16012#issuecomment-1399656043
+    // The `pressAndHold` signal is intentionally not "forwarded" here from the MouseArea for performance reasons.
+    // Most buttons don't use it and Qt has optimizations if no signal is attached. If a component needs it,
+    // it can hook to it directly (the mouse area is exposed via the `mouseArea` alias property).
 
     objectName: root.text
 
