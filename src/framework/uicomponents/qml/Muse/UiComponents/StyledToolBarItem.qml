@@ -103,18 +103,15 @@ FlatButton {
         }
     }
 
-    Connections {
-        target: root.mouseArea
-
-        enabled: root.hasMenu && !menuLoader.isMenuOpened
-
-        function onPressAndHold() {
-            if (menuLoader.isMenuOpened || !root.hasMenu) {
-                return
-            }
-
-            root.toggleMenuOpened()
+    onPressAndHold: function(mouseEvent) {
+        if (menuLoader.isMenuOpened || !root.hasMenu) {
+            return
         }
+
+        // consume event and suppress the click event
+        mouseEvent.accepted = true
+
+        root.toggleMenuOpened()
     }
 
     Canvas {

@@ -103,8 +103,7 @@ FocusScope {
     }
 
     signal clicked(var mouse)
-    // There are intentionally no "forwarded" signals here from the MouseArea, like `pressAndHold`
-    // See https://github.com/musescore/MuseScore/issues/16012#issuecomment-1399656043
+    signal pressAndHold(var mouseEvent)
 
     objectName: root.text
 
@@ -311,6 +310,14 @@ FocusScope {
 
         onPressed: {
             ui.tooltip.hide(root, true)
+        }
+
+        onPressAndHold: function(mouseEvent) {
+            // Set 'accepted' to false (it is true by default) to not supress the click event.
+            // If a handler consumes this event, it should set 'accepted' to true.
+            mouseEvent.accepted = false
+
+            root.pressAndHold(mouseEvent)
         }
 
         onContainsMouseChanged: {
