@@ -131,6 +131,9 @@ muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesP
     //! but never bigger than the maxSamplesPerBlock
     m_processData.numSamples = samplesPerChannel;
 
+    // Send playback position (in samples) to plug-in
+    m_processContext.projectTimeSamples = (m_playbackPosition / 1000000.f) * m_samplesInfo.sampleRate;
+
     if (samplesPerChannel > m_samplesInfo.maxSamplesPerBlock) {
         setMaxSamplesPerBlock(samplesPerChannel);
     }
@@ -534,4 +537,9 @@ void VstAudioClient::addParamChange(const ParamChangeEvent& param)
     if (queue) {
         queue->addPoint(0, param.value, dummyIdx);
     }
+}
+
+void VstAudioClient::setPlaybackPosition(const msecs_t newPlaybackPosition)
+{
+    m_playbackPosition = newPlaybackPosition;
 }
