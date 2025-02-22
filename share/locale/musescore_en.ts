@@ -19568,11 +19568,6 @@ Fret %1 on strings %2</translation>
         <source>Create</source>
         <translation type="unfinished">Create</translation>
     </message>
-    <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="98"/>
-        <source>Delete pad</source>
-        <translation type="unfinished">Delete pad</translation>
-    </message>
 </context>
 <context>
     <name>iex_capella</name>
@@ -25509,6 +25504,11 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="141"/>
         <source>Never</source>
         <translation type="unfinished">Never</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="98"/>
+        <source>Delete pad</source>
+        <translation type="unfinished">Delete pad</translation>
     </message>
 </context>
 <context>

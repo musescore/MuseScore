@@ -95,7 +95,7 @@ QList<QVariantMap> PercussionPanelPadModel::contextMenuItems() const
         // { { "id", DUPLICATE_PAD_CODE }, { "title", muse::qtrc("global", "Duplicate") },
         //     { "icon", duplicatePadIcon }, { "enabled", true } },
 
-        { { "id", DELETE_PAD_CODE }, { "title", muse::qtrc("global", "Delete pad") },
+        { { "id", DELETE_PAD_CODE }, { "title", muse::qtrc("notation/percussion", "Delete pad") },
             { "icon", deletePadIcon }, { "enabled", true } },
     };
 
