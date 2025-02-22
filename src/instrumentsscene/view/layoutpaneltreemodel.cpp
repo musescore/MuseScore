@@ -69,6 +69,7 @@ LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
         updateRearrangementAvailability();
         updateRemovingAvailability();
         updateSelectedItemsType();
+        emit isAddingSystemMarkingsAvailableChanged(isAddingSystemMarkingsAvailable());
     });
 
     connect(this, &LayoutPanelTreeModel::rowsInserted, this, [this]() {
@@ -453,6 +454,8 @@ void LayoutPanelTreeModel::addSystemMarkings()
     if (const Staff* staff = resolveNewSystemObjectStaff()) {
         m_masterNotation->parts()->addSystemObjects({ staff->id() });
     }
+
+    emit isAddingSystemMarkingsAvailableChanged(isAddingSystemMarkingsAvailable());
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsUp()
@@ -552,6 +555,17 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
     sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
+
+    int lastRow = m_rootItem->childCount() - 1;
+    AbstractLayoutPanelTreeItem* lastItem = m_rootItem->childAtRow(m_rootItem->childCount() - 1);
+    if (lastItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+        bool restore = m_isRemovingAvailable;
+        m_isRemovingAvailable = true;
+
+        removeRow(lastRow);
+
+        m_isRemovingAvailable = restore;
+    }
 
     updateRearrangementAvailability();
     updateSystemObjectLayers();
@@ -719,7 +733,18 @@ bool LayoutPanelTreeModel::isAddingAvailable() const
 
 bool LayoutPanelTreeModel::isAddingSystemMarkingsAvailable() const
 {
-    return isAddingAvailable() && m_notation->isMaster();
+    if (!isAddingAvailable() || !m_notation->isMaster()) {
+        return false;
+    }
+
+    int systemLayerCount = 0;
+    for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            ++systemLayerCount;
+        }
+    }
+
+    return systemLayerCount < 0.5 * m_rootItem->childCount();
 }
 
 bool LayoutPanelTreeModel::isEmpty() const
@@ -828,6 +853,13 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
     bool hasControlItem = parentItem->type() != LayoutPanelItemType::ROOT;
     const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
     bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
+
+    IF_ASSERT_FAILED(!(lastSelectedIsSystemObjectLayer && lastSelectedRowIndex.row() == 0)) {
+        // Selecting/moving the top system object layer not allowed
+        setIsMovingDownAvailable(false);
+        return;
+    }
+
     int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0) - (lastSelectedIsSystemObjectLayer ? 1 : 0);
 
     bool isRowInBoundaries = lastSelectedRowIndex.isValid() && lastSelectedRowIndex.row() < lastItemRowIndex;
@@ -1052,7 +1084,10 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             m_rootItem->insertChild(newItem, row);
             endInsertRows();
 
-            m_selectionModel->select(createIndex(row, 0, newItem));
+            if (row != 0) {
+                m_selectionModel->select(createIndex(row, 0, newItem));
+            }
+
             break;
         }
     }
