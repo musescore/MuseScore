@@ -562,6 +562,12 @@ TEST_F(MusicXml_Tests, dsalCodaMisplaced) {
 TEST_F(MusicXml_Tests, durationLargeErrorMscx) {
     musicXmlImportTestRef("testDurationLargeError");
 }
+TEST_F(MusicXml_Tests, duplicateFermataOnGraceNote) {
+    musicXmlImportTestRef("testDuplicateFermataOnGraceNote");
+}
+TEST_F(MusicXml_Tests, duplicateFermataOnGraceNoteAndMainNote) {
+    musicXmlImportTestRef("testDuplicateFermataOnGraceNoteAndMainNote");
+}
 TEST_F(MusicXml_Tests, duplicateInstrChange) {
     musicXmlImportTestRef("testDuplicateInstrChange");
 }
