@@ -324,7 +324,7 @@ PercussionPanelPadModel* PercussionPanelPadListModel::createPadModelForPitch(int
 
     PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
 
-    model->setPadName(m_drumset->name(pitch));
+    model->setPadName(m_drumset->translatedName(pitch));
     model->setKeyboardShortcut(m_drumset->shortcut(pitch));
     model->setPitch(pitch);
 
