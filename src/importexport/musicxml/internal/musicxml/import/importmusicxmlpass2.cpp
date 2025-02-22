@@ -1223,23 +1223,25 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     const SymId articSym = notation.symId();
     const String direction = notation.attribute(u"type");
     const Color color = Color::fromString(notation.attribute(u"color"));
-    Fermata* na = Factory::createFermata(cr);
-    na->setSymIdAndTimeStretch(articSym);
-    na->setTrack(cr->track());
+    Segment* seg = cr->segment();
+    Fermata* fermata = Factory::createFermata(seg ? seg : cr->score()->dummy()->segment());
+    fermata->setSymIdAndTimeStretch(articSym);
+    fermata->setTrack(cr->track());
     if (color.isValid()) {
-        na->setColor(color);
+        fermata->setColor(color);
     }
     if (!direction.empty()) {
-        na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
-        na->resetProperty(Pid::OFFSET);
+        fermata->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
+        fermata->resetProperty(Pid::OFFSET);
     } else {
-        na->setPlacement(na->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
+        fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
     }
-    setElementPropertyFlags(na, Pid::PLACEMENT, direction);
-    if (cr->segment() == nullptr && cr->isGrace()) {
-        cr->addFermata(na);           // store for later move to segment
+    setElementPropertyFlags(fermata, Pid::PLACEMENT, direction);
+    if (!seg) {
+        assert(cr->isGrace());
+        cr->addFermata(fermata); // store for later move to segment
     } else {
-        cr->segment()->add(na);
+        cr->segment()->add(fermata);
     }
 }
 

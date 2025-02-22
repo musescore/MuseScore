@@ -415,8 +415,8 @@ MAKE_ITEM_IMPL(Clef, Segment)
 CREATE_ITEM_IMPL(DeadSlapped, ElementType::DEAD_SLAPPED, Rest, isAccessibleEnabled)
 COPY_ITEM_IMPL(DeadSlapped)
 
-CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, EngravingItem, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Fermata, EngravingItem)
+CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, Segment, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Fermata, Segment)
 
 CREATE_ITEM_IMPL(FiguredBass, ElementType::FIGURED_BASS, Segment, isAccessibleEnabled)
 MAKE_ITEM_IMPL(FiguredBass, Segment)
