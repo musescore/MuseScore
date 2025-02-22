@@ -44,7 +44,10 @@ void EditPercussionShortcutModel::load(const QVariant& originDrum, const QVarian
         m_drumsWithShortcut << drum;
     }
 
+    m_cleared = false;
+
     emit originShortcutTextChanged();
+    emit clearedChanged();
 }
 
 void EditPercussionShortcutModel::inputKey(Qt::Key key)
@@ -70,9 +73,22 @@ void EditPercussionShortcutModel::inputKey(Qt::Key key)
     emit newShortcutTextChanged();
 }
 
+void EditPercussionShortcutModel::clear()
+{
+    m_newShortcut = QKeySequence();
+    m_conflictShortcut.clear();
+
+    m_cleared = true;
+
+    emit newShortcutTextChanged();
+    emit clearedChanged();
+}
+
 bool EditPercussionShortcutModel::trySave()
 {
-    if (originShortcutText() == m_newShortcut.toString()) {
+    const QString newShortcut = m_newShortcut.toString();
+    const bool alreadyEmpty = originShortcutText().isEmpty() && m_cleared;
+    if (alreadyEmpty || originShortcutText() == newShortcut) {
         return false;
     }
 

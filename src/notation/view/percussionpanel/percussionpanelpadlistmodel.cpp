@@ -84,7 +84,17 @@ void PercussionPanelPadListModel::addEmptyRow(bool focusFirstInNewRow)
 
 void PercussionPanelPadListModel::deleteRow(int row)
 {
+    // Update the drumset...
+    const int startIdx = row * NUM_COLUMNS;
+    for (int i = startIdx; i < startIdx + NUM_COLUMNS; ++i) {
+        if (const PercussionPanelPadModel* model = m_padModels.at(i)) {
+            m_drumset->setDrum(model->pitch(), mu::engraving::DrumInstrument());
+        }
+    }
+
+    // Then remove the row...
     m_padModels.remove(row * NUM_COLUMNS, NUM_COLUMNS);
+
     emit layoutChanged();
     emit numPadsChanged();
 }
@@ -95,7 +105,8 @@ void PercussionPanelPadListModel::removeEmptyRows()
     const int lastRowIndex = numPads() / NUM_COLUMNS - 1;
     for (int i = lastRowIndex; i >= 0; --i) {
         const int numRows = numPads() / NUM_COLUMNS;
-        if (rowIsEmpty(i) && numRows > 1) { // never delete the first row
+        const bool rowIsEmpty = numEmptySlotsAtRow(i) == NUM_COLUMNS;
+        if (rowIsEmpty && numRows > 1) { // never delete the first row
             m_padModels.remove(i * NUM_COLUMNS, NUM_COLUMNS);
             rowsRemoved = true;
         }
@@ -104,11 +115,6 @@ void PercussionPanelPadListModel::removeEmptyRows()
         emit layoutChanged();
         emit numPadsChanged();
     }
-}
-
-bool PercussionPanelPadListModel::rowIsEmpty(int row) const
-{
-    return numEmptySlotsAtRow(row) == NUM_COLUMNS;
 }
 
 void PercussionPanelPadListModel::startPadSwap(int startIndex)
@@ -424,23 +430,8 @@ int PercussionPanelPadListModel::getModelIndexForPitch(int pitch) const
 
 void PercussionPanelPadListModel::movePad(int fromIndex, int toIndex)
 {
-    const int fromRow = fromIndex / NUM_COLUMNS;
-    const int toRow = toIndex / NUM_COLUMNS;
-
-    // fromRow will become empty if there's only 1 "occupied" slot, toRow will no longer be empty if it was previously...
-    const bool fromRowEmptyChanged = numEmptySlotsAtRow(fromRow) == NUM_COLUMNS - 1;
-    const bool toRowEmptyChanged = rowIsEmpty(toRow);
-
     m_padModels.swapItemsAt(fromIndex, toIndex);
     emit layoutChanged();
-
-    if (fromRowEmptyChanged) {
-        emit rowIsEmptyChanged(fromRow, /*isEmpty*/ true);
-    }
-
-    if (toRowEmptyChanged) {
-        emit rowIsEmptyChanged(toRow, /*isEmpty*/ false);
-    }
 }
 
 int PercussionPanelPadListModel::numEmptySlotsAtRow(int row) const

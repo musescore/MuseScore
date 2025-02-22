@@ -39,6 +39,8 @@ class EditShortcutModel : public QObject, public Injectable
     Q_PROPERTY(QString newSequence READ newSequenceInNativeFormat NOTIFY newSequenceChanged)
     Q_PROPERTY(QString conflictWarning READ conflictWarning NOTIFY newSequenceChanged)
 
+    Q_PROPERTY(bool cleared READ cleared NOTIFY clearedChanged)
+
     Inject<IInteractive> interactive = { this };
 
 public:
@@ -47,15 +49,18 @@ public:
     QString originSequenceInNativeFormat() const;
     QString newSequenceInNativeFormat() const;
     QString conflictWarning() const;
+    bool cleared() const { return m_cleared; }
     bool isShiftAllowed(Qt::Key key);
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers);
+    Q_INVOKABLE void clear();
     Q_INVOKABLE void trySave();
 
 signals:
     void originSequenceChanged();
     void newSequenceChanged();
+    void clearedChanged();
 
     void applyNewSequenceRequested(const QString& newSequence, int conflictShortcutIndex = -1);
 
@@ -74,6 +79,8 @@ private:
     QVariantMap m_conflictShortcut;
 
     QKeySequence m_newSequence;
+
+    bool m_cleared = false;
 };
 }
 

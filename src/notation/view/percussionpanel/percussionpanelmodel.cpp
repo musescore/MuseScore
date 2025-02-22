@@ -448,7 +448,9 @@ void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
     }
 
     Drumset updatedDrumset = *m_padListModel->drumset();
-    PercussionUtilities::editPercussionShortcut(updatedDrumset, pitch);
+    if (!PercussionUtilities::editPercussionShortcut(updatedDrumset, pitch)) {
+        return;
+    }
 
     INotationUndoStackPtr undoStack = notation()->undoStack();
 

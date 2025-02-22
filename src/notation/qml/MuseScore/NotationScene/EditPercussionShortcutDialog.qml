@@ -70,7 +70,8 @@ StyledDialogView {
 
         headerText: qsTrc("shortcuts", "Define percussion keyboard shortcut")
 
-        originShortcutText: model.originShortcutText
+        //! NOTE: There's no need to actually clear the origin shortcut, we can simply hide it for aesthetic purposes...
+        originShortcutText: !model.cleared ? model.originShortcutText : ""
         newShortcutText: model.newShortcutText
         informationText: model.informationText
 
@@ -84,6 +85,10 @@ StyledDialogView {
 
         onCancelRequested: {
             root.reject()
+        }
+
+        onClearRequested: {
+            model.clear()
         }
 
         onKeyPressed: function(event) {

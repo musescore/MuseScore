@@ -44,6 +44,7 @@ Item {
 
     signal saveRequested()
     signal cancelRequested()
+    signal clearRequested()
     signal keyPressed(var event)
 
     anchors.fill: parent
@@ -137,6 +138,17 @@ Item {
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 2
+
+            FlatButton {
+                text: qsTrc("global", "Clear")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.Clear
+                isLeftSide: true
+
+                onClicked: {
+                    root.clearRequested()
+                }
+            }
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {

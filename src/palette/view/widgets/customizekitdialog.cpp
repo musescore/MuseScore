@@ -666,7 +666,9 @@ void CustomizeKitDialog::defineShortcut()
     }
 
     const int originPitch = item->data(Column::PITCH, Qt::UserRole).toInt();
-    PercussionUtilities::editPercussionShortcut(m_editedDrumset, originPitch);
+    if (!PercussionUtilities::editPercussionShortcut(m_editedDrumset, originPitch)) {
+        return;
+    }
 
     const QString editedShortcutText = m_editedDrumset.shortcut(originPitch);
     shortcut->setText(!editedShortcutText.isEmpty() ? editedShortcutText : muse::qtrc("shortcuts", "None"));

@@ -925,6 +925,10 @@
     <seq>P</seq>
     </SC>
   <SC>
+    <key>toggle-percussion-panel</key>
+    <seq>O</seq>
+    </SC>
+  <SC>
     <key>next-score</key>
     <std>20</std>
     </SC>

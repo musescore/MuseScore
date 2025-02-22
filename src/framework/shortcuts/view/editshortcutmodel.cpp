@@ -63,7 +63,10 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
     m_originSequence = originShortcutMap.value("sequence").toString();
     m_originShortcutTitle = originShortcutMap.value("title").toString();
 
+    m_cleared = false;
+
     emit originSequenceChanged();
+    emit clearedChanged();
 }
 
 void EditShortcutModel::clearNewSequence()
@@ -108,6 +111,14 @@ void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
     checkNewSequenceForConflicts();
 
     emit newSequenceChanged();
+}
+
+void EditShortcutModel::clear()
+{
+    clearNewSequence();
+    m_cleared = true;
+    emit originSequenceChanged();
+    emit clearedChanged();
 }
 
 bool EditShortcutModel::isShiftAllowed(Qt::Key key)
@@ -215,8 +226,8 @@ QString EditShortcutModel::conflictWarning() const
 void EditShortcutModel::trySave()
 {
     QString newSequence = this->newSequence();
-
-    if (m_originSequence == newSequence) {
+    const bool alreadyEmpty = originSequenceInNativeFormat().isEmpty() && m_cleared;
+    if (alreadyEmpty || m_originSequence == newSequence) {
         return;
     }
 

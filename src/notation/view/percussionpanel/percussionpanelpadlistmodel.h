@@ -61,8 +61,6 @@ public:
 
     void removeEmptyRows();
 
-    Q_INVOKABLE bool rowIsEmpty(int row) const;
-
     Q_INVOKABLE void startPadSwap(int startIndex);
     Q_INVOKABLE void endPadSwap(int endIndex);
     bool swapInProgress() const { return indexIsValid(m_padSwapStartIndex); }
@@ -89,7 +87,6 @@ public:
 
 signals:
     void numPadsChanged();
-    void rowIsEmptyChanged(int row, bool empty);
     void padFocusRequested(int padIndex); //! NOTE: This won't work if it is called immediately before a layoutChange
 
 private:

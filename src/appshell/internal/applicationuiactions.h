@@ -29,6 +29,7 @@
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
 #include "view/preferences/braillepreferencesmodel.h"
+#include "notation/inotationconfiguration.h"
 
 #include "dockwindow/idockwindowprovider.h"
 
@@ -39,6 +40,7 @@ class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::Inj
     muse::Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
     muse::Inject<IAppShellConfiguration> configuration = { this };
     muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::Inject<mu::notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const muse::modularity::ContextPtr& iocCtx);
