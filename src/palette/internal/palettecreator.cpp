@@ -984,7 +984,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
     // Breaths
 
     for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
-        auto f = Factory::makeFermata(gpaletteScore->dummy());
+        auto f = Factory::makeFermata(gpaletteScore->dummy()->segment());
         f->setSymIdAndTimeStretch(i);
         sp->appendElement(f, f->subtypeUserName());
     }

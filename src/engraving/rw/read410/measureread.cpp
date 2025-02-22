@@ -560,7 +560,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             }
             segment->add(el);
         } else if (tag == "Fermata") {
-            fermata = Factory::createFermata(ctx.dummy());
+            fermata = Factory::createFermata(ctx.dummy()->segment());
             fermata->setTrack(ctx.track());
             fermata->setPlacement(fermata->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
             TRead::read(fermata, e, ctx);
