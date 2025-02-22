@@ -64,6 +64,8 @@ public:
     void reset() override;
 
     muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
+    void remoteSeek(const muse::audio::msecs_t msecs) override;
+    void remotePlayOrStop(const bool playOrStop) override;
 
     muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     muse::async::Notification currentTrackSequenceIdChanged() const override;
@@ -224,6 +226,8 @@ private:
     muse::async::Notification m_currentTempoChanged;
     muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> m_currentPlaybackPositionChanged;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
+    muse::async::Channel<muse::audio::msecs_t> m_remoteSeek;
+    muse::async::Channel<bool> m_remotePlayOrStop;
 
     muse::audio::TrackSequenceId m_currentSequenceId = -1;
 

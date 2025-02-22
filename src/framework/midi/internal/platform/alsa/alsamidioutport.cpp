@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -41,8 +41,10 @@ using namespace muse::midi;
 
 void AlsaMidiOutPort::init()
 {
+    LOGI("---- linux ALSA init ----");
     m_alsa = std::make_shared<Alsa>();
 
+    /*
     m_devicesListener.startWithCallback([this]() {
         return availableDevices();
     });
@@ -61,10 +63,12 @@ void AlsaMidiOutPort::init()
 
         m_availableDevicesChanged.notify();
     });
+    */
 }
 
 void AlsaMidiOutPort::deinit()
 {
+    LOGI("---- linux ALSA deinit ----");
     if (isConnected()) {
         disconnect();
     }
@@ -72,16 +76,12 @@ void AlsaMidiOutPort::deinit()
 
 std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 {
-    std::lock_guard lock(m_devicesMutex);
-
     int streams = SND_SEQ_OPEN_OUTPUT;
     const unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
     const unsigned int type_hw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
     const unsigned int type_sw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_SOFTWARE;
 
     std::vector<MidiDevice> ret;
-
-    ret.push_back({ NONE_DEVICE_ID, muse::trc("midi", "No device") });
 
     snd_seq_client_info_t* cinfo;
     snd_seq_port_info_t* pinfo;
@@ -91,7 +91,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
     err = snd_seq_open(&handle, "hw", streams, 0);
     if (err < 0) {
-        /* Use snd_strerror(errno) to get the error here. */
+        LOGE("snd_seq_open failed: err: %s", snd_strerror(err));
         return ret;
     }
 
@@ -117,8 +117,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
             if (canConnect) {
                 MidiDevice dev;
-                dev.name = snd_seq_client_info_get_name(cinfo);
-
+                dev.name = "ALSA/" + std::string(snd_seq_client_info_get_name(cinfo));
                 int client = snd_seq_port_info_get_client(pinfo);
                 int port = snd_seq_port_info_get_port(pinfo);
                 dev.id = makeUniqueDeviceId(index++, client, port);
@@ -133,58 +132,36 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
     return ret;
 }
 
-async::Notification AlsaMidiOutPort::availableDevicesChanged() const
+muse::Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
-    return m_availableDevicesChanged;
-}
-
-Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
-{
-    if (!deviceExists(deviceID)) {
-        return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
-    }
-
-    DEFER {
-        m_deviceChanged.notify();
-    };
-
     Ret ret = muse::make_ok();
 
-    if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
-        std::vector<int> deviceParams = splitDeviceId(deviceID);
-        IF_ASSERT_FAILED(deviceParams.size() == 3) {
-            return make_ret(Err::MidiInvalidDeviceID, "invalid device id: " + deviceID);
-        }
-
-        if (isConnected()) {
-            disconnect();
-        }
-
-        int err = snd_seq_open(&m_alsa->midiOut, "default", SND_SEQ_OPEN_OUTPUT, 0);
-        if (err < 0) {
-            return make_ret(Err::MidiFailedConnect, "failed open seq, err: " + std::string(snd_strerror(err)));
-        }
-        snd_seq_set_client_name(m_alsa->midiOut, "MuseScore");
-
-        int port = snd_seq_create_simple_port(m_alsa->midiOut, "MuseScore Port-0", SND_SEQ_PORT_CAP_READ, SND_SEQ_PORT_TYPE_MIDI_GENERIC);
-        if (port < 0) {
-            return make_ret(Err::MidiFailedConnect, "failed create port");
-        }
-
-        m_alsa->client = deviceParams.at(1);
-        m_alsa->port = deviceParams.at(2);
-        err = snd_seq_connect_to(m_alsa->midiOut, port, m_alsa->client, m_alsa->port);
-        if (err < 0) {
-            return make_ret(Err::MidiFailedConnect,  "failed connect, err: " + std::string(snd_strerror(err)));
-        }
+    std::vector<int> deviceParams = splitDeviceId(deviceID);
+    IF_ASSERT_FAILED(deviceParams.size() == 3) {
+        return make_ret(Err::MidiInvalidDeviceID, "invalid device id: " + deviceID);
     }
 
-    m_deviceID = deviceID;
-
-    if (ret) {
-        LOGD() << "Connected to " << m_deviceID;
+    if (isConnected()) {
+        disconnect();
     }
 
+    int err = snd_seq_open(&m_alsa->midiOut, "default", SND_SEQ_OPEN_OUTPUT, 0);
+    if (err < 0) {
+        return make_ret(Err::MidiFailedConnect, "failed open seq, err: " + std::string(snd_strerror(err)));
+    }
+    snd_seq_set_client_name(m_alsa->midiOut, "MuseScore");
+
+    int port = snd_seq_create_simple_port(m_alsa->midiOut, "MuseScore Port-0", SND_SEQ_PORT_CAP_READ, SND_SEQ_PORT_TYPE_MIDI_GENERIC);
+    if (port < 0) {
+        return make_ret(Err::MidiFailedConnect, "failed create port");
+    }
+
+    m_alsa->client = deviceParams.at(1);
+    m_alsa->port = deviceParams.at(2);
+    err = snd_seq_connect_to(m_alsa->midiOut, port, m_alsa->client, m_alsa->port);
+    if (err < 0) {
+        return make_ret(Err::MidiFailedConnect,  "failed connect, err: " + std::string(snd_strerror(err)));
+    }
     return Ret(true);
 }
 
@@ -215,11 +192,6 @@ MidiDeviceID AlsaMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
-async::Notification AlsaMidiOutPort::deviceChanged() const
-{
-    return m_deviceChanged;
-}
-
 bool AlsaMidiOutPort::supportsMIDI20Output() const
 {
     return false;
@@ -227,8 +199,6 @@ bool AlsaMidiOutPort::supportsMIDI20Output() const
 
 Ret AlsaMidiOutPort::sendEvent(const Event& e)
 {
-    // LOGI() << e.to_string();
-
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);
     }
