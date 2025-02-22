@@ -208,7 +208,7 @@
                     <li>Multiple improvements to the Plugin API</li>
                     <li>Implement changing palette and palette cell properties on fly</li>
                     <li>Current workspace is automatically saved on each action that changes the workspace</li>
-                    <li>Palettes and workspaces can be reset to the default state defined by the workspace you started customisations from</li>
+                    <li>Palettes and workspaces can be reset to the default state defined by the workspace you started customizations from</li>
                     <li>Improve algorithm for determining start point for note input</li>
                     <li>Move the viewport to show actual changes in the score if they are outside of the current view</li>
                 </ul>
