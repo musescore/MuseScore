@@ -2596,14 +2596,14 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
 {
     for (int i = static_cast<int>(gcl.size()) - 1; i >= 0; i--) {
         Chord* gc = gcl.at(i);
-        for (EngravingItem* e : gc->el()) {
+        std::vector<EngravingItem*> el = gc->el(); // copy, because modified during loop
+        for (EngravingItem* e : el) {
             if (e->isFermata()) {
                 c->segment()->add(e);
                 gc->removeFermata(toFermata(e));
-                break;                          // out of the door, line on the left, one cross each
             }
         }
-        c->add(gc);            // TODO check if same voice ?
+        c->add(gc); // TODO check if same voice ?
         coerceGraceCue(c, gc);
     }
     gcl.clear();
