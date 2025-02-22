@@ -199,12 +199,14 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::BAR_LINE:
         layoutBarLine(item_cast<const BarLine*>(item), static_cast<BarLine::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::BEAM:             layoutBeam(item_cast<Beam*>(item), ctx);
+    case ElementType::BEAM:
+        layoutBeam(item_cast<Beam*>(item), ctx);
         break;
     case ElementType::BEND:
         layoutBend(item_cast<const Bend*>(item), static_cast<Bend::LayoutData*>(ldata));
         break;
-    case ElementType::STRETCHED_BEND:   layoutStretchedBend(item_cast<StretchedBend*>(item), ctx);
+    case ElementType::STRETCHED_BEND:
+        layoutStretchedBend(item_cast<StretchedBend*>(item), ctx);
         break;
     case ElementType::HBOX:
         layoutHBox(item_cast<const HBox*>(item), static_cast<HBox::LayoutData*>(ldata), ctx);
@@ -224,7 +226,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::BREATH:
         layoutBreath(item_cast<const Breath*>(item), static_cast<Breath::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::CHORD:            layoutChord(item_cast<Chord*>(item), ctx);
+    case ElementType::CHORD:
+        layoutChord(item_cast<Chord*>(item), ctx);
         break;
     case ElementType::CHORDLINE:
         layoutChordLine(item_cast<const ChordLine*>(item), static_cast<ChordLine::LayoutData*>(ldata), ctx.conf());
@@ -256,23 +259,32 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::FRET_DIAGRAM:
         layoutFretDiagram(item_cast<const FretDiagram*>(item), static_cast<FretDiagram::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::GLISSANDO:        layoutGlissando(item_cast<Glissando*>(item), ctx);
+    case ElementType::GLISSANDO:
+        layoutGlissando(item_cast<Glissando*>(item), ctx);
         break;
-    case ElementType::GLISSANDO_SEGMENT: layoutGlissandoSegment(item_cast<GlissandoSegment*>(item), ctx);
+    case ElementType::GLISSANDO_SEGMENT:
+        layoutGlissandoSegment(item_cast<GlissandoSegment*>(item), ctx);
         break;
-    case ElementType::GRADUAL_TEMPO_CHANGE: layoutGradualTempoChange(item_cast<GradualTempoChange*>(item), ctx);
+    case ElementType::GRADUAL_TEMPO_CHANGE:
+        layoutGradualTempoChange(item_cast<GradualTempoChange*>(item), ctx);
         break;
-    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: layoutGradualTempoChangeSegment(item_cast<GradualTempoChangeSegment*>(item), ctx);
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
+        layoutGradualTempoChangeSegment(item_cast<GradualTempoChangeSegment*>(item), ctx);
         break;
-    case ElementType::GUITAR_BEND: layoutGuitarBend(item_cast<GuitarBend*>(item), ctx);
+    case ElementType::GUITAR_BEND:
+        layoutGuitarBend(item_cast<GuitarBend*>(item), ctx);
         break;
-    case ElementType::GUITAR_BEND_SEGMENT: layoutGuitarBendSegment(item_cast<GuitarBendSegment*>(item), ctx);
+    case ElementType::GUITAR_BEND_SEGMENT:
+        layoutGuitarBendSegment(item_cast<GuitarBendSegment*>(item), ctx);
         break;
-    case ElementType::GUITAR_BEND_HOLD_SEGMENT: GuitarBendLayout::layoutHoldLine(item_cast<GuitarBendHoldSegment*>(item));
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+        GuitarBendLayout::layoutHoldLine(item_cast<GuitarBendHoldSegment*>(item));
         break;
-    case ElementType::HAIRPIN:          layoutHairpin(item_cast<Hairpin*>(item), ctx);
+    case ElementType::HAIRPIN:
+        layoutHairpin(item_cast<Hairpin*>(item), ctx);
         break;
-    case ElementType::HAIRPIN_SEGMENT:  layoutHairpinSegment(item_cast<HairpinSegment*>(item), ctx);
+    case ElementType::HAIRPIN_SEGMENT:
+        layoutHairpinSegment(item_cast<HairpinSegment*>(item), ctx);
         break;
     case ElementType::HARP_DIAGRAM:
         layoutHarpPedalDiagram(item_cast<const HarpPedalDiagram*>(item), static_cast<HarpPedalDiagram::LayoutData*>(ldata));
@@ -280,7 +292,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::HARMONY:
         layoutHarmony(item_cast<const Harmony*>(item), static_cast<Harmony::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::HARMONIC_MARK_SEGMENT: layoutHarmonicMarkSegment(item_cast<HarmonicMarkSegment*>(item), ctx);
+    case ElementType::HARMONIC_MARK_SEGMENT:
+        layoutHarmonicMarkSegment(item_cast<HarmonicMarkSegment*>(item), ctx);
         break;
     case ElementType::HOOK:
         layoutHook(item_cast<const Hook*>(item), static_cast<Hook::LayoutData*>(ldata));
@@ -309,17 +322,23 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::SYSTEM_LOCK_INDICATOR:
         layoutSystemLockIndicator(item_cast<const SystemLockIndicator*>(item), static_cast<SystemLockIndicator::LayoutData*>(ldata));
         break;
-    case ElementType::LET_RING:         layoutLetRing(item_cast<LetRing*>(item), ctx);
+    case ElementType::LET_RING:
+        layoutLetRing(item_cast<LetRing*>(item), ctx);
         break;
-    case ElementType::LET_RING_SEGMENT: layoutLetRingSegment(item_cast<LetRingSegment*>(item), ctx);
+    case ElementType::LET_RING_SEGMENT:
+        layoutLetRingSegment(item_cast<LetRingSegment*>(item), ctx);
         break;
-    case ElementType::LEDGER_LINE:      layoutLedgerLine(item_cast<LedgerLine*>(item), ctx);
+    case ElementType::LEDGER_LINE:
+        layoutLedgerLine(item_cast<LedgerLine*>(item), ctx);
         break;
-    case ElementType::LYRICS:           layoutLyrics(item_cast<Lyrics*>(item), ctx);
+    case ElementType::LYRICS:
+        layoutLyrics(item_cast<Lyrics*>(item), ctx);
         break;
-    case ElementType::LYRICSLINE_SEGMENT: layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
+    case ElementType::LYRICSLINE_SEGMENT:
+        layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
         break;
-    case ElementType::PARTIAL_LYRICSLINE_SEGMENT: layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
+        layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
         break;
     case ElementType::MARKER:
         layoutMarker(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata));
@@ -354,26 +373,35 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::ORNAMENT:
         layoutOrnament(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::OTTAVA:           layoutOttava(item_cast<Ottava*>(item), ctx);
+    case ElementType::OTTAVA:
+        layoutOttava(item_cast<Ottava*>(item), ctx);
         break;
-    case ElementType::OTTAVA_SEGMENT:   layoutOttavaSegment(item_cast<OttavaSegment*>(item), ctx);
+    case ElementType::OTTAVA_SEGMENT:
+        layoutOttavaSegment(item_cast<OttavaSegment*>(item), ctx);
         break;
-    case ElementType::PALM_MUTE:        layoutPalmMute(item_cast<PalmMute*>(item), ctx);
+    case ElementType::PALM_MUTE:
+        layoutPalmMute(item_cast<PalmMute*>(item), ctx);
         break;
-    case ElementType::PALM_MUTE_SEGMENT: layoutPalmMuteSegment(item_cast<PalmMuteSegment*>(item), ctx);
+    case ElementType::PALM_MUTE_SEGMENT:
+        layoutPalmMuteSegment(item_cast<PalmMuteSegment*>(item), ctx);
         break;
-    case ElementType::PARENTHESIS:      layoutParenthesis(item_cast<Parenthesis*>(item), ctx);
+    case ElementType::PARENTHESIS:
+        layoutParenthesis(item_cast<Parenthesis*>(item), ctx);
         break;
-    case ElementType::PEDAL:            layoutPedal(item_cast<Pedal*>(item), ctx);
+    case ElementType::PEDAL:
+        layoutPedal(item_cast<Pedal*>(item), ctx);
         break;
-    case ElementType::PEDAL_SEGMENT:    layoutPedalSegment(item_cast<PedalSegment*>(item), ctx);
+    case ElementType::PEDAL_SEGMENT:
+        layoutPedalSegment(item_cast<PedalSegment*>(item), ctx);
         break;
-    case ElementType::PICK_SCRAPE_SEGMENT: layoutPickScrapeSegment(item_cast<PickScrapeSegment*>(item), ctx);
+    case ElementType::PICK_SCRAPE_SEGMENT:
+        layoutPickScrapeSegment(item_cast<PickScrapeSegment*>(item), ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION:
         layoutPlayTechAnnotation(item_cast<const PlayTechAnnotation*>(item), static_cast<PlayTechAnnotation::LayoutData*>(ldata));
         break;
-    case ElementType::RASGUEADO_SEGMENT: layoutRasgueadoSegment(item_cast<RasgueadoSegment*>(item), ctx);
+    case ElementType::RASGUEADO_SEGMENT:
+        layoutRasgueadoSegment(item_cast<RasgueadoSegment*>(item), ctx);
         break;
     case ElementType::REHEARSAL_MARK:
         layoutRehearsalMark(item_cast<const RehearsalMark*>(item), static_cast<RehearsalMark::LayoutData*>(ldata));
@@ -381,11 +409,14 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::REST:
         layoutRest(item_cast<const Rest*>(item), static_cast<Rest::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::SHADOW_NOTE:      layoutShadowNote(item_cast<ShadowNote*>(item), ctx);
+    case ElementType::SHADOW_NOTE:
+        layoutShadowNote(item_cast<ShadowNote*>(item), ctx);
         break;
-    case ElementType::SLUR:             layoutSlur(item_cast<Slur*>(item), ctx);
+    case ElementType::SLUR:
+        layoutSlur(item_cast<Slur*>(item), ctx);
         break;
-    case ElementType::SPACER:           layoutSpacer(item_cast<Spacer*>(item), ctx);
+    case ElementType::SPACER:
+        layoutSpacer(item_cast<Spacer*>(item), ctx);
         break;
     case ElementType::STAFF_STATE:
         layoutStaffState(item_cast<const StaffState*>(item), static_cast<StaffState::LayoutData*>(ldata));
@@ -429,42 +460,56 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::TEXT:
         layoutText(item_cast<const Text*>(item), static_cast<Text::LayoutData*>(ldata));
         break;
-    case ElementType::TEXTLINE:         layoutTextLine(item_cast<TextLine*>(item), ctx);
+    case ElementType::TEXTLINE:
+        layoutTextLine(item_cast<TextLine*>(item), ctx);
         break;
-    case ElementType::TEXTLINE_SEGMENT: layoutTextLineSegment(item_cast<TextLineSegment*>(item), ctx);
+    case ElementType::TEXTLINE_SEGMENT:
+        layoutTextLineSegment(item_cast<TextLineSegment*>(item), ctx);
         break;
-    case ElementType::TIE:              layoutTie(item_cast<Tie*>(item), ctx);
+    case ElementType::TIE:
+        layoutTie(item_cast<Tie*>(item), ctx);
         break;
     case ElementType::TIMESIG:
         layoutTimeSig(item_cast<const TimeSig*>(item), static_cast<TimeSig::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::TIME_TICK_ANCHOR: layoutTimeTickAnchor(static_cast<TimeTickAnchor*>(item), ctx);
+    case ElementType::TIME_TICK_ANCHOR:
+        layoutTimeTickAnchor(static_cast<TimeTickAnchor*>(item), ctx);
         break;
-    case ElementType::TREMOLO_SINGLECHORD: layoutTremoloSingle(item_cast<TremoloSingleChord*>(item), ctx);
+    case ElementType::TREMOLO_SINGLECHORD:
+        layoutTremoloSingle(item_cast<TremoloSingleChord*>(item), ctx);
         break;
-    case ElementType::TREMOLO_TWOCHORD:    layoutTremoloTwo(item_cast<TremoloTwoChord*>(item), ctx);
+    case ElementType::TREMOLO_TWOCHORD:
+        layoutTremoloTwo(item_cast<TremoloTwoChord*>(item), ctx);
         break;
     case ElementType::TREMOLOBAR:
         layoutTremoloBar(item_cast<const TremoloBar*>(item), static_cast<TremoloBar::LayoutData*>(ldata));
         break;
-    case ElementType::TRILL:            layoutTrill(item_cast<Trill*>(item), ctx);
+    case ElementType::TRILL:
+        layoutTrill(item_cast<Trill*>(item), ctx);
         break;
-    case ElementType::TRILL_SEGMENT:    layoutTrillSegment(item_cast<TrillSegment*>(item), ctx);
+    case ElementType::TRILL_SEGMENT:
+        layoutTrillSegment(item_cast<TrillSegment*>(item), ctx);
         break;
     case ElementType::TRIPLET_FEEL:
         layoutTripletFeel(item_cast<const TripletFeel*>(item), static_cast<TripletFeel::LayoutData*>(ldata));
         break;
-    case ElementType::TUPLET:           layoutTuplet(item_cast<Tuplet*>(item), ctx);
+    case ElementType::TUPLET:
+        layoutTuplet(item_cast<Tuplet*>(item), ctx);
         break;
-    case ElementType::VIBRATO:          layoutVibrato(item_cast<Vibrato*>(item), ctx);
+    case ElementType::VIBRATO:
+        layoutVibrato(item_cast<Vibrato*>(item), ctx);
         break;
-    case ElementType::VIBRATO_SEGMENT:  layoutVibratoSegment(item_cast<VibratoSegment*>(item), ctx);
+    case ElementType::VIBRATO_SEGMENT:
+        layoutVibratoSegment(item_cast<VibratoSegment*>(item), ctx);
         break;
-    case ElementType::VOLTA:            layoutVolta(item_cast<Volta*>(item), ctx);
+    case ElementType::VOLTA:
+        layoutVolta(item_cast<Volta*>(item), ctx);
         break;
-    case ElementType::VOLTA_SEGMENT:    layoutVoltaSegment(item_cast<VoltaSegment*>(item), ctx);
+    case ElementType::VOLTA_SEGMENT:
+        layoutVoltaSegment(item_cast<VoltaSegment*>(item), ctx);
         break;
-    case ElementType::WHAMMY_BAR_SEGMENT: layoutWhammyBarSegment(item_cast<WhammyBarSegment*>(item), ctx);
+    case ElementType::WHAMMY_BAR_SEGMENT:
+        layoutWhammyBarSegment(item_cast<WhammyBarSegment*>(item), ctx);
         break;
     default:
         LOGE() << "not found in layout types item: " << item->typeName();
