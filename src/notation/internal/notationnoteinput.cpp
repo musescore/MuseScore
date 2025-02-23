@@ -591,7 +591,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
 
         switch (mode) {
         case PitchMode::CHROMATIC:
-            newVal.pitch = val.pitch + up ? 1 : -1;
+            newVal.pitch = val.pitch + (up ? 1 : -1);
             break;
         case PitchMode::DIATONIC: {
             const int oldLine = mu::engraving::noteValToLine(val, is.staff(), is.tick());
