@@ -115,7 +115,7 @@ Item {
         width: Math.min(rowLayout.width, parent.width)
 
         contentWidth: rowLayout.width
-        contentHeight: rowLayout.height
+        contentHeight: rowLayout.height + rowLayout.anchors.topMargin
 
         StyledScrollBar.vertical: verticalScrollBar
 
@@ -152,6 +152,8 @@ Item {
             }
 
             height: padGrid.cellHeight * padGrid.numRows
+            anchors.top: parent.top
+            anchors.topMargin: Math.max((flickable.height - height) / 2, 0)
             spacing: padGrid.spacing / 2
 
             NavigationPanel {
@@ -240,10 +242,8 @@ Item {
                 property Item swapOriginPad: null
                 property bool isKeyboardSwapActive: false
 
-                Layout.alignment: Qt.AlignTop
-                Layout.fillHeight: true
-
                 width: cellWidth * numColumns
+                Layout.fillHeight: true
 
                 interactive: false
 
@@ -433,6 +433,7 @@ Item {
             visible: !percModel.enabled
 
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: rowLayout.anchors.topMargin / 2
 
             font: ui.theme.bodyFont
             text: qsTrc("notation/percussion", "Select an unpitched percussion staff to see available sounds")
