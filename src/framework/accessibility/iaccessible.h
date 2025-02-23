@@ -55,6 +55,7 @@ public:
         List,
         ListItem,
         MenuItem,
+        SpinBox,
         Range,
         Group,
 

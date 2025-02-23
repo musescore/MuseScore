@@ -59,8 +59,11 @@ public:
         List,
         ListItem,
         MenuItem,
+        SpinBox,
         Range,
-        Information
+        Group,
+        Information,
+        ElementOnScore
     };
     Q_ENUM(Role)
 };

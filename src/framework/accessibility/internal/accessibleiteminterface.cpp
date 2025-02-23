@@ -192,6 +192,10 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::SpinBox: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     case IAccessible::Role::Range: {
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
@@ -225,6 +229,7 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::List: return QAccessible::List;
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
     case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
+    case IAccessible::Role::SpinBox: return QAccessible::SpinBox;
     case IAccessible::Role::Range: return QAccessible::Slider;
     case IAccessible::Role::Group:
     case IAccessible::Role::Information:
