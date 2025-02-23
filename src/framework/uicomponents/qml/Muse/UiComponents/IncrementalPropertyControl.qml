@@ -150,14 +150,22 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
+        navigation.accessible.role: MUAccessible.SpinBox
+        navigation.accessible.value: currentValue + (measureUnitsSymbol !== "" ? " " + measureUnitsSymbol : "")
         navigation.onNavigationEvent: function(event) {
+            if (!textInputField.activeFocus) {
+                return
+            }
+
             switch (event.type) {
             case NavigationEvent.Up:
                 root.increment()
+                selectAll()
                 event.accepted = true
                 break
             case NavigationEvent.Down:
                 root.decrement()
+                selectAll()
                 event.accepted = true
                 break
             }
@@ -193,8 +201,8 @@ Item {
             canIncrease: root.canIncrease
             canDecrease: root.canDecrease
 
-            onIncreaseButtonClicked: { root.increment() }
-            onDecreaseButtonClicked: { root.decrement() }
+            onIncreaseButtonClicked: { root.increment(); textInputField.selectAll() }
+            onDecreaseButtonClicked: { root.decrement(); textInputField.selectAll() }
         }
 
         mouseArea.onWheel: function(wheel) {
