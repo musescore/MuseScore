@@ -491,7 +491,7 @@ void BarLine::getY() const
       int oneLine = st1->lines() <= 1;
       if (oneLine && _spanFrom == 0) {
             from = BARLINE_SPAN_1LINESTAFF_FROM;
-            if (!_spanStaff || (staffIdx1 == nstaves - 1))
+            if (!_spanStaff || (staffIdx1 == nstaves - 1) || (staffIdx2 == staffIdx1))
                   to = BARLINE_SPAN_1LINESTAFF_TO;
             }
       SysStaff* sysStaff1  = system->staff(staffIdx1);
