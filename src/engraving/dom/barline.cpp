@@ -501,7 +501,7 @@ void BarLine::calcY()
     bool oneLine = staffType1->lines() <= 1;
     if (oneLine && m_spanFrom == 0) {
         from = BARLINE_SPAN_1LINESTAFF_FROM;
-        if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
+        if (!m_spanStaff || (staffIdx1 == nstaves - 1) || (staffIdx2 == staffIdx1)) {
             to = BARLINE_SPAN_1LINESTAFF_TO;
         }
     }
