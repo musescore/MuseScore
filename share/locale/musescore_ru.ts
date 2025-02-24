@@ -19549,12 +19549,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1079"/>
         <source>Music by %1</source>
-        <translation>Автор музыки:</translation>
+        <translation>Автор музыки: %1</translation>
     </message>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1085"/>
         <source>Words by %1</source>
-        <translation>Автор слов:</translation>
+        <translation>Автор слов: %1</translation>
     </message>
 </context>
 <context>
@@ -29018,7 +29018,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;.</source>
-        <translation>Партитуры появятся здесь, когда вы сохраните файл в облаке или опубликуете партитуру на musescore.com.</translation>
+        <translation>Партитуры появятся здесь, когда вы сохраните файл в облаке или опубликуете партитуру на &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
@@ -29028,7 +29028,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
         <source>Log in or create a new account on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; to view online scores.</source>
-        <translation>Войдите в систему или создайте учётную запись на musescore.com, чтобы просматривать опубликованные партитуры.</translation>
+        <translation>Войдите в систему или создайте учётную запись на &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; чтобы просматривать опубликованные партитуры.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>

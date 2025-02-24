@@ -7111,7 +7111,7 @@ tekstur x-hædd):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="67"/>
         <source>Add %1 to chord</source>
-        <translation>Legg &amp;1 afturat akkordini</translation>
+        <translation>Legg %1 afturat akkordini</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="68"/>
@@ -18600,7 +18600,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="347"/>
         <source>%1/%2 time</source>
-        <translation>%1%2 tíð</translation>
+        <translation>%1/%2 tíð</translation>
     </message>
 </context>
 <context>

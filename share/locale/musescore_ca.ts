@@ -8982,7 +8982,7 @@ l&apos;alçària x del text):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1250"/>
         <source>Add tied note to chord</source>
-        <translation>Afegeix la nota amb punt a l&apos;acord</translation>
+        <translation>Afegeix una nota lligada a l&apos;acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
@@ -24619,12 +24619,12 @@ A més a més, Mastering MuseScore compta amb una comunitat de músics solidàri
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="619"/>
         <source>Note input modes</source>
-        <translation type="unfinished"/>
+        <translation>Modes d&apos;entrada de notes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="620"/>
         <source>Discover different ways to input notes in MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Descobriu diferents maneres d&apos;entrar les notes en MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml" line="56"/>

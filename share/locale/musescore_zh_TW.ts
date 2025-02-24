@@ -29288,7 +29288,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="59"/>
         <source>Each page of the selected parts will be exported as a separate %1 file.</source>
-        <translation>所選分譜的每一頁將會匯出為一個單獨的 &amp;1 檔案。</translation>
+        <translation>所選分譜的每一頁將會匯出為一個單獨的 %1 檔案。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>

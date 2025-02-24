@@ -14278,7 +14278,7 @@ Band %1 på strängar %2</translation>
         <source>“%1” volta</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;. %1 in this string represents the volta's text set by the user</extracomment>
-        <translation type="unfinished"/>
+        <translation>“%1” volta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="123"/>
@@ -14286,46 +14286,46 @@ Band %1 på strängar %2</translation>
         <source>start repeat</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>reprisbörjan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="142"/>
         <source>next note</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>nästa not</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="146"/>
         <source>invalid</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>ogiltig</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="209"/>
         <source>Toggle partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Partiell bindebåge av/på</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="469"/>
         <source>Replace full tie with partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Ersätt hel bindebåge med partiell bindebåge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="470"/>
         <source>Replace partial tie with full tie</source>
-        <translation type="unfinished"/>
+        <translation>Ersätt partiell bindebåge med hel bindebåge</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="184"/>
         <source>Remove partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort partiell bindebåge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/systemlock.cpp" line="169"/>
         <source>Start measure: %1; End measure: %2</source>
-        <translation type="unfinished"/>
+        <translation>Börja takt: %1; Avsluta takt: %2</translation>
     </message>
 </context>
 <context>
@@ -18270,7 +18270,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5582"/>
         <source>Half-open 2 (Weinberg)</source>
-        <translation type="unfinished"/>
+        <translation>Halvöppen 2 (Weinberg)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5689"/>
@@ -19518,7 +19518,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Denna inställning kan när som helst ändras i Inställningar</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -20242,17 +20242,17 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="94"/>
         <source>Move to system</source>
-        <translation type="unfinished"/>
+        <translation>Flytta till ackolad</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="115"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="117"/>
         <source>Move measure(s) to previous system</source>
-        <translation type="unfinished"/>
+        <translation>Flytta takt(er) till föregående ackolad</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="134"/>
@@ -20262,27 +20262,27 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="136"/>
         <source>Move measure(s) to next system</source>
-        <translation type="unfinished"/>
+        <translation>Flytta takt(er) till nästa ackolad</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="159"/>
         <source>Unlock selected systems</source>
-        <translation type="unfinished"/>
+        <translation>Lås upp markerade ackolader</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="160"/>
         <source>Unlock selected system</source>
-        <translation type="unfinished"/>
+        <translation>Lås upp markerad ackolad</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="161"/>
         <source>Lock selected systems</source>
-        <translation type="unfinished"/>
+        <translation>Lås markerade ackolader</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="162"/>
         <source>Lock selected system</source>
-        <translation type="unfinished"/>
+        <translation>Lås markerad ackolad</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="164"/>
@@ -20292,7 +20292,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation type="unfinished"/>
+        <translation>Håll samman takter i markerad(e) ackolad(er) och hindra dem från att föras över till nästa ackolad</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="186"/>
@@ -20303,7 +20303,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="189"/>
         <source>Create a system containing only the selected measure(s)</source>
-        <translation type="unfinished"/>
+        <translation>Skapa en ackolad innehållande endast de markerade takterna</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
@@ -20620,7 +20620,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation type="unfinished"/>
+        <translation>Visa varningsklav</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20863,7 +20863,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation type="unfinished"/>
+        <translation>Visa varnande tonartssignatur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -20928,7 +20928,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="50"/>
         <source>Line type</source>
-        <translation type="unfinished"/>
+        <translation>Linjetyp</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="75"/>
@@ -21124,7 +21124,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
         <source>Number offset</source>
-        <translation type="unfinished"/>
+        <translation>Nummerförskjutning</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
@@ -21348,7 +21348,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
         <source>Hide courtesy clefs and signatures</source>
-        <translation type="unfinished"/>
+        <translation>Göm varnande klaver och tonartssignaturer</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -21482,7 +21482,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation type="unfinished"/>
+        <translation>Visa varnande taktartssignatur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -22035,7 +22035,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="59"/>
         <source>Tie (partial)</source>
-        <translation type="unfinished"/>
+        <translation>Bindebåge (partiell)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="110"/>
@@ -22335,7 +22335,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
         <source>Cue note visibility</source>
-        <translation type="unfinished"/>
+        <translation>Inprickningssynlighet</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="219"/>
@@ -22375,7 +22375,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
         <source>Laissez vibrer placement</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Låt klinga&quot;-placering</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="98"/>
@@ -22394,7 +22394,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="106"/>
         <source>Minimum length</source>
-        <translation type="unfinished"/>
+        <translation>Minstalängd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
@@ -22529,7 +22529,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml" line="44"/>
         <source>Score style preset</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentstilsförinställning</translation>
     </message>
 </context>
 <context>
@@ -22728,17 +22728,17 @@ upptakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="94"/>
         <source>Move selected system markings up</source>
-        <translation type="unfinished"/>
+        <translation>Flytta markerade ackoladmarkeringar uppåt</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="119"/>
         <source>Move selected system markings down</source>
-        <translation type="unfinished"/>
+        <translation>Flytta markerade ackoladmarkeringar nedåt</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="144"/>
         <source>Remove selected system markings</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort markerade ackoladmarkeringar</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="117"/>
@@ -22769,17 +22769,17 @@ upptakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="40"/>
         <source>Add instruments or system markings</source>
-        <translation type="unfinished"/>
+        <translation>Lägg till instrument eller ackoladmarkeringar</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="49"/>
         <source>System markings (tempo, rehearsal marks, etc.)</source>
-        <translation type="unfinished"/>
+        <translation>Ackoladmarkeringar (tempobeteckningar, orienteringstecken, etc.)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="47"/>
         <source>New instrument</source>
-        <translation type="unfinished"/>
+        <translation>Nytt instrument</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="313"/>
@@ -22819,7 +22819,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml" line="57"/>
         <source>Display at this position on the score</source>
-        <translation type="unfinished"/>
+        <translation>Visa vid denna position i dokumentet</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
@@ -22884,12 +22884,12 @@ upptakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="38"/>
         <source>System markings</source>
-        <translation type="unfinished"/>
+        <translation>Ackoladmarkeringar</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
         <source>System markings hidden</source>
-        <translation type="unfinished"/>
+        <translation>Ackoladmarkeringar gömda</translation>
     </message>
 </context>
 <context>
@@ -22951,7 +22951,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation type="unfinished"/>
+        <translation>Välkommen till Bemästra MuseScore – den mest omfattande resursen för att lära sig världens populäraste notskrivningsprogram! Mitt namn är Marc Sabatella, och jag har hjälpt till att utveckla, stödja och främja MuseScore sedan dess första utgåva för över tio år sedan.
+
+Om du nyss har kommit igång med notskrivningsprogram, eller är en van användare ivrig att utforska avancerad notsättning och uppspelning, min förnämsta kurs på nätet, Bemästra MuseScore, täcker allt du behöver veta för att få ut det mesta av MuseScore.
+
+Därutöver mönstrar Bemästra MuseScore en stödjande gemenskap av musiker, med diskussionsforum, direktuppspelningar, och andra liknande kurser och tjänster för att hjälpa dig skapa din bästa musik. Tag vara på tillfället att lära dig MuseScore av en av dess mest erkända experter!
+
+(Anmärkning: Bemästra MuseScore är endast tillgänglig på engelska)</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="97"/>
@@ -23142,7 +23148,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="48"/>
         <source>Line type:</source>
-        <translation type="unfinished"/>
+        <translation>Linjetyp:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="51"/>
@@ -23158,12 +23164,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="71"/>
         <source>Show text:</source>
-        <translation type="unfinished"/>
+        <translation>Visa text:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="83"/>
         <source>Edit glissando text style</source>
-        <translation type="unfinished"/>
+        <translation>Redigera glissandotextstil</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="100"/>
@@ -23231,7 +23237,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
         <source>Close search</source>
-        <translation type="unfinished"/>
+        <translation>Stäng sökning</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
@@ -23438,7 +23444,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="130"/>
         <source>Move measures</source>
-        <translation type="unfinished"/>
+        <translation>Flytta takter</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="132"/>
@@ -23473,12 +23479,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="257"/>
         <source>To previous system</source>
-        <translation type="unfinished"/>
+        <translation>Till föregående ackolad</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="258"/>
         <source>To next system</source>
-        <translation type="unfinished"/>
+        <translation>Till nästa ackolad</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -23738,12 +23744,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="64"/>
         <source>Dash (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>Streck (streckad linje):</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="70"/>
         <source>Gap (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>Avstånd (streckad linje)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="81"/>
@@ -24499,7 +24505,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="181"/>
         <source>Note input preview note color</source>
-        <translation type="unfinished"/>
+        <translation>Förhandsgranskning av notfärg vid notinmatning</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="249"/>
@@ -24554,7 +24560,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="92"/>
         <source>Placement of inner ties with respect to augmentation dots:</source>
-        <translation type="unfinished"/>
+        <translation>Placering av inre bindebågar med hänsyn till förlängningspunkter</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="101"/>
@@ -24564,12 +24570,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
         <source>Always before dots</source>
-        <translation type="unfinished"/>
+        <translation>Alltid före punkter</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="117"/>
         <source>Always after dots</source>
-        <translation type="unfinished"/>
+        <translation>Alltid efter punkter</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
@@ -24594,7 +24600,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
         <source>Input pitch</source>
-        <translation type="unfinished"/>
+        <translation>Inmatningston</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
@@ -24604,32 +24610,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="375"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>Historia</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="619"/>
         <source>Note input modes</source>
-        <translation type="unfinished"/>
+        <translation>Notinmatningslägen</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="620"/>
         <source>Discover different ways to input notes in MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Upptäck olika sätt att mata in noter i MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml" line="56"/>
         <source>Edit note-anchored line text style</source>
-        <translation type="unfinished"/>
+        <translation>Redigera notförankrad linjetextstil</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="57"/>
         <source>Dynamics Popup</source>
-        <translation type="unfinished"/>
+        <translation>Poppuppfönster för dynamik</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="735"/>
         <source>Small parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Små parenteser</translation>
     </message>
 </context>
 <context>
@@ -24638,7 +24644,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/breaksdialog.cpp" line="43"/>
         <source>Lock layout with %1 measure(s) per system</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lås utläggning med %1 takt(er) per ackolad</translation>
     </message>
 </context>
 <context>
@@ -25023,7 +25029,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="81"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="455"/>
         <source>Visibility:</source>
-        <translation type="unfinished"/>
+        <translation>Synlighet:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="88"/>
@@ -25038,7 +25044,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="101"/>
         <source>Hide tab clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Göm tabulaturklaver efter första ackoladen där de förekommer</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
@@ -25073,42 +25079,42 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="159"/>
         <source>On all staves</source>
-        <translation type="unfinished"/>
+        <translation>I alla system</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="160"/>
         <source>Above staves</source>
-        <translation type="unfinished"/>
+        <translation>Över system</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="161"/>
         <source>Across staves</source>
-        <translation type="unfinished"/>
+        <translation>Mellan system</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
         <source>Set where time signatures appear using the Layout panel.</source>
-        <translation type="unfinished"/>
+        <translation>Ange med hjälp av Utläggningspanelen var taktartssignaturer skall visas.</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="189"/>
         <source>Style and size</source>
-        <translation type="unfinished"/>
+        <translation>Stil och storlek</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="203"/>
         <source>Numeral style:</source>
-        <translation type="unfinished"/>
+        <translation>Nummerstil:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="249"/>
         <source>Alignment with barlines:</source>
-        <translation type="unfinished"/>
+        <translation>Justering till taktstreck:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="250"/>
         <source>Alignment across staves:</source>
-        <translation type="unfinished"/>
+        <translation>Justering mellan system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="290"/>
@@ -25119,7 +25125,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="353"/>
         <source>Gap between numbers
 (scaled):</source>
-        <translation type="unfinished"/>
+        <translation>Avstånd mellan mummer
+(skalat):</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="377"/>
@@ -25134,22 +25141,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="415"/>
         <source>End-of-staff alignment:</source>
-        <translation type="unfinished"/>
+        <translation>Justering till systemslut:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="419"/>
         <source>Hang into page margin</source>
-        <translation type="unfinished"/>
+        <translation>Häng ut i marginalen</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="424"/>
         <source>Inset time signature</source>
-        <translation type="unfinished"/>
+        <translation>Infoga taktartssignatur</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="429"/>
         <source>Inset barline</source>
-        <translation type="unfinished"/>
+        <translation>Infoga taktstreck</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="448"/>
@@ -25174,7 +25181,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="484"/>
         <source>Clefs, key &amp; time signatures at repeats and jumps</source>
-        <translation type="unfinished"/>
+        <translation>Klaver, tonarts- och taktartssignaturer vid repriser och hopp</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="528"/>
