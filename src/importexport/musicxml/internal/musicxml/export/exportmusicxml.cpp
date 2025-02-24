@@ -3549,6 +3549,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 }
             }
             mxmlArtic += color2xml(a);
+            mxmlArtic += ExportMusicXml::positioningAttributes(a);
 
             notations.tag(m_xml, a);
             articulations.tag(m_xml);
