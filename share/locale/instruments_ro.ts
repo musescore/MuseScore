@@ -251,21 +251,21 @@
         <source>Traverso</source>
         <comment>traverso trackName</comment>
         <extracomment>trackName for Traverso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Flaut baroc</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="288"/>
         <source>Traverso</source>
         <comment>traverso longName</comment>
         <extracomment>longName for Traverso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Flaut baroc</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="290"/>
         <source>Trv.</source>
         <comment>traverso shortName</comment>
         <extracomment>shortName for Traverso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Fl. B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="293"/>
@@ -1980,7 +1980,7 @@
         <source>Standard concert oboe.</source>
         <comment>oboe description</comment>
         <extracomment>description for Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oboi de concert standard.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="845"/>
@@ -5333,7 +5333,7 @@
         <source>Tenor C</source>
         <comment>harmonica-c12tenor-c traitName</comment>
         <extracomment>traitName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>do tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1965"/>
@@ -17093,7 +17093,7 @@
         <source>6-course lute (staff notation).</source>
         <comment>lute description</comment>
         <extracomment>description for Lute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută cu 6 perechi de coarde (notație pe portativ).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5625"/>
@@ -17121,14 +17121,14 @@
         <source>6-course lute (tablature).</source>
         <comment>lute-tablature description</comment>
         <extracomment>description for Lute (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută cu 6 perechi de coarde (tabulatură).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5634"/>
         <source>Lute (tablature)</source>
         <comment>lute-tablature trackName</comment>
         <extracomment>trackName for Lute (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută (tabulatură)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5636"/>
@@ -17142,21 +17142,21 @@
         <source>5-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-5-course description</comment>
         <extracomment>description for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor renascentistă cu 5 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5641"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-5-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5643"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-5-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5645"/>
@@ -17170,28 +17170,28 @@
         <source>5-course</source>
         <comment>ren.-tenor-lute-5-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5650"/>
         <source>6-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-6-course description</comment>
         <extracomment>description for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor renascentistă cu 6 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5652"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-6-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5654"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-6-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5656"/>
@@ -17205,28 +17205,28 @@
         <source>6-course</source>
         <comment>ren.-tenor-lute-6-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>6 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5661"/>
         <source>7-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-7-course description</comment>
         <extracomment>description for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor renascentistă cu 7 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5663"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-7-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5665"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-7-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5667"/>
@@ -17240,28 +17240,28 @@
         <source>7-course</source>
         <comment>ren.-tenor-lute-7-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>7 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5672"/>
         <source>8-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-8-course description</comment>
         <extracomment>description for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor renascentistă cu 8 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5674"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-8-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5676"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-8-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5678"/>
@@ -17275,28 +17275,28 @@
         <source>8-course</source>
         <comment>ren.-tenor-lute-8-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>8 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5683"/>
         <source>9-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-9-course description</comment>
         <extracomment>description for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor renascentistă cu 9 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5685"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-9-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5687"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-9-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5689"/>
@@ -17310,28 +17310,28 @@
         <source>9-course</source>
         <comment>ren.-tenor-lute-9-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>9 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5694"/>
         <source>10-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-10-course description</comment>
         <extracomment>description for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor renascentistă cu 10 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5696"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-10-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5698"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-10-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5700"/>
@@ -17345,28 +17345,28 @@
         <source>10-course</source>
         <comment>ren.-tenor-lute-10-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>10 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5705"/>
         <source>13-course Baroque lute.</source>
         <comment>baroque-lute-13-course description</comment>
         <extracomment>description for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută barocă cu 13 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5707"/>
         <source>Tenor Lute</source>
         <comment>baroque-lute-13-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5709"/>
         <source>Tenor Lute</source>
         <comment>baroque-lute-13-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5711"/>
@@ -17380,14 +17380,14 @@
         <source>13-course</source>
         <comment>baroque-lute-13-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>13 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5716"/>
         <source>14-course theorbo.</source>
         <comment>theorbo-14-course description</comment>
         <extracomment>description for Theorbo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Teorbă cu 14 coarde duble.</translation>
+        <translation>Teorbă cu 14 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5718"/>
@@ -17415,7 +17415,7 @@
         <source>14-course archlute.</source>
         <comment>archlute-14-course description</comment>
         <extracomment>description for Archlute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Arhilăută cu 14 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5727"/>
@@ -17639,7 +17639,7 @@
         <source>Greek lute, with 3 courses.</source>
         <comment>bouzouki-3-course description</comment>
         <extracomment>description for Bouzouki; course: 3-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută grecească cu 3 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5799"/>
@@ -17667,14 +17667,14 @@
         <source>3-course</source>
         <comment>bouzouki-3-course traitName</comment>
         <extracomment>traitName for Bouzouki; course: 3-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>3 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5808"/>
         <source>Greek lute, with 4 courses.</source>
         <comment>bouzouki-4-course description</comment>
         <extracomment>description for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută grecească cu 4 perechi de coarde.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5810"/>
@@ -17702,7 +17702,7 @@
         <source>4-course</source>
         <comment>bouzouki-4-course traitName</comment>
         <extracomment>traitName for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>4 perechi de coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5819"/>
@@ -17737,7 +17737,7 @@
         <source>Short-neck lute-type fretless stringed instrument, common in the Middle East and North Africa.</source>
         <comment>oud description</comment>
         <extracomment>description for Oud; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Instrument cu coarde, fără taste, cu gâtul scurt, similar cu lăuta, comun în Orientul Mijlociu și Africa de Nord.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5830"/>
@@ -18010,7 +18010,7 @@
         <source>Spanish lute similar to the bandurria. (Staff notation).</source>
         <comment>laud description</comment>
         <extracomment>description for Laúd; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută spaniolă similară cu bandurria. (Notație pe portativ).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5918"/>
@@ -18038,7 +18038,7 @@
         <source>Spanish lute similar to the bandurria. (Tablature).</source>
         <comment>laud-tablature description</comment>
         <extracomment>description for Laúd (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lăută spaniolă similară cu bandurria. (Tabulatură).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5927"/>
@@ -19480,7 +19480,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
         <source>Lutes</source>
-        <translation type="unfinished"/>
+        <translation>Lăute</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="184"/>

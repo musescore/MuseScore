@@ -42,12 +42,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>每行小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation type="unfinished"/>
+        <translation>每個譜行有若干小節的固定版面</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -58,13 +58,13 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system locks to each system</source>
-        <translation type="unfinished"/>
+        <translation>為每個譜行添加譜行鎖</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system locks</source>
-        <translation type="unfinished"/>
+        <translation>移除當前譜行鎖</translation>
     </message>
 </context>
 <context>
@@ -72,7 +72,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="14"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>自定義套組</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="50"/>
@@ -1117,7 +1117,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="354"/>
         <source>Merge matching rests:</source>
-        <translation type="unfinished"/>
+        <translation>合併匹配的休止符：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="367"/>
@@ -1283,13 +1283,13 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1034"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1037"/>
         <source>Apply and go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>應用並前往上一譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1053"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1056"/>
         <source>Apply and go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>應用並前往下一譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="458"/>
@@ -1803,7 +1803,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8532"/>
         <source>Hairpins</source>
-        <translation>音量漸變記號线</translation>
+        <translation>音量漸變記號線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
@@ -2735,7 +2735,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>力度標記與楔形力度號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="592"/>
@@ -2745,23 +2745,23 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="598"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>當只有一種樂器時隱藏</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="607"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="627"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>全稱</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="617"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“後續譜行組上的樂器標籤”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="637"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“在首章譜行組上的樂器標籤”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="647"/>
@@ -2772,12 +2772,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="654"/>
         <source>On subsequent systems:</source>
-        <translation type="unfinished"/>
+        <translation>在後續譜行組上：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="661"/>
         <source>On first system of sections:</source>
-        <translation type="unfinished"/>
+        <translation>在樂章的首個譜行組上</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="668"/>
@@ -2838,7 +2838,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4026"/>
         <source>Multiple accidentals in chords</source>
-        <translation type="unfinished"/>
+        <translation>在和弦裏的多個變音號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4236"/>
@@ -3014,7 +3014,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5312"/>
         <source>Use double barlines before key signatures</source>
-        <translation type="unfinished"/>
+        <translation>在調號前面使用雙小節綫</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5318"/>
@@ -3031,32 +3031,32 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5332"/>
         <source>Only before courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>僅在輔助調號之前</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
         <source>Use double barlines before time signatures</source>
-        <translation type="unfinished"/>
+        <translation>在拍號前使用雙小節線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5362"/>
         <source>Only before courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>只在輔助拍號之前</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5616"/>
         <source>Accidental to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>臨時記號-變音號間距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5696"/>
         <source>Alignment in chords</source>
-        <translation type="unfinished"/>
+        <translation>和弦對齊</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5702"/>
         <source>Combine voices that share the same stem direction</source>
-        <translation type="unfinished"/>
+        <translation>合併移動方向相同的聲部</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5769"/>
@@ -3089,22 +3089,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8248"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation type="unfinished"/>
+        <translation>力度記號與漸強記號的默認位置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8276"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation type="unfinished"/>
+        <translation>1&amp;3聲部處於譜表上方，2&amp;4聲部處於譜表下方</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8311"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation type="unfinished"/>
+        <translation>力度記號放在聲樂譜表上方</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8318"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation type="unfinished"/>
+        <translation>力度記號放在大譜表樂器的中間</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10205"/>
@@ -3129,27 +3129,27 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11657"/>
         <source>Edit lyrics text style</source>
-        <translation type="unfinished"/>
+        <translation>編輯唱詞的文本樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11761"/>
         <source>Min. gap between lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>唱詞段最小間距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11858"/>
         <source>Min. margin to current staff:</source>
-        <translation type="unfinished"/>
+        <translation>當前譜表的最小內邊距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11810"/>
         <source>Min. margin to other staves:</source>
-        <translation type="unfinished"/>
+        <translation>其他譜表的最小內邊距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
         <source>Line height (% of text size):</source>
-        <translation type="unfinished"/>
+        <translation>綫高（字號比例）</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12096"/>
@@ -3159,28 +3159,29 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12145"/>
         <source>Max. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>最大虛綫間隔：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12181"/>
         <source>Min. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>最小虛綫間隔：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12361"/>
         <source>Omit dash when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>空間不足時省略虛綫</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12381"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
-        <translation type="unfinished"/>
+        <translation>在譜行組的第一個音符上
+重申音節前的虛線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12389"/>
         <source>Dash placement at the start of the system:</source>
-        <translation type="unfinished"/>
+        <translation>譜行組開頭的虛線位置：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8484"/>
@@ -3218,17 +3219,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation type="unfinished"/>
+        <translation>滑音與音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
         <source>Cue sizes</source>
-        <translation type="unfinished"/>
+        <translation>縮小化元素</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2064"/>
         <source>Reduce rhythmic spacing for small notes</source>
-        <translation type="unfinished"/>
+        <translation>減少小音符的節奏間距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3436"/>
@@ -3363,17 +3364,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation type="unfinished"/>
+        <translation>譜號、調號、拍號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5292"/>
         <source>Mask barlines</source>
-        <translation type="unfinished"/>
+        <translation>小節線襯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Mask barlines when intersecting text</source>
-        <translation type="unfinished"/>
+        <translation>文本壓到小節線加襯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5393"/>
@@ -3454,12 +3455,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6032"/>
         <source>Center between staves on multi-staff instruments</source>
-        <translation type="unfinished"/>
+        <translation>在多譜樂器的譜表之間居中</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6081"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“若數字重疊則斷開H型休止符”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6135"/>
@@ -3475,27 +3476,27 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6201"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6204"/>
         <source>H-bar</source>
-        <translation type="unfinished"/>
+        <translation>H式休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
         <source>Reset &apos;Horizontal stroke thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「橫條粗細」值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6271"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「小節線之間的休止符邊距」值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6320"/>
         <source>Reset &apos;Vertical stroke thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“垂直端粗細”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6359"/>
         <source>Reset &apos;Vertical stroke height&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“垂直端高度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6402"/>
@@ -3770,74 +3771,74 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5880"/>
         <source>Fixed, based on time signature of:</source>
-        <translation type="unfinished"/>
+        <translation>相對拍號的：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5887"/>
         <source>Proportional to time signature</source>
-        <translation type="unfinished"/>
+        <translation>與拍號成常比</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5910"/>
         <source>Cap width after:</source>
-        <translation type="unfinished"/>
+        <translation>後方寬度上限：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5917"/>
         <source> / 4</source>
-        <translation type="unfinished"/>
+        <translation> / 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5937"/>
         <source> measures</source>
-        <translation type="unfinished"/>
+        <translation> 小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5954"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5957"/>
         <source>On single empty measure</source>
-        <translation type="unfinished"/>
+        <translation>在單獨的空小節中</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5963"/>
         <source>Use normal rest</source>
-        <translation type="unfinished"/>
+        <translation>使用常規休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5990"/>
         <source>Use H-bar</source>
-        <translation type="unfinished"/>
+        <translation>使用H式</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6000"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6003"/>
         <source>Number layout</source>
-        <translation type="unfinished"/>
+        <translation>數字版式：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6071"/>
         <source>Break H-bar if number overlaps</source>
-        <translation type="unfinished"/>
+        <translation>若數字重疊則斷開H型休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6210"/>
         <source>Horizontal stroke thickness:</source>
-        <translation type="unfinished"/>
+        <translation>橫條粗細：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6281"/>
         <source>Margin within barlines:</source>
-        <translation type="unfinished"/>
+        <translation>小節線內邊距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6291"/>
         <source>Vertical stroke thickness:</source>
-        <translation type="unfinished"/>
+        <translation>垂直端粗細：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6330"/>
         <source>Vertical stroke height:</source>
-        <translation type="unfinished"/>
+        <translation>垂直端高度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6959"/>
@@ -4425,63 +4426,64 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12171"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘虛線外邊距’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12323"/>
         <source>Vertical position (% of 
 text x-height):</source>
-        <translation type="unfinished"/>
+        <translation>垂直位置（相對文本
+垂直高度的百分比）：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12344"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘垂直位置（文本高度的%）’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12371"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘空間有限時省略虛線’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12415"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘虛線位置位於譜行組開頭’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12430"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>延長綫</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12470"/>
         <source>Reset &apos;Min. line length&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“最小線長”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12499"/>
         <source>Min. line length:</source>
-        <translation type="unfinished"/>
+        <translation>最小線長：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12516"/>
         <source>Line gap:</source>
-        <translation type="unfinished"/>
+        <translation>行間距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12548"/>
         <source>Reset &apos;Line gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘行間距’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12565"/>
         <source>Omit extension line when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>空間有限時省略延長線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12575"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置 &apos;空間有限時省略延長線&apos; 值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6045"/>
@@ -4492,27 +4494,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8040"/>
         <source>Minimum hanging tie length:</source>
-        <translation type="unfinished"/>
+        <translation>最小懸浮延音線長度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8078"/>
         <source>Reset &apos;Minimum hanging tie length&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“最小懸浮延音線長度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8127"/>
         <source>Minimum laissez vibrer length:</source>
-        <translation type="unfinished"/>
+        <translation>最小放任號長度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8190"/>
         <source>Use SMuFL symbols</source>
-        <translation type="unfinished"/>
+        <translation>使用SMuFL符號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10166"/>
@@ -4524,27 +4526,27 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10177"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10180"/>
         <source>Note-anchored lines</source>
-        <translation type="unfinished"/>
+        <translation>音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11033"/>
         <source>Trill cue note</source>
-        <translation type="unfinished"/>
+        <translation>小顫音音符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11039"/>
         <source>Show only for intervals other than seconds</source>
-        <translation type="unfinished"/>
+        <translation>僅顯示二度以外的音程</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11046"/>
         <source>Show for all intervals</source>
-        <translation type="unfinished"/>
+        <translation>顯示所有音程</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12076"/>
         <source>Reset avoid barlines</source>
-        <translation type="unfinished"/>
+        <translation>重設避開小節線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13028"/>
@@ -4921,17 +4923,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14370"/>
         <source>Parentheses indicating ties</source>
-        <translation type="unfinished"/>
+        <translation>表示延音線的括號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14383"/>
         <source>Always show at the start of a measure</source>
-        <translation type="unfinished"/>
+        <translation>總在小節開頭顯示</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14397"/>
         <source>Always show parenthesized fret marks when articulation markings are present</source>
-        <translation type="unfinished"/>
+        <translation>總是在運音法記號出現時顯示帶括號品號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14896"/>
@@ -4941,22 +4943,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14919"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation type="unfinished"/>
+        <translation>為連音數字使用音樂符號字體</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14929"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“為連音數字使用音樂符號字體”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14941"/>
         <source>Musical symbols scale:</source>
-        <translation type="unfinished"/>
+        <translation>音樂符號比例</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14970"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“音樂符號比例”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="15039"/>
@@ -4983,27 +4985,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14340"/>
         <source>Tied fret marks</source>
-        <translation type="unfinished"/>
+        <translation>連結品格號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14346"/>
         <source>Show ties and repeat fret marks</source>
-        <translation type="unfinished"/>
+        <translation>顯示延音線並重復品格號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14353"/>
         <source>Show ties only</source>
-        <translation type="unfinished"/>
+        <translation>僅顯示延音綫</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14360"/>
         <source>Show initial fret mark only</source>
-        <translation type="unfinished"/>
+        <translation>僅顯示初始品格號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14376"/>
         <source>Only show at the start of a system</source>
-        <translation type="unfinished"/>
+        <translation>總在譜行組開頭顯示</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14390"/>
@@ -5135,7 +5137,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="851"/>
         <source>Show number ‘1’</source>
-        <translation type="unfinished"/>
+        <translation>顯示數字「1」</translation>
     </message>
 </context>
 <context>
@@ -5166,7 +5168,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/DebugWindow.cpp" line="123"/>
         <source>DockWidget unique name</source>
-        <translation type="unfinished"/>
+        <translation>邊欄組件標識名稱</translation>
     </message>
 </context>
 <context>
@@ -5179,7 +5181,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="612"/>
         <source>Detach</source>
-        <translation type="unfinished"/>
+        <translation>分弓</translation>
     </message>
 </context>
 <context>
@@ -5187,12 +5189,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
         <source>Dock window</source>
-        <translation type="unfinished"/>
+        <translation>邊欄化窗口</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
         <source>Undock window</source>
-        <translation type="unfinished"/>
+        <translation>懸浮化視窗</translation>
     </message>
 </context>
 <context>
@@ -5200,7 +5202,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="143"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>最小化</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="144"/>
@@ -5210,22 +5212,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="265"/>
         <source>Auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>自動隱藏</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="268"/>
         <source>Disable auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>取消自動隱藏</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Restore</source>
-        <translation type="unfinished"/>
+        <translation>恢復</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Maximize</source>
-        <translation type="unfinished"/>
+        <translation>最大化</translation>
     </message>
 </context>
 <context>
@@ -5415,12 +5417,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="471"/>
         <source>Apply and go to previous measure</source>
-        <translation type="unfinished"/>
+        <translation>應用並前往上一小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="487"/>
         <source>Apply and go to next measure</source>
-        <translation type="unfinished"/>
+        <translation>應用並前往下一小節</translation>
     </message>
 </context>
 <context>
@@ -6668,7 +6670,7 @@ text x-height):</source>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="234"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="77"/>
         <source>Undo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>撤消“%1”</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="239"/>
@@ -6682,10 +6684,10 @@ text x-height):</source>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="240"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="85"/>
         <source>Redo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>恢復“%1”</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2046"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2052"/>
         <source>Note input</source>
         <translation>輸入音符</translation>
     </message>
@@ -6955,12 +6957,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation type="unfinished"/>
+        <translation>每行小節... (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Measures per system…</source>
-        <translation type="unfinished"/>
+        <translation>每行小節...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
@@ -7067,19 +7069,19 @@ text x-height):</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2415"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2421"/>
         <source>Cross-staff beaming</source>
         <translation>跨譜表符槓</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2421"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2427"/>
         <source>Tuplet</source>
         <translation>連音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1111"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1117"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2312"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2318"/>
         <source>Rest</source>
         <translation>休止符</translation>
     </message>
@@ -7090,12 +7092,12 @@ text x-height):</source>
         <translation>輸入休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2414"/>
         <source>Staccato</source>
         <translation>斷音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2401"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2407"/>
         <source>Tenuto</source>
         <translation>持續音</translation>
     </message>
@@ -7120,133 +7122,133 @@ text x-height):</source>
         <translation>插入 %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1446"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1447"/>
         <source>Reset all text style overrides to default</source>
         <translation>重設所有文字樣式為預設值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1591"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1592"/>
         <source>Page: Top of first</source>
         <translation>頁面：第一頁頂部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1597"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1598"/>
         <source>Page: Bottom of last</source>
         <translation>頁面：尾頁底部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1603"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1604"/>
         <source>Context sensitive help</source>
         <translation>情境幫助</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1648"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
         <source>Concert pitch</source>
         <translation>標準音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1662"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1668"/>
         <source>Next text element</source>
         <translation>下一個文字元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1668"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1674"/>
         <source>Previous text element</source>
         <translation>上一個文字元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1740"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1746"/>
         <source>Next lyric verse</source>
         <translation>下一遍歌詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1746"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1752"/>
         <source>Previous lyric verse</source>
         <translation>上一遍歌詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1824"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1825"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1830"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1831"/>
         <source>Go to top staff</source>
         <translation>前往頂端譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1830"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1831"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1836"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1837"/>
         <source>Go to first empty trailing measure</source>
         <translation>前往末尾的第一個空白小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1980"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1986"/>
         <source>Diatonic pitch up (keep degree alterations)</source>
         <translation>在自然音階內上移（保持音程關係）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1986"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1992"/>
         <source>Diatonic pitch down (keep degree alterations)</source>
         <translation>在自然音階內下移（保持音程關係）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2080"/>
         <source>Rhythm only (not pitch)</source>
         <translation>節拍編輯（原音高）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2081"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2087"/>
         <source>Re-pitch existing notes</source>
         <translation>調整音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2088"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2094"/>
         <source>Real-time (metronome)</source>
         <translation>即時（節拍器）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2095"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2101"/>
         <source>Real-time (foot pedal)</source>
         <translation>即時（踏板）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2186"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2263"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2192"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2269"/>
         <source>256th note</source>
         <translation>256 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2193"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2270"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2199"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2276"/>
         <source>512th note</source>
         <translation>512 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2200"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2277"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2206"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2283"/>
         <source>1024th note</source>
         <translation>1024 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1860"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1866"/>
         <source>Toggle trill</source>
         <translation>顫音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2393"/>
         <source>Marcato</source>
         <translation>加強音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1908"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1914"/>
         <source>Toggle up bow</source>
         <translation>上弓</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1914"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1920"/>
         <source>Toggle down bow</source>
         <translation>下弓</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1643"/>
         <source>Flip direction</source>
         <translation>翻轉符桿方向</translation>
     </message>
@@ -7256,7 +7258,7 @@ text x-height):</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1812"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1818"/>
         <source>Diatonic pitch up</source>
         <translation>以自然音階上移音高</translation>
     </message>
@@ -7266,17 +7268,17 @@ text x-height):</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1818"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1824"/>
         <source>Diatonic pitch down</source>
         <translation>以自然音階下移音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2319"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2325"/>
         <source>Accessibility: Next segment element</source>
         <translation>輔助功能：下個區段元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2325"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2331"/>
         <source>Accessibility: Previous segment element</source>
         <translation>輔助功能：上個區段元素</translation>
     </message>
@@ -7310,7 +7312,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="60"/>
         <source>Customize kit…</source>
-        <translation type="unfinished"/>
+        <translation>自定義套組...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="65"/>
@@ -7339,8 +7341,8 @@ text x-height):</source>
         <translation>把上一個和弦加到選取範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1519"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1520"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1521"/>
         <source>Select to beginning of measure</source>
         <translation>選取至小節開頭</translation>
     </message>
@@ -7470,22 +7472,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="245"/>
         <source>Snap to &amp;previous</source>
-        <translation type="unfinished"/>
+        <translation>吸附到上一個 (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="246"/>
         <source>Snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>吸附到上一個</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="252"/>
         <source>Snap to &amp;next</source>
-        <translation type="unfinished"/>
+        <translation>吸附到下一個(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="253"/>
         <source>Snap to next</source>
-        <translation type="unfinished"/>
+        <translation>吸附到下一個</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="260"/>
@@ -7671,7 +7673,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="518"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="519"/>
         <source>Floating</source>
-        <translation type="unfinished"/>
+        <translation>懸浮</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="526"/>
@@ -7715,19 +7717,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="637"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="638"/>
         <source>Add/remove system lock</source>
-        <translation type="unfinished"/>
+        <translation>添加/移除譜行鎖</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>將小節移至上一譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="651"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>將小節移至下一譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
@@ -7921,906 +7923,905 @@ text x-height):</source>
         <translation>輸入音程：下方九度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
         <source>Add hairpin: crescendo</source>
         <translation>新增力度記號線：漸強</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1238"/>
         <source>Add hairpin: decrescendo</source>
         <translation>新增力度記號線：漸弱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1248"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1243"/>
+        <source>&amp;Note-anchored line</source>
+        <translation>音符錨線 (&amp;M)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
+        <source>Add note-anchored line</source>
+        <translation>添加音符錨線</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1255"/>
         <source>Image</source>
         <translation>圖片</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1254"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1261"/>
         <source>Add text: title</source>
         <translation>新增文字：標題</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1260"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1267"/>
         <source>Add text: subtitle</source>
         <translation>新增文字：副標題</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1266"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1273"/>
         <source>Add text: composer</source>
         <translation>新增文字：作曲者</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1272"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1279"/>
         <source>Add text: lyricist</source>
         <translation>新增文字：作詞者</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1278"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1285"/>
         <source>Add text: part name</source>
         <translation>新增文字：分譜名稱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1283"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1290"/>
         <source>Text</source>
         <translation>文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1291"/>
         <source>Add frame text</source>
         <translation>新增框架文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1290"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
         <source>Add text: system text</source>
         <translation>新增文字：譜表組文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1296"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1303"/>
         <source>Add text: staff text</source>
         <translation>新增文字：譜表文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1301"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1225"/>
         <source>&amp;Dynamic</source>
-        <translation type="unfinished"/>
+        <translation>力度 (&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1302"/>
-        <source>Add text: dynamic</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1308"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
         <source>Add text: expression text</source>
         <translation>新增文字：表情文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1314"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1315"/>
         <source>Add text: rehearsal mark</source>
         <translation>新增文字：排練記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1320"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1321"/>
         <source>Add text: instrument change</source>
         <translation>新增文字：更換樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1326"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1327"/>
         <source>Add text: fingering</source>
         <translation>新增文字：指法</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1332"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1333"/>
         <source>Add text: sticking</source>
         <translation>新增文字：鼓法</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1337"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1338"/>
         <source>C&amp;hord symbol</source>
-        <translation type="unfinished"/>
+        <translation>和弦符號 (&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1338"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1339"/>
         <source>Add text: chord symbol</source>
         <translation>新增文字：和弦代號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1344"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1345"/>
         <source>Add text: Roman numeral analysis</source>
         <translation>新增文字：和弦級數分析</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1350"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1351"/>
         <source>Add text: Nashville number</source>
         <translation>新增文字：納什維爾數字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1356"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1357"/>
         <source>Add text: lyrics</source>
         <translation>新增文字：歌詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1362"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1363"/>
         <source>Add text: figured bass</source>
         <translation>新增文字：數字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1368"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1369"/>
         <source>Add text: tempo marking</source>
         <translation>新增文字：速度記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1374"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1375"/>
         <source>Enter tuplet: duplet</source>
         <translation>輸入連音：二連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1380"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1381"/>
         <source>Enter tuplet: triplet</source>
         <translation>輸入連音：三連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1386"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
         <source>Enter tuplet: quadruplet</source>
         <translation>輸入連音：四連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1392"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
         <source>Enter tuplet: quintuplet</source>
         <translation>輸入連音：五連音  </translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1398"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1399"/>
         <source>Enter tuplet: sextuplet</source>
         <translation>輸入連音：六連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1404"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
         <source>Enter tuplet: septuplet</source>
         <translation>輸入連音：七連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1410"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
         <source>Enter tuplet: octuplet</source>
         <translation>輸入連音：八連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1415"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1416"/>
         <source>&amp;Nonuplet</source>
-        <translation type="unfinished"/>
+        <translation>九連音 (&amp;J)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1416"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1417"/>
         <source>Enter tuplet: nonuplet</source>
         <translation>輸入連音：九連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1422"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1423"/>
         <source>Enter tuplet: other…</source>
-        <translation type="unfinished"/>
+        <translation>輸入連音：其他…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1428"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
         <source>Decrease layout stretch</source>
         <translation>縮窄小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1435"/>
         <source>Increase layout stretch</source>
         <translation>拉伸小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1440"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1441"/>
         <source>Reset layout stretch</source>
         <translation>重設小節拉伸</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1453"/>
         <source>Reset beams to default grouping</source>
         <translation>將符槓重設為預設編組</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1457"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
         <source>Reset s&amp;hapes and positions</source>
-        <translation type="unfinished"/>
+        <translation>重置形狀和位置 (&amp;X)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1459"/>
         <source>Reset shapes and positions</source>
         <translation>重設形狀與位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1463"/>
-        <source>Reset entire score to &amp;default layout</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1464"/>
-        <source>Reset entire score to default layout</source>
-        <translation type="unfinished"/>
+        <source>Reset entire score to &amp;default layout</source>
+        <translation>將整個樂譜恢復為默認版面 (&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1489"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1465"/>
+        <source>Reset entire score to default layout</source>
+        <translation>將整個樂譜恢復為默認版面</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1490"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1491"/>
         <source>Zoom to page width</source>
         <translation>縮放到頁寬</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1495"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1496"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1497"/>
         <source>Zoom to whole page</source>
         <translation>縮放以顯示整頁</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1501"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1502"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
         <source>Zoom to two pages</source>
         <translation>縮放以顯示雙頁</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1508"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1509"/>
         <source>Accessibility: get location</source>
         <translation>輔助功能：獲取位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1525"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1526"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1527"/>
         <source>Select to end of measure</source>
         <translation>選取至小節結尾</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1531"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1532"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1533"/>
         <source>Select to beginning of line</source>
         <translation>選取至該行的開頭</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1537"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1538"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1539"/>
         <source>Select to end of line</source>
         <translation>選取至該行的結尾</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1543"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1544"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1545"/>
         <source>Select to beginning of score</source>
         <translation>選取至樂譜的開頭</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1549"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1550"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1551"/>
         <source>Select to end of score</source>
         <translation>選取至樂譜的結尾</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1555"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1556"/>
         <source>Add staff above to selection</source>
         <translation>將上方譜表加入選取範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1556"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1557"/>
         <source>Add to selection: staff above</source>
         <translation>將上方譜表加入選取範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1561"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1562"/>
         <source>Add staff below to selection</source>
         <translation>將下方譜表加入選取範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1562"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1563"/>
         <source>Add to selection: staff below</source>
         <translation>將下方譜表加入選取範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1579"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1580"/>
         <source>Page: Previous</source>
         <translation>頁面：上一頁</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1585"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1586"/>
         <source>Page: Next</source>
         <translation>頁面：下一頁</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1592"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1593"/>
         <source>Jump to top of first page</source>
         <translation>跳轉到首頁頂部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1598"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1599"/>
         <source>Jump to bottom of last page</source>
         <translation>跳轉到尾頁底部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1628"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
         <source>Change enharmonic spelling (concert and written pitch)</source>
         <translation>變更同音異名的音名（標準音高和記譜音高）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
         <source>Change enharmonic spelling (current mode only)</source>
         <translation>變更同音異名的音名（僅目前模式）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1649"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1655"/>
         <source>Toggle concert pitch</source>
         <translation>切換標準音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1675"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
         <source>Advance cursor: next beat (chord symbols)</source>
         <translation>前移游標：下一拍（和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1686"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1692"/>
         <source>Advance longa (F.B./Chord symbol)</source>
         <translation>前移四倍全音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1687"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
         <translation>前移游標：四倍全音符 （數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1692"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1698"/>
         <source>Advance breve (F.B./Chord symbol)</source>
         <translation>前移二倍全音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1699"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
         <translation>前移游標：二倍全音符 （數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1698"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1704"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
         <translation>前移全音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1699"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1705"/>
         <source>Advance cursor: whole note (figured bass/chord symbols)</source>
         <translation>前移游標：全音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1704"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1710"/>
         <source>Advance half note (F.B./Chord symbol)</source>
         <translation>前移二分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1705"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1711"/>
         <source>Advance cursor: half note (figured bass/chord symbols)</source>
         <translation>前移游標：二分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1710"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1716"/>
         <source>Advance quarter note (F.B./Chord symbol)</source>
         <translation>前移四分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1711"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1717"/>
         <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
         <translation>前移游標：四分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1716"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1722"/>
         <source>Advance eighth note (F.B./Chord symbol)</source>
         <translation>前移八分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1717"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
         <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
         <translation>前移游標：八分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1722"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1728"/>
         <source>Advance 16th note (F.B./Chord symbol)</source>
         <translation>前移 16 分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
         <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
         <translation>前移游標：16 分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1728"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1734"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
         <translation>前移 32 分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
         <translation>前移游標：32 分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1734"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1740"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
         <translation>前移 64 分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
         <translation>前移游標：64 分音符（數字低音／和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
         <source>Move text/go to next lyric verse</source>
         <translation>移動文字／跳到下一節歌詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
         <source>Move text/go to previous lyric verse</source>
         <translation>移動文字／跳到上一節歌詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1758"/>
-        <source>Add extension line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
-        <source>Lyrics: enter extension line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1764"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
-        <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <source>Add extension line</source>
+        <translation>添加延伸線</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
+        <source>Lyrics: enter extension line</source>
+        <translation>唱詞：輸入延伸線</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1770"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
+        <source>Add lyrics verse</source>
+        <translation>添加唱詞段落</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
         <source>Format text: bold</source>
         <translation>格式化文字：粗體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1778"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1784"/>
         <source>Format text: italic</source>
         <translation>格式化文字：斜體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1785"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1791"/>
         <source>Format text: underline</source>
         <translation>格式化文字：底線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1791"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1797"/>
         <source>Strikethrough</source>
         <translation>刪除線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1792"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
         <source>Format text: strikethrough</source>
         <translation>格式化文字： 刪除線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
         <source>Subscript</source>
         <translation>下標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1799"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
         <source>Format text: subscript</source>
         <translation>格式化文字：下標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1811"/>
         <source>Superscript</source>
         <translation>上標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1806"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1812"/>
         <source>Format text: superscript</source>
         <translation>格式化文字：上標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1813"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1819"/>
         <source>Move pitch up diatonically</source>
         <translation>在調性內上移音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1819"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1825"/>
         <source>Move pitch down diatonically</source>
         <translation>在調性內下移音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1927"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1933"/>
         <source>Add clef: treble</source>
         <translation>新增高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1933"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
         <source>Add clef: bass</source>
         <translation>新增低音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1945"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1951"/>
         <source>Add accidental: sharp</source>
         <translation>新增臨時記號：升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
         <translation>在調性內上移音高（保持音程變化）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1993"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
         <translation>在調性內下移音高（保持音程變化）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1993"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1999"/>
         <source>Insert full measure rest</source>
         <translation>插入全休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2005"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2011"/>
         <source>Show/hide empty staves</source>
         <translation>顯示／隱藏空譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2011"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2017"/>
         <source>Make selected element(s) visible</source>
         <translation>顯示所選元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2017"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
         <source>Make selected element(s) invisible</source>
         <translation>隱藏所選元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2028"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
         <source>Toggle automatic placement for selected elements</source>
         <translation>所選元素自動佈置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2034"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2040"/>
         <source>String above (TAB)</source>
         <translation>上方弦（指法譜）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2035"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2041"/>
         <source>Go to string above (TAB)</source>
         <translation>前往上方弦（指法譜）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2040"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2046"/>
         <source>String below (TAB)</source>
         <translation>下方弦（指法譜）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2041"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2047"/>
         <source>Go to string below (TAB)</source>
         <translation>前往下方弦（指法譜）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2117"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2123"/>
         <source>Set duration: longa</source>
         <translation>設定時值：四倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2124"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2130"/>
         <source>Set duration: double whole note</source>
         <translation>設定時值：倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2131"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2208"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2137"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2214"/>
         <source>Set duration: whole note</source>
         <translation>設定時值：全音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2138"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2215"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2144"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2221"/>
         <source>Set duration: half note</source>
         <translation>設定時值：二分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2145"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2222"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2151"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2228"/>
         <source>Set duration: quarter note</source>
         <translation>設定時值：四分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2151"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2228"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2157"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2234"/>
         <source>Eighth note</source>
         <translation>八分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2152"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2229"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2158"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2235"/>
         <source>Set duration: eighth note</source>
         <translation>設定時值：八分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2159"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2236"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2165"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2242"/>
         <source>Set duration: 16th note</source>
         <translation>設定時值：16 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2166"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2243"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2172"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2249"/>
         <source>Set duration: 32nd note</source>
         <translation>設定時值：32 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2173"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2250"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2179"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2256"/>
         <source>Set duration: 64th note</source>
         <translation>設定時值：64 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2180"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2257"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2186"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2263"/>
         <source>Set duration: 128th note</source>
         <translation>設定時值：128 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2187"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2264"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2193"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2270"/>
         <source>Set duration: 256th note</source>
         <translation>設定時值：256 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2194"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2271"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2200"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2277"/>
         <source>Set duration: 512th note</source>
         <translation>設定時值：512 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2201"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2278"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2207"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2284"/>
         <source>Set duration: 1024th note</source>
         <translation>設定時值：1024 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2291"/>
         <source>Toggle duration dot</source>
         <translation>切換附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
         <source>Toggle duration dot: double</source>
         <translation>切換附點：雙附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
         <source>Toggle duration dot: triple</source>
         <translation>切換附點：三重附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2312"/>
         <source>Toggle duration dot: quadruple</source>
         <translation>切換附點：四重附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2313"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2319"/>
         <source>Toggle rest</source>
         <translation>切換休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2320"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2326"/>
         <source>Select next in-staff element</source>
         <translation>選取譜表中的下一個元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2326"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2332"/>
         <source>Select previous in-staff element</source>
         <translation>選取前一個譜表中的元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2332"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2338"/>
         <source>Toggle accidental: flat</source>
         <translation>切換臨時記號：降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2346"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2352"/>
         <source>Toggle accidental: natural</source>
         <translation>切換臨時記號：還原記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2353"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
         <source>Toggle accidental: sharp</source>
         <translation>切換臨時記號：升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2367"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2373"/>
         <source>Add tied note</source>
         <translation>新增連結線音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2373"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2374"/>
-        <source>Add laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
+        <source>Add laissez vibrer</source>
+        <translation>添加放任號</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
         <source>Slur</source>
         <translation>圓滑線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2471"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2477"/>
         <source>Staff type change</source>
         <translation>譜表類型變更</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2472"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2478"/>
         <source>Insert staff type change</source>
         <translation>插入譜表類型變更</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2482"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2483"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2489"/>
         <source>Standard bend</source>
         <translation>標準彎音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2489"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2490"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2495"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2496"/>
         <source>Pre-bend</source>
         <translation>預彎音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2496"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2497"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2502"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2503"/>
         <source>Grace note bend</source>
         <translation>插音彎音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2503"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2504"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2509"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2510"/>
         <source>Slight bend</source>
         <translation>微彎音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2510"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2511"/>
-        <source>Note-anchored line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2521"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2520"/>
         <source>Show/hide invisible elements</source>
         <translation>顯示／隱藏不可見元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2535"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2534"/>
         <source>Show/hide frames</source>
         <translation>顯示／隱藏框架</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2542"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
         <source>Show/hide page margins</source>
         <translation>顯示／隱藏頁邊</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2565"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2564"/>
         <source>Show element bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>顯示元素邊界矩形</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2571"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2570"/>
         <source>Color element shapes</source>
-        <translation type="unfinished"/>
+        <translation>元素形狀著色</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2577"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2576"/>
         <source>Show segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>顯示區段形狀</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2583"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2582"/>
         <source>Color segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>區段形狀著色</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2589"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2588"/>
         <source>Show skylines</source>
-        <translation type="unfinished"/>
+        <translation>顯示輪廓線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2595"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2594"/>
         <source>Show system bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>顯示譜行組邊界矩形</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2601"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2600"/>
         <source>Show element masks</source>
-        <translation type="unfinished"/>
+        <translation>顯示元素襯</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2607"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2606"/>
         <source>Show corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>顯示錯亂小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1992"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1998"/>
         <source>Full measure rest</source>
         <translation>全小節休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2116"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2122"/>
         <source>Longa</source>
         <translation>四倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2123"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2129"/>
         <source>Double whole note</source>
         <translation>倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2130"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2207"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2136"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2213"/>
         <source>Whole note</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2137"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2214"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2143"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2220"/>
         <source>Half note</source>
         <translation>二分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2144"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2221"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2150"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2227"/>
         <source>Quarter note</source>
         <translation>四分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2158"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2235"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2164"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2241"/>
         <source>16th note</source>
         <translation>16 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2165"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2242"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2171"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2248"/>
         <source>32nd note</source>
         <translation>32 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2172"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2249"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2178"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2255"/>
         <source>64th note</source>
         <translation>64 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2179"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2256"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2185"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2262"/>
         <source>128th note</source>
         <translation>128 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2290"/>
         <source>Augmentation dot</source>
         <translation>附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2291"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2297"/>
         <source>Double augmentation dot</source>
         <translation>複附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2304"/>
         <source>Triple augmentation dot</source>
         <translation>三附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2311"/>
         <source>Quadruple augmentation dot</source>
         <translation>四附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2372"/>
         <source>Tie</source>
         <translation>連結線</translation>
     </message>
@@ -8860,92 +8861,92 @@ text x-height):</source>
         <translation>裝飾音：32 分後音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2060"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2066"/>
         <source>Input by note name</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2061"/>
-        <source>Toggle note input mode: input by note name</source>
-        <translation type="unfinished"/>
+        <translation>通過音名輸入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
+        <source>Toggle note input mode: input by note name</source>
+        <translation>切換音符輸入模式：按音符名稱輸入</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2073"/>
         <source>Input by duration</source>
-        <translation type="unfinished"/>
+        <translation>按時值輸入</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2068"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
         <source>Toggle note input mode: input by duration</source>
-        <translation type="unfinished"/>
+        <translation>切換音符輸入模式：按時值輸入</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
         <source>Add articulation: marcato</source>
         <translation>新增演奏記號：加強音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2401"/>
         <source>Add articulation: accent</source>
         <translation>新增演奏記號：重音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2402"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
         <source>Add articulation: tenuto</source>
         <translation>新增演奏記號：持續音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2415"/>
         <source>Add articulation: staccato</source>
         <translation>新增演奏記號：斷奏</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2427"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2433"/>
         <source>Voice 1</source>
         <translation>第 1 聲部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
         <source>Use voice 1</source>
         <translation>使用聲部 1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
         <source>Voice 2</source>
         <translation>第 2 聲部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2435"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2441"/>
         <source>Use voice 2</source>
         <translation>使用聲部 2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2441"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2447"/>
         <source>Voice 3</source>
         <translation>第 3 聲部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2442"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2448"/>
         <source>Use voice 3</source>
         <translation>使用聲部 3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2448"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2454"/>
         <source>Voice 4</source>
         <translation>第 4 聲部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2556"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
         <source>Mark irregular measures</source>
         <translation>標記不規則的小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1627"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1628"/>
         <source>Change enharmonic spelling (both modes)</source>
         <translation>變更同音異名的音名（兩種模式下）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1634"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
         <source>Change enharmonic spelling (current mode)</source>
         <translation>變更同音異名的音名（目前模式）</translation>
     </message>
@@ -8973,42 +8974,42 @@ text x-height):</source>
         <translation>貼上特殊符號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2102"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2108"/>
         <source>Insert</source>
         <translation>插入</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1243"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1250"/>
         <source>Add tied note to chord</source>
         <translation>將連接音加入和弦</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
         <source>Accent</source>
         <translation>重音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1920"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1926"/>
         <source>Reset style</source>
         <translation>重設樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1921"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1927"/>
         <source>Reset all style values to default</source>
         <translation>還原所有樣式設定值為預設值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1507"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1508"/>
         <source>Accessibility: Get location</source>
         <translation>輔助功能：取得位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1567"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1568"/>
         <source>Screen: Previous</source>
         <translation>上一頁</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1573"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1574"/>
         <source>Screen: Next</source>
         <translation>下一頁</translation>
     </message>
@@ -9037,7 +9038,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="65"/>
         <source>&amp;About MuseScore Studio…</source>
-        <translation type="unfinished"/>
+        <translation>關於&amp;MuseScore Studio…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="70"/>
@@ -9090,16 +9091,6 @@ text x-height):</source>
         <translation>顯示／隱藏面板</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
-        <source>Instr&amp;uments</source>
-        <translation>樂器 (&amp;U)</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
-        <source>Open instruments dialog…</source>
-        <translation>開啟樂器對話框...</translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
         <source>Propert&amp;ies</source>
         <translation>屬性 (&amp;I)</translation>
@@ -9122,12 +9113,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
         <source>&amp;History</source>
-        <translation type="unfinished"/>
+        <translation>歷史  (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
         <source>Show/hide undo history</source>
-        <translation type="unfinished"/>
+        <translation>顯示/隱藏撤銷歷史</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="160"/>
@@ -9142,12 +9133,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="169"/>
         <source>&amp;Braille</source>
-        <translation type="unfinished"/>
+        <translation>盲文 (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="170"/>
         <source>Show/hide braille panel</source>
-        <translation type="unfinished"/>
+        <translation>顯示/隱藏盲文面板</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="178"/>
@@ -9215,6 +9206,16 @@ text x-height):</source>
         <translation>輸入音符 (&amp;N)</translation>
     </message>
     <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
+        <source>&amp;Layout</source>
+        <translation>版面(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
+        <source>Show/hide layout panel</source>
+        <translation>顯示/隱藏佈局面板</translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="193"/>
         <source>Piano &amp;keyboard</source>
         <translation>鋼琴鍵盤 (&amp;K)</translation>
@@ -9269,22 +9270,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="96"/>
         <source>Written pitch</source>
-        <translation type="unfinished"/>
+        <translation>譜面音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="97"/>
         <source>Input written pitch</source>
-        <translation type="unfinished"/>
+        <translation>輸入譜面音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="104"/>
         <source>Sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>聽感音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="105"/>
         <source>Input sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>輸入聽感音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="123"/>
@@ -9295,12 +9296,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="131"/>
         <source>Hear playback when editing</source>
-        <translation type="unfinished"/>
+        <translation>邊編輯邊聽回放</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="132"/>
         <source>Toggle hear playback when editing</source>
-        <translation type="unfinished"/>
+        <translation>切換邊編輯邊聽回放</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="139"/>
@@ -9367,12 +9368,12 @@ text x-height):</source>
         <translation>移調… (&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1926"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
         <source>Add treble clef</source>
         <translation>新增高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1938"/>
         <source>Add bass clef</source>
         <translation>新增低音譜號</translation>
     </message>
@@ -9409,38 +9410,38 @@ text x-height):</source>
         <translation>對調 3、4 部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1513"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1514"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1515"/>
         <source>Edit element</source>
         <translation>編輯元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2449"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2455"/>
         <source>Use voice 4</source>
         <translation>使用聲部 4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2520"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2519"/>
         <source>Show &amp;invisible</source>
         <translation>顯示不可見元素 (&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2527"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2526"/>
         <source>Show f&amp;ormatting</source>
         <translation>顯示排版標記 (&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2528"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2527"/>
         <source>Show/hide formatting</source>
         <translation>顯示／隱藏排版標記</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2534"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2533"/>
         <source>Show &amp;frames</source>
         <translation>顯示框架 (&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2540"/>
         <source>Show page &amp;margins</source>
         <translation>顯示頁面邊距 (&amp;M)</translation>
     </message>
@@ -9450,26 +9451,26 @@ text x-height):</source>
         <translation>插入特別字元</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1469"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1470"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1471"/>
         <source>Zoom in</source>
         <translation>放大顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1476"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1477"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1478"/>
         <source>Zoom out</source>
         <translation>縮小顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1483"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1484"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
         <source>Zoom to 100%</source>
         <translation>縮放至 100%</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1836"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1837"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1842"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1843"/>
         <source>Mirror notehead</source>
         <translation>鏡像翻轉符頭</translation>
     </message>
@@ -9479,8 +9480,8 @@ text x-height):</source>
         <translation>倍增時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1608"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1609"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1610"/>
         <source>Repeat selection</source>
         <translation>重複所選區域</translation>
     </message>
@@ -9490,27 +9491,27 @@ text x-height):</source>
         <translation>節拍器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1968"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
         <source>Transpose up</source>
         <translation>向上移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1980"/>
         <source>Transpose down</source>
         <translation>向下移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1752"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1758"/>
         <source>Next syllable</source>
         <translation>下一音節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2010"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
         <source>Set visible</source>
         <translation>設為可見</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
         <source>Set invisible</source>
         <translation>設為隱藏</translation>
     </message>
@@ -9633,7 +9634,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="658"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>從選區創建譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
@@ -9776,567 +9777,568 @@ text x-height):</source>
         <translation>新增低八度記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1225"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
+        <source>Add dynamic</source>
+        <translation>添加力度</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1231"/>
         <source>&amp;Crescendo</source>
         <translation>漸強 (&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1231"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1237"/>
         <source>&amp;Decrescendo</source>
         <translation>漸弱 (&amp;D)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1237"/>
-        <source>&amp;Note anchored line</source>
-        <translation>音符錨線 (&amp;N)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1238"/>
-        <source>Add note anchored line</source>
-        <translation>新增音符錨線</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1253"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1260"/>
         <source>&amp;Title</source>
         <translation>標題 (&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1259"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1266"/>
         <source>&amp;Subtitle</source>
         <translation>副標題 (&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1265"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1272"/>
         <source>&amp;Composer</source>
         <translation>作曲者 (&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1271"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1278"/>
         <source>&amp;Lyricist</source>
         <translation>作詞者 (&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1277"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1284"/>
         <source>&amp;Part name</source>
         <translation>分譜名稱 (&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1289"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1296"/>
         <source>Syst&amp;em text</source>
         <translation>總譜文字 (&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1295"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1302"/>
         <source>St&amp;aff text</source>
         <translation>譜表文字 (&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1307"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1308"/>
         <source>E&amp;xpression text</source>
         <translation>表情文字 (&amp;x)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1313"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1314"/>
         <source>&amp;Rehearsal mark</source>
         <translation>排練記號 (&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1319"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1320"/>
         <source>&amp;Instrument change</source>
         <translation>更換樂器 (&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1325"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1326"/>
         <source>&amp;Fingering</source>
         <translation>指法 (&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1331"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1332"/>
         <source>Stic&amp;king</source>
         <translation>鼓法 (&amp;k)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1343"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1344"/>
         <source>R&amp;oman numeral analysis</source>
         <translation>和弦級數 (&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1349"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1350"/>
         <source>&amp;Nashville number</source>
         <translation>納什維爾數字 (&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1355"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1356"/>
         <source>L&amp;yrics</source>
         <translation>歌詞 (&amp;y)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1361"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1362"/>
         <source>Figured &amp;bass</source>
         <translation>數字低音 (&amp;b)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1367"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1368"/>
         <source>Tempo &amp;marking</source>
         <translation>速度記號 (&amp;m)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1373"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1374"/>
         <source>&amp;Duplet</source>
         <translation>二連音 (&amp;D)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1379"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1380"/>
         <source>&amp;Triplet</source>
         <translation>三連音 (&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1385"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1386"/>
         <source>&amp;Quadruplet</source>
         <translation>四連音 (&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1391"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1392"/>
         <source>Q&amp;uintuplet</source>
         <translation>五連音 (&amp;u)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1397"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1398"/>
         <source>Se&amp;xtuplet</source>
         <translation>六連音 (&amp;x)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1403"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1404"/>
         <source>Se&amp;ptuplet</source>
         <translation>七連音 (&amp;p)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1409"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1410"/>
         <source>&amp;Octuplet</source>
         <translation>八連音 (&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1421"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1422"/>
         <source>Othe&amp;r…</source>
         <translation>其他… (&amp;r)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1427"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1428"/>
         <source>&amp;Decrease layout stretch</source>
         <translation>縮窄小節 (&amp;D)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1433"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
         <source>&amp;Increase layout stretch</source>
         <translation>拉伸小節 (&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1439"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1440"/>
         <source>&amp;Reset layout stretch</source>
         <translation>重置小節拉伸 (&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1445"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1446"/>
         <source>Reset &amp;text style overrides</source>
         <translation>重置文字樣式覆寫 (&amp;t)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1451"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
         <source>Reset &amp;beams</source>
         <translation>重置符槓 (&amp;b)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1568"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1569"/>
         <source>Jump to previous screen</source>
         <translation>向上遍歷樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1574"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1575"/>
         <source>Jump to next screen</source>
         <translation>向下遍歷樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1580"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1581"/>
         <source>Jump to previous page</source>
         <translation>跳轉到上一頁</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1586"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1587"/>
         <source>Jump to next page</source>
         <translation>跳轉到下一頁</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1614"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1615"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
         <source>Lock/unlock all systems</source>
-        <translation type="unfinished"/>
+        <translation>鎖定/解鎖所有譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1620"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1621"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1622"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>鎖定/解鎖所選譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1656"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1649"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1650"/>
+        <source>Flip horizontally</source>
+        <translation>水平翻轉</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1662"/>
         <source>Next word</source>
         <translation>下一個詞語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1663"/>
         <source>Go to next word</source>
         <translation>前往下一個詞語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1663"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1669"/>
         <source>Go to next text element</source>
         <translation>前往下個文字元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1669"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1675"/>
         <source>Go to previous text element</source>
         <translation>前往上個文字元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1687"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
         <translation>移動游標：上一拍 （和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
         <source>Lyrics: enter hyphen</source>
         <translation>歌詞：輸入連字號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1842"/>
-        <source>Toggle turn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1843"/>
-        <source>Add ornament: turn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1848"/>
-        <source>Toggle inverted turn</source>
-        <translation type="unfinished"/>
+        <source>Toggle turn</source>
+        <translation>切換迴旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1849"/>
-        <source>Add ornament: inverted turn</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: turn</source>
+        <translation>添加裝飾音：迴旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1854"/>
-        <source>Toggle turn with slash</source>
-        <translation type="unfinished"/>
+        <source>Toggle inverted turn</source>
+        <translation>切換逆迴音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1855"/>
-        <source>Add ornament: turn with slash</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: inverted turn</source>
+        <translation>添加裝飾音：逆迴音</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1860"/>
+        <source>Toggle turn with slash</source>
+        <translation>切換逆回音（穿線）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1861"/>
-        <source>Add ornament: trill</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1866"/>
-        <source>Toggle short trill</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: turn with slash</source>
+        <translation>添加裝飾音：逆回音（穿線）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1867"/>
-        <source>Add ornament: short trill</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: trill</source>
+        <translation>添加裝飾音：顫音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1872"/>
-        <source>Toggle mordent</source>
-        <translation type="unfinished"/>
+        <source>Toggle short trill</source>
+        <translation>切換短顫音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1873"/>
-        <source>Add ornament: mordent</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: short trill</source>
+        <translation>添加裝飾音：短顫音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1878"/>
-        <source>Toggle tremblement</source>
-        <translation type="unfinished"/>
+        <source>Toggle mordent</source>
+        <translation>切換波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1879"/>
-        <source>Add ornament: tremblement</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: mordent</source>
+        <translation>添加裝飾音：波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1884"/>
-        <source>Toggle prall mordent</source>
-        <translation type="unfinished"/>
+        <source>Toggle tremblement</source>
+        <translation>切換彈簧音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1885"/>
-        <source>Add ornament: prall mordent</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: tremblement</source>
+        <translation>添加裝飾音：彈簧音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1890"/>
-        <source>Toggle shake</source>
-        <translation type="unfinished"/>
+        <source>Toggle prall mordent</source>
+        <translation>切換逆波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1891"/>
-        <source>Add ornament: shake</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: prall mordent</source>
+        <translation>添加裝飾音： 回旋逆波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1896"/>
-        <source>Toggle shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <source>Toggle shake</source>
+        <translation>切換顫抖音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1897"/>
-        <source>Add ornament: shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: shake</source>
+        <translation>添加裝飾音： 顫抖音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1902"/>
-        <source>Toggle tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <source>Toggle shake (Muffat)</source>
+        <translation>切換顫抖音（穆法特）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1903"/>
-        <source>Add ornament: tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: shake (Muffat)</source>
+        <translation>添加裝飾音： 顫抖音（穆法特）</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1908"/>
+        <source>Toggle tremblement appuyé (Couperin)</source>
+        <translation>切換強顫音（庫普蘭）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1909"/>
-        <source>Add bowing: up bow</source>
-        <translation type="unfinished"/>
+        <source>Add ornament: tremblement appuyé (Couperin)</source>
+        <translation>添加裝飾音：強顫音（庫普蘭）</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1915"/>
-        <source>Add bowing: down bow</source>
-        <translation type="unfinished"/>
+        <source>Add bowing: up bow</source>
+        <translation>添加弓法：上弓</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1938"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1921"/>
+        <source>Add bowing: down bow</source>
+        <translation>添加弓法：下弓</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1944"/>
         <source>Add double-sharp</source>
         <translation>加上重升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1945"/>
         <source>Add accidental: double-sharp</source>
         <translation>加上臨時記號：重升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1944"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1950"/>
         <source>Add sharp</source>
         <translation>加上升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1950"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1956"/>
         <source>Add natural</source>
         <translation>加上還原記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1951"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1957"/>
         <source>Add accidental: natural</source>
         <translation>加上臨時記號：還原記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1956"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1962"/>
         <source>Add flat</source>
         <translation>加上降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1957"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1963"/>
         <source>Add accidental: flat</source>
         <translation>加上臨時記號：降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1962"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1968"/>
         <source>Add double-flat</source>
         <translation>加上重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1963"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1969"/>
         <source>Add accidental: double-flat</source>
         <translation>加上臨時記號：重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1969"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1975"/>
         <source>Transpose up a semitone</source>
         <translation>向上移調半音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1975"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
         <source>Transpose down a semitone</source>
         <translation>向下移調半音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1998"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1999"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2004"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2005"/>
         <source>Toggle multimeasure rests</source>
         <translation>多小節休止符開關</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2004"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2010"/>
         <source>Toggle empty staves</source>
         <translation>切換空白譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2028"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2034"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2035"/>
         <source>Toggle automatic placement for entire score</source>
         <translation>切換自動排版整個樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2047"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2053"/>
         <source>Toggle note input mode</source>
         <translation>切換音符輸入模式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2054"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2060"/>
         <source>Insert/overwrite</source>
         <translation>插入/覆寫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2055"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2061"/>
         <source>Toggle note input mode: insert/overwrite</source>
         <translation>切換音符輸入模式：插入／覆寫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2075"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2081"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
         <translation>切換音符輸入模式：僅節奏（不含音高）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2082"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2088"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
         <translation>切換音符輸入模式：重調現有音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2089"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2095"/>
         <source>Toggle note input mode: real-time (metronome)</source>
         <translation>切換音符輸入模式：即時（節拍器）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2096"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2102"/>
         <source>Toggle note input mode: real-time (foot pedal)</source>
         <translation>切換音符輸入模式：即時（腳踏開關）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2103"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2109"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
         <translation>切換音符輸入模式：插入（增加小節長度）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2109"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2110"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2115"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2116"/>
         <source>Real-time advance</source>
         <translation>即時前進</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2331"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2337"/>
         <source>Toggle flat</source>
         <translation>降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2338"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2344"/>
         <source>Toggle double-flat</source>
         <translation>重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2339"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2345"/>
         <source>Toggle accidental: double-flat</source>
         <translation>臨時記號：重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2345"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2351"/>
         <source>Toggle natural</source>
         <translation>還原記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2352"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2358"/>
         <source>Toggle sharp</source>
         <translation>升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2365"/>
         <source>Toggle double-sharp</source>
         <translation>重升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2360"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
         <source>Toggle accidental: double-sharp</source>
         <translation>臨時記號：重升記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
         <source>Add slur</source>
         <translation>加上圓滑線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2455"/>
-        <source>All voices on instrument</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2456"/>
-        <source>Use all voices on instrument</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
-        <source>All voices on staff</source>
-        <translation type="unfinished"/>
+        <source>All voices on instrument</source>
+        <translation>樂器的所有聲部</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2462"/>
+        <source>Use all voices on instrument</source>
+        <translation>使用樂器的所有聲部</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2467"/>
+        <source>All voices on staff</source>
+        <translation>譜表上的所有聲部</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2468"/>
         <source>Use all voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>使用譜表上的所有聲部</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2547"/>
+        <source>Show sound flags</source>
+        <translation>顯示音色旗標</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2548"/>
-        <source>Show sound flags</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2549"/>
         <source>Show/hide sound flags</source>
-        <translation type="unfinished"/>
+        <translation>顯示/隱藏音色旗標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2554"/>
         <source>Mark i&amp;rregular measures</source>
         <translation>標記不規則小節 (&amp;i)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1680"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1686"/>
         <source>Previous beat (Chord symbol)</source>
         <translation>上一拍（和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1674"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1680"/>
         <source>Next beat (Chord symbol)</source>
         <translation>下一拍（和弦代號）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1770"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1776"/>
         <source>Bold face</source>
         <translation>粗體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1783"/>
         <source>Italic</source>
         <translation>斜體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1784"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1790"/>
         <source>Underline</source>
         <translation>底線</translation>
     </message>
@@ -10406,7 +10408,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation type="unfinished"/>
+        <translation>顯示顯卡信息…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
@@ -10416,37 +10418,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation type="unfinished"/>
+        <translation>顯示無障礙樹狀圖...  (&amp;a)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation type="unfinished"/>
+        <translation>將無障礙樹轉儲到控制台  (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
-        <translation type="unfinished"/>
+        <translation>顯示排版元素  (&amp;e)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="77"/>
         <source>Show &amp;actions list</source>
-        <translation type="unfinished"/>
+        <translation>顯示操作列表 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="82"/>
         <source>Test query action</source>
-        <translation type="unfinished"/>
+        <translation>測試查詢操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="87"/>
         <source>Test query action with params 1</source>
-        <translation type="unfinished"/>
+        <translation>使用參數1測試查詢操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="92"/>
         <source>Test query action with params 2</source>
-        <translation type="unfinished"/>
+        <translation>使用參數2測試查詢操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
@@ -10466,7 +10468,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
         <source>Show API dump</source>
-        <translation type="unfinished"/>
+        <translation>顯示API轉存</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
@@ -10476,17 +10478,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload Muse Sampler</source>
-        <translation type="unfinished"/>
+        <translation>重新加載Muse採樣器</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
         <source>Use old view</source>
-        <translation type="unfinished"/>
+        <translation>使用舊視圖</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="44"/>
         <source>Use new view</source>
-        <translation type="unfinished"/>
+        <translation>使用新視圖</translation>
     </message>
 </context>
 <context>
@@ -10512,7 +10514,7 @@ text x-height):</source>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="90"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="86"/>
         <source>Muse Sounds</source>
-        <translation type="unfinished"/>
+        <translation>Muse音效</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="91"/>
@@ -10550,7 +10552,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="164"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>擴展包工具欄</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="220"/>
@@ -10569,8 +10571,8 @@ text x-height):</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="301"/>
-        <source>Instruments</source>
-        <translation>樂器</translation>
+        <source>Layout</source>
+        <translation>版面</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="327"/>
@@ -10588,22 +10590,22 @@ text x-height):</source>
         <translation>混音器</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="445"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="454"/>
         <source>Piano keyboard</source>
         <translation>鋼琴鍵盤</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="476"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="485"/>
         <source>Timeline</source>
         <translation>時間線</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="503"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="512"/>
         <source>Drumset tools</source>
         <translation>鼓組工具</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="529"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="538"/>
         <source>Percussion</source>
         <translation>打擊樂譜號</translation>
     </message>
@@ -10615,7 +10617,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="121"/>
         <source>Publish toolbar</source>
-        <translation type="unfinished"/>
+        <translation>發佈工具欄</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MainToolBar.qml" line="64"/>
@@ -10650,12 +10652,12 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="348"/>
         <source>Would you like to restart MuseScore Studio now?</source>
-        <translation type="unfinished"/>
+        <translation>是否立即重啓MuseScore Studio？</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="349"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio需要重新啓動才能使這些變動生效。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="354"/>
@@ -10737,19 +10739,20 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
         <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
         <source>MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation type="unfinished"/>
+        <translation>您確定要重設偏好設定嗎？</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>此操作將重設您的所有應用偏好偏好設定並刪除所有自定義快捷鍵。但不會刪除您的任何樂譜。
+此操作無法撤消。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
@@ -10762,7 +10765,7 @@ This action cannot be undone.</source>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="33"/>
         <source>About MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>關於MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="85"/>
@@ -10794,7 +10797,7 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
         <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>版權所有 © 1999-2025 MuseScore有限公司。依照 &lt;a href=&quot;%1&quot;&gt;GNU通用公共授權條款第3版&lt;/a&gt;發佈。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -10809,7 +10812,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>版權所有 © 2004-2021 音樂XML規範貢獻者，由W3C社群最終規範協議（FSA）下的音樂記譜社群小組發布。</translation>
+        <translation>版權所有 © 2004-2021 MusicXML規範貢獻者，由W3C社群最終規範協議（FSA）下的音樂記譜社群小組發布。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
@@ -10860,7 +10863,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Discover new sound libraries in MuseHub and enjoy realistic score playback</source>
-        <translation type="unfinished"/>
+        <translation>在MuseHub中發現新的聲音庫，並享受逼真的樂譜聲效</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -10870,7 +10873,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>歡迎來到MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10907,7 +10910,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>爲保護你的隱私，MuseScore不會收集任何個人信息。詳情參閲&lt;a href=&quot;%1&quot;&gt;隱私條款&lt;/a&gt; 。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -10922,7 +10925,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback library on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>倘若您選擇取消，請務必在musescore.org上查看我們的免費MuseSounds聲效庫。</translation>
     </message>
 </context>
 <context>
@@ -10983,7 +10986,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="483"/>
         <source>A&amp;ctions</source>
-        <translation type="unfinished"/>
+        <translation>操作 (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="484"/>
@@ -10998,7 +11001,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="486"/>
         <source>E&amp;xtensions</source>
-        <translation type="unfinished"/>
+        <translation>擴展 (&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="487"/>
@@ -11008,12 +11011,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
         <source>&amp;VST</source>
-        <translation type="unfinished"/>
+        <translation>&amp;VST</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="492"/>
         <source>&amp;Diagnostics</source>
-        <translation type="unfinished"/>
+        <translation>診斷 (&amp;D)</translation>
     </message>
 </context>
 <context>
@@ -11180,12 +11183,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation type="unfinished"/>
+        <translation>檢查MuseScore Studio是否有更新可用</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>需要連接到網路來檢查軟件更新。爲了保護你的隱私，MuseScore不會存儲任何個人信息。詳情參閲&lt;a href=&quot;%1&quot;&gt;隱私條款&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -11266,7 +11269,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
         <source>Keyboard layout</source>
-        <translation>鍵盤布局</translation>
+        <translation>鍵盤佈局</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="31"/>
@@ -11337,37 +11340,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="90"/>
         <source>Infer text type based on content where possible</source>
-        <translation type="unfinished"/>
+        <translation>盡量按照內容來推測文字類型</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="44"/>
         <source>Note preview</source>
-        <translation type="unfinished"/>
+        <translation>音符預覽</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="70"/>
         <source>Hear playback when adding, editing, and selecting notes</source>
-        <translation type="unfinished"/>
+        <translation>在添加、編輯和選擇筆記時預覽回放</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="78"/>
-        <source>Include preview notes in playback (input by duration only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="94"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="77"/>
         <source>Playback duration:</source>
-        <translation type="unfinished"/>
+        <translation>播放時長：</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="117"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="100"/>
         <source>Play chord when editing</source>
         <translation>在編輯時播放和弦</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="134"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="117"/>
         <source>Play chord symbols and Nashville numbers</source>
-        <translation type="unfinished"/>
+        <translation>演奏和弦符號和納什維爾數字</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="134"/>
+        <source>Play when setting pitch (input by duration mode only)</source>
+        <translation>設置音高時播放（僅通過時值模式輸入）</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
@@ -11377,28 +11380,28 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="48"/>
-        <source>Default input mode</source>
-        <translation type="unfinished"/>
+        <source>Default input mode:</source>
+        <translation>默認輸入模式：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="62"/>
-        <source>Apply accidentals, augmentation dots, and articulations</source>
-        <translation type="unfinished"/>
+        <source>Apply accidentals, augmentation dots, and articulations:</source>
+        <translation>應用變音號、附點及運音法記號</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
         <source>To next note entered</source>
-        <translation type="unfinished"/>
+        <translation>至下一個已輸入音符</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="70"/>
         <source>To previous note entered</source>
-        <translation type="unfinished"/>
+        <translation>至上一個已輸入音符</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="81"/>
-        <source>Input by duration mode cursor</source>
-        <translation type="unfinished"/>
+        <source>Input by duration mode cursor:</source>
+        <translation>以時值模式光標輸入：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="88"/>
@@ -11408,12 +11411,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="89"/>
         <source>On staff</source>
-        <translation type="unfinished"/>
+        <translation>在譜表上</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="37"/>
         <source>Note colors</source>
-        <translation type="unfinished"/>
+        <translation>音符色彩</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="43"/>
@@ -11553,7 +11556,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="168"/>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="228"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="230"/>
         <source>All</source>
         <translation>所有</translation>
     </message>
@@ -11676,7 +11679,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="175"/>
         <source>Audio &amp; MIDI</source>
-        <translation type="unfinished"/>
+        <translation>音頻與MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="178"/>
@@ -11734,7 +11737,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>啟動時載入樂譜：</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="227"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="229"/>
         <source>MuseScore file</source>
         <translation>MuseScore 檔案</translation>
     </message>
@@ -11860,43 +11863,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
-        <translation type="unfinished"/>
+        <translation>當樂器被隱藏/顯示時，對應音軌也會被靜音/解除靜音</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>聲部指派</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation type="unfinished"/>
+        <translation>當進入時，力度與力度楔形記號應影響：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
         <source>All voices on the instrument</source>
-        <translation type="unfinished"/>
+        <translation>樂器上的所有聲部</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="62"/>
         <source>Only the voice they are applied to</source>
-        <translation type="unfinished"/>
+        <translation>加了相關記號的聲部</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="45"/>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="181"/>
         <source>Percussion</source>
         <translation>打擊樂譜號</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="56"/>
-        <source>Open the percussion panel when an unpitched staff is selected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
         <source>MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>MIDI設備</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="69"/>
@@ -11906,22 +11903,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="78"/>
         <source>When pressing a key, begin note input at the selected measure, note, or rest</source>
-        <translation type="unfinished"/>
+        <translation>當按下按鍵時，在選定的小節、音符或休止處開始輸入音符</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="93"/>
         <source>Real-time input modes</source>
-        <translation type="unfinished"/>
+        <translation>實時輸入模式</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="106"/>
         <source>Advance to next note on key release</source>
-        <translation type="unfinished"/>
+        <translation>松開按鍵時前往下一個音符</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="123"/>
-        <source>Delay between notes</source>
-        <translation type="unfinished"/>
+        <source>Delay between notes:</source>
+        <translation>音符間延遲：</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="139"/>
+        <source>Legacy panel</source>
+        <translation>舊面板</translation>
     </message>
 </context>
 <context>
@@ -12021,7 +12023,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>登錄成功！您可以返回MuseScore Studio桌面應用。</translation>
     </message>
 </context>
 <context>
@@ -12034,7 +12036,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="39"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation type="unfinished"/>
+        <translation>將創建一個包含有關MuseScore Studio設置信息的.zip文件，以幫助開發人員診斷您遇到的任何問題。在發送給他人前，您可以檢查此文件的內容。</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="53"/>
@@ -12137,38 +12139,38 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>四點 %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1116"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1103"/>
         <source>Start and end of %1</source>
         <translation>%1的起始和終結</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3590"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3574"/>
         <source>Current contents of measures will be replaced</source>
         <translation>小節的當前內容將被替換</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3591"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3575"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>繼續插入小節重複？</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2521"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2528"/>
         <source>Measure: %1</source>
         <translation>小節：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2524"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2531"/>
         <source>Displayed measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>譜面小節：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2528"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2535"/>
         <source>Beat: %1</source>
         <translation>拍子：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fingering.cpp" line="127"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1250"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1264"/>
         <source>String number</source>
         <translation>弦線號碼</translation>
     </message>
@@ -12246,10 +12248,10 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation><numerusform>共 %n 根弦</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="737"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2553"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2577"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="751"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2567"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2591"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2837"/>
         <source>Custom</source>
         <translation>自訂</translation>
     </message>
@@ -12260,7 +12262,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1604"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1243"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1257"/>
         <source>Nashville number</source>
         <translation>納什維爾數字</translation>
     </message>
@@ -12312,122 +12314,122 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3301"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3339"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3317"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3355"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="739"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="751"/>
         <source>Voice: %1</source>
         <translation>聲部：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3309"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3325"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>（起於 %1‰ 止於 %2‰）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3315"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3344"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3331"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3360"/>
         <source>Beat slash</source>
         <translation>拍點斜線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3315"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3344"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3331"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3360"/>
         <source>Rhythm slash</source>
         <translation>節奏斜線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3319"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3348"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3335"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3364"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1；第 %2 弦；第 %3 品</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3325"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3341"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1；音高：%2；時值：%3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3354"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3370"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1符頭 %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3356"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3372"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="754"/>
         <source>Cross-staff above</source>
         <translation>跨到上方譜表</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3358"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3374"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="756"/>
         <source>Cross-staff below</source>
         <translation>跨到下方譜表</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3362"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3378"/>
         <source>too low</source>
         <translation>過低</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3364"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3380"/>
         <source>too high</source>
         <translation>過高</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3366"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3382"/>
         <source>too low for amateurs</source>
         <translation>對業餘人士過低</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3368"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3384"/>
         <source>too high for amateurs</source>
         <translation>對業餘人士過高</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="424"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="434"/>
         <source>Note input will remove measure repeat</source>
         <translation>音符輸入將移除小節反覆記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="425"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="435"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation>該小節包含一個小節反覆記號。若您在這裡輸入音符，它將被刪除。您想繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1513"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1527"/>
         <source>triple ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>三重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1508"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1522"/>
         <source>double ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1503"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1517"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>降記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1493"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1507"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>升記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1488"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1502"/>
         <source>double ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>重升記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1483"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1497"/>
         <source>triple ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>三重升記號</translation>
@@ -12444,20 +12446,20 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1118"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3394"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3406"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3410"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3422"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2442"/>
         <source>Start of %1</source>
         <translation>%1之始</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1120"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3398"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3414"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3430"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2457"/>
         <source>End of %1</source>
         <translation>%1之終</translation>
@@ -12598,14 +12600,14 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>簡易 10 弦指法譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="99"/>
-        <location filename="../../src/engraving/rw/read410/measureread.cpp" line="97"/>
+        <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="94"/>
+        <location filename="../../src/engraving/rw/read410/measureread.cpp" line="92"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
         <translation>MSCX 第 %1 行錯誤：無效的小節長度：%2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="166"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1571"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1585"/>
         <source>Invalid</source>
         <translation>無效</translation>
     </message>
@@ -12622,7 +12624,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="169"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1234"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1248"/>
         <source>Staff</source>
         <translation>譜表</translation>
     </message>
@@ -12638,13 +12640,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="173"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1223"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1237"/>
         <source>Measure number</source>
         <translation>小節數</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="174"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1224"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1238"/>
         <source>Multimeasure rest range</source>
         <translation>長休止符範圍</translation>
     </message>
@@ -12685,7 +12687,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="184"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2028"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2042"/>
         <source>Arpeggio</source>
         <translation>琶音</translation>
     </message>
@@ -12757,7 +12759,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="159"/>
         <source>Articulation text</source>
-        <translation type="unfinished"/>
+        <translation>運音法文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="162"/>
@@ -12768,7 +12770,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="96"/>
         <source>Ornament text</source>
-        <translation type="unfinished"/>
+        <translation>裝飾音文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="99"/>
@@ -12833,19 +12835,19 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1247"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1261"/>
         <source>Fingering</source>
         <translation>指法記號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1245"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1259"/>
         <source>Tuplet</source>
         <translation>連音符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1226"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1240"/>
         <source>Tempo</source>
         <translation>速度</translation>
     </message>
@@ -12863,7 +12865,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
         <source>Sound flag</source>
-        <translation type="unfinished"/>
+        <translation>音色旗標</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
@@ -12877,7 +12879,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1251"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1265"/>
         <source>String tunings</source>
         <translation>弦樂器調弦</translation>
     </message>
@@ -12888,13 +12890,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1231"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1245"/>
         <source>Rehearsal mark</source>
         <translation>排練記號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="226"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1217"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1231"/>
         <source>Instrument change</source>
         <translation>更改樂器</translation>
     </message>
@@ -12905,7 +12907,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1240"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1254"/>
         <source>Chord symbol</source>
         <translation>和弦代號</translation>
     </message>
@@ -12916,14 +12918,14 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1256"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1270"/>
         <source>Harp pedal diagram</source>
         <translation>竪琴踏板圖</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="231"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="232"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1265"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1279"/>
         <source>Bend</source>
         <translation>推弦</translation>
     </message>
@@ -12934,7 +12936,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="234"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1261"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1275"/>
         <source>Volta</source>
         <translation>跳躍記號</translation>
     </message>
@@ -13051,7 +13053,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="262"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1567"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1581"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
@@ -13087,19 +13089,19 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1237"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1251"/>
         <source>Hairpin</source>
         <translation>音量漸變記號線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="271"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1262"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1276"/>
         <source>Ottava</source>
         <translation>八度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1264"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1278"/>
         <source>Pedal</source>
         <translation>踏板</translation>
     </message>
@@ -13110,13 +13112,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="274"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1266"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1280"/>
         <source>Let ring</source>
         <translation>持續延音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1227"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1241"/>
         <source>Gradual tempo change</source>
         <translation>漸變速度</translation>
     </message>
@@ -13127,7 +13129,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="277"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1267"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1281"/>
         <source>Palm mute</source>
         <translation>手掌悶音</translation>
     </message>
@@ -13148,7 +13150,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1259"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1273"/>
         <source>Text line</source>
         <translation>文字線</translation>
     </message>
@@ -13159,7 +13161,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1263"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1277"/>
         <source>Glissando</source>
         <translation>滑奏</translation>
     </message>
@@ -13170,7 +13172,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1232"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1246"/>
         <source>System</source>
         <translation>譜表組</translation>
     </message>
@@ -13231,7 +13233,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="305"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1246"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1260"/>
         <source>Sticking</source>
         <translation>鼓法</translation>
     </message>
@@ -13261,56 +13263,56 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>吉他彎音文字</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="576"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
         <source>Vertical</source>
         <translation>垂直</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="577"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="591"/>
         <source>Horizontal</source>
         <translation>橫向</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="620"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1743"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1779"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="610"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="634"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1757"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1793"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1225"/>
         <source>Lyricist</source>
         <translation>填詞人</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1257"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1271"/>
         <source>Harp pedal text diagram</source>
         <translation>竪琴踏板圖</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1498"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1512"/>
         <source>♮</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>♮</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1566"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1580"/>
         <source>Whole</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1565"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1579"/>
         <source>Half</source>
         <translation>二分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1556"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1570"/>
         <source>Quarter</source>
         <translation>四分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1568"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1582"/>
         <source>Breve</source>
         <translation>二全音符</translation>
     </message>
@@ -13330,105 +13332,105 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>元素列表</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1207"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1221"/>
         <source>Default</source>
         <translation>預設</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1208"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1222"/>
         <source>Title</source>
         <translation>標題</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1209"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1223"/>
         <source>Subtitle</source>
         <translation>副標題</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1224"/>
         <source>Composer</source>
         <translation>作曲家</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1212"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1226"/>
         <source>Translator</source>
         <translation>譯者</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1213"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1227"/>
         <source>Frame</source>
         <translation>框架</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1218"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1232"/>
         <source>Header</source>
         <translation>頁首</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1219"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1233"/>
         <source>Footer</source>
         <translation>頁尾</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1228"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1242"/>
         <source>Metronome</source>
         <translation>節拍器</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1235"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1249"/>
         <source>Expression</source>
         <translation>表情文字</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1236"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1250"/>
         <source>Dynamics</source>
         <translation>強弱記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1214"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1228"/>
         <source>Instrument name (Part)</source>
         <translation>樂器名稱（分譜）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="178"/>
         <source>Laissez vibrer segment</source>
-        <translation type="unfinished"/>
+        <translation>放任號區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
         <source>Extension line segment</source>
-        <translation type="unfinished"/>
+        <translation>唱詞延長區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>Note-anchored line segment</source>
-        <translation type="unfinished"/>
+        <translation>音符錨索區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
         <source>Partial tie segment</source>
-        <translation type="unfinished"/>
+        <translation>局部延音線區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Partial tie</source>
-        <translation type="unfinished"/>
+        <translation>局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>Partial extension line segment</source>
-        <translation type="unfinished"/>
+        <translation>唱詞局部延長線區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
         <source>System lock</source>
-        <translation type="unfinished"/>
+        <translation>譜行鎖</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
@@ -13437,549 +13439,569 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1260"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1274"/>
         <source>Note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>延長綫</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
         <source>Partial extension line</source>
-        <translation type="unfinished"/>
+        <translation>唱詞局部延長線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="316"/>
         <source>Time tick anchor</source>
-        <translation type="unfinished"/>
+        <translation>時鐘節拍錨點</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1215"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="322"/>
+        <source>Rehearsal marks</source>
+        <translation>排練號</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="323"/>
+        <source>Voltas</source>
+        <translation>跳躍號</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="324"/>
+        <source>Jumps</source>
+        <translation>跳轉記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="325"/>
+        <source>Measure numbers</source>
+        <translation>小節號碼</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1229"/>
         <source>Instrument name (Long)</source>
         <translation>樂器名稱（全名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1230"/>
         <source>Instrument name (Short)</source>
         <translation>樂器名稱（簡寫）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1220"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1234"/>
         <source>Copyright</source>
         <translation>著作權資訊</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1221"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1235"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>頁碼</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1229"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1243"/>
         <source>Repeat text left</source>
         <translation>左反覆文字</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1230"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1244"/>
         <source>Repeat text right</source>
         <translation>右反覆文字</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1238"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1252"/>
         <source>Lyrics odd lines</source>
         <translation>歌詞奇數列</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1239"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1253"/>
         <source>Lyrics even lines</source>
         <translation>歌詞偶數列</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1241"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1255"/>
         <source>Chord symbol (alternate)</source>
         <translation>和弦代號（另類）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1242"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1256"/>
         <source>Roman numeral analysis</source>
         <translation>羅馬數字分析</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1248"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1262"/>
         <source>LH guitar fingering</source>
         <translation>左手吉他指法</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1249"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1263"/>
         <source>RH guitar fingering</source>
         <translation>右手吉他指法</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1253"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1267"/>
         <source>Fretboard diagram fingering</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1255"/>
-        <source>Fretboard diagram fret number</source>
-        <translation type="unfinished"/>
+        <translation>品格圖指法</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1269"/>
+        <source>Fretboard diagram fret number</source>
+        <translation>品格圖品號</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1283"/>
         <source>User-1</source>
         <translation>使用者 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1270"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1284"/>
         <source>User-2</source>
         <translation>使用者2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1271"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1285"/>
         <source>User-3</source>
         <translation>使用者3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1272"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1286"/>
         <source>User-4</source>
         <translation>使用者4</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1273"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1287"/>
         <source>User-5</source>
         <translation>使用者5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1274"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1288"/>
         <source>User-6</source>
         <translation>使用者6</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1275"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1289"/>
         <source>User-7</source>
         <translation>使用者7</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1276"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1290"/>
         <source>User-8</source>
         <translation>使用者8</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1277"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1291"/>
         <source>User-9</source>
         <translation>使用者9</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1278"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1292"/>
         <source>User-10</source>
         <translation>使用者 10</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1279"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1293"/>
         <source>User-11</source>
         <translation>使用者 11</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1280"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1294"/>
         <source>User-12</source>
         <translation>使用者 12</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1485"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1499"/>
         <source>triple sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>三重升記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1490"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1504"/>
         <source>double sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>重升記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1495"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1509"/>
         <source>sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>升記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1500"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1514"/>
         <source>natural</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>還原記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1505"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1519"/>
         <source>flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>降記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1510"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1524"/>
         <source>double flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1515"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1529"/>
         <source>triple flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>三重降記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1557"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1571"/>
         <source>Eighth</source>
         <translation>八分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1558"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1572"/>
         <source>1024th</source>
         <translation>1024 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1559"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1573"/>
         <source>512th</source>
         <translation>512 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1560"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1574"/>
         <source>256th</source>
         <translation>256 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1561"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1575"/>
         <source>128th</source>
         <translation>128 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1562"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1576"/>
         <source>64th</source>
         <translation>64 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1563"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1577"/>
         <source>32nd</source>
         <translation>32 分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1564"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1578"/>
         <source>16th</source>
         <translation>十六分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1569"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1583"/>
         <source>Longa</source>
         <translation>四倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1570"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1584"/>
         <source>Zero</source>
         <translation>〇</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1744"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1758"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1745"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1759"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1794"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1781"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1795"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2029"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2043"/>
         <source>Up arpeggio</source>
         <translation>上行琶音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2030"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2044"/>
         <source>Down arpeggio</source>
         <translation>下行琶音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2031"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2045"/>
         <source>Bracket arpeggio</source>
         <translation>括號琶音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2032"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2046"/>
         <source>Up arpeggio straight</source>
         <translation>直線上行琶音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2033"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2047"/>
         <source>Down arpeggio straight</source>
         <translation>直線下行琶音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2389"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2403"/>
         <source>Fall</source>
         <translation>墜音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2390"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2404"/>
         <source>Doit</source>
         <translation>爵士上倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2391"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2405"/>
         <source>Plop</source>
         <translation>輕落音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2392"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2406"/>
         <source>Scoop</source>
         <translation>舀音（爵士下倚音）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2394"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2408"/>
         <source>Slide out down</source>
         <translation>滑音後往下</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2395"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2409"/>
         <source>Slide out up</source>
         <translation>滑音後往上</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2396"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2410"/>
         <source>Slide in above</source>
         <translation>從上滑音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2397"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2411"/>
         <source>Slide in below</source>
         <translation>從下滑音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2399"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2413"/>
         <source>Slide out down (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波紋下滑出</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2400"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2414"/>
         <source>Slide out up (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波紋上滑出</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2401"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2415"/>
         <source>Slide in above (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波紋滑入（上）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2402"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2416"/>
         <source>Slide in below (rough)</source>
-        <translation type="unfinished"/>
+        <translation>波紋滑入（下）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2519"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2533"/>
         <source>Straight glissando</source>
         <translation>直線滑奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2520"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2534"/>
         <source>Wavy glissando</source>
         <translation>波浪狀滑奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2539"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2553"/>
         <source>Da Capo</source>
         <translation>從頭演奏（D.C.）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2540"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2554"/>
         <source>Da Capo al Fine</source>
         <translation>從頭演奏（D.C.）至 Fine 結束</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2541"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2555"/>
         <source>Da Capo al Coda</source>
         <translation>從頭演奏（D.C.）至 Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2542"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2556"/>
         <source>D.S. al Coda</source>
         <translation>跳到 Segno 後演奏至 Coda 結束</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2543"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2557"/>
         <source>D.S. al Fine</source>
         <translation>跳到 Segno 後演奏至 Fine 結束</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2544"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2558"/>
         <source>D.S.</source>
         <translation>跳到 Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2575"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2589"/>
         <source>Da Coda</source>
         <translation>跳到 Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2567"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2581"/>
         <source>Segno</source>
         <translation>Segno 記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2568"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2582"/>
         <source>Segno variation</source>
         <translation>雙 Segno 記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2569"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2583"/>
         <source>Coda</source>
         <translation>尾聲記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2570"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2584"/>
         <source>Varied coda</source>
         <translation>第二尾聲</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2572"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2586"/>
         <source>Fine</source>
         <translation>終止</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2573"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <source>To coda</source>
         <translation>跳到尾聲記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2574"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
         <source>To coda (symbol)</source>
         <translation>跳到尾聲（記號）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2815"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2829"/>
         <source>G major, E minor</source>
         <translation>G 大調、E 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2807"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
         <source>C♭ major, A♭ minor</source>
         <translation>C♭ 大調、A♭ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2816"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2830"/>
         <source>D major, B minor</source>
         <translation>D 大調、B 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2808"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
         <source>G♭ major, E♭ minor</source>
         <translation>G♭ 大調、E♭ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2817"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2831"/>
         <source>A major, F♯ minor</source>
         <translation>A 大調、F♯ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2809"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
         <source>D♭ major, B♭ minor</source>
         <translation>D♭ 大調、B♭ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2818"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2832"/>
         <source>E major, C♯ minor</source>
         <translation>E 大調、C♯ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2810"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2824"/>
         <source>A♭ major, F minor</source>
         <translation>A♭ 大調、F 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2819"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2833"/>
         <source>B major, G♯ minor</source>
         <translation>B 大調、G♯ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2811"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2825"/>
         <source>E♭ major, C minor</source>
         <translation>E♭ 大調、C 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2820"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2834"/>
         <source>F♯ major, D♯ minor</source>
         <translation>F♯ 大調、D♯ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2812"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2826"/>
         <source>B♭ major, G minor</source>
         <translation>B♭ 大調、G 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2835"/>
         <source>C♯ major, A♯ minor</source>
         <translation>C♯ 大調、A♯ 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2813"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2827"/>
         <source>F major, D minor</source>
         <translation>F 大調、D 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2546"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2560"/>
         <source>Da Capo al Doppia Coda</source>
         <translation>Da Capo al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2547"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2561"/>
         <source>Dal Segno al Doppia Coda</source>
         <translation>從 S 處到雙 Coda 處</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2548"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2562"/>
         <source>Dal Doppio Segno</source>
         <translation>從雙符號開始</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2549"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2563"/>
         <source>Dal Doppio Segno al Coda</source>
         <translation>從Doppio Segno到Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2550"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2564"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
         <translation>從雙符號到雙尾音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2551"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2565"/>
         <source>Dal Doppio Segno al Fine</source>
         <translation>從雙符號到終止號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2571"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2585"/>
         <source>Doppia Coda</source>
         <translation>雙尾聲部</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2576"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
         <source>Da Doppia Coda</source>
         <translation>雙尾巴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2814"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2828"/>
         <source>C major, A minor</source>
         <translation>C 大調、A 小調</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2836"/>
         <source>Open/Atonal</source>
         <translation>開放／無調性</translation>
     </message>
@@ -13991,55 +14013,55 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="202"/>
         <source>%n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>%n小節</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="61"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="66"/>
         <source>Unknown error</source>
         <translation>未知的錯誤</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="64"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="69"/>
         <source>File “%1” not found</source>
         <translation>檔案「%1」未找到</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="67"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="72"/>
         <source>File open error</source>
         <translation>檔案開啟錯誤</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="70"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="75"/>
         <source>Bad format</source>
         <translation>格式損壞</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="73"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="78"/>
         <source>Unknown filetype</source>
         <translation>未知檔案類型</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="76"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="81"/>
         <source>This file was last saved in a version older than 2.0.0. You can convert this score by opening and then saving in MuseScore version 2.x. Visit the &lt;a href=&quot;%1&quot;&gt;MuseScore download page&lt;/a&gt; to obtain such a 2.x version.</source>
         <translation>本檔案儲存時所用的 MuseScore 版本低於 2.0.0。您可使用 2.x 版本的 MuseScore 開啟、儲存這份樂譜來轉檔。前往&lt;a href=&quot;%1&quot;&gt;MuseScore 下載頁面&lt;/a&gt;以獲取 2.x 版本。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="83"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>此文件使用較新版本的MuseScore Studio保存。請訪問&lt;a href=&quot;https://musescore.org&quot;&gt;museScore.org&lt;/a&gt;以獲取最新版本。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="87"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="92"/>
         <source>This file was last saved in a development version of 3.0.</source>
         <translation>此檔案上一次以 MuseScore 3.0 的開發版本儲存。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="90"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="95"/>
         <source>File “%1” is corrupted.</source>
         <translation>檔案「%1」損毀。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/engravingerrors.h" line="93"/>
+        <location filename="../../src/engraving/engravingerrors.h" line="98"/>
         <source>File “%1” is critically corrupted and cannot be processed.</source>
         <translation>檔案「%1」嚴重損毀而無法處理。</translation>
     </message>
@@ -14076,19 +14098,19 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>無法建立比例為 %1、時值為 %2 的連音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7307"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7339"/>
         <source>Remove stale partial tie</source>
-        <translation type="unfinished"/>
+        <translation>移除失效的局部延音線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7319"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7351"/>
         <source>Reset incoming partial slur</source>
-        <translation type="unfinished"/>
+        <translation>重置傳入部分的分句線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7325"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7357"/>
         <source>Reset outgoing partial slur</source>
-        <translation type="unfinished"/>
+        <translation>重置傳出部分的分句線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="146"/>
@@ -14126,7 +14148,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="111"/>
         <source>All voices color</source>
-        <translation type="unfinished"/>
+        <translation>眾聲部顏色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="127"/>
@@ -14136,27 +14158,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="134"/>
         <source>Score grey color</source>
-        <translation type="unfinished"/>
+        <translation>樂譜灰色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="138"/>
         <source>Formatting color</source>
-        <translation type="unfinished"/>
+        <translation>格式化顏色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="145"/>
         <source>Invisible color</source>
-        <translation type="unfinished"/>
+        <translation>不可見顏色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="152"/>
         <source>Desynchronized color</source>
-        <translation type="unfinished"/>
+        <translation>未同步顏色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="159"/>
         <source>Do not save EIDs</source>
-        <translation type="unfinished"/>
+        <translation>不要保存EID</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -14190,7 +14212,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1575"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>Start measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>起始小節：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1578"/>
@@ -14202,13 +14224,13 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1581"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="174"/>
         <source>Start beat: %1</source>
-        <translation type="unfinished"/>
+        <translation>始拍：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1588"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
         <source>End measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>終止小節：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1591"/>
@@ -14220,20 +14242,20 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1594"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
         <source>End beat: %1</source>
-        <translation type="unfinished"/>
+        <translation>終拍：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="73"/>
         <source>Tie to %1 (m. %2)</source>
         <extracomment>%1 represents the preceding jump item eg. coda. %2 represents the measure number</extracomment>
-        <translation type="unfinished"/>
+        <translation>延音線連至%1（小節%2）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="84"/>
         <source>start of score</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>樂譜開頭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="100"/>
@@ -14247,14 +14269,14 @@ Fret %1 on strings %2</source>
         <source>segno</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>segno記號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="117"/>
         <source>“%1” volta</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;. %1 in this string represents the volta's text set by the user</extracomment>
-        <translation type="unfinished"/>
+        <translation>“%1”八度記號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="123"/>
@@ -14262,14 +14284,14 @@ Fret %1 on strings %2</source>
         <source>start repeat</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>開始反復</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="142"/>
         <source>next note</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>下個音符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="146"/>
@@ -14281,882 +14303,882 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="209"/>
         <source>Toggle partial tie</source>
-        <translation type="unfinished"/>
+        <translation>切換局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="469"/>
         <source>Replace full tie with partial tie</source>
-        <translation type="unfinished"/>
+        <translation>用局部延音線替換全延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="470"/>
         <source>Replace partial tie with full tie</source>
-        <translation type="unfinished"/>
+        <translation>用全延音線替換局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="184"/>
         <source>Remove partial tie</source>
-        <translation type="unfinished"/>
+        <translation>移除局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/systemlock.cpp" line="169"/>
         <source>Start measure: %1; End measure: %2</source>
-        <translation type="unfinished"/>
+        <translation>起點小節：%1；終點小節：%2</translation>
     </message>
 </context>
 <context>
     <name>engraving/bagpipeembellishment</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
         <source>Single grace low G</source>
         <translation>單一裝飾音低音 G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
         <source>Single grace low A</source>
         <translation>單一裝飾音低音 A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2076"/>
         <source>Single grace B</source>
         <translation>單一裝飾音 B 音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2077"/>
         <source>Single grace C</source>
         <translation>單一裝飾音 C 音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
         <source>Single grace D</source>
         <translation>單一裝飾音 D 音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2079"/>
         <source>Single grace E</source>
         <translation>單一裝飾音 E 音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2066"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2080"/>
         <source>Single grace F</source>
         <translation>單一裝飾音 F 音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2067"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2081"/>
         <source>Single grace high G</source>
         <translation>單一裝飾音高音 G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2082"/>
         <source>Single grace high A</source>
         <translation>單一裝飾音高音 A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2076"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2077"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2079"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2081"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2082"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2083"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2084"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2085"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2086"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2087"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2088"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2089"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2091"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2095"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2101"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2102"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2103"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2104"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2106"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2107"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2108"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2111"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2113"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
         <source>Double grace</source>
         <translation>雙裝飾音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2106"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2120"/>
         <source>Half doubling on low G</source>
         <translation>低音 G 的半雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2107"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
         <source>Half doubling on low A</source>
         <translation>低音 A 的半雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2108"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
         <source>Half doubling on B</source>
         <translation>B 的半雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2109"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
         <source>Half doubling on C</source>
         <translation>C 的半雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
         <source>Half doubling on D</source>
         <translation>D 的半雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2111"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
         <source>Half doubling on E</source>
         <translation>E 的半雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2126"/>
         <source>Half doubling on F</source>
         <translation>F 的半雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2131"/>
         <source>Doubling on high G</source>
         <translation>高音 G 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2118"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2132"/>
         <source>Doubling on high A</source>
         <translation>高音 A 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2135"/>
         <source>Half strike on low A</source>
         <translation>低音 A 的半打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2136"/>
         <source>Half strike on B</source>
         <translation>B 的半打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2137"/>
         <source>Half strike on C</source>
         <translation>C 的半打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2138"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2139"/>
         <source>Half strike on D</source>
         <translation>D 的半打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2126"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2140"/>
         <source>Half strike on E</source>
         <translation>E的半打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2127"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2141"/>
         <source>Half strike on F</source>
         <translation>F 的半打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2128"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2142"/>
         <source>Half strike on high G</source>
         <translation>高音 G 的半打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2131"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2186"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2187"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2145"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2200"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2201"/>
         <source>Grip</source>
         <translation>握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2134"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2148"/>
         <source>Half D throw</source>
         <translation>D 的半擲音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2137"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2151"/>
         <source>Doubling on low G</source>
         <translation>低音 G 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2138"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2152"/>
         <source>Doubling on low A</source>
         <translation>低音 A 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2139"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2153"/>
         <source>Doubling on B</source>
         <translation>B 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2140"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2154"/>
         <source>Doubling on C</source>
         <translation>C 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2141"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2155"/>
         <source>Doubling on D</source>
         <translation>D 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2142"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2156"/>
         <source>Doubling on E</source>
         <translation>E 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2143"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2157"/>
         <source>Doubling on F</source>
         <translation>F 的雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2146"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2160"/>
         <source>Thumb doubling on low G</source>
         <translation>低音 G 的拇指雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2147"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2161"/>
         <source>Thumb doubling on low A</source>
         <translation>低音 A 的拇指雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2148"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2162"/>
         <source>Thumb doubling on B</source>
         <translation>B 的拇指雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2149"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2163"/>
         <source>Thumb doubling on C</source>
         <translation>C 的拇指雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2150"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2164"/>
         <source>Thumb doubling on D</source>
         <translation>D 的拇指雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2151"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2165"/>
         <source>Thumb doubling on E</source>
         <translation>E 的拇指雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2152"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2166"/>
         <source>Thumb doubling on F</source>
         <translation>F 的拇指雙花音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2156"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2170"/>
         <source>G grace note on low A</source>
         <translation>低音 A 上的 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2157"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2171"/>
         <source>G grace note on B</source>
         <translation>B 上的 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2158"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2172"/>
         <source>G grace note on C</source>
         <translation>C 上的 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2159"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2160"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2173"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2174"/>
         <source>G grace note on D</source>
         <translation>D 上的 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2161"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2175"/>
         <source>G grace note on E</source>
         <translation>E 上的 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2162"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2176"/>
         <source>G grace note on F</source>
         <translation>F 上的 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2165"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2179"/>
         <source>Double strike on low A</source>
         <translation>低音 A 的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2166"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2180"/>
         <source>Double strike on B</source>
         <translation>B 的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2167"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2181"/>
         <source>Double strike on C</source>
         <translation>C的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2168"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2169"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2182"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2183"/>
         <source>Double strike on D</source>
         <translation>D的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2170"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2184"/>
         <source>Double strike on E</source>
         <translation>E 的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2171"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2185"/>
         <source>Double strike on F</source>
         <translation>F 的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2172"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2186"/>
         <source>Double strike on high G</source>
         <translation>高音 G 的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2173"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2187"/>
         <source>Double strike on high A</source>
         <translation>高音 A 的雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2176"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2190"/>
         <source>Thumb strike on low A</source>
         <translation>低音 A 的拇指打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2177"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2191"/>
         <source>Thumb strike on B</source>
         <translation>B 的拇指打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2178"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2192"/>
         <source>Thumb strike on C</source>
         <translation>C 的拇指打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2179"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2180"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2193"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2194"/>
         <source>Thumb strike on D</source>
         <translation>D 的拇指打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2181"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2195"/>
         <source>Thumb strike on E</source>
         <translation>E的拇指打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2182"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2196"/>
         <source>Thumb strike on F</source>
         <translation>F 的拇指打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2183"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2197"/>
         <source>Thumb strike on high G</source>
         <translation>高音 G 的拇指打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2190"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2196"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2257"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2258"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2204"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2271"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2272"/>
         <source>Birl</source>
         <translation>滾音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2191"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2205"/>
         <source>D throw</source>
         <translation>D 的擲音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2192"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2206"/>
         <source>Half heavy D throw</source>
         <translation>D 的半重擲音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2193"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2199"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2200"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2207"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2213"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2214"/>
         <source>Taorluath</source>
         <translation>Taorluath</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2197"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2254"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2268"/>
         <source>Bubbly</source>
         <translation>活潑的</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2198"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2212"/>
         <source>Heavy D throw</source>
         <translation>D 的重擲音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2203"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2217"/>
         <source>Half double strike on low A</source>
         <translation>低音 A 的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2204"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2218"/>
         <source>Half double strike on B</source>
         <translation>B 的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2205"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2219"/>
         <source>Half double strike on C</source>
         <translation>C的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2206"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2207"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2220"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2221"/>
         <source>Half double strike on D</source>
         <translation>D 的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2208"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2222"/>
         <source>Half double strike on E</source>
         <translation>E 的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2209"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2223"/>
         <source>Half double strike on F</source>
         <translation>F 的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2224"/>
         <source>Half double strike on high G</source>
         <translation>高音 G 的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2225"/>
         <source>Half double strike on high A</source>
         <translation>高音 A 的半雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2214"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2228"/>
         <source>Half grip on low A</source>
         <translation>低音 A 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2215"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2229"/>
         <source>Half grip on B</source>
         <translation>B 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2230"/>
         <source>Half grip on C</source>
         <translation>C 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2217"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2218"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2231"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
         <source>Half grip on D</source>
         <translation>D 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2219"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2233"/>
         <source>Half grip on E</source>
         <translation>E 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2220"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2234"/>
         <source>Half grip on F</source>
         <translation>F 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2221"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2235"/>
         <source>Half grip on high G</source>
         <translation>高音 G 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2222"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2236"/>
         <source>Half grip on high A</source>
         <translation>高音 A 的半握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2225"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2239"/>
         <source>Half pele on low A</source>
         <translation>低音 A 的半剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2226"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2240"/>
         <source>Half pele on B</source>
         <translation>B 的半剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2227"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2241"/>
         <source>Half pele on C</source>
         <translation>C 的半剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2228"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2229"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2242"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2243"/>
         <source>Half pele on D</source>
         <translation>D 的半剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2230"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2244"/>
         <source>Half pele on E</source>
         <translation>E 的半剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2231"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2245"/>
         <source>Half pele on F</source>
         <translation>F 的半剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2232"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2246"/>
         <source>Half pele on high G</source>
         <translation>高音 G 的半剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2235"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2249"/>
         <source>G grace note grip on low A</source>
         <translation>低音 A 上的 G 倚握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2236"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2250"/>
         <source>G grace note grip on B</source>
         <translation>B 上的 G 倚握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2237"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2251"/>
         <source>G grace note grip on C</source>
         <translation>C 上的 G 倚握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2238"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2239"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2252"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2253"/>
         <source>G grace note grip on D</source>
         <translation>D 上的 G 倚握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2240"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2254"/>
         <source>G grace note grip on E</source>
         <translation>E 上的 G 倚握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2241"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2255"/>
         <source>G grace note grip on F</source>
         <translation>F 上的 G 倚握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2244"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2258"/>
         <source>Thumb grip on low A</source>
         <translation>低音 A 的拇指握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2245"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2259"/>
         <source>Thumb grip on B</source>
         <translation>B 的拇指握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2246"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2260"/>
         <source>Thumb grip on C</source>
         <translation>C 的拇指握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2247"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2248"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2261"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2262"/>
         <source>Thumb grip on D</source>
         <translation>D 的拇指握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2249"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2263"/>
         <source>Thumb grip on E</source>
         <translation>E 的拇指握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2250"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2264"/>
         <source>Thumb grip on F</source>
         <translation>F 的拇指握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2251"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2265"/>
         <source>Thumb grip on high G</source>
         <translation>高音 G 的拇指握音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2261"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2275"/>
         <source>Pele on low A</source>
         <translation>低音 A 的剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2262"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2276"/>
         <source>Pele on B</source>
         <translation>B 的剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2263"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2277"/>
         <source>Pele on C</source>
         <translation>C 的剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2264"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2265"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2278"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2279"/>
         <source>Pele on D</source>
         <translation>D 的剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2266"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2280"/>
         <source>Pele on E</source>
         <translation>E 的剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2267"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2281"/>
         <source>Pele on F</source>
         <translation>F 的剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2270"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2284"/>
         <source>Thumb grace note pele on low A</source>
         <translation>低音 A 上的拇指倚剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2271"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2285"/>
         <source>Thumb grace note pele on B</source>
         <translation>B 上的拇指倚剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2272"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2286"/>
         <source>Thumb grace note pele on C</source>
         <translation>C 上的拇指倚剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2273"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2274"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2287"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2288"/>
         <source>Thumb grace note pele on D</source>
         <translation>D 上的拇指倚剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2275"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2289"/>
         <source>Thumb grace note pele on E</source>
         <translation>E 上的拇指倚剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2276"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2290"/>
         <source>Thumb grace note pele on F</source>
         <translation>F 上的拇指倚剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2277"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2291"/>
         <source>Thumb grace note pele on high G</source>
         <translation>高音 G 上的拇指倚剝音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2280"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2294"/>
         <source>G grace note double strike on low A</source>
         <translation>低音 A 上的雙打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2281"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2295"/>
         <source>G grace note double strike on B</source>
         <translation>B 上的雙打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2282"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2296"/>
         <source>G grace note double strike on C</source>
         <translation>C 上的雙打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2283"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2284"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2297"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2298"/>
         <source>G grace note double strike on D</source>
         <translation>D 上的雙打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2285"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2299"/>
         <source>G grace note double strike on E</source>
         <translation>E 上的雙打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2286"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2300"/>
         <source>G grace note double strike on F</source>
         <translation>F 上的雙打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2289"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2303"/>
         <source>Thumb double strike on low A</source>
         <translation>低音 A 的拇指雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2290"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2304"/>
         <source>Thumb double strike on B</source>
         <translation>B 的拇指雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2291"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2305"/>
         <source>Thumb double strike on C</source>
         <translation>C 的拇指雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2292"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2293"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2306"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2307"/>
         <source>Thumb double strike on D</source>
         <translation>D 的拇指雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2294"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2308"/>
         <source>Thumb double strike on E</source>
         <translation>E 的拇指雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2295"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2309"/>
         <source>Thumb double strike on F</source>
         <translation>F 的拇指雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2296"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2310"/>
         <source>Thumb double strike on high G</source>
         <translation>高音 G 的拇指雙打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2299"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2313"/>
         <source>Triple strike on low A</source>
         <translation>低音 A 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2300"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2314"/>
         <source>Triple strike on B</source>
         <translation>B 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2301"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2315"/>
         <source>Triple strike on C</source>
         <translation>C 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2302"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2303"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2316"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2317"/>
         <source>Triple strike on D</source>
         <translation>D 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2304"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2318"/>
         <source>Triple strike on E</source>
         <translation>E 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2305"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2319"/>
         <source>Triple strike on F</source>
         <translation>F 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2306"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2320"/>
         <source>Triple strike on high G</source>
         <translation>高音 G 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2307"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2321"/>
         <source>Triple strike on high A</source>
         <translation>高音 A 的三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2310"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2324"/>
         <source>Half triple strike on low A</source>
         <translation>低音 A 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2311"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2325"/>
         <source>Half triple strike on B</source>
         <translation>B 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2312"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
         <source>Half triple strike on C</source>
         <translation>C 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2313"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2314"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2327"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2328"/>
         <source>Half triple strike on D</source>
         <translation>D 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2315"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2329"/>
         <source>Half triple strike on E</source>
         <translation>E 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2316"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2330"/>
         <source>Half triple strike on F</source>
         <translation>F 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2317"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2331"/>
         <source>Half triple strike on high G</source>
         <translation>高音 G 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2318"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2332"/>
         <source>Half triple strike on high A</source>
         <translation>高音 A 的半三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2321"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2335"/>
         <source>G grace note triple strike on low A</source>
         <translation>低音 A 上的三打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2322"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2336"/>
         <source>G grace note triple strike on B</source>
         <translation>B 上的三打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2323"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2337"/>
         <source>G grace note triple strike on C</source>
         <translation>C 上的三打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2324"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2325"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2338"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2339"/>
         <source>G grace note triple strike on D</source>
         <translation>D 上的三打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2340"/>
         <source>G grace note triple strike on E</source>
         <translation>E 上的三打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2327"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2341"/>
         <source>G grace note triple strike on F</source>
         <translation>F 上的三打 G 倚音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2330"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2344"/>
         <source>Thumb triple strike on low A</source>
         <translation>低音 A 的拇指三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2331"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2345"/>
         <source>Thumb triple strike on B</source>
         <translation>B 的拇指三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2332"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2346"/>
         <source>Thumb triple strike on C</source>
         <translation>C 的拇指三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2333"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2334"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2347"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2348"/>
         <source>Thumb triple strike on D</source>
         <translation>D 的拇指三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2335"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2349"/>
         <source>Thumb triple strike on E</source>
         <translation>E 的拇指三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2336"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2350"/>
         <source>Thumb triple strike on F</source>
         <translation>F 的拇指三打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2337"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2351"/>
         <source>Thumb triple strike on high G</source>
         <translation>高音 G 的拇指三打音</translation>
     </message>
@@ -15164,210 +15186,210 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/brackettype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1986"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2000"/>
         <source>Normal</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1987"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2001"/>
         <source>Brace</source>
         <translation>花括號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1988"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
         <source>Square</source>
         <translation>方括號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1989"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
         <source>Line</source>
         <translation>線條</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2004"/>
         <source>No bracket</source>
-        <translation type="unfinished"/>
+        <translation>無括號</translation>
     </message>
 </context>
 <context>
     <name>engraving/cleftype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="777"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="791"/>
         <source>Treble clef</source>
         <translation>高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="778"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="792"/>
         <source>Treble clef 15ma bassa</source>
         <translation>低十五度高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="779"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="793"/>
         <source>Treble clef 8va bassa</source>
         <translation>低八度高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="794"/>
         <source>Treble clef 8va alta</source>
         <translation>高八度高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="781"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="795"/>
         <source>Treble clef 15ma alta</source>
         <translation>高十五度高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="782"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="796"/>
         <source>Double treble clef 8va bassa on 2nd line</source>
         <translation>雙高音譜號 低八度 第二線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="783"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="797"/>
         <source>Treble clef optional 8va bassa</source>
         <translation>可低八度高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="784"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="798"/>
         <source>French violin clef</source>
         <translation>法國小提琴譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="785"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="799"/>
         <source>Soprano clef</source>
         <translation>女高音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="786"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="800"/>
         <source>Mezzo-soprano clef</source>
         <translation>女中音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="787"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="801"/>
         <source>Alto clef</source>
         <translation>中音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="788"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="802"/>
         <source>Tenor clef</source>
         <translation>次中音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="789"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="803"/>
         <source>Baritone clef (C clef)</source>
         <translation>次低音譜號（男中音 C 譜號）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="790"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="804"/>
         <source>C clef, H shape (19th century)</source>
         <translation>H 形 C 譜號（19 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="791"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="805"/>
         <source>Soprano clef (French, 18th century)</source>
         <translation>高音譜號（法式 18 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="792"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="806"/>
         <source>Alto clef (French, 18th century)</source>
         <translation>中音譜號（法式 18 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="793"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="807"/>
         <source>Tenor clef (French, 18th century)</source>
         <translation>中音譜號（法式 18 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="794"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="808"/>
         <source>Soprano clef (French, 20th century)</source>
         <translation>高音譜號（法式 20世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="795"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="809"/>
         <source>Alto clef (French, 20th century)</source>
         <translation>高音譜號（法式 20 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="796"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="810"/>
         <source>Tenor clef (French, 20th century)</source>
         <translation>次中音譜號（法式 20 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="797"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="811"/>
         <source>Bass clef</source>
         <translation>低音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="798"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="812"/>
         <source>Bass clef 15ma bassa</source>
         <translation>低十五度低音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="799"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="813"/>
         <source>Bass clef 8va bassa</source>
         <translation>低八度低音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="800"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="814"/>
         <source>Bass clef 8va alta</source>
         <translation>高八度低音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="801"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="815"/>
         <source>Bass clef 15ma alta</source>
         <translation>高十五度低音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="802"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="816"/>
         <source>Baritone clef (F clef)</source>
         <translation>次低音譜號（男中音 F 譜號）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="803"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="817"/>
         <source>Subbass clef</source>
         <translation>次低音譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="804"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="818"/>
         <source>F clef (French, 18th century)</source>
         <translation>F 譜號（法式 18 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="805"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="819"/>
         <source>F clef (19th century)</source>
         <translation>F 譜號（19 世紀）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="807"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="821"/>
         <source>Percussion</source>
         <translation>打擊樂譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="808"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="822"/>
         <source>Percussion 2</source>
         <translation>打擊樂譜號 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="810"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="824"/>
         <source>Tablature</source>
         <translation>指法譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="811"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="825"/>
         <source>Tablature 4 lines</source>
         <translation>四線指法譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="812"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="826"/>
         <source>Tablature Serif</source>
         <translation>襯線指法譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="813"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="827"/>
         <source>Tablature Serif 4 lines</source>
         <translation>襯線四線指法譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="815"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="829"/>
         <source>Tenor clef 8va bassa</source>
         <translation>低八度次中音譜號</translation>
     </message>
@@ -15375,327 +15397,327 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/drumset</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2427"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2441"/>
         <source>High Q</source>
         <translation>高 Q</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2428"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2442"/>
         <source>Slap</source>
         <translation>打弦</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2429"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2443"/>
         <source>Scratch Push</source>
         <translation>特效處理推音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2431"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2445"/>
         <source>Scratch Pull</source>
         <translation>特效處理拉音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2432"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2446"/>
         <source>Sticks</source>
         <translation>敲鼓棒聲</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2433"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2447"/>
         <source>Square Click</source>
         <translation>方波聲</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2434"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2448"/>
         <source>Metronome Click</source>
         <translation>節拍器聲</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2435"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2449"/>
         <source>Metronome Bell</source>
         <translation>節拍器鐘聲</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2436"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2450"/>
         <source>Acoustic Bass Drum</source>
         <translation>原聲大鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2437"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2451"/>
         <source>Bass Drum 1</source>
         <translation>低音鼓 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2438"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2452"/>
         <source>Side Stick</source>
         <translation>小鼓邊擊</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2439"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
         <source>Acoustic Snare</source>
         <translation>原聲小鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2440"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2454"/>
         <source>Hand Clap</source>
         <translation>拍手</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2442"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2456"/>
         <source>Electric Snare</source>
         <translation>電子小鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2443"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2457"/>
         <source>Low Floor Tom</source>
         <translation>低音落地鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2444"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2458"/>
         <source>Closed Hi-Hat</source>
         <translation>Hi-Hat（閉）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2445"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2459"/>
         <source>High Floor Tom</source>
         <translation>高音落地鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2446"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2460"/>
         <source>Pedal Hi-Hat</source>
         <translation>Hi-Hat 踏板</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2447"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2461"/>
         <source>Low Tom</source>
         <translation>筒鼓（低）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2448"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2462"/>
         <source>Open Hi-Hat</source>
         <translation>Hi-Hat（開）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2449"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2463"/>
         <source>Low-Mid Tom</source>
         <translation>筒鼓（中低）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2450"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2464"/>
         <source>Hi-Mid Tom</source>
         <translation>筒鼓（中高）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2451"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2465"/>
         <source>Crash Cymbal 1</source>
         <translation>碎音鈸 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2467"/>
         <source>High Tom</source>
         <translation>筒鼓（高）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2454"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2468"/>
         <source>Ride Cymbal 1</source>
         <translation>疊音鈸 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2455"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2469"/>
         <source>Chinese Cymbal</source>
         <translation>中國鈸</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2456"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2470"/>
         <source>Ride Bell</source>
         <translation>疊音鈸心</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2457"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2471"/>
         <source>Tambourine</source>
         <translation>鈴鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2458"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2472"/>
         <source>Splash Cymbal</source>
         <translation>水鈸</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2459"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2473"/>
         <source>Cowbell</source>
         <translation>牛鈴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2460"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2474"/>
         <source>Crash Cymbal 2</source>
         <translation>碎音鈸 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2461"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
         <source>Vibraslap</source>
         <translation>振盪器</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2462"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
         <source>Ride Cymbal 2</source>
         <translation>疊音鈸 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2464"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
         <source>Hi Bongo</source>
         <translation>邦哥鼓（高）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2465"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2479"/>
         <source>Low Bongo</source>
         <translation>邦哥鼓（低）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2466"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2480"/>
         <source>Mute Hi Conga</source>
         <translation>高音康加鼓（悶）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2467"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2481"/>
         <source>Open Hi Conga</source>
         <translation>高音康加鼓（開）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2468"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2482"/>
         <source>Low Conga</source>
         <translation>低音康加鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2469"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2483"/>
         <source>High Timbale</source>
         <translation>高音天巴鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2470"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2484"/>
         <source>Low Timbale</source>
         <translation>低音天巴鼓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2471"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2485"/>
         <source>High Agogo</source>
         <translation>阿哥哥鈴（高音）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2472"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2486"/>
         <source>Low Agogo</source>
         <translation>阿哥哥鈴（低音）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2473"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2487"/>
         <source>Cabasa</source>
         <translation>鐵沙鈴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2489"/>
         <source>Maracas</source>
         <translation>沙鈴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2490"/>
         <source>Short Whistle</source>
         <translation>短口哨</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2491"/>
         <source>Long Whistle</source>
         <translation>長口哨</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2492"/>
         <source>Short Güiro</source>
         <translation>短刮葫</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2479"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2493"/>
         <source>Long Güiro</source>
         <translation>長刮葫</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2480"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2494"/>
         <source>Claves</source>
         <translation>響木</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2481"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2495"/>
         <source>Hi Wood Block</source>
         <translation>高木魚</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2482"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2496"/>
         <source>Low Wood Block</source>
         <translation>低木魚</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2483"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2497"/>
         <source>Mute Cuica</source>
         <translation>悶音 Cuica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2484"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2498"/>
         <source>Open Cuica</source>
         <translation>開音 Cuica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2486"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2500"/>
         <source>Mute Triangle</source>
         <translation>悶音三角鐵</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2487"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2501"/>
         <source>Open Triangle</source>
         <translation>開音三角鐵</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2488"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2502"/>
         <source>Shaker</source>
         <translation>搖沙鈴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2489"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2503"/>
         <source>Sleigh Bell</source>
         <translation>雪鈴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2490"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2504"/>
         <source>Mark Tree</source>
         <translation>風鈴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2491"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2505"/>
         <source>Castanets</source>
         <translation>響板</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2492"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2506"/>
         <source>Mute Surdo</source>
         <translation>開音 Surdo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2493"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2507"/>
         <source>Open Surdo</source>
         <translation>悶音 Surdo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2495"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2509"/>
         <source>Snare (Rim shot)</source>
         <translation>小鼓（邊擊）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2497"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2511"/>
         <source>Ride (Edge)</source>
         <translation>疊音鈸邊</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2499"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2513"/>
         <source>Cowbell Low</source>
         <translation>低音牛鈴</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2501"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2515"/>
         <source>Cowbell High</source>
         <translation>高音牛鈴</translation>
     </message>
@@ -15703,225 +15725,225 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/dynamictype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="862"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="876"/>
         <source>Other dynamic</source>
-        <translation type="unfinished"/>
+        <translation>其他力度</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="864"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="878"/>
         <source>pppppp (Pianissississississimo)</source>
-        <translation type="unfinished"/>
+        <translation>pppppp（極極極極極弱）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="866"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="880"/>
         <source>ppppp (Pianississississimo)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="868"/>
-        <source>pppp (Pianissississimo)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="870"/>
-        <source>ppp (Pianississimo)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="872"/>
-        <source>pp (Pianissimo)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="874"/>
-        <source>p (Piano)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="877"/>
-        <source>mp (Mezzo-piano)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="879"/>
-        <source>mf (Mezzo-forte)</source>
-        <translation type="unfinished"/>
+        <translation>ppppp（極極極極弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="882"/>
-        <source>f (Forte)</source>
-        <translation type="unfinished"/>
+        <source>pppp (Pianissississimo)</source>
+        <translation>pppp（極極極弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="884"/>
-        <source>ff (Fortissimo)</source>
-        <translation type="unfinished"/>
+        <source>ppp (Pianississimo)</source>
+        <translation>ppp（極極弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="886"/>
-        <source>fff (Fortississimo)</source>
-        <translation type="unfinished"/>
+        <source>pp (Pianissimo)</source>
+        <translation>pp（極弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="888"/>
-        <source>ffff (Fortissississimo)</source>
-        <translation type="unfinished"/>
+        <source>p (Piano)</source>
+        <translation>p（弱）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="890"/>
-        <source>fffff (Fortississississimo)</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="891"/>
+        <source>mp (Mezzo-piano)</source>
+        <translation>mp（次弱）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="892"/>
-        <source>ffffff (Fortissississississimo)</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="893"/>
+        <source>mf (Mezzo-forte)</source>
+        <translation>mf（次強）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="895"/>
-        <source>fp (Fortepiano)</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="896"/>
+        <source>f (Forte)</source>
+        <translation>f（強）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="897"/>
-        <source>pf (Pianoforte)</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="898"/>
+        <source>ff (Fortissimo)</source>
+        <translation>ff（極強）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="900"/>
-        <source>sf (Sforzando)</source>
-        <translation type="unfinished"/>
+        <source>fff (Fortississimo)</source>
+        <translation>fff（極極強）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="902"/>
-        <source>sfz (Sforzato)</source>
-        <translation type="unfinished"/>
+        <source>ffff (Fortissississimo)</source>
+        <translation>ffff（極極極強）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="904"/>
-        <source>sff (Sforzando)</source>
-        <translation type="unfinished"/>
+        <source>fffff (Fortississississimo)</source>
+        <translation>fffff（極極極極強）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="906"/>
-        <source>sffz (Sforzato)</source>
-        <translation type="unfinished"/>
+        <source>ffffff (Fortissississississimo)</source>
+        <translation>ffffff（極極極極極強）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="908"/>
-        <source>sfff (Sforzando)</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="909"/>
+        <source>fp (Fortepiano)</source>
+        <translation>fp（強後即弱）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="910"/>
-        <source>sfffz (Sforzato)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="912"/>
-        <source>sfp (Sforzando-piano)</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="911"/>
+        <source>pf (Pianoforte)</source>
+        <translation>pf（弱後即強）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="914"/>
+        <source>sf (Sforzando)</source>
+        <translation>sf（突強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="916"/>
+        <source>sfz (Sforzato)</source>
+        <translation>sfz（突強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="918"/>
+        <source>sff (Sforzando)</source>
+        <translation>sff（突極強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="920"/>
+        <source>sffz (Sforzato)</source>
+        <translation>sffz（突極強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="922"/>
+        <source>sfff (Sforzando)</source>
+        <translation>sfff（突極極強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="924"/>
+        <source>sfffz (Sforzato)</source>
+        <translation>sfffz（突極極強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="926"/>
+        <source>sfp (Sforzando-piano)</source>
+        <translation>sfp（突強即弱）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="928"/>
         <source>sfpp (Sforzando-pianissimo)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="917"/>
-        <source>rfz (Rinforzando)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="919"/>
-        <source>rf (Rinforzando)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="921"/>
-        <source>fz (Forzando)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="923"/>
-        <source>m (Mezzo)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="925"/>
-        <source>r (Rinforzando)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="927"/>
-        <source>s (Sforzando)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="929"/>
-        <source>z (Forzando)</source>
-        <translation type="unfinished"/>
+        <translation>sfpp（突強後轉極弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="931"/>
+        <source>rfz (Rinforzando)</source>
+        <translation>rfz（加強到強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="933"/>
+        <source>rf (Rinforzando)</source>
+        <translation>rf（加強到強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="935"/>
+        <source>fz (Forzando)</source>
+        <translation>fz（突強）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="937"/>
+        <source>m (Mezzo)</source>
+        <translation>m（次之的）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="939"/>
+        <source>r (Rinforzando)</source>
+        <translation>r（加強的）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="941"/>
+        <source>s (Sforzando)</source>
+        <translation>s（突然的）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="943"/>
+        <source>z (Forzando)</source>
+        <translation>z（加重的）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="945"/>
         <source>n (Niente)</source>
-        <translation type="unfinished"/>
+        <translation>n（無聲）</translation>
     </message>
 </context>
 <context>
     <name>engraving/gradualtempochangetype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1628"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1642"/>
         <source>accel.</source>
         <translation>accel.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1629"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1643"/>
         <source>allarg.</source>
         <translation>allarg.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1630"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1644"/>
         <source>calando</source>
         <translation>calando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1631"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1645"/>
         <source>lentando</source>
         <translation>lentando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1632"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1646"/>
         <source>morendo</source>
         <translation>morendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1633"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1647"/>
         <source>precipitando</source>
         <translation>precipitando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1634"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1648"/>
         <source>rall.</source>
         <translation>rall.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1635"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1649"/>
         <source>rit.</source>
         <translation>rit.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1636"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1650"/>
         <source>smorz.</source>
         <translation>smorz.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1637"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1651"/>
         <source>sost.</source>
         <translation>sost.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1638"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1652"/>
         <source>string.</source>
         <translation>string.</translation>
     </message>
@@ -15929,27 +15951,27 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="809"/>
         <source>Crescendo hairpin</source>
         <translation>漸強線記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="781"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="811"/>
         <source>Decrescendo hairpin</source>
         <translation>漸弱記號線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="783"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="813"/>
         <source>Crescendo line</source>
         <translation>漸強線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="785"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="815"/>
         <source>Decrescendo line</source>
-        <translation type="unfinished"/>
+        <translation>漸弱線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="787"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="817"/>
         <source>Custom</source>
         <translation>自訂</translation>
     </message>
@@ -15977,22 +15999,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/layoutbreaktype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1815"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1829"/>
         <source>System break</source>
         <translation>譜表組分行符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1816"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1830"/>
         <source>Page break</source>
         <translation>分頁符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1817"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1831"/>
         <source>Section break</source>
         <translation>分段符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1818"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1832"/>
         <source>Keep measures on the same system</source>
         <translation>將小節保持在相同譜表組</translation>
     </message>
@@ -16000,372 +16022,372 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/noteheadgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="649"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="663"/>
         <source>Normal</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="650"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="664"/>
         <source>Cross</source>
         <translation>X 形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="651"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="665"/>
         <source>Plus</source>
         <translation>十字形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="652"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="666"/>
         <source>XCircle</source>
         <translation>圓圈帶叉</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="653"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="667"/>
         <source>With X</source>
         <translation>圓圈帶叉 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="654"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="668"/>
         <source>Triangle up</source>
         <translation>正三角形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="655"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="669"/>
         <source>Triangle down</source>
         <translation>倒三角形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="656"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="670"/>
         <source>Slashed (forwards)</source>
         <translation>帶斜線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="657"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="671"/>
         <source>Slashed (backwards)</source>
         <translation>帶反斜線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="658"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="672"/>
         <source>Diamond</source>
         <translation>菱形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="659"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="673"/>
         <source>Diamond (old)</source>
         <translation>菱形（舊式）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="660"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="674"/>
         <source>Circled</source>
         <translation>帶圓圈</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="661"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="675"/>
         <source>Circled large</source>
         <translation>帶大圓圈</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="662"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="676"/>
         <source>Large arrow</source>
         <translation>大箭頭</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="663"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="677"/>
         <source>Alt. brevis</source>
         <translation>古代倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="665"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="679"/>
         <source>Slash</source>
         <translation>斜線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="666"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="680"/>
         <source>Large diamond</source>
         <translation>大菱形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="668"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="682"/>
         <source>Heavy cross</source>
         <translation>粗叉形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="669"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="683"/>
         <source>Heavy cross hat</source>
         <translation>父字形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="672"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="686"/>
         <source>Sol</source>
         <translation>Sol</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="673"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="687"/>
         <source>La</source>
         <translation>La</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="674"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="688"/>
         <source>Fa</source>
         <translation>Fa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="675"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="689"/>
         <source>Mi</source>
         <translation>Mi</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="676"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="690"/>
         <source>Do</source>
         <translation>Do</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="677"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="691"/>
         <source>Re</source>
         <translation>Re</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="678"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="692"/>
         <source>Ti</source>
         <translation>Ti</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="681"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="695"/>
         <source>Do (Walker)</source>
         <translation>Do（沃克樣式）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="682"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="696"/>
         <source>Re (Walker)</source>
         <translation>Re（沃克樣式）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="683"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="697"/>
         <source>Ti (Walker)</source>
         <translation>Ti（沃克樣式）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="684"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="698"/>
         <source>Do (Funk)</source>
         <translation>Do（Funk 樣式）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="685"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="699"/>
         <source>Re (Funk)</source>
         <translation>Re（Funk 樣式）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="686"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="700"/>
         <source>Ti (Funk)</source>
         <translation>Ti（Funk 樣式）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="689"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="703"/>
         <source>Do (Name)</source>
         <translation>Do（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="690"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="704"/>
         <source>Di (Name)</source>
         <translation>Di（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="691"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="705"/>
         <source>Ra (Name)</source>
         <translation>Ra（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="692"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="706"/>
         <source>Re (Name)</source>
         <translation>Re（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="693"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="707"/>
         <source>Ri (Name)</source>
         <translation>Ri（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="694"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="708"/>
         <source>Me (Name)</source>
         <translation>Me（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="695"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="709"/>
         <source>Mi (Name)</source>
         <translation>Mi（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="696"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="710"/>
         <source>Fa (Name)</source>
         <translation>Fa（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="697"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="711"/>
         <source>Fi (Name)</source>
         <translation>Fi（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="698"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="712"/>
         <source>Se (Name)</source>
         <translation>Se（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="699"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="713"/>
         <source>Sol (Name)</source>
         <translation>Sol（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="700"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="714"/>
         <source>Le (Name)</source>
         <translation>Le（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="701"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="715"/>
         <source>La (Name)</source>
         <translation>La（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="702"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="716"/>
         <source>Li (Name)</source>
         <translation>Li（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="703"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="717"/>
         <source>Te (Name)</source>
         <translation>Te（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="704"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="718"/>
         <source>Ti (Name)</source>
         <translation>Ti（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="705"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="719"/>
         <source>Si (Name)</source>
         <translation>Si（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="707"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="721"/>
         <source>A♯ (Name)</source>
         <translation>A♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="708"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="722"/>
         <source>A (Name)</source>
         <translation>A（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="709"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="723"/>
         <source>A♭ (Name)</source>
         <translation>A♭（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="710"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="724"/>
         <source>B♯ (Name)</source>
         <translation>B♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="711"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="725"/>
         <source>B (Name)</source>
         <translation>B（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="712"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="726"/>
         <source>B♭ (Name)</source>
         <translation>B♭（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="713"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="727"/>
         <source>C♯ (Name)</source>
         <translation>C♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="714"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="728"/>
         <source>C (Name)</source>
         <translation>C（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="715"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="729"/>
         <source>C♭ (Name)</source>
         <translation>C♭（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="716"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="730"/>
         <source>D♯ (Name)</source>
         <translation>D♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="717"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="731"/>
         <source>D (Name)</source>
         <translation>D（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="718"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="732"/>
         <source>D♭ (Name)</source>
         <translation>D♭（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="719"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="733"/>
         <source>E♯ (Name)</source>
         <translation>E♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="720"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="734"/>
         <source>E (Name)</source>
         <translation>E（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="721"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="735"/>
         <source>E♭ (Name)</source>
         <translation>E♭（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="722"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="736"/>
         <source>F♯ (Name)</source>
         <translation>F♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="723"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="737"/>
         <source>F (Name)</source>
         <translation>F（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="724"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="738"/>
         <source>F♭ (Name)</source>
         <translation>F♭（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="725"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="739"/>
         <source>G♯ (Name)</source>
         <translation>G♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="726"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="740"/>
         <source>G (Name)</source>
         <translation>G（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="727"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="741"/>
         <source>G♭ (Name)</source>
         <translation>G♭（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="728"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="742"/>
         <source>H (Name)</source>
         <translation>H（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="729"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="743"/>
         <source>H♯ (Name)</source>
         <translation>H♯（音名）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="732"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="746"/>
         <source>Swiss Rudiments Flam</source>
         <translation>瑞士 Flam 型基礎</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="734"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="748"/>
         <source>Swiss Rudiments Doublé</source>
         <translation>瑞士雙擊基礎</translation>
     </message>
@@ -16373,47 +16395,47 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/noteheadscheme</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="621"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="635"/>
         <source>Normal</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="622"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="636"/>
         <source>Pitch names</source>
         <translation>音名</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="623"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="637"/>
         <source>German pitch names</source>
         <translation>德式音名</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="624"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="638"/>
         <source>Solfège movable Do</source>
         <translation>首調唱名</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="625"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="639"/>
         <source>Solfège fixed Do</source>
         <translation>固定調唱名</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="626"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="640"/>
         <source>4-shape (Walker)</source>
         <translation>4形（Walker）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="627"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="641"/>
         <source>7-shape (Aikin)</source>
         <translation>7形（Aikin）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="628"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="642"/>
         <source>7-shape (Funk)</source>
         <translation>7形（Funk）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="629"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="643"/>
         <source>7-shape (Walker)</source>
         <translation>7形（Walker）</translation>
     </message>
@@ -16421,22 +16443,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/noteheadtype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
         <source>Whole</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="598"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="612"/>
         <source>Half</source>
         <translation>二分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="613"/>
         <source>Quarter</source>
         <translation>四分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="614"/>
         <source>Breve</source>
         <translation>二全音符</translation>
     </message>
@@ -16477,84 +16499,84 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/playtechtype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1591"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1605"/>
         <source>Normal</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1592"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1606"/>
         <source>Pizzicato</source>
         <translation>撥奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1594"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1608"/>
         <source>Open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>開音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1596"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1610"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>無聲</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1597"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1611"/>
         <source>Tremolo</source>
         <translation>震音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1598"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1612"/>
         <source>Détaché</source>
         <translation>分弓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1599"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1613"/>
         <source>Martelé</source>
         <translation>重斷弓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1600"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1614"/>
         <source>Col legno</source>
         <translation>弓桿拉奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1601"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1615"/>
         <source>Sul ponticello</source>
         <translation>近馬運弓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1602"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1616"/>
         <source>Sul tasto</source>
         <translation>近指板運弓</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1603"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1617"/>
         <source>Vibrato</source>
         <translation>抖音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1604"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1618"/>
         <source>Legato</source>
         <translation>連貫地</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1605"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1619"/>
         <source>Distortion</source>
         <translation>失真</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1606"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1620"/>
         <source>Overdrive</source>
         <translation>過載</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1607"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1621"/>
         <source>Harmonics</source>
         <translation>泛音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1608"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1622"/>
         <source>Jazz tone</source>
         <translation>爵士調</translation>
     </message>
@@ -16570,45 +16592,6 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/notationtypes.h" line="570"/>
         <source>Custom</source>
         <translation>自訂</translation>
-    </message>
-</context>
-<context>
-    <name>engraving/scorestylepreset</name>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2845"/>
-        <source>Default</source>
-        <extracomment>Score notation style: Default</extracomment>
-        <translation>預設</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2847"/>
-        <source>16mm MSN</source>
-        <extracomment>Score notation style: Modified Stave Notation (MSN) with 16mm staff size. Intended for visually-impaired musicians.</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2849"/>
-        <source>18mm MSN</source>
-        <extracomment>Score notation style: Modified Stave Notation (MSN) with 18mm staff size. Intended for visually-impaired musicians.</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2851"/>
-        <source>20mm MSN</source>
-        <extracomment>Score notation style: Modified Stave Notation (MSN) with 20mm staff size. Intended for visually-impaired musicians.</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2853"/>
-        <source>22mm MSN</source>
-        <extracomment>Score notation style: Modified Stave Notation (MSN) with 22mm staff size. Intended for visually-impaired musicians.</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2855"/>
-        <source>25mm MSN</source>
-        <extracomment>Score notation style: Modified Stave Notation (MSN) with 25mm staff size. Intended for visually-impaired musicians.</extracomment>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -16660,17 +16643,17 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/staffgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2615"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2629"/>
         <source>Standard</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2616"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2630"/>
         <source>Percussion</source>
         <translation>打擊樂譜號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2617"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2631"/>
         <source>Tablature</source>
         <translation>指法譜</translation>
     </message>
@@ -17290,17 +17273,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3533"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation type="unfinished"/>
+        <translation>諧和地重新表達近似相等的變音號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3534"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation type="unfinished"/>
+        <translation>諧和地重新表達相等的變音號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3535"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation type="unfinished"/>
+        <translation>諧和地重新表達變音波形號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3541"/>
@@ -18285,7 +18268,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5582"/>
         <source>Half-open 2 (Weinberg)</source>
-        <translation type="unfinished"/>
+        <translation>半開2式（Weinberg）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5689"/>
@@ -18568,17 +18551,17 @@ Fret %1 on strings %2</source>
         <translation>短小節線 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
         <source>Tap</source>
         <translation>點弦</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2730"/>
         <source>Slap</source>
         <translation>打弦</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2731"/>
         <source>Pop</source>
         <translation>勾弦</translation>
     </message>
@@ -18622,47 +18605,47 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/tremolotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1959"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1973"/>
         <source>Eighth through stem</source>
         <translation>穿過符桿的八分顫音符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1960"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1974"/>
         <source>16th through stem</source>
         <translation>穿過符桿的 16 分顫音符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1961"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1975"/>
         <source>32nd through stem</source>
         <translation>穿過符桿的 32 分顫音符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1962"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1976"/>
         <source>64th through stem</source>
         <translation>穿過符桿的 64 分顫音符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1963"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1977"/>
         <source>Buzz roll</source>
         <translation>壓奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1964"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1978"/>
         <source>Eighth between notes</source>
         <translation>音符之間的八分顫音符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1965"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1979"/>
         <source>16th between notes</source>
         <translation>音符之間的 16 分顫音符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1966"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1980"/>
         <source>32nd between notes</source>
         <translation>音符之間的 32 分顫音符號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1967"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1981"/>
         <source>64th between notes</source>
         <translation>音符之間的 64 分顫音符號</translation>
     </message>
@@ -18670,22 +18653,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/trilltype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2636"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2650"/>
         <source>Trill line</source>
         <translation>顫音線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2637"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2651"/>
         <source>Upprall line</source>
         <translation>上滑逆波音線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2638"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2652"/>
         <source>Downprall line</source>
         <translation>下滑逆波音線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2639"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2653"/>
         <source>Prallprall line</source>
         <translation>雙重逆波音線</translation>
     </message>
@@ -18731,22 +18714,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/vibratotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2679"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2693"/>
         <source>Guitar vibrato</source>
         <translation>吉他抖音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2680"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2694"/>
         <source>Guitar vibrato wide</source>
         <translation>吉他揉顫音寬</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2681"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2695"/>
         <source>Vibrato sawtooth</source>
         <translation>揉顫音鋸齒</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2683"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2697"/>
         <source>Tremolo sawtooth wide</source>
         <translation>震音鋸齒寬</translation>
     </message>
@@ -18809,7 +18792,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
         <source>Plugin is not in the correct format</source>
-        <translation type="unfinished"/>
+        <translation>插件格式不正確</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="76"/>
@@ -18844,7 +18827,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="61"/>
         <source>Run plugin %1 (%2)</source>
-        <translation type="unfinished"/>
+        <translation>運行插件%1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="108"/>
@@ -18855,7 +18838,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="103"/>
         <source>Manually</source>
-        <translation type="unfinished"/>
+        <translation>手動</translation>
     </message>
 </context>
 <context>
@@ -18942,7 +18925,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="89"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="95"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="98"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
@@ -19258,7 +19241,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="130"/>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="102"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="85"/>
         <source>ms</source>
         <extracomment>Abbreviation of &quot;milliseconds&quot;</extracomment>
         <translation>毫秒</translation>
@@ -19293,14 +19276,14 @@ Fret %1 on strings %2</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="249"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="261"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="81"/>
         <source>Collapse</source>
         <extracomment>Collapse a tree item</extracomment>
         <translation>合上</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="251"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="263"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="83"/>
         <source>Expand</source>
         <extracomment>Expand a tree item</extracomment>
@@ -19431,7 +19414,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1373"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1381"/>
         <source>Success!</source>
         <translation>成功！</translation>
     </message>
@@ -19515,7 +19498,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
         <source>°</source>
-        <translation type="unfinished"/>
+        <translation>°</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
@@ -19523,11 +19506,6 @@ Fret %1 on strings %2</source>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="172"/>
         <source>Please check your internet connection or try again later.</source>
         <translation>請檢查您的互聯網連接或稍後再試。</translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="153"/>
-        <source>Always ask</source>
-        <translation>總是詢問</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="187"/>
@@ -19538,7 +19516,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation type="unfinished"/>
+        <translation>可以隨時在“偏好設置”中更改此設置</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -19621,7 +19599,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
         <source>MuseScore Studio instrument</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio樂器</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -19859,12 +19837,12 @@ pickup measure</source>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="60"/>
         <source>Limit MusicXML export for compatibility with MuseScore 3</source>
         <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
-        <translation type="unfinished"/>
+        <translation>限制MusicXML導出以兼容MuseScore 3</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="65"/>
         <source>Export invisible elements to MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>往MusicXML中導出不可見元素</translation>
     </message>
 </context>
 <context>
@@ -20263,17 +20241,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="94"/>
         <source>Move to system</source>
-        <translation type="unfinished"/>
+        <translation>移往譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="115"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>上一個</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="117"/>
         <source>Move measure(s) to previous system</source>
-        <translation type="unfinished"/>
+        <translation>將小節移至上一譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="134"/>
@@ -20283,48 +20261,48 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="136"/>
         <source>Move measure(s) to next system</source>
-        <translation type="unfinished"/>
+        <translation>將小節移至下一譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="159"/>
         <source>Unlock selected systems</source>
-        <translation type="unfinished"/>
+        <translation>解鎖所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="160"/>
         <source>Unlock selected system</source>
-        <translation type="unfinished"/>
+        <translation>解鎖所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="161"/>
         <source>Lock selected systems</source>
-        <translation type="unfinished"/>
+        <translation>鎖定所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="162"/>
         <source>Lock selected system</source>
-        <translation type="unfinished"/>
+        <translation>鎖定所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="164"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>鎖定/解鎖所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation type="unfinished"/>
+        <translation>將所選譜行的小節放在一行，並防止它們被擠到下一個譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="186"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="188"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>從選區創建譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="189"/>
         <source>Create a system containing only the selected measure(s)</source>
-        <translation type="unfinished"/>
+        <translation>創建一個只包含選定小節的譜行組</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
@@ -20360,7 +20338,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="83"/>
         <source>Horizontal order</source>
-        <translation type="unfinished"/>
+        <translation>水平順序</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="95"/>
@@ -20641,7 +20619,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation type="unfinished"/>
+        <translation>顯示建議的譜號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20664,7 +20642,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
         <source>Scale with staff size</source>
-        <translation type="unfinished"/>
+        <translation>與譜表大小一起縮放</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
@@ -20711,7 +20689,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="162"/>
         <source>Finger for string %1</source>
-        <translation type="unfinished"/>
+        <translation>弦%1指法</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="200"/>
@@ -20884,7 +20862,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation type="unfinished"/>
+        <translation>顯示提示調號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -21145,7 +21123,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
         <source>Number offset</source>
-        <translation type="unfinished"/>
+        <translation>號碼偏移</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
@@ -21181,12 +21159,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="172"/>
         <source>Beam direction</source>
-        <translation type="unfinished"/>
+        <translation>符槓方向</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
         <source>Move cross-staff beam</source>
-        <translation type="unfinished"/>
+        <translation>移動跨譜表符槓</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="227"/>
@@ -21246,7 +21224,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="188"/>
         <source>Combine with voices that share the same stem direction</source>
-        <translation type="unfinished"/>
+        <translation>合併移動方向相同的聲部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
@@ -21306,7 +21284,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="64"/>
         <source>Show stem slash</source>
-        <translation type="unfinished"/>
+        <translation>顯示符乾斜線</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
@@ -21364,12 +21342,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="85"/>
         <source>Indent first system of new section</source>
-        <translation type="unfinished"/>
+        <translation>縮進新樂章的首個譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
         <source>Hide courtesy clefs and signatures</source>
-        <translation type="unfinished"/>
+        <translation>隱藏提示譜號和記號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -21503,7 +21481,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation type="unfinished"/>
+        <translation>顯示提示拍號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -21624,12 +21602,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="106"/>
         <source>Sound flags</source>
-        <translation type="unfinished"/>
+        <translation>音色旗標</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="82"/>
         <source>Rotation</source>
-        <translation type="unfinished"/>
+        <translation>旋轉</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="96"/>
@@ -22051,12 +22029,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="53"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="59"/>
         <source>Tie (partial)</source>
-        <translation type="unfinished"/>
+        <translation>延音線（局部）</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="110"/>
@@ -22356,7 +22334,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
         <source>Cue note visibility</source>
-        <translation type="unfinished"/>
+        <translation>小型音符可見性</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="219"/>
@@ -22396,7 +22374,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
         <source>Laissez vibrer placement</source>
-        <translation type="unfinished"/>
+        <translation>放任號位置</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="98"/>
@@ -22475,7 +22453,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="46"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>聲部指派</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="71"/>
@@ -22485,17 +22463,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="106"/>
         <source>All voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>樂器的所有聲部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="112"/>
         <source>All voices on this staff only</source>
-        <translation type="unfinished"/>
+        <translation>僅此譜表的所有聲部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="187"/>
         <source>Center between staves</source>
-        <translation type="unfinished"/>
+        <translation>譜表間居中</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="196"/>
@@ -22514,33 +22492,33 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
         <source>Align with preceding dynamic</source>
-        <translation type="unfinished"/>
+        <translation>對齊前一個力度記號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="63"/>
         <source>Alignment with adjacent tempo text</source>
-        <translation type="unfinished"/>
+        <translation>與相鄰的速度文本對齊</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="68"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="77"/>
         <source>Snap to next</source>
-        <translation type="unfinished"/>
+        <translation>吸附到下一個</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="63"/>
         <source>Alignment with adjacent dynamics</source>
-        <translation type="unfinished"/>
+        <translation>與相鄰動力度記號對齊</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="68"/>
         <source>Snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>吸附到上一個</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/notelinesettingsmodel.cpp" line="31"/>
         <source>Note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/measures/measuressettingsmodel.cpp" line="37"/>
@@ -22550,17 +22528,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml" line="44"/>
         <source>Score style preset</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/models/score/scoreaccessibilitysettingsmodel.cpp" line="36"/>
-        <source>Accessibility</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/models/score/scoreaccessibilitysettingsmodel.cpp" line="93"/>
-        <source>%1 (edited)</source>
-        <translation type="unfinished"/>
+        <translation>樂譜樣式預設</translation>
     </message>
 </context>
 <context>
@@ -22595,52 +22563,19 @@ pickup measure</source>
         <translation>樂器族</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="66"/>
-        <source>Add instruments</source>
-        <translation>新增樂器</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="69"/>
-        <source>Add</source>
-        <extracomment>Keep in sync with the message that appears if there are no instruments in the score (InstrumentsPanel.qml)</extracomment>
-        <translation>新增</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="85"/>
-        <source>Move selected staves up</source>
-        <translation>上移所選譜表</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="103"/>
-        <source>Move selected staves down</source>
-        <translation>下移所選譜表</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="121"/>
-        <source>Remove selected staves</source>
-        <translation>移除所選譜表</translation>
-    </message>
-    <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="176"/>
         <source>Add selected instruments to score</source>
         <translation>將所選樂器新增至樂譜</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="240"/>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="85"/>
         <source>Move selected instruments up</source>
         <translation>上移所選樂器</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="255"/>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="103"/>
         <source>Move selected instruments down</source>
         <translation>下移所選樂器</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="121"/>
-        <source>Remove selected instruments</source>
-        <translation>移除所選樂器</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="67"/>
@@ -22703,11 +22638,6 @@ pickup measure</source>
         <translation>將您的樂器新增至此清單中以選擇樂器</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="301"/>
-        <source>Settings</source>
-        <translation>設定</translation>
-    </message>
-    <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="55"/>
         <location filename="../../src/stubs/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="37"/>
         <source>Instruments</source>
@@ -22716,102 +22646,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="136"/>
         <source>traits</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="67"/>
-        <source>Staff type</source>
-        <translation>譜表類型</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
-        <source>Voices visible in the score</source>
-        <translation>樂譜中可見的聲部</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
-        <source>Small staff</source>
-        <translation>小型化譜表</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
-        <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>隱藏所有不包含音樂符號的小節（提示曲譜）</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
-        <source>Create a linked staff</source>
-        <translation>創建關聯譜表</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="187"/>
-        <source>Note: linked staves contain identical information.</source>
-        <translation>注：關聯譜表與被關聯譜表包含的資訊一致。</translation>
+        <translation>性狀</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="191"/>
         <source>All instruments</source>
         <translation>全部樂器</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="221"/>
-        <source>Are you sure you want to reset all formatting?</source>
-        <translation>您真的要重設所有格式嗎？</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="222"/>
-        <source>This action can not be undone</source>
-        <translation>此操作無法撤消</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="182"/>
-        <source>Instrument ordering</source>
-        <translation>樂器排列次序</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="192"/>
-        <source>Expand all instruments</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="193"/>
-        <source>Collapse all instruments</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
-        <source>Add staff</source>
-        <translation>新增譜表</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/view/stafftreeitem.cpp" line="63"/>
-        <source>[LINK] %1</source>
-        <extracomment>Prefix for the display name for a linked staff. Preferably, keep this short.</extracomment>
-        <translation>[關聯] %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="130"/>
-        <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
-        <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>您的樂譜中尚無樂器。請按&lt;b&gt;新增&lt;/b&gt;以選擇或使用快捷鍵%1來新增。</translation>
-    </message>
-    <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="133"/>
-        <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
-        <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>您的樂譜中沒有樂器。要選取樂器，請按&lt;b&gt;新增&lt;/b&gt;。</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="826"/>
-        <source>Are you sure you want to delete the selected %n instrument(s)?</source>
-        <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>您確定要刪除所選的%n個樂器嗎？</numerusform></translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="831"/>
-        <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
-        <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>這將從總譜和及所有分譜中刪除%n個樂器。</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>
@@ -22873,6 +22713,185 @@ pickup measure</source>
     </message>
 </context>
 <context>
+    <name>layoutpanel</name>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="92"/>
+        <source>Move selected instruments up</source>
+        <translation>上移所選樂器</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="93"/>
+        <source>Move selected staves up</source>
+        <translation>上移所選譜表</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="94"/>
+        <source>Move selected system markings up</source>
+        <translation>上移所選譜行組記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="119"/>
+        <source>Move selected system markings down</source>
+        <translation>下移所選譜行組記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="144"/>
+        <source>Remove selected system markings</source>
+        <translation>移除所選譜行組記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="117"/>
+        <source>Move selected instruments down</source>
+        <translation>下移所選樂器</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="118"/>
+        <source>Move selected staves down</source>
+        <translation>下移所選譜表</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="142"/>
+        <source>Remove selected instruments</source>
+        <translation>移除所選樂器</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="143"/>
+        <source>Remove selected staves</source>
+        <translation>移除所選譜表</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="37"/>
+        <source>Add</source>
+        <extracomment>Keep in sync with the message that appears if there are no instruments in the score (LayoutPanel.qml)</extracomment>
+        <translation>新增</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="40"/>
+        <source>Add instruments or system markings</source>
+        <translation>添加樂器或譜行組標記</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="49"/>
+        <source>System markings (tempo, rehearsal marks, etc.)</source>
+        <translation>譜行組記號（速度、排練號等）</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="47"/>
+        <source>New instrument</source>
+        <translation>新樂器</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="313"/>
+        <source>Settings</source>
+        <translation>設定</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="67"/>
+        <source>Staff type</source>
+        <translation>譜表類型</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
+        <source>Voices visible in the score</source>
+        <translation>樂譜中可見的聲部</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
+        <source>Small staff</source>
+        <translation>小型化譜表</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
+        <source>Hide all measures that do not contain notation (cutaway)</source>
+        <translation>隱藏所有不包含音樂符號的小節（提示曲譜）</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
+        <source>Create a linked staff</source>
+        <translation>創建關聯譜表</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="187"/>
+        <source>Note: linked staves contain identical information.</source>
+        <translation>注：關聯譜表與被關聯譜表包含的資訊一致。</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml" line="57"/>
+        <source>Display at this position on the score</source>
+        <translation>在樂譜上的這個位置顯示</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
+        <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
+        <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
+        <translation>您的樂譜中尚無樂器。請按&lt;b&gt;新增&lt;/b&gt;以選擇或使用快捷鍵%1來新增。</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="138"/>
+        <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
+        <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
+        <translation>您的樂譜中沒有樂器。要選取樂器，請按&lt;b&gt;新增&lt;/b&gt;。</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/layoutpanelcontextmenumodel.cpp" line="182"/>
+        <source>Instrument ordering</source>
+        <translation>樂器排列次序</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/layoutpanelcontextmenumodel.cpp" line="192"/>
+        <source>Expand all instruments</source>
+        <translation>展開所有樂器</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/layoutpanelcontextmenumodel.cpp" line="193"/>
+        <source>Collapse all instruments</source>
+        <translation>折疊所有樂器</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="888"/>
+        <source>Are you sure you want to delete the selected %n instrument(s)?</source>
+        <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
+        <translation><numerusform>您確定要刪除所選的%n個樂器嗎？</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="893"/>
+        <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
+        <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
+        <translation><numerusform>這將從總譜和及所有分譜中刪除%n個樂器。</numerusform></translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="239"/>
+        <source>Are you sure you want to reset all formatting?</source>
+        <translation>您真的要重設所有格式嗎？</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="240"/>
+        <source>This action can not be undone</source>
+        <translation>此操作無法撤消</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
+        <source>Add staff</source>
+        <translation>新增譜表</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/stafftreeitem.cpp" line="65"/>
+        <source>[LINK] %1</source>
+        <extracomment>Prefix for the display name for a linked staff. Preferably, keep this short.</extracomment>
+        <translation>[關聯] %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="38"/>
+        <source>System markings</source>
+        <translation>譜行組記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
+        <source>System markings hidden</source>
+        <translation>已隱藏譜行組對象</translation>
+    </message>
+</context>
+<context>
     <name>learn</name>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/ClassesPage.qml" line="204"/>
@@ -22926,17 +22945,21 @@ pickup measure</source>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="83"/>
         <source>Welcome to Mastering MuseScore – the most comprehensive resource for learning the world’s most popular music notation software! My name is Marc Sabatella, and I have been helping develop, support, and promote MuseScore since its initial release over ten years ago.
 
-Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore. 
+Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore.
 
-In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!</source>
-        <translation>歡迎來到《精通MuseScore》——這是學習世界上最受歡迎的製譜軟體的最全面的資源！我叫Marc Sabatella，自十多年前MuseScore首次發布以來，我一直在協助開發、支援和推廣MuseScore。
+In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
-無論您是剛剛開始使用製譜軟體，還是渴望探索進階排版和播放技術的強大使用者，我的旗艦級線上課程《精通MuseScore》涵蓋了您為充分利用MuseScore而需要知道的一切。
+(Note: Mastering MuseScore is available in English only)</source>
+        <translation>歡迎來到《精通MuseScore》——這裡有學習全球最受歡迎的記譜軟件：Musescore 的最全面的資源！我是Marc Sabatella，自十多年前MuseScore首次發佈以來，我一直在幫助開發、支持和推廣MuseScore。
 
-此外，《精通MuseScore》擁有良好支援的音樂家社區，包括討論空間、直播和其他相關課程和服務，以協助您創作最好的音樂。利用這個機會向其最知名的專家之一學習MuseScore！</translation>
+無論您是剛開始使用軟件，還是渴望探索高級制譜和播放技巧的高級用戶，我的旗艦在線課程《精通MuseScore》涵蓋了您需要瞭解的MuseScore的一切。
+
+此外，《精通MuseScore》還設有一個支持性的音樂家社區，包括討論區、直播和其他相關課程和服務，以幫助您創作出最好的音樂。利用這個機會從MuseScore最知名的專家之一那裡學習MuseScore！
+
+ （注意：僅提供英語版本）</translation>
     </message>
     <message>
-        <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="96"/>
+        <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="97"/>
         <source>Mastering MuseScore</source>
         <translation>掌握MuseScore</translation>
     </message>
@@ -22951,8 +22974,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/midi/internal/platform/lin/alsamidiinport.cpp" line="85"/>
         <location filename="../../src/framework/midi/internal/platform/lin/alsamidioutport.cpp" line="84"/>
-        <location filename="../../src/framework/midi/internal/platform/osx/coremidiinport.cpp" line="78"/>
-        <location filename="../../src/framework/midi/internal/platform/osx/coremidioutport.cpp" line="172"/>
+        <location filename="../../src/framework/midi/internal/platform/osx/coremidiinport.cpp" line="87"/>
+        <location filename="../../src/framework/midi/internal/platform/osx/coremidioutport.cpp" line="166"/>
         <location filename="../../src/framework/midi/internal/platform/win/winmidiinport.cpp" line="97"/>
         <location filename="../../src/framework/midi/internal/platform/win/winmidioutport.cpp" line="92"/>
         <source>No device</source>
@@ -22977,12 +23000,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/internal/SoundLibraryItem.qml" line="120"/>
         <source>Get it now</source>
-        <translation type="unfinished"/>
+        <translation>立即獲取</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="167"/>
         <source>Sorry, we are unable to load these sounds right now</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，我們現在無法加載這些音效</translation>
     </message>
 </context>
 <context>
@@ -23104,17 +23127,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="132"/>
         <source>Beam style</source>
-        <translation type="unfinished"/>
+        <translation>符槓樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="145"/>
         <source>Draw inner stems through beams</source>
-        <translation type="unfinished"/>
+        <translation>符槓貫穿所有符槓</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="146"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
-        <translation type="unfinished"/>
+        <translation>符槓只連到外側符槓（法式）</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
@@ -23139,13 +23162,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="71"/>
-        <source>Show text</source>
-        <translation>顯示文字</translation>
+        <source>Show text:</source>
+        <translation>顯示文本：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="83"/>
         <source>Edit glissando text style</source>
-        <translation type="unfinished"/>
+        <translation>編輯滑音線文本樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="100"/>
@@ -23213,7 +23236,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
         <source>Close search</source>
-        <translation type="unfinished"/>
+        <translation>模糊搜索</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
@@ -23223,7 +23246,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this staff</source>
-        <translation type="unfinished"/>
+        <translation>該譜表上的可見聲部</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -23245,7 +23268,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>音符工具列</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="204"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="195"/>
         <source>Show/hide toolbar buttons</source>
         <translation>顯示/隱藏工具列按鈕</translation>
     </message>
@@ -23291,104 +23314,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="884"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="730"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="731"/>
         <source>Note input mode</source>
         <translation>音符輸入模式</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="886"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="730"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="731"/>
         <source>Normal mode</source>
         <translation>一般模式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="952"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="961"/>
         <source>Cannot create tuplet</source>
         <translation>無法創建連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="952"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="961"/>
         <source>Note value is too short</source>
         <translation>音符時值過短</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1456"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1467"/>
         <source>All Supported Files</source>
         <translation>所有可支援的檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1457"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1468"/>
         <source>Scalable Vector Graphics</source>
         <translation>可縮放向量圖形</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1458"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1469"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1459"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1470"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG 點陣圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1460"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1471"/>
         <source>Bitmap</source>
         <translation>點陣圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1461"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1472"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1464"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1475"/>
         <source>Insert Image</source>
         <translation>插入圖片</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1814"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1825"/>
         <source>MuseScore style files</source>
         <translation>MuseScore 樣式檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1815"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1826"/>
         <source>MuseScore style file</source>
         <translation>MuseScore 樣式檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1818"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1829"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2425"/>
         <source>Load style</source>
         <translation>載入樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1819"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1830"/>
         <source>Save style</source>
         <translation>儲存樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1829"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1840"/>
         <source>The style file could not be loaded.</source>
         <translation>無法載入樣式檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1834"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1845"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>由於此樣式文件來自不同版本的 MuseScore Studio，因此無法保證您的樂譜顯示正確。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1836"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1847"/>
         <source>Click OK to load anyway.</source>
         <translation>單擊確定以繼續載入。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1850"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1861"/>
         <source>The style file could not be saved.</source>
         <translation>無法儲存樣式檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1851"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1862"/>
         <source>An error occurred.</source>
         <translation>發生錯誤。</translation>
     </message>
@@ -23420,12 +23443,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="130"/>
         <source>Move measures</source>
-        <translation type="unfinished"/>
+        <translation>移動小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="132"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>從選區創建譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="208"/>
@@ -23455,12 +23478,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="257"/>
         <source>To previous system</source>
-        <translation type="unfinished"/>
+        <translation>至上一譜行組</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="258"/>
         <source>To next system</source>
-        <translation type="unfinished"/>
+        <translation>至下一譜行組</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -23720,12 +23743,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="64"/>
         <source>Dash (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>虛線單長</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="70"/>
         <source>Gap (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>虛線間隔</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="81"/>
@@ -23763,7 +23786,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1462"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1473"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>所有</translation>
@@ -23852,7 +23875,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="80"/>
         <source>Nut line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>弦枕線粗細：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="88"/>
@@ -23892,22 +23915,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="124"/>
         <source>Number only</source>
-        <translation type="unfinished"/>
+        <translation>僅數字</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="133"/>
         <source>Custom suffix:</source>
-        <translation type="unfinished"/>
+        <translation>自定後綴</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="150"/>
         <source>Preview:</source>
-        <translation type="unfinished"/>
+        <translation>預覽：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="157"/>
         <source>Edit fret number text style</source>
-        <translation type="unfinished"/>
+        <translation>編輯品號文本樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="168"/>
@@ -23922,7 +23945,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="184"/>
         <source>Appearance:</source>
-        <translation type="unfinished"/>
+        <translation>外觀：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="188"/>
@@ -23948,22 +23971,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="209"/>
         <source>Edit fingering text style</source>
-        <translation type="unfinished"/>
+        <translation>編輯指法文本樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="218"/>
         <source>Fretboard style:</source>
-        <translation type="unfinished"/>
+        <translation>品格樣式：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="222"/>
         <source>Trimmed</source>
-        <translation type="unfinished"/>
+        <translation>截短</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="223"/>
         <source>Extended</source>
-        <translation type="unfinished"/>
+        <translation>延伸</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="229"/>
@@ -24027,8 +24050,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="60"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="203"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="211"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="194"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="202"/>
         <source>Customize toolbar</source>
         <translation>自訂工具列</translation>
     </message>
@@ -24264,12 +24287,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
         <source>These measures cannot be joined</source>
-        <translation type="unfinished"/>
+        <translation>這些小節無法聯結</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
         <source>Please remove the staff type change and retry.</source>
-        <translation type="unfinished"/>
+        <translation>請移除譜表類型更改並重試。</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -24382,28 +24405,28 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>%1音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="48"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="49"/>
         <source>%1 in %2</source>
         <comment>Transposing instrument displayed in the score</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
         <translation>%1（%2）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="68"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="69"/>
         <source>%1 in %2 %3</source>
         <comment>One of several transposing instruments displayed in the score</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
         <translation>%1（%2）%3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="73"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="74"/>
         <source>%1 %2</source>
         <comment>One of several instruments displayed in the score</comment>
         <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="119"/>
+        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="128"/>
         <source>Continuous view</source>
         <translation>連續視圖</translation>
     </message>
@@ -24479,12 +24502,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="180"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="181"/>
         <source>Note input preview note color</source>
-        <translation type="unfinished"/>
+        <translation>音符輸入預覽音符顏色</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="248"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="249"/>
         <source>Smooth panning</source>
         <translation>平滑平移</translation>
     </message>
@@ -24536,7 +24559,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="92"/>
         <source>Placement of inner ties with respect to augmentation dots:</source>
-        <translation type="unfinished"/>
+        <translation>內延音線相對於附點的位置：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="101"/>
@@ -24546,62 +24569,72 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
         <source>Always before dots</source>
-        <translation type="unfinished"/>
+        <translation>總在附點前</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="117"/>
         <source>Always after dots</source>
-        <translation type="unfinished"/>
+        <translation>總在附點後</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
         <source>Keep accidentals close to offset notes</source>
-        <translation type="unfinished"/>
+        <translation>讓變音號靠近偏移音符</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
         <source>Pair accidentals on seconds</source>
-        <translation type="unfinished"/>
+        <translation>二度音程間變音號緊貼</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation type="unfinished"/>
+        <translation>在子和弦上將變音號相隔一個八度對齊</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
-        <translation type="unfinished"/>
+        <translation>變音號對齊偏移的八度記號</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
         <source>Input pitch</source>
-        <translation type="unfinished"/>
+        <translation>輸入音高</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>擴展包工具欄</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="375"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>歷史</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="619"/>
+        <source>Note input modes</source>
+        <translation>音符輸入模式</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="620"/>
+        <source>Discover different ways to input notes in MuseScore Studio.</source>
+        <translation>在MuseScore Studio中探索輸入音符的不同方式。</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml" line="56"/>
         <source>Edit note-anchored line text style</source>
-        <translation type="unfinished"/>
+        <translation>編輯音符錨索文本樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="57"/>
         <source>Dynamics Popup</source>
-        <translation type="unfinished"/>
+        <translation>動態彈出窗口</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="733"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="735"/>
         <source>Small parentheses</source>
-        <translation type="unfinished"/>
+        <translation>小括號</translation>
     </message>
 </context>
 <context>
@@ -24610,7 +24643,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/breaksdialog.cpp" line="43"/>
         <source>Lock layout with %1 measure(s) per system</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation type="unfinished"/>
+        <translation>鎖定版面為每行固定%1小節</translation>
     </message>
 </context>
 <context>
@@ -24788,7 +24821,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="211"/>
         <source>Based on voice</source>
-        <translation type="unfinished"/>
+        <translation>基於聲部</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="234"/>
@@ -24804,12 +24837,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="802"/>
         <source>Inside the header</source>
-        <translation type="unfinished"/>
+        <translation>在譜頭內</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="804"/>
         <source>Under the first note</source>
-        <translation type="unfinished"/>
+        <translation>在首個音符之下</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="957"/>
@@ -24956,12 +24989,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1392"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>本樂譜上次保存時的MuseScore Studio版本</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1394"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>本樂譜上次保存時的MuseScore Studio修訂號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1396"/>
@@ -24993,9 +25026,9 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="81"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="453"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="455"/>
         <source>Visibility:</source>
-        <translation type="unfinished"/>
+        <translation>可見性：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="88"/>
@@ -25005,17 +25038,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="89"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>只在譜行組開頭顯示譜號，之後的所有行均隱藏</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="101"/>
         <source>Hide tab clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>在首個譜行組出現後隱藏指法譜號</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
         <source>Show courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>顯示提示譜號</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="115"/>
@@ -25045,42 +25078,42 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="159"/>
         <source>On all staves</source>
-        <translation type="unfinished"/>
+        <translation>在所有譜表上方</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="160"/>
         <source>Above staves</source>
-        <translation type="unfinished"/>
+        <translation>在譜表之上</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="161"/>
         <source>Across staves</source>
-        <translation type="unfinished"/>
+        <translation>橫跨譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
         <source>Set where time signatures appear using the Layout panel.</source>
-        <translation type="unfinished"/>
+        <translation>使用佈局面板設置拍號的顯示位置。</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="189"/>
         <source>Style and size</source>
-        <translation type="unfinished"/>
+        <translation>樣式與大小</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="203"/>
         <source>Numeral style:</source>
-        <translation type="unfinished"/>
+        <translation>數字樣式：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="249"/>
         <source>Alignment with barlines:</source>
-        <translation type="unfinished"/>
+        <translation>與小節線對齊：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="250"/>
         <source>Alignment across staves:</source>
-        <translation type="unfinished"/>
+        <translation>在譜表間對齊：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="290"/>
@@ -25088,130 +25121,131 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>縮放比例：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="351"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="353"/>
         <source>Gap between numbers
 (scaled):</source>
-        <translation type="unfinished"/>
+        <translation>數字之間的間隔
+（經縮放）：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="375"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="377"/>
         <source>Vertical placement:</source>
         <translation>垂直位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="394"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="396"/>
         <source>Show courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>顯示提示拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="413"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="415"/>
         <source>End-of-staff alignment:</source>
-        <translation type="unfinished"/>
+        <translation>譜表末對齊：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="417"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="419"/>
         <source>Hang into page margin</source>
-        <translation type="unfinished"/>
+        <translation>掛起到頁邊距</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="422"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="424"/>
         <source>Inset time signature</source>
-        <translation type="unfinished"/>
+        <translation>嵌入拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="427"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="429"/>
         <source>Inset barline</source>
-        <translation type="unfinished"/>
+        <translation>嵌入小節線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="446"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="448"/>
         <source>Key signatures</source>
         <translation>調號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="460"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="462"/>
         <source>Show on every system</source>
-        <translation type="unfinished"/>
+        <translation>在每個譜行組上顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="461"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="463"/>
         <source>Hide after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>只在譜行組開頭顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="473"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="475"/>
         <source>Show courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>顯示提示調號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="482"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="484"/>
         <source>Clefs, key &amp; time signatures at repeats and jumps</source>
-        <translation type="unfinished"/>
+        <translation>在反復號及跳躍號處的譜號、調號和拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="526"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="528"/>
         <source>Use parentheses</source>
-        <translation type="unfinished"/>
+        <translation>使用括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="566"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="568"/>
         <source>Place all changes before the barline</source>
-        <translation type="unfinished"/>
+        <translation>將所有更改置於小節線之前</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="570"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="572"/>
         <source>At repeats</source>
-        <translation type="unfinished"/>
+        <translation>在反復號處</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="576"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="578"/>
         <source>At all other jumps</source>
-        <translation type="unfinished"/>
+        <translation>在所有其他跳躍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="584"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="586"/>
         <source>Changes that apply only after repeats and jumps</source>
-        <translation type="unfinished"/>
+        <translation>僅在重復和跳躍後才應用的更改</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="594"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="596"/>
         <source>Place clefs before repeats</source>
-        <translation type="unfinished"/>
+        <translation>將譜號置於反復號前</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="603"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="605"/>
         <source>Place clefs after repeats</source>
-        <translation type="unfinished"/>
+        <translation>在反復號後放置譜號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="639"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="641"/>
         <source>Allow changes between end-start repeats</source>
-        <translation type="unfinished"/>
+        <translation>允許在結束-開始重復之間進行更改</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="679"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="681"/>
         <source>Courtesies</source>
-        <translation type="unfinished"/>
+        <translation>提示性記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="694"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="696"/>
         <source>Show at repeats</source>
-        <translation type="unfinished"/>
+        <translation>在反復號處顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="705"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="707"/>
         <source>Show at all other jumps</source>
-        <translation type="unfinished"/>
+        <translation>在所有其他跳躍號處顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="716"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="718"/>
         <source>Show when cancelling a change before repeats</source>
-        <translation type="unfinished"/>
+        <translation>在重復號之前取消更改時顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="727"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="729"/>
         <source>Show when cancelling a change before all other jumps</source>
-        <translation type="unfinished"/>
+        <translation>在所有其他跳躍號之前取消更改時顯示</translation>
     </message>
 </context>
 <context>
@@ -25219,7 +25253,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="180"/>
         <source>Properties for measure %1</source>
-        <translation type="unfinished"/>
+        <translation>小節%1屬性</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="226"/>
@@ -25235,53 +25269,61 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/percussion</name>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="83"/>
-        <source>When swapping the positions of two drum pads:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="100"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="129"/>
         <source>Move MIDI notes and keyboard shortcuts with their sounds</source>
-        <translation type="unfinished"/>
+        <translation>按其聲音移動MIDI音符和鍵盤快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="101"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="130"/>
         <source>Leave MIDI notes and keyboard shortcuts fixed to original pad positions</source>
-        <translation type="unfinished"/>
+        <translation>將MIDI音符和鍵盤快捷鍵固定在原始鍵盤位置</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="198"/>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="56"/>
+        <source>Triggering the percussion panel</source>
+        <translation>觸發打擊樂器面板</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="68"/>
+        <source>Open the panel automatically:</source>
+        <translation>自動打開面板</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="107"/>
+        <source>Close the panel automatically</source>
+        <translation>自動關閉面板</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="174"/>
         <source>Use legacy percussion panel</source>
-        <translation type="unfinished"/>
+        <translation>使用舊版打擊樂器面板</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="70"/>
         <source>Row: %1</source>
         <extracomment>%1 will be the row number of a percussion panel pad</extracomment>
-        <translation type="unfinished"/>
+        <translation>行：%1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="73"/>
         <source>Column: %1</source>
         <extracomment>%1 will be the column number of a percussion panel pad</extracomment>
-        <translation type="unfinished"/>
+        <translation>列：%1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="91"/>
         <source>Empty pad</source>
-        <translation type="unfinished"/>
+        <translation>空白Pad</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="118"/>
         <source>footer</source>
-        <translation type="unfinished"/>
+        <translation>頁腳</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="72"/>
         <source>Write</source>
-        <translation type="unfinished"/>
+        <translation>寫</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="139"/>
@@ -25290,9 +25332,9 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="200"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="132"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="139"/>
         <source>Finish editing</source>
-        <translation type="unfinished"/>
+        <translation>完成編輯</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="232"/>
@@ -25302,42 +25344,57 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="253"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>自定義套組</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="414"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="417"/>
         <source>Add row</source>
-        <translation type="unfinished"/>
+        <translation>添加行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="435"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="438"/>
         <source>Select an unpitched percussion staff to see available sounds</source>
-        <translation type="unfinished"/>
+        <translation>選擇一個無音高打擊樂譜表以查看可用的音色</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="117"/>
         <source>Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?</source>
-        <translation type="unfinished"/>
+        <translation>您還想移動觸發這些聲音的MIDI音符和鍵盤快捷鍵嗎？</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="133"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="140"/>
         <source>Edit layout</source>
-        <translation type="unfinished"/>
+        <translation>編輯版面</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="139"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="146"/>
         <source>Pad names</source>
-        <translation type="unfinished"/>
+        <translation>Pad名稱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="142"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="149"/>
         <source>Notation preview</source>
-        <translation type="unfinished"/>
+        <translation>記號預覽</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="151"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="158"/>
         <source>Reset layout</source>
-        <translation type="unfinished"/>
+        <translation>重置版面</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>
+        <source>When an unpitched percussion staff is selected</source>
+        <translation>當選擇無音高打擊樂譜表時</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="138"/>
+        <source>When inputting notation on an unpitched percussion staff</source>
+        <translation>在在無音高打擊樂譜表上輸入符號時</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="141"/>
+        <source>Never</source>
+        <translation>永不</translation>
     </message>
 </context>
 <context>
@@ -25497,7 +25554,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/internal/undohistorymodel.cpp" line="96"/>
         <source>File opened</source>
-        <translation type="unfinished"/>
+        <translation>已打開的文件</translation>
     </message>
 </context>
 <context>
@@ -26289,12 +26346,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1708"/>
         <source>Cm</source>
-        <translation type="unfinished"/>
+        <translation>Cm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1709"/>
         <source>C7</source>
-        <translation type="unfinished"/>
+        <translation>C7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1711"/>
@@ -26304,12 +26361,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1712"/>
         <source>Dm</source>
-        <translation type="unfinished"/>
+        <translation>Dm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1713"/>
         <source>D7</source>
-        <translation type="unfinished"/>
+        <translation>D7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1715"/>
@@ -26319,12 +26376,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1716"/>
         <source>Em</source>
-        <translation type="unfinished"/>
+        <translation>Em</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1717"/>
         <source>E7</source>
-        <translation type="unfinished"/>
+        <translation>E7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1719"/>
@@ -26334,12 +26391,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1720"/>
         <source>Fm</source>
-        <translation type="unfinished"/>
+        <translation>Fm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1721"/>
         <source>F7</source>
-        <translation type="unfinished"/>
+        <translation>F7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1723"/>
@@ -26349,12 +26406,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1724"/>
         <source>Gm</source>
-        <translation type="unfinished"/>
+        <translation>Gm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1725"/>
         <source>G7</source>
-        <translation type="unfinished"/>
+        <translation>G7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1727"/>
@@ -26364,12 +26421,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1728"/>
         <source>Am</source>
-        <translation type="unfinished"/>
+        <translation>Am</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1729"/>
         <source>A7</source>
-        <translation type="unfinished"/>
+        <translation>A7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1731"/>
@@ -26379,12 +26436,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1732"/>
         <source>Bm</source>
-        <translation type="unfinished"/>
+        <translation>Bm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1733"/>
         <source>B7</source>
-        <translation type="unfinished"/>
+        <translation>B7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1964"/>
@@ -26518,7 +26575,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="919"/>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="922"/>
         <source>MuseScore Studio palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio面板</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="921"/>
@@ -26549,7 +26606,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="598"/>
         <source>MuseScore Studio may not be able to load this drumset file.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio可能無法加載此鼓組文件。</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="629"/>
@@ -26659,7 +26716,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="132"/>
         <source>Allow reordering palettes</source>
-        <translation type="unfinished"/>
+        <translation>允許面板重新排序</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="164"/>
@@ -26674,7 +26731,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/DrumsetPanel.qml" line="66"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>自定義套組</translation>
     </message>
 </context>
 <context>
@@ -28289,7 +28346,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
         <source>Get more effects</source>
-        <translation type="unfinished"/>
+        <translation>獲取更多效果</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -28324,7 +28381,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
         <source>Get more sounds</source>
-        <translation type="unfinished"/>
+        <translation>獲取更多音色</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="391"/>
@@ -28355,17 +28412,17 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="681"/>
         <source>Change sound</source>
-        <translation type="unfinished"/>
+        <translation>改換音色</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="684"/>
         <source>Are you sure you want to change this sound?</source>
-        <translation type="unfinished"/>
+        <translation>您確定要更改此音色嗎？</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="685"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>此樂器上的音色旗標可能會被重置，但譜表文本將被保留。此操作無法撤銷。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -28415,67 +28472,67 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="57"/>
         <source>Modify sound</source>
-        <translation type="unfinished"/>
+        <translation>修改音色</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="84"/>
         <source>Playing techniques</source>
-        <translation type="unfinished"/>
+        <translation>演奏技術</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="108"/>
         <source>Sound flag options are not available for this sound.</source>
-        <translation type="unfinished"/>
+        <translation>音色旗標在此音色中不可用</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
         <source>Ord. (default)</source>
-        <translation type="unfinished"/>
+        <translation>常規（默認）</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="284"/>
         <source>Reset to default sound</source>
-        <translation type="unfinished"/>
+        <translation>重置為默認音色</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="296"/>
         <source>Allow multiple selection</source>
-        <translation type="unfinished"/>
+        <translation>允許多個選區</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="309"/>
         <source>Apply selection to all staves</source>
-        <translation type="unfinished"/>
+        <translation>將選項應用於所有譜表</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
         <source>ordinary</source>
-        <translation type="unfinished"/>
+        <translation>常規</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
         <source>Sound flag settings</source>
-        <translation type="unfinished"/>
+        <translation>音色旗標設置</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="143"/>
         <source>Sound flag menu</source>
-        <translation type="unfinished"/>
+        <translation>音色旗標菜單</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="162"/>
         <source>Change sounds</source>
-        <translation type="unfinished"/>
+        <translation>改換音色</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="165"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation type="unfinished"/>
+        <translation>您確定要更改此音色嗎？</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="166"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>音色旗標可能被重置，但譜表文本將被保留。此操作無法撤消。</translation>
     </message>
 </context>
 <context>
@@ -28590,106 +28647,106 @@ failed.</source>
         <translation>開啟其他檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="726"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="734"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation>您想在關閉前儲存樂譜「%1」的變更嗎？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="729"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="737"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation>若不進行儲存，您所有的變更都將遺失。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1723"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1745"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1731"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1753"/>
         <source>Open anyway</source>
         <translation>仍然開啟</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1736"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1744"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>此文件使用較新版本的MuseScore Studio保存。請訪問&lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt;以獲取最新版本。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1742"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1750"/>
         <source>File “%1” is corrupted</source>
         <translation>檔案「%1」錯亂</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1757"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1765"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation>檔案「%1」因損壞無法開啟。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1758"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>
         <source>Get help for this issue on musescore.org.</source>
         <translation>在musescore.org上獲取有關此問題的幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1579"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1760"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1587"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1768"/>
         <source>Get help</source>
         <translation>獲取幫助</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1494"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1502"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1584"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation>你的樂譜無法上傳到雲端</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1495"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
         <translation>此樂譜已損壞。您可以手動修復這些錯誤，或是將它儲存到您的電腦，並到 musescore.org 上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1502"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1510"/>
         <source>Save as…</source>
         <translation>另存為…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1507"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1543"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1515"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1551"/>
         <source>Revert to last saved</source>
         <translation>恢復到上次存檔</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1528"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1536"/>
         <source>This score has become corrupted and contains errors</source>
         <translation>此樂譜已損壞</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1529"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1537"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
         <translation>儘管該檔案或將無法使用，您仍可以繼續將其存儲於本地。您可以嘗試手動修復這些錯誤，或者到musescore.org上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1531"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1539"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
         <translation>儘管該存檔或將無法使用，您仍可以將其繼續存儲於本地。若您想要妥善地存儲樂譜，請恢復它到上次存儲的版本，或手動修復錯誤。您也可以到musescore.org上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1538"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1546"/>
         <source>Save anyway</source>
         <translation>仍要儲存</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1575"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1583"/>
         <source>Your score cannot be saved</source>
         <translation>無法儲存您的樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1577"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
         <translation>該樂譜已損壞。您可以到musescore.org上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1644"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1652"/>
         <source>Revert to last saved?</source>
         <translation>是否恢復上次的存檔？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1645"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1653"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation>您所做的修改將會丟失。此操作無法撤消。</translation>
     </message>
@@ -28704,120 +28761,120 @@ failed.</source>
         <translation>該樂譜無效。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1735"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1774"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1743"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1782"/>
         <source>Cannot read file %1</source>
         <translation>無法讀取文件 %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1779"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation>該檔案不存在，或暫時無法存取。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1743"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1751"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
-        <translation type="unfinished"/>
+        <translation>此文件包含錯誤，可致MuseScore Studio發生故障。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1629"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1637"/>
         <source>Try again</source>
-        <translation type="unfinished"/>
+        <translation>重試</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1782"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation type="unfinished"/>
+        <translation>無法打開文件，請確保MuseScore Studio有讀取該文件的權限。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1789"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
         <source>An error occurred while reading this file.</source>
         <translation>讀取本檔案時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1842"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1850"/>
         <source>All supported files</source>
         <translation>所有支援的檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1843"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1851"/>
         <source>MuseScore files</source>
         <translation>MuseScore檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1844"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1852"/>
         <source>MusicXML files</source>
         <translation>MusicXML 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1845"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
         <source>MIDI files</source>
         <translation>MIDI 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1846"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1854"/>
         <source>MuseData files</source>
         <translation>MuseData 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1847"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1855"/>
         <source>Capella files</source>
         <translation>Capella 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1848"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1856"/>
         <source>BB files (experimental)</source>
         <translation>BB 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1849"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1857"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Overture / Score Writer 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1850"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1858"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Bagpipe Music Writer 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1851"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1859"/>
         <source>Guitar Pro files</source>
         <translation>Guitar Pro 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1852"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1860"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Power Tab Editor 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1861"/>
         <source>MEI files</source>
         <translation>MEI 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1854"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1862"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>未壓縮的 MuseScore 資料夾（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1855"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1863"/>
         <source>MuseScore developer files</source>
         <translation>MuseScore開發檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1856"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1864"/>
         <source>MuseScore backup files</source>
         <translation>MuseScore 備份檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1868"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1876"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="129"/>
         <source>Create backup of file on disk before saving new changes</source>
-        <translation type="unfinished"/>
+        <translation>在保存新更改之前，在磁盤上創建文件備份</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="346"/>
@@ -29229,7 +29286,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="59"/>
         <source>Each page of the selected parts will be exported as a separate %1 file.</source>
         <translation>所選分譜的每一頁將會匯出為一個單獨的 &amp;1 檔案。</translation>
     </message>
@@ -29430,25 +29487,25 @@ failed.</source>
         <translation>所有分譜合為一個檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="575"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="590"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>所有版面</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="577"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="592"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>譜表組及分頁符號</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="579"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="594"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>僅手動添加的分行符和分頁符</translation>
     </message>
     <message>
-        <location filename="../../src/project/view/exportdialogmodel.cpp" line="581"/>
+        <location filename="../../src/project/view/exportdialogmodel.cpp" line="596"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>無分行符或分頁符</translation>
@@ -29466,7 +29523,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="45"/>
         <source>Use MuseScore element IDs</source>
-        <translation type="unfinished"/>
+        <translation>使用MuseScore元素識別號</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
+        <source>Masking compatibility (Adobe Illustrator only)</source>
+        <translation>遮罩兼容性（僅限Adobe Illustrator）</translation>
     </message>
 </context>
 <context>
@@ -29485,7 +29547,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>為&lt;a href=&quot;%1&quot;&gt;Muse鼓譜打擊樂&lt;/a&gt;使用新式記譜和音色</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
@@ -29510,12 +29572,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>為&lt;a href=&quot;%1&quot;&gt;Muse鼓譜打擊樂&lt;/a&gt;使用新式記譜和音色</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>請注意：樂譜版面將被MuseScore Studio的改進特性所影響</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
@@ -29854,7 +29916,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="83"/>
         <source>Not selected</source>
-        <translation type="unfinished"/>
+        <translation>未選中</translation>
     </message>
 </context>
 <context>
@@ -29867,7 +29929,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio版本：</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -30105,35 +30167,35 @@ failed.</source>
         <translation>每次保存可能需要幾分鐘，具體取決於您的樂譜大小。這些設置始終可以在偏好設定中更改。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="434"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="531"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="442"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="539"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
         <translation>登入或在 musescore.com 上建立免費帳號以開啟此樂譜。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1367"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1375"/>
         <source>View online</source>
         <translation>線上檢視</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1370"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1378"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
         <translation>所有既存更改現在都將更新到雲端。您可以在musescore.com上的樂譜管理器中管理此檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1595"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1603"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation>存儲本檔案時發生未知錯誤。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1613"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1621"/>
         <source>An error occurred while saving your score</source>
-        <translation type="unfinished"/>
+        <translation>保存您的樂譜時出現錯誤</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1615"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation type="unfinished"/>
+        <translation>為了保留您的樂譜，請試著重新保存一次。若本消息仍然出現，請將您的樂譜保存為新副本。您也可以在%1上獲得有關此問題的幫助。&lt;br/&gt;&lt;br/&gt;錯誤詳情（請求支持時請引用）：%2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -30142,7 +30204,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="989"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="997"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
         <translation>登入 musescore.com 以將此樂譜儲存到雲端。</translation>
     </message>
@@ -30214,18 +30276,18 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1625"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1633"/>
         <source>Save as…</source>
         <translation>另存為...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1444"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1452"/>
         <source>Unable to connect to the cloud</source>
         <translation>無法連接到雲端</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1445"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1453"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation>您的更改在連接恢復前將保存到一個本地檔案。</translation>
     </message>
@@ -30242,12 +30304,12 @@ failed.</source>
         <translation>請檢查您的互聯網連接或稍後再試。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1603"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1611"/>
         <source>Your score could not be saved</source>
         <translation>無法保存您的樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1458"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1466"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation>儲存前請至少新增一個樂器。</translation>
     </message>
@@ -30259,12 +30321,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="830"/>
         <source>File “%1” could not be opened for validation. %2</source>
-        <translation type="unfinished"/>
+        <translation>文件“%1”無法打開進行驗證。%2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="841"/>
         <source>“%1” is corrupted or damaged.</source>
-        <translation type="unfinished"/>
+        <translation>“%1”有錯誤或已損壞</translation>
     </message>
 </context>
 <context>
@@ -30307,7 +30369,7 @@ failed.</source>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishToolBar.qml" line="31"/>
         <source>Publish toolbar</source>
-        <translation type="unfinished"/>
+        <translation>發佈工具欄</translation>
     </message>
 </context>
 <context>
@@ -30335,7 +30397,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/StandardEditShortcutDialog.qml" line="64"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="100"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="91"/>
         <source>Define keyboard shortcut</source>
         <translation>自訂鍵盤快捷鍵</translation>
     </message>
@@ -30450,7 +30512,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
         <source>MuseScore Studio shortcuts file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio快捷鍵文件</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
@@ -30487,22 +30549,22 @@ failed.</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="38"/>
         <source>Enter shortcut</source>
-        <translation type="unfinished"/>
+        <translation>輸入快捷鍵</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="71"/>
         <source>Define percussion keyboard shortcut</source>
-        <translation type="unfinished"/>
+        <translation>自定義打擊樂鍵盤快捷鍵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="85"/>
         <source>Reassign shortcut for &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished"/>
+        <translation>為&lt;b&gt;%1&lt;/b&gt;重分配快捷鍵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="168"/>
         <source>When this instrument is selected, &lt;b&gt;%1&lt;/b&gt; will no longer run &lt;b&gt;%2&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>當選中該樂器時，&lt;b&gt;%1&lt;/b&gt;將不再運行&lt;b&gt;%2&lt;/b&gt;。</translation>
     </message>
 </context>
 <context>
@@ -30561,22 +30623,17 @@ failed.</source>
 <context>
     <name>tours</name>
     <message>
-        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="84"/>
-        <source>New</source>
-        <translation>新增</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="126"/>
+        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="114"/>
         <source>Watch video</source>
         <translation>觀看影片</translation>
     </message>
     <message>
-        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="146"/>
+        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="134"/>
         <source>Got it</source>
-        <translation type="unfinished"/>
+        <translation>知道了</translation>
     </message>
     <message>
-        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="146"/>
+        <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="134"/>
         <source>Next</source>
         <translation>下一頁</translation>
     </message>
@@ -30910,18 +30967,18 @@ failed.</source>
         <location filename="../../src/engraving/dom/edit.cpp" line="1931"/>
         <location filename="../../src/engraving/dom/edit.cpp" line="2055"/>
         <source>Add tie</source>
-        <translation type="unfinished"/>
+        <translation>添加延音線</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="741"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2226"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2557"/>
         <source>Add slur</source>
         <translation>加上圓滑線</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="786"/>
         <source>Add long slur</source>
-        <translation type="unfinished"/>
+        <translation>添加長圓滑線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/api/v1/qmlpluginapi.cpp" line="281"/>
@@ -30931,31 +30988,31 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/api/v1/score.cpp" line="247"/>
         <source>Plugin edit</source>
-        <translation type="unfinished"/>
+        <translation>插件編輯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/devtools/corruptscoredevtoolsmodel.cpp" line="44"/>
         <source>Corrupt score</source>
         <extracomment>&quot;Corrupt&quot; is used as a verb here, i.e. &quot;Make the current score corrupted&quot; (for testing purposes).</extracomment>
-        <translation type="unfinished"/>
+        <translation>損毀樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="2858"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="2842"/>
         <source>Reset all positions</source>
-        <translation type="unfinished"/>
+        <translation>重置所有位置佈局</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2056"/>
         <source>Remove tie</source>
-        <translation type="unfinished"/>
+        <translation>移除延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2110"/>
         <source>Toggle laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>切換放任號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="4112"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="4144"/>
         <source>Enter rest</source>
         <translation>輸入休止符</translation>
     </message>
@@ -30963,34 +31020,34 @@ failed.</source>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="750"/>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="770"/>
         <source>Regenerate figured bass text</source>
-        <translation type="unfinished"/>
+        <translation>重生成數字低音文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/lyrics.cpp" line="192"/>
         <source>Paste lyrics</source>
-        <translation type="unfinished"/>
+        <translation>粘貼唱詞</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="908"/>
         <source>Paste text</source>
-        <translation type="unfinished"/>
+        <translation>粘貼文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="106"/>
         <source>Change tie anchor</source>
-        <translation type="unfinished"/>
+        <translation>更改延音線錨點</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/unrollrepeats.cpp" line="102"/>
         <source>Create parts</source>
-        <translation type="unfinished"/>
+        <translation>創建分譜</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="379"/>
-        <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="159"/>
-        <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="171"/>
+        <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="163"/>
+        <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="175"/>
         <source>Edit element property</source>
-        <translation type="unfinished"/>
+        <translation>編輯元素屬性</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="461"/>
@@ -31000,764 +31057,807 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="143"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="484"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="485"/>
         <source>Make element(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>使元素可見</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="144"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="486"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="487"/>
         <source>Make element(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>使元素不可見</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4958"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5489"/>
         <source>Change voice</source>
-        <translation type="unfinished"/>
+        <translation>更改聲部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="151"/>
         <source>Set barline span interval as staff default</source>
-        <translation type="unfinished"/>
+        <translation>將連譜線間隔設為譜表默認</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="277"/>
         <source>Edit bend curve</source>
-        <translation type="unfinished"/>
+        <translation>編輯變音曲線</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/stems/stemsettingsmodel.cpp" line="114"/>
         <source>Change stem direction</source>
-        <translation type="unfinished"/>
+        <translation>更改符乾方向</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/ornaments/ornamentsettingsmodel.cpp" line="256"/>
         <source>Set ornament interval step</source>
-        <translation type="unfinished"/>
+        <translation>設置裝飾音音程</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/ornaments/ornamentsettingsmodel.cpp" line="288"/>
         <source>Set ornament interval type</source>
-        <translation type="unfinished"/>
+        <translation>設置裝飾音音程類型</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/widgets/fretcanvas.cpp" line="272"/>
         <source>Edit fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>編輯品格圖</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/widgets/fretcanvas.cpp" line="381"/>
         <source>Clear fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>清除品格圖</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/excerptnotation.cpp" line="145"/>
         <source>Rename part</source>
         <extracomment>Means: &quot;edit the name of a part score&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>重命名分譜</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="538"/>
         <source>Add/remove parts</source>
-        <translation type="unfinished"/>
+        <translation>添加/移除分譜</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="581"/>
         <source>Reset part</source>
-        <translation type="unfinished"/>
+        <translation>重置分譜</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="70"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="236"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="237"/>
         <source>Add/remove instruments</source>
-        <translation type="unfinished"/>
+        <translation>添加/移除樂器</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="106"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="701"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="871"/>
         <source>Remove instruments</source>
-        <translation type="unfinished"/>
+        <translation>移除樂器</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="121"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="825"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="995"/>
         <source>Remove staves</source>
-        <translation type="unfinished"/>
+        <translation>移除譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="140"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="508"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="568"/>
         <source>Add staff</source>
         <translation>新增譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="168"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="531"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="591"/>
         <source>Add linked staff</source>
-        <translation type="unfinished"/>
+        <translation>添加聯動譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="192"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="592"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="652"/>
         <source>Replace instrument</source>
         <translation>替換樂器</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="227"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="642"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="702"/>
         <source>Edit drumset</source>
         <translation>編輯鼓組</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="462"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="265"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="734"/>
+        <source>Add system markings</source>
+        <translation>添加譜行組記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="282"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="768"/>
+        <source>Remove system markings</source>
+        <translation>移除譜行組記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="295"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="802"/>
+        <source>Move system markings</source>
+        <translation>移動譜行組記號</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="463"/>
         <source>Toggle multimeasure rests</source>
         <translation>多小節休止符開關</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="464"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="465"/>
         <source>Toggle empty staves</source>
         <translation>切換空白譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="467"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="468"/>
         <source>Mirror notehead</source>
         <translation>鏡像翻轉符頭</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="482"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="483"/>
         <source>Enter full-measure rest</source>
-        <translation type="unfinished"/>
+        <translation>輸入全小節休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2132"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2143"/>
         <source>Display concert pitch</source>
-        <translation type="unfinished"/>
+        <translation>顯示標準音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2133"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2144"/>
         <source>Display transposed</source>
-        <translation type="unfinished"/>
+        <translation>顯示已移調內容</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="498"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="550"/>
         <source>Toggle visible</source>
-        <translation type="unfinished"/>
+        <translation>切換為可見</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1039"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1091"/>
         <source>Drag element</source>
-        <translation type="unfinished"/>
+        <translation>拖動元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1465"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1727"/>
         <source>Drop element</source>
-        <translation type="unfinished"/>
+        <translation>放下元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1716"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1973"/>
+        <source>Move range</source>
+        <translation>移動範圍</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1974"/>
+        <source>Copy range</source>
+        <translation>拷貝範圍</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2047"/>
         <source>Apply palette element</source>
-        <translation type="unfinished"/>
+        <translation>應用面板元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3133"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3552"/>
         <source>Move chord/rest to staff</source>
-        <translation type="unfinished"/>
+        <translation>將和弦/休止符移到譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3163"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3582"/>
         <source>Move chord/rest</source>
-        <translation type="unfinished"/>
+        <translation>移動和弦/休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3213"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3632"/>
         <source>Toggle snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>切換吸附至上一個</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3254"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3673"/>
         <source>Toggle snap to next</source>
-        <translation type="unfinished"/>
+        <translation>切換吸附至下一個</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3384"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3803"/>
         <source>Change pitch</source>
-        <translation type="unfinished"/>
+        <translation>更改音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3401"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3820"/>
         <source>Move lyrics</source>
-        <translation type="unfinished"/>
+        <translation>移動唱詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3413"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3832"/>
         <source>Nudge element</source>
-        <translation type="unfinished"/>
+        <translation>微移元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3449"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3868"/>
         <source>Nudge</source>
-        <translation type="unfinished"/>
+        <translation>微移</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3555"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3974"/>
         <source>Edit text</source>
-        <translation type="unfinished"/>
+        <translation>編輯文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3964"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4383"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
-        <translation type="unfinished"/>
+        <translation>按鍵性編輯</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4065"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4484"/>
         <source>Split measure</source>
         <translation>分割小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4080"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4499"/>
         <source>Join measures</source>
         <translation>合併小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4232"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4651"/>
         <source>Add horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>添加水平框體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4233"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4652"/>
         <source>Add vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>添加垂直框體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4234"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4653"/>
         <source>Add text frame</source>
-        <translation type="unfinished"/>
+        <translation>添加文本框</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4235"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4654"/>
         <source>Add %n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>添加%n小節</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4300"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4334"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4719"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4753"/>
         <source>Repeat selection</source>
         <translation>重複所選區域</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4354"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4773"/>
         <source>Paste</source>
         <translation>貼上</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4451"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4870"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4477"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4896"/>
         <source>Flip direction</source>
         <translation>翻轉符桿方向</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4526"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4956"/>
         <source>Add ottava</source>
-        <translation type="unfinished"/>
+        <translation>添加八度記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4533"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4569"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="173"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4963"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4999"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="183"/>
         <source>Add hairpin</source>
         <translation>添加音量漸變線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4655"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5085"/>
         <source>Toggle accidental</source>
-        <translation type="unfinished"/>
+        <translation>切換變音號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4715"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5145"/>
         <source>Toggle augmentation dots</source>
-        <translation type="unfinished"/>
+        <translation>切換附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4843"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5374"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>鎖定/解鎖所選譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4850"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5381"/>
         <source>Lock/unlock all systems</source>
-        <translation type="unfinished"/>
+        <translation>鎖定/解鎖所有譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4857"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5388"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>從選區創建譜行</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5511"/>
+        <source>Add note-anchored line</source>
+        <translation>添加音符錨線</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5256"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5787"/>
         <source>Delete %n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>刪除%n個小節</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6937"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7468"/>
         <source>Add accidental</source>
-        <translation type="unfinished"/>
+        <translation>添加變音號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4618"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5048"/>
         <source>Add brackets</source>
-        <translation type="unfinished"/>
+        <translation>添加括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4623"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4907"/>
+        <source>Flip horizontally</source>
+        <translation>水平翻轉</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5053"/>
         <source>Add braces</source>
-        <translation type="unfinished"/>
+        <translation>添加括弧</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4628"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5058"/>
         <source>Add parentheses</source>
-        <translation type="unfinished"/>
+        <translation>添加圓括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4698"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6911"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5128"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7442"/>
         <source>Toggle articulation</source>
-        <translation type="unfinished"/>
+        <translation>切換運音法記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4749"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5179"/>
         <source>Add grace note</source>
-        <translation type="unfinished"/>
+        <translation>添加倚音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4776"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="687"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5206"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="698"/>
         <source>Add tuplet</source>
-        <translation type="unfinished"/>
+        <translation>添加連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4797"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5227"/>
         <source>Set beam type</source>
-        <translation type="unfinished"/>
+        <translation>設置符槓類型</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4809"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5239"/>
         <source>Increase duration</source>
-        <translation type="unfinished"/>
+        <translation>增加時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4810"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5240"/>
         <source>Decrease duration</source>
-        <translation type="unfinished"/>
+        <translation>減少時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4822"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5257"/>
+        <source>Change hairpin type</source>
+        <translation>更改楔形力度號類型</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5300"/>
+        <source>Add dynamic</source>
+        <translation>其他力度</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5353"/>
         <source>Toggle layout break</source>
-        <translation type="unfinished"/>
+        <translation>切換換行符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4829"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5360"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>將小節移至上一譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4836"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5367"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>將小節移至下一譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4864"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5395"/>
         <source>Apply system lock to selection</source>
-        <translation type="unfinished"/>
+        <translation>將譜行鎖應用到選區</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4874"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5405"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>每行小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4881"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5412"/>
         <source>Transposition</source>
-        <translation type="unfinished"/>
+        <translation>移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4905"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5436"/>
         <source>Swap voices</source>
-        <translation type="unfinished"/>
+        <translation>交換聲部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4936"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5467"/>
         <source>Add interval</source>
-        <translation type="unfinished"/>
+        <translation>添加音程</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4943"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5474"/>
         <source>Enter note at fret %1</source>
-        <translation type="unfinished"/>
+        <translation>在%1品輸入音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4969"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5500"/>
         <source>Change voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>更改聲部指派</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4980"/>
-        <source>Add note anchored line</source>
-        <translation>新增音符錨線</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5051"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5582"/>
         <source>Add text</source>
         <translation>加入文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5119"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5650"/>
         <source>Add image</source>
         <translation>加入圖片</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5138"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5669"/>
         <source>Add figured bass</source>
         <translation>新增數字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5153"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5684"/>
         <source>Increase layout stretch</source>
         <translation>拉伸小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5154"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
         <source>Decrease layout stretch</source>
         <translation>縮窄小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5177"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5708"/>
         <source>Add time signature</source>
-        <translation type="unfinished"/>
+        <translation>添加拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5188"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5719"/>
         <source>Explode</source>
         <translation>拆分譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5199"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5730"/>
         <source>Implode</source>
         <translation>合併譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5210"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5741"/>
         <source>Realize chord symbols</source>
         <translation>依和弦代號填入音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5267"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5798"/>
         <source>Delete range</source>
-        <translation type="unfinished"/>
+        <translation>刪除範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5274"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5805"/>
         <source>Remove empty trailing measures</source>
         <translation>移除尾隨的空置小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5285"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5816"/>
         <source>Fill with slashes</source>
         <translation>以斜線填滿</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5296"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5827"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>節奏斜線記譜切換開關</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5303"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5834"/>
         <source>Change enharmonic spelling</source>
-        <translation type="unfinished"/>
+        <translation>更改異名同音的音名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5310"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5841"/>
         <source>Respell pitches</source>
         <translation>同音異名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5317"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5848"/>
         <source>Regroup rhythms</source>
         <translation>重新編組節奏</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5324"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5855"/>
         <source>Resequence rehearsal marks</source>
         <translation>重新排序排練記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5331"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5862"/>
         <source>Reset layout stretch</source>
         <translation>重設小節拉伸</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5338"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5869"/>
         <source>Reset text style overrides</source>
-        <translation type="unfinished"/>
+        <translation>重置文本樣式優先級</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5345"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5876"/>
         <source>Reset beams</source>
         <translation>重設符槓</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5362"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5893"/>
         <source>Reset shapes and positions</source>
         <translation>重設形狀與位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5382"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5913"/>
         <source>Reset to default layout</source>
-        <translation type="unfinished"/>
+        <translation>重置為默認版面</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5408"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5939"/>
         <source>Set score view settings</source>
-        <translation type="unfinished"/>
+        <translation>設定樂譜視圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5586"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6117"/>
         <source>Navigate to lyrics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5714"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5734"/>
-        <source>Navigate to next syllable</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5916"/>
-        <source>Navigate to verse</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6007"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6061"/>
-        <source>Navigate to next chord symbol</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6098"/>
-        <source>Navigate to chord symbol</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6153"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6197"/>
-        <source>Navigate to next figured bass</source>
-        <translation type="unfinished"/>
+        <translation>導航到唱詞</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6245"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6265"/>
+        <source>Navigate to next syllable</source>
+        <translation>導航到下一個音節</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6447"/>
+        <source>Navigate to verse</source>
+        <translation>導航到段落</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6538"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6592"/>
+        <source>Navigate to next chord symbol</source>
+        <translation>導航到下一個和弦符號</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6629"/>
+        <source>Navigate to chord symbol</source>
+        <translation>導航到和弦符號</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6684"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6728"/>
+        <source>Navigate to next figured bass</source>
+        <translation>導航到下一個數字低音</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6776"/>
         <source>Navigate to figured bass</source>
-        <translation type="unfinished"/>
+        <translation>導航到數字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6541"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6548"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6596"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7072"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7079"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7127"/>
         <source>Enter lyrics extension line</source>
-        <translation type="unfinished"/>
+        <translation>輸入唱詞局部延長線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6677"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7208"/>
         <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <translation>添加唱詞段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6725"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7256"/>
         <source>Enter guitar bend</source>
-        <translation type="unfinished"/>
+        <translation>輸入吉他彎音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6835"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7366"/>
         <source>Format text</source>
-        <translation type="unfinished"/>
+        <translation>格式化文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6855"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7386"/>
         <source>Toggle subscript</source>
-        <translation type="unfinished"/>
+        <translation>切換下標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6857"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7388"/>
         <source>Toggle superscript</source>
-        <translation type="unfinished"/>
+        <translation>切換上標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6859"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7390"/>
         <source>Toggle subscript/superscript</source>
-        <translation type="unfinished"/>
+        <translation>切換下/上標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6916"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7447"/>
         <source>Toggle ornament</source>
-        <translation type="unfinished"/>
+        <translation>切換裝飾音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6921"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7452"/>
         <source>Toggle automatic placement</source>
-        <translation type="unfinished"/>
+        <translation>切換自動佈局</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6932"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7463"/>
         <source>Add clef</source>
-        <translation type="unfinished"/>
+        <translation>添加譜號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6942"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7473"/>
         <source>Transpose semitone</source>
-        <translation type="unfinished"/>
+        <translation>半音移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6948"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7479"/>
         <source>Transpose diatonically</source>
         <translation>以全音階移調</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationmidiinput.cpp" line="226"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="431"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="466"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="435"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="477"/>
         <source>Enter note</source>
-        <translation type="unfinished"/>
+        <translation>輸入音符</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationmidiinput.cpp" line="351"/>
         <source>Realtime advance</source>
-        <translation type="unfinished"/>
+        <translation>實時推進</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="453"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="457"/>
         <source>Pad note</source>
-        <translation type="unfinished"/>
+        <translation>Pad音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="491"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="502"/>
         <source>Delete note</source>
-        <translation type="unfinished"/>
+        <translation>刪除音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="890"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="901"/>
         <source>Double note input duration</source>
-        <translation type="unfinished"/>
+        <translation>加倍輸入時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="903"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="914"/>
         <source>Halve note input duration</source>
-        <translation type="unfinished"/>
+        <translation>減半輸入時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="256"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="257"/>
         <source>Set score order</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="278"/>
-        <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
-        <source>Show instrument</source>
-        <translation type="unfinished"/>
+        <translation>設定樂譜順序</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="279"/>
-        <location filename="../../src/notation/view/widgets/timeline.cpp" line="3043"/>
-        <source>Hide instrument</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
+        <source>Show instrument</source>
+        <translation>顯示樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="306"/>
-        <source>Set sharps/flats no preference</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="280"/>
+        <location filename="../../src/notation/view/widgets/timeline.cpp" line="3043"/>
+        <source>Hide instrument</source>
+        <translation>隱藏樂器</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="307"/>
-        <source>Set prefer flats</source>
-        <translation type="unfinished"/>
+        <source>Set sharps/flats no preference</source>
+        <translation>設升/降號為無偏好</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="308"/>
-        <source>Set prefer sharps</source>
-        <translation type="unfinished"/>
+        <source>Set prefer flats</source>
+        <translation>設置偏好降號</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="309"/>
+        <source>Set prefer sharps</source>
+        <translation>設置偏好升號</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="310"/>
         <source>Set sharps/flats automatic</source>
-        <translation type="unfinished"/>
+        <translation>自動設置升/降號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="311"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="312"/>
         <source>Set sharps/flats preference</source>
-        <translation type="unfinished"/>
+        <translation>設置升/降號偏好</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="352"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="412"/>
         <source>Set instrument name</source>
-        <translation type="unfinished"/>
+        <translation>設置樂器名稱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="379"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="439"/>
         <source>Set abbreviated instrument name</source>
-        <translation type="unfinished"/>
+        <translation>設置縮寫樂器名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="406"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="466"/>
         <source>Show voice %1</source>
-        <translation type="unfinished"/>
+        <translation>顯示聲部%1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="407"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="467"/>
         <source>Hide voice %1</source>
-        <translation type="unfinished"/>
+        <translation>隱藏聲部%1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="436"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="496"/>
         <source>Show staff</source>
-        <translation type="unfinished"/>
+        <translation>顯示譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="437"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="497"/>
         <source>Hide staff</source>
-        <translation type="unfinished"/>
+        <translation>隱藏譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="464"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="524"/>
         <source>Set staff type</source>
-        <translation type="unfinished"/>
+        <translation>設置譜表類型</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="486"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="546"/>
         <source>Edit staff properties</source>
-        <translation type="unfinished"/>
+        <translation>編輯譜表屬性</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="554"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="614"/>
         <source>Add instrument</source>
         <translation>新增樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="572"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="632"/>
         <source>Reset instrument formatting</source>
-        <translation type="unfinished"/>
+        <translation>重置樂器格式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="880"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1050"/>
         <source>Move instruments</source>
-        <translation type="unfinished"/>
+        <translation>移動樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="909"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1079"/>
         <source>Move staves</source>
-        <translation type="unfinished"/>
+        <translation>移動譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationstyle.cpp" line="116"/>
@@ -31767,22 +31867,22 @@ failed.</source>
     <message>
         <location filename="../../src/notation/view/internal/harppedalpopupmodel.cpp" line="179"/>
         <source>Edit harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>編輯竪琴踏板圖</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="142"/>
         <source>Set string tuning</source>
-        <translation type="unfinished"/>
+        <translation>設置弦調律</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="232"/>
         <source>Load string tunings preset</source>
-        <translation type="unfinished"/>
+        <translation>加載弦調律預設</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="285"/>
         <source>Set number of strings</source>
-        <translation type="unfinished"/>
+        <translation>設置弦數</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="356"/>
@@ -31790,84 +31890,91 @@ failed.</source>
         <translation>編輯弦樂器弦數</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="229"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="236"/>
         <source>Edit percussion panel layout</source>
-        <translation type="unfinished"/>
+        <translation>編輯打擊樂面板版面</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="404"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="416"/>
         <source>Duplicate percussion panel pad</source>
-        <translation type="unfinished"/>
+        <translation>複製打擊樂面板版面</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="424"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="436"/>
         <source>Delete percussion panel pad</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="443"/>
-        <source>Edit percussion shortcut</source>
-        <translation type="unfinished"/>
+        <translation>刪除打擊樂面板</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="455"/>
-        <source>Enter percussion note</source>
-        <translation type="unfinished"/>
+        <source>Edit percussion shortcut</source>
+        <translation>編輯打擊樂快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="512"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="518"/>
         <source>Reset percussion panel layout</source>
-        <translation type="unfinished"/>
+        <translation>重置打擊樂面板版面</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="318"/>
         <source>Edit measure properties</source>
-        <translation type="unfinished"/>
+        <translation>編輯小節屬性</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="101"/>
         <source>Edit page settings</source>
-        <translation type="unfinished"/>
+        <translation>編輯頁面設置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="144"/>
         <source>Edit staff text properties</source>
-        <translation type="unfinished"/>
+        <translation>編輯譜表文本屬性</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="212"/>
         <source>Edit time signature properties</source>
-        <translation type="unfinished"/>
+        <translation>編輯拍號屬性</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="183"/>
         <source>Toggle sound flag preset</source>
-        <translation type="unfinished"/>
+        <translation>切換 音色旗標預設</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="210"/>
         <source>Toggle sound flag playing technique</source>
-        <translation type="unfinished"/>
+        <translation>切換音色旗標演奏技巧</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="333"/>
         <source>Reset sound flag</source>
-        <translation type="unfinished"/>
+        <translation>重置音色旗標</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="359"/>
         <source>Toggle ‘Apply sound flag to all staves’</source>
-        <translation type="unfinished"/>
+        <translation>切換“對所有譜表應用音色旗標”</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="1084"/>
         <source>Edit project properties</source>
-        <translation type="unfinished"/>
+        <translation>編輯項目屬性</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectmigrator.cpp" line="157"/>
         <source>Migrate project</source>
-        <translation type="unfinished"/>
+        <translation>遷移項目</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="99"/>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="192"/>
+        <source>Make system marking(s) visible</source>
+        <translation>使譜行組記號可見</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="100"/>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="193"/>
+        <source>Make system marking(s) invisible</source>
+        <translation>使譜行組記號不可見</translation>
     </message>
 </context>
 <context>
@@ -31890,7 +31997,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="82"/>
         <source>A new version of MuseScore Studio is available!</source>
-        <translation type="unfinished"/>
+        <translation>新版本MuseScore Studio現已可用！</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="89"/>
@@ -31900,7 +32007,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished"/>
+        <translation>您已擁有最新版本的MuseScore Studio。請訪問&lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt;瞭解更多前瞻性內容。</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
@@ -31920,7 +32027,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="193"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio需要關閉才能完成安裝。如果您有任何未保存的更改，系統將提示您在MuseScore Studio關閉前保存它們。</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="198"/>
@@ -31930,18 +32037,18 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation type="unfinished"/>
+        <translation>閱讀%1版本說明</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/appupdateservice.cpp" line="208"/>
         <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation type="unfinished"/>
+        <translation>正在下載MuseScore Studio %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/view/updatemodel.cpp" line="36"/>
         <source>Updating MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>正在更新MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -31965,7 +32072,7 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
-        <translation type="unfinished"/>
+        <translation>使用工作區來保存MuseScore Studio界面的不同佈局</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>
@@ -31985,7 +32092,7 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>
         <source>UI arrangement</source>
-        <translation>使用者介面布局</translation>
+        <translation>使用者介面佈局</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="166"/>
@@ -32013,7 +32120,7 @@ failed.</source>
         <translation>「%1」無法用作工作區名稱。請選擇其他名稱。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="95"/>
+        <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="101"/>
         <source>Workspace:</source>
         <translation>工作區：</translation>
     </message>
