@@ -2007,8 +2007,8 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
     const double itemToRightParen = rightParenX - itemRightX;
     const double parenToItemDist = (leftParenToItem + itemToRightParen) / 2;
 
-    leftParen->mutldata()->moveX(-std::abs(parenToItemDist - leftParenToItem));
-    rightParen->mutldata()->moveX(-std::abs(itemToRightParen - parenToItemDist));
+    leftParen->mutldata()->moveX(-(parenToItemDist - leftParenToItem));
+    rightParen->mutldata()->moveX(-(itemToRightParen - parenToItemDist));
 }
 
 Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)
