@@ -191,7 +191,7 @@ public:
     static AsciiStringView toXml(ChordLineType v);
     static ChordLineType fromXml(const AsciiStringView& tag, ChordLineType def);
 
-    static const char* userName(DrumNum v);
+    static const String& userName(DrumNum v);
 
     static const TranslatableString& userName(GlissandoType v);
     static AsciiStringView toXml(GlissandoType v);

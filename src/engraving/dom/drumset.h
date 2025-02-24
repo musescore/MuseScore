@@ -20,14 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_DRUMSET_H
-#define MU_ENGRAVING_DRUMSET_H
+#pragma once
 
-#include "mscore.h"
 #include "pitchspelling.h"
 #include "../types/types.h"
-
-#include "editdata.h"
 
 namespace mu::engraving {
 class XmlWriter;
@@ -70,9 +66,9 @@ struct DrumInstrument {
     std::list<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
-    DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
+    DrumInstrument(const String& n, NoteHeadGroup nh, int l, DirectionV d,
                    int pr = -1, int pc = -1, int v = 0, String sc = String())
-        : name(String::fromUtf8(s)), notehead(nh), line(l), stemDirection(d), panelRow(pr), panelColumn(pc), voice(v), shortcut(sc) {}
+        : name(n), notehead(nh), line(l), stemDirection(d), panelRow(pr), panelColumn(pc), voice(v), shortcut(sc) {}
 
     void addVariant(DrumInstrumentVariant v) { variants.push_back(v); }
 
@@ -152,4 +148,3 @@ private:
 
 extern Drumset* smDrumset;
 } // namespace mu::engraving
-#endif
