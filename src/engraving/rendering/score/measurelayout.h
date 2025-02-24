@@ -111,6 +111,8 @@ private:
     static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
     static void placeParentheses(const Segment* segment, track_idx_t trackIdx, LayoutContext& ctx);
     static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
+    static void removeRepeatCourtesies(Measure* m);
     static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
+    static void removeRepeatContinuationCourtesies(Measure* m);
 };
 }
