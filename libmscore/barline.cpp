@@ -429,7 +429,7 @@ int nextVisibleSpannedStaff(const BarLine* bl)
       for (int i = staffIdx + 1; i < nstaves; ++i) {
             Staff* s = score->staff(i);
             if (s->part()->show()) {
-                  // span/show bar line if this measure is visible 
+                  // span/show bar line if this measure is visible
                   if (bl->measure()->visible(i))
                         return i;
                   // or if this is an endBarLine and:
@@ -466,45 +466,39 @@ void BarLine::getY() const
       int staffIdx1       = staffIdx();
       const Staff* staff1 = score()->staff(staffIdx1);
       int staffIdx2       = staffIdx1;
-      int nstaves         = score()->nstaves();
 
-      Measure* measure = segment()->measure();
       if (_spanStaff)
             staffIdx2 = nextVisibleSpannedStaff(this);
 
+      bool isTop = this->isTop();
+      bool isBottom = this->isBottom();
+
+      Measure* measure = segment()->measure();
       System* system = measure->system();
       if (!system)
             return;
 
-      // test start and end staff visibility
-
-
-      // base y on top visible staff in barline span
-      // after skipping ones with hideSystemBarLine set
-      // and accounting for staves that are shown but have invisible measures
-
       Fraction tick        = segment()->measure()->tick();
-      const StaffType* st1 = staff1->staffType(tick);
+      const StaffType* staffType1  = staff1->staffType(tick);
 
-      int from    = _spanFrom;
+      int from = isTop ? _spanFrom : 0; // barlines spanned from top always starts at top line
       int to      = _spanTo;
-      int oneLine = st1->lines() <= 1;
-      if (oneLine && _spanFrom == 0) {
+      int oneLine = staffType1 ->lines() <= 1;
+      if (oneLine && isTop && _spanFrom == 0)
             from = BARLINE_SPAN_1LINESTAFF_FROM;
-            if (!_spanStaff || (staffIdx1 == nstaves - 1) || (staffIdx2 == staffIdx1))
-                  to = BARLINE_SPAN_1LINESTAFF_TO;
-            }
-      SysStaff* sysStaff1  = system->staff(staffIdx1);
-      qreal yp = sysStaff1->y();
-      qreal spatium1 = st1->spatium(score());
-      qreal d  = st1->lineDistance().val() * spatium1;
-      qreal yy = measure->staffLines(staffIdx1)->y1() - yp;
-      qreal lw = score()->styleS(Sid::staffLineWidth).val() * spatium1 * .5;
-      y1       = yy + from * d * .5 - lw;
-      if (staffIdx2 != staffIdx1)
-            y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
-      else
-            y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
+      if (oneLine && isBottom && _spanTo == 0)
+            to = BARLINE_SPAN_1LINESTAFF_TO;
+
+      qreal sysStaff1Y = system->staff(staffIdx1)->y();
+      qreal spatium1 = staffType1 ->spatium(score());
+      qreal lineDistance   = staffType1 ->lineDistance().val() * spatium1;
+      qreal offset = staffType1->yoffset().val() * spatium1;
+      qreal lineWidth  = score()->styleS(Sid::staffLineWidth).val() * spatium1 * .5;
+      y1       = offset + from * lineDistance * .5 - lineWidth ;
+      if (isBottom)
+            y2 = offset + (staffType1 ->lines() * 2 - 2 + to) * lineDistance  * .5 + lineWidth ;
+      else // span to top of next staff
+            y2 = measure->staffLines(staffIdx2)->y1() - sysStaff1Y;
       }
 
 //---------------------------------------------------------
@@ -531,7 +525,7 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
                             || score()->scoreFont()->name() == "Ekmelos") ? 0.5 * score()->spatium() * mag() : 0;
             y1l          = st->doty1() * _spatium + offset;
             y2l          = st->doty2() * _spatium + offset;
-            
+
             //adjust for staffType offset
             qreal stYOffset = st->yoffset().val() * _spatium;
             y1l             += stYOffset;
