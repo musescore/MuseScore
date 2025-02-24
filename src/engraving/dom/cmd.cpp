@@ -4301,6 +4301,12 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             note->setNval(nval, tick);
         }
 
+        if (!seg->isChordRestType()) {
+            Segment* newCrSeg = seg->measure()->undoGetSegment(SegmentType::ChordRest, seg->tick());
+            newCrSeg->setTicks(seg->ticks());
+            seg = newCrSeg;
+        }
+
         setChord(this, seg, h->track(), chord, duration);     //add chord using template
         delete chord;
     }
