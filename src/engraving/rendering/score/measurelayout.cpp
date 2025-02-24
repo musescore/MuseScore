@@ -1252,8 +1252,9 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
             break;
         }
 
-        if (!modernMMRest && (s2->isClefRepeatAnnounceType() || s2->isTimeSigRepeatAnnounceType() || s2->isKeySigRepeatAnnounceType()
-                              || s2->isEndBarLineType()) && s2->element(staffIdx * VOICES)) {
+        if (!modernMMRest
+            && (s2->isClefRepeatAnnounceType() || (s2->isTimeSigRepeatAnnounceType() && !s2->hasTimeSigAboveStaves())
+                || s2->isKeySigRepeatAnnounceType() || s2->isEndBarLineType()) && s2->element(staffIdx * VOICES)) {
             break;
         }
     }
