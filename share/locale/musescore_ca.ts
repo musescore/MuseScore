@@ -8983,7 +8983,7 @@ l&apos;alçària x del text):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1243"/>
         <source>Add tied note to chord</source>
-        <translation>Afegeix la nota amb punt a l&apos;acord</translation>
+        <translation>Afegeix una nota lligada a l&apos;acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
