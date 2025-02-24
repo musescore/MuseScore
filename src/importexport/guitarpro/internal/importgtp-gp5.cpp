@@ -923,7 +923,7 @@ bool GuitarPro5::read(IODevice* io)
         }
         if (barBits & SCORE_REPEAT_END) {                    // number of repeats
             bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::END;
-            bar.repeats = readUInt8() + 1;
+            bar.repeats = readUInt8();
         }
         if (barBits & SCORE_MARKER) {
             bar.marker = readDelphiString();           // new section?
@@ -937,6 +937,7 @@ bool GuitarPro5::read(IODevice* io)
                 bar.volta.voltaInfo.push_back(voltaNumber & 1);
                 voltaNumber >>= 1;
             }
+            bar.repeats = bar.volta.voltaInfo.size() + 1;
         }
         if (barBits & SCORE_KEYSIG) {
             int currentKey = readUInt8();
