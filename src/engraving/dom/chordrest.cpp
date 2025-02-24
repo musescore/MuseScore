@@ -1317,7 +1317,7 @@ bool ChordRest::hasFollowingJumpItem() const
 
         const Marker* marker = toMarker(e);
 
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+        if (marker->isRightMarker()) {
             return true;
         }
     }
@@ -1373,7 +1373,7 @@ bool ChordRest::hasPrecedingJumpItem() const
         }
 
         const Marker* marker = toMarker(e);
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+        if (marker->isRightMarker()) {
             continue;
         }
 
