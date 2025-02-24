@@ -25862,7 +25862,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
         <location filename="../../src/palette/internal/palettecreator.cpp" line="607"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1814"/>
         <source>LH guitar fingering %1</source>
-        <translation>VK kitarasormitus &amp;1</translation>
+        <translation>VK kitarasormitus %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="614"/>

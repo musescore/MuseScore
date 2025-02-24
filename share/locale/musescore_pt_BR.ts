@@ -14129,7 +14129,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/check.cpp" line="200"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>Compasso incompleto: %1, compasso %2, pauta %3. Encontrado: %4. Esperado: %5.</translation>
+        <translation>&lt;b&gt;Compasso incompleto&lt;/b&gt;: %1, compasso %2, pauta %3. Encontrado: %4. Esperado: %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="215"/>
@@ -16665,47 +16665,47 @@ Traste %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3174"/>
         <source>11 large diesis down, 3° down [46 EDO]</source>
-        <translation>11 dieses grandes abaixo, 3º abaixo [46 EDO]</translation>
+        <translation>11 dieses grandes abaixo, 3° abaixo [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3175"/>
         <source>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</source>
-        <translation>11 dieses grandes acima, (11L), (sustenido menos 11M), 3º acima [46 EDO]</translation>
+        <translation>11 dieses grandes acima, (11L), (sustenido menos 11M), 3° acima [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3176"/>
         <source>11 medium diesis down, 1°[17 31] 2°46 down, 1/4-tone down</source>
-        <translation>11 dieses médias abaixo, 1º[17 31] 2º46 abaixo, 1/4 de tom abaixo</translation>
+        <translation>11 dieses médias abaixo, 1°[17 31] 2°46 abaixo, 1/4 de tom abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3177"/>
         <source>11 medium diesis up, (11M), 1°[17 31] 2°46 up, 1/4-tone up</source>
-        <translation>11 dieses médias acima, (11M), 1º[17 31] 2º46 acima, 1/4 de tom acima</translation>
+        <translation>11 dieses médias acima, (11M), 1°[17 31] 2°46 acima, 1/4 de tom acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3202"/>
         <source>25 small diesis down, 2° down [53 EDO]</source>
-        <translation>25 dieses pequenas abaixo, 2º abaixo [53 EDO]</translation>
+        <translation>25 dieses pequenas abaixo, 2° abaixo [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3203"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation>25 dieses pequenas acima, (25S, ~5:13S, ~37S, 5C mais 5C), 2º acima [53 EDO]</translation>
+        <translation>25 dieses pequenas acima, (25S, ~5:13S, ~37S, 5C mais 5C), 2° acima [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3208"/>
         <source>35 large diesis down, 2° down [50 EDO], 5/18-tone down</source>
-        <translation>35 dieses grandes abaixo, 2ª abaixo [50 EDO], 5/18 de tom abaixo</translation>
+        <translation>35 dieses grandes abaixo, 2° abaixo [50 EDO], 5/18 de tom abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3209"/>
         <source>35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2°50 up</source>
-        <translation>35 dieses grandes acima, (35L, ~13L, ~125L, sustenido menos 35M), 2º50 acima</translation>
+        <translation>35 dieses grandes acima, (35L, ~13L, ~125L, sustenido menos 35M), 2°50 acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3210"/>
         <source>35 medium diesis down, 1°[50] 2°[27] down, 2/9-tone down</source>
-        <translation>35 dieses médias abaixo, 1º[50] 2º[27] abaixo, 2/9 de tom abaixo</translation>
+        <translation>35 dieses médias abaixo, 1°[50] 2°[27] abaixo, 2/9 de tom abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3211"/>
@@ -16765,7 +16765,7 @@ Traste %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3346"/>
         <source>Flat 7C-up, 2° down [43 EDO], 4° down [72 EDO], 1/3-tone down</source>
-        <translation>Bemol 7C-acima, 2º abaixo [43 EDO], 4º abaixo [72 EDO], 1/3 de tom abaixo</translation>
+        <translation>Bemol 7C-acima, 2° abaixo [43 EDO], 4° abaixo [72 EDO], 1/3 de tom abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3358"/>
@@ -16775,7 +16775,7 @@ Traste %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3379"/>
         <source>Sharp 25S-down, 3° up [53 EDO]</source>
-        <translation>Sustenido 255 abaixo, 3º acima [53 EDO]</translation>
+        <translation>Sustenido 255 abaixo, 3° acima [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3389"/>
@@ -16790,7 +16790,7 @@ Traste %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3402"/>
         <source>Sharp 7C-down, 2° up [43 EDO], 4° up [72 EDO], 1/3-tone up</source>
-        <translation>Sustenido 7C-abaixo, 2º acima [43 EDO], 4º acima [72 EDO], 1/3 de tom acima</translation>
+        <translation>Sustenido 7C-abaixo, 2° acima [43 EDO], 4° acima [72 EDO], 1/3 de tom acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3414"/>

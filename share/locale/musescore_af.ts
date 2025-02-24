@@ -11590,7 +11590,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="70"/>
         <source>Your version of %1 is up to date.</source>
-        <translation>U weergawe van $1 is op datum.</translation>
+        <translation>U weergawe van %1 is op datum.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="103"/>
@@ -21951,7 +21951,7 @@ opslagmaat</translation>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="54"/>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="44"/>
         <source>Hooked 90°</source>
-        <translation>Gehaak 90º</translation>
+        <translation>Gehaak 90°</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="45"/>
@@ -21959,7 +21959,7 @@ opslagmaat</translation>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="46"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="55"/>
         <source>Hooked 45°</source>
-        <translation>Gehaak 45º</translation>
+        <translation>Gehaak 45°</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="66"/>
@@ -22006,7 +22006,7 @@ opslagmaat</translation>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="47"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="56"/>
         <source>Hooked 90° T-style</source>
-        <translation>Gehaak 90º T-styl</translation>
+        <translation>Gehaak 90° T-styl</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="47"/>

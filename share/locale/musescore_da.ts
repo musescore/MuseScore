@@ -11943,7 +11943,7 @@ Publiceret i henhold til &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="125"/>
         <source>File path: %1</source>
-        <translation>Filsti:</translation>
+        <translation>Filsti: %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="144"/>

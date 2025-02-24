@@ -9194,12 +9194,12 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="99"/>
         <source>Restore the &amp;default layout</source>
-        <translation>&amp;Herstel de standaard weergave</translation>
+        <translation>&amp;Herstel de standaardweergave</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the default layout</source>
-        <translation>Herstel de standaard weergave</translation>
+        <translation>Herstel de standaardweergave</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
@@ -25096,7 +25096,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
         <source>Set where time signatures appear using the Layout panel.</source>
-        <translation>Bepaal met het opmaak paneel waar de maatsoorten worden weergegeven.</translation>
+        <translation>Bepaal met het Opmaak-paneel waar de maatsoorten worden weergegeven.</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="189"/>
@@ -25342,7 +25342,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="232"/>
         <source>Layout</source>
-        <translation>Opmaak</translation>
+        <translation>Indeling</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="253"/>
@@ -25367,7 +25367,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="140"/>
         <source>Edit layout</source>
-        <translation>Wijzig opmaak</translation>
+        <translation>Wijzig indeling</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="146"/>
@@ -25382,7 +25382,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="158"/>
         <source>Reset layout</source>
-        <translation>Herstel opmaak</translation>
+        <translation>Herstel indeling</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>
@@ -31621,7 +31621,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5913"/>
         <source>Reset to default layout</source>
-        <translation>Herstel naar standaardlayout</translation>
+        <translation>Herstel standaardlayout</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5939"/>
@@ -31895,7 +31895,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="236"/>
         <source>Edit percussion panel layout</source>
-        <translation>Bewerk opmaak percussiepaneel</translation>
+        <translation>Bewerk indeling percussiepaneel</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="416"/>
@@ -31915,7 +31915,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="518"/>
         <source>Reset percussion panel layout</source>
-        <translation>Herstel opmaak percussiepaneel</translation>
+        <translation>Herstel indeling percussiepaneel</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="318"/>
