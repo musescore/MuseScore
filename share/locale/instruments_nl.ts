@@ -15511,7 +15511,7 @@
         <source>Common drum kit, 5-piece.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gebruikelijk drumstel, 5-delig.</translation>
+        <translation>Gewoon drumstel, 5-delig.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3895"/>
@@ -15595,7 +15595,7 @@
         <source>Orchestral percussion kit.</source>
         <comment>percussion description</comment>
         <extracomment>description for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Orkestrale percussiekit.</translation>
+        <translation>Orkest percussiekit.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4345"/>
