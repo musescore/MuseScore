@@ -1417,10 +1417,14 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
 
             if (s->isType(SegmentType::TimeSigType)) {
-                TimeSig* ts = toTimeSig(s->element(e->track()));
-                TimeSigPlacement timeSigPlacement = ts->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
+                EngravingItem* el = s->element(e->track());
+                TimeSig* timeSig = el ? toTimeSig(el) : nullptr;
+                if (!timeSig) {
+                    continue;
+                }
+                TimeSigPlacement timeSigPlacement = timeSig->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
                 if (timeSigPlacement == TimeSigPlacement::ACROSS_STAVES) {
-                    if (!ts->showOnThisStaff()) {
+                    if (!timeSig->showOnThisStaff()) {
                         e->mutldata()->reset();
                     }
                     continue;
