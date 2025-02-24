@@ -1839,9 +1839,13 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
     const Segment* prevCourtesySegment
         = prevMeasure ? prevMeasure->findSegmentR(SegmentType::ClefRepeatAnnounce, prevMeasure->ticks()) : nullptr;
-    const Segment* actualSegAtMeasureStart = m->findSegmentR(SegmentType::Clef, Fraction(0, 1));
+
+    const Segment* actualSegAtMeasureStartOrTick = m->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, Fraction(0, 1));
+    actualSegAtMeasureStartOrTick = actualSegAtMeasureStartOrTick ? actualSegAtMeasureStartOrTick : m->findSegmentR(
+        SegmentType::Clef | SegmentType::HeaderClef, courtesyClefRTick);
+
     bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyClef()
-                                  && !(actualSegAtMeasureStart && actualSegAtMeasureStart->enabled()) && prevCourtesySegment
+                                  && !(actualSegAtMeasureStartOrTick && actualSegAtMeasureStartOrTick->enabled()) && prevCourtesySegment
                                   && prevCourtesySegment->enabled();
     Segment* courtesyClefSeg = m->findSegmentR(courtesySegType, courtesyClefRTick);
     for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
@@ -1862,8 +1866,8 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
         const ClefType refClef = staff->clef(refClefTick);
         const bool clefsMatch = staff->clef(m->endTick() - Fraction::eps()) != refClef;
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && isContinuationCourtesy
-                                   && prevCourtesySegment && prevCourtesySegment->elementAt(track) : clefsMatch;
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->elementAt(
+            track) : clefsMatch;
         const bool show = actualClef && actualClef->showCourtesy() && needsCourtesy && ctx.conf().styleB(Sid::genCourtesyClef);
 
         if (!courtesyClefSeg) {
