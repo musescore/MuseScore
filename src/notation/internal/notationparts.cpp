@@ -690,21 +690,26 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
-    mu::engraving::Instrument* instrument = part->instrument(instrumentKey.tick);
-    if (!instrument) {
-        return;
-    }
-
+    // Update all identical drumsets in the part...
     if (undoable) {
         startEdit(TranslatableString("undoableAction", "Edit drumset"));
-        score()->undo(new mu::engraving::ChangeDrumset(instrument, newDrumset, part));
+        for (auto pair : part->instruments()) {
+            Instrument* instrument = pair.second;
+            if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
+                score()->undo(new mu::engraving::ChangeDrumset(instrument, newDrumset, part));
+            }
+        }
         apply();
     } else {
-        instrument->setDrumset(&newDrumset);
+        for (auto pair : part->instruments()) {
+            Instrument* instrument = pair.second;
+            if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
+                instrument->setDrumset(&newDrumset);
+            }
+        }
     }
 
     notifyAboutPartChanged(part);
-
     m_interaction->noteInput()->stateChanged().notify();
 }
 

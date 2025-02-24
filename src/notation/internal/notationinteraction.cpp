@@ -2029,7 +2029,36 @@ bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* inst
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&newInstrument);
 
+    if (newInstrument.useDrumset()) {
+        cleanupDrumsetChanges(instrumentChange);
+    }
+
     return true;
+}
+
+void NotationInteraction::cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const
+{
+    Part* part = instrumentChange ? instrumentChange->part() : nullptr;
+    Instrument* newInstrument = instrumentChange ? instrumentChange->instrument() : nullptr;
+    if (!part || !newInstrument) {
+        return;
+    }
+
+    for (auto pair : part->instruments()) {
+        const Instrument* otherInst = pair.second;
+        if (!otherInst || otherInst == newInstrument) {
+            continue;
+        }
+
+        // If the following conditional is true, it means that we're trying to change to a drumset that already exists for this part. Due to the fact
+        // that we don't create new tracks for identical instruments in a given part, the knock-on effect is that the new drumset won't have a chance
+        // to load a MuseSampler patch (see usage of shouldLoadDrumset in PlaybackController). The following logic resolves this by copying the patch
+        // from the existing drumset into the new one...
+        if (otherInst->drumset() && newInstrument->id() == otherInst->id()) {
+            score()->undo(new engraving::ChangeDrumset(newInstrument, *otherInst->drumset(), part));
+            return;
+        }
+    }
 }
 
 //! NOTE Copied from Palette::applyPaletteElement
