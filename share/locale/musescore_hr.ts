@@ -18596,7 +18596,7 @@ Prag %1 na žicama %2</translation>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="347"/>
         <source>%1/%2 time</source>
-        <translation>%1%2 vrijeme</translation>
+        <translation>%1/%2 vrijeme</translation>
     </message>
 </context>
 <context>

@@ -10778,7 +10778,7 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="115"/>
         <source>Visit %1 for new versions and more information.</source>
         <extracomment>%1 will be a link to the MuseScore website</extracomment>
-        <translation>Apsilankykite &amp;1 norėdami gauti naujas versijas ir detalesnę informaciją.</translation>
+        <translation>Apsilankykite %1 norėdami gauti naujas versijas ir detalesnę informaciją.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="118"/>
@@ -10907,7 +10907,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>Siekiant apsaugoti jūsų privatumą, MuseScore Studio nerenka jokių asmens duomenų. Apsilankykite mūsų &lt;/a&gt;privatumo politikoje&lt;/a&gt; dėl išsamesnės informacijos.</translation>
+        <translation>Siekiant apsaugoti jūsų privatumą, MuseScore Studio nerenka jokių asmens duomenų. Apsilankykite mūsų &lt;a href=&quot;%1&quot;&gt;privatumo politikoje&lt;/a&gt; dėl išsamesnės informacijos.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -24521,7 +24521,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="180"/>
         <source>Value %1</source>
-        <translation>Reikšmė</translation>
+        <translation>Reikšmė %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="36"/>

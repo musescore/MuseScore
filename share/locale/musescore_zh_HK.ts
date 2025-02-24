@@ -11189,7 +11189,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>需要連接到網絡來檢查軟件更新。爲了保護你的隱私，MuseScore不會存儲任何個人信息。詳情參閲1隱私條款1 。</translation>
+        <translation>需要連接到網絡來檢查軟件更新。爲了保護你的隱私，MuseScore不會存儲任何個人信息。詳情參閲 &lt;a href=&quot;%1&quot;&gt;隱私條款&lt;/a&gt; 。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -14243,7 +14243,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1594"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
         <source>End beat: %1</source>
-        <translation>末尾拍</translation>
+        <translation>末尾拍：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="73"/>
@@ -19499,7 +19499,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
         <source>°</source>
-        <translation>。</translation>
+        <translation>°</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
@@ -29289,7 +29289,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="59"/>
         <source>Each page of the selected parts will be exported as a separate %1 file.</source>
-        <translation>所選分譜的每一頁將會導出為一個單獨的 &amp;1 檔案。</translation>
+        <translation>所選分譜的每一頁將會導出為一個單獨的 %1 檔案。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>

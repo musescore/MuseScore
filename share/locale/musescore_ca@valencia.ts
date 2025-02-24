@@ -14129,7 +14129,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/check.cpp" line="200"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>Compassa incompleta: %1, compassa %2, pentagrama %3. Trobat: %4. Esperat: %5.</translation>
+        <translation>&lt;b&gt;Compassa incompleta&lt;/b&gt;: %1, compassa %2, pentagrama %3. Trobat: %4. Esperat: %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="215"/>
