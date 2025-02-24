@@ -95,7 +95,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>/</string>
+              <string notr="true">/</string>
              </property>
              <property name="buddy">
               <cstring>nNominal</cstring>
@@ -197,7 +197,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>/</string>
+              <string notr="true">/</string>
              </property>
              <property name="buddy">
               <cstring>nText</cstring>
