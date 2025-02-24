@@ -14045,7 +14045,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="81"/>
         <source>This file was last saved in a version older than 2.0.0. You can convert this score by opening and then saving in MuseScore version 2.x. Visit the &lt;a href=&quot;%1&quot;&gt;MuseScore download page&lt;/a&gt; to obtain such a 2.x version.</source>
-        <translation>Este archivo fue creado con una versión más antigua que la versión 2.0.0. Puedes convertir esta partitura abriendo y luego guardando en una versión de Musescore mayor a 2.x. Visite la página de descarga &lt;a href=&quot;%1&quot;&gt; de Musescore para obtener una versión más nueva</translation>
+        <translation>Este archivo fue creado con una versión más antigua que la versión 2.0.0. Puedes convertir esta partitura abriendo y luego guardando en una versión de Musescore mayor a 2.x. Visite la &lt;a href=&quot;%1&quot;&gt;página de descarga de Musescore&lt;/a&gt; para obtener una versión más nueva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
@@ -22827,7 +22827,7 @@ anacrusa</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
-        <translation>No hay instrumentos en tu partitura. Para elegir alguno presiona &quot;1&quot;Añadir&quot;1&quot;, o usa el atajo de teclado %1</translation>
+        <translation>No hay instrumentos en tu partitura. Para elegir alguno presiona &lt;b&gt;Añadir&lt;/b&gt;, o usa el atajo de teclado %1</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="138"/>
@@ -30252,7 +30252,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="560"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation>Puedes reemplazar la partitura en línea o publicar esta como una partitura nueva para evitar perder cambios en la versión actual en línea.</translation>
+        <translation>Puedes reemplazar la &lt;a href=&quot;%1&quot;&gt;partitura en línea&lt;/a&gt; o publicar esta como una partitura nueva para evitar perder cambios en la versión actual en línea.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="566"/>
@@ -30268,7 +30268,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="571"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation>Puedes reemplazar las partituras en línea o salvar esta como nuevo archivo para evitar perder cambios en las versiones actuales en línea. </translation>
+        <translation>Puedes reemplazar las &lt;a href=&quot;%1&quot;&gt;partituras en línea&lt;/a&gt; o salvar esta como nuevo archivo para evitar perder cambios en las versiones actuales en línea.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>

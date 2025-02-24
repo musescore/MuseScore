@@ -24620,12 +24620,12 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="619"/>
         <source>Note input modes</source>
-        <translation type="unfinished"/>
+        <translation>Moduri introducere note</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="620"/>
         <source>Discover different ways to input notes in MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Descoperă moduri diferite de introducere a notelor în MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml" line="56"/>
