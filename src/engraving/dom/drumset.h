@@ -102,7 +102,7 @@ static const int DRUM_INSTRUMENTS = 128;
 class Drumset
 {
 public:
-    bool isValid(int pitch) const { return !m_drums[pitch].name.empty(); }
+    bool isValid(int pitch) const;
     NoteHeadGroup noteHead(int pitch) const { return m_drums[pitch].notehead; }
     SymId noteHeads(int pitch, NoteHeadType t) const { return m_drums[pitch].noteheads[int(t)]; }
     int line(int pitch) const { return m_drums[pitch].line; }
@@ -116,6 +116,10 @@ public:
     int panelColumn(int pitch) const { return m_drums[pitch].panelColumn; }
 
     int pitchForShortcut(const String& shortcut) const;
+
+    // defaultPitchForLine tries to find the pitch of a normal notehead at "line". If a normal notehead can't be found it will
+    // instead return the "first valid pitch" (i.e. the lowest used midi note)
+    int defaultPitchForLine(int line) const;
 
     void save(XmlWriter&) const;
     void load(XmlReader&);

@@ -40,6 +40,11 @@ using namespace mu::engraving;
 namespace mu::engraving {
 Drumset* smDrumset = nullptr;           // standard midi drumset
 
+bool Drumset::isValid(int pitch) const
+{
+    return pitch >= 0 && pitch < DRUM_INSTRUMENTS && !m_drums[pitch].name.empty();
+}
+
 String Drumset::translatedName(int pitch) const
 {
     return muse::mtrc("engraving/drumset", name(pitch));
@@ -64,6 +69,26 @@ int Drumset::pitchForShortcut(const String& shortcut) const
     }
 
     return -1;
+}
+
+int Drumset::defaultPitchForLine(int val) const
+{
+    int firstValidPitch = -1;
+    for (int pitch = 0; pitch < DRUM_INSTRUMENTS; ++pitch) {
+        if (!isValid(pitch) || line(pitch) != val) {
+            continue;
+        }
+
+        if (firstValidPitch < 0) {
+            firstValidPitch = pitch;
+        }
+
+        const NoteHeadGroup headGroup = noteHead(pitch);
+        if (headGroup == NoteHeadGroup::HEAD_NORMAL) {
+            return pitch;
+        }
+    }
+    return firstValidPitch;
 }
 
 //---------------------------------------------------------
