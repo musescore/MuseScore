@@ -123,7 +123,7 @@ FocusScope {
                                 notationView.forceFocusIn()
 
                                 if (notationView.navigationPanel.highlight) {
-                                    notationView.selectOnNavigationActive()
+                                    Qt.callLater(notationView.selectOnNavigationActive())
                                 }
                             } else {
                                 notationView.focus = false

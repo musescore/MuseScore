@@ -3711,6 +3711,9 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
 
     // VBoxes are not included in horizontal layouts - skip over them (and their contents) when moving selections...
     const auto nextNonVBox = [this, isLeftDirection](EngravingItem* currElem) -> EngravingItem* {
+        if (!currElem) {
+            return nullptr;
+        }
         while (const EngravingItem* vBox = currElem->findAncestor(ElementType::VBOX)) {
             currElem = isLeftDirection ? toVBox(vBox)->prevMM() : toVBox(vBox)->nextMM();
             if (currElem && currElem->isMeasure()) {
