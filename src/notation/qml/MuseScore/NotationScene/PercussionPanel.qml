@@ -314,7 +314,9 @@ Item {
                             padGrid.swapOriginPad = pad
                             padGrid.isKeyboardSwapActive = isKeyboardSwap
                             padGrid.model.startPadSwap(index)
-                            pad.padNavigation.requestActive()
+                            if (isKeyboardSwap) {
+                                pad.padNavigation.requestActive()
+                            }
                         }
 
                         onEndPadSwapRequested: {
@@ -343,7 +345,11 @@ Item {
                                 if (index !== padIndex) {
                                     return
                                 }
-                                pad.padNavigation.requestActive()
+
+                                // Focus pad only if keyboard navigation has started
+                                if (root.navigationSection.active) {
+                                    pad.padNavigation.requestActive()
+                                }
                             }
 
                             function onNumPadsChanged() {
