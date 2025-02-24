@@ -19853,7 +19853,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="50"/>
         <source>Guitar Tablature</source>
-        <translation>Kitara tabulatuuri</translation>
+        <translation>Kitaratabulatuuri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="51"/>
