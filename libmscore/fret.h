@@ -237,6 +237,8 @@ class FretDiagram final : public Element {
       bool setProperty(Pid propertyId, const QVariant&) override;
       QVariant propertyDefault(Pid) const override;
 
+      void setTrack(int val) override;
+
       qreal userMag() const         { return _userMag;   }
       void setUserMag(qreal m)      { _userMag = m;      }
 

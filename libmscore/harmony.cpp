@@ -10,10 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "harmony.h"
-
 #include "chordlist.h"
 #include "fret.h"
+#include "harmony.h"
 #include "measure.h"
 #include "mscore.h"
 #include "part.h"
@@ -26,6 +25,8 @@
 #include "system.h"
 #include "utils.h"
 #include "xml.h"
+
+#include "global/log.h"
 
 namespace Ms {
 
@@ -876,7 +877,7 @@ void Harmony::endEdit(EditData& ed)
       showSpell = false;
 
       if (links()) {
-            for (ScoreElement* e : *links()) {
+            for (ScoreElement*& e : *links()) {
                   if (e == this)
                         continue;
                   Harmony* h = toHarmony(e);
@@ -1272,7 +1273,10 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 
 const RealizedHarmony& Harmony::getRealizedHarmony()
       {
-      Staff* st = staff();
+      const Staff* st = staff();
+      IF_ASSERT_FAILED(st) {
+          return _realizedHarmony;
+      }
       int capo = st->capo(tick()) - 1;
       int offset = (capo < 0 ? 0 : capo);   //semitone offset for pitch adjustment
       Interval interval = st->part()->instrument(tick())->transpose();
@@ -1282,7 +1286,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony()
       //Adjust for Nashville Notation, might be temporary
       // TODO: set dirty on add/remove of keysig
       if (_harmonyType == HarmonyType::NASHVILLE && !_realizedHarmony.valid()) {
-            Key key = staff()->key(tick());
+            Key key = st->key(tick());
             //parse root
             int rootTpc = function2Tpc(_function, key);
 
@@ -2048,7 +2052,7 @@ QString Harmony::generateScreenReaderInfo() const
                   for (auto const &r : symbolReplacements) {
                         // only replace when not preceded by backslash
                         QString s = "(?<!\\\\)" + r.first;
-                        QRegularExpression re(s);
+                        static QRegularExpression re(s);
                         aux.replace(re, r.second);
                         }
                   // construct string one character at a time
@@ -2072,9 +2076,9 @@ QString Harmony::generateScreenReaderInfo() const
             QString extension = "";
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-            for (QString s : aux.split(">", Qt::SkipEmptyParts)) {
+            for (QString& s : aux.split(">", Qt::SkipEmptyParts)) {
 #else
-            for (QString s : aux.split(">", QString::SkipEmptyParts)) {
+            for (QString& s : aux.split(">", QString::SkipEmptyParts)) {
 #endif
                   if (!s.contains("blues"))
                         s.replace("b", QObject::tr("♭"));
