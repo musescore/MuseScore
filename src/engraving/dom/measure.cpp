@@ -840,7 +840,7 @@ void Measure::add(EngravingItem* e)
     break;
     case ElementType::JUMP:
     case ElementType::MARKER:
-        if (e && (e->isJump() || muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()))) {
+        if (e && (e->isJump() || (e->isMarker() && toMarker(e)->isRightMarker()))) {
             // "To coda" markings act like jumps
             setProperty(Pid::REPEAT_JUMP, true);
         }
@@ -943,9 +943,10 @@ void Measure::remove(EngravingItem* e)
         break;
 
     case ElementType::JUMP:
-        setProperty(Pid::REPEAT_JUMP, false);
-    // fall through
     case ElementType::MARKER:
+        if (e->isJump() || (e->isMarker() && toMarker(e)->isRightMarker())) {
+            setProperty(Pid::REPEAT_JUMP, false);
+        }
     case ElementType::HBOX:
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);

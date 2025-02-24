@@ -57,6 +57,8 @@ public:
                || m_markerType == MarkerType::DA_DBLCODA;
     }
 
+    inline bool isRightMarker() const { return muse::contains(Marker::RIGHT_MARKERS, m_markerType); }
+
     Marker* clone() const override { return new Marker(*this); }
 
     int subtype() const override { return int(m_markerType); }
