@@ -441,7 +441,7 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
     }
 
     const System* system = toSystem(findAncestor(ElementType::SYSTEM));
-    if (!system) {
+    if (!system || system->vbox()) {
         return vStaffIdx();
     }
 
