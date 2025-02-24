@@ -202,6 +202,7 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
+
     samples_t sampleOffset = 0;
     samples_t processedSamples = 0;
 
@@ -242,5 +243,5 @@ samples_t VstSynthesiser::processSequence(const VstSequencer::EventSequence& seq
         return 0;
     }
 
-    return m_vstAudioClient->process(buffer, samples);
+    return m_vstAudioClient->process(buffer, samples, m_sequencer.playbackPosition());
 }
