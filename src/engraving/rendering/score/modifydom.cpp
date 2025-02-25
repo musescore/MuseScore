@@ -387,7 +387,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     // Sort segments at start of first measure
     Measure* prevMeasure = measure->prevMeasure();
     if (prevMeasure && prevMeasure == ctx.dom().firstMeasure()) {
-        ModifyDom::removeAndAddBeginSegments(prevMeasure);
+        removeAndAddBeginSegments(prevMeasure);
     }
 }
 
