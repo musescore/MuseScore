@@ -110,7 +110,7 @@ DropArea {
         // Only navigate to empty slots when we're in edit mode
         enabled: Boolean(root.padModel) || root.panelMode === PanelMode.EDIT_LAYOUT
 
-        accessible.role: MUAccessible.Button
+        accessible.role: MUAccessible.SilentRole
         accessible.name: Boolean(root.padModel) ? root.padModel.padName : qsTrc("notation/percussion", "Empty pad")
 
         accessible.description: Boolean(root.padModel) ? prv.fullAccessibleString : prv.accessibleRowColumnString
@@ -137,7 +137,7 @@ DropArea {
 
         enabled: Boolean(root.padModel)
 
-        accessible.role: MUAccessible.Button
+        accessible.role: MUAccessible.SilentRole
         accessible.name: Boolean(root.padModel) ? root.padModel.padName + " " + qsTrc("notation/percussion", "options") : ""
 
         accessible.visualItem: footerFocusBorder
