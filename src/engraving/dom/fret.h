@@ -235,6 +235,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    void setTrack(track_idx_t val) override;
+
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
 

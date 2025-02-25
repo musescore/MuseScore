@@ -896,6 +896,15 @@ PropertyValue FretDiagram::propertyDefault(Pid pid) const
     return EngravingItem::propertyDefault(pid);
 }
 
+void FretDiagram::setTrack(track_idx_t val)
+{
+    EngravingItem::setTrack(val);
+
+    if (m_harmony) {
+        m_harmony->setTrack(val);
+    }
+}
+
 //---------------------------------------------------------
 //   endEditDrag
 //---------------------------------------------------------
