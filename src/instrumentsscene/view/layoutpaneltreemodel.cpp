@@ -135,7 +135,16 @@ bool LayoutPanelTreeModel::removeRows(int row, int count, const QModelIndex& par
         parentItem = m_rootItem;
     }
 
-    if (parentItem == m_rootItem) {
+    bool needWarning = false;
+    for (int i = row + count - 1; i >= row; --i) {
+        AbstractLayoutPanelTreeItem* child = m_rootItem->childAtRow(i);
+        if (child->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            needWarning = true;
+            break;
+        }
+    }
+
+    if (needWarning && parentItem == m_rootItem) {
         // When removing instruments, the user needs to be warned in some cases
         if (!warnAboutRemovingInstrumentsIfNecessary(count)) {
             return false;
