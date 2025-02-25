@@ -464,6 +464,7 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
             ElementType::DYNAMIC,
             ElementType::EXPRESSION,
             ElementType::STICKING,
+            ElementType::HARMONY
         };
         return !itemToAutoplace->isTextBase() || muse::contains(TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER, type1);
     }
