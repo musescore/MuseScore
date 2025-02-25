@@ -36,11 +36,12 @@ Rectangle {
     property double forceHeight: 0
     property alias source: image.source
 
-    width: image.width + 2 * horizontalPadding
-    height: image.height + 2 * verticalPadding
+    width: image.width + 2 * horizontalPadding + border.width * 2
+    height: image.height + 2 * verticalPadding + border.width * 2
 
     color: "#ffffff"
     border.color: ui.theme.strokeColor
+    border.width: 1
     radius: 3
 
     Image {
