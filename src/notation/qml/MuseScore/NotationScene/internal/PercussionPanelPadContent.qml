@@ -180,6 +180,7 @@ Column {
 
             anchors.fill: parent
             enabled: root.panelMode !== PanelMode.EDIT_LAYOUT
+            hoverEnabled: true
 
             acceptedButtons: Qt.LeftButton | Qt.RightButton
 
@@ -233,5 +234,24 @@ Column {
         onHandleMenuItem: function(itemId) {
             root.padModel.handleMenuItem(itemId)
         }
+
+        states: [
+            State {
+                name: "MOUSE_HOVERED"
+                when: footerMouseArea.containsMouse && !footerMouseArea.pressed
+                PropertyChanges {
+                    target: footerArea
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHover)
+                }
+            },
+            State {
+                name: "MOUSE_HIT"
+                when: footerMouseArea.pressed
+                PropertyChanges {
+                    target: footerArea
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHit)
+                }
+            }
+        ]
     }
 }
