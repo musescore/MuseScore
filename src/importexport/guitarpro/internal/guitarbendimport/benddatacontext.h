@@ -31,6 +31,12 @@ class Chord;
 
 namespace mu::iex::guitarpro {
 struct BendDataContext {
+    enum class BendAlgorithm {
+        DONT_SPLIT_NOTES,
+        SPLIT_ONLY_TIED_NOTES,
+        SPLIT_ALL_NOTES
+    };
+
     struct BendNoteData {
         double startFactor = 0.0;
         double endFactor = 1.0;
@@ -40,12 +46,23 @@ struct BendDataContext {
 
     struct BendChordData {
         mu::engraving::Fraction startTick;
-        std::map<int /* idx in chord */, BendNoteData> noteDataByIdx;
+        std::map<size_t /* idx in chord */, BendNoteData> noteDataByIdx;
     };
 
     std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::vector<mu::engraving::Fraction> > > bendChordDurations;
     std::unordered_map<mu::engraving::track_idx_t, std::map<int, BendChordData> > bendDataByEndTick;
     std::unordered_map<mu::engraving::track_idx_t, std::set<mu::engraving::Fraction> > reduntantChordTicks;
     std::unordered_map<mu::engraving::track_idx_t, std::set<mu::engraving::Fraction> > chordTicksForTieBack;
+
+    /// grace-note-after related data
+    struct GraceAfterBendData {
+        int quarterTones = 0;
+        double startFactor = 0.0;
+        double endFactor = 1.0;
+    };
+
+    std::unordered_map<mu::engraving::track_idx_t, std::map<int /* tick */, std::map<size_t /* idx in chord */,
+                                                                                     std::vector<GraceAfterBendData> > > >
+    graceAfterBendData;
 };
 } // mu::iex::guitarpro
