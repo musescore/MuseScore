@@ -571,7 +571,11 @@ void PlaybackController::onPartChanged(const Part* part)
 
 void PlaybackController::onSelectionChanged()
 {
-    INotationSelectionPtr selection = this->selection();
+    const INotationSelectionPtr selection = this->selection();
+    if (!selection || !m_player) {
+        return;
+    }
+
     bool selectionTypeChanged = m_isRangeSelection && !selection->isRange();
     m_isRangeSelection = selection->isRange();
 
@@ -590,7 +594,7 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    currentPlayer()->resetLoop();
+    m_player->resetLoop();
 
     seekRangeSelection();
     updateSoloMuteStates();
