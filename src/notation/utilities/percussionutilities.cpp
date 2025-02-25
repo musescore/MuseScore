@@ -121,7 +121,7 @@ void PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPit
     drumset.drum(originPitch).shortcut = vals.value("newShortcut").toString();
 
     const int conflictShortcutPitch = vals.value("conflictDrumPitch").toInt();
-    if (conflictShortcutPitch > -1 && drumset.isValid(conflictShortcutPitch)) {
+    if (drumset.isValid(conflictShortcutPitch)) {
         drumset.drum(conflictShortcutPitch).shortcut.clear();
     }
 }

@@ -450,18 +450,16 @@ bool NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParam
 
         const int noteInputPitch = inputState.drumNote();
 
-        if (noteInputPitch > 0 && ds->isValid(noteInputPitch) && ds->line(noteInputPitch) == line) {
+        if (ds->isValid(noteInputPitch) && ds->line(noteInputPitch) == line) {
             noteheadGroup = ds->noteHead(noteInputPitch);
             voice = ds->voice(noteInputPitch);
             drumNotePitch = noteInputPitch;
         } else {
-            for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
-                if (ds->isValid(pitch) && ds->line(pitch) == line) {
-                    noteheadGroup = ds->noteHead(pitch);
-                    voice = ds->voice(pitch);
-                    drumNotePitch = pitch;
-                    break;
-                }
+            const int pitch = ds->defaultPitchForLine(line);
+            if (ds->isValid(pitch)) {
+                noteheadGroup = ds->noteHead(pitch);
+                voice = ds->voice(pitch);
+                drumNotePitch = pitch;
             }
             if (drumNotePitch < 0) {
                 shadowNote.setVisible(false);
