@@ -3240,6 +3240,7 @@ static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notation
                         }
                   }
             tagName += color2xml(breath);
+            tagName += positioningAttributes(breath);
             if (breath->placement() == Placement::BELOW)
                   tagName += " placement=\"below\"";
             else/* if (preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))*/ {
@@ -3298,6 +3299,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                               mxmlArtic += " placement=\"below\"";
                         }
                   mxmlArtic += color2xml(a);
+                  mxmlArtic += positioningAttributes(a);
 
                   notations.tag(_xml);
                   articulations.tag(_xml);
@@ -3747,6 +3749,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                   if (!f->isStyled(Pid::FONT_STYLE))
                         attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
                   attr += color2xml(f);
+                  attr += positioningAttributes(f);
 
                   if (f->tid() == Tid::RH_GUITAR_FINGERING)
                         xml.tag("pluck" + attr, t);
