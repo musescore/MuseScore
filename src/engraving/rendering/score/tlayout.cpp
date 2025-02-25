@@ -3780,6 +3780,13 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             if (item->staff()) {
                 t2 = item->staff()->key(item->tick() - Fraction(1, 480 * 4));
             }
+            if (item->segment() && item->segment()->isType(SegmentType::KeySigStartRepeatAnnounce)) {
+                // Handle naturals in continuation courtesy
+                Segment* prevCourtesySeg
+                    = prevMeasure ? prevMeasure->findSegmentR(SegmentType::KeySigRepeatAnnounce, prevMeasure->ticks()) : nullptr;
+                EngravingItem* prevCourtesy = prevCourtesySeg ? prevCourtesySeg->element(item->track()) : nullptr;
+                t2 = prevCourtesy && prevCourtesy->isKeySig() ? toKeySig(prevCourtesy)->key() : t2;
+            }
             if (t2 == Key::C) {
                 naturalsOn = false;
             } else {
