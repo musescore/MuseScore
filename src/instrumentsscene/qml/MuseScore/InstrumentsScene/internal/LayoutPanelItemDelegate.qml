@@ -216,6 +216,7 @@ FocusableControl {
         spacing: 2
 
         VisibilityBox {
+            visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
 
@@ -237,6 +238,13 @@ FocusableControl {
                     root.changeVisibilityRequested(styleData.index, !isVisible)
                 }
             }
+        }
+
+        StyledIconLabel {
+            visible: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+            Layout.alignment: Qt.AlignCenter
+            iconCode: IconCode.MINUS
+            enabled: model && model.itemRole.isVisible
         }
 
         Item {
@@ -435,17 +443,6 @@ FocusableControl {
             when: root.visible && !root.isSelected &&
                   (root.type === LayoutPanelItemType.INSTRUMENT ||
                    root.type === LayoutPanelItemType.STAFF)
-
-            PropertyChanges {
-                target: root.background
-                color: ui.theme.textFieldColor
-                opacity: 1
-            }
-        },
-
-        State {
-            name: "SYSTEM_OBJECTS_LAYER_NORMAL"
-            when: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
             PropertyChanges {
                 target: root.background
