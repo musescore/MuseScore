@@ -775,6 +775,7 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
             obj->triggerLayout();
             continue;
         }
+        obj->undoUnlink();
         score->undoRemoveElement(obj, false /*removeLinked*/);
     }
 
