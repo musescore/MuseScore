@@ -3271,7 +3271,7 @@ void Score::cmdMirrorNoteHead()
 
 //---------------------------------------------------------
 //   cmdIncDecDuration
-//     When stepDotted is false and nSteps is 1 or -1, will halve or double the duration
+//     When stepDotted is false and nSteps is 1 or -1, will double or halve the duration
 //     When stepDotted is true, will step by nearest dotted or undotted note
 //---------------------------------------------------------
 
@@ -3296,9 +3296,9 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     if (initialDuration == DurationType::V_MEASURE) {
         initialDuration = TDuration(cr->measure()->timesig(), true);
 
-        if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
+        if (initialDuration.fraction() < cr->measure()->timesig() && nSteps < 0) {
             // Duration already shortened by truncation; shorten one step less
-            --nSteps;
+            ++nSteps;
         }
     }
 
