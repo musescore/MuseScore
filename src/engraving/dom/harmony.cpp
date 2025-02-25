@@ -1073,9 +1073,12 @@ const ChordDescription* Harmony::getDescription(const String& name, const Parsed
 
 const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
-    Fraction tick = this->tick();
     const Staff* st = staff();
+    IF_ASSERT_FAILED(st) {
+        return m_realizedHarmony;
+    }
 
+    const Fraction tick = this->tick();
     const CapoParams& capo = st->capo(tick);
 
     int offset = 0;
@@ -1091,7 +1094,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     //Adjust for Nashville Notation, might be temporary
     // TODO: set dirty on add/remove of keysig
     if (m_harmonyType == HarmonyType::NASHVILLE && !m_realizedHarmony.valid()) {
-        Key key = staff()->key(tick);
+        Key key = st->key(tick);
 
         //parse root
         int rootTpc = function2Tpc(m_function, key);
