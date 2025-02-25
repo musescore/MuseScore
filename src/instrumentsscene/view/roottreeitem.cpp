@@ -72,6 +72,11 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTre
 
 void RootTreeItem::moveChildrenOnScore(const MoveParams& params)
 {
+    if (params.objectsType == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER && !params.destinationObjectId.isValid()) {
+        notation()->parts()->removeSystemObjects(params.objectIdListToMove);
+        return;
+    }
+
     if (!params.isValid()) {
         return;
     }
@@ -169,14 +174,16 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
         }
     }
 
-    if (!srcStaff || !dstStaff) {
+    if (!srcStaff) {
         return {};
     }
 
     MoveParams moveParams;
     moveParams.objectsType = LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
     moveParams.objectIdListToMove.push_back(srcStaff->id());
-    moveParams.destinationObjectId = dstStaff->id();
+    if (dstStaff) {
+        moveParams.destinationObjectId = dstStaff->id();
+    }
 
     return moveParams;
 }

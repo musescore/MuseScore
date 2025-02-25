@@ -1483,7 +1483,7 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
         }
 
         for (const Segment& seg : measure->segments()) {
-            if (seg.isChordRestType()) {
+            if (seg.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
                 for (EngravingItem* annotation : seg.annotations()) {
                     if (!annotation || !annotation->systemFlag()) {
                         continue;

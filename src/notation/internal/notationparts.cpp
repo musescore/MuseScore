@@ -775,6 +775,7 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
             obj->triggerLayout();
             continue;
         }
+        obj->undoUnlink();
         score->undoRemoveElement(obj, false /*removeLinked*/);
     }
 
@@ -799,7 +800,7 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
     startEdit(TranslatableString("undoableAction", "Move system markings"));
 
     score()->undo(new mu::engraving::RemoveSystemObjectStaff(srcStaff));
-    if (!score()->isSystemObjectStaff(dstStaff)) {
+    if (!score()->isSystemObjectStaff(dstStaff) && dstStaffIdx != 0) {
         score()->undo(new mu::engraving::AddSystemObjectStaff(dstStaff));
     }
 
