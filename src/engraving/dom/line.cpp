@@ -586,9 +586,9 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     const Segment* newTickSeg = left ? l->startSegment() : l->endSegment();
     const System* newSpannerSystem = newTickSeg->measure()->system();
 
-    if (newSeg->system() != oldLineSegSystem || oldSpannerSystem != newSpannerSystem) {
+    if ((oldLineSegSystem && newSeg->system() != oldLineSegSystem) || oldSpannerSystem != newSpannerSystem) {
         renderer()->layoutItem(l);
-        return left ? l->frontSegment() : l->backSegment();
+        return l->segmentsEmpty() ? nullptr : left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
         rebaseOffsetsOnAnchorChanged(grip, oldPos, oldLineSegSystem);
     }
