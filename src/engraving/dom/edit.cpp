@@ -5144,7 +5144,7 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
         EngravingItem* item = toEngravingItem(obj);
         Score* linkedScore = item->score();
         Staff* linkedOrigin = item->staff();
-        Staff* linkedDest = linkedScore != this ? destStaff->findLinkedInScore(linkedScore) : linkedOrigin; // don't allow staff-change of linked elements within the same score
+        Staff* linkedDest = linkedScore != this && destStaff != element->staff() ? destStaff->findLinkedInScore(linkedScore) : linkedOrigin; // don't allow staff-change of linked elements within the same score
         if (!linkedDest && element->systemFlag()) {
             linkedDest = linkedScore->staff(0);
         }
