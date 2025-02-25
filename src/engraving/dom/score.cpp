@@ -3343,7 +3343,9 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
         m_is.setDuration(oldDuration);
         m_is.setRest(oldRest);
         m_is.setAccidentalType(oldAccidentalType);
-        m_is.moveToNextInputPos();
+        if (noteEntryMode()) {
+            m_is.moveToNextInputPos();
+        }
     }
 }
 
