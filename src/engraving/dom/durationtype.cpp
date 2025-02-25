@@ -259,14 +259,14 @@ void TDuration::shiftType(int nSteps, bool stepDotted)
         if (stepDotted) {
             // figure out the new duration in terms of the number of single dotted or undotted steps from DurationType::V_LONG
             int roundDownSingleDots = (m_dots > 0) ? -1 : 0;
-            int newValAsNumSingleDotSteps = int(m_val) * 2 + roundDownSingleDots + nSteps;
+            int newValAsNumSingleDotSteps = int(m_val) * 2 + roundDownSingleDots - nSteps;
 
             // convert that new duration back into terms of DurationType integer value and number of dots
             newDots  = newValAsNumSingleDotSteps % 2;       // odd means there is a dot
             newValue = newValAsNumSingleDotSteps / 2 + newDots;       // if new duration has a dot, then that
         } else {
             newDots = m_dots;
-            newValue = int(m_val) + nSteps;
+            newValue = int(m_val) - nSteps;
         }
 
         if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_1024TH))
@@ -426,7 +426,7 @@ void TDuration::truncateToFraction(const Fraction& l, int maxDots)
     }
 
     // that wasn't enough so now change type too
-    for (shiftType(1); isValid(); shiftType(1)) {
+    for (shiftType(-1); isValid(); shiftType(-1)) {
         if (setDotsToFitFraction(l, maxDots)) {
             return;       // duration fits in l
         }
