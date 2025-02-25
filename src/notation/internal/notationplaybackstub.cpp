@@ -36,6 +36,10 @@ void NotationPlaybackStub::init()
 {
 }
 
+void NotationPlaybackStub::reload()
+{
+}
+
 const engraving::InstrumentTrackId& NotationPlaybackStub::metronomeTrackId() const
 {
     static const engraving::InstrumentTrackId dummy;

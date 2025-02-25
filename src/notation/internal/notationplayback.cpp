@@ -105,6 +105,11 @@ void NotationPlayback::init()
     });
 }
 
+void NotationPlayback::reload()
+{
+    m_playbackModel.reload();
+}
+
 const engraving::InstrumentTrackId& NotationPlayback::metronomeTrackId() const
 {
     return m_playbackModel.metronomeTrackId();
