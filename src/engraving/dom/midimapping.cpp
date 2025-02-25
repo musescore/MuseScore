@@ -190,14 +190,17 @@ void MasterScore::reorderMidiMapping()
         for (const auto& pair : part->instruments()) {
             const Instrument* instr = pair.second;
             for (InstrChannel* channel : instr->channel()) {
-                if (!(m_midiMapping[sequenceNumber].part() == part
-                      && m_midiMapping[sequenceNumber].m_masterChannel == channel)) {
-                    int shouldBe = channel->channel();
-                    swap(m_midiMapping[sequenceNumber], m_midiMapping[shouldBe]);
-                    m_midiMapping[sequenceNumber].articulation()->setChannel(sequenceNumber);
-                    channel->setChannel(sequenceNumber);
-                    m_midiMapping[shouldBe].articulation()->setChannel(shouldBe);
+                if (m_midiMapping[sequenceNumber].part() == part && m_midiMapping[sequenceNumber].m_masterChannel == channel) {
+                    sequenceNumber++;
+                    continue;
                 }
+
+                const int shouldBe = channel->channel();
+                swap(m_midiMapping[sequenceNumber], m_midiMapping[shouldBe]);
+                m_midiMapping[sequenceNumber].articulation()->setChannel(sequenceNumber);
+                channel->setChannel(sequenceNumber);
+                m_midiMapping[shouldBe].articulation()->setChannel(shouldBe);
+
                 sequenceNumber++;
             }
         }
