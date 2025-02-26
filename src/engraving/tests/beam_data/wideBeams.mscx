@@ -6,6 +6,10 @@
       <maskBarlinesForText>0</maskBarlinesForText>
       <useWideBeams>1</useWideBeams>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

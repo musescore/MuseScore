@@ -15,6 +15,10 @@
       <keySigNaturals>1</keySigNaturals>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>

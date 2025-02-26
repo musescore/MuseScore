@@ -45,6 +45,10 @@
       <measureNumberPosBelow x="0" y="1"/>
       <systemTextLineFontSize>12</systemTextLineFontSize>
       <defaultsVersion>410</defaultsVersion>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
