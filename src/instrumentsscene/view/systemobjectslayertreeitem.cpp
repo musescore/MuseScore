@@ -94,10 +94,6 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGrou
     bool isTopLayer = staff->score()->staff(0) == staff;
     setIsRemovable(!isTopLayer);
     setIsSelectable(!isTopLayer);
-
-    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
-        onVisibleChanged(isVisible);
-    });
 }
 
 const Staff* SystemObjectsLayerTreeItem::staff() const
@@ -181,28 +177,6 @@ void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChange
     }
 }
 
-void SystemObjectsLayerTreeItem::onVisibleChanged(bool isVisible)
-{
-    if (m_ignoreVisibilityChanges || m_systemObjectGroups.empty()) {
-        return;
-    }
-
-    const muse::TranslatableString actionName = isVisible
-                                                ? TranslatableString("undoableAction", "Make system marking(s) visible")
-                                                : TranslatableString("undoableAction", "Make system marking(s) invisible");
-
-    notation()->undoStack()->prepareChanges(actionName);
-
-    for (const SystemObjectsGroup& group : m_systemObjectGroups) {
-        for (engraving::EngravingItem* item : group.items) {
-            item->undoSetVisible(isVisible);
-        }
-    }
-
-    notation()->undoStack()->commitChanges();
-    notation()->notationChanged().notify();
-}
-
 bool SystemObjectsLayerTreeItem::addSystemObject(engraving::EngravingItem* obj)
 {
     for (auto& pair : m_systemObjectGroups) {
@@ -254,8 +228,4 @@ void SystemObjectsLayerTreeItem::updateState()
 {
     setTitle(formatLayerTitle(m_systemObjectGroups));
     setSettingsEnabled(!m_systemObjectGroups.empty());
-
-    m_ignoreVisibilityChanges = true;
-    setIsVisible(isLayerVisible(m_systemObjectGroups));
-    m_ignoreVisibilityChanges = false;
 }

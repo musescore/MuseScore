@@ -47,7 +47,6 @@ public:
 
 private:
     void onScoreChanged(const mu::engraving::ScoreChangesRange& changes) override;
-    void onVisibleChanged(bool isVisible);
 
     bool addSystemObject(mu::engraving::EngravingItem* obj);
     bool removeSystemObject(mu::engraving::EngravingItem* obj);
@@ -58,6 +57,5 @@ private:
     const mu::engraving::Staff* m_staff = nullptr;
     mu::engraving::staff_idx_t m_staffIdx = muse::nidx;
     SystemObjectGroups m_systemObjectGroups;
-    bool m_ignoreVisibilityChanges = false;
 };
 }
