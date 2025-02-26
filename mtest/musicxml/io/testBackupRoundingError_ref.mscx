@@ -14,6 +14,12 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="description">
+	  	Due to limitations of lower division values, tuplets
+		are sometimes rounded to incorrect ticks. Additionally,
+		backups surrounding those tuplets can be further incorrect.
+		These improper placements cause layout issues.
+        </metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>

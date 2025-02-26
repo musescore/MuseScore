@@ -27,7 +27,7 @@
         Measure 4 C5: off time 0.993
         All other notes: no changed off time
         MuseScore will use the calculated duration, resulting (on export) in a
-        normal MusicXML file (with divsions 1 and duration 2 for the half notes).
+        normal MusicXML file (with divisions 1 and duration 2 for the half notes).
         </miscellaneous-field>
       </miscellaneous>
     </identification>

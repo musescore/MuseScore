@@ -1287,9 +1287,17 @@ void MusicXMLParserPass1::identification()
                   }
             else if (_e.name() == "source")
                   _score->setMetaTag("source", _e.readElementText());
-            else if (_e.name() == "miscellaneous")
-                  // TODO
-                  _e.skipCurrentElement();  // skip but don't log
+            else if (_e.name() == "miscellaneous") {
+                  // store all miscellaneous information
+                  while (_e.readNextStartElement()) {
+                        if (_e.name() == "miscellaneous-field") {
+                              const QString name = _e.attributes().value("name").toString();
+                              _score->setMetaTag(name, _e.readElementText());
+                              }
+                        else
+                              _e.skipCurrentElement();
+                        }
+                  }
             else
                   skipLogCurrElem();
             }

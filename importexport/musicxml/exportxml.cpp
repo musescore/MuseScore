@@ -5873,8 +5873,8 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int
 
 void ExportMusicXml::work(const MeasureBase* /*measure*/)
       {
-      QString workTitle  = _score->metaTag("workTitle");
-      QString workNumber = _score->metaTag("workNumber");
+      const QString workTitle  = _score->metaTag("workTitle");
+      const QString workNumber = _score->metaTag("workNumber");
       if (!(workTitle.isEmpty() && workNumber.isEmpty())) {
             _xml.stag("work");
             if (!workNumber.isEmpty())
@@ -6462,17 +6462,18 @@ static void identification(XmlWriter& xml, Score const* const score)
       {
       xml.stag("identification");
 
-      QStringList creators;
       // the creator types commonly found in MusicXML
-      creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
-      for (QString &type : creators) {
+      std::set<QString> metaTagNames = { "arranger", "composer", "lyricist", "poet", "translator" };
+      for (const QString &type : metaTagNames) {
             QString creator = score->metaTag(type);
             if (!creator.isEmpty())
                   xml.tag(QString("creator type=\"%1\"").arg(type), creator);
             }
 
-      if (!score->metaTag("copyright").isEmpty())
+      if (!score->metaTag("copyright").isEmpty()) {
             xml.tag("rights", score->metaTag("copyright"));
+            metaTagNames.emplace("copyright");
+            }
 
       xml.stag("encoding");
 
@@ -6481,7 +6482,7 @@ static void identification(XmlWriter& xml, Score const* const score)
             xml.tag("encoding-date", QString("2007-09-10"));
             }
       else {
-            xml.tag("software", QString("MuseScore ") + QString(VERSION));
+            xml.tag("software", QString("MuseScore ") + QString(VERSION) + " Evolution");
             xml.tag("encoding-date", QDate::currentDate().toString(Qt::ISODate));
             }
 
@@ -6503,8 +6504,27 @@ static void identification(XmlWriter& xml, Score const* const score)
 
       xml.etag();
 
-      if (!score->metaTag("source").isEmpty())
+      if (!score->metaTag("source").isEmpty()) {
             xml.tag("source", score->metaTag("source"));
+            metaTagNames.emplace("source");
+            }
+
+      if (!MScore::debugMode) {
+            // do not write miscellaneous in debug mode
+            metaTagNames.insert({ "workTitle", "workNumber", "movementTitle", "movementNumber", "originalFormat" });
+            xml.stag("miscellaneous");
+            //for (const auto& metaTag : score->metaTags()) {
+            QMapIterator<QString, QString> metaTag(score->metaTags());
+            while (metaTag.hasNext()) {
+                  metaTag.next();
+                  auto search = metaTagNames.find(metaTag.key());
+                  if (search != metaTagNames.end())
+                        continue;
+                  else if (!metaTag.value().isEmpty())
+                        xml.tagE(QString("miscellaneous-field name=\"%1\" %2").arg(metaTag.key(), metaTag.value()));
+                  }
+            xml.etag();
+            }
 
       xml.etag();
       }
