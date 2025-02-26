@@ -25,34 +25,22 @@ import Muse.Ui
 import Muse.UiComponents
 import MuseScore.AppShell
 
-ListView {
+Item {
     id: root
-
-    height: Math.max(1,contentItem.childrenRect.height)
-    width: contentWidth
 
     property alias appWindow: appMenuModel.appWindow
 
-    orientation: Qt.Horizontal
+    property int availableWidth: ui.rootItem.width
+    property bool truncated: availableWidth < contentRow.childrenRect.width
 
-    interactive: false
-
-    model: appMenuModel
-
-    function openedArea(menuLoader) {
-        if (menuLoader.isMenuOpened) {
-            if (menuLoader.menu.subMenuLoader && menuLoader.menu.subMenuLoader.isMenuOpened)
-                return openedArea(menuLoader.menu.subMenuLoader)
-            return Qt.rect(menuLoader.menu.x, menuLoader.menu.y, menuLoader.menu.width, menuLoader.menu.height)
-        }
-        return Qt.rect(0, 0, 0, 0)
-    }
+    implicitWidth: contentRow.width
+    implicitHeight: contentRow.height
 
     AppMenuModel {
         id: appMenuModel
 
         appMenuAreaRect: Qt.rect(root.x, root.y, root.width, root.height)
-        openedMenuAreaRect: openedArea(menuLoader)
+        openedMenuAreaRect: prv.openedArea(menuLoader)
 
         onOpenMenuRequested: function(menuId) {
             prv.openMenu(menuId)
@@ -81,123 +69,105 @@ ListView {
         appMenuModel.load()
     }
 
-    QtObject {
-        id: prv
+    Row {
+        id: contentRow
 
-        property var openedMenu: null
-        property bool needRestoreNavigationAfterClose: false
-        property string lastOpenedMenuId: ""
+        Repeater {
+            model: appMenuModel
 
-        function openMenu(menuId, byHover) {
-            for (var i = 0; i < root.count; ++i) {
-                var item = root.itemAtIndex(i) as FlatButton
-                if (Boolean(item) && item.menuId === menuId) {
-                    needRestoreNavigationAfterClose = true
-                    lastOpenedMenuId = menuId
+            delegate: FlatButton {
+                id: radioButtonDelegate
 
-                    if (!byHover) {
-                        if (menuLoader.isMenuOpened && menuLoader.parent === item) {
-                            menuLoader.close()
-                            return
+                required property MenuItem item
+                required property int index
+
+                property string menuId: Boolean(item) ? item.id : ""
+                property string title: Boolean(item) ? item.title : ""
+                property string titleWithMnemonicUnderline: Boolean(item) ? item.titleWithMnemonicUnderline : ""
+
+                property bool isMenuOpened: menuLoader.isMenuOpened && menuLoader.parent === this
+                property bool highlight: appMenuModel.highlightedMenuId === menuId
+
+                buttonType: FlatButton.TextOnly
+                isNarrow: true
+                margins: 8
+                drawFocusBorderInsideRect: true
+
+                transparent: !isMenuOpened
+                accentButton: isMenuOpened
+
+                navigation.accessible.ignored: true
+
+                visible: mapToItem(root, 0, 0).x + width < root.availableWidth
+
+                AccessibleItem {
+                    id: accessibleInfo
+
+                    accessibleParent: panelAccessibleInfo
+                    visualItem: radioButtonDelegate
+                    role: MUAccessible.Button
+                    name: radioButtonDelegate.title
+
+                    property bool active: radioButtonDelegate.highlight && !radioButtonDelegate.isMenuOpened
+                    onActiveChanged: {
+                        if (active) {
+                            forceActiveFocus()
+                            accessibleInfo.readInfo()
+                        } else {
+                            accessibleInfo.resetFocus()
                         }
                     }
 
-                    menuLoader.menuId = menuId
-                    menuLoader.parent = item
-                    menuLoader.accessibleName = item.title
+                    function readInfo() {
+                        accessibleInfo.ignored = false
+                        accessibleInfo.focused = true
+                    }
 
-                    Qt.callLater(menuLoader.open, item.item.subitems)
+                    function resetFocus() {
+                        accessibleInfo.focused = false
+                        accessibleInfo.ignored = true
+                    }
+                }
 
-                    return
+                contentItem: StyledTextLabel {
+                    id: textLabel
+
+                    width: textMetrics.width
+
+                    text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
+                    textFormat: Text.RichText
+                    font: ui.theme.defaultFont
+
+                    TextMetrics {
+                        id: textMetrics
+
+                        font: textLabel.font
+                        text: radioButtonDelegate.title
+                    }
+                }
+
+                backgroundItem: AppButtonBackground {
+                    mouseArea: radioButtonDelegate.mouseArea
+
+                    highlight: radioButtonDelegate.highlight
+
+                    color: radioButtonDelegate.normalColor
+                }
+
+                mouseArea.onHoveredChanged: {
+                    if (!mouseArea.containsMouse) {
+                        return
+                    }
+
+                    if (menuLoader.isMenuOpened && menuLoader.parent !== this) {
+                        appMenuModel.openMenu(radioButtonDelegate.menuId, true)
+                    }
+                }
+
+                onClicked: {
+                    appMenuModel.openMenu(radioButtonDelegate.menuId, false)
                 }
             }
-        }
-
-        function hasNavigatedItem() {
-            return appMenuModel.highlightedMenuId !== ""
-        }
-    }
-
-    delegate: FlatButton {
-        id: radioButtonDelegate
-
-        required property MenuItem item
-        required property int index
-
-        property string menuId: Boolean(item) ? item.id : ""
-        property string title: Boolean(item) ? item.title : ""
-        property string titleWithMnemonicUnderline: Boolean(item) ? item.titleWithMnemonicUnderline : ""
-
-        property bool isMenuOpened: menuLoader.isMenuOpened && menuLoader.parent === this
-        property bool highlight: appMenuModel.highlightedMenuId === menuId
-
-        buttonType: FlatButton.TextOnly
-        isNarrow: true
-        margins: 8
-        drawFocusBorderInsideRect: true
-
-        transparent: !isMenuOpened
-        accentButton: isMenuOpened
-
-        navigation.accessible.ignored: true
-
-        AccessibleItem {
-            id: accessibleInfo
-
-            accessibleParent: panelAccessibleInfo
-            visualItem: radioButtonDelegate
-            role: MUAccessible.Button
-            name: radioButtonDelegate.title
-
-            property bool active: radioButtonDelegate.highlight && !radioButtonDelegate.isMenuOpened
-            onActiveChanged: {
-                if (active) {
-                    forceActiveFocus()
-                    accessibleInfo.readInfo()
-                } else {
-                    accessibleInfo.resetFocus()
-                }
-            }
-
-            function readInfo() {
-                accessibleInfo.ignored = false
-                accessibleInfo.focused = true
-            }
-
-            function resetFocus() {
-                accessibleInfo.focused = false
-                accessibleInfo.ignored = true
-            }
-        }
-
-        contentItem: StyledTextLabel {
-            id: textLabel
-
-            text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
-            textFormat: Text.RichText
-            font: ui.theme.defaultFont
-        }
-
-        backgroundItem: AppButtonBackground {
-            mouseArea: radioButtonDelegate.mouseArea
-
-            highlight: radioButtonDelegate.highlight
-
-            color: radioButtonDelegate.normalColor
-        }
-
-        mouseArea.onHoveredChanged: {
-            if (!mouseArea.containsMouse) {
-                return
-            }
-
-            if (menuLoader.isMenuOpened && menuLoader.parent !== this) {
-                appMenuModel.openMenu(radioButtonDelegate.menuId, true)
-            }
-        }
-
-        onClicked: {
-            appMenuModel.openMenu(radioButtonDelegate.menuId, false)
         }
     }
 
@@ -225,6 +195,53 @@ ListView {
 
         onClosed: {
             appMenuModel.openedMenuId = ""
+        }
+    }
+
+    QtObject {
+        id: prv
+
+        property var openedMenu: null
+        property bool needRestoreNavigationAfterClose: false
+        property string lastOpenedMenuId: ""
+
+        function openMenu(menuId, byHover) {
+            var children = contentRow.children
+            for (var i = 0; i < children.length; ++i) {
+                var item = children[i]
+                if (Boolean(item) && item.menuId === menuId) {
+                    needRestoreNavigationAfterClose = true
+                    lastOpenedMenuId = menuId
+
+                    if (!byHover) {
+                        if (menuLoader.isMenuOpened && menuLoader.parent === item) {
+                            menuLoader.close()
+                            return
+                        }
+                    }
+
+                    menuLoader.menuId = menuId
+                    menuLoader.parent = item
+                    menuLoader.accessibleName = item.title
+
+                    Qt.callLater(menuLoader.open, item.item.subitems)
+
+                    return
+                }
+            }
+        }
+
+        function hasNavigatedItem() {
+            return appMenuModel.highlightedMenuId !== ""
+        }
+
+        function openedArea(menuLoader) {
+            if (menuLoader.isMenuOpened) {
+                if (menuLoader.menu.subMenuLoader && menuLoader.menu.subMenuLoader.isMenuOpened)
+                    return openedArea(menuLoader.menu.subMenuLoader)
+                return Qt.rect(menuLoader.menu.x, menuLoader.menu.y, menuLoader.menu.width, menuLoader.menu.height)
+            }
+            return Qt.rect(0, 0, 0, 0)
         }
     }
 }
