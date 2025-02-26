@@ -460,9 +460,8 @@ static void initDrumset(Drumset* drumset, const MusicXmlInstruments& instruments
         //LOGD("initDrumset: instrument: %s %s", muPrintable(ii.key()), muPrintable(ii.value().toString()));
         int unpitched = ii.second.unpitched;
         if (0 <= unpitched && unpitched <= 127) {
-            ByteArray name = ii.second.name.toAscii();
             drumset->drum(ii.second.unpitched)
-                = DrumInstrument(name.constChar(), ii.second.notehead, ii.second.line, ii.second.stemDirection);
+                = DrumInstrument(ii.second.name, ii.second.notehead, ii.second.line, ii.second.stemDirection);
         }
     }
 }
@@ -6612,7 +6611,7 @@ void MusicXmlParserPass2::xmlSetDrumsetPitch(Note* note, const Chord* chord, con
 
             newPitch = instr.pitch;
             ds->drum(newPitch) = ds->drum(newPitch) = DrumInstrument(
-                instr.name.toStdString().c_str(), headGroup, line, stemDir, static_cast<int>(chord->voice()));
+                instr.name, headGroup, line, stemDir, static_cast<int>(chord->voice()));
         }
     }
 
@@ -6627,7 +6626,7 @@ void MusicXmlParserPass2::xmlSetDrumsetPitch(Note* note, const Chord* chord, con
             }
         }
 
-        ds->drum(newPitch) = DrumInstrument("drum", headGroup, line, stemDir, static_cast<int>(chord->voice()));
+        ds->drum(newPitch) = DrumInstrument(u"drum", headGroup, line, stemDir, static_cast<int>(chord->voice()));
     } else if (stemDir == DirectionV::AUTO) {
         stemDir = ds->stemDirection(newPitch);
     }
