@@ -57,6 +57,18 @@ void NoteInputPreferencesModel::load()
         emit playNotesWhenEditingChanged(playNotesWhenEditing());
     });
 
+    playbackConfiguration()->playChordWhenEditingChanged().onReceive(this, [this](bool value) {
+        emit playChordWhenEditingChanged(value);
+    });
+
+    playbackConfiguration()->playHarmonyWhenEditingChanged().onReceive(this, [this](bool value) {
+        emit playChordSymbolWhenEditingChanged(value);
+    });
+
+    playbackConfiguration()->playNotesOnMidiInputChanged().onReceive(this, [this](bool value) {
+        emit playNotesOnMidiInputChanged(value);
+    });
+
     notationConfiguration()->isPlayPreviewNotesInInputByDurationChanged().onNotify(this, [this]() {
         emit playPreviewNotesInInputByDurationChanged(playPreviewNotesInInputByDuration());
     });
@@ -71,14 +83,6 @@ void NoteInputPreferencesModel::load()
 
     notationConfiguration()->notePlayDurationMillisecondsChanged().onReceive(this, [this](int value) {
         emit notePlayDurationMillisecondsChanged(value);
-    });
-
-    playbackConfiguration()->playChordWhenEditingChanged().onReceive(this, [this](bool value) {
-        emit playChordWhenEditingChanged(value);
-    });
-
-    playbackConfiguration()->playHarmonyWhenEditingChanged().onReceive(this, [this](bool value) {
-        emit playChordSymbolWhenEditingChanged(value);
     });
 
     engravingConfiguration()->dynamicsApplyToAllVoicesChanged().onReceive(this, [this](bool value) {
@@ -205,7 +209,6 @@ void NoteInputPreferencesModel::setDefaultNoteInputMethod(int value)
     }
 
     notationConfiguration()->setDefaultNoteInputMethod(static_cast<mu::notation::NoteInputMethod>(value));
-    emit defaultNoteInputMethodChanged(value);
 }
 
 void NoteInputPreferencesModel::setAddAccidentalDotsArticulationsToNextNoteEntered(bool value)
@@ -215,7 +218,6 @@ void NoteInputPreferencesModel::setAddAccidentalDotsArticulationsToNextNoteEnter
     }
 
     notationConfiguration()->setAddAccidentalDotsArticulationsToNextNoteEntered(value);
-    emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(value);
 }
 
 void NoteInputPreferencesModel::setUseNoteInputCursorInInputByDuration(bool value)
@@ -225,7 +227,6 @@ void NoteInputPreferencesModel::setUseNoteInputCursorInInputByDuration(bool valu
     }
 
     notationConfiguration()->setUseNoteInputCursorInInputByDuration(value);
-    emit useNoteInputCursorInInputByDurationChanged(value);
 }
 
 void NoteInputPreferencesModel::setMidiInputEnabled(bool value)
@@ -235,7 +236,6 @@ void NoteInputPreferencesModel::setMidiInputEnabled(bool value)
     }
 
     notationConfiguration()->setIsMidiInputEnabled(value);
-    emit midiInputEnabledChanged(value);
 }
 
 void NoteInputPreferencesModel::setStartNoteInputAtSelectionWhenPressingMidiKey(bool value)
@@ -245,7 +245,6 @@ void NoteInputPreferencesModel::setStartNoteInputAtSelectionWhenPressingMidiKey(
     }
 
     notationConfiguration()->setStartNoteInputAtSelectionWhenPressingMidiKey(value);
-    emit startNoteInputAtSelectionWhenPressingMidiKeyChanged(value);
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
@@ -255,7 +254,6 @@ void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
     }
 
     shortcutsConfiguration()->setAdvanceToNextNoteOnKeyRelease(value);
-    emit advanceToNextNoteOnKeyReleaseChanged(value);
 }
 
 void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(int delay)
@@ -265,7 +263,6 @@ void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(i
     }
 
     notationConfiguration()->setDelayBetweenNotesInRealTimeModeMilliseconds(delay);
-    emit delayBetweenNotesInRealTimeModeMillisecondsChanged(delay);
 }
 
 void NoteInputPreferencesModel::setPlayNotesWhenEditing(bool value)
@@ -275,7 +272,6 @@ void NoteInputPreferencesModel::setPlayNotesWhenEditing(bool value)
     }
 
     playbackConfiguration()->setPlayNotesWhenEditing(value);
-    emit playNotesWhenEditingChanged(value);
 }
 
 void NoteInputPreferencesModel::setPlayPreviewNotesInInputByDuration(bool value)
@@ -285,7 +281,6 @@ void NoteInputPreferencesModel::setPlayPreviewNotesInInputByDuration(bool value)
     }
 
     notationConfiguration()->setIsPlayPreviewNotesInInputByDuration(value);
-    emit playPreviewNotesInInputByDurationChanged(value);
 }
 
 void NoteInputPreferencesModel::setNotePlayDurationMilliseconds(int duration)
@@ -295,7 +290,6 @@ void NoteInputPreferencesModel::setNotePlayDurationMilliseconds(int duration)
     }
 
     notationConfiguration()->setNotePlayDurationMilliseconds(duration);
-    emit notePlayDurationMillisecondsChanged(duration);
 }
 
 void NoteInputPreferencesModel::setPlayChordWhenEditing(bool value)
@@ -305,7 +299,6 @@ void NoteInputPreferencesModel::setPlayChordWhenEditing(bool value)
     }
 
     playbackConfiguration()->setPlayChordWhenEditing(value);
-    emit playChordWhenEditingChanged(value);
 }
 
 void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
@@ -315,7 +308,6 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
     }
 
     playbackConfiguration()->setPlayHarmonyWhenEditing(value);
-    emit playChordSymbolWhenEditingChanged(value);
 }
 
 void NoteInputPreferencesModel::setPlayNotesOnMidiInput(bool value)
@@ -325,7 +317,6 @@ void NoteInputPreferencesModel::setPlayNotesOnMidiInput(bool value)
     }
 
     playbackConfiguration()->setPlayNotesOnMidiInput(value);
-    emit playNotesOnMidiInputChanged(value);
 }
 
 void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
@@ -335,7 +326,6 @@ void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
     }
 
     engravingConfiguration()->setDynamicsApplyToAllVoices(value);
-    emit dynamicsApplyToAllVoicesChanged(value);
 }
 
 void NoteInputPreferencesModel::setColorNotesOutsideOfUsablePitchRange(bool value)
@@ -345,7 +335,6 @@ void NoteInputPreferencesModel::setColorNotesOutsideOfUsablePitchRange(bool valu
     }
 
     notationConfiguration()->setColorNotesOutsideOfUsablePitchRange(value);
-    emit colorNotesOutsideOfUsablePitchRangeChanged(value);
 }
 
 void NoteInputPreferencesModel::setWarnGuitarBends(bool value)
@@ -355,5 +344,4 @@ void NoteInputPreferencesModel::setWarnGuitarBends(bool value)
     }
 
     notationConfiguration()->setWarnGuitarBends(value);
-    emit warnGuitarBendsChanged(value);
 }
