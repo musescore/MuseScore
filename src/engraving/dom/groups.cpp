@@ -137,7 +137,7 @@ BeamMode Groups::endBeam(const ChordRest* cr, const ChordRest* prev)
         // if current or previous cr is in tuplet (but not both in same tuplet):
         // consider it as if this were next shorter duration
         if (prev && (cr->tuplet() != prev->tuplet()) && (crDuration == prev->durationType())) {
-            if (crDuration >= DurationType::V_EIGHTH) {
+            if (crDuration <= DurationType::V_EIGHTH) {
                 val = g.beamMode(tick.ticks(), DurationType::V_16TH);
             } else if (crDuration == DurationType::V_16TH) {
                 val = g.beamMode(tick.ticks(), DurationType::V_32ND);

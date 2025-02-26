@@ -2461,8 +2461,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         static_cast<Chord*>(cr)->setStemDirection(sd);
         // set beam to none if score has beaming information and note can get beam, otherwise
         // set to auto
-        bool canGetBeam = (cr->durationType().type() >= DurationType::V_EIGHTH
-                           && cr->durationType().type() <= DurationType::V_1024TH);
+        bool canGetBeam = (cr->durationType().type() <= DurationType::V_EIGHTH
+                           && cr->durationType().type() >= DurationType::V_1024TH);
         if (hasBeamingInfo && canGetBeam) {
             cr->setBeamMode(BeamMode::NONE);
         } else {

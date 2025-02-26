@@ -564,7 +564,7 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
 
     for (ChordRest* cr : graceNotes) {
         bm = Groups::endBeam(cr);
-        if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+        if ((cr->durationType().type() >= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {
                 beam->setIsGrace(true);
                 layout1(beam, ctx);
@@ -762,7 +762,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
             }
 
             // Rests of any duration can be beamed over, if required
-            bool canBeBeamed = durationType.type() > DurationType::V_QUARTER || cr->isRest();
+            bool canBeBeamed = durationType.type() < DurationType::V_QUARTER || cr->isRest();
             if (!canBeBeamed || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {

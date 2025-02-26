@@ -359,9 +359,9 @@ enum class BeamMode : signed char {
 };
 
 enum class DurationType : signed char {
-    V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
-    V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
-    V_ZERO, V_MEASURE,  V_INVALID
+    V_INVALID = -1, V_ZERO, V_1024TH, V_512TH, V_256TH,
+    V_128TH, V_64TH, V_32ND, V_16TH, V_EIGHTH, V_QUARTER,
+    V_HALF, V_WHOLE, V_BREVE, V_LONG, V_MEASURE
 };
 
 // P_TYPE::DURATION_TYPE_WITH_DOTS

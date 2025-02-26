@@ -2152,7 +2152,7 @@ bool MeiExporter::writeBeamTypeAtt(const ChordRest* chordRest, libmei::AttTyped&
     }
 
     // Make sure we do not add a @type for notes / rests longer the 8th with a hanging beam flag
-    if (int(chordRest->durationType().type()) < int(DurationType::V_EIGHTH)) {
+    if (int(chordRest->durationType().type()) > int(DurationType::V_EIGHTH)) {
         return true;
     }
 

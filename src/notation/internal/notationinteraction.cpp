@@ -5350,7 +5350,7 @@ bool NotationInteraction::canAddTupletToSelectedChordRests() const
             continue;
         }
 
-        if (chordRest->durationType() < mu::engraving::TDuration(mu::engraving::DurationType::V_512TH)
+        if (chordRest->durationType() > mu::engraving::TDuration(mu::engraving::DurationType::V_512TH)
             && chordRest->durationType() != mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE)) {
             return false;
         }

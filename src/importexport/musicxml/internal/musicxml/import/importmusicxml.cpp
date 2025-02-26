@@ -135,18 +135,18 @@ Err importMusicXmlfromBuffer(Score* score, const String& /*name*/, const ByteArr
  import will almost certainly break in non-obvious ways.
  */
 
-static_assert(int(DurationType::V_BREVE) == int(DurationType::V_LONG) + 1
-              && int(DurationType::V_WHOLE) == int(DurationType::V_BREVE) + 1
-              && int(DurationType::V_HALF) == int(DurationType::V_WHOLE) + 1
-              && int(DurationType::V_QUARTER) == int(DurationType::V_HALF) + 1
-              && int(DurationType::V_EIGHTH) == int(DurationType::V_QUARTER) + 1
-              && int(DurationType::V_16TH) == int(DurationType::V_EIGHTH) + 1
-              && int(DurationType::V_32ND) == int(DurationType::V_16TH) + 1
-              && int(DurationType::V_64TH) == int(DurationType::V_32ND) + 1
-              && int(DurationType::V_128TH) == int(DurationType::V_64TH) + 1
-              && int(DurationType::V_256TH) == int(DurationType::V_128TH) + 1
-              && int(DurationType::V_512TH) == int(DurationType::V_256TH) + 1
-              && int(DurationType::V_1024TH) == int(DurationType::V_512TH) + 1);
+static_assert(int(DurationType::V_BREVE) == int(DurationType::V_LONG) - 1
+              && int(DurationType::V_WHOLE) == int(DurationType::V_BREVE) - 1
+              && int(DurationType::V_HALF) == int(DurationType::V_WHOLE) - 1
+              && int(DurationType::V_QUARTER) == int(DurationType::V_HALF) - 1
+              && int(DurationType::V_EIGHTH) == int(DurationType::V_QUARTER) - 1
+              && int(DurationType::V_16TH) == int(DurationType::V_EIGHTH) - 1
+              && int(DurationType::V_32ND) == int(DurationType::V_16TH) - 1
+              && int(DurationType::V_64TH) == int(DurationType::V_32ND) - 1
+              && int(DurationType::V_128TH) == int(DurationType::V_64TH) - 1
+              && int(DurationType::V_256TH) == int(DurationType::V_128TH) - 1
+              && int(DurationType::V_512TH) == int(DurationType::V_256TH) - 1
+              && int(DurationType::V_1024TH) == int(DurationType::V_512TH) - 1);
 
 //---------------------------------------------------------
 //   extractRootfile

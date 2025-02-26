@@ -88,14 +88,14 @@ void TDuration::setVal(int ticks)
         m_val = DurationType::V_MEASURE;
     } else {
         TDuration dt;
-        for (int i = 0; i < int(DurationType::V_ZERO); ++i) {
+        for (int i = 1; i < int(DurationType::V_LONG); ++i) {
             dt.setType(DurationType(i));
             int t = dt.ticks().ticks();
             if (ticks / t) {
                 int remain = ticks % t;
                 const int SMALLEST_DOT_DIVISOR = 1 << MAX_DOTS;
                 if ((t - remain) < (t / SMALLEST_DOT_DIVISOR)) {
-                    m_val = DurationType(i - 1);
+                    m_val = DurationType(i + 1);
                     return;
                 }
                 m_val = DurationType(i);
@@ -269,11 +269,11 @@ void TDuration::shiftType(int nSteps, bool stepDotted)
             newValue = int(m_val) - nSteps;
         }
 
-        if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_1024TH))
-            || ((newValue >= int(DurationType::V_1024TH)) && (newDots >= 1))
-            || ((newValue >= int(DurationType::V_512TH)) && (newDots >= 2))
-            || ((newValue >= int(DurationType::V_256TH)) && (newDots >= 3))
-            || ((newValue >= int(DurationType::V_128TH)) && (newDots >= 4))) {
+        if ((newValue > int(DurationType::V_LONG)) || (newValue < int(DurationType::V_1024TH))
+            || ((newValue <= int(DurationType::V_1024TH)) && (newDots >= 1))
+            || ((newValue <= int(DurationType::V_512TH)) && (newDots >= 2))
+            || ((newValue <= int(DurationType::V_256TH)) && (newDots >= 3))
+            || ((newValue <= int(DurationType::V_128TH)) && (newDots >= 4))) {
             setType(DurationType::V_INVALID);
         } else {
             setType(DurationType(newValue));
