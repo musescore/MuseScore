@@ -38,6 +38,7 @@ public:
     // start
     void start()
     {
+        m_isCanceled = false;
         m_isStarted = true;
         m_started.notify();
     }
