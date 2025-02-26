@@ -41,6 +41,7 @@ public:
 
     const mu::engraving::Staff* staff() const;
     void setStaff(const mu::engraving::Staff* staff);
+    void updateSystemObjects();
 
     Q_INVOKABLE QString staffId() const;
     Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;

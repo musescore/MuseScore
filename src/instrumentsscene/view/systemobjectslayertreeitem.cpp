@@ -127,6 +127,12 @@ void SystemObjectsLayerTreeItem::setStaff(const Staff* staff)
     }
 }
 
+void SystemObjectsLayerTreeItem::updateSystemObjects()
+{
+    m_systemObjectGroups = collectSystemObjectGroups(m_staff);
+    updateState();
+}
+
 QString SystemObjectsLayerTreeItem::staffId() const
 {
     const Staff* s = staff();
@@ -135,7 +141,7 @@ QString SystemObjectsLayerTreeItem::staffId() const
 
 bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
 {
-    return false;
+    return m_staffIdx != 0; // all except the first
 }
 
 void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreChangesRange& changes)

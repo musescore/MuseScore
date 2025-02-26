@@ -266,10 +266,6 @@ void MasterNotationParts::addSystemObjects(const muse::IDList& stavesIds)
 
     NotationParts::addSystemObjects(stavesIds);
 
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->addSystemObjects(stavesIds);
-    }
-
     endGlobalEdit();
 }
 
@@ -282,10 +278,6 @@ void MasterNotationParts::removeSystemObjects(const muse::IDList& stavesIds)
     startGlobalEdit(TranslatableString("undoableAction", "Remove system markings"));
 
     NotationParts::removeSystemObjects(stavesIds);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->removeSystemObjects(stavesIds);
-    }
 
     endGlobalEdit();
 }
