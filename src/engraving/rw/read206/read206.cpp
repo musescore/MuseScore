@@ -347,6 +347,10 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         ts = textStyle(ss);
     }
     for (const auto& i : *ts) {
+        if (ctx.shouldSkipProperty(i.pid)) {
+            continue;
+        }
+
         PropertyValue value;
         if (i.sid == Sid::NOSTYLE) {
             break;
