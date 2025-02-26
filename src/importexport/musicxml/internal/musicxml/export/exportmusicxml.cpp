@@ -7184,17 +7184,20 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
         metaTagNames.insert(u"source");
     }
 
-    metaTagNames.insert({ u"workTitle", u"workNumber", u"movementTitle", u"movementNumber", u"originalFormat" });
-    xml.startElement("miscellaneous");
-    for (const auto& metaTag : score->metaTags()) {
-        auto search = metaTagNames.find(metaTag.first);
-        if (search != metaTagNames.end()) {
-            continue;
-        } else if (!metaTag.second.isEmpty()) {
-            xml.tag("miscellaneous-field", { { "name", metaTag.first } }, metaTag.second);
+    if (!MScore::debugMode) {
+        // do not write miscellaneous in debug mode
+        metaTagNames.insert({ u"workTitle", u"workNumber", u"movementTitle", u"movementNumber", u"originalFormat" });
+        xml.startElement("miscellaneous");
+        for (const auto& metaTag : score->metaTags()) {
+            auto search = metaTagNames.find(metaTag.first);
+            if (search != metaTagNames.end()) {
+                continue;
+            } else if (!metaTag.second.isEmpty()) {
+                xml.tag("miscellaneous-field", { { "name", metaTag.first } }, metaTag.second);
+            }
         }
+        xml.endElement();
     }
-    xml.endElement();
 
     xml.endElement();
 }
