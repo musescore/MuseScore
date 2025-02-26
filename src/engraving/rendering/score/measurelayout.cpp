@@ -1646,6 +1646,9 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
     const bool isTrailer = courtesySegType == SegmentType::TimeSigAnnounce;
     const bool isContinuationCourtesy = courtesySegType == SegmentType::TimeSigStartRepeatAnnounce;
 
+    const Segment* prevCourtesySegment
+        = prevMeasure ? prevMeasure->findSegmentR(SegmentType::TimeSigRepeatAnnounce, prevMeasure->ticks()) : nullptr;
+
     // Cont. courtesies - check for sig at the start of the measure OR end of previous measure if changesBeforeBarline... is on
     const bool checkPrevMeasure = isContinuationCourtesy && prevMeasure
                                   && ((prevMeasure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
@@ -1670,8 +1673,8 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
         // Show continuation courtesy if there's a repeat courtesy before it
         // Show trailer courtesy only when there's a time sig element in the next bar
         const bool sigsDifferent = actualTimeSig->sig() != curTimeSig->sig();
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy
-                                   : isTrailer ? actualTimeSig->tick() == m->endTick() : sigsDifferent;
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->elementAt(
+            track) : isTrailer ? actualTimeSig->tick() == m->endTick() : sigsDifferent;
         // If there is a real key sig at this tick (in this bar or the previous), don't create a courtesy
         const bool hasSigAtTick = tsSegAtCourtesyTick && tsSegAtCourtesyTick->enabled() && tsSegAtCourtesyTick->element(track);
         // Only show courtesy if its real signature has courtesies enabled
@@ -1760,6 +1763,9 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
     const bool isTrailer = courtesySegType == SegmentType::KeySigAnnounce;
     const bool isContinuationCourtesy = courtesySegType == SegmentType::KeySigStartRepeatAnnounce;
 
+    const Segment* prevCourtesySegment
+        = prevMeasure ? prevMeasure->findSegmentR(SegmentType::KeySigRepeatAnnounce, prevMeasure->ticks()) : nullptr;
+
     // Cont. courtesies - check for sig at the start of the measure OR end of previous measure if changesBeforeBarline... is on
     const bool checkPrevMeasure = isContinuationCourtesy && prevMeasure
                                   && ((prevMeasure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
@@ -1787,7 +1793,8 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
         // Get info from correct tick for repeats
         // For trailers and pre-repeat courtesies, signatures should be different
         const bool sigsDifferent = staff->key(m->endTick() - Fraction::eps()) != refKey.key();
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : sigsDifferent;
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->elementAt(
+            track) : sigsDifferent;
         // Only show key sig changes on pitched staves
         const bool staffIsPitchedAtNextMeas = ctx.dom().lastMeasure() == m
                                               || (m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick()));
@@ -1874,6 +1881,8 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
     const bool isContinuationCourtesy = courtesySegType == SegmentType::ClefStartRepeatAnnounce;
 
+    const Segment* prevCourtesySegment
+        = prevMeasure ? prevMeasure->findSegmentR(SegmentType::ClefRepeatAnnounce, prevMeasure->ticks()) : nullptr;
     const Segment* clefSegAtCourtesyTick = m->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, courtesyClefRTick);
     clefSegAtCourtesyTick
         = !clefSegAtCourtesyTick
@@ -1901,7 +1910,8 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
         const ClefType refClef = staff->clef(refClefTick);
         // For trailers and pre-repeat courtesies, clefs should be different
         const bool clefsDifferent = staff->clef(m->endTick() - Fraction::eps()) != refClef;
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy : clefsDifferent;
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->elementAt(
+            track) : clefsDifferent;
         // If there is a real clef at this tick (in this bar or the previous), don't create a courtesy
         const bool hasClefAtTick = clefSegAtCourtesyTick && clefSegAtCourtesyTick->enabled() && clefSegAtCourtesyTick->element(track);
         // Only show courtesy if its real clef has courtesies enabled
