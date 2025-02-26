@@ -216,6 +216,7 @@ FocusableControl {
         spacing: 2
 
         VisibilityBox {
+            id: visibilityBox
             visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
@@ -241,6 +242,7 @@ FocusableControl {
         }
 
         StyledIconLabel {
+            Layout.preferredWidth: visibilityBox.width
             visible: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
             Layout.alignment: Qt.AlignCenter
             iconCode: IconCode.MINUS
