@@ -344,11 +344,15 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
         bool timeSigAboveBarlineCase = segmentHasTimeSigAboveStaff && prevSeg->isEndBarLineType() && prevSeg->tick() == segment->tick();
         bool timeSigAboveKeySigCase = segmentHasTimeSigAboveStaff && prevSeg->isType(SegmentType::KeySig)
                                       && prevSeg->tick() == segment->tick();
+        bool timeSigAboveRepeatKeySigCase = segmentHasTimeSigAboveStaff && prevSeg->isType(SegmentType::KeySigRepeatAnnounce)
+                                            && prevSeg->tick() == segment->tick();
 
         if (timeSigAboveBarlineCase) {
             x = xPrevSeg + prevSeg->minRight() - 0.5 * prevSeg->style().styleMM(Sid::barWidth); // align to the preceding barline
         } else if (timeSigAboveKeySigCase) {
             x = xPrevSeg + segment->minLeft(); // align to the preceding keySig
+        } else if (timeSigAboveRepeatKeySigCase) {
+            x = xPrevSeg + prevSeg->minRight();
         } else {
             double minHorDist = minHorizontalDistance(prevSeg, segment, ctx.squeezeFactor);
             minHorDist = std::max(minHorDist, spaceLyricsAgainstBarlines(prevSeg, segment, ctx));
