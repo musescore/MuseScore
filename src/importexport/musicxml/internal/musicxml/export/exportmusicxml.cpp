@@ -5915,7 +5915,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 template<typename T>
 inline std::set<String>& operator<<(std::set<String>& s, const T& v)
 {
-    s.insert(v);
+    s.emplace(v);
     return s;
 }
 
@@ -7149,7 +7149,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 
     if (!score->metaTag(u"copyright").isEmpty()) {
         xml.tag("rights", score->metaTag(u"copyright"));
-        metaTagNames.insert(u"copyright");
+        metaTagNames.emplace(u"copyright");
     }
 
     xml.startElement("encoding");
@@ -7181,7 +7181,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 
     if (!score->metaTag(u"source").isEmpty()) {
         xml.tag("source", score->metaTag(u"source"));
-        metaTagNames.insert(u"source");
+        metaTagNames.emplace(u"source");
     }
 
     if (!MScore::debugMode) {
@@ -7625,7 +7625,7 @@ static void addChordPitchesToSet(const Chord* c, pitchSet& set)
 {
     for (const Note* note : c->notes()) {
         LOGD("chord %p note %p pitch %d", c, note, note->pitch() + 1);
-        set.insert(note->pitch());
+        set.emplace(note->pitch());
     }
 }
 
