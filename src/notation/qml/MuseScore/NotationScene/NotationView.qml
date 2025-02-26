@@ -186,8 +186,11 @@ FocusScope {
                         notationViewNavigationSection: navSec
                         navigationOrderStart: notationView.navigationPanel.order + 1
 
-                        onOpened: paintView.onElementPopupIsOpenChanged(true)
-                        onClosed: paintView.onElementPopupIsOpenChanged(false)
+                        onOpened: function(popupType) {
+                            paintView.onElementPopupIsOpenChanged(popupType)
+                        }
+
+                        onClosed: paintView.onElementPopupIsOpenChanged()
                     }
                 }
 

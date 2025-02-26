@@ -125,6 +125,7 @@ class OttavaSegment;
 class Page;
 class PalmMute;
 class PalmMuteSegment;
+class Parenthesis;
 class Part;
 class PartialLyricsLine;
 class PartialLyricsLineSegment;
@@ -189,6 +190,7 @@ class VoltaSegment;
 class WhammyBar;
 class WhammyBarSegment;
 class FretCircle;
+class ShadowNote;
 
 class LinkedObjects;
 
@@ -291,7 +293,7 @@ protected:
     void addChild(EngravingObject* o);
     void removeChild(EngravingObject* o);
 
-    const ElementStyle* m_elementStyle {& EMPTY_STYLE };
+    const ElementStyle* m_elementStyle { &EMPTY_STYLE };
     PropertyFlags* m_propertyFlagsList = nullptr;
     LinkedObjects* m_links = nullptr;
     Score* m_score = nullptr;
@@ -454,6 +456,8 @@ public:
     CONVERT(FretCircle, FRET_CIRCLE)
     CONVERT(StringTunings, STRING_TUNINGS)
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
+    CONVERT(Parenthesis, PARENTHESIS)
+    CONVERT(ShadowNote, SHADOW_NOTE)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -868,5 +872,7 @@ CONVERT(LaissezVib)
 CONVERT(PartialTie)
 CONVERT(PartialLyricsLine)
 CONVERT(PartialLyricsLineSegment)
+CONVERT(Parenthesis)
+CONVERT(ShadowNote)
 #undef CONVERT
 }

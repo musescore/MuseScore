@@ -168,6 +168,7 @@ signals:
     void compactPriorityOrderChanged();
 
     void floatingChanged();
+    void frameCurrentWidgetChanged();
 
     void initedChanged();
 
@@ -191,7 +192,7 @@ private slots:
     void onIsInMainWindowChanged();
 
 private:
-    void listenFloatingChanges();
+    void setUpFrameConnections();
     void doSetFloating(bool floating);
 
     void writeProperties();

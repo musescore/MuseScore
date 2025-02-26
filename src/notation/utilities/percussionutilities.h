@@ -22,17 +22,36 @@
 
 #pragma once
 
+#include "ui/iuiactionsregister.h"
+#include "shortcuts/ishortcutsregister.h"
+
+#include "iinteractive.h"
+
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/rw/xmlreader.h"
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
 
+#include "types/retval.h"
+
 namespace mu::notation {
 class PercussionUtilities
 {
+    INJECT_STATIC(muse::ui::IUiActionsRegister, uiactionsRegister)
+    INJECT_STATIC(muse::shortcuts::IShortcutsRegister, shortcutsRegister)
+
+    INJECT_STATIC(muse::IInteractive, interactive)
+
     INJECT_STATIC(mu::engraving::rendering::ISingleRenderer, engravingRender)
 
 public:
+    static void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);
     static std::shared_ptr<mu::engraving::Chord> getDrumNoteForPreview(const mu::engraving::Drumset* drumset, int pitch);
+    static bool editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
+
+private:
+    static muse::RetVal<muse::Val> openPercussionShortcutDialog(const mu::engraving::Drumset& drumset, int originPitch);
+    static QVariantMap drumToQVariantMap(int pitch, const engraving::DrumInstrument& drum);
 };
 }

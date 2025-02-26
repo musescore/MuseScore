@@ -666,6 +666,35 @@ EngravingObjectList Trill::scanChildren() const
 }
 
 //---------------------------------------------------------
+//   FBox
+//---------------------------------------------------------
+
+EngravingObject* FBox::scanParent() const
+{
+    return explicitParent();
+}
+
+EngravingObjectList FBox::scanChildren() const
+{
+    EngravingObjectList children;
+
+    for (FretDiagram* fretDiagram : m_fretDiagrams) {
+        children.push_back(fretDiagram);
+    }
+
+    return children;
+}
+
+void FBox::scanElements(void* data, void (*func)(void*, EngravingItem*), bool all)
+{
+    for (EngravingObject* o : scanChildren()) {
+        o->scanElements(data, func, all);
+    }
+
+    Box::scanElements(data, func, all);
+}
+
+//---------------------------------------------------------
 //   TBox
 //---------------------------------------------------------
 

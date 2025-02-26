@@ -36,13 +36,15 @@ public:
     virtual ~IWorkspace() = default;
 
     virtual std::string name() const = 0;
-    virtual std::string title() const = 0;
 
-    virtual bool isManaged(const DataKey& key) const = 0;
-    virtual void setIsManaged(const DataKey& key, bool val) = 0;
+    virtual bool isBuiltin() const = 0;
+    virtual bool isEdited() const = 0;
 
     virtual RetVal<QByteArray> rawData(const DataKey& key) const = 0;
     virtual Ret setRawData(const DataKey& key, const QByteArray& data) = 0;
+
+    virtual void reset() = 0;
+    virtual void assignNewName(const std::string& newName) = 0;
 
     virtual async::Notification reloadNotification() = 0;
 };

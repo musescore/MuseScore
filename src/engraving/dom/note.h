@@ -38,6 +38,7 @@
 #include "tie.h"
 #include "tiejumppointlist.h"
 #include "types.h"
+#include "noteval.h"
 
 namespace mu::engraving {
 class Factory;
@@ -52,7 +53,7 @@ class Spanner;
 class StaffType;
 class StretchedBend;
 class NoteEditData;
-enum class AccidentalType;
+enum class AccidentalType : unsigned char;
 
 static constexpr int MAX_DOTS = 4;
 
@@ -94,25 +95,6 @@ public:
     NoteHead* clone() const override { return new NoteHead(*this); }
 
     NoteHeadGroup headGroup() const;
-};
-
-//---------------------------------------------------------
-//   NoteVal
-///    helper structure
-///   \cond PLUGIN_API \private \endcond
-//---------------------------------------------------------
-
-struct NoteVal {
-    int pitch = -1;
-    int tpc1 = Tpc::TPC_INVALID;
-    int tpc2 = Tpc::TPC_INVALID;
-    int fret = INVALID_FRET_INDEX;
-    int string = INVALID_STRING_INDEX;
-    NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
-
-    NoteVal() {}
-    NoteVal(int p)
-        : pitch(p) {}
 };
 
 static const int INVALID_LINE = -10000;
@@ -158,7 +140,7 @@ class Note final : public EngravingItem
     DECLARE_CLASSOF(ElementType::NOTE)
 
 public:
-    enum class SlideType {
+    enum class SlideType : unsigned char {
         Undefined = 0,
         UpToNote,
         DownToNote,
@@ -166,7 +148,7 @@ public:
         DownFromNote
     };
 
-    enum DisplayFretOption {
+    enum DisplayFretOption : signed char {
         Hide = -1,
         NoHarmonic,
         NaturalHarmonic,
@@ -175,7 +157,7 @@ public:
 
     ~Note();
 
-    std::vector<const Note*> compoundNotes() const;
+    std::vector<Note*> compoundNotes() const;
 
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
@@ -306,11 +288,7 @@ public:
     void setTieFor(Tie* t);
     void setTieBack(Tie* t);
     Note* firstTiedNote(bool ignorePlayback = true) const;
-    const Note* lastTiedNote(bool ignorePlayback = true) const;
-    Note* lastTiedNote(bool ignorePlayback = true)
-    {
-        return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote(ignorePlayback));
-    }
+    Note* lastTiedNote(bool ignorePlayback = true) const;
 
     int unisonIndex() const;
     void disconnectTiedNotes();

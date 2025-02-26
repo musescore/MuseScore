@@ -28,6 +28,7 @@
 #include "durationtype.h"
 #include "mscore.h"
 #include "types.h"
+#include "noteval.h"
 
 #include "../types/types.h"
 
@@ -40,6 +41,7 @@ class Score;
 class Segment;
 class Selection;
 class Slur;
+class Staff;
 
 // no ordinal for the visual repres. of string
 // (topmost in TAB varies according to visual order and presence of bass strings)
@@ -50,7 +52,7 @@ static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 //---------------------------------------------------------
 
 enum class NoteEntryMethod : char {
-    UNKNOWN, STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
+    UNKNOWN, BY_NOTE_NAME, BY_DURATION, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
 };
 
 //---------------------------------------------------------
@@ -77,10 +79,17 @@ public:
     Segment* lastSegment() const { return m_lastSegment; }
     void setLastSegment(Segment* s) { m_lastSegment = s; }
 
+    Staff* staff() const;
+    staff_idx_t staffIdx() const;
+
     Drumset* drumset() const;
 
     int drumNote() const { return m_drumNote; }
     void setDrumNote(int v) { m_drumNote = v; }
+
+    // Used in the input-by-duration mode
+    const NoteValList& notes() const { return m_notes; }
+    void setNotes(const NoteValList& v) { m_notes = v; }
 
     voice_idx_t voice() const { return m_track == muse::nidx ? 0 : (m_track % VOICES); }
     void setVoice(voice_idx_t v);
@@ -112,7 +121,7 @@ public:
     AccidentalType accidentalType() const { return m_accidentalType; }
     void setAccidentalType(AccidentalType val) { m_accidentalType = val; }
 
-    std::set<SymId> articulationIds() const { return m_articulationIds; }
+    const std::set<SymId>& articulationIds() const { return m_articulationIds; }
     void setArticulationIds(const std::set<SymId>& ids) { m_articulationIds = ids; }
 
     Slur* slur() const { return m_slur; }
@@ -137,11 +146,13 @@ private:
     int m_drumNote = -1;
     int m_string = VISUAL_INVALID_STRING_INDEX; // visual string selected for input (TAB staves only)
 
+    NoteValList m_notes;
+
     Segment* m_lastSegment = nullptr;
     Segment* m_segment = nullptr; // current segment
 
     bool m_noteEntryMode = false;
-    NoteEntryMethod m_noteEntryMethod = NoteEntryMethod::STEPTIME;
+    NoteEntryMethod m_noteEntryMethod = NoteEntryMethod::BY_NOTE_NAME;
 
     TDuration m_duration = DurationType::V_INVALID; // currently duration
     bool m_rest = false; // rest mode

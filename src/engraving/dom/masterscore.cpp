@@ -36,6 +36,7 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "factory.h"
+#include "box.h"
 #include "linkedobjects.h"
 #include "repeatlist.h"
 #include "rest.h"
@@ -456,6 +457,21 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
     }
 }
 
+void MasterScore::rebuildFretDiagramLegend()
+{
+    for (MeasureBase* measure = first(); measure; measure = measure->next()) {
+        if (!measure->isFBox()) {
+            continue;
+        }
+
+        FBox* fbox = toFBox(measure);
+        fbox->init();
+        fbox->triggerLayout();
+
+        break;
+    }
+}
+
 //---------------------------------------------------------
 //   rebuildAndUpdateExpressive
 //    implicitly rebuild midi mappings as well. Should be preferred over
@@ -620,14 +636,14 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                                 moveClef = initClef;
                             } else {
                                 ClefToBarlinePosition clefPos = toClef(e)->clefToBarlinePosition();
-                                if (clefPos == ClefToBarlinePosition::AFTER) {
-                                    // non header clef at the begining of the measure
-                                    moveClef = true;
-                                } else if (isBeginning) {
+                                if (isBeginning) {
                                     // special case:
                                     // there is a non-header clef at global tick 0, and we are inserting at the beginning of the score.
                                     // this clef will be moved with the measure it accompanies, but it will be moved before the barline.
                                     specialCase = true;
+                                    moveClef = true;
+                                } else if (clefPos == ClefToBarlinePosition::AFTER) {
+                                    // non header clef at the begining of the measure
                                     moveClef = true;
                                 }
                             }

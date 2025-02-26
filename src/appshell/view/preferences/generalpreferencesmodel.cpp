@@ -61,11 +61,11 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 
     m_languageUpdateProgress = languagesService()->update(languageCode);
 
-    m_languageUpdateProgress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+    m_languageUpdateProgress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
         emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
     });
 
-    m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](const ProgressResult& res) {
+    m_languageUpdateProgress.finished().onReceive(this, [this, languageCode](const ProgressResult& res) {
         if (res.ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
             QString msg = muse::qtrc("appshell/preferences", "Your version of %1 is up to date.")
                           .arg(languagesService()->language(languageCode).name);
@@ -197,7 +197,7 @@ QVariantList GeneralPreferencesModel::startupModes() const
 
 GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes() const
 {
-    static const QMap<StartupModeType, QString> modeTitles {
+    const QMap<StartupModeType, QString> modeTitles {
         { StartupModeType::StartEmpty,  muse::qtrc("appshell/preferences", "Start empty") },
         { StartupModeType::ContinueLastSession, muse::qtrc("appshell/preferences", "Continue last session") },
         { StartupModeType::StartWithNewScore, muse::qtrc("appshell/preferences", "Start with new score") },
@@ -206,6 +206,8 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
 
     StartModeList modes;
 
+    const QString currentPath = configuration()->startupScorePath().toQString();
+
     for (StartupModeType type : modeTitles.keys()) {
         bool canSelectScorePath = (type == StartupModeType::StartWithScore);
 
@@ -213,7 +215,7 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
         mode.type = type;
         mode.title = modeTitles[type];
         mode.checked = configuration()->startupModeType() == type;
-        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().toQString() : QString();
+        mode.scorePath = canSelectScorePath ? currentPath : QString();
         mode.canSelectScorePath = canSelectScorePath;
 
         modes << mode;

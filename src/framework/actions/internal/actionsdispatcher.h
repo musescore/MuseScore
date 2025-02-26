@@ -50,6 +50,8 @@ private:
 
     void doDispatch(const Clients& clients, const ActionCode& actionCode, const ActionData& data);
 
+    void dump() const; // for debug
+
     std::map<ActionCode, Clients > m_clients;
 };
 }

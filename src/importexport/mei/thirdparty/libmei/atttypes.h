@@ -527,6 +527,34 @@ enum data_COMPASSDIRECTION_extended : int8_t {
 };
 
 /**
+ * MEI data.COURSETUNING
+ */
+enum data_COURSETUNING : int8_t {
+    COURSETUNING_NONE = 0,
+    COURSETUNING_guitar_standard,
+    COURSETUNING_guitar_drop_D,
+    COURSETUNING_guitar_open_D,
+    COURSETUNING_guitar_open_G,
+    COURSETUNING_guitar_open_A,
+    COURSETUNING_lute_renaissance_6,
+    COURSETUNING_lute_baroque_d_major,
+    COURSETUNING_lute_baroque_d_minor,
+    COURSETUNING_MAX
+};
+
+/**
+ * MEI data.ENCLOSURE
+ */
+enum data_ENCLOSURE : int8_t {
+    ENCLOSURE_NONE = 0,
+    ENCLOSURE_paren,
+    ENCLOSURE_brack,
+    ENCLOSURE_box,
+    ENCLOSURE_none,
+    ENCLOSURE_MAX
+};
+
+/**
  * MEI data.EVENTREL
  */
 enum data_EVENTREL : int8_t {
@@ -624,6 +652,17 @@ enum data_GRACE : int8_t {
     GRACE_unacc,
     GRACE_unknown,
     GRACE_MAX
+};
+
+/**
+ * MEI data.HARPPEDALPOSITION
+ */
+enum data_HARPPEDALPOSITION : int8_t {
+    HARPPEDALPOSITION_NONE = 0,
+    HARPPEDALPOSITION_f,
+    HARPPEDALPOSITION_n,
+    HARPPEDALPOSITION_s,
+    HARPPEDALPOSITION_MAX
 };
 
 /**
@@ -1479,89 +1518,12 @@ enum harmVis_RENDGRID : int8_t {
 };
 
 /**
- * MEI att.harpPedal.log\@a
- */
-enum harpPedalLog_A : int8_t {
-    harpPedalLog_A_NONE = 0,
-    harpPedalLog_A_f,
-    harpPedalLog_A_n,
-    harpPedalLog_A_s,
-    harpPedalLog_A_MAX
-};
-
-/**
- * MEI att.harpPedal.log\@b
- */
-enum harpPedalLog_B : int8_t {
-    harpPedalLog_B_NONE = 0,
-    harpPedalLog_B_f,
-    harpPedalLog_B_n,
-    harpPedalLog_B_s,
-    harpPedalLog_B_MAX
-};
-
-/**
- * MEI att.harpPedal.log\@c
- */
-enum harpPedalLog_C : int8_t {
-    harpPedalLog_C_NONE = 0,
-    harpPedalLog_C_f,
-    harpPedalLog_C_n,
-    harpPedalLog_C_s,
-    harpPedalLog_C_MAX
-};
-
-/**
- * MEI att.harpPedal.log\@d
- */
-enum harpPedalLog_D : int8_t {
-    harpPedalLog_D_NONE = 0,
-    harpPedalLog_D_f,
-    harpPedalLog_D_n,
-    harpPedalLog_D_s,
-    harpPedalLog_D_MAX
-};
-
-/**
- * MEI att.harpPedal.log\@e
- */
-enum harpPedalLog_E : int8_t {
-    harpPedalLog_E_NONE = 0,
-    harpPedalLog_E_f,
-    harpPedalLog_E_n,
-    harpPedalLog_E_s,
-    harpPedalLog_E_MAX
-};
-
-/**
- * MEI att.harpPedal.log\@f
- */
-enum harpPedalLog_F : int8_t {
-    harpPedalLog_F_NONE = 0,
-    harpPedalLog_F_f,
-    harpPedalLog_F_n,
-    harpPedalLog_F_s,
-    harpPedalLog_F_MAX
-};
-
-/**
- * MEI att.harpPedal.log\@g
- */
-enum harpPedalLog_G : int8_t {
-    harpPedalLog_G_NONE = 0,
-    harpPedalLog_G_f,
-    harpPedalLog_G_n,
-    harpPedalLog_G_s,
-    harpPedalLog_G_MAX
-};
-
-/**
  * MEI att.meiVersion\@meiversion
  */
 enum meiVersion_MEIVERSION : int8_t {
     meiVersion_MEIVERSION_NONE = 0,
-    meiVersion_MEIVERSION_5_0,
-    meiVersion_MEIVERSION_5_0plusbasic,
+    meiVersion_MEIVERSION_5_1,
+    meiVersion_MEIVERSION_5_1plusbasic,
     meiVersion_MEIVERSION_MAX
 };
 

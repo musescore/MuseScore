@@ -86,7 +86,17 @@ jobs:
       run: |
         bash ./buildscripts/ci/backend/package.sh
 
-    - name: Build Docker
+    - name: Send package to S3
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        bash ./buildscripts/ci/backend/publish_to_s3.sh \
+          --s3_key ${{ secrets.S3_KEY_CONVERTER }} \
+          --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} \
+          --stage ${{ inputs.build_mode }} \
+          --mu_version ${{ env.VERSION }} \
+          --mu_version_major_minor ${{ env.VERSION_MAJOR_MINOR }}  
+
+    - name: Build Docker (used package from S3)
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/backend/build_docker.sh
@@ -99,17 +109,8 @@ jobs:
     - name: Deploy to musescore.com
       if: env.DO_PUBLISH == 'true'
       run: |
-        bash ./buildscripts/ci/backend/publish_to_s3.sh \
-          --s3_key ${{ secrets.S3_KEY_CONVERTER }} \
-          --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} \
-          --stage ${{ inputs.build_mode }} \
-          --mu_version ${{ env.VERSION }} \
-          --mu_version_major_minor ${{ env.VERSION_MAJOR_MINOR }}
-
-
         pip install jenkinsapi
-
-        python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION }} --api_token ${{ secrets.JENKINS_API_TOKEN }}
+        python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION_MAJOR_MINOR }} --api_token ${{ secrets.JENKINS_API_TOKEN }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}

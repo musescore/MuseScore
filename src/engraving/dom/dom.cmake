@@ -209,6 +209,7 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/navigate.h
     ${CMAKE_CURRENT_LIST_DIR}/note.cpp
     ${CMAKE_CURRENT_LIST_DIR}/note.h
+    ${CMAKE_CURRENT_LIST_DIR}/noteval.h
     ${CMAKE_CURRENT_LIST_DIR}/notedot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notedot.h
     ${CMAKE_CURRENT_LIST_DIR}/noteentry.cpp
@@ -223,6 +224,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ottava.h
     ${CMAKE_CURRENT_LIST_DIR}/page.cpp
     ${CMAKE_CURRENT_LIST_DIR}/page.h
+    ${CMAKE_CURRENT_LIST_DIR}/parenthesis.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/parenthesis.h
     ${CMAKE_CURRENT_LIST_DIR}/partialtie.cpp
     ${CMAKE_CURRENT_LIST_DIR}/partialtie.h
     ${CMAKE_CURRENT_LIST_DIR}/palmmute.cpp

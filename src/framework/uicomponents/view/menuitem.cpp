@@ -96,6 +96,16 @@ muse::actions::ActionData MenuItem::args() const
     return m_args;
 }
 
+const muse::actions::ActionQuery& MenuItem::query() const
+{
+    return m_query;
+}
+
+void MenuItem::setQuery(const muse::actions::ActionQuery& query)
+{
+    m_query = query;
+}
+
 bool MenuItem::isValid() const
 {
     return !m_id.isEmpty();
@@ -171,6 +181,26 @@ void MenuItem::setSelected(bool selected)
     emit selectedChanged(m_selected);
 }
 
+void MenuItem::setCheckable(bool checkable)
+{
+    const Checkable actionCeckable = checkable ? Checkable::Yes : Checkable::No;
+    if (m_action.checkable == actionCeckable) {
+        return;
+    }
+
+    m_action.checkable = actionCeckable;
+}
+
+void MenuItem::setChecked(bool checked)
+{
+    if (m_state.checked == checked) {
+        return;
+    }
+
+    m_state.checked = checked;
+    emit stateChanged();
+}
+
 void MenuItem::setRole(MenuItemRole role)
 {
     if (m_role == role) {
@@ -219,6 +249,11 @@ QString MenuItem::description_property() const
 int MenuItem::icon_property() const
 {
     return static_cast<int>(m_action.iconCode);
+}
+
+QString MenuItem::iconColor_property() const
+{
+    return m_action.iconColor;
 }
 
 bool MenuItem::enabled_property() const

@@ -32,9 +32,6 @@ public:
     void setPlayNotesWhenEditing(bool value) override;
     muse::async::Notification playNotesWhenEditingChanged() const override;
 
-    bool playNotesOnMidiInput() const override;
-    void setPlayNotesOnMidiInput(bool value) override;
-
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
     muse::async::Channel<bool> playChordWhenEditingChanged() const override;
@@ -42,6 +39,10 @@ public:
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
     muse::async::Channel<bool> playHarmonyWhenEditingChanged() const override;
+
+    bool playNotesOnMidiInput() const override;
+    void setPlayNotesOnMidiInput(bool value) override;
+    muse::async::Channel<bool> playNotesOnMidiInputChanged() const override;
 
     PlaybackCursorType cursorType() const override;
 

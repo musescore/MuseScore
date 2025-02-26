@@ -210,9 +210,10 @@ DECLARE_OPERATORS_FOR_FLAGS(MouseButtons)
 //   Grip
 //---------------------------------------------------------
 
-enum class Grip {
+enum class Grip : signed char {
     NO_GRIP = -1,
     START = 0, END = 1,                           // arpeggio etc.
+    LEFT = START, RIGHT = END,                    // aliases for dynamic
     MIDDLE = 2, APERTURE = 3,                     // Line
     /*START, END , */
     BEZIER1 = 2, SHOULDER = 3, BEZIER2 = 4, DRAG = 5,       // Slur

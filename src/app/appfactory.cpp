@@ -77,6 +77,12 @@
 #include "framework/stubs/shortcuts/shortcutsstubmodule.h"
 #endif
 
+#ifdef MUSE_MODULE_TOURS
+#include "framework/tours/toursmodule.h"
+#else
+#include "framework/stubs/tours/toursstubmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_UI
 #include "framework/dockwindow/dockmodule.h"
 #include "framework/ui/uimodule.h"
@@ -187,12 +193,6 @@
 #include "stubs/project/projectstubmodule.h"
 #endif
 
-#ifdef MUSE_MODULE_WORKSPACE
-#include "workspacescene/workspacescenemodule.h"
-#else
-#include "stubs/workspacescene/workspacescenestubmodule.h"
-#endif
-
 #ifdef Q_OS_WASM
 #include "wasmtest/wasmtestmodule.h"
 #endif
@@ -254,6 +254,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::uicomponents::UiComponentsModule());
     app->addModule(new muse::dock::DockModule());
 #endif
+    app->addModule(new muse::tours::ToursModule());
     app->addModule(new muse::vst::VSTModule());
 
 // modules
@@ -316,7 +317,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
-    app->addModule(new mu::workspacescene::WorkspaceSceneModule());
 
 #ifdef Q_OS_WASM
     app->addModule(new mu::wasmtest::WasmTestModule());
@@ -350,9 +350,21 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new muse::draw::DrawModule());
     app->addModule(new muse::midi::MidiModule());
     app->addModule(new muse::mpe::MpeModule());
+
 #ifdef MUSE_MODULE_MUSESAMPLER
-    app->addModule(new muse::musesampler::MuseSamplerModule());
+    bool shouldAddMuseSamplerModule = true;
+#ifndef MUSE_MODULE_MUSESAMPLER_LOAD_IN_DEBUG
+    if (runtime::isDebug()) {
+        shouldAddMuseSamplerModule = false;
+        LOGI() << "Not adding MuseSampler module in a debug build";
+    }
 #endif
+
+    if (shouldAddMuseSamplerModule) {
+        app->addModule(new muse::musesampler::MuseSamplerModule());
+    }
+#endif
+
     app->addModule(new muse::network::NetworkModule());
     app->addModule(new muse::shortcuts::ShortcutsModule());
 #ifdef MUSE_MODULE_UI
@@ -360,6 +372,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new muse::uicomponents::UiComponentsModule());
     app->addModule(new muse::dock::DockModule());
 #endif
+    app->addModule(new muse::tours::ToursModule());
     app->addModule(new muse::vst::VSTModule());
 
 // modules
@@ -419,7 +432,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
-    app->addModule(new mu::workspacescene::WorkspaceSceneModule());
 
 #ifdef Q_OS_WASM
     app->addModule(new mu::wasmtest::WasmTestModule());

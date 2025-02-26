@@ -295,12 +295,12 @@ DockPage {
         },
 
         DockPanel {
-            id: instrumentsPanel
+            id: layoutPanel
 
-            objectName: root.pageModel.instrumentsPanelName()
-            title: qsTrc("appshell", "Instruments")
+            objectName: root.pageModel.layoutPanelName()
+            title: qsTrc("appshell", "Layout")
 
-            navigationSection: root.navigationPanelSec(instrumentsPanel.location)
+            navigationSection: root.navigationPanelSec(layoutPanel.location)
 
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
@@ -310,12 +310,12 @@ DockPage {
 
             dropDestinations: root.verticalPanelDropDestinations
 
-            InstrumentsPanel {
-                navigationSection: instrumentsPanel.navigationSection
-                navigationOrderStart: instrumentsPanel.contentNavigationPanelOrderStart
+            LayoutPanel {
+                navigationSection: layoutPanel.navigationSection
+                navigationOrderStart: layoutPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
-                    instrumentsPanel.contextMenuModel = contextMenuModel
+                    layoutPanel.contextMenuModel = contextMenuModel
                 }
             }
         },
@@ -419,6 +419,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(mixerPanel.location)
 
             MixerPanel {
+                id: mixerPanelComponent
+
                 navigationSection: mixerPanel.navigationSection
                 contentNavigationPanelOrderStart: mixerPanel.contentNavigationPanelOrderStart
 
@@ -434,6 +436,13 @@ DockPage {
 
                 onResizeRequested: function(newWidth, newHeight) {
                     mixerPanel.resize(newWidth, newHeight)
+                }
+
+                Connections {
+                    target: mixerPanel
+                    function onPanelShown() {
+                        mixerPanelComponent.resizePanelToContentHeight()
+                    }
                 }
             }
         },
@@ -544,6 +553,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(percussionPanel.location)
 
             PercussionPanel {
+                id: percussionComponent
+
                 navigationSection: percussionPanel.navigationSection
                 contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
 
@@ -557,6 +568,13 @@ DockPage {
 
                 onResizeRequested: function(newWidth, newHeight) {
                     percussionPanel.resize(newWidth, newHeight)
+                }
+
+                Connections {
+                    target: percussionPanel
+                    function onPanelShown() {
+                        percussionComponent.resizePanelToContentHeight()
+                    }
                 }
             }
         }
@@ -590,4 +608,21 @@ DockPage {
             id: content
         }
     }
+
+    tours: [
+        {
+            "eventCode": "project_opened",
+            "tour": {
+                "id": "input-by-duration",
+                "steps": [
+                    {
+                        "title": qsTrc("notation", "Note input modes"),
+                        "description": qsTrc("notation", "Discover different ways to input notes in MuseScore Studio."),
+                        "controlUri": "control://NoteInputSection/NoteInputBar/note-input-by-duration",
+                        "videoExplanationUrl": "https://www.youtube.com/watch?v=OUXf7Y2CPQE&t"
+                    }
+                ]
+            }
+        }
+    ]
 }

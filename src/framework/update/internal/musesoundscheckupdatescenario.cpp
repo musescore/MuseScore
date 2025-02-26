@@ -48,29 +48,33 @@ void MuseSoundsCheckUpdateScenario::delayedInit()
     }
 }
 
-void MuseSoundsCheckUpdateScenario::checkForUpdate()
+bool MuseSoundsCheckUpdateScenario::hasUpdate() const
 {
     if (isCheckStarted() || !service()->needCheckForUpdate()) {
-        return;
+        return false;
     }
 
     RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
-    if (lastCheckResult.ret) {
-        //! NOTE: recheck if we already shown the info
-        if (shouldIgnoreUpdate(lastCheckResult.val)) {
-            return;
-        }
-
-        showReleaseInfo(lastCheckResult.val);
-        return;
+    if (!lastCheckResult.ret) {
+        return false;
     }
 
     bool noUpdate = lastCheckResult.ret.code() == static_cast<int>(Err::NoUpdate);
     if (noUpdate) {
+        return false;
+    }
+
+    return !shouldIgnoreUpdate(lastCheckResult.val);
+}
+
+void MuseSoundsCheckUpdateScenario::showUpdate()
+{
+    RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
         return;
     }
 
-    doCheckForUpdate(true);
+    showReleaseInfo(lastCheckResult.val);
 }
 
 bool MuseSoundsCheckUpdateScenario::isCheckStarted() const
@@ -91,11 +95,11 @@ void MuseSoundsCheckUpdateScenario::setIgnoredUpdate(const std::string& version)
 void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started.onNotify(this, [this]() {
+    m_checkProgressChannel->started().onNotify(this, [this]() {
         m_checkProgress = true;
     });
 
-    m_checkProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
             m_checkProgress = false;
         };
@@ -126,7 +130,7 @@ void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
 
 void MuseSoundsCheckUpdateScenario::th_checkForUpdate()
 {
-    m_checkProgressChannel->started.notify();
+    m_checkProgressChannel->start();
 
     RetVal<ReleaseInfo> retVal = service()->checkForUpdate();
 
@@ -134,7 +138,7 @@ void MuseSoundsCheckUpdateScenario::th_checkForUpdate()
     result.ret = retVal.ret;
     result.val = Val(releaseInfoToValMap(retVal.val));
 
-    m_checkProgressChannel->finished.send(result);
+    m_checkProgressChannel->finish(result);
 }
 
 void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)

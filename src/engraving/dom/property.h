@@ -93,6 +93,7 @@ enum class Pid {
     ARTICULATION_ANCHOR,
 
     DIRECTION,
+    HORIZONTAL_DIRECTION,
     STEM_DIRECTION,
     NO_STEM,
     SLUR_DIRECTION,
@@ -142,6 +143,13 @@ enum class Pid {
     IMAGE_WIDTH,
     IMAGE_FRAMED,
 
+    FRET_FRAME_TEXT_SCALE,
+    FRET_FRAME_DIAGRAM_SCALE,
+    FRET_FRAME_COLUMN_GAP,
+    FRET_FRAME_ROW_GAP,
+    FRET_FRAME_CHORDS_PER_ROW,
+    FRET_FRAME_H_ALIGN,
+
     SCALE,
     LOCK_ASPECT_RATIO,
     SIZE_IS_SPATIUM,
@@ -186,7 +194,7 @@ enum class Pid {
     VELO_CHANGE_METHOD,
     VELO_CHANGE_SPEED,
     DYNAMIC_TYPE,
-//100
+
     SINGLE_NOTE_DYNAMICS,
     CHANGE_METHOD,
     PLACEMENT,                // Goes with P_TYPE::PLACEMENT
@@ -310,7 +318,7 @@ enum class Pid {
 
     BRACKET_COLUMN,
     INAME_LAYOUT_POSITION,
-//200
+
     TEXT_STYLE,
 
     FONT_FACE,
@@ -456,18 +464,20 @@ enum class Pid {
 
     APPLY_TO_ALL_STAVES,
 
+    IS_COURTESY,
+
     END
 };
 
 // Determines propagation of properties between score and parts
-enum class PropertyPropagation {
+enum class PropertyPropagation : unsigned char {
     NONE,
     PROPAGATE,
     UNLINK,
 };
 
 // Each group can be propagated differently between score and parts
-enum class PropertyGroup {
+enum class PropertyGroup : unsigned char {
     POSITION,
     TEXT,
     APPEARANCE,

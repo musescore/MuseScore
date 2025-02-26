@@ -120,6 +120,11 @@ QWindow* NavigationSection::window() const
     return AbstractNavigation::window();
 }
 
+QQuickItem* muse::ui::NavigationSection::visualItem() const
+{
+    return AbstractNavigation::visualItem();
+}
+
 void NavigationSection::addPanel(NavigationPanel* panel)
 {
     TRACEFUNC;

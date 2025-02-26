@@ -77,5 +77,26 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-create_space.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyledImage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTieMenuRowItem.qml</file>
+        <file>qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-cancel-3.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-cancel-2.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-cancel-1.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-cancel-3.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-cancel-2.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-cancel-1.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-4.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-3.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-2.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-1.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clef-before-true.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clef-before-false.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-3.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-2.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-1.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-3.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-2.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-1.png</file>
+        <file>qml/MuseScore/NotationScene/internal/ShadowNotePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PercussionNotePopupContent.qml</file>
     </qresource>
 </RCC>

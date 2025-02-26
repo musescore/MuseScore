@@ -415,7 +415,7 @@ private:
     void chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset);
     void rest(Rest* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll);
     void clef(staff_idx_t staff, const ClefType ct, const String& extraAttributes = u"");
-    void timesig(TimeSig* tsig);
+    void timesig(const TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
     void barlineLeft(const Measure* const m, const track_idx_t track);
     void barlineMiddle(const BarLine* bl);
@@ -2167,13 +2167,13 @@ void ExportMusicXml::moveToTickIfNeed(const Fraction& t)
 //   timesig
 //---------------------------------------------------------
 
-void ExportMusicXml::timesig(TimeSig* tsig)
+void ExportMusicXml::timesig(const TimeSig* tsig)
 {
-    TimeSigType st = tsig->timeSigType();
-    Fraction ts = tsig->sig();
-    int z = ts.numerator();
-    int n = ts.denominator();
-    String ns = tsig->numeratorString();
+    const TimeSigType st = tsig->timeSigType();
+    const Fraction ts = tsig->sig();
+    const int z = ts.numerator();
+    const int n = ts.denominator();
+    const String ns = tsig->numeratorString();
 
     m_attr.doAttr(m_xml, true);
     XmlWriter::Attributes attrs;
@@ -2181,6 +2181,8 @@ void ExportMusicXml::timesig(TimeSig* tsig)
         attrs = { { "symbol", "common" } };
     } else if (st == TimeSigType::ALLA_BREVE) {
         attrs = { { "symbol", "cut" } };
+    } else if (!ns.empty() && tsig->denominatorString().empty()) {
+        attrs = { { "symbol", "single-number" } };
     }
     if (!tsig->visible()) {
         attrs.push_back({ "print-object", "no" });
@@ -3486,6 +3488,7 @@ static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notation
             }
         }
         tagName += color2xml(breath);
+        tagName += ExportMusicXml::positioningAttributes(breath);
         if (breath->placement() == PlacementV::BELOW) {
             tagName += u" placement=\"below\"";
         } else if (ExportMusicXml::configuration()->exportMu3Compat()) {
@@ -3546,6 +3549,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 }
             }
             mxmlArtic += color2xml(a);
+            mxmlArtic += ExportMusicXml::positioningAttributes(a);
 
             notations.tag(m_xml, a);
             articulations.tag(m_xml);
@@ -4084,6 +4088,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
             }
             attr += color2xml(f);
+            attr += ExportMusicXml::positioningAttributes(f);
 
             if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING) {
                 xml.tagRaw(u"pluck" + attr, t);
@@ -7896,7 +7901,11 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
     for (size_t i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
         const double mag = st->staffMag(Fraction(0, 1));
-        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0) || !st->show()) {
+        const Color lineColor = st->color(Fraction(0, 1));
+        const bool invis = st->isLinesInvisible(Fraction(0, 1));
+        const bool needsLineDetails = invis || lineColor != engravingConfiguration()->defaultColor();
+        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0)
+            || !st->show() || needsLineDetails) {
             XmlWriter::Attributes attributes;
             if (staves > 1) {
                 attributes.push_back({ "number", i + 1 });
@@ -7911,6 +7920,19 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             }
 
             xml.tag("staff-lines", st->lines(Fraction(0, 1)));
+            if (needsLineDetails) {
+                for (int lineIdx = 0; lineIdx < st->lines(Fraction(0, 1)); ++lineIdx) {
+                    String ld = String(u"line-detail line=\"%1\"").arg(lineIdx + 1);
+                    if (lineColor != engravingConfiguration()->defaultColor()) {
+                        ld += String(u" color=\"%1\"").arg(String::fromStdString(lineColor.toString()));
+                    }
+                    if (invis) {
+                        ld += u" print-object=\"no\"";
+                    }
+                    xml.tagRaw(ld);
+                }
+            }
+
             if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
                 std::vector<instrString> l = instrument->stringData()->stringList();
                 for (size_t ii = 0; ii < l.size(); ii++) {
@@ -8245,6 +8267,14 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                 const track_idx_t endtrack = staff2track(spannerStaff + 1);
                 spannerStop(this, starttrack, endtrack, seg->tick(), partRelStaffNo, spannersStopped);
 
+                // We check if there are additional annotations
+                for (EngravingItem* annotation : seg->annotations()) {
+                    if (annotation->track() != track || !annotation->isTextBase()) {
+                        continue;
+                    }
+                    // Just to include them
+                    annotations(this, strack, etrack, track, partRelStaffNo, seg);
+                }
                 continue;
             }
             EngravingItem* const el = seg->element(track);

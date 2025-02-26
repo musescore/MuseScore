@@ -32,7 +32,6 @@
 #include "../iupdateconfiguration.h"
 #include "../imusesoundscheckupdateservice.h"
 
-#include "../iappupdateservice.h"
 #include "../imusesoundscheckupdatescenario.h"
 
 namespace muse::update {
@@ -51,7 +50,8 @@ public:
 
     void delayedInit();
 
-    void checkForUpdate() override;
+    bool hasUpdate() const override;
+    void showUpdate() override;
 
 private:
     bool isCheckStarted() const;

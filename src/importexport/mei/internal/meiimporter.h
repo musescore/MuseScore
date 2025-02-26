@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_MEIIMPORTER_H
-#define MU_IMPORTEXPORT_MEIIMPORTER_H
+#pragma once
 
 #include "engraving/types/types.h"
 
@@ -50,8 +49,8 @@ class Score;
 class Spanner;
 class Tuplet;
 class VBox;
-enum class NoteType;
-enum class TimeSigType : char;
+enum class NoteType : unsigned char;
+enum class TimeSigType : unsigned char;
 struct ClefTypeList;
 }
 
@@ -261,5 +260,3 @@ private:
     engraving::Measure* m_endingEnd;
 };
 } // namespace
-
-#endif // MU_IMPORTEXPORT_MEIIMPORTER_H

@@ -923,6 +923,11 @@ void GuitarPro::createMeasures()
         //            m->setRepeatFlags(bars[i].repeatFlags);
         m->setRepeatCount(bars[i].repeats);           // supported in gp5
 
+        if (bars[i].repeatFlags == (mu::engraving::Repeat::START | mu::engraving::Repeat::END)) {
+            m->setRepeatEnd(true);
+            m->setRepeatStart(true);
+            voltaSequence = 1;
+        }
         // reset the volta sequence if we have an opening repeat
         if (bars[i].repeatFlags == mu::engraving::Repeat::START) {
             voltaSequence = 1;
@@ -2847,9 +2852,10 @@ static void createLinkedTabs(MasterScore* score)
                 StaffTypes::TAB_7SIMPLE,
                 StaffTypes::TAB_8SIMPLE,
                 StaffTypes::TAB_9SIMPLE,
+                StaffTypes::TAB_10SIMPLE,
             };
 
-            size_t index = (lines >= 4 && lines <= 9) ? lines - 4 : 2;
+            size_t index = (lines >= 4 && lines <= 10) ? lines - 4 : 2;
 
             dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
             dstStaff->setLines(fr, static_cast<int>(lines));

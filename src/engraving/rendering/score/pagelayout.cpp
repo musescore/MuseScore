@@ -52,6 +52,7 @@
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "masklayout.h"
 #include "measurelayout.h"
 #include "slurtielayout.h"
 #include "systemlayout.h"
@@ -81,7 +82,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
     } else {
         state.setPage(dom.pages()[state.pageIdx()]);
         std::vector<System*>& systems = state.page()->systems();
-        state.setPageOldMeasure(systems.empty() ? nullptr : systems.back()->measures().back());
+        state.setPageOldMeasure(systems.empty() || systems.back()->measures().empty() ? nullptr : systems.back()->measures().back());
         const system_idx_t i = muse::indexOf(systems, state.curSystem());
         if ((i < systems.size()) && i > 0 && systems[i - 1]->page() == state.page()) {
             // Current and previous systems are on the current page.
@@ -401,6 +402,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
             SystemLayout::centerBigTimeSigsAcrossStaves(system);
         }
     }
+
+    MaskLayout::computeMasks(ctx, page);
 
     page->invalidateBspTree();
 }
@@ -727,7 +730,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                     vbox = false;
                 }
 
-                prevYBottom  = system->y() + sysStaff->y() + sysStaff->bbox().height();
+                prevYBottom  = system->y() + sysStaff->bbox().bottom();
                 yBottom      = system->y() + sysStaff->y() + sysStaff->skyline().south().max();
                 spacerOffset = sysStaff->skyline().south().max() - sysStaff->bbox().height();
                 vgdl.push_back(vgd);

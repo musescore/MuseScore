@@ -86,6 +86,21 @@ static mu::engraving::DynamicType findNominalEndDynamicType(const Hairpin* hairp
         return textDynamicType;
     }
 
+    if (hairpin->spannerSegments().empty()) {
+        const Segment* endSegment = hairpin->endSegment();
+        if (!endSegment) {
+            return mu::engraving::DynamicType::OTHER;
+        }
+
+        const track_idx_t trackIdx = hairpin->track();
+        const EngravingItem* dynamic = endSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx);
+        if (!dynamic || !dynamic->isDynamic()) {
+            return mu::engraving::DynamicType::OTHER;
+        }
+
+        return toDynamic(dynamic)->dynamicType();
+    }
+
     const LineSegment* seg = hairpin->backSegment();
     if (!seg) {
         return mu::engraving::DynamicType::OTHER;
@@ -428,7 +443,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
 
-        if (!spanner->isHairpin() || !spanner->playSpanner() || spanner->segmentsEmpty()) {
+        if (!spanner->isHairpin() || !spanner->playSpanner()) {
             continue;
         }
 

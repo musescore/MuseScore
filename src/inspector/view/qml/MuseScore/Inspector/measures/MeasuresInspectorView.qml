@@ -76,7 +76,7 @@ InspectorSectionView {
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "DeleteMeasures"
-                navigation.row: root.navigationRowStart + 1
+                navigation.row: insertMeasuresPopupButton.navigation.row + 1
 
                 toolTipTitle: qsTrc("inspector", "Delete selected measures")
 
@@ -89,22 +89,24 @@ InspectorSectionView {
         StyledTextLabel {
             Layout.fillWidth: true
             Layout.topMargin: 12
-            visible: model.scoreIsInPageView
+            visible: root.model ? model.scoreIsInPageView : false
             horizontalAlignment: Qt.AlignLeft
             text: qsTrc("inspector", "Move to system")
         }
 
         RowLayout {
+            id: moveSystemLayout
+
             Layout.topMargin: 8
             visible: model.scoreIsInPageView
 
-            Layout.fillWidth: true
+            width: parent.width
             spacing: 4
 
             FlatButton {
                 id: upSystem
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "SystemUp"
@@ -123,7 +125,7 @@ InspectorSectionView {
             FlatButton {
                 id: downSystem
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "SystemDown"
@@ -156,10 +158,13 @@ InspectorSectionView {
 
             orientation: Qt.Horizontal
             icon: Boolean(model.allSystemsAreLocked) ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
-            text: qsTrc("inspector", "Lock current system")
+            text: Boolean(model.allSystemsAreLocked) ? model.systemCount > 1 ? qsTrc("inspector", "Unlock selected systems")
+                                                                             : qsTrc("inspector", "Unlock selected system")
+                                                     : model.systemCount > 1 ? qsTrc("inspector", "Lock selected systems")
+                                                                             : qsTrc("inspector", "Lock selected system")
 
-            toolTipTitle: qsTrc("inspector", "Lock current system(s)")
-            toolTipDescription: qsTrc("inspector", "Keep these measures together and prevent them from reflowing to the next system")
+            toolTipTitle: qsTrc("inspector", "Lock/unlock selected system(s)")
+            toolTipDescription: qsTrc("inspector", "Keep measures on the selected system(s) together and prevent them from reflowing to the next system")
             toolTipShortcut: model.shortcutToggleSystemLock
 
             accentButton: Boolean(model.allSystemsAreLocked)
@@ -169,7 +174,7 @@ InspectorSectionView {
 
         FlatButton {
             id: makeIntoOneSystem
-            enabled: model.isMakeIntoSystemAvailable
+            enabled: root.model ? model.isMakeIntoSystemAvailable : false
 
             Layout.topMargin: 4
             Layout.fillWidth: true
@@ -180,9 +185,9 @@ InspectorSectionView {
 
             orientation: Qt.Horizontal
             //icon: TODO maybe
-            text: qsTrc("inspector", "Make into one system")
+            text: qsTrc("inspector", "Create system from selection")
 
-            toolTipTitle: qsTrc("inspector", "Make measure(s) into one system")
+            toolTipTitle: qsTrc("inspector", "Create system from selection")
             toolTipDescription: qsTrc("inspector", "Create a system containing only the selected measure(s)")
             toolTipShortcut: model.shortcutMakeIntoSystem
 

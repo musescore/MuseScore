@@ -422,6 +422,13 @@ void GPConverter::fixEmptyMeasures()
             rest->setDurationType(DurationType::V_MEASURE);
             if (Tuplet* tuplet = rest->tuplet()) {
                 tuplet->remove(rest);
+                if (tuplet->elements().empty()) {
+                    if (tuplet->tuplet()) {
+                        tuplet->tuplet()->remove(tuplet);
+                    }
+
+                    delete tuplet;
+                }
             }
         }
     }
@@ -514,9 +521,18 @@ void GPConverter::convertVoices(const std::vector<std::unique_ptr<GPVoice> >& vo
         fillUncompletedMeasure(ctx);
     }
 
+    track_idx_t currentTrackFirstVoice = ctx.curTrack;
     for (const auto& voice : voices) {
+        ctx.curTrack = currentTrackFirstVoice + voice->position();
         convertVoice(voice.get(), ctx);
-        ctx.curTrack++;
+    }
+
+    bool hasFirstVoice = std::any_of(voices.begin(), voices.end(), [](const std::unique_ptr<GPVoice>& voice) {
+        return voice->position() == 0;
+    });
+
+    if (!hasFirstVoice && _score->lastMeasure()) {
+        _score->setRest(_score->lastMeasure()->tick(), currentTrackFirstVoice, _score->lastMeasure()->ticks(), true, nullptr);
     }
 }
 
@@ -1240,13 +1256,13 @@ void GPConverter::hideRestsInEmptyMeasures(track_idx_t startTrack, track_idx_t e
 
             // hiding rests in secondary voices for measures without any chords
             if (!m_chordExistsInBar) {
-                rest->setGap(!mainVoice);
+                rest->setVisible(mainVoice);
                 continue;
             }
 
             // hiding rests in voices without chords
             if (!m_chordExistsForVoice[voice]) {
-                rest->setGap(true);
+                rest->setVisible(false);
             }
         }
     }

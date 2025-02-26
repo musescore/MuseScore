@@ -38,15 +38,6 @@ muse::async::Notification PlaybackConfigurationStub::playNotesWhenEditingChanged
     return muse::async::Notification();
 }
 
-bool PlaybackConfigurationStub::playNotesOnMidiInput() const
-{
-    return false;
-}
-
-void PlaybackConfigurationStub::setPlayNotesOnMidiInput(bool)
-{
-}
-
 bool PlaybackConfigurationStub::playChordWhenEditing() const
 {
     return false;
@@ -72,6 +63,21 @@ void PlaybackConfigurationStub::setPlayHarmonyWhenEditing(bool)
 }
 
 muse::async::Channel<bool> PlaybackConfigurationStub::playHarmonyWhenEditingChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
+bool PlaybackConfigurationStub::playNotesOnMidiInput() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setPlayNotesOnMidiInput(bool)
+{
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::playNotesOnMidiInputChanged() const
 {
     static muse::async::Channel<bool> ch;
     return ch;

@@ -276,7 +276,7 @@ private:
 //   Trait
 //---------------------------------------------------------
 
-enum class TraitType
+enum class TraitType : unsigned char
 {
     Unknown,
     Tuning,

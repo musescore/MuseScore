@@ -37,8 +37,8 @@ static constexpr float BALANCE_SCALING_FACTOR = 100.f;
 
 static constexpr int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
 
-static const std::string VSTFX_EDITOR_URI("muse://vstfx/editor?sync=false&modal=false&floating=true");
-static const std::string VSTI_EDITOR_URI("muse://vsti/editor?sync=false&modal=false&floating=true");
+static const std::string VSTFX_EDITOR_ACTION("action://vst/fx_editor");
+static const std::string VSTI_EDITOR_ACTION("action://vst/instrument_editor");
 
 static const std::string TRACK_ID_KEY("trackId");
 static const std::string RESOURCE_ID_KEY("resourceId");
@@ -552,11 +552,11 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
             return;
         }
 
-        UriQuery uri(VSTI_EDITOR_URI);
-        uri.addParam(TRACK_ID_KEY, Val(m_trackId));
-        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
+        actions::ActionQuery aq(VSTI_EDITOR_ACTION);
+        aq.addParam(TRACK_ID_KEY, Val(m_trackId));
+        aq.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
 
-        openEditor(newItem, uri);
+        openEditor(newItem, aq);
     });
 
     connect(newItem, &InputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
@@ -577,7 +577,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
 
         m_outParams.fxChain.clear();
 
-        for (const OutputResourceItem* item : m_outputResourceItems) {
+        for (const OutputResourceItem* item : std::as_const(m_outputResourceItems)) {
             m_outParams.fxChain.insert({ item->params().chainOrder, item->params() });
         }
 
@@ -589,16 +589,16 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
             return;
         }
 
-        UriQuery uri(VSTFX_EDITOR_URI);
+        actions::ActionQuery aq(VSTFX_EDITOR_ACTION);
 
         if (m_type != Type::Master) {
-            uri.addParam(TRACK_ID_KEY, Val(m_trackId));
+            aq.addParam(TRACK_ID_KEY, Val(m_trackId));
         }
 
-        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
-        uri.addParam(CHAIN_ORDER_KEY, Val(newItem->params().chainOrder));
+        aq.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
+        aq.addParam(CHAIN_ORDER_KEY, Val(newItem->params().chainOrder));
 
-        openEditor(newItem, uri);
+        openEditor(newItem, aq);
     });
 
     connect(newItem, &OutputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
@@ -638,24 +638,30 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
     return newItem;
 }
 
-void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri)
+void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const actions::ActionQuery& action)
 {
-    if (item->editorUri() != editorUri) {
-        interactive()->close(item->editorUri());
-        item->setEditorUri(editorUri);
+    if (item->editorAction() != action) {
+        if (item->editorAction().isValid()) {
+            // make and send close
+            actions::ActionQuery closeAction = item->editorAction();
+            closeAction.addParam("operation", Val("close"));
+            dispatcher()->dispatch(closeAction);
+        }
+        // set new action
+        item->setEditorAction(action);
     }
 
-    if (interactive()->isOpened(editorUri).val) {
-        interactive()->raise(editorUri);
-    } else {
-        interactive()->open(editorUri);
-    }
+    dispatcher()->dispatch(action);
 }
 
 void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
 {
-    interactive()->close(item->editorUri());
-    item->setEditorUri(UriQuery());
+    // make and send close
+    actions::ActionQuery closeAction = item->editorAction();
+    closeAction.addParam("operation", Val("close"));
+    dispatcher()->dispatch(closeAction);
+
+    item->setEditorAction(UriQuery());
 }
 
 bool MixerChannelItem::askAboutChangingSound()

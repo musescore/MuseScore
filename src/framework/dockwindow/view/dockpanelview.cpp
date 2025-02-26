@@ -210,6 +210,13 @@ void DockPanelView::componentComplete()
             dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(m_toolbarComponent));
         }
     });
+
+    connect(this, &DockBase::frameCurrentWidgetChanged, this, [this, dockWidget](){
+        const KDDockWidgets::Frame* frame = dockWidget ? dockWidget->frame() : nullptr;
+        if (frame && frame->currentDockWidget() == dockWidget) {
+            emit panelShown();
+        }
+    });
 }
 
 AbstractMenuModel* DockPanelView::contextMenuModel() const
@@ -307,4 +314,28 @@ void DockPanelView::setCurrentTabIndex(int index)
     if (frame) {
         frame->setCurrentTabIndex(index);
     }
+}
+
+bool DockPanelView::isCurrentTabInFrame() const
+{
+    if (!dockWidget()) {
+        return false;
+    }
+
+    KDDockWidgets::Frame* frame = dockWidget()->frame();
+    return frame && frame->currentDockWidget() == dockWidget();
+}
+
+void DockPanelView::makeCurrentTabInFrame()
+{
+    IF_ASSERT_FAILED(dockWidget()) {
+        return;
+    }
+
+    KDDockWidgets::Frame* frame = dockWidget()->frame();
+    if (!frame) {
+        return;
+    }
+
+    frame->setCurrentDockWidget(dockWidget());
 }

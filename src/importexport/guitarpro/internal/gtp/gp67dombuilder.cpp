@@ -102,7 +102,11 @@ void GP67DomBuilder::buildGPScore(XmlDomNode* scoreNode)
         } else if (nodeName == u"Instructions" || nodeName == u"Notices") {
             // Currently we ignore score unrelated texts
         } else if (nodeName == u"MultiVoice") {
-            score->setMultiVoice(currentNode.toElement().text().toInt());
+            /// gp saves the value "1>" instead of "1"
+            String multiVoiceString = currentNode.toElement().text();
+            if (!multiVoiceString.empty()) {
+                score->setMultiVoice(String(multiVoiceString[0]).toInt());
+            }
         } else if (sUnusedNodes.find(nodeName) != sUnusedNodes.end()) {
             // Ignored nodes, which specify unused specifics (e.g. default layout, footers e.t.c.)
         }
@@ -437,13 +441,17 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* 
         } else if (nodeName == u"Voices") {
             String voicesElement = innerNode.toElement().text();
             StringList voices = voicesElement.split(u' ');
+            int currentPosition = -1;
             for (const String& voiceIdx : voices) {
+                currentPosition++;
                 int idx = voiceIdx.toInt();
                 if (idx == -1) {
                     continue;
                 }
+
                 std::unique_ptr<GPVoice> voice;
                 voice = std::move(_voices.at(idx));
+                voice->setPosition(currentPosition);
                 _voices.erase(idx);
                 bar->addGPVoice(std::move(voice));
             }

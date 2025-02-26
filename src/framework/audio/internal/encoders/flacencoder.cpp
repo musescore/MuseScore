@@ -63,7 +63,7 @@ bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, c
     m_format = format;
 
     m_flac = new FlacHandler([this](int64_t current, int64_t total){
-        m_progress.progressChanged.send(current, total, "");
+        m_progress.progress(current, total, "");
     });
 
     if (!m_flac->set_verify(true)

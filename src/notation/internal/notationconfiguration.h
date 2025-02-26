@@ -82,9 +82,17 @@ public:
     QColor loopMarkerColor() const override;
     int cursorOpacity() const override;
 
+    bool thinNoteInputCursor() const override;
+
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     QColor dropRectColor() const override;
+
+    muse::draw::Color noteInputPreviewColor() const override;
+
+    bool useNoteInputCursorInInputByDuration() const override;
+    void setUseNoteInputCursorInInputByDuration(bool use) override;
+    muse::async::Notification useNoteInputCursorInInputByDurationChanged() const override;
 
     int selectionProximity() const override;
     void setSelectionProximity(int proximity) override;
@@ -121,9 +129,21 @@ public:
     void setPartStyleFilePath(const muse::io::path_t& path) override;
     muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
 
+    NoteInputMethod defaultNoteInputMethod() const override;
+    void setDefaultNoteInputMethod(NoteInputMethod method) override;
+    muse::async::Notification defaultNoteInputMethodChanged() const override;
+
+    bool addAccidentalDotsArticulationsToNextNoteEntered() const override;
+    void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
+    muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
+
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
     muse::async::Notification isMidiInputEnabledChanged() const override;
+
+    bool startNoteInputAtSelectionWhenPressingMidiKey() const override;
+    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) override;
+    muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
@@ -138,6 +158,10 @@ public:
     bool isPlayChordSymbolsEnabled() const override;
     void setIsPlayChordSymbolsEnabled(bool enabled) override;
     muse::async::Notification isPlayChordSymbolsChanged() const override;
+
+    bool isPlayPreviewNotesInInputByDuration() const override;
+    void setIsPlayPreviewNotesInInputByDuration(bool play) override;
+    muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const override;
 
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled) override;
@@ -212,9 +236,13 @@ public:
     void setUseNewPercussionPanel(bool use) override;
     muse::async::Notification useNewPercussionPanelChanged() const override;
 
-    bool autoShowPercussionPanel() const override;
-    void setAutoShowPercussionPanel(bool autoShow) override;
-    muse::async::Notification autoShowPercussionPanelChanged() const override;
+    PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
+    void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode percussionPanelAutoShowMode) override;
+    muse::async::Notification percussionPanelAutoShowModeChanged() const override;
+
+    bool autoClosePercussionPanel() const override;
+    void setAutoClosePercussionPanel(bool autoClose) override;
+    muse::async::Notification autoClosePercussionPanelChanged() const override;
 
     bool showPercussionPanelPadSwapDialog() const override;
     void setShowPercussionPanelPadSwapDialog(bool show) override;
@@ -237,8 +265,6 @@ public:
     void resetStyleDialogPageIndices() override;
 
 private:
-    muse::async::Notification m_isMidiInputEnabledChanged;
-
     muse::io::path_t firstScoreOrderListPath() const;
     void setFirstScoreOrderListPath(const muse::io::path_t& path);
 
@@ -247,6 +273,12 @@ private:
 
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
+
+    muse::async::Notification m_defaultNoteInputMethodChanged;
+    muse::async::Notification m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;
+    muse::async::Notification m_useNoteInputCursorInInputByDurationChanged;
+    muse::async::Notification m_isMidiInputEnabledChanged;
+    muse::async::Notification m_startNoteInputAtSelectionWhenPressingMidiKeyChanged;
 
     muse::async::Notification m_defaultZoomChanged;
     muse::async::Notification m_mouseZoomPrecisionChanged;
@@ -262,11 +294,13 @@ private:
     muse::async::Channel<std::string> m_styleFileImportPathChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
+    muse::async::Notification m_isPlayNotesPreviewInInputByDurationChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
     muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;
     muse::async::Notification m_useNewPercussionPanelChanged;
-    muse::async::Notification m_autoShowPercussionPanelChanged;
+    muse::async::Notification m_percussionPanelAutoShowModeChanged;
+    muse::async::Notification m_autoClosePercussionPanelChanged;
     muse::async::Notification m_showPercussionPanelPadSwapDialogChanged;
     muse::async::Notification m_percussionPanelMoveMidiNotesAndShortcutsChanged;
 

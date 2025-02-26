@@ -326,6 +326,9 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
                 LOGN("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
                      (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 fillGap(expectedPos, currentPos - expectedPos, track, stretch, useGapRests);
+                if (currentPos >= f) {
+                    break;
+                }
             }
 
             DurationElement* de = cr;

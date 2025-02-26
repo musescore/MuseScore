@@ -573,6 +573,10 @@ void MasterScore::initExcerpt(Excerpt* excerpt)
 
     Excerpt::createExcerpt(excerpt);
     excerpt->setInited(true);
+
+    if (!score->style().isDefault(Sid::timeSigPlacement)) {
+        score->resetStyleValue(Sid::timeSigPlacement);
+    }
 }
 
 void MasterScore::initParts(Excerpt* excerpt)
@@ -1076,7 +1080,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         }
     }
 
-    nmb->linkTo(mb);
+    score->undo(new Link(nmb, mb));
     nmb->setExcludeFromOtherParts(false);
 
     for (EngravingItem* e : mb->el()) {
@@ -1113,9 +1117,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
             // skip part name in score
             continue;
         } else if (e->isTextBase() || e->isLayoutBreak()) {
-            ne = e->clone();
+            ne = e->linkedClone();
             ne->setAutoplace(true);
-            ne->linkTo(e);
         } else {
             ne = e->clone();
         }
@@ -1534,7 +1537,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         continue;
                     }
                     bool systemObject = e->systemFlag() && e->track() == 0;
-                    bool alreadyCloned = bool(e->findLinkedInScore(score));
+                    EngravingItem* linkedElement = e->findLinkedInScore(score);
+                    bool alreadyCloned = linkedElement && linkedElement->parent() == ns;
                     bool cloneAnnotation = !alreadyCloned && (e->elementAppliesToTrack(srcTrack) || systemObject);
 
                     if (!cloneAnnotation) {

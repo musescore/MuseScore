@@ -7,6 +7,7 @@
       <frameSystemDistance>0</frameSystemDistance>
       <barWidth>0.2</barWidth>
       <endBarWidth>0.4</endBarWidth>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <stemWidth>0.2</stemWidth>
       <staffLineWidth>0.15</staffLineWidth>
       <measureNumberInterval>1</measureNumberInterval>
@@ -22,6 +23,10 @@
       <evenFooterR>Version $:version:</evenFooterR>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>

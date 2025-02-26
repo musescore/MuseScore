@@ -136,7 +136,6 @@ set(LINK_LIB
     context
     muse::shortcuts
     muse::workspace
-    workspacescene
     muse::audio
     muse::mpe
     muse::midi
@@ -157,6 +156,10 @@ if (MUSE_MODULE_UI)
     list(APPEND LINK_LIB muse::ui)
     list(APPEND LINK_LIB muse::uicomponents)
     list(APPEND LINK_LIB muse::dockwindow)
+endif()
+
+if (MUSE_MODULE_TOURS)
+    list(APPEND LINK_LIB muse::tours)
 endif()
 
 if (MUSE_MODULE_AUDIOPLUGINS)

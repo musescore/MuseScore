@@ -81,6 +81,10 @@ if (MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
 endif()
 
+if (MUSE_MODULE_TOURS)
+    add_subdirectory(tours)
+endif()
+
 if (MUSE_MODULE_MULTIINSTANCES)
     add_subdirectory(multiinstances)
 endif()

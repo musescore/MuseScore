@@ -148,14 +148,14 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
 
     if (writerProgress) {
         showExportProgress(isAudioExport(suffix));
-        m_exportProgress.started.notify();
+        m_exportProgress.start();
 
-        writerProgress->progressChanged.onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
-                                                                                           const std::string& status) {
-            m_exportProgress.progressChanged.send(currentFileNum * total + current, fileCount * total, status);
+        writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
+                                                                                             const std::string& status) {
+            m_exportProgress.progress(currentFileNum * total + current, fileCount * total, status);
         });
 
-        m_exportProgress.cancelRequested.onNotify(this, [writer]() {
+        m_exportProgress.canceled().onNotify(this, [writer]() {
             writer->abort();
         });
     }
@@ -165,9 +165,9 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
         setViewModes(notations, viewModes);
 
         if (writerProgress) {
-            m_exportProgress.finished.send(muse::make_ok());
-            writerProgress->progressChanged.resetOnReceive(this);
-            m_exportProgress.finished.resetOnReceive(this);
+            m_exportProgress.finish(muse::make_ok());
+            writerProgress->progressChanged().resetOnReceive(this);
+            m_exportProgress.finished().resetOnReceive(this);
         }
     };
 

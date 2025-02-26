@@ -94,9 +94,8 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
         impl->setBracketsAndBarlines();
     }
 
+    updatePartsAndSystemObjectStaves();
     endGlobalEdit();
-
-    m_partChangedNotifier.changed();
 }
 
 void MasterNotationParts::removeParts(const IDList& partsIds)
@@ -254,6 +253,45 @@ void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
             master->deleteExcerpt(excerpt);
         }
     }
+}
+
+void MasterNotationParts::addSystemObjects(const muse::IDList& stavesIds)
+{
+    if (stavesIds.empty()) {
+        return;
+    }
+
+    startGlobalEdit(TranslatableString("undoableAction", "Add system markings"));
+
+    NotationParts::addSystemObjects(stavesIds);
+
+    endGlobalEdit();
+}
+
+void MasterNotationParts::removeSystemObjects(const muse::IDList& stavesIds)
+{
+    if (stavesIds.empty()) {
+        return;
+    }
+
+    startGlobalEdit(TranslatableString("undoableAction", "Remove system markings"));
+
+    NotationParts::removeSystemObjects(stavesIds);
+
+    endGlobalEdit();
+}
+
+void MasterNotationParts::moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId)
+{
+    startGlobalEdit(TranslatableString("undoableAction", "Move system markings"));
+
+    NotationParts::moveSystemObjects(sourceStaffId, destinationStaffId);
+
+    for (INotationPartsPtr parts : excerptsParts()) {
+        parts->moveSystemObjects(sourceStaffId, destinationStaffId);
+    }
+
+    endGlobalEdit();
 }
 
 std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const

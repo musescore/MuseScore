@@ -44,6 +44,8 @@ PopupView {
     property alias closeOnEscape: content.closeOnEscape
     property alias navigationSection: content.navigationSection
 
+    property alias useDropShadow: content.useDropShadow
+
     contentWidth: 240
     contentHeight: content.contentBodyHeight
 

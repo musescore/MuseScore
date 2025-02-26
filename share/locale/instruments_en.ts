@@ -11498,87 +11498,45 @@
         <translation type="unfinished">Cu.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3875"/>
-        <source>Drum Kit.</source>
-        <comment>drumset description</comment>
-        <extracomment>description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Drum Kit.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3877"/>
-        <source>Large Drum Kit</source>
-        <comment>drumset trackName</comment>
-        <extracomment>trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Large Drum Kit</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3879"/>
         <source>Drum Kit</source>
         <comment>drumset longName</comment>
-        <extracomment>longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Drum Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3881"/>
         <source>D. Kit</source>
         <comment>drumset shortName</comment>
-        <extracomment>shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">D. Kit</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3884"/>
-        <source>4 piece drum kit.</source>
-        <comment>drum-kit-4 description</comment>
-        <extracomment>description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">4 piece drum kit.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3886"/>
-        <source>4-Piece Drum Kit</source>
-        <comment>drum-kit-4 trackName</comment>
-        <extracomment>trackName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">4-Piece Drum Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3888"/>
         <source>Drum Kit</source>
         <comment>drum-kit-4 longName</comment>
-        <extracomment>longName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Drum Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3890"/>
         <source>D. Kit</source>
         <comment>drum-kit-4 shortName</comment>
-        <extracomment>shortName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">D. Kit</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3893"/>
-        <source>5 piece drum kit.</source>
-        <comment>drum-kit-5 description</comment>
-        <extracomment>description for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">5 piece drum kit.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3895"/>
-        <source>5-Piece Drum Kit</source>
-        <comment>drum-kit-5 trackName</comment>
-        <extracomment>trackName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">5-Piece Drum Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3897"/>
         <source>Drum Kit</source>
         <comment>drum-kit-5 longName</comment>
-        <extracomment>longName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Drum Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3899"/>
         <source>D. Kit</source>
         <comment>drum-kit-5 shortName</comment>
-        <extracomment>shortName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">D. Kit</translation>
     </message>
     <message>
@@ -12604,1628 +12562,1586 @@
         <translation type="unfinished">Mrcs.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4244"/>
-        <source>Orchestral percussion drumset.</source>
-        <comment>percussion description</comment>
-        <extracomment>description for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Orchestral percussion drumset.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4246"/>
-        <source>Percussion</source>
-        <comment>percussion trackName</comment>
-        <extracomment>trackName for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Percussion</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4248"/>
+        <location filename="../instruments/instrumentsxml.h" line="4347"/>
         <source>Percussion</source>
         <comment>percussion longName</comment>
-        <extracomment>longName for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Percussion</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4250"/>
+        <location filename="../instruments/instrumentsxml.h" line="4349"/>
         <source>Perc.</source>
         <comment>percussion shortName</comment>
-        <extracomment>shortName for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Perc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4253"/>
+        <location filename="../instruments/instrumentsxml.h" line="4244"/>
         <source>Dried donkey or horse jawbone, traditionally used as a rattle in some Latin American countries.</source>
         <comment>quijada description</comment>
         <extracomment>description for Quijada; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Dried donkey or horse jawbone, traditionally used as a rattle in some Latin American countries.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4255"/>
+        <location filename="../instruments/instrumentsxml.h" line="4246"/>
         <source>Quijada</source>
         <comment>quijada trackName</comment>
         <extracomment>trackName for Quijada; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Quijada</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4257"/>
+        <location filename="../instruments/instrumentsxml.h" line="4248"/>
         <source>Quijada</source>
         <comment>quijada longName</comment>
         <extracomment>longName for Quijada; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Quijada</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4259"/>
+        <location filename="../instruments/instrumentsxml.h" line="4250"/>
         <source>Qui.</source>
         <comment>quijada shortName</comment>
         <extracomment>shortName for Quijada; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Qui.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4262"/>
+        <location filename="../instruments/instrumentsxml.h" line="4253"/>
         <source>Ratchet, also known as a rattle.</source>
         <comment>ratchet description</comment>
         <extracomment>description for Ratchet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ratchet, also known as a rattle.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4264"/>
+        <location filename="../instruments/instrumentsxml.h" line="4255"/>
         <source>Ratchet</source>
         <comment>ratchet trackName</comment>
         <extracomment>trackName for Ratchet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ratchet</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4266"/>
+        <location filename="../instruments/instrumentsxml.h" line="4257"/>
         <source>Ratchet</source>
         <comment>ratchet longName</comment>
         <extracomment>longName for Ratchet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ratchet</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4268"/>
+        <location filename="../instruments/instrumentsxml.h" line="4259"/>
         <source>Rat.</source>
         <comment>ratchet shortName</comment>
         <extracomment>shortName for Ratchet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Rat.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4271"/>
+        <location filename="../instruments/instrumentsxml.h" line="4262"/>
         <source>Pair of blocks wrapped in sandpaper, played by rubbing together.</source>
         <comment>sandpaper-blocks description</comment>
         <extracomment>description for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pair of blocks wrapped in sandpaper, played by rubbing together.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4273"/>
+        <location filename="../instruments/instrumentsxml.h" line="4264"/>
         <source>Sandpaper Blocks</source>
         <comment>sandpaper-blocks trackName</comment>
         <extracomment>trackName for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sandpaper Blocks</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4275"/>
+        <location filename="../instruments/instrumentsxml.h" line="4266"/>
         <source>Sandpaper Blocks</source>
         <comment>sandpaper-blocks longName</comment>
         <extracomment>longName for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sandpaper Blocks</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4277"/>
+        <location filename="../instruments/instrumentsxml.h" line="4268"/>
         <source>Sa. Bl.</source>
         <comment>sandpaper-blocks shortName</comment>
         <extracomment>shortName for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sa. Bl.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4280"/>
+        <location filename="../instruments/instrumentsxml.h" line="4271"/>
         <source>Shaker.</source>
         <comment>shaker description</comment>
         <extracomment>description for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Shaker.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4282"/>
+        <location filename="../instruments/instrumentsxml.h" line="4273"/>
         <source>Shaker</source>
         <comment>shaker trackName</comment>
         <extracomment>trackName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Shaker</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4284"/>
+        <location filename="../instruments/instrumentsxml.h" line="4275"/>
         <source>Shaker</source>
         <comment>shaker longName</comment>
         <extracomment>longName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Shaker</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4286"/>
+        <location filename="../instruments/instrumentsxml.h" line="4277"/>
         <source>Sh.</source>
         <comment>shaker shortName</comment>
         <extracomment>shortName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sh.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4289"/>
+        <location filename="../instruments/instrumentsxml.h" line="4280"/>
         <source>Shell wind chimes.</source>
         <comment>shell-wind-chimes description</comment>
         <extracomment>description for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Shell wind chimes.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4291"/>
+        <location filename="../instruments/instrumentsxml.h" line="4282"/>
         <source>Shell Wind Chimes</source>
         <comment>shell-wind-chimes trackName</comment>
         <extracomment>trackName for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Shell Wind Chimes</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4293"/>
+        <location filename="../instruments/instrumentsxml.h" line="4284"/>
         <source>Shell Wind Chimes</source>
         <comment>shell-wind-chimes longName</comment>
         <extracomment>longName for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Shell Wind Chimes</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4295"/>
+        <location filename="../instruments/instrumentsxml.h" line="4286"/>
         <source>Sh. Wn Ch.</source>
         <comment>shell-wind-chimes shortName</comment>
         <extracomment>shortName for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sh. Wn Ch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4298"/>
+        <location filename="../instruments/instrumentsxml.h" line="4289"/>
         <source>Stones.</source>
         <comment>stones description</comment>
         <extracomment>description for Stones; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Stones.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4300"/>
+        <location filename="../instruments/instrumentsxml.h" line="4291"/>
         <source>Stones</source>
         <comment>stones trackName</comment>
         <extracomment>trackName for Stones; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Stones</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4302"/>
+        <location filename="../instruments/instrumentsxml.h" line="4293"/>
         <source>Stones</source>
         <comment>stones longName</comment>
         <extracomment>longName for Stones; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Stones</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4304"/>
+        <location filename="../instruments/instrumentsxml.h" line="4295"/>
         <source>Sto.</source>
         <comment>stones shortName</comment>
         <extracomment>shortName for Stones; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sto.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4307"/>
+        <location filename="../instruments/instrumentsxml.h" line="4298"/>
         <source>Tambourine.</source>
         <comment>tambourine description</comment>
         <extracomment>description for Tambourine; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tambourine.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4309"/>
+        <location filename="../instruments/instrumentsxml.h" line="4300"/>
         <source>Tambourine</source>
         <comment>tambourine trackName</comment>
         <extracomment>trackName for Tambourine; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tambourine</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4311"/>
+        <location filename="../instruments/instrumentsxml.h" line="4302"/>
         <source>Tambourine</source>
         <comment>tambourine longName</comment>
         <extracomment>longName for Tambourine; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tambourine</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4313"/>
+        <location filename="../instruments/instrumentsxml.h" line="4304"/>
         <source>Tamb.</source>
         <comment>tambourine shortName</comment>
         <extracomment>shortName for Tambourine; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tamb.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4316"/>
+        <location filename="../instruments/instrumentsxml.h" line="4307"/>
         <source>Large shaker in the form of a tube.</source>
         <comment>tubo description</comment>
         <extracomment>description for Tubo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Large shaker in the form of a tube.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4318"/>
+        <location filename="../instruments/instrumentsxml.h" line="4309"/>
         <source>Tubo</source>
         <comment>tubo trackName</comment>
         <extracomment>trackName for Tubo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tubo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4320"/>
+        <location filename="../instruments/instrumentsxml.h" line="4311"/>
         <source>Tubo</source>
         <comment>tubo longName</comment>
         <extracomment>longName for Tubo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tubo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4322"/>
+        <location filename="../instruments/instrumentsxml.h" line="4313"/>
         <source>Tu.</source>
         <comment>tubo shortName</comment>
         <extracomment>shortName for Tubo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tu.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4325"/>
+        <location filename="../instruments/instrumentsxml.h" line="4316"/>
         <source>Vibraslap.</source>
         <comment>vibraslap description</comment>
         <extracomment>description for Vibraslap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Vibraslap.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4327"/>
+        <location filename="../instruments/instrumentsxml.h" line="4318"/>
         <source>Vibraslap</source>
         <comment>vibraslap trackName</comment>
         <extracomment>trackName for Vibraslap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Vibraslap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4329"/>
+        <location filename="../instruments/instrumentsxml.h" line="4320"/>
         <source>Vibraslap</source>
         <comment>vibraslap longName</comment>
         <extracomment>longName for Vibraslap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Vibraslap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4331"/>
+        <location filename="../instruments/instrumentsxml.h" line="4322"/>
         <source>Vibslp.</source>
         <comment>vibraslap shortName</comment>
         <extracomment>shortName for Vibraslap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Vibslp.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4334"/>
+        <location filename="../instruments/instrumentsxml.h" line="4325"/>
         <source>Two wooden boards joined by a hinge, played by being brought together rapidly. Also known as a slap stick.</source>
         <comment>whip description</comment>
         <extracomment>description for Whip; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Two wooden boards joined by a hinge, played by being brought together rapidly. Also known as a slap stick.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4336"/>
+        <location filename="../instruments/instrumentsxml.h" line="4327"/>
         <source>Whip</source>
         <comment>whip trackName</comment>
         <extracomment>trackName for Whip; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Whip</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4338"/>
+        <location filename="../instruments/instrumentsxml.h" line="4329"/>
         <source>Whip</source>
         <comment>whip longName</comment>
         <extracomment>longName for Whip; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Whip</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4340"/>
+        <location filename="../instruments/instrumentsxml.h" line="4331"/>
         <source>Wh.</source>
         <comment>whip shortName</comment>
         <extracomment>shortName for Whip; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Wh.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4346"/>
+        <location filename="../instruments/instrumentsxml.h" line="4355"/>
         <source>Marching snare drum.</source>
         <comment>marching-snare description</comment>
         <extracomment>description for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Marching snare drum.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4350"/>
+        <location filename="../instruments/instrumentsxml.h" line="4359"/>
         <source>Snare Drum</source>
         <comment>marching-snare longName</comment>
         <extracomment>longName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Snare Drum</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4352"/>
+        <location filename="../instruments/instrumentsxml.h" line="4361"/>
         <source>S.D.</source>
         <comment>marching-snare shortName</comment>
         <extracomment>shortName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">S.D.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4355"/>
+        <location filename="../instruments/instrumentsxml.h" line="4364"/>
         <source>Marching tenor drums.</source>
         <comment>marching-tenor-drums description</comment>
         <extracomment>description for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Marching tenor drums.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4359"/>
+        <location filename="../instruments/instrumentsxml.h" line="4368"/>
         <source>Tenor Drums</source>
         <comment>marching-tenor-drums longName</comment>
         <extracomment>longName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor Drums</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4361"/>
+        <location filename="../instruments/instrumentsxml.h" line="4370"/>
         <source>T.D.</source>
         <comment>marching-tenor-drums shortName</comment>
         <extracomment>shortName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">T.D.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4364"/>
+        <location filename="../instruments/instrumentsxml.h" line="4373"/>
         <source>Marching bass drums.</source>
         <comment>marching-bass-drums description</comment>
         <extracomment>description for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Marching bass drums.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4368"/>
+        <location filename="../instruments/instrumentsxml.h" line="4377"/>
         <source>Bass Drums</source>
         <comment>marching-bass-drums longName</comment>
         <extracomment>longName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bass Drums</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4370"/>
+        <location filename="../instruments/instrumentsxml.h" line="4379"/>
         <source>B.D.</source>
         <comment>marching-bass-drums shortName</comment>
         <extracomment>shortName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">B.D.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4373"/>
+        <location filename="../instruments/instrumentsxml.h" line="4382"/>
         <source>Marching cymbals.</source>
         <comment>marching-cymbals description</comment>
         <extracomment>description for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Marching cymbals.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4377"/>
+        <location filename="../instruments/instrumentsxml.h" line="4386"/>
         <source>Cymbals</source>
         <comment>marching-cymbals longName</comment>
         <extracomment>longName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Cymbals</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4379"/>
+        <location filename="../instruments/instrumentsxml.h" line="4388"/>
         <source>Cym.</source>
         <comment>marching-cymbals shortName</comment>
         <extracomment>shortName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Cym.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4385"/>
+        <location filename="../instruments/instrumentsxml.h" line="4394"/>
         <source>Finger snap.</source>
         <comment>finger-snap description</comment>
         <extracomment>description for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Finger snap.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4387"/>
+        <location filename="../instruments/instrumentsxml.h" line="4396"/>
         <source>Finger Snap</source>
         <comment>finger-snap trackName</comment>
         <extracomment>trackName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Finger Snap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4389"/>
+        <location filename="../instruments/instrumentsxml.h" line="4398"/>
         <source>Finger Snap</source>
         <comment>finger-snap longName</comment>
         <extracomment>longName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Finger Snap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4391"/>
+        <location filename="../instruments/instrumentsxml.h" line="4400"/>
         <source>Fi. Sna.</source>
         <comment>finger-snap shortName</comment>
         <extracomment>shortName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Fi. Sna.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4394"/>
+        <location filename="../instruments/instrumentsxml.h" line="4403"/>
         <source>Hand clap.</source>
         <comment>hand-clap description</comment>
         <extracomment>description for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hand clap.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4396"/>
+        <location filename="../instruments/instrumentsxml.h" line="4405"/>
         <source>Hand Clap</source>
         <comment>hand-clap trackName</comment>
         <extracomment>trackName for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hand Clap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4398"/>
+        <location filename="../instruments/instrumentsxml.h" line="4407"/>
         <source>Hand Clap</source>
         <comment>hand-clap longName</comment>
         <extracomment>longName for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hand Clap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4400"/>
+        <location filename="../instruments/instrumentsxml.h" line="4409"/>
         <source>Hd. Clp.</source>
         <comment>hand-clap shortName</comment>
         <extracomment>shortName for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hd. Clp.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4403"/>
+        <location filename="../instruments/instrumentsxml.h" line="4412"/>
         <source>Hand slap.</source>
         <comment>slap description</comment>
         <extracomment>description for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hand slap.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4405"/>
+        <location filename="../instruments/instrumentsxml.h" line="4414"/>
         <source>Slap</source>
         <comment>slap trackName</comment>
         <extracomment>trackName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Slap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4407"/>
+        <location filename="../instruments/instrumentsxml.h" line="4416"/>
         <source>Slap</source>
         <comment>slap longName</comment>
         <extracomment>longName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Slap</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4409"/>
+        <location filename="../instruments/instrumentsxml.h" line="4418"/>
         <source>Sla.</source>
         <comment>slap shortName</comment>
         <extracomment>shortName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sla.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4412"/>
+        <location filename="../instruments/instrumentsxml.h" line="4421"/>
         <source>Foot stamp.</source>
         <comment>stamp description</comment>
         <extracomment>description for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Foot stamp.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4414"/>
+        <location filename="../instruments/instrumentsxml.h" line="4423"/>
         <source>Stamp</source>
         <comment>stamp trackName</comment>
         <extracomment>trackName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Stamp</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4416"/>
+        <location filename="../instruments/instrumentsxml.h" line="4425"/>
         <source>Stamp</source>
         <comment>stamp longName</comment>
         <extracomment>longName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Stamp</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4418"/>
+        <location filename="../instruments/instrumentsxml.h" line="4427"/>
         <source>Sta.</source>
         <comment>stamp shortName</comment>
         <extracomment>shortName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Sta.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4424"/>
+        <location filename="../instruments/instrumentsxml.h" line="4433"/>
         <source>Boy soprano voice.</source>
         <comment>boy-soprano description</comment>
         <extracomment>description for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Boy soprano voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4426"/>
+        <location filename="../instruments/instrumentsxml.h" line="4435"/>
         <source>Boy Soprano</source>
         <comment>boy-soprano trackName</comment>
         <extracomment>trackName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Boy Soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4428"/>
+        <location filename="../instruments/instrumentsxml.h" line="4437"/>
         <source>Boy Soprano</source>
         <comment>boy-soprano longName</comment>
         <extracomment>longName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Boy Soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4430"/>
+        <location filename="../instruments/instrumentsxml.h" line="4439"/>
         <source>B. S.</source>
         <comment>boy-soprano shortName</comment>
         <extracomment>shortName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">B. S.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4433"/>
+        <location filename="../instruments/instrumentsxml.h" line="4442"/>
         <source>Soprano voice.</source>
         <comment>soprano description</comment>
         <extracomment>description for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4435"/>
+        <location filename="../instruments/instrumentsxml.h" line="4444"/>
         <source>Soprano</source>
         <comment>soprano trackName</comment>
         <extracomment>trackName for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4437"/>
+        <location filename="../instruments/instrumentsxml.h" line="4446"/>
         <source>Soprano</source>
         <comment>soprano longName</comment>
         <extracomment>longName for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4439"/>
+        <location filename="../instruments/instrumentsxml.h" line="4448"/>
         <source>S.</source>
         <comment>soprano shortName</comment>
         <extracomment>shortName for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">S.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4442"/>
+        <location filename="../instruments/instrumentsxml.h" line="4451"/>
         <source>Soprano voice (notated in C clef).</source>
         <comment>soprano-c-clef description</comment>
         <extracomment>description for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano voice (notated in C clef).</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4444"/>
+        <location filename="../instruments/instrumentsxml.h" line="4453"/>
         <source>Soprano (C clef)</source>
         <comment>soprano-c-clef trackName</comment>
         <extracomment>trackName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano (C clef)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4446"/>
+        <location filename="../instruments/instrumentsxml.h" line="4455"/>
         <source>Soprano</source>
         <comment>soprano-c-clef longName</comment>
         <extracomment>longName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4448"/>
+        <location filename="../instruments/instrumentsxml.h" line="4457"/>
         <source>S.</source>
         <comment>soprano-c-clef shortName</comment>
         <extracomment>shortName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">S.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4451"/>
+        <location filename="../instruments/instrumentsxml.h" line="4460"/>
         <source>Mezzo-soprano voice.</source>
         <comment>mezzo-soprano description</comment>
         <extracomment>description for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mezzo-soprano voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4453"/>
+        <location filename="../instruments/instrumentsxml.h" line="4462"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano trackName</comment>
         <extracomment>trackName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mezzo-soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4455"/>
+        <location filename="../instruments/instrumentsxml.h" line="4464"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano longName</comment>
         <extracomment>longName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mezzo-soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4457"/>
+        <location filename="../instruments/instrumentsxml.h" line="4466"/>
         <source>Mzs.</source>
         <comment>mezzo-soprano shortName</comment>
         <extracomment>shortName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mzs.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4460"/>
+        <location filename="../instruments/instrumentsxml.h" line="4469"/>
         <source>Mezzo-soprano voice (notated in C clef).</source>
         <comment>mezzo-soprano-c-clef description</comment>
         <extracomment>description for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mezzo-soprano voice (notated in C clef).</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4462"/>
+        <location filename="../instruments/instrumentsxml.h" line="4471"/>
         <source>Mezzo-soprano (C clef)</source>
         <comment>mezzo-soprano-c-clef trackName</comment>
         <extracomment>trackName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mezzo-soprano (C clef)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4464"/>
+        <location filename="../instruments/instrumentsxml.h" line="4473"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano-c-clef longName</comment>
         <extracomment>longName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mezzo-soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4466"/>
+        <location filename="../instruments/instrumentsxml.h" line="4475"/>
         <source>Mzs.</source>
         <comment>mezzo-soprano-c-clef shortName</comment>
         <extracomment>shortName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mzs.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4469"/>
+        <location filename="../instruments/instrumentsxml.h" line="4478"/>
         <source>Counter tenor or male alto voice.</source>
         <comment>countertenor description</comment>
         <extracomment>description for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Counter tenor or male alto voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4471"/>
+        <location filename="../instruments/instrumentsxml.h" line="4480"/>
         <source>Countertenor</source>
         <comment>countertenor trackName</comment>
         <extracomment>trackName for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Countertenor</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4473"/>
+        <location filename="../instruments/instrumentsxml.h" line="4482"/>
         <source>Countertenor</source>
         <comment>countertenor longName</comment>
         <extracomment>longName for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Countertenor</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4475"/>
+        <location filename="../instruments/instrumentsxml.h" line="4484"/>
         <source>Ct.</source>
         <comment>countertenor shortName</comment>
         <extracomment>shortName for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ct.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4478"/>
+        <location filename="../instruments/instrumentsxml.h" line="4487"/>
         <source>Alto voice.</source>
         <comment>alto description</comment>
         <extracomment>description for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4480"/>
+        <location filename="../instruments/instrumentsxml.h" line="4489"/>
         <source>Alto</source>
         <comment>alto trackName</comment>
         <extracomment>trackName for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4482"/>
+        <location filename="../instruments/instrumentsxml.h" line="4491"/>
         <source>Alto</source>
         <comment>alto longName</comment>
         <extracomment>longName for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4484"/>
+        <location filename="../instruments/instrumentsxml.h" line="4493"/>
         <source>A.</source>
         <comment>alto shortName</comment>
         <extracomment>shortName for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">A.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4487"/>
+        <location filename="../instruments/instrumentsxml.h" line="4496"/>
         <source>Alto voice (notated in C clef).</source>
         <comment>alto-c-clef description</comment>
         <extracomment>description for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto voice (notated in C clef).</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4489"/>
+        <location filename="../instruments/instrumentsxml.h" line="4498"/>
         <source>Alto (C clef)</source>
         <comment>alto-c-clef trackName</comment>
         <extracomment>trackName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto (C clef)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4491"/>
+        <location filename="../instruments/instrumentsxml.h" line="4500"/>
         <source>Alto</source>
         <comment>alto-c-clef longName</comment>
         <extracomment>longName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4493"/>
+        <location filename="../instruments/instrumentsxml.h" line="4502"/>
         <source>A.</source>
         <comment>alto-c-clef shortName</comment>
         <extracomment>shortName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">A.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4496"/>
+        <location filename="../instruments/instrumentsxml.h" line="4505"/>
         <source>Female alto voice.</source>
         <comment>contralto description</comment>
         <extracomment>description for Contralto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Female alto voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4498"/>
+        <location filename="../instruments/instrumentsxml.h" line="4507"/>
         <source>Contralto</source>
         <comment>contralto trackName</comment>
         <extracomment>trackName for Contralto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Contralto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4500"/>
+        <location filename="../instruments/instrumentsxml.h" line="4509"/>
         <source>Contralto</source>
         <comment>contralto longName</comment>
         <extracomment>longName for Contralto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Contralto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4502"/>
+        <location filename="../instruments/instrumentsxml.h" line="4511"/>
         <source>Contr.</source>
         <comment>contralto shortName</comment>
         <extracomment>shortName for Contralto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Contr.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4505"/>
+        <location filename="../instruments/instrumentsxml.h" line="4514"/>
         <source>Tenor voice.</source>
         <comment>tenor description</comment>
         <extracomment>description for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4507"/>
+        <location filename="../instruments/instrumentsxml.h" line="4516"/>
         <source>Tenor</source>
         <comment>tenor trackName</comment>
         <extracomment>trackName for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4509"/>
+        <location filename="../instruments/instrumentsxml.h" line="4518"/>
         <source>Tenor</source>
         <comment>tenor longName</comment>
         <extracomment>longName for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4511"/>
+        <location filename="../instruments/instrumentsxml.h" line="4520"/>
         <source>T.</source>
         <comment>tenor shortName</comment>
         <extracomment>shortName for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">T.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4514"/>
+        <location filename="../instruments/instrumentsxml.h" line="4523"/>
         <source>Tenor voice (notated in C clef).</source>
         <comment>tenor-c-clef description</comment>
         <extracomment>description for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor voice (notated in C clef).</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4516"/>
+        <location filename="../instruments/instrumentsxml.h" line="4525"/>
         <source>Tenor (C clef)</source>
         <comment>tenor-c-clef trackName</comment>
         <extracomment>trackName for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor (C clef)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4518"/>
+        <location filename="../instruments/instrumentsxml.h" line="4527"/>
         <source>Tenor</source>
         <comment>tenor-c-clef longName</comment>
         <extracomment>longName for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4520"/>
+        <location filename="../instruments/instrumentsxml.h" line="4529"/>
         <source>T.</source>
         <comment>tenor-c-clef shortName</comment>
         <extracomment>shortName for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">T.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4523"/>
+        <location filename="../instruments/instrumentsxml.h" line="4532"/>
         <source>Baritone voice.</source>
         <comment>baritone description</comment>
         <extracomment>description for Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Baritone voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4525"/>
+        <location filename="../instruments/instrumentsxml.h" line="4534"/>
         <source>Baritone</source>
         <comment>baritone trackName</comment>
         <extracomment>trackName for Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Baritone</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4527"/>
+        <location filename="../instruments/instrumentsxml.h" line="4536"/>
         <source>Baritone</source>
         <comment>baritone longName</comment>
         <extracomment>longName for Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Baritone</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4529"/>
+        <location filename="../instruments/instrumentsxml.h" line="4538"/>
         <source>Bar.</source>
         <comment>baritone shortName</comment>
         <extracomment>shortName for Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bar.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4532"/>
+        <location filename="../instruments/instrumentsxml.h" line="4541"/>
         <source>Baritone voice (notated in C clef).</source>
         <comment>baritone-c-clef description</comment>
         <extracomment>description for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Baritone voice (notated in C clef).</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4534"/>
+        <location filename="../instruments/instrumentsxml.h" line="4543"/>
         <source>Baritone (C clef)</source>
         <comment>baritone-c-clef trackName</comment>
         <extracomment>trackName for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Baritone (C clef)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4536"/>
+        <location filename="../instruments/instrumentsxml.h" line="4545"/>
         <source>Baritone</source>
         <comment>baritone-c-clef longName</comment>
         <extracomment>longName for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Baritone</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4538"/>
+        <location filename="../instruments/instrumentsxml.h" line="4547"/>
         <source>Bar.</source>
         <comment>baritone-c-clef shortName</comment>
         <extracomment>shortName for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bar.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4541"/>
+        <location filename="../instruments/instrumentsxml.h" line="4550"/>
         <source>Voice (unspecified type).</source>
         <comment>voice description</comment>
         <extracomment>description for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Voice (unspecified type).</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4543"/>
+        <location filename="../instruments/instrumentsxml.h" line="4552"/>
         <source>Voice</source>
         <comment>voice trackName</comment>
         <extracomment>trackName for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Voice</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4545"/>
+        <location filename="../instruments/instrumentsxml.h" line="4554"/>
         <source>Voice</source>
         <comment>voice longName</comment>
         <extracomment>longName for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Voice</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4547"/>
+        <location filename="../instruments/instrumentsxml.h" line="4556"/>
         <source>Vo.</source>
         <comment>voice shortName</comment>
         <extracomment>shortName for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Vo.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4550"/>
+        <location filename="../instruments/instrumentsxml.h" line="4559"/>
         <source>Bass voice.</source>
         <comment>bass description</comment>
         <extracomment>description for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bass voice.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4552"/>
+        <location filename="../instruments/instrumentsxml.h" line="4561"/>
         <source>Bass</source>
         <comment>bass trackName</comment>
         <extracomment>trackName for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bass</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4554"/>
+        <location filename="../instruments/instrumentsxml.h" line="4563"/>
         <source>Bass</source>
         <comment>bass longName</comment>
         <extracomment>longName for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bass</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4556"/>
+        <location filename="../instruments/instrumentsxml.h" line="4565"/>
         <source>B.</source>
         <comment>bass shortName</comment>
         <extracomment>shortName for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">B.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4559"/>
+        <location filename="../instruments/instrumentsxml.h" line="4568"/>
         <source>Women’s voices.</source>
         <comment>women description</comment>
         <extracomment>description for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Women’s voices.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4561"/>
+        <location filename="../instruments/instrumentsxml.h" line="4570"/>
         <source>Women</source>
         <comment>women trackName</comment>
         <extracomment>trackName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Women</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4563"/>
+        <location filename="../instruments/instrumentsxml.h" line="4572"/>
         <source>Women</source>
         <comment>women longName</comment>
         <extracomment>longName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Women</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4565"/>
+        <location filename="../instruments/instrumentsxml.h" line="4574"/>
         <source>W.</source>
         <comment>women shortName</comment>
         <extracomment>shortName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">W.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4567"/>
+        <location filename="../instruments/instrumentsxml.h" line="4576"/>
         <source>Soprano</source>
         <comment>women channel</comment>
         <extracomment>channel for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4569"/>
+        <location filename="../instruments/instrumentsxml.h" line="4578"/>
         <source>Alto</source>
         <comment>women channel</comment>
         <extracomment>channel for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4572"/>
+        <location filename="../instruments/instrumentsxml.h" line="4581"/>
         <source>Men’s voices.</source>
         <comment>men description</comment>
         <extracomment>description for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Men’s voices.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4574"/>
+        <location filename="../instruments/instrumentsxml.h" line="4583"/>
         <source>Men</source>
         <comment>men trackName</comment>
         <extracomment>trackName for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Men</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4576"/>
+        <location filename="../instruments/instrumentsxml.h" line="4585"/>
         <source>Men</source>
         <comment>men longName</comment>
         <extracomment>longName for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Men</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4578"/>
+        <location filename="../instruments/instrumentsxml.h" line="4587"/>
         <source>M.</source>
         <comment>men shortName</comment>
         <extracomment>shortName for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">M.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4580"/>
+        <location filename="../instruments/instrumentsxml.h" line="4589"/>
         <source>Tenor</source>
         <comment>men channel</comment>
         <extracomment>channel for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Tenor</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4582"/>
+        <location filename="../instruments/instrumentsxml.h" line="4591"/>
         <source>Bass</source>
         <comment>men channel</comment>
         <extracomment>channel for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bass</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4585"/>
+        <location filename="../instruments/instrumentsxml.h" line="4594"/>
         <source>Kazoo.</source>
         <comment>kazoo description</comment>
         <extracomment>description for Kazoo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Kazoo.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4587"/>
+        <location filename="../instruments/instrumentsxml.h" line="4596"/>
         <source>Kazoo</source>
         <comment>kazoo trackName</comment>
         <extracomment>trackName for Kazoo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Kazoo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4589"/>
+        <location filename="../instruments/instrumentsxml.h" line="4598"/>
         <source>Kazoo</source>
         <comment>kazoo longName</comment>
         <extracomment>longName for Kazoo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Kazoo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4591"/>
+        <location filename="../instruments/instrumentsxml.h" line="4600"/>
         <source>Kaz.</source>
         <comment>kazoo shortName</comment>
         <extracomment>shortName for Kazoo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Kaz.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4597"/>
+        <location filename="../instruments/instrumentsxml.h" line="4606"/>
         <source>Celesta.</source>
         <comment>celesta description</comment>
         <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Celesta.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4599"/>
+        <location filename="../instruments/instrumentsxml.h" line="4608"/>
         <source>Celesta</source>
         <comment>celesta trackName</comment>
         <extracomment>trackName for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Celesta</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4601"/>
+        <location filename="../instruments/instrumentsxml.h" line="4610"/>
         <source>Celesta</source>
         <comment>celesta longName</comment>
         <extracomment>longName for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Celesta</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4603"/>
+        <location filename="../instruments/instrumentsxml.h" line="4612"/>
         <source>Cel.</source>
         <comment>celesta shortName</comment>
         <extracomment>shortName for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Cel.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4606"/>
+        <location filename="../instruments/instrumentsxml.h" line="4615"/>
         <source>Clavichord.</source>
         <comment>clavichord description</comment>
         <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Clavichord.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4608"/>
+        <location filename="../instruments/instrumentsxml.h" line="4617"/>
         <source>Clavichord</source>
         <comment>clavichord trackName</comment>
         <extracomment>trackName for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Clavichord</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4610"/>
+        <location filename="../instruments/instrumentsxml.h" line="4619"/>
         <source>Clavichord</source>
         <comment>clavichord longName</comment>
         <extracomment>longName for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Clavichord</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4612"/>
+        <location filename="../instruments/instrumentsxml.h" line="4621"/>
         <source>Cch.</source>
         <comment>clavichord shortName</comment>
         <extracomment>shortName for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Cch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4615"/>
+        <location filename="../instruments/instrumentsxml.h" line="4624"/>
         <source>Electrically amplified clavichord.</source>
         <comment>clavinet description</comment>
         <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Electrically amplified clavichord.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4617"/>
+        <location filename="../instruments/instrumentsxml.h" line="4626"/>
         <source>Clavinet</source>
         <comment>clavinet trackName</comment>
         <extracomment>trackName for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Clavinet</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4619"/>
+        <location filename="../instruments/instrumentsxml.h" line="4628"/>
         <source>Clavinet</source>
         <comment>clavinet longName</comment>
         <extracomment>longName for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Clavinet</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4621"/>
+        <location filename="../instruments/instrumentsxml.h" line="4630"/>
         <source>Clav.</source>
         <comment>clavinet shortName</comment>
         <extracomment>shortName for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Clav.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4624"/>
+        <location filename="../instruments/instrumentsxml.h" line="4633"/>
         <source>Harpsichord.</source>
         <comment>harpsichord description</comment>
         <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Harpsichord.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4626"/>
+        <location filename="../instruments/instrumentsxml.h" line="4635"/>
         <source>Harpsichord</source>
         <comment>harpsichord trackName</comment>
         <extracomment>trackName for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Harpsichord</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4628"/>
+        <location filename="../instruments/instrumentsxml.h" line="4637"/>
         <source>Harpsichord</source>
         <comment>harpsichord longName</comment>
         <extracomment>longName for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Harpsichord</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4630"/>
+        <location filename="../instruments/instrumentsxml.h" line="4639"/>
         <source>Hch.</source>
         <comment>harpsichord shortName</comment>
         <extracomment>shortName for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4633"/>
+        <location filename="../instruments/instrumentsxml.h" line="4642"/>
         <source>Virginal.</source>
         <comment>virginal description</comment>
         <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Virginal.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4635"/>
+        <location filename="../instruments/instrumentsxml.h" line="4644"/>
         <source>Virginal</source>
         <comment>virginal trackName</comment>
         <extracomment>trackName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Virginal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4637"/>
+        <location filename="../instruments/instrumentsxml.h" line="4646"/>
         <source>Virginal</source>
         <comment>virginal longName</comment>
         <extracomment>longName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Virginal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4639"/>
+        <location filename="../instruments/instrumentsxml.h" line="4648"/>
         <source>Vir.</source>
         <comment>virginal shortName</comment>
         <extracomment>shortName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Vir.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4642"/>
+        <location filename="../instruments/instrumentsxml.h" line="4651"/>
         <source>Electric piano.</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Electric piano.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4644"/>
+        <location filename="../instruments/instrumentsxml.h" line="4653"/>
         <source>Electric Piano</source>
         <comment>electric-piano trackName</comment>
         <extracomment>trackName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Electric Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4646"/>
+        <location filename="../instruments/instrumentsxml.h" line="4655"/>
         <source>Electric Piano</source>
         <comment>electric-piano longName</comment>
         <extracomment>longName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Electric Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4648"/>
+        <location filename="../instruments/instrumentsxml.h" line="4657"/>
         <source>El. Pno.</source>
         <comment>electric-piano shortName</comment>
         <extracomment>shortName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">El. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4651"/>
+        <location filename="../instruments/instrumentsxml.h" line="4660"/>
         <source>Specifically a grand piano.</source>
         <comment>grand-piano description</comment>
         <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Specifically a grand piano.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4653"/>
+        <location filename="../instruments/instrumentsxml.h" line="4662"/>
         <source>Grand Piano</source>
         <comment>grand-piano trackName</comment>
         <extracomment>trackName for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Grand Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4655"/>
+        <location filename="../instruments/instrumentsxml.h" line="4664"/>
         <source>Grand Piano</source>
         <comment>grand-piano longName</comment>
         <extracomment>longName for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Grand Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4657"/>
+        <location filename="../instruments/instrumentsxml.h" line="4666"/>
         <source>Pno.</source>
         <comment>grand-piano shortName</comment>
         <extracomment>shortName for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4660"/>
+        <location filename="../instruments/instrumentsxml.h" line="4669"/>
         <source>Honky-tonk (very out of tune) piano.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Honky-tonk (very out of tune) piano.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4662"/>
+        <location filename="../instruments/instrumentsxml.h" line="4671"/>
         <source>Honky Tonk Piano</source>
         <comment>honky-tonk-piano trackName</comment>
         <extracomment>trackName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Honky Tonk Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4664"/>
+        <location filename="../instruments/instrumentsxml.h" line="4673"/>
         <source>Honky Tonk Piano</source>
         <comment>honky-tonk-piano longName</comment>
         <extracomment>longName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Honky Tonk Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4666"/>
+        <location filename="../instruments/instrumentsxml.h" line="4675"/>
         <source>Hnk. Pno.</source>
         <comment>honky-tonk-piano shortName</comment>
         <extracomment>shortName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hnk. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4669"/>
+        <location filename="../instruments/instrumentsxml.h" line="4678"/>
         <source>Piano.</source>
         <comment>piano description</comment>
         <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Piano.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4671"/>
+        <location filename="../instruments/instrumentsxml.h" line="4680"/>
         <source>Piano</source>
         <comment>piano trackName</comment>
         <extracomment>trackName for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4673"/>
+        <location filename="../instruments/instrumentsxml.h" line="4682"/>
         <source>Piano</source>
         <comment>piano longName</comment>
         <extracomment>longName for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4675"/>
+        <location filename="../instruments/instrumentsxml.h" line="4684"/>
         <source>Pno.</source>
         <comment>piano shortName</comment>
         <extracomment>shortName for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4678"/>
+        <location filename="../instruments/instrumentsxml.h" line="4687"/>
         <source>Toy piano.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Toy piano.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4680"/>
+        <location filename="../instruments/instrumentsxml.h" line="4689"/>
         <source>Toy Piano</source>
         <comment>toy-piano trackName</comment>
         <extracomment>trackName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Toy Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4682"/>
+        <location filename="../instruments/instrumentsxml.h" line="4691"/>
         <source>Toy Piano</source>
         <comment>toy-piano longName</comment>
         <extracomment>longName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Toy Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4684"/>
+        <location filename="../instruments/instrumentsxml.h" line="4693"/>
         <source>Toy Pno.</source>
         <comment>toy-piano shortName</comment>
         <extracomment>shortName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Toy Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4687"/>
+        <location filename="../instruments/instrumentsxml.h" line="4696"/>
         <source>Specifically an upright piano.</source>
         <comment>upright-piano description</comment>
         <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Specifically an upright piano.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4689"/>
+        <location filename="../instruments/instrumentsxml.h" line="4698"/>
         <source>Upright Piano</source>
         <comment>upright-piano trackName</comment>
         <extracomment>trackName for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Upright Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4691"/>
+        <location filename="../instruments/instrumentsxml.h" line="4700"/>
         <source>Upright Piano</source>
         <comment>upright-piano longName</comment>
         <extracomment>longName for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Upright Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4693"/>
+        <location filename="../instruments/instrumentsxml.h" line="4702"/>
         <source>Pno.</source>
         <comment>upright-piano shortName</comment>
         <extracomment>shortName for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4696"/>
+        <location filename="../instruments/instrumentsxml.h" line="4705"/>
         <source>Hammond electronic organ.</source>
         <comment>hammond-organ description</comment>
         <extracomment>description for Hammond Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hammond electronic organ.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4698"/>
+        <location filename="../instruments/instrumentsxml.h" line="4707"/>
         <source>Hammond Organ</source>
         <comment>hammond-organ trackName</comment>
         <extracomment>trackName for Hammond Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hammond Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4700"/>
+        <location filename="../instruments/instrumentsxml.h" line="4709"/>
         <source>Hammond Organ</source>
         <comment>hammond-organ longName</comment>
         <extracomment>longName for Hammond Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hammond Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4702"/>
+        <location filename="../instruments/instrumentsxml.h" line="4711"/>
         <source>Hm. Org.</source>
         <comment>hammond-organ shortName</comment>
         <extracomment>shortName for Hammond Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hm. Org.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4705"/>
+        <location filename="../instruments/instrumentsxml.h" line="4714"/>
         <source>Organ (generic).</source>
         <comment>organ description</comment>
         <extracomment>description for Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Organ (generic).</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4707"/>
+        <location filename="../instruments/instrumentsxml.h" line="4716"/>
         <source>Organ</source>
         <comment>organ trackName</comment>
         <extracomment>trackName for Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4709"/>
+        <location filename="../instruments/instrumentsxml.h" line="4718"/>
         <source>Organ</source>
         <comment>organ longName</comment>
         <extracomment>longName for Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4711"/>
+        <location filename="../instruments/instrumentsxml.h" line="4720"/>
         <source>Org.</source>
         <comment>organ shortName</comment>
         <extracomment>shortName for Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Org.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4714"/>
+        <location filename="../instruments/instrumentsxml.h" line="4723"/>
         <source>Electronic organ with percussion feature.</source>
         <comment>percussive-organ description</comment>
         <extracomment>description for Percussive Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Electronic organ with percussion feature.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4716"/>
+        <location filename="../instruments/instrumentsxml.h" line="4725"/>
         <source>Percussive Organ</source>
         <comment>percussive-organ trackName</comment>
         <extracomment>trackName for Percussive Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Percussive Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4718"/>
+        <location filename="../instruments/instrumentsxml.h" line="4727"/>
         <source>Percussive Organ</source>
         <comment>percussive-organ longName</comment>
         <extracomment>longName for Percussive Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Percussive Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4720"/>
+        <location filename="../instruments/instrumentsxml.h" line="4729"/>
         <source>Perc. Org.</source>
         <comment>percussive-organ shortName</comment>
         <extracomment>shortName for Percussive Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Perc. Org.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4723"/>
+        <location filename="../instruments/instrumentsxml.h" line="4732"/>
         <source>Pipe organ.</source>
         <comment>pipe-organ description</comment>
         <extracomment>description for Pipe Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pipe organ.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4725"/>
+        <location filename="../instruments/instrumentsxml.h" line="4734"/>
         <source>Pipe Organ</source>
         <comment>pipe-organ trackName</comment>
         <extracomment>trackName for Pipe Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pipe Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4727"/>
+        <location filename="../instruments/instrumentsxml.h" line="4736"/>
         <source>Pipe Organ</source>
         <comment>pipe-organ longName</comment>
         <extracomment>longName for Pipe Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pipe Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4729"/>
+        <location filename="../instruments/instrumentsxml.h" line="4738"/>
         <source>Org.</source>
         <comment>pipe-organ shortName</comment>
         <extracomment>shortName for Pipe Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Org.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4732"/>
+        <location filename="../instruments/instrumentsxml.h" line="4741"/>
         <source>Hammond organ with Leslie rotary speaker.</source>
         <comment>rotary-organ description</comment>
         <extracomment>description for Rotary Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Hammond organ with Leslie rotary speaker.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4734"/>
+        <location filename="../instruments/instrumentsxml.h" line="4743"/>
         <source>Rotary Organ</source>
         <comment>rotary-organ trackName</comment>
         <extracomment>trackName for Rotary Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Rotary Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4736"/>
+        <location filename="../instruments/instrumentsxml.h" line="4745"/>
         <source>Rotary Organ</source>
         <comment>rotary-organ longName</comment>
         <extracomment>longName for Rotary Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Rotary Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4738"/>
+        <location filename="../instruments/instrumentsxml.h" line="4747"/>
         <source>Rot. Org.</source>
         <comment>rotary-organ shortName</comment>
         <extracomment>shortName for Rotary Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Rot. Org.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4741"/>
+        <location filename="../instruments/instrumentsxml.h" line="4750"/>
         <source>Harmonium.</source>
         <comment>harmonium description</comment>
         <extracomment>description for Harmonium; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Harmonium.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4743"/>
+        <location filename="../instruments/instrumentsxml.h" line="4752"/>
         <source>Harmonium</source>
         <comment>harmonium trackName</comment>
         <extracomment>trackName for Harmonium; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Harmonium</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4745"/>
+        <location filename="../instruments/instrumentsxml.h" line="4754"/>
         <source>Harmonium</source>
         <comment>harmonium longName</comment>
         <extracomment>longName for Harmonium; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Harmonium</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4747"/>
+        <location filename="../instruments/instrumentsxml.h" line="4756"/>
         <source>Harm.</source>
         <comment>harmonium shortName</comment>
         <extracomment>shortName for Harmonium; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Harm.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4750"/>
+        <location filename="../instruments/instrumentsxml.h" line="4759"/>
         <source>Reed organ.</source>
         <comment>reed-organ description</comment>
         <extracomment>description for Reed Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Reed organ.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4752"/>
+        <location filename="../instruments/instrumentsxml.h" line="4761"/>
         <source>Reed Organ</source>
         <comment>reed-organ trackName</comment>
         <extracomment>trackName for Reed Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Reed Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4754"/>
+        <location filename="../instruments/instrumentsxml.h" line="4763"/>
         <source>Reed Organ</source>
         <comment>reed-organ longName</comment>
         <extracomment>longName for Reed Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Reed Organ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4756"/>
+        <location filename="../instruments/instrumentsxml.h" line="4765"/>
         <source>Rd. Org.</source>
         <comment>reed-organ shortName</comment>
         <extracomment>shortName for Reed Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Rd. Org.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4762"/>
+        <location filename="../instruments/instrumentsxml.h" line="4771"/>
         <source>Mallet synthesizer.</source>
         <comment>mallet-synthesizer description</comment>
         <extracomment>description for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mallet synthesizer.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4764"/>
+        <location filename="../instruments/instrumentsxml.h" line="4773"/>
         <source>Mallet Synthesizer</source>
         <comment>mallet-synthesizer trackName</comment>
         <extracomment>trackName for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mallet Synthesizer</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4766"/>
+        <location filename="../instruments/instrumentsxml.h" line="4775"/>
         <source>Mallet Synthesizer</source>
         <comment>mallet-synthesizer longName</comment>
         <extracomment>longName for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mallet Synthesizer</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4768"/>
+        <location filename="../instruments/instrumentsxml.h" line="4777"/>
         <source>Mal. Syn.</source>
         <comment>mallet-synthesizer shortName</comment>
         <extracomment>shortName for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mal. Syn.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4771"/>
+        <location filename="../instruments/instrumentsxml.h" line="4780"/>
         <source>Ondes Martenot.</source>
         <comment>ondes-martenot description</comment>
         <extracomment>description for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ondes Martenot.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4773"/>
+        <location filename="../instruments/instrumentsxml.h" line="4782"/>
         <source>Ondes Martenot</source>
         <comment>ondes-martenot trackName</comment>
         <extracomment>trackName for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ondes Martenot</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4775"/>
+        <location filename="../instruments/instrumentsxml.h" line="4784"/>
         <source>Ondes Martenot</source>
         <comment>ondes-martenot longName</comment>
         <extracomment>longName for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ondes Martenot</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4777"/>
+        <location filename="../instruments/instrumentsxml.h" line="4786"/>
         <source>O.M.</source>
         <comment>ondes-martenot shortName</comment>
         <extracomment>shortName for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">O.M.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4780"/>
-        <source>Percussion synthesizer.</source>
-        <comment>percussion-synthesizer description</comment>
-        <extracomment>description for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Percussion synthesizer.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4782"/>
-        <source>Percussion Synthesizer</source>
-        <comment>percussion-synthesizer trackName</comment>
-        <extracomment>trackName for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Percussion Synthesizer</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4784"/>
-        <source>Percussion Synthesizer</source>
-        <comment>percussion-synthesizer longName</comment>
-        <extracomment>longName for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Percussion Synthesizer</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4786"/>
-        <source>Perc. Syn.</source>
-        <comment>percussion-synthesizer shortName</comment>
-        <extracomment>shortName for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Perc. Syn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4789"/>
@@ -15565,6 +15481,48 @@
         <translation type="unfinished">Snare Drum</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3875"/>
+        <source>Large drum kit.</source>
+        <comment>drumset description</comment>
+        <extracomment>description for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Large drum kit.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3877"/>
+        <source>Drum Kit (large)</source>
+        <comment>drumset trackName</comment>
+        <extracomment>trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Drum Kit (large)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3884"/>
+        <source>Minimal drum kit, 4-piece.</source>
+        <comment>drum-kit-4 description</comment>
+        <extracomment>description for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Minimal drum kit, 4-piece.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3886"/>
+        <source>Drum Kit (minimal)</source>
+        <comment>drum-kit-4 trackName</comment>
+        <extracomment>trackName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Drum Kit (minimal)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3893"/>
+        <source>Common drum kit, 5-piece.</source>
+        <comment>drum-kit-5 description</comment>
+        <extracomment>description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Common drum kit, 5-piece.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3895"/>
+        <source>Drum Kit (common)</source>
+        <comment>drum-kit-5 trackName</comment>
+        <extracomment>trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Drum Kit (common)</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="4010"/>
         <source>China cymbal for drum kit.</source>
         <comment>chinese-cymbal description</comment>
@@ -15607,28 +15565,70 @@
         <translation type="unfinished">Tam-tam</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4348"/>
+        <location filename="../instruments/instrumentsxml.h" line="4334"/>
+        <source>General MIDI percussion kit with Level 2 extensions.</source>
+        <comment>percussion-synthesizer description</comment>
+        <extracomment>description for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">General MIDI percussion kit with Level 2 extensions.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4336"/>
+        <source>General MIDI Percussion</source>
+        <comment>percussion-synthesizer trackName</comment>
+        <extracomment>trackName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">General MIDI Percussion</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4338"/>
+        <source>Percussion</source>
+        <comment>percussion-synthesizer longName</comment>
+        <extracomment>longName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Percussion</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4340"/>
+        <source>Perc.</source>
+        <comment>percussion-synthesizer shortName</comment>
+        <extracomment>shortName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Perc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4343"/>
+        <source>Orchestral percussion kit.</source>
+        <comment>percussion description</comment>
+        <extracomment>description for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Orchestral percussion kit.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4345"/>
+        <source>Mixed Percussion</source>
+        <comment>percussion trackName</comment>
+        <extracomment>trackName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Mixed Percussion</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4357"/>
         <source>Marching Snare Drum</source>
         <comment>marching-snare trackName</comment>
         <extracomment>trackName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Marching Snare Drum</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4357"/>
+        <location filename="../instruments/instrumentsxml.h" line="4366"/>
         <source>Marching Tenor Drums</source>
         <comment>marching-tenor-drums trackName</comment>
         <extracomment>trackName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Marching Tenor Drums</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4366"/>
+        <location filename="../instruments/instrumentsxml.h" line="4375"/>
         <source>Marching Bass Drums</source>
         <comment>marching-bass-drums trackName</comment>
         <extracomment>trackName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Marching Bass Drums</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4375"/>
+        <location filename="../instruments/instrumentsxml.h" line="4384"/>
         <source>Marching Cymbals</source>
         <comment>marching-cymbals trackName</comment>
         <extracomment>trackName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -19646,27 +19646,27 @@
         <translation type="unfinished">Percussion - Unpitched</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4343"/>
+        <location filename="../instruments/instrumentsxml.h" line="4352"/>
         <source>Percussion - Marching</source>
         <translation type="unfinished">Percussion - Marching</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4382"/>
+        <location filename="../instruments/instrumentsxml.h" line="4391"/>
         <source>Percussion - Body</source>
         <translation type="unfinished">Percussion - Body</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4421"/>
+        <location filename="../instruments/instrumentsxml.h" line="4430"/>
         <source>Vocals</source>
         <translation type="unfinished">Vocals</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4594"/>
+        <location filename="../instruments/instrumentsxml.h" line="4603"/>
         <source>Keyboards</source>
         <translation type="unfinished">Keyboards</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4759"/>
+        <location filename="../instruments/instrumentsxml.h" line="4768"/>
         <source>Electronic</source>
         <translation type="unfinished">Electronic</translation>
     </message>

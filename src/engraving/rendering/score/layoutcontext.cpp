@@ -260,6 +260,22 @@ Measure* DomAccessor::firstMeasure()
     return score()->firstMeasure();
 }
 
+const Measure* DomAccessor::lastMeasure() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasure();
+}
+
+Measure* DomAccessor::lastMeasure()
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasure();
+}
+
 Measure* DomAccessor::tick2measure(const Fraction& tick)
 {
     IF_ASSERT_FAILED(score()) {
@@ -390,6 +406,14 @@ void DomAccessor::removeElement(EngravingItem* item)
         return;
     }
     score()->removeElement(item);
+}
+
+void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+    score()->updateSystemLocksOnCreateMMRests(first, last);
 }
 
 void DomAccessor::addUnmanagedSpanner(Spanner* s)

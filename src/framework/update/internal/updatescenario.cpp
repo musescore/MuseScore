@@ -64,11 +64,11 @@ bool UpdateScenario::isCheckStarted() const
 void UpdateScenario::doCheckForUpdate(bool manual)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started.onNotify(this, [this]() {
+    m_checkProgressChannel->started().onNotify(this, [this]() {
         m_checkProgress = true;
     });
 
-    m_checkProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
             m_checkProgress = false;
         };
@@ -103,7 +103,7 @@ void UpdateScenario::doCheckForUpdate(bool manual)
 
 void UpdateScenario::th_checkForUpdate()
 {
-    m_checkProgressChannel->started.notify();
+    m_checkProgressChannel->start();
 
     RetVal<ReleaseInfo> retVal = service()->checkForUpdate();
 
@@ -111,7 +111,7 @@ void UpdateScenario::th_checkForUpdate()
     result.ret = retVal.ret;
     result.val = Val(releaseInfoToValMap(retVal.val));
 
-    m_checkProgressChannel->finished.send(result);
+    m_checkProgressChannel->finish(result);
 }
 
 void UpdateScenario::processUpdateResult(int errorCode)

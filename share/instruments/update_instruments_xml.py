@@ -55,7 +55,7 @@ sheet_ids = {
     'GM+GS_Percussion':         '1216482735',
 }
 
-standard_drumset_id = 'drumset'
+standard_drumset_id = 'percussion-synthesizer' # General MIDI Percussion (most generic kit)
 
 parser = argparse.ArgumentParser(description='Fetch the latest spreadsheet and generate instruments.xml.')
 parser.add_argument('-c', '--cached', action='store_true', help='Use cached version instead of downloading')
@@ -304,6 +304,15 @@ for group in groups.values():
                 if pitch in gmgs_percussion:
                     to_comment(d_el, gmgs_percussion[pitch], 'name')
                 to_subelement(d_el, drum, 'head')
+
+                noteheads_el = ET.Element('noteheads')
+                to_subelement(noteheads_el, drum, 'quarter')
+                to_subelement(noteheads_el, drum, 'half')
+                to_subelement(noteheads_el, drum, 'whole')
+                to_subelement(noteheads_el, drum, 'breve')
+                if noteheads_el.find('*') is not None:
+                    d_el.append(noteheads_el)
+
                 to_subelement(d_el, drum, 'line')
                 to_subelement(d_el, drum, 'voice')
                 to_subelement(d_el, drum, 'drum', 'name')
@@ -516,10 +525,15 @@ def noteheadgroup(tag):
 
     return 'HEAD_' + tag.upper().replace('-', '_')
 
+def noteheadtype(tag):
+    if tag == 'breve':
+        return 'HEAD_BREVIS'
+    return 'HEAD_' + tag.upper()
+
 def shortcut(tag):
     if tag == null or not tag:
-        return '0'
-    return 'Key_' + tag
+        return 'String()'
+    return '(muse::Char)Key_' + tag
 
 # Generate the standard drumset. This must be hard-coded in C++ to ensure it's
 # available at startup when systems are initialized (engraving, playback, MIDI
@@ -530,11 +544,25 @@ gen_code = ''
 for drum in drumsets[standard_drumset_id].values():
     pitch = drum['pitch']
 
+    custom_noteheads_code = ''
+
+    for duration in ['whole', 'half', 'quarter', 'breve']:
+        notehead = drum[duration]
+
+        if not notehead or notehead is null:
+            continue
+
+        type = noteheadtype(duration)
+
+        custom_noteheads_code += f"""\
+    smDrumset->drum({pitch}).noteheads[static_cast<int>(NoteHeadType::{type})] = SymNames::symIdByName("{notehead}");
+"""
+
     gen_code += f"""
     // {drum['drum']}
     smDrumset->drum({pitch}) = DrumInstrument(
         TConv::userName(DrumNum({pitch})),
-        NoteHeadGroup::{noteheadgroup(drum['head'])},
+        NoteHeadGroup::{noteheadgroup('custom' if custom_noteheads_code else drum['head'])},
         /*line*/ {drum['line']},
         DirectionV::{direction(drum['stem'])},
         /*panelRow*/ {drum['row']},
@@ -542,6 +570,9 @@ for drum in drumsets[standard_drumset_id].values():
         /*voice*/ {drum['voice']},
         /*shortcut*/ {shortcut(drum['shortcut'])});
 """
+
+    if custom_noteheads_code:
+        gen_code += '\n' + custom_noteheads_code
 
 with open(standard_drumset_cpp_path, newline='\n', encoding='utf-8') as file:
     old_code = file.read()

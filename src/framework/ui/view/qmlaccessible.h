@@ -52,6 +52,7 @@ public:
         Panel,
         StaticText,
         EditableText,
+        SilentRole,
         Button,
         CheckBox,
         RadioButton,

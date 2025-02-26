@@ -67,6 +67,7 @@ public:
 
 private:
     void readEndpointLocation(Location& l);
+    Fraction curTick() const;
 
     XmlReader* m_reader = nullptr;
     ReadContext* m_ctx = nullptr;

@@ -30,7 +30,9 @@
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
+#include "musesampler/imusesamplerinfo.h"
 #include "iinstrumentsrepository.h"
+#include "inotationconfiguration.h"
 
 #include "percussionpanelpadlistmodel.h"
 
@@ -53,7 +55,9 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
     muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
 
     Q_OBJECT
 
@@ -109,19 +113,23 @@ signals:
 private:
     void setUpConnections();
 
+    void setDrumset(mu::engraving::Drumset* drumset);
+
     void updateSoundTitle(const InstrumentTrackId& trackId);
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void onPadTriggered(int pitch);
+    void onPadTriggered(int pitch, const PercussionPanelPadModel::PadAction& action);
     void onDuplicatePadRequested(int pitch);
     void onDeletePadRequested(int pitch);
     void onDefinePadShortcutRequested(int pitch);
 
-    void writePitch(int pitch);
+    void writePitch(int pitch, const NoteAddingMode& addingMode);
     void playPitch(int pitch);
 
     void resetLayout();
+    Drumset standardDefaultDrumset() const;
+    Drumset museSamplerDefaultDrumset() const;
 
     mu::engraving::InstrumentTrackId currentTrackId() const;
 

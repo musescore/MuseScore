@@ -24,8 +24,8 @@
 
 #include "audioplugins/audiopluginstypes.h"
 
-#include "vstplugin.h"
-#include "vsttypes.h"
+#include "../ivstplugininstance.h"
+#include "../vsttypes.h"
 
 namespace muse::vst {
 class VstAudioClient
@@ -34,7 +34,7 @@ public:
     VstAudioClient() = default;
     ~VstAudioClient();
 
-    void init(audioplugins::AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t audioChannelsCount = 2);
+    void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance, muse::audio::audioch_t audioChannelsCount = 2);
 
     void loadSupportedParams();
 
@@ -42,7 +42,7 @@ public:
     bool handleParamChange(const ParamChangeEvent& param);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
-    muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
+    muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel, muse::audio::msecs_t playbackPosition = 0);
 
     void flush();
     void allNotesOff();
@@ -85,7 +85,7 @@ private:
     bool m_isActive = false;
     muse::audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0
 
-    VstPluginPtr m_pluginPtr = nullptr;
+    IVstPluginInstancePtr m_pluginPtr = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;
 
     SamplesInfo m_samplesInfo;

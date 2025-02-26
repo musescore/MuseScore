@@ -32,14 +32,14 @@
 #include "mpe/events.h"
 
 #include "../vstaudioclient.h"
-#include "ivstpluginsregister.h"
+#include "../../ivstinstancesregister.h"
 #include "vstsequencer.h"
 #include "vsttypes.h"
 
 namespace muse::vst {
 class VstSynthesiser : public muse::audio::synth::AbstractSynthesizer
 {
-    Inject<IVstPluginsRegister> pluginsRegister = { this };
+    Inject<IVstInstancesRegister> instancesRegister = { this };
     Inject<muse::audio::IAudioConfiguration> config = { this };
 
 public:
@@ -77,7 +77,7 @@ private:
     void toggleVolumeGain(const bool isActive);
     audio::samples_t processSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t samples, float* buffer);
 
-    VstPluginPtr m_pluginPtr = nullptr;
+    IVstPluginInstancePtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     unsigned int m_audioChannelsCount = 2;

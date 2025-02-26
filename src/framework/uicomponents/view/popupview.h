@@ -81,6 +81,8 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
     Q_PROPERTY(
         bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
 
+    Q_PROPERTY(bool takeFocusOnClick READ takeFocusOnClick WRITE setTakeFocusOnClick NOTIFY takeFocusOnClickChanged)
+
     //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
@@ -93,7 +95,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 public:
     Inject<ui::IMainWindow> mainWindow = { this };
     Inject<ui::IUiConfiguration> uiConfiguration = { this };
-    Inject<ui::INavigationController> navigationController= { this };
+    Inject<ui::INavigationController> navigationController = { this };
 
 public:
 
@@ -151,6 +153,7 @@ public:
     Placement placement() const;
 
     bool activateParentOnClose() const;
+    bool takeFocusOnClick() const;
 
     ui::INavigationControl* navigationParentControl() const;
 
@@ -201,6 +204,7 @@ public slots:
     void setAnchorItem(QQuickItem* anchorItem);
 
     void setActivateParentOnClose(bool activateParentOnClose);
+    void setTakeFocusOnClick(bool takeFocusOnClick);
 
 signals:
     void parentItemChanged();
@@ -234,6 +238,7 @@ signals:
     void anchorItemChanged(QQuickItem* anchorItem);
 
     void activateParentOnCloseChanged(bool activateParentOnClose);
+    void takeFocusOnClickChanged(bool takeFocusOnClick);
 
     void isContentReadyChanged();
 
@@ -295,6 +300,7 @@ protected:
     Placement m_placement = { Placement::Default };
 
     bool m_activateParentOnClose = true;
+    bool m_takeFocusOnClick = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
     QString m_objectId;
     QString m_title;

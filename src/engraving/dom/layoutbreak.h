@@ -61,6 +61,8 @@ public:
     void setStartWithMeasureOne(bool v) { m_startWithMeasureOne = v; }
     bool firstSystemIndentation() const { return m_firstSystemIndentation; }
     void setFirstSystemIndentation(bool v) { m_firstSystemIndentation = v; }
+    bool showCourtesy() const { return m_showCourtesy; }
+    void setShowCourtesy(bool v) { m_showCourtesy = v; }
 
     bool isPageBreak() const { return m_layoutBreakType == LayoutBreakType::PAGE; }
     bool isLineBreak() const { return m_layoutBreakType == LayoutBreakType::LINE; }
@@ -70,6 +72,8 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+
+    String accessibleInfo() const override;
 
     char16_t iconCode() const;
 
@@ -88,6 +92,7 @@ private:
     bool m_startWithLongNames = false;
     bool m_startWithMeasureOne = false;
     bool m_firstSystemIndentation = false;
+    bool m_showCourtesy = false;
     LayoutBreakType m_layoutBreakType = LayoutBreakType::NOBREAK;
 };
 } // namespace mu::engraving

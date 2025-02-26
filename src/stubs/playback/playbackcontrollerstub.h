@@ -58,7 +58,9 @@ public:
                                const notation::INotationSoloMuteState::SoloMuteState& state) override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi) override;
+    void playNotes(const notation::NoteValList& notes, const notation::staff_idx_t staffIdx, const notation::Segment* segment) override;
     void playMetronome(int tick) override;
+
     void seekElement(const notation::EngravingItem* element) override;
     void seekBeat(int measureIndex, int beatIndex) override;
 

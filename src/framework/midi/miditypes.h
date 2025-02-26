@@ -45,6 +45,7 @@ using Events = std::map<tick_t, std::vector<Event> >;
 
 static constexpr int EXPRESSION_CONTROLLER = 11;
 static constexpr int SUSTAIN_PEDAL_CONTROLLER = 64;
+static constexpr int SOSTENUTO_PEDAL_CONTROLLER = 66;
 
 struct Program {
     Program(bank_t b = 0, program_t p = 0)

@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>qml/Muse/Shortcuts/qmldir</file>
         <file>qml/Muse/Shortcuts/ShortcutsPage.qml</file>
-        <file>qml/Muse/Shortcuts/EditShortcutDialog.qml</file>
+        <file>qml/Muse/Shortcuts/EditShortcutDialogContent.qml</file>
         <file>qml/Muse/Shortcuts/Shortcuts.qml</file>
         <file>qml/Muse/Shortcuts/EditMidiMappingDialog.qml</file>
         <file>qml/Muse/Shortcuts/MidiDeviceMappingPage.qml</file>
@@ -11,5 +11,6 @@
         <file>qml/Muse/Shortcuts/internal/ShortcutsBottomPanel.qml</file>
         <file>qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml</file>
         <file>qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml</file>
+        <file>qml/Muse/Shortcuts/StandardEditShortcutDialog.qml</file>
     </qresource>
 </RCC>

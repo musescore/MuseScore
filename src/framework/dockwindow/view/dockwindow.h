@@ -78,7 +78,7 @@ public:
     Q_INVOKABLE void loadPage(const QString& uri, const QVariantMap& params);
 
     //! IDockWindow
-    bool isDockOpen(const QString& dockName) const override;
+    bool isDockOpenAndCurrentInFrame(const QString& dockName) const override;
     void toggleDock(const QString& dockName) override;
     void setDockOpen(const QString& dockName, bool open) override;
 

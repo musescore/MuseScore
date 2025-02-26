@@ -26,7 +26,7 @@
 #include "serialization/xmlstreamreader.h"
 
 namespace mu::engraving {
-enum class AccidentalType;
+enum class AccidentalType : unsigned char;
 class Articulation;
 class Chord;
 class Fraction;

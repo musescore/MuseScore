@@ -42,6 +42,7 @@ public:
     async::Channel<midi::channel_t, midi::Program> channelAdded() const;
 
     const ChannelMap& channels() const;
+    int lastStaff() const;
 
 private:
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
@@ -51,11 +52,14 @@ private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
     void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& changes);
 
-    void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta,
-                             const int midiControlIdx, const midi::channel_t channelIdx);
+    void appendControlChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const int midiControlIdx,
+                             const midi::channel_t channelIdx, const uint32_t value);
 
     void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta,
                          const midi::channel_t channelIdx);
+
+    using SostenutoTimeAndDurations = std::map<midi::channel_t, std::vector<mpe::TimestampAndDuration> >;
+    void appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations);
 
     midi::channel_t channel(const mpe::NoteEvent& noteEvent) const;
     midi::note_idx_t noteIndex(const mpe::pitch_level_t pitchLevel) const;
@@ -66,6 +70,7 @@ private:
 
     mutable ChannelMap m_channels;
     bool m_useDynamicEvents = false;
+    int m_lastStaff = -1;
 };
 }
 

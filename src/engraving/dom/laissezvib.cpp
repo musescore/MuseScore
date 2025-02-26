@@ -86,6 +86,7 @@ void LaissezVib::setEndNote(Note* note)
 void LaissezVib::setEndElement(EngravingItem* e)
 {
     UNUSED(e);
+    LOGI() << "nope";
     ASSERT_X("Laissez vibrer ties do not have an end note");
 }
 

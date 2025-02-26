@@ -23,8 +23,6 @@
 
 #include "log.h"
 
-#include "internal/vstplugin.h"
-
 using namespace muse;
 using namespace muse::vst;
 using namespace muse::audio::synth;
@@ -35,13 +33,13 @@ static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kCtrlVolume,
     Steinberg::Vst::kCtrlExpression,
     Steinberg::Vst::kCtrlSustainOnOff,
+    Steinberg::Vst::kCtrlSustenutoOnOff,
     Steinberg::Vst::kPitchBend,
 };
 
 VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioInputParams& params,
                                const modularity::ContextPtr& iocCtx)
     : AbstractSynthesizer(params, iocCtx),
-    m_pluginPtr(std::make_shared<VstPlugin>(params.resourceMeta.id)),
     m_vstAudioClient(std::make_unique<VstAudioClient>()),
     m_trackId(trackId)
 {
@@ -49,13 +47,12 @@ VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioIn
 
 VstSynthesiser::~VstSynthesiser()
 {
-    pluginsRegister()->unregisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
+    instancesRegister()->unregisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 }
 
 void VstSynthesiser::init()
 {
-    pluginsRegister()->registerInstrPlugin(m_trackId, m_pluginPtr);
-    m_pluginPtr->load();
+    m_pluginPtr = instancesRegister()->makeAndRegisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 
     m_audioChannelsCount = config()->audioChannelsCount();
     m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr, m_audioChannelsCount);
@@ -106,7 +103,7 @@ bool VstSynthesiser::isValid() const
         return false;
     }
 
-    return m_pluginPtr->isValid();
+    return m_pluginPtr->isLoaded();
 }
 
 muse::audio::AudioSourceType VstSynthesiser::type() const
@@ -205,6 +202,7 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
+
     samples_t sampleOffset = 0;
     samples_t processedSamples = 0;
 
@@ -215,10 +213,6 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
         if (nextIt != sequences.cend()) {
             msecs_t duration = nextIt->first - it->first;
             durationInSamples = microSecsToSamples(duration, m_sampleRate);
-        }
-
-        if (durationInSamples == 0) {
-            continue;
         }
 
         IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
@@ -245,5 +239,9 @@ samples_t VstSynthesiser::processSequence(const VstSequencer::EventSequence& seq
         }
     }
 
-    return m_vstAudioClient->process(buffer, samples);
+    if (samples == 0) {
+        return 0;
+    }
+
+    return m_vstAudioClient->process(buffer, samples, m_sequencer.playbackPosition());
 }

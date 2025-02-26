@@ -64,14 +64,14 @@ static const QList<QList<DynamicPopupModel::PageItem> > DYN_POPUP_PAGES = {
         { DynamicType::PPPPPP, 74, 2.0, DynamicPopupModel::Dynamic },
         { DynamicType::FFFFFF, 60, 2.5, DynamicPopupModel::Dynamic },
     },
-    {   // Page 6
+    {   // Page 6 - Hairpins
+        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Crescendo },
+        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Decrescendo },
+    },
+    {   // Page 7
         { DynamicType::PPPPP,  64, 2.0, DynamicPopupModel::Dynamic },
         { DynamicType::PPPP,   52, 2.0, DynamicPopupModel::Dynamic },
         { DynamicType::PPP,    44, 2.0, DynamicPopupModel::Dynamic },
-    },
-    {   // Page 7 - Hairpins
-        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Crescendo },
-        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Decrescendo },
     },
 };
 
@@ -160,6 +160,16 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
     m_item->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(DYN_POPUP_PAGES[page][index].dynType));
     m_item->undoChangeProperty(Pid::DYNAMIC_TYPE, DYN_POPUP_PAGES[page][index].dynType);
     endCommand();
+
+    INotationInteractionPtr interaction = currentNotation()->interaction();
+
+    interaction->autoFlipHairpinsType(toDynamic(m_item));
+
+    // Hide the bounding box which appears when called using Ctrl+D shortcut
+    if (interaction->isTextEditingStarted()) {
+        interaction->endEditText();
+        interaction->startEditGrip(m_item, Grip::DRAG);
+    }
 
     updateNotation();
 }

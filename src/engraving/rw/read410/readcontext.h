@@ -98,6 +98,8 @@ public:
 
     double spatium() const;
     void setSpatium(double v);
+    void setPropertiesToSkip(const PropertyIdSet& propertiesToSkip) { m_propertiesToSkip = propertiesToSkip; }
+    bool shouldSkipProperty(Pid pid) const { return muse::contains(m_propertiesToSkip, pid); }
 
     compat::DummyElement* dummy() const;
 
@@ -164,6 +166,9 @@ public:
     const SettingsCompat& settingCompat() { return _settingsCompat; }
 
     TimeSigMap* compatTimeSigMap();
+
+    Fraction timeSigForNextMeasure() { return m_timeSigForNextMeasure; }
+    void setTimeSigForNextMeasure(Fraction timeSig) { m_timeSigForNextMeasure = timeSig; }
 
     Location location(bool forceAbsFrac = false) const;
     void fillLocation(Location&, bool forceAbsFrac = false) const;
@@ -237,6 +242,10 @@ private:
     SettingsCompat _settingsCompat;
 
     TimeSigMap m_compatTimeSigMap;
+
+    PropertyIdSet m_propertiesToSkip;
+
+    Fraction m_timeSigForNextMeasure = Fraction(0, 1);
 };
 }
 

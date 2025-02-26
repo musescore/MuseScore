@@ -99,6 +99,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lyricsMelismaForce,                         false),
     styleDef(lyricsMelismaMinLength,                     Spatium(1.0)),
     styleDef(lyricsDashPosAtStartOfSystem,               int(LyricsDashSystemStart::STANDARD)),
+    styleDef(lyricsAvoidBarlines,                        true),
 
     styleDef(lyricsOddFontFace,                          "Edwin"),
     styleDef(lyricsOddFontSize,                          10.0),
@@ -148,6 +149,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(repeatBarTips,                              false),
     styleDef(startBarlineSingle,                         false),
     styleDef(startBarlineMultiple,                       true),
+    styleDef(maskBarlinesForText,                        true),
 
     styleDef(bracketWidth,                               Spatium(0.45)),
     styleDef(bracketDistance,                            Spatium(0.45)),
@@ -1214,7 +1216,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rehearsalMarkFrameFgColor,                  PropertyValue::fromValue(Color::BLACK)),
     styleDef(rehearsalMarkFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
     styleDef(rehearsalMarkPlacement,                     PlacementV::ABOVE),
-    styleDef(rehearsalMarkPosAbove,                      PointF(.0, -3.0)),
+    styleDef(rehearsalMarkPosAbove,                      PointF(.0, -2.0)),
     styleDef(rehearsalMarkPosBelow,                      PointF(.0, 4.0)),
     styleDef(rehearsalMarkMinDistance,                   Spatium(0.5)),
 
@@ -1774,6 +1776,19 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(autoplaceEnabled,                           true),
     styleDef(defaultsVersion,                            Constants::MSC_VERSION),
+    styleDef(changesBeforeBarlineRepeats,                true),
+    styleDef(changesBeforeBarlineOtherJumps,             true),
+    styleDef(placeClefsBeforeRepeats,                    false),
+    styleDef(changesBetweenEndStartRepeat,               true),
+    styleDef(showCourtesiesRepeats,                      true),
+    styleDef(useParensRepeatCourtesies,                  true),
+    styleDef(showCourtesiesOtherJumps,                   true),
+    styleDef(useParensOtherJumpCourtesies,               true),
+    styleDef(showCourtesiesAfterCancellingRepeats,       true),
+    styleDef(useParensRepeatCourtesiesAfterCancelling,   true),
+    styleDef(showCourtesiesAfterCancellingOtherJumps,    true),
+    styleDef(useParensOtherJumpCourtesiesAfterCancelling, true),
+    styleDef(smallParens,                                true),
 } };
 
 #undef styleDef

@@ -42,6 +42,7 @@ void MeasuresSettingsModel::loadProperties()
     updateAllSystemsAreLocked();
     updateScoreIsInPageView();
     updateIsMakeIntoSystemAvailable();
+    updateSystemCount();
 }
 
 void MeasuresSettingsModel::onCurrentNotationChanged()
@@ -174,6 +175,11 @@ bool MeasuresSettingsModel::isMakeIntoSystemAvailable() const
     return m_isMakeIntoSystemAvailable;
 }
 
+size_t MeasuresSettingsModel::systemCount() const
+{
+    return m_systemCount;
+}
+
 void MeasuresSettingsModel::updateScoreIsInPageView()
 {
     const Score* score = currentNotation()->elements()->msScore();
@@ -190,6 +196,9 @@ void MeasuresSettingsModel::updateIsMakeIntoSystemAvailable()
     const Selection& selection = currentNotation()->elements()->msScore()->selection();
     const MeasureBase* startMB = selection.startMeasureBase();
     const MeasureBase* endMB = selection.endMeasureBase();
+    if (!startMB || !endMB) {
+        return;
+    }
 
     bool available = true;
     if (startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock() && startMB->systemLock() == endMB->systemLock()) {
@@ -199,6 +208,15 @@ void MeasuresSettingsModel::updateIsMakeIntoSystemAvailable()
     if (m_isMakeIntoSystemAvailable != available) {
         m_isMakeIntoSystemAvailable = available;
         emit isMakeIntoSystemAvailableChanged(m_isMakeIntoSystemAvailable);
+    }
+}
+
+void MeasuresSettingsModel::updateSystemCount()
+{
+    size_t count = currentNotation()->elements()->msScore()->selection().selectedSystems().size();
+    if (count != m_systemCount) {
+        m_systemCount = count;
+        emit systemCountChanged(count);
     }
 }
 

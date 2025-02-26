@@ -41,9 +41,11 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "textedit.h"
 #include "utils.h"
 
 #include "log.h"
+#include "undo.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -379,162 +381,6 @@ void Harmony::determineRootBaseSpelling()
 }
 
 //---------------------------------------------------------
-//   convertNote
-//    convert something like "C#" into tpc 21
-//---------------------------------------------------------
-
-static int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, size_t& idx)
-{
-    bool useGerman = false;
-    bool useSolfeggio = false;
-    static const int spellings[] = {
-        // bb  b   -   #  ##
-        0,  7, 14, 21, 28,      // C
-        2,  9, 16, 23, 30,      // D
-        4, 11, 18, 25, 32,      // E
-        -1,  6, 13, 20, 27,     // F
-        1,  8, 15, 22, 29,      // G
-        3, 10, 17, 24, 31,      // A
-        5, 12, 19, 26, 33,      // B
-    };
-    if (s.empty()) {
-        return Tpc::TPC_INVALID;
-    }
-    noteCase = s.at(0).isLower() ? NoteCaseType::LOWER : NoteCaseType::CAPITAL;
-    int acci;
-    switch (noteSpelling) {
-    case NoteSpellingType::SOLFEGGIO:
-    case NoteSpellingType::FRENCH:
-        useSolfeggio = true;
-        if (s.startsWith(u"sol", muse::CaseInsensitive)) {
-            acci = 3;
-        } else {
-            acci = 2;
-        }
-        break;
-    case NoteSpellingType::GERMAN:
-    case NoteSpellingType::GERMAN_PURE:
-        useGerman = true;
-    // fall through
-    default:
-        acci = 1;
-    }
-    idx = acci;
-    int alter = 0;
-    size_t n = s.size();
-    String acc = s.right(n - acci);
-    if (!acc.empty()) {
-        if (acc.startsWith(u"bb")) {
-            alter = -2;
-            idx += 2;
-        } else if (acc.startsWith(u"b")) {
-            alter = -1;
-            idx += 1;
-        } else if (useGerman && acc.startsWith(u"eses")) {
-            alter = -2;
-            idx += 4;
-        } else if (useGerman && (acc.startsWith(u"ses") || acc.startsWith(u"sas"))) {
-            alter = -2;
-            idx += 3;
-        } else if (useGerman && acc.startsWith(u"es")) {
-            alter = -1;
-            idx += 2;
-        } else if (useGerman && acc.startsWith(u"s") && !acc.startsWith(u"su")) {
-            alter = -1;
-            idx += 1;
-        } else if (acc.startsWith(u"##")) {
-            alter = 2;
-            idx += 2;
-        } else if (acc.startsWith(u"x")) {
-            alter = 2;
-            idx += 1;
-        } else if (acc.startsWith(u"#")) {
-            alter = 1;
-            idx += 1;
-        } else if (useGerman && acc.startsWith(u"isis")) {
-            alter = 2;
-            idx += 4;
-        } else if (useGerman && acc.startsWith(u"is")) {
-            alter = 1;
-            idx += 2;
-        }
-    }
-    int r;
-    if (useGerman) {
-        switch (s.at(0).toLower().toAscii()) {
-        case 'c':   r = 0;
-            break;
-        case 'd':   r = 1;
-            break;
-        case 'e':   r = 2;
-            break;
-        case 'f':   r = 3;
-            break;
-        case 'g':   r = 4;
-            break;
-        case 'a':   r = 5;
-            break;
-        case 'h':   r = 6;
-            break;
-        case 'b':
-            if (alter && alter != -1) {
-                return Tpc::TPC_INVALID;
-            }
-            r = 6;
-            alter = -1;
-            break;
-        default:
-            return Tpc::TPC_INVALID;
-        }
-    } else if (useSolfeggio) {
-        if (s.size() < 2) {
-            return Tpc::TPC_INVALID;
-        }
-        if (s.at(1).isUpper()) {
-            noteCase = NoteCaseType::UPPER;
-        }
-        String ss = s.toLower().left(2);
-        if (ss == "do") {
-            r = 0;
-        } else if (ss == "re" || ss == "ré") {
-            r = 1;
-        } else if (ss == "mi") {
-            r = 2;
-        } else if (ss == "fa") {
-            r = 3;
-        } else if (ss == "so") {    // sol, but only check first 2 characters
-            r = 4;
-        } else if (ss == "la") {
-            r = 5;
-        } else if (ss == "si") {
-            r = 6;
-        } else {
-            return Tpc::TPC_INVALID;
-        }
-    } else {
-        switch (s.at(0).toLower().toAscii()) {
-        case 'c':   r = 0;
-            break;
-        case 'd':   r = 1;
-            break;
-        case 'e':   r = 2;
-            break;
-        case 'f':   r = 3;
-            break;
-        case 'g':   r = 4;
-            break;
-        case 'a':   r = 5;
-            break;
-        case 'b':   r = 6;
-            break;
-        default:    return Tpc::TPC_INVALID;
-        }
-    }
-    r = spellings[r * 5 + alter + 2];
-    return r;
-}
-
-//---------------------------------------------------------
 //   parseHarmony
 //    determine root and bass tpc & case
 //    compare body of chordname against chord list
@@ -769,6 +615,8 @@ void Harmony::endEditTextual(EditData& ed)
         s.replace(u"\ue262",  u"\u266f");         // sharp
     }
 
+    String oldHarmonyName = harmonyName();
+
     //play chord on edit and set dirty
     score()->setPlayChord(true);
     m_realizedHarmony.setDirty(true);
@@ -780,6 +628,24 @@ void Harmony::endEditTextual(EditData& ed)
     m_isMisspelled = false;
 
     TextBase::endEditTextual(ed);
+
+    TextEditData* ted = dynamic_cast<TextEditData*>(ed.getData(this).get());
+    bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
+
+    if (textChanged) {
+        Segment* parentSegment = explicitParent() ? getParentSeg() : nullptr;
+        if (parentSegment) {
+            EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+            if (fretDiagramItem) {
+                FretDiagram* fretDiagram = toFretDiagram(fretDiagramItem);
+
+                UndoStack* undo = score()->undoStack();
+                undo->reopen();
+                score()->undo(new FretDataChange(fretDiagram, s));
+                score()->endCmd();
+            }
+        }
+    }
 
     if (links()) {
         for (EngravingObject* e : *links()) {
@@ -983,9 +849,14 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 {
     Segment* seg = getParentSeg();
     Fraction duration = seg->ticks();
-    Segment* cur = seg->next();
-    auto rsIt = score()->repeatList().findRepeatSegmentFromUTick(utick);
 
+    const RepeatList& repeats = score()->repeatList();
+    auto rsIt = repeats.findRepeatSegmentFromUTick(utick);
+    if (rsIt == repeats.cend()) {
+        return duration;
+    }
+
+    Segment* cur = seg->next();
     Measure const* currentMeasure = seg->measure();
     Measure const* endMeasure = (stopAtMeasureEnd) ? currentMeasure : (*rsIt)->lastMeasure();
     Harmony const* nextHarmony = nullptr;
@@ -1026,9 +897,9 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
             // End of repeatSegment or search boundary reached
             if (stopAtMeasureEnd) {
                 break;
-            } else {
+            } else if (!nextHarmony) {
                 // move to next RepeatSegment
-                if (++rsIt != score()->repeatList().end()) {
+                if (++rsIt != repeats.end()) {
                     currentMeasure = (*rsIt)->firstMeasure();
                     endMeasure     = (*rsIt)->lastMeasure();
                     cur = currentMeasure->first();
@@ -1036,6 +907,12 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
             }
         }
     } while ((nextHarmony == nullptr) && (cur != nullptr));
+
+    if (nextHarmony && rsIt != repeats.end()) {
+        int tickOffset = (*rsIt)->utick - (*rsIt)->tick;
+        int nextHarmonyUtick = nextHarmony->tick().ticks() + tickOffset;
+        duration = Fraction::fromTicks(nextHarmonyUtick - utick);
+    }
 
     return duration;
 }
@@ -1196,9 +1073,12 @@ const ChordDescription* Harmony::getDescription(const String& name, const Parsed
 
 const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
-    Fraction tick = this->tick();
     const Staff* st = staff();
+    IF_ASSERT_FAILED(st) {
+        return m_realizedHarmony;
+    }
 
+    const Fraction tick = this->tick();
     const CapoParams& capo = st->capo(tick);
 
     int offset = 0;
@@ -1214,7 +1094,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     //Adjust for Nashville Notation, might be temporary
     // TODO: set dirty on add/remove of keysig
     if (m_harmonyType == HarmonyType::NASHVILLE && !m_realizedHarmony.valid()) {
-        Key key = staff()->key(tick);
+        Key key = st->key(tick);
 
         //parse root
         int rootTpc = function2Tpc(m_function, key);
@@ -1471,7 +1351,8 @@ void Harmony::render()
     m_fontList.clear();
     for (const ChordFont& cf : chordList->fonts) {
         Font ff(font());
-        ff.setPointSizeF(ff.pointSizeF() * cf.mag);
+        double mag = m_userMag.value_or(cf.mag);
+        ff.setPointSizeF(ff.pointSizeF() * mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
             ff.setFamily(cf.family, Font::Type::Harmony);
         }
@@ -2024,5 +1905,14 @@ Sid Harmony::getPropertyStyle(Pid pid) const
         }
     }
     return TextBase::getPropertyStyle(pid);
+}
+
+double Harmony::mag() const
+{
+    if (m_userMag.has_value()) {
+        return m_userMag.value();
+    }
+
+    return EngravingItem::mag();
 }
 }

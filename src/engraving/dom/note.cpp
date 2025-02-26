@@ -568,14 +568,14 @@ Note::~Note()
     m_rightParenthesis = nullptr;
 }
 
-std::vector<const Note*> Note::compoundNotes() const
+std::vector<Note*> Note::compoundNotes() const
 {
-    std::vector<const Note*> elements;
-    if (const Note* note = firstTiedNote()) {
+    std::vector<Note*> elements;
+    if (Note* note = firstTiedNote()) {
         elements.push_back(note);
     }
 
-    if (const Note* note = lastTiedNote()) {
+    if (Note* note = lastTiedNote()) {
         elements.push_back(note);
     }
 
@@ -1642,7 +1642,7 @@ class NoteEditData : public ElementEditData
 {
     OBJECT_ALLOCATOR(engraving, NoteEditData)
 public:
-    enum EditMode {
+    enum EditMode : unsigned char {
         EditMode_ChangePitch = 0,
         EditMode_AddSpacing,
         EditMode_Undefined,
@@ -1924,6 +1924,9 @@ EngravingItem* Note::drop(EditData& data)
             GuitarBendType type = (toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
                                   ? GuitarBendType::PRE_BEND : GuitarBendType::GRACE_NOTE_BEND;
             GuitarBend* guitarBend = score()->addGuitarBend(type, this);
+            if (!guitarBend) {
+                break;
+            }
             Note* note = guitarBend->startNote();
             IF_ASSERT_FAILED(note) {
                 LOGE() << "not valid start note of the bend";
@@ -2360,14 +2363,30 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 void Note::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);
-    if (m_tieFor) {
+    if (tieForNonPartial()) {
         m_tieFor->setTrack(val);
         for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
             seg->setTrack(val);
         }
     }
-    if (m_tieBack) {
+    if (tieBackNonPartial()) {
         m_tieBack->setTrack2(val);
+    }
+    if (laissezVib() || outgoingPartialTie()) {
+        m_tieFor->setTrack(val);
+        m_tieFor->setTrack2(val);
+        for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
+            seg->setTrack(val);
+            seg->setTrack(val);
+        }
+    }
+    if (incomingPartialTie()) {
+        m_tieBack->setTrack(val);
+        m_tieBack->setTrack2(val);
+        for (SpannerSegment* seg : m_tieBack->spannerSegments()) {
+            seg->setTrack(val);
+            seg->setTrack(val);
+        }
     }
     for (Spanner* s : m_spannerFor) {
         s->setTrack(val);
@@ -3705,7 +3724,7 @@ EngravingItem* Note::prevSegmentElement()
 //   lastTiedNote
 //---------------------------------------------------------
 
-const Note* Note::lastTiedNote(bool ignorePlayback) const
+Note* Note::lastTiedNote(bool ignorePlayback) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
@@ -3720,7 +3739,7 @@ const Note* Note::lastTiedNote(bool ignorePlayback) const
         note = note->tieFor()->endNote();
         notes.push_back(note);
     }
-    return note;
+    return const_cast<Note*>(note);
 }
 
 //---------------------------------------------------------

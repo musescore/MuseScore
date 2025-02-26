@@ -84,24 +84,18 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         measure->m_mstaves.push_back(s);
     }
 
-    bool irregular;
+    bool irregular = false;
     if (e.hasAttribute("len")) {
-        StringList sl = e.attribute("len").split(u'/');
-        if (sl.size() == 2) {
-            measure->m_len = Fraction(sl.at(0).toInt(), sl.at(1).toInt());
-        } else {
-            LOGD("illegal measure size <%s>", muPrintable(e.attribute("len")));
-        }
-        irregular = true;
-        if (measure->m_len.numerator() <= 0 || measure->m_len.denominator() <= 0 || measure->m_len.denominator() > 128) {
-            e.raiseError(muse::mtrc("engraving",
-                                    "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->m_len.toString()));
+        bool ok = true;
+        measure->m_len = Fraction::fromString(e.attribute("len"), &ok);
+        if (!ok || measure->m_len < Fraction(1, 128)) {
+            e.raiseError(muse::mtrc("engraving", "MSCX error at line %1: invalid measure length: %2")
+                         .arg(e.lineNumber()).arg(e.attribute("len")));
             return;
         }
+        irregular = true;
         ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->m_len, measure->m_timesig));
         ctx.compatTimeSigMap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
-    } else {
-        irregular = false;
     }
 
     while (e.readNextStartElement()) {
@@ -387,6 +381,14 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 header = clef->isHeader();
             }
 
+            if (ctx.score()->mscVersion() < 450) {
+                // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
+                if (ctx.tick() != Fraction(0, 1) && ctx.tick() == measure->tick()
+                    && !(measure->prevMeasure() && measure->prevMeasure()->repeatEnd()) && !header) {
+                    clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+                }
+            }
+
             segment = measure->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             segment->add(clef);
             clef->setIsHeader(header);
@@ -394,18 +396,20 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
             ts->setTrack(ctx.track());
             TRead::read(ts, e, ctx);
-            // if time sig not at beginning of measure => courtesy time sig
-            Fraction currTick = ctx.tick();
-            bool courtesySig = (currTick > measure->tick());
-            if (courtesySig) {
-                // if courtesy sig., just add it without map processing
-                segment = measure->getSegment(SegmentType::TimeSigAnnounce, currTick);
-                segment->add(ts);
-            } else {
-                // if 'real' time sig., do full process
-                segment = measure->getSegment(SegmentType::TimeSig, currTick);
-                segment->add(ts);
 
+            // PRE 4.5: if time sig not at beginning of measure => courtesy time sig
+            // 4.5+ just tag it
+            Fraction currTick = ctx.tick();
+            bool courtesySig = ctx.score()->mscVersion() < 450 ? currTick > measure->tick() : ts->isCourtesy();
+            segment = measure->getSegment(courtesySig ? SegmentType::TimeSigAnnounce : SegmentType::TimeSig, currTick);
+            segment->add(ts);
+
+            if (!courtesySig && currTick == measure->endTick()) {
+                segment->setEndOfMeasureChange(true);
+                measure->setEndOfMeasureChange(true);
+            }
+
+            if (!courtesySig && currTick == measure->tick()) {
                 timeStretch = ts->stretch().reduced();
                 measure->m_timesig = ts->sig() / timeStretch;
 
@@ -413,15 +417,27 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                     measure->m_len = measure->m_timesig;
                 }
             }
+
+            if (!courtesySig && currTick > measure->tick()) {
+                ctx.setTimeSigForNextMeasure(ts->sig() / ts->stretch().reduced());
+            }
         } else if (tag == "KeySig") {
             KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
             ks->setTrack(ctx.track());
             TRead::read(ks, e, ctx);
+
+            // PRE 4.5: if key sig not at beginning of measure => courtesy key sig
+            // 4.5+ just tag it
             Fraction curTick = ctx.tick();
-            // if key sig not at beginning of measure => courtesy key sig
-            bool courtesySig = (curTick == measure->endTick());
+            bool courtesySig = ctx.score()->mscVersion() < 450 ? curTick == measure->endTick() : ks->isCourtesy();
             segment = measure->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
             segment->add(ks);
+
+            if (!courtesySig && curTick == measure->endTick()) {
+                segment->setEndOfMeasureChange(true);
+                measure->setEndOfMeasureChange(true);
+            }
+
             if (!courtesySig) {
                 staff->setKey(curTick, ks->keySigEvent());
             }

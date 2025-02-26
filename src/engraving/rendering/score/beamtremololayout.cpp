@@ -332,8 +332,9 @@ void BeamTremoloLayout::setSmallInnerBeamPos(const BeamBase::LayoutData* ldata, 
         if (!cr->isChord()) {
             continue;
         }
+        const Chord* c = toChord(cr);
         beamCount = std::max(beamCount, strokeCount(ldata, cr));
-        noteOutsideStaff |= (cr->downLine() < -2 && !ldata->up) || (cr->upLine() >= 11 && ldata->up);
+        noteOutsideStaff |= (c->downLine() < -2 && !ldata->up) || (c->upLine() >= 11 && ldata->up);
     }
 
     // AND stems have been extended to the second stave line when the notes are far enough outside of the stave

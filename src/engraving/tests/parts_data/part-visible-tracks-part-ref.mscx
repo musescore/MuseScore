@@ -23,6 +23,7 @@
       <lyricsDashMaxLength>0.8</lyricsDashMaxLength>
       <lyricsMelismaPad>0.1</lyricsMelismaPad>
       <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <clefKeyDistance>1</clefKeyDistance>
       <barNoteDistance>1.3</barNoteDistance>
       <accidentalDistance>0.22</accidentalDistance>
@@ -44,6 +45,10 @@
       <measureNumberPosBelow x="0" y="1"/>
       <systemTextLineFontSize>12</systemTextLineFontSize>
       <defaultsVersion>410</defaultsVersion>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

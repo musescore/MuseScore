@@ -24,20 +24,12 @@
 
 #include "iinteractiveuriregister.h"
 
-template<>
-struct std::hash<muse::Uri>
-{
-    std::size_t operator()(const muse::Uri& uri) const noexcept
-    {
-        return std::hash<std::string> {}(uri.toString());
-    }
-};
-
 namespace muse::ui {
 class InteractiveUriRegister : public IInteractiveUriRegister
 {
 public:
     void registerUri(const Uri& uri, const ContainerMeta& meta) override;
+    void unregisterUri(const Uri& uri) override;
     ContainerMeta meta(const Uri& uri) const override;
 
 private:

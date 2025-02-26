@@ -21,6 +21,8 @@
  */
 #include "keysignaturesettingsmodel.h"
 
+#include "dom/layoutbreak.h"
+#include "dom/measure.h"
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -50,17 +52,24 @@ void KeySignatureSettingsModel::loadProperties()
     loadPropertyItem(m_hasToShowCourtesy);
     loadPropertyItem(m_mode);
 
-    bool enabled = true;
+    bool enableMode = true;
+    bool enableCourtesy = true;
 
     for (const mu::engraving::EngravingItem* element : m_elementList) {
         if (element->generated()) {
-            enabled = false;
-            break;
+            enableMode = false;
+        }
+
+        const engraving::Measure* measure = element->findMeasure();
+        const engraving::Measure* prevMeasure = measure ? measure->prevMeasure() : nullptr;
+        const engraving::LayoutBreak* sectionBreak = prevMeasure ? prevMeasure->sectionBreakElement() : nullptr;
+        if (sectionBreak && !sectionBreak->showCourtesy()) {
+            enableCourtesy = false;
         }
     }
 
-    m_hasToShowCourtesy->setIsEnabled(enabled);
-    m_mode->setIsEnabled(enabled);
+    m_hasToShowCourtesy->setIsEnabled(enableCourtesy);
+    m_mode->setIsEnabled(enableMode);
 }
 
 void KeySignatureSettingsModel::resetProperties()

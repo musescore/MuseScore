@@ -25,9 +25,9 @@ ENV_FILE=$BUILD_TOOLS/environment.sh
 mkdir -p $BUILD_TOOLS
 rm -f $ENV_FILE
 
-QT_DIR="/c/Qt/6.2.4"
+QT_DIR="/c/Qt/6.2.11"
 
-echo export PATH="${QT_DIR}/msvc2019_64/bin:\${PATH}" >> ${ENV_FILE}
+echo export PATH="${QT_DIR}/bin:\${PATH}" >> ${ENV_FILE}
 
 chmod +x "$ENV_FILE"
 

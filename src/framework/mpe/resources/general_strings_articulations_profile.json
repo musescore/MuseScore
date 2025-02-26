@@ -2897,7 +2897,7 @@
         "LaissezVibrer": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 19900,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2908,39 +2908,39 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 3000
+                            "offsetValue": 1500
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 4100
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 3300
-                        },
-                        {
-                            "offsetPosition": 5000,
                             "offsetValue": 2500
                         },
                         {
+                            "offsetPosition": 3000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 5000
+                        },
+                        {
                             "offsetPosition": 6000,
-                            "offsetValue": 1900
+                            "offsetValue": 4500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 1400
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 900
+                            "offsetValue": 2500
                         },
                         {
                             "offsetPosition": 9000,
-                            "offsetValue": 500
+                            "offsetValue": 1500
                         },
                         {
                             "offsetPosition": 10000,
@@ -4052,7 +4052,7 @@
         "Mute": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 8000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {

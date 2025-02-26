@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Tours/qmldir</file>
+        <file>qml/Muse/Tours/ToursProvider.qml</file>
+    </qresource>
+</RCC>

@@ -2031,7 +2031,7 @@ void TextBase::layoutFrame(LayoutData* ldata) const
     double _spatium = spatium();
     double w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
     ldata->frame.adjust(-w, -w, w, w);
-    w = frameWidth().val() * _spatium;
+    w = 0.5 * frameWidth().val() * _spatium;
     ldata->setBbox(ldata->frame.adjusted(-w, -w, w, w));
 }
 
@@ -2345,30 +2345,6 @@ RectF TextBase::pageRectangle() const
         return RectF(x, y, w, h);
     }
     return pageBoundingRect();
-}
-
-void TextBase::computeHighResShape(const FontMetrics& fontMetrics)
-{
-    Shape& highResShape = mutldata()->highResShape.mut_value();
-    highResShape.clear();
-    highResShape.elements().reserve(m_text.size());
-
-    for (const TextBlock& block : ldata()->blocks) {
-        double x = 0;
-        for (const TextFragment& fragment : block.fragments()) {
-            x += fragment.pos.x();
-            size_t textSize = fragment.text.size();
-            for (size_t i = 0; i < textSize; ++i) {
-                Char character = fragment.text.at(i);
-                RectF characterBoundingRect = fontMetrics.tightBoundingRect(fragment.text.at(i));
-                characterBoundingRect.translate(x, 0.0);
-                highResShape.add(characterBoundingRect);
-                if (i + 1 < textSize) {
-                    x += fontMetrics.horizontalAdvance(character);
-                }
-            }
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -3282,6 +3258,14 @@ void TextBase::editDrag(EditData& ed)
     }
 }
 
+void TextBase::endDrag(EditData& ed)
+{
+    if (m_cursor->editing()) {
+        return;
+    }
+    EngravingItem::endDrag(ed);
+}
+
 void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
 {
     ElementEditDataPtr eedThis = ed.getData(this);
@@ -3473,7 +3457,7 @@ void TextBase::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
         if (itemBefore->isTextBase() && itemBefore->parent() != newSeg) {
             score()->undoChangeParent(itemBefore, newSeg, itemBefore->staffIdx());
             toTextBase(itemBefore)->moveSnappedItems(newSeg, tickDiff);
-        } else if (itemBefore->isTextLineSegment()) {
+        } else if (itemBefore->isTextLineBaseSegment()) {
             TextLineBase* textLine = ((TextLineBaseSegment*)itemBefore)->textLineBase();
             if (textLine->tick2() != newSeg->tick()) {
                 textLine->undoMoveEnd(tickDiff);
@@ -3829,12 +3813,18 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         return;
     }
 
+    score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
+
+    if (m_cursor->editing()) {
+        // If we're in edit mode, changes will be propagated later when
+        // propagating the Pid::TEXT property, so don't propagate now.
+        return;
+    }
+
     const std::list<EngravingObject*> linkedObjects = linkListForPropertyPropagation();
     for (EngravingObject* linkedObject : linkedObjects) {
         TextBase* linkedText = toTextBase(linkedObject);
         if (linkedText == this) {
-            // can't use standard change property as Undo might set to "undefined"
-            score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
             continue;
         }
 

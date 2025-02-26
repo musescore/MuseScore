@@ -69,6 +69,9 @@ public:
     std::string BulgeToStr(const data_BULGE &data) const;
     data_BULGE StrToBulge(const std::string &value, bool logWarning = true) const;
 
+    std::string DegreesToStr(data_DEGREES data) const;
+    data_DEGREES StrToDegrees(const std::string &value, bool logWarning = true) const;
+
     std::string DurationToStr(data_DURATION data) const;
     data_DURATION StrToDuration(const std::string &value, bool = true) const;
 
@@ -87,7 +90,10 @@ public:
     std::string MeasurementsignedToStr(data_MEASUREMENTSIGNED data) const;
     data_MEASUREMENTSIGNED StrToMeasurementsigned(const std::string &value, bool logWarning = true) const;
 
-    std::string MeasurementunsignedToStr(data_MEASUREMENTUNSIGNED data) const { return MeasurementsignedToStr(data); }
+    std::string MeasurementunsignedToStr(data_MEASUREMENTUNSIGNED data) const
+    {
+        return MeasurementsignedToStr(data);
+    }
     data_MEASUREMENTUNSIGNED StrToMeasurementunsigned(const std::string &value, bool logWarning = true) const
     {
         return StrToMeasurementsigned(value, logWarning);
@@ -129,10 +135,10 @@ public:
     std::string PercentToStr(data_PERCENT data) const;
     data_PERCENT StrToPercent(const std::string &value, bool logWarning = true) const;
 
-    std::string PercentLimitedToStr(data_PERCENT_LIMITED_SIGNED data) const;
+    std::string PercentLimitedToStr(data_PERCENT_LIMITED_SIGNED data) const { return PercentToStr(data); }
     data_PERCENT_LIMITED StrToPercentLimited(const std::string &value, bool logWarning = true) const;
 
-    std::string PercentLimitedSignedToStr(data_PERCENT_LIMITED data) const;
+    std::string PercentLimitedSignedToStr(data_PERCENT_LIMITED data) const { return PercentToStr(data); }
     data_PERCENT_LIMITED_SIGNED StrToPercentLimitedSigned(const std::string &value, bool logWarning = true) const;
 
     std::string PitchnameToStr(data_PITCHNAME data) const;

@@ -114,6 +114,11 @@ QWindow* NavigationPanel::window() const
     return AbstractNavigation::window();
 }
 
+QQuickItem* muse::ui::NavigationPanel::visualItem() const
+{
+    return AbstractNavigation::visualItem();
+}
+
 void NavigationPanel::setDirection(QmlDirection direction)
 {
     if (m_direction == direction) {

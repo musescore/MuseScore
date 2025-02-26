@@ -101,6 +101,9 @@ public:
     double yRelativeToStaff() const;
     void setYRelativeToStaff(double y);
 
+    bool avoidBarlines() const { return m_avoidBarlines; }
+    void setAvoidBarlines(bool v) { m_avoidBarlines = v; }
+
 protected:
     int m_no = 0;  // row index
 
@@ -116,6 +119,7 @@ private:
     LyricsSyllabic m_syllabic = LyricsSyllabic::SINGLE;
     LyricsLine* m_separator = nullptr;
     bool m_needRemoveInvalidSegments = false;
+    bool m_avoidBarlines = true;
 };
 
 //---------------------------------------------------------

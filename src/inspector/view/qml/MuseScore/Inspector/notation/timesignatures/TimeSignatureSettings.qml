@@ -132,7 +132,7 @@ Column {
     }
 
     PropertyCheckBox {
-        text: qsTrc("inspector", "Show courtesy time signature on previous system")
+        text: qsTrc("inspector", "Show courtesy time signature")
         propertyItem: root.model ? root.model.shouldShowCourtesy : null
 
         navigation.name: "ShowCourtesyCheckBox"
@@ -154,5 +154,7 @@ Column {
                 root.model.showTimeSignatureProperties()
             }
         }
+
+        enabled: root.model ? !root.model.isGenerated : false
     }
 }

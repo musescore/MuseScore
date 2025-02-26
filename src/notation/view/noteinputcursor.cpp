@@ -24,32 +24,40 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
+NoteInputCursor::NoteInputCursor(bool isThinLine)
+    : m_isThinLine(isThinLine)
+{
+}
+
 void NoteInputCursor::paint(muse::draw::Painter* painter)
 {
     INotationNoteInputPtr noteInput = currentNoteInput();
-    if (!noteInput || !noteInput->isNoteInputMode()) {
+    if (!noteInput) {
         return;
     }
 
-    NoteInputState state = noteInput->state();
+    const NoteInputState& state = noteInput->state();
+    Color fillColor = configuration()->selectionColor(state.voice());
     RectF cursorRect = noteInput->cursorRect();
 
-    Color fillColor = configuration()->selectionColor(state.currentVoiceIndex);
-    Color cursorRectColor = fillColor;
-    cursorRectColor.setAlpha(configuration()->cursorOpacity());
-    painter->fillRect(cursorRect, cursorRectColor);
+    if (!m_isThinLine) {
+        Color cursorRectColor = fillColor;
+        cursorRectColor.setAlpha(configuration()->cursorOpacity());
+        painter->fillRect(cursorRect, cursorRectColor);
+    }
 
     constexpr int leftLineWidth = 3;
     RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
     Color lineColor = fillColor;
     painter->fillRect(leftLine, lineColor);
 
-    if (state.staffGroup == StaffGroup::TAB) {
-        const StaffType* staffType = state.staff ? state.staff->staffType() : nullptr;
+    if (state.staffGroup() == StaffGroup::TAB) {
+        const Staff* staff = state.staff();
+        const StaffType* staffType = staff ? staff->staffType() : nullptr;
 
         if (staffType) {
-            staffType->drawInputStringMarks(painter, state.currentString,
-                                            configuration()->selectionColor(state.currentVoiceIndex), cursorRect);
+            staffType->drawInputStringMarks(painter, state.string(),
+                                            configuration()->selectionColor(state.voice()), cursorRect);
         }
     }
 }

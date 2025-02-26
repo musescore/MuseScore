@@ -56,12 +56,10 @@ public:
 
     Q_INVOKABLE void init();
 
-    Q_INVOKABLE void addEmptyRow();
+    Q_INVOKABLE void addEmptyRow(bool focusFirstInNewRow = false);
     Q_INVOKABLE void deleteRow(int row);
 
     void removeEmptyRows();
-
-    Q_INVOKABLE bool rowIsEmpty(int row) const;
 
     Q_INVOKABLE void startPadSwap(int startIndex);
     Q_INVOKABLE void endPadSwap(int endIndex);
@@ -77,7 +75,7 @@ public:
 
     QList<PercussionPanelPadModel*> padList() const { return m_padModels; }
 
-    mu::engraving::Drumset constructDefaultLayout(const engraving::Drumset* templateDrumset) const;
+    mu::engraving::Drumset constructDefaultLayout(const engraving::Drumset& templateDrumset) const;
     int nextAvailableIndex(int pitch) const; //! NOTE: This may be equal to m_padModels.size()
     int nextAvailablePitch(int pitch) const;
 
@@ -89,7 +87,6 @@ public:
 
 signals:
     void numPadsChanged();
-    void rowIsEmptyChanged(int row, bool empty);
     void padFocusRequested(int padIndex); //! NOTE: This won't work if it is called immediately before a layoutChange
 
 private:

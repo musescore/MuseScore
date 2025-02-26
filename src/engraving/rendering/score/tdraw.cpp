@@ -98,6 +98,7 @@
 #include "dom/ottava.h"
 
 #include "dom/page.h"
+#include "dom/parenthesis.h"
 #include "dom/partialtie.h"
 #include "dom/palmmute.h"
 #include "dom/part.h"
@@ -306,6 +307,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::PAGE:                 draw(item_cast<const Page*>(item), painter);
+        break;
+    case ElementType::PARENTHESIS:          draw(item_cast<const Parenthesis*>(item), painter);
         break;
     case ElementType::PARTIAL_TIE_SEGMENT:  draw(item_cast<const PartialTieSegment*>(item), painter);
         break;
@@ -680,6 +683,9 @@ void TDraw::draw(const BarLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
+    painter->save();
+    setMask(item, painter);
+
     const BarLine::LayoutData* data = item->ldata();
     IF_ASSERT_FAILED(data) {
         return;
@@ -838,7 +844,7 @@ void TDraw::draw(const BarLine* item, Painter* painter)
     if (s && s->isEndBarLineType() && !item->score()->printing()) {
         Measure* m = s->measure();
         if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
-            painter->setPen(item->configuration()->formattingColor());
+            painter->setPen(item->configuration()->invisibleColor());
 
             Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / SPATIUM20);
@@ -853,6 +859,8 @@ void TDraw::draw(const BarLine* item, Painter* painter)
             painter->drawText(-r.width(), 0.0, ch);
         }
     }
+
+    painter->restore();
 }
 
 void TDraw::draw(const Beam* item, Painter* painter)
@@ -997,15 +1005,15 @@ void TDraw::draw(const Box* item, Painter* painter)
     const bool showFrame = showHighlightedFrame || (item->score() ? item->score()->showFrames() : false);
 
     if (showFrame) {
-        double lineWidth = item->spatium() * .15;
+        double lineWidth = SPATIUM20 * .10;
         Pen pen;
         pen.setWidthF(lineWidth);
-        pen.setJoinStyle(PenJoinStyle::MiterJoin);
-        pen.setCapStyle(PenCapStyle::SquareCap);
+        pen.setJoinStyle(PenJoinStyle::RoundJoin);
+        pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setColor(showHighlightedFrame
                      ? item->configuration()->selectionColor()
                      : item->configuration()->frameColor());
-        pen.setDashPattern({ 1, 3 });
+        pen.setDashPattern({ 5, 5 });
 
         painter->setBrush(BrushStyle::NoBrush);
         painter->setPen(pen);
@@ -1186,7 +1194,7 @@ void TDraw::draw(const FiguredBass* item, Painter* painter)
     if (!item->score()->printing() && item->score()->showUnprintable()) {
         for (double len : ldata->lineLengths) {
             if (len > 0) {
-                painter->setPen(Pen(item->configuration()->frameColor(), 3));
+                painter->setPen(Pen(item->configuration()->invisibleColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }
@@ -2219,7 +2227,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
             double halfHBarThickness = hBarThickness * .5;
-            if (item->numberVisible() // avoid painting line through number
+            if (item->shouldShowNumber() // avoid painting line through number
                 && item->style().styleB(Sid::mmRestNumberMaskHBar)
                 && numberBox.bottom() >= -halfHBarThickness
                 && numberBox.top() <= halfHBarThickness) {
@@ -2274,33 +2282,15 @@ void TDraw::draw(const Note* item, Painter* painter)
         }
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
-        // draw background, if required (to hide a segment of string line or to show a fretting conflict)
-        if (!tab->linesThrough() || item->fretConflict()) {
-            double d  = item->style().styleS(Sid::tabFretPadding).val() * item->spatium();
-            RectF bb = RectF(ldata->bbox().x() - d,
-                             tab->fretMaskY() * item->magS(),
-                             ldata->bbox().width() + 2 * d,
-                             tab->fretMaskH() * item->magS()
-                             );
 
-            // we do not know which viewer did this draw() call
-            // so update all:
-            if (!item->score()->getViewer().empty()) {
-                for (MuseScoreView* view : item->score()->getViewer()) {
-                    view->drawBackground(painter, bb);
-                }
-            } else {
-                painter->fillRect(bb, config->noteBackgroundColor());
-            }
-
-            if (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable()) {                //on fret conflict, draw on red background
-                painter->save();
-                painter->setPen(config->criticalColor());
-                painter->setBrush(config->criticalColor());
-                painter->drawRect(bb);
-                painter->restore();
-            }
+        if (item->fretConflict() && item->score()->printing() && item->score()->showUnprintable()) {                    //on fret conflict, draw on red background
+            painter->save();
+            painter->setPen(config->criticalColor());
+            painter->setBrush(config->criticalColor());
+            painter->drawRect(ldata->bbox());
+            painter->restore();
         }
+
         Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(f);
@@ -2449,6 +2439,24 @@ void TDraw::draw(const Page* item, Painter* painter)
     }
 }
 
+void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>());
+
+    Pen pen(penColor);
+    double mag = item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
+
+    painter->setBrush(Brush(pen.color()));
+    pen.setCapStyle(PenCapStyle::RoundCap);
+    pen.setJoinStyle(PenJoinStyle::RoundJoin);
+    pen.setWidthF(Parenthesis::PARENTHESIS_END_WIDTH * item->spatium() * mag);
+
+    painter->setPen(pen);
+    painter->drawPath(item->ldata()->path());
+}
+
 void TDraw::draw(const PartialTieSegment* item, muse::draw::Painter* painter)
 {
     draw(static_cast<const TieSegment*>(item), painter);
@@ -2515,13 +2523,13 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
     PointF ap(item->pagePos());
     painter->translate(ap);
     double lw = item->style().styleMM(Sid::stemWidth) * item->mag();
-    Pen pen(item->configuration()->highlightSelectionColor(item->voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    Pen pen(item->color(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     bool up = item->computeUp();
 
     // Draw the accidental
-    SymId acc = Accidental::subtype2symbol(item->score()->inputState().accidentalType());
+    SymId acc = Accidental::subtype2symbol(item->accidentalType());
     if (acc != SymId::noSym) {
         PointF posAcc;
         posAcc.rx() -= item->symWidth(acc) + item->style().styleMM(Sid::accidentalNoteDistance) * item->mag();
@@ -2663,8 +2671,14 @@ void TDraw::draw(const Spacer* item, Painter* painter)
 void TDraw::draw(const StaffLines* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    painter->save();
+
+    setMask(item, painter);
+
     painter->setPen(Pen(item->curColor(), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLines(item->lines());
+
+    painter->restore();
 }
 
 void TDraw::draw(const StaffState* item, Painter* painter)
@@ -3106,6 +3120,9 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     if (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genTimesig()) {
         return;
     }
+    if (!item->showOnThisStaff()) {
+        return;
+    }
     painter->setPen(item->curColor());
 
     const TimeSig::LayoutData* ldata = item->ldata();
@@ -3267,6 +3284,20 @@ void TDraw::draw(const WhammyBarSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::setMask(const EngravingItem* item, Painter* painter)
+{
+    const EngravingItem::LayoutData* ldata = item->ldata();
+
+    const Shape& mask = ldata->mask();
+    if (mask.empty()) {
+        return;
+    }
+
+    RectF background = ldata->bbox().padded(item->spatium());
+
+    painter->setMask(background, mask.toRects());
 }
 
 // dev

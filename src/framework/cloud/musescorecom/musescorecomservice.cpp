@@ -51,7 +51,7 @@ static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_RO
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
-static const QString MUSESCORE_TEXT_LOGO("https://musescore.org/themes/musescore_theme/logo.svg");
+static const QString MUSESCORE_TEXT_LOGO("https://musescore.com/static/public/musescore/img/logo/musescore-logo.svg");
 
 static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
@@ -75,7 +75,7 @@ CloudInfo MuseScoreComService::cloudInfo() const
         MUSESCORECOM_CLOUD_TITLE,
         MUSESCORECOM_CLOUD_URL,
         MUSESCORE_TEXT_LOGO,
-        logoColorForTheme(uiConfig()->currentTheme())
+        logoColor()
     };
 }
 
@@ -309,19 +309,19 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     async::Async::call(this, [this, manager, scoreId, &scoreData, hash, secret, progress]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
         result.ret = executeRequest([this, manager, scoreId, &scoreData, hash, secret]() {
             return doDownloadScore(manager, scoreId, scoreData, hash, secret);
         });
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;
@@ -363,8 +363,8 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
@@ -377,13 +377,13 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
     };
 
     async::Async::call(this, [this, progress, uploadCallback, scoreUrlMap]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
         result.ret = executeRequest(uploadCallback);
         result.val = Val(*scoreUrlMap);
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;
@@ -394,8 +394,8 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     auto uploadCallback = [this, manager, &audioData, audioFormat, sourceUrl]() {
@@ -403,9 +403,9 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     };
 
     async::Async::call(this, [this, progress, uploadCallback]() {
-        progress->started.notify();
+        progress->start();
         Ret ret = executeRequest(uploadCallback);
-        progress->finished.send(ret);
+        progress->finish(ret);
     });
 
     return progress;
@@ -558,14 +558,4 @@ Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadManager
     }
 
     return ret;
-}
-
-QString MuseScoreComService::logoColorForTheme(const ui::ThemeInfo& theme) const
-{
-    if (theme.codeKey == ui::LIGHT_THEME_CODE) {
-        return "#0065C3";
-    } else if (theme.codeKey == ui::DARK_THEME_CODE) {
-        return "#8EC9FF";
-    }
-    return AbstractCloudService::logoColorForTheme(theme);
 }

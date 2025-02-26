@@ -25,19 +25,21 @@
 #include <memory>
 
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
 #include "audio/ifxprocessor.h"
 #include "audio/iaudioconfiguration.h"
 
-#include "internal/vstaudioclient.h"
-#include "internal/vstplugin.h"
+#include "../vstaudioclient.h"
+#include "../../ivstplugininstance.h"
 #include "vsttypes.h"
 
 namespace muse::vst {
 class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
-    INJECT(muse::audio::IAudioConfiguration, config)
+    muse::Inject<muse::audio::IAudioConfiguration> config;
 public:
-    explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const muse::audio::AudioFxParams& params);
+    explicit VstFxProcessor(IVstPluginInstancePtr&& instance, const muse::audio::AudioFxParams& params);
 
     void init();
 
@@ -52,7 +54,7 @@ public:
 private:
     bool m_inited = false;
 
-    VstPluginPtr m_pluginPtr = nullptr;
+    IVstPluginInstancePtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     muse::audio::AudioFxParams m_params;

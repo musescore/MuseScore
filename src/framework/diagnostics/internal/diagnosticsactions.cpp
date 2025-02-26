@@ -75,6 +75,21 @@ const UiActionList DiagnosticsActions::m_actions = {
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show &actions list")
+             ),
+    UiAction("action://diagnostic/actions/query",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Test query action")
+             ),
+    UiAction("action://diagnostic/actions/query_params1",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Test query action with params 1")
+             ),
+    UiAction("action://diagnostic/actions/query_params2",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Test query action with params 2")
              )
 };
 

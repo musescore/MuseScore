@@ -554,7 +554,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     staff(staffIdx)->addTimeSig(ts);
                 }
             }
-        } else if (segment.isChordRestType()) {
+        } else if (segment.isChordRestType() || segment.isTimeTickType()) {
             if (!isMaster()) {
                 continue;
             }
@@ -2018,15 +2018,6 @@ int Score::utime2utick(double utime) const
 }
 
 //---------------------------------------------------------
-//   inputPos
-//---------------------------------------------------------
-
-Fraction Score::inputPos() const
-{
-    return m_is.tick();
-}
-
-//---------------------------------------------------------
 //   scanElementsInRange
 //---------------------------------------------------------
 
@@ -2894,47 +2885,20 @@ void Score::cmdRemoveStaff(staff_idx_t staffIdx)
     undoRemoveStaff(s);
 }
 
-//---------------------------------------------------------
-//   sortSystemStaves
-//---------------------------------------------------------
-
 void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
 {
     std::vector<staff_idx_t> moveTo;
-    for (Staff* staff : m_systemObjectStaves) {
-        moveTo.push_back(staff->idx());
-    }
-    // rebuild system object staves
-    for (size_t i = 0; i < m_staves.size(); i++) {
-        staff_idx_t newLocation = muse::indexOf(dst, i);
-        if (newLocation == muse::nidx) { //!dst.contains(_staves[i]->idx())) {
-            // this staff was removed
-            for (size_t j = 0; j < m_systemObjectStaves.size(); j++) {
-                if (m_staves[i]->idx() == moveTo[j]) {
-                    // the removed staff was a system object staff
-                    if (i == m_staves.size() - 1 || muse::contains(moveTo, m_staves[i + 1]->idx())) {
-                        // this staff is at the end of the score, or is right before a new system object staff
-                        moveTo[j] = muse::nidx;
-                    } else {
-                        moveTo[j] = i + 1;
-                    }
-                }
-            }
-        } else if (newLocation != m_staves[i]->idx() && muse::contains(m_systemObjectStaves, m_staves[i])) {
-            // system object staff was moved somewhere, put the system objects at the top of its new group
-            staff_idx_t topOfGroup = newLocation;
-            String family = m_staves[dst[newLocation]]->part()->familyId();
-            while (topOfGroup > 0) {
-                if (m_staves[dst[topOfGroup - 1]]->part()->familyId() != family) {
-                    // the staff above is of a different instrument family, current topOfGroup is destination
-                    break;
-                } else {
-                    topOfGroup--;
-                }
-            }
-            moveTo[muse::indexOf(m_systemObjectStaves, m_staves[i])] = dst[topOfGroup];
+    for (const Staff* staff : m_systemObjectStaves) {
+        staff_idx_t oldStaffIdx = staff->idx();
+        staff_idx_t newStaffIfx = oldStaffIdx < dst.size() ? dst[oldStaffIdx] : muse::nidx;
+
+        if (muse::contains(moveTo, newStaffIfx)) {
+            newStaffIfx = muse::nidx;
         }
+
+        moveTo.push_back(newStaffIfx);
     }
+
     for (staff_idx_t i = 0; i < m_systemObjectStaves.size(); i++) {
         if (moveTo[i] == m_systemObjectStaves[i]->idx()) {
             // this sysobj staff doesn't move
@@ -2945,6 +2909,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                 if (!mb->isMeasure()) {
                     continue;
                 }
+
                 Measure* m = toMeasure(mb);
                 for (EngravingItem* e : m->el()) {
                     if ((e->isJump() || e->isMarker()) && e->isLinked() && e->track() == staff2track(m_systemObjectStaves[i]->idx())) {
@@ -2958,6 +2923,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                         }
                     }
                 }
+
                 for (Segment* s = m->first(); s; s = s->next()) {
                     if (s->isChordRest() || !s->annotations().empty()) {
                         const auto annotations = s->annotations(); // make a copy since we alter the list
@@ -2981,6 +2947,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                     }
                 }
             }
+
             // update systemObjectStaves with the correct staff
             if (moveTo[i] == muse::nidx) {
                 m_systemObjectStaves.erase(m_systemObjectStaves.begin() + i);
@@ -3101,11 +3068,7 @@ void Score::cmdConcertPitchChanged(bool flag)
     }
 }
 
-//---------------------------------------------------------
-//   padToggle
-//---------------------------------------------------------
-
-void Score::padToggle(Pad p, const EditData& ed)
+void Score::padToggle(Pad p, bool toggleForSelectionOnly)
 {
     if (!noteEntryMode()) {
         for (ChordRest* cr : getSelectedChordRests()) {
@@ -3115,7 +3078,10 @@ void Score::padToggle(Pad p, const EditData& ed)
         }
     }
 
-    int oldDots = m_is.duration().dots();
+    const TDuration oldDuration = m_is.duration();
+    const bool oldRest = m_is.rest();
+    const AccidentalType oldAccidentalType = m_is.accidentalType();
+
     switch (p) {
     case Pad::NOTE00:
         m_is.setDuration(DurationType::V_LONG);
@@ -3161,7 +3127,6 @@ void Score::padToggle(Pad p, const EditData& ed)
             m_is.setRest(!m_is.rest());
             m_is.setAccidentalType(AccidentalType::NONE);
         } else if (selection().isNone()) {
-            ed.view()->startNoteEntryMode();
             m_is.setDuration(DurationType::V_QUARTER);
             m_is.setRest(true);
         } else {
@@ -3217,65 +3182,61 @@ void Score::padToggle(Pad p, const EditData& ed)
         // if in "note enter" mode, reset
         // rest flag
         //
-        if (noteEntryMode()) {
-            if (usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
-                switch (oldDots) {
+        if (noteEntryMode() && !toggleForSelectionOnly) {
+            if (usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+                switch (oldDuration.dots()) {
                 case 1:
-                    padToggle(Pad::DOT, ed);
+                    padToggle(Pad::DOT);
                     break;
                 case 2:
-                    padToggle(Pad::DOT2, ed);
+                    padToggle(Pad::DOT2);
                     break;
                 case 3:
-                    padToggle(Pad::DOT3, ed);
+                    padToggle(Pad::DOT3);
                     break;
                 case 4:
-                    padToggle(Pad::DOT4, ed);
+                    padToggle(Pad::DOT4);
                     break;
                 }
 
-                NoteVal nval;
-                DirectionV stemDirection = DirectionV::AUTO;
                 if (m_is.rest()) {
                     // Enter a rest
-                    nval = NoteVal();
+                    setNoteRest(m_is.segment(), m_is.track(), NoteVal(), m_is.duration().fraction());
+                    m_is.moveToNextInputPos();
                 } else {
-                    EngravingItem* e = selection().element();
-                    if (e && e->isNote()) {
-                        // use same pitch etc. as previous note
-                        Note* n = toNote(e);
-                        nval = n->noteVal();
-                        stemDirection = n->chord()->stemDirection();
-                    } else {
-                        // enter a reasonable default note
-                        Staff* s = staff(m_is.track() / VOICES);
-                        Fraction tick = m_is.tick();
-                        if (s->isTabStaff(tick)) {
-                            // tab - use fret 0 on current string
-                            nval.fret = 0;
-                            nval.string = m_is.string();
-                            const StringData* stringData = s->part()->stringData(tick, s->idx());
-                            nval.pitch = stringData->getPitch(nval.string, nval.fret, s);
-                        } else if (s->isDrumStaff(tick)) {
-                            // drum - use selected drum palette note
-                            int n = m_is.drumNote();
-                            if (n == -1) {
-                                // no selection on palette - find next valid pitch
-                                const Drumset* ds = m_is.drumset();
-                                n = ds->nextPitch(n);
-                            }
-                            nval = NoteVal(n);
+                    if (usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+                        const EngravingItem* selectedItem = score()->selection().element();
+                        if (selectedItem && selectedItem->isNote()) {
+                            m_is.setNotes({ toNote(selectedItem)->noteVal() });
+                        }
+                    }
+
+                    ChordRest* cr = m_is.cr();
+                    Chord* chord = nullptr;
+
+                    if (cr && cr->isChord() && cr->durationType() == m_is.duration()) {
+                        chord = toChord(cr);
+                    }
+
+                    for (const NoteVal& nval : m_is.notes()) {
+                        if (chordContainsNoteVal(chord, nval)) {
+                            continue;
+                        }
+
+                        NoteVal copy(nval);
+                        const Note* note = nullptr;
+
+                        if (chord) {
+                            note = addPitchToChord(copy, chord);
                         } else {
-                            // standard staff - use middle line
-                            ClefType clef = s->clef(tick);
-                            Key key = s->key(tick);
-                            int line = ((s->lines(tick) - 1) / 2) * 2;
-                            nval = NoteVal(line2pitch(line, clef, key));
+                            note = addPitch(copy, false /*addFlag*/);
+                        }
+
+                        if (note) {
+                            chord = note->chord();
                         }
                     }
                 }
-                setNoteRest(m_is.segment(), m_is.track(), nval, m_is.duration().fraction(), stemDirection, false, m_is.articulationIds());
-                m_is.moveToNextInputPos();
             } else {
                 m_is.setRest(false);
             }
@@ -3283,7 +3244,9 @@ void Score::padToggle(Pad p, const EditData& ed)
     }
 
     if (noteEntryMode()) {
-        return;
+        if (!toggleForSelectionOnly || selection().isNone()) {
+            return;
+        }
     }
 
     std::vector<ChordRest*> crs;
@@ -3312,12 +3275,10 @@ void Score::padToggle(Pad p, const EditData& ed)
         if (cr) {
             crs.push_back(cr);
         } else {
-            ed.view()->startNoteEntryMode();
             deselect(e);
         }
     } else if (selection().isNone() && p != Pad::REST) {
         TDuration td = m_is.duration();
-        ed.view()->startNoteEntryMode();
         m_is.setDuration(td);
         m_is.setAccidentalType(AccidentalType::NONE);
     } else {
@@ -3376,6 +3337,15 @@ void Score::padToggle(Pad p, const EditData& ed)
         }
         select(selectList, SelectType::ADD, 0);
         selection().updateSelectedElements();
+    }
+
+    if (toggleForSelectionOnly) {
+        m_is.setDuration(oldDuration);
+        m_is.setRest(oldRest);
+        m_is.setAccidentalType(oldAccidentalType);
+        if (noteEntryMode()) {
+            m_is.moveToNextInputPos();
+        }
     }
 }
 
@@ -3575,154 +3545,254 @@ void Score::selectAdd(EngravingItem* e)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
+static Segment* findElementStartSegment(Score* score, EngravingItem* e)
+{
+    if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
+        if (ancestor->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+            return ancestor;
+        }
+    }
+
+    return score->tick2segmentMM(e->tick(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+}
+
+/// Returns `nullptr` when the end segment is the end of the score;
+/// returns `def` if no end segment is found.
+static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* def)
+{
+    ChordRest* cr = nullptr;
+
+    if (e->isNote()) {
+        cr = toChordRest(e->parentItem());
+    } else if (e->isChordRest()) {
+        cr = toChordRest(e);
+    } else if (EngravingItem* c = e->findAncestor(ElementType::CHORD)) {
+        cr = toChordRest(c);
+    } else if (EngravingItem* r = e->findAncestor(ElementType::REST)) {
+        cr = toChordRest(r);
+    }
+
+    if (cr) {
+        return cr->nextSegmentAfterCR(SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef);
+    }
+
+    if (e->isSpanner() || e->isSpannerSegment()) {
+        Spanner* sp = e->isSpanner() ? toSpanner(e) : toSpannerSegment(e)->spanner();
+        return score->tick2segmentMM(sp->tick2(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+    }
+
+    if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
+        if (ancestor->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+            // https://github.com/musescore/MuseScore/pull/25821#issuecomment-2617369881
+            if (Segment* next = ancestor->nextCR(e->track(), true)) {
+                return next;
+            }
+        }
+    }
+
+    if (Segment* seg = score->tick2segmentMM(e->tick(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        return seg;
+    }
+
+    return def;
+}
+
 void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
 {
-    track_idx_t activeTrack = e->track();
-    // current selection is range extending to end of score?
-    bool endRangeSelected = selection().isRange() && selection().endSegment() == nullptr;
-    if (e->isMeasure()) {
-        Measure* m  = toMeasure(e);
-        Fraction tick    = m->tick();
-        Fraction etick   = tick + m->ticks();
-        activeTrack = staffIdx * VOICES;
-        Segment* s1 = m->tick2segment(tick);
-        if (!s1) {                        // m is corrupted!
-            s1 = m->first(SegmentType::ChordRest);
-        }
-        Segment* s2 = m == lastMeasure() ? 0 : m->last();
-        if (m_selection.isNone() || (m_selection.isList() && !m_selection.isSingle())) {
-            if (m_selection.isList()) {
-                deselectAll();
-            }
-            m_selection.setRange(s1, s2, staffIdx, staffIdx + 1);
-        } else if (m_selection.isRange()) {
-            m_selection.extendRangeSelection(s1, s2, staffIdx, tick, etick);
-        } else if (m_selection.isSingle()) {
-            EngravingItem* oe = selection().element();
-            if (oe->isNote() || oe->isChordRest()) {
-                if (oe->isNote()) {
-                    oe = oe->parentItem();
-                }
-                ChordRest* cr = toChordRest(oe);
-                Fraction oetick = cr->segment()->tick();
-                Segment* startSegment = cr->segment();
-                Segment* endSegment = m->last();
-                if (tick < oetick) {
-                    startSegment = m->tick2segment(tick);
-                    if (etick <= oetick) {
-                        SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
-                        endSegment = cr->nextSegmentAfterCR(st);
-                    }
-                }
-                staff_idx_t staffStart = staffIdx;
-                staff_idx_t endStaff = staffIdx + 1;
-                if (staffStart > cr->staffIdx()) {
-                    staffStart = cr->staffIdx();
-                } else if (cr->staffIdx() >= endStaff) {
-                    endStaff = cr->staffIdx() + 1;
-                }
-                m_selection.setRange(startSegment, endSegment, staffStart, endStaff);
-            } else {
-                deselectAll();
-                m_selection.setRange(s1, s2, staffIdx, staffIdx + 1);
-            }
-        } else {
-            LOGD("SELECT_RANGE: measure: sel state %d", int(m_selection.state()));
-            return;
-        }
-    } else if (e->isNote() || e->isChordRest()) {
-        if (e->isNote()) {
-            e = e->parentItem();
-        }
-        ChordRest* cr = toChordRest(e);
-
-        if (m_selection.isNone() || (m_selection.isList() && !m_selection.isSingle())) {
-            if (m_selection.isList()) {
-                deselectAll();
-            }
-            SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
-            m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), e->staffIdx(), e->staffIdx() + 1);
-            activeTrack = cr->track();
-        } else if (m_selection.isSingle()) {
-            EngravingItem* oe = m_selection.element();
-            if (oe && (oe->isNote() || oe->isRest() || oe->isMMRest())) {
-                if (oe->isNote()) {
-                    oe = oe->parentItem();
-                }
-                ChordRest* ocr = toChordRest(oe);
-
-                Segment* endSeg = tick2segmentMM(ocr->segment()->tick() + ocr->actualTicks(), true);
-                if (!endSeg) {
-                    endSeg = ocr->segment()->next();
-                }
-
-                m_selection.setRange(ocr->segment(), endSeg, oe->staffIdx(), oe->staffIdx() + 1);
-                m_selection.extendRangeSelection(cr);
-            } else {
-                doSelect(e, SelectType::SINGLE, 0);
+    if (m_selection.isSingle()) {
+        if (!e->isMeasureBase()
+            && !e->isNote()
+            && !e->isChordRest()) {
+            // Try to select similar in range
+            bool success = trySelectSimilarInRange(e);
+            if (success) {
                 return;
             }
-        } else if (m_selection.isRange()) {
-            m_selection.extendRangeSelection(cr);
-        } else {
-            LOGD("sel state %d", int(m_selection.state()));
+        }
+
+        // Try to extend single selection into range selection
+        bool success = tryExtendSingleSelectionToRange(e, staffIdx);
+        if (success) {
             return;
         }
-        if (!endRangeSelected && !m_selection.endSegment()) {
-            m_selection.setEndSegment(cr->segment()->nextCR());
-        }
-        if (!m_selection.startSegment()) {
-            m_selection.setStartSegment(cr->segment());
-        }
-    } else {
-        // try to select similar in range
-        EngravingItem* selectedElement = m_selection.element();
-        if (selectedElement && e->type() == selectedElement->type()) {
-            staff_idx_t idx1 = selectedElement->staffIdx();
-            staff_idx_t idx2 = e->staffIdx();
-            if (idx2 < idx1) {
-                staff_idx_t temp = idx1;
-                idx1 = idx2;
-                idx2 = temp;
+    }
+
+    if (e->isMeasure()) {
+        Measure* m = toMeasure(e);
+        Segment* startSegment = m->first(SegmentType::ChordRest);
+        Segment* endSegment = m == lastMeasure() ? nullptr : m->last();
+        Fraction tick = m->tick();
+        Fraction etick = tick + m->ticks();
+
+        if (m_selection.isRange()) {
+            // Extend existing range selection
+            m_selection.extendRangeSelection(startSegment, endSegment, staffIdx, tick, etick);
+        } else {
+            // Create new range selection
+            if (!m_selection.isNone()) {
+                deselectAll();
             }
-
-            if (idx1 != muse::nidx && idx2 != muse::nidx) {
-                Fraction t1 = selectedElement->tick();
-                Fraction t2 = e->tick();
-                if (t1 > t2) {
-                    Fraction temp = t1;
-                    t1 = t2;
-                    t2 = temp;
-                }
-                Segment* s1 = tick2segmentMM(t1, true, SegmentType::ChordRest);
-                Segment* s2 = tick2segmentMM(t2, true, SegmentType::ChordRest);
-                if (s2) {
-                    s2 = s2->next1MM(SegmentType::ChordRest);
-                }
-
-                if (s1) {
-                    m_selection.setRange(s1, s2, idx1, idx2 + 1);
-                    selectSimilarInRange(e);
-                    if (selectedElement->track() == e->track()) {
-                        // limit to this voice only
-                        const std::vector<EngravingItem*>& list = m_selection.elements();
-                        for (EngravingItem* el : list) {
-                            if (el->track() != e->track()) {
-                                m_selection.remove(el);
-                            }
-                        }
-                    }
-
-                    return;
-                }
-            }
+            m_selection.setRange(startSegment, endSegment, staffIdx, staffIdx + 1);
         }
-        doSelect(e, SelectType::SINGLE, staffIdx);
+
+        m_selection.updateSelectedElements();
+        m_selection.setActiveTrack(staffIdx * VOICES);
         return;
     }
 
-    m_selection.setActiveTrack(activeTrack);
+    if (m_selection.isRange()) {
+        // Extend existing range selection
+
+        Segment* startSegment = findElementStartSegment(this, e);
+        if (startSegment) {
+            Segment* endSegment = findElementEndSegment(this, e, m_selection.endSegment());
+            staff_idx_t elementStaffIdx = e->staffIdx();
+            Fraction tick = startSegment->tick();
+            Fraction etick = endSegment->tick();
+
+            if (endSegment && elementStaffIdx != muse::nidx) {
+                m_selection.extendRangeSelection(startSegment, endSegment, elementStaffIdx, tick, etick);
+                m_selection.updateSelectedElements();
+
+                m_selection.setActiveTrack(e->track());
+                return;
+            }
+        }
+    }
+
+    if (e->isNote() || e->isChordRest()) {
+        // Create new range selection
+        if (!m_selection.isNone()) {
+            deselectAll();
+        }
+
+        ChordRest* cr = e->isNote() ? toChordRest(e->parentItem()) : toChordRest(e);
+
+        SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
+        m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
+        m_selection.updateSelectedElements();
+
+        m_selection.setActiveTrack(cr->track());
+        return;
+    }
+
+    // Nothing worked; just select the new element
+    doSelect(e, SelectType::SINGLE, staffIdx);
+}
+
+bool Score::trySelectSimilarInRange(EngravingItem* e)
+{
+    EngravingItem* selectedElement = m_selection.element();
+    if (!selectedElement || e->type() != selectedElement->type()) {
+        return false;
+    }
+
+    staff_idx_t idx1 = selectedElement->staffIdx();
+    staff_idx_t idx2 = e->staffIdx();
+
+    if (idx1 == muse::nidx || idx2 == muse::nidx) {
+        return false;
+    }
+
+    if (idx2 < idx1) {
+        std::swap(idx1, idx2);
+    }
+
+    Fraction t1 = selectedElement->tick();
+    Fraction t2 = e->tick();
+    if (t1 > t2) {
+        std::swap(t1, t2);
+    }
+
+    Segment* s1 = tick2segmentMM(t1, true, SegmentType::ChordRest);
+    Segment* s2 = tick2segmentMM(t2, true, SegmentType::ChordRest);
+    if (s2) {
+        s2 = s2->next1MM(SegmentType::ChordRest);
+    }
+
+    if (!s1) {
+        return false;
+    }
+
+    m_selection.setRange(s1, s2, idx1, idx2 + 1);
+    selectSimilarInRange(e);
+    if (selectedElement->track() == e->track()) {
+        // limit to this voice only
+        const std::vector<EngravingItem*>& list = m_selection.elements();
+        for (EngravingItem* el : list) {
+            if (el->track() != e->track()) {
+                m_selection.remove(el);
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx_t staffIdx)
+{
+    EngravingItem* selectedElement = m_selection.element();
+    if (!selectedElement) {
+        return false;
+    }
+
+    Segment* startSegment = findElementStartSegment(this, selectedElement);
+    if (!startSegment) {
+        return false;
+    }
+
+    Segment* endSegment = findElementEndSegment(this, selectedElement, startSegment);
+
+    staff_idx_t startStaffIdx = selectedElement->staffIdx();
+    if (startStaffIdx == muse::nidx) {
+        return false;
+    }
+
+    staff_idx_t endStaffIdx = startStaffIdx + 1;
+
+    track_idx_t activeTrack = newElement->track();
+
+    if (newElement->isMeasure()) {
+        Measure* m = toMeasure(newElement);
+        const Fraction tick = m->tick();
+
+        if (tick < startSegment->tick()) {
+            startSegment = m->first(SegmentType::ChordRest);
+        }
+        if (m == lastMeasure()) {
+            endSegment = nullptr;
+        } else if (endSegment && tick + m->ticks() > endSegment->tick()) {
+            endSegment = m->last();
+        }
+
+        startStaffIdx = std::min(startStaffIdx, staffIdx);
+        endStaffIdx = std::max(endStaffIdx, staffIdx + 1);
+
+        activeTrack = staffIdx * VOICES;
+    } else {
+        Segment* newStartSegment = findElementStartSegment(this, newElement);
+        if (newStartSegment && newStartSegment->tick() < startSegment->tick()) {
+            startSegment = newStartSegment;
+        }
+
+        Segment* newEndSegment = findElementEndSegment(this, newElement, newStartSegment);
+        if (endSegment && newEndSegment->tick() > endSegment->tick()) {
+            endSegment = newEndSegment;
+        }
+
+        staff_idx_t newStaffIdx = newElement->staffIdx();
+        if (newStaffIdx != muse::nidx) {
+            startStaffIdx = std::min(startStaffIdx, newStaffIdx);
+            endStaffIdx = std::max(endStaffIdx, newStaffIdx + 1);
+        }
+    }
+
+    m_selection.setRange(startSegment, endSegment, startStaffIdx, endStaffIdx);
     m_selection.updateSelectedElements();
+
+    m_selection.setActiveTrack(activeTrack);
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -4578,11 +4648,31 @@ ChordRest* Score::findCR(Fraction tick, track_idx_t track) const
 }
 
 //---------------------------------------------------------
-//   findCRinStaff
+//   findChordRestEndingBeforeTickInStaff
 //    find last chord/rest on staff that ends before tick
 //---------------------------------------------------------
 
 ChordRest* Score::findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const
+{
+    return findChordRestEndingBeforeTickInStaffAndVoice(tick, staffIdx, false, 0);
+}
+
+//-----------------------------------------------------------------
+//   findChordRestEndingBeforeTickInStaffAndVoice
+//    find last chord/rest on staff and voice that ends before tick
+//-----------------------------------------------------------------
+ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, voice_idx_t voice) const
+{
+    return findChordRestEndingBeforeTickInStaffAndVoice(tick, staffIdx, true, voice);
+}
+
+//-----------------------------------------------------------------
+//   findChordRestEndingBeforeTickInStaffAndVoice
+//    find last chord/rest on staff and voice that ends before tick
+//    allow no specific voice
+//-----------------------------------------------------------------
+ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, bool forceVoice,
+                                                               voice_idx_t voice) const
 {
     Fraction ptick = tick - Fraction::fromTicks(1);
     Measure* m = tick2measureMM(ptick);
@@ -4595,9 +4685,9 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaff(const Fraction& tick, sta
         ptick = m->tick();
     }
 
-    Segment* s      = m->first(SegmentType::ChordRest);
-    track_idx_t strack      = staffIdx * VOICES;
-    track_idx_t etrack      = strack + VOICES;
+    Segment* s = m->first(SegmentType::ChordRest);
+    track_idx_t strack = forceVoice ? staffIdx * VOICES + voice : staffIdx * VOICES;
+    track_idx_t etrack = forceVoice ? strack + 1 : strack + VOICES;
     track_idx_t actualTrack = strack;
 
     Fraction lastTick = Fraction(-1, 1);
@@ -4608,7 +4698,7 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaff(const Fraction& tick, sta
         // found a segment; now find longest cr on this staff that does not overlap tick
         for (track_idx_t t = strack; t < etrack; ++t) {
             ChordRest* cr = toChordRest(ns->element(t));
-            if (cr) {
+            if ((cr) && ((!forceVoice) || voice == cr->voice())) {
                 Fraction endTick = cr->tick() + cr->actualTicks();
                 if (endTick >= lastTick && endTick <= tick) {
                     s = ns;
@@ -4652,6 +4742,10 @@ ChordRest* Score::findChordRestEndingBeforeTickInTrack(const Fraction& tick, tra
 
 ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
 {
+    IF_ASSERT_FAILED(cr) {
+        return nullptr;
+    }
+
     auto newCR = cr;
     auto currentMeasure = cr->measure();
     auto currentSystem = currentMeasure->system() ? currentMeasure->system() : currentMeasure->coveringMMRestOrThis()->system();
@@ -4659,6 +4753,10 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
         return cr;
     }
     auto destinationMeasure = currentSystem->firstMeasure();
+    if (!destinationMeasure) {
+        return cr;
+    }
+
     auto firstSegment = destinationMeasure->first(SegmentType::ChordRest);
 
     // Case: Go to next system
@@ -4668,6 +4766,9 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
             currentSystem = destinationMeasure->system()
                             ? destinationMeasure->system()
                             : destinationMeasure->coveringMMRestOrThis()->system();
+            if (!currentSystem) {
+                return cr;
+            }
             if ((destinationMeasure = currentSystem->firstMeasure())) {
                 if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false))) {
                     cr = newCR;
@@ -4696,10 +4797,8 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
         // and not in first measure of entire score
         if ((destinationMeasure != firstMeasure() && destinationMeasure != firstMeasureMM())
             && (currentSegment == firstSegment || (currentMeasure->mmRest() && currentMeasure->mmRest()->isFirstInSystem()))) {
-            if (!(destinationMeasure = destinationMeasure->prevMeasure())) {
-                if (!(destinationMeasure = destinationMeasure->prevMeasureMM())) {
-                    return cr;
-                }
+            if (!(destinationMeasure = destinationMeasure->prevMeasureMM())) {
+                return cr;
             }
             if (!(currentSystem = destinationMeasure->system()
                                   ? destinationMeasure->system()
@@ -5660,6 +5759,11 @@ void Score::clearSystemObjectStaves()
 void Score::addSystemObjectStaff(Staff* staff)
 {
     m_systemObjectStaves.push_back(staff);
+}
+
+void Score::removeSystemObjectStaff(Staff* staff)
+{
+    muse::remove(m_systemObjectStaves, staff);
 }
 
 bool Score::isSystemObjectStaff(Staff* staff) const

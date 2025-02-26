@@ -135,6 +135,7 @@
 #include "../../dom/pedal.h"
 #include "../../dom/palmmute.h"
 #include "../../dom/segment.h"
+#include "../../dom/parenthesis.h"
 #include "../../dom/part.h"
 #include "../../dom/partialtie.h"
 #include "../../dom/whammybar.h"
@@ -496,9 +497,11 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
-    item->setProperty(pid, v);
-    if (item->isStyled(pid)) {
-        item->setPropertyFlags(pid, PropertyFlags::UNSTYLED);
+    if (!ctx.shouldSkipProperty(pid)) {
+        item->setProperty(pid, v);
+        if (item->isStyled(pid)) {
+            item->setPropertyFlags(pid, PropertyFlags::UNSTYLED);
+        }
     }
 }
 
@@ -1485,6 +1488,8 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
             sig.setForInstrumentChange(e.readBool());
+        } else if (tag == "isCourtesy") {
+            s->setIsCourtesy(e.readBool());
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
@@ -2084,6 +2089,7 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
         TRead::read(chord, xml, ctx);
         chord->setTrack(ctx.track());
+        chord->setIsTrillCueNote(true);
         o->setCueNoteChord(chord);
         o->setNoteAbove(chord->notes().front());
     } else {
@@ -2303,7 +2309,19 @@ void TRead::read(VBox* b, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
 {
-    TRead::read(static_cast<Box*>(b), xml, ctx);
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_TEXT_SCALE)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_DIAGRAM_SCALE)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_COLUMN_GAP)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_ROW_GAP)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_CHORDS_PER_ROW)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_H_ALIGN)) {
+        } else if (TRead::readProperties(static_cast<Box*>(b), xml, ctx)) {
+        } else {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(TBox* b, XmlReader& e, ReadContext& ctx)
@@ -3304,6 +3322,8 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
             TRead::readProperty(b, e, ctx, Pid::START_WITH_MEASURE_ONE);
         } else if (tag == "firstSystemIndentation") {
             TRead::readProperty(b, e, ctx, Pid::FIRST_SYSTEM_INDENTATION);
+        } else if (tag == "showCourtesySig") {
+            TRead::readProperty(b, e, ctx, Pid::SHOW_COURTESY);
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
@@ -3754,6 +3774,17 @@ void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
     }
 }
 
+void TRead::read(Parenthesis* p, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (TRead::readProperty(p, tag, xml, ctx, Pid::HORIZONTAL_DIRECTION)) {
+        } else if (!readItemProperties(p, xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
 void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
 {
     p->setId(e.intAttribute("id", 0));
@@ -4039,7 +4070,7 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
     if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
-    } else if (tag == "SlurSegment" || tag == "TieSegment") {
+    } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment") {
         const int idx = e.intAttribute("no", 0);
         const int n = int(s->spannerSegments().size());
         for (int i = n; i < idx; ++i) {
@@ -4519,6 +4550,8 @@ void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
             Groups groups;
             TRead::read(&groups, e, ctx);
             s->setGroups(groups);
+        } else if (tag == "isCourtesy") {
+            s->setIsCourtesy(e.readBool());
         } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();

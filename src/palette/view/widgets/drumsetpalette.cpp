@@ -72,13 +72,13 @@ void DrumsetPalette::updateDrumset()
         return;
     }
 
-    NoteInputState state = noteInput->state();
-    if (m_drumset == state.drumset) {
+    const NoteInputState& state = noteInput->state();
+    if (m_drumset == state.drumset()) {
         return;
     }
 
     clear();
-    m_drumset = state.drumset;
+    m_drumset = state.drumset();
 
     if (!m_drumset) {
         return;
@@ -92,11 +92,7 @@ void DrumsetPalette::updateDrumset()
         }
 
         std::shared_ptr<Chord> chord = notation::PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch);
-
-        int shortcutCode = m_drumset->shortcut(pitch);
-        QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
-
-        m_drumPalette->appendElement(chord, m_drumset->translatedName(pitch), 1.0, QPointF(0, 0), shortcut);
+        m_drumPalette->appendElement(chord, m_drumset->translatedName(pitch), 1.0, QPointF(0, 0), m_drumset->shortcut(pitch));
     }
 
     noteInput->setDrumNote(selectedDrumNote());
@@ -126,7 +122,7 @@ void DrumsetPalette::drumNoteClicked(int val)
     if (newChordSelected) {
         const Note* note = ch->downNote();
 
-        track_idx_t track = (noteInput->state().currentTrack / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
+        track_idx_t track = (noteInput->state().track() / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
 
         noteInput->setCurrentTrack(track);
         noteInput->setDrumNote(note->pitch());
@@ -147,8 +143,8 @@ void DrumsetPalette::previewSound(const Chord* chord, bool newChordSelected, con
     }
 
     Chord* preview = chord->clone();
-    preview->setParent(inputState.segment);
-    preview->setTrack(inputState.currentTrack);
+    preview->setParent(inputState.segment());
+    preview->setTrack(inputState.track());
 
     const std::vector<Note*>& previewNotes = preview->notes();
     const std::vector<Note*>& chordNotes = chord->notes();

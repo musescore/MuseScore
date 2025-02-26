@@ -45,6 +45,20 @@ public:
     MarkerType markerType() const { return m_markerType; }
     String markerTypeUserName() const;
 
+    inline bool isSegno() const { return m_markerType == MarkerType::SEGNO || m_markerType == MarkerType::VARSEGNO; }
+    inline bool isCoda() const
+    {
+        return m_markerType == MarkerType::CODA || m_markerType == MarkerType::VARCODA || m_markerType == MarkerType::CODETTA;
+    }
+
+    inline bool isToCoda() const
+    {
+        return m_markerType == MarkerType::TOCODA || m_markerType == MarkerType::TOCODASYM || m_markerType == MarkerType::DA_CODA
+               || m_markerType == MarkerType::DA_DBLCODA;
+    }
+
+    inline bool isRightMarker() const { return muse::contains(Marker::RIGHT_MARKERS, m_markerType); }
+
     Marker* clone() const override { return new Marker(*this); }
 
     int subtype() const override { return int(m_markerType); }

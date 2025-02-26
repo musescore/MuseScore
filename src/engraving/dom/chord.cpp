@@ -2430,6 +2430,11 @@ void Chord::removeMarkings(bool keepTremolo)
     if (arpeggio()) {
         remove(arpeggio());
     }
+
+    if (m_spanArpeggio) {
+        m_spanArpeggio = nullptr;
+    }
+
     muse::DeleteAll(graceNotes());
     graceNotes().clear();
     muse::DeleteAll(articulations());
@@ -2551,6 +2556,21 @@ Chord* Chord::graceNoteAt(size_t idx) const
     }
 
     return m_graceNotes.at(idx);
+}
+
+//---------------------------------------------------------
+//   allGraceChordsOfMainChord
+//   returns a list containing all grace notes (chords) attached to the main chord and the main chord itself, in order
+//---------------------------------------------------------
+std::vector<Chord*> Chord::allGraceChordsOfMainChord()
+{
+    Chord* mainChord = isGrace() ? toChord(explicitParent()) : this;
+    std::vector<Chord*> chords = { mainChord };
+    const GraceNotesGroup& gnBefore = mainChord->graceNotesBefore();
+    const GraceNotesGroup& gnAfter = mainChord->graceNotesAfter();
+    chords.insert(chords.begin(), gnBefore.begin(), gnBefore.end());
+    chords.insert(chords.end(), gnAfter.begin(), gnAfter.end());
+    return chords;
 }
 
 //---------------------------------------------------------

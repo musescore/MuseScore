@@ -43,18 +43,7 @@ RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
         return RetVal<QByteArray>(make_ret(Ret::Code::InternalError));
     }
 
-    if (current->isManaged(key)) {
-        LOGD() << "get data from current workspace, key: " << key;
-        return current->rawData(key);
-    }
-
-    IWorkspacePtr def = manager()->defaultWorkspace();
-    IF_ASSERT_FAILED(def) {
-        return RetVal<QByteArray>(make_ret(Ret::Code::InternalError));
-    }
-
-    LOGD() << "get data from default workspace, key: " << key;
-    return def->rawData(key);
+    return current->rawData(key);
 }
 
 Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
@@ -64,21 +53,7 @@ Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
         return make_ret(Ret::Code::InternalError);
     }
 
-    Ret ret = false;
-    if (current->isManaged(key)) {
-        LOGD() << "set data to current workspace, key: " << key;
-        ret = current->setRawData(key, data);
-    }
-
-    if (!ret) {
-        IWorkspacePtr def = manager()->defaultWorkspace();
-        IF_ASSERT_FAILED(def) {
-            return make_ret(Ret::Code::InternalError);
-        }
-
-        LOGD() << "set data to default workspace, key: " << key;
-        ret = def->setRawData(key, data);
-    }
+    Ret ret = current->setRawData(key, data);
 
     if (ret) {
         auto n = m_dataNotifications.find(key);

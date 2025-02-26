@@ -30,7 +30,6 @@ constexpr int MAX_DENOMINATOR = 64;
 constexpr Fraction ONE_DOT_DURATION_MULTIPLIER(3, 2);
 constexpr Fraction TWO_DOTS_DURATION_MULTIPLIER(7, 4);
 
-static int findClosestNumerator(const Fraction& fraction, int requestedDenominator, bool skipFirstBest);
 static Fraction findClosestDisplayableDuration(const Fraction& totalDuration, const Fraction& targetDuration, int maxDenominator,
                                                bool skipFirstBest);
 static std::vector<Fraction> fillDurationsByProportions(const Fraction& totalDuration, const std::vector<Fraction>& proportions,
@@ -153,24 +152,14 @@ static std::vector<Fraction> generateDurations(int maxDenominator)
     return durations;
 }
 
-static Fraction findClosestDisplayableDuration(const Fraction& totalDuration, const Fraction& targetDuration, int maxDenominator,
+static Fraction findClosestDisplayableDuration(const Fraction& totalDuration, const Fraction& targetDuration, int requestedDenominator,
                                                bool skipFirstBest)
 {
-    int numerator = findClosestNumerator(targetDuration, maxDenominator, skipFirstBest);
-    Fraction currentChordTicks = Fraction(numerator, maxDenominator);
-    currentChordTicks = std::max(currentChordTicks, Fraction(1, maxDenominator));
-    currentChordTicks = std::min(currentChordTicks, totalDuration - Fraction(1, maxDenominator));
-    currentChordTicks.reduce();
-
-    return currentChordTicks;
-}
-
-static int findClosestNumerator(const Fraction& fraction, int requestedDenominator, bool skipFirstBest)
-{
-    int closestNumerator = 0;
+    Fraction closestFraction = Fraction(0, 1);
     double minDifference = std::numeric_limits<double>::max();
-    int numerator = fraction.numerator();
-    int denominator = fraction.denominator();
+    int numerator = targetDuration.numerator();
+    int denominator = targetDuration.denominator();
+    const Fraction smallestFraction(1, requestedDenominator);
 
     bool firstBestSkipped = false;
 
@@ -180,18 +169,23 @@ static int findClosestNumerator(const Fraction& fraction, int requestedDenominat
 
         double difference = std::fabs(originalFraction - candidateFraction);
 
-        if (difference < minDifference
-            && canBeRepresentedAsDottedNote(Fraction(candidateNumerator, requestedDenominator), requestedDenominator)) {
-            if (skipFirstBest && !firstBestSkipped) {
-                firstBestSkipped = true;
-            } else {
-                minDifference = difference;
-                closestNumerator = candidateNumerator;
+        if (difference < minDifference) {
+            Fraction resultCandidateFraction(candidateNumerator, requestedDenominator);
+            resultCandidateFraction = std::max(resultCandidateFraction, smallestFraction);
+            resultCandidateFraction = std::min(resultCandidateFraction, totalDuration - smallestFraction);
+
+            if (canBeRepresentedAsDottedNote(resultCandidateFraction, requestedDenominator)) {
+                if (skipFirstBest && !firstBestSkipped) {
+                    firstBestSkipped = true;
+                } else {
+                    minDifference = difference;
+                    closestFraction = resultCandidateFraction;
+                }
             }
         }
     }
 
-    return closestNumerator;
+    return closestFraction.reduced();
 }
 
 static bool canBeRepresentedAsDottedNote(const Fraction& duration, int maxDenominator)

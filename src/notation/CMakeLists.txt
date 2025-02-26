@@ -134,6 +134,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationruler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationruler.h
     ${CMAKE_CURRENT_LIST_DIR}/view/loopmarker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/loopmarker.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.cpp
@@ -174,10 +176,19 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/dynamicpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/shadownotepopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/shadownotepopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/editpercussionshortcutmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/editpercussionshortcutmodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/percussionpanel/percussionpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/percussionpanel/percussionpanelmodel.h
@@ -198,6 +209,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utilities/engravingitempreviewpainter.h
     ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.h
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/scorerangeutilities.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/scorerangeutilities.h
 
     ${WIDGETS_SRC}
     ${STYLEDIALOG_SRC}

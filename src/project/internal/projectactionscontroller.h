@@ -45,6 +45,7 @@
 #include "notation/inotationconfiguration.h"
 #include "update/imusesoundscheckupdatescenario.h"
 #include "extensions/iextensionsprovider.h"
+#include "tours/itoursservice.h"
 
 #include "async/asyncable.h"
 
@@ -77,6 +78,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::Inject<muse::io::IFileSystem> fileSystem = { this };
     muse::Inject<muse::update::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
     muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::Inject<muse::tours::IToursService> toursService = { this };
 
 public:
 

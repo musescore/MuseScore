@@ -54,7 +54,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         LD_CONDITION(s->ldata()->isSetPos());
 
         double sp = item->style().spatium();
-        staff_idx_t si = item->staffIdxOrNextVisible();
+        staff_idx_t si = item->effectiveStaffIdx();
 
         // if there's no good staff for this object, obliterate it
         ldata->setIsSkipDraw(si == muse::nidx);
@@ -85,6 +85,9 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         });
 
         if (filteredSkyline.elements().empty()) {
+            if (add && item->addToSkyline()) {
+                staffSkyline.add(shape);
+            }
             return;
         }
 
@@ -130,7 +133,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
         LD_CONDITION(ldata->isSetBbox());
         LD_CONDITION(m->ldata()->isSetPos());
 
-        staff_idx_t si = item->staffIdxOrNextVisible();
+        staff_idx_t si = item->effectiveStaffIdx();
 
         // if there's no good staff for this object, obliterate it
         ldata->setIsSkipDraw(si == muse::nidx);
@@ -215,7 +218,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         Shape sh = item->shape();
         sl.add(sh.translate(item->pos()));
         double yd = 0.0;
-        staff_idx_t stfIdx = item->systemFlag() ? item->staffIdxOrNextVisible() : item->staffIdx();
+        staff_idx_t stfIdx = item->effectiveStaffIdx();
         if (stfIdx == muse::nidx) {
             ldata->setIsSkipDraw(true);
             return;
@@ -439,11 +442,20 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
 
 bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline)
 {
+    if (itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
+        return itemsShouldIgnoreEachOther(itemToAutoplace, itemInSkyline->parentItem());
+    }
+
     ElementType type1 = itemToAutoplace->type();
     ElementType type2 = itemInSkyline->type();
 
     if (type1 == ElementType::TIMESIG) {
         return type2 != ElementType::KEYSIG;
+    }
+
+    if ((type1 == ElementType::DYNAMIC || type1 == ElementType::HAIRPIN_SEGMENT)
+        && (type2 == ElementType::DYNAMIC || type2 == ElementType::HAIRPIN_SEGMENT)) {
+        return true;
     }
 
     if (type1 == type2) {
@@ -452,6 +464,7 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
             ElementType::DYNAMIC,
             ElementType::EXPRESSION,
             ElementType::STICKING,
+            ElementType::HARMONY
         };
         return !itemToAutoplace->isTextBase() || muse::contains(TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER, type1);
     }

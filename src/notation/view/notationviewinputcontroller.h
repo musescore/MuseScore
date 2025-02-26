@@ -74,8 +74,10 @@ public:
     virtual void hideContextMenu() = 0;
 
     virtual void showElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
-    virtual void hideElementPopup() = 0;
+    virtual void hideElementPopup(const ElementType& elementType = ElementType::INVALID) = 0;
     virtual void toggleElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
+
+    virtual bool elementPopupIsOpen(const ElementType& elementType) const = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
@@ -166,6 +168,7 @@ private:
     void startDragElements(ElementType elementsType, const muse::PointF& elementsOffset);
 
     void togglePopupForItemIfSupports(const EngravingItem* item);
+    void updateShadowNotePopupVisibility(bool forceHide = false);
 
     float hitWidth() const;
 
@@ -173,6 +176,7 @@ private:
         muse::PointF logicClickPos;
         const QMouseEvent* event = nullptr;
         mu::engraving::EngravingItem* hitElement = nullptr;
+        mu::engraving::staff_idx_t hitStaff = muse::nidx;
         bool isHitGrip = false;
     };
 
@@ -184,6 +188,8 @@ private:
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
 
+    bool tryPercussionShortcut(QKeyEvent* event);
+
     EngravingItem* resolveStartPlayableElement() const;
 
     IControlledView* m_view = nullptr;
@@ -194,8 +200,17 @@ private:
     bool m_isCanvasDragged = false;
     bool m_tripleClickPending = false;
 
-    QPointF m_physicalBeginPoint;
-    muse::PointF m_logicalBeginPoint;
+    struct MouseDownInfo {
+        enum DragAction {
+            DragOutgoingElement,
+            DragOutgoingRange,
+            Other,
+            Nothing
+        } dragAction = Other;
+
+        QPointF physicalBeginPoint;
+        muse::PointF logicalBeginPoint;
+    } m_mouseDownInfo;
 
     mu::engraving::EngravingItem* m_prevHitElement = nullptr;
     mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;

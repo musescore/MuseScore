@@ -4,6 +4,7 @@
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <clefLeftMargin>4</clefLeftMargin>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <defaultFramePadding>0</defaultFramePadding>
@@ -13,6 +14,10 @@
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.364</spatium>
       </Style>
     <showInvisible>1</showInvisible>

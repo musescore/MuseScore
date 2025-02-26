@@ -177,7 +177,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     nextButton->setEnabled(m_measure->nextMeasure() != 0);
     previousButton->setEnabled(m_measure->prevMeasure() != 0);
 
-    setWindowTitle(muse::qtrc("notation/measureproperties", "Measure properties for measure %1").arg(m_measure->no() + 1));
+    setWindowTitle(muse::qtrc("notation/measureproperties", "Properties for measure %1").arg(m_measure->no() + 1));
     m_notation->interaction()->clearSelection();
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::ADD, 0);
 

@@ -23,6 +23,8 @@
 
 #include "types/val.h"
 
+#include "log.h"
+
 using namespace muse::workspace;
 using namespace muse::actions;
 
@@ -30,30 +32,21 @@ void WorkspaceActionController::init()
 {
     dispatcher()->reg(this, "select-workspace", this, &WorkspaceActionController::selectWorkspace);
     dispatcher()->reg(this, "configure-workspaces", this, &WorkspaceActionController::openConfigureWorkspacesDialog);
+    dispatcher()->reg(this, "create-workspace", this, &WorkspaceActionController::createNewWorkspace);
 }
 
 void WorkspaceActionController::selectWorkspace(const ActionData& args)
 {
     std::string selectedWorkspace = !args.empty() ? args.arg<std::string>(0) : "";
-    setCurrentWorkspaceName(selectedWorkspace);
+    manager()->changeCurrentWorkspace(selectedWorkspace);
 }
 
 void WorkspaceActionController::openConfigureWorkspacesDialog()
 {
-    RetVal<Val> result = interactive()->open("muse://workspace/select?sync=true");
-    if (!result.ret) {
-        return;
-    }
-
-    std::string selectedWorkspace = result.val.toString();
-    setCurrentWorkspaceName(selectedWorkspace);
+    manager()->openConfigureWorkspacesDialog();
 }
 
-void WorkspaceActionController::setCurrentWorkspaceName(const std::string& workspaceName)
+void muse::workspace::WorkspaceActionController::createNewWorkspace()
 {
-    if (configuration()->currentWorkspaceName() == workspaceName || workspaceName.empty()) {
-        return;
-    }
-
-    configuration()->setCurrentWorkspaceName(workspaceName);
+    manager()->createAndAppendNewWorkspace();
 }

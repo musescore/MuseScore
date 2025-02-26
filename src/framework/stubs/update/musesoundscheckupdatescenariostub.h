@@ -28,7 +28,8 @@ namespace muse::update {
 class MuseSoundsCheckUpdateScenarioStub : public IMuseSoundsCheckUpdateScenario
 {
 public:
-    void checkForUpdate() override;
+    bool hasUpdate() const override;
+    void showUpdate() override;
 };
 }
 

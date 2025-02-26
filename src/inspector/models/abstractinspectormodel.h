@@ -67,7 +67,6 @@ public:
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE,
-        SECTION_SCORE_ACCESSIBILITY,
         SECTION_PARTS,
     };
     Q_ENUM(InspectorSectionType)
@@ -114,6 +113,7 @@ public:
         TYPE_TEXT_FRAME,
         TYPE_VERTICAL_FRAME,
         TYPE_HORIZONTAL_FRAME,
+        TYPE_FRET_FRAME,
         TYPE_ARTICULATION,
         TYPE_ORNAMENT,
         TYPE_AMBITUS,
@@ -193,7 +193,7 @@ protected:
     PointFPropertyItem* buildPointFPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
                                                                                                   const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
-    using ConvertPropertyValueFunc = std::function<QVariant(const QVariant&)>;
+    using ConvertPropertyValueFunc = std::function<QVariant (const QVariant&)>;
     void loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc = nullptr);
     void loadPropertyItem(PropertyItem* propertyItem, const QList<engraving::EngravingItem*>& elements,
                           ConvertPropertyValueFunc convertElementPropertyValueFunc = nullptr);

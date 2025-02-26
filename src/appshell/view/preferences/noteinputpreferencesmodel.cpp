@@ -33,24 +33,36 @@ NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
 
 void NoteInputPreferencesModel::load()
 {
+    notationConfiguration()->defaultNoteInputMethodChanged().onNotify(this, [this]() {
+        emit defaultNoteInputMethodChanged(defaultNoteInputMethod());
+    });
+
+    notationConfiguration()->addAccidentalDotsArticulationsToNextNoteEnteredChanged().onNotify(this, [this]() {
+        emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(addAccidentalDotsArticulationsToNextNoteEntered());
+    });
+
+    notationConfiguration()->useNoteInputCursorInInputByDurationChanged().onNotify(this, [this]() {
+        emit useNoteInputCursorInInputByDurationChanged(useNoteInputCursorInInputByDuration());
+    });
+
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        emit midiInputEnabledChanged(midiInputEnabled());
+    });
+
+    notationConfiguration()->startNoteInputAtSelectionWhenPressingMidiKeyChanged().onNotify(this, [this]() {
+        emit startNoteInputAtSelectionWhenPressingMidiKeyChanged(startNoteInputAtSelectionWhenPressingMidiKey());
+    });
+
     playbackConfiguration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
         emit playNotesWhenEditingChanged(playNotesWhenEditing());
     });
 
-    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
-        emit enableMidiInputChanged(playNotesWhenEditing());
+    notationConfiguration()->isPlayPreviewNotesInInputByDurationChanged().onNotify(this, [this]() {
+        emit playPreviewNotesInInputByDurationChanged(playPreviewNotesInInputByDuration());
     });
 
     shortcutsConfiguration()->advanceToNextNoteOnKeyReleaseChanged().onReceive(this, [this](bool value) {
         emit advanceToNextNoteOnKeyReleaseChanged(value);
-    });
-
-    notationConfiguration()->colorNotesOutsideOfUsablePitchRangeChanged().onReceive(this, [this](bool value) {
-        emit colorNotesOutsideOfUsablePitchRangeChanged(value);
-    });
-
-    notationConfiguration()->warnGuitarBendsChanged().onReceive(this, [this](bool value) {
-        emit warnGuitarBendsChanged(value);
     });
 
     notationConfiguration()->delayBetweenNotesInRealTimeModeMillisecondsChanged().onReceive(this, [this](int value) {
@@ -72,26 +84,68 @@ void NoteInputPreferencesModel::load()
     engravingConfiguration()->dynamicsApplyToAllVoicesChanged().onReceive(this, [this](bool value) {
         emit dynamicsApplyToAllVoicesChanged(value);
     });
+
+    notationConfiguration()->colorNotesOutsideOfUsablePitchRangeChanged().onReceive(this, [this](bool value) {
+        emit colorNotesOutsideOfUsablePitchRangeChanged(value);
+    });
+
+    notationConfiguration()->warnGuitarBendsChanged().onReceive(this, [this](bool value) {
+        emit warnGuitarBendsChanged(value);
+    });
 }
 
-bool NoteInputPreferencesModel::enableMidiInput() const
+QVariantList NoteInputPreferencesModel::noteInputMethods() const
+{
+    using Method = mu::notation::NoteInputMethod;
+
+    std::vector<std::pair<muse::actions::ActionCode, Method > > noteInputActions {
+        { "note-input-by-note-name", Method::BY_NOTE_NAME },
+        { "note-input-by-duration", Method::BY_DURATION },
+    };
+
+    QVariantList methods;
+
+    for (const auto& pair : noteInputActions) {
+        const muse::ui::UiAction& action = uiActionsRegister()->action(pair.first);
+
+        QVariantMap method;
+        method["value"] = static_cast<int>(pair.second);
+        method["text"] = action.title.qTranslatedWithoutMnemonic();
+
+        methods.emplace_back(std::move(method));
+    }
+
+    return methods;
+}
+
+int NoteInputPreferencesModel::defaultNoteInputMethod() const
+{
+    return static_cast<int>(notationConfiguration()->defaultNoteInputMethod());
+}
+
+bool NoteInputPreferencesModel::addAccidentalDotsArticulationsToNextNoteEntered() const
+{
+    return notationConfiguration()->addAccidentalDotsArticulationsToNextNoteEntered();
+}
+
+bool NoteInputPreferencesModel::useNoteInputCursorInInputByDuration() const
+{
+    return notationConfiguration()->useNoteInputCursorInInputByDuration();
+}
+
+bool NoteInputPreferencesModel::midiInputEnabled() const
 {
     return notationConfiguration()->isMidiInputEnabled();
+}
+
+bool NoteInputPreferencesModel::startNoteInputAtSelectionWhenPressingMidiKey() const
+{
+    return notationConfiguration()->startNoteInputAtSelectionWhenPressingMidiKey();
 }
 
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
     return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();
-}
-
-bool NoteInputPreferencesModel::colorNotesOutsideOfUsablePitchRange() const
-{
-    return notationConfiguration()->colorNotesOutsideOfUsablePitchRange();
-}
-
-bool NoteInputPreferencesModel::warnGuitarBends() const
-{
-    return notationConfiguration()->warnGuitarBends();
 }
 
 int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() const
@@ -102,6 +156,11 @@ int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() con
 bool NoteInputPreferencesModel::playNotesWhenEditing() const
 {
     return playbackConfiguration()->playNotesWhenEditing();
+}
+
+bool NoteInputPreferencesModel::playPreviewNotesInInputByDuration() const
+{
+    return notationConfiguration()->isPlayPreviewNotesInInputByDuration();
 }
 
 int NoteInputPreferencesModel::notePlayDurationMilliseconds() const
@@ -129,14 +188,64 @@ bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
     return engravingConfiguration()->dynamicsApplyToAllVoices();
 }
 
-void NoteInputPreferencesModel::setEnableMidiInput(bool value)
+bool NoteInputPreferencesModel::colorNotesOutsideOfUsablePitchRange() const
 {
-    if (value == enableMidiInput()) {
+    return notationConfiguration()->colorNotesOutsideOfUsablePitchRange();
+}
+
+bool NoteInputPreferencesModel::warnGuitarBends() const
+{
+    return notationConfiguration()->warnGuitarBends();
+}
+
+void NoteInputPreferencesModel::setDefaultNoteInputMethod(int value)
+{
+    if (value == defaultNoteInputMethod()) {
+        return;
+    }
+
+    notationConfiguration()->setDefaultNoteInputMethod(static_cast<mu::notation::NoteInputMethod>(value));
+    emit defaultNoteInputMethodChanged(value);
+}
+
+void NoteInputPreferencesModel::setAddAccidentalDotsArticulationsToNextNoteEntered(bool value)
+{
+    if (value == addAccidentalDotsArticulationsToNextNoteEntered()) {
+        return;
+    }
+
+    notationConfiguration()->setAddAccidentalDotsArticulationsToNextNoteEntered(value);
+    emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(value);
+}
+
+void NoteInputPreferencesModel::setUseNoteInputCursorInInputByDuration(bool value)
+{
+    if (value == useNoteInputCursorInInputByDuration()) {
+        return;
+    }
+
+    notationConfiguration()->setUseNoteInputCursorInInputByDuration(value);
+    emit useNoteInputCursorInInputByDurationChanged(value);
+}
+
+void NoteInputPreferencesModel::setMidiInputEnabled(bool value)
+{
+    if (value == midiInputEnabled()) {
         return;
     }
 
     notationConfiguration()->setIsMidiInputEnabled(value);
-    emit enableMidiInputChanged(value);
+    emit midiInputEnabledChanged(value);
+}
+
+void NoteInputPreferencesModel::setStartNoteInputAtSelectionWhenPressingMidiKey(bool value)
+{
+    if (value == startNoteInputAtSelectionWhenPressingMidiKey()) {
+        return;
+    }
+
+    notationConfiguration()->setStartNoteInputAtSelectionWhenPressingMidiKey(value);
+    emit startNoteInputAtSelectionWhenPressingMidiKeyChanged(value);
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
@@ -147,26 +256,6 @@ void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
 
     shortcutsConfiguration()->setAdvanceToNextNoteOnKeyRelease(value);
     emit advanceToNextNoteOnKeyReleaseChanged(value);
-}
-
-void NoteInputPreferencesModel::setColorNotesOutsideOfUsablePitchRange(bool value)
-{
-    if (value == colorNotesOutsideOfUsablePitchRange()) {
-        return;
-    }
-
-    notationConfiguration()->setColorNotesOutsideOfUsablePitchRange(value);
-    emit colorNotesOutsideOfUsablePitchRangeChanged(value);
-}
-
-void NoteInputPreferencesModel::setWarnGuitarBends(bool value)
-{
-    if (value == warnGuitarBends()) {
-        return;
-    }
-
-    notationConfiguration()->setWarnGuitarBends(value);
-    emit warnGuitarBendsChanged(value);
 }
 
 void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(int delay)
@@ -187,6 +276,16 @@ void NoteInputPreferencesModel::setPlayNotesWhenEditing(bool value)
 
     playbackConfiguration()->setPlayNotesWhenEditing(value);
     emit playNotesWhenEditingChanged(value);
+}
+
+void NoteInputPreferencesModel::setPlayPreviewNotesInInputByDuration(bool value)
+{
+    if (value == playPreviewNotesInInputByDuration()) {
+        return;
+    }
+
+    notationConfiguration()->setIsPlayPreviewNotesInInputByDuration(value);
+    emit playPreviewNotesInInputByDurationChanged(value);
 }
 
 void NoteInputPreferencesModel::setNotePlayDurationMilliseconds(int duration)
@@ -237,4 +336,24 @@ void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
 
     engravingConfiguration()->setDynamicsApplyToAllVoices(value);
     emit dynamicsApplyToAllVoicesChanged(value);
+}
+
+void NoteInputPreferencesModel::setColorNotesOutsideOfUsablePitchRange(bool value)
+{
+    if (value == colorNotesOutsideOfUsablePitchRange()) {
+        return;
+    }
+
+    notationConfiguration()->setColorNotesOutsideOfUsablePitchRange(value);
+    emit colorNotesOutsideOfUsablePitchRangeChanged(value);
+}
+
+void NoteInputPreferencesModel::setWarnGuitarBends(bool value)
+{
+    if (value == warnGuitarBends()) {
+        return;
+    }
+
+    notationConfiguration()->setWarnGuitarBends(value);
+    emit warnGuitarBendsChanged(value);
 }

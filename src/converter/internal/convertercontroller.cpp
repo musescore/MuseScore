@@ -51,14 +51,14 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
     TRACEFUNC;
 
     if (progress) {
-        progress->started.notify();
+        progress->start();
     }
 
     RetVal<BatchJob> batchJob = parseBatchJob(batchJobFile);
     if (!batchJob.ret) {
         LOGE() << "failed parse batch job file, err: " << batchJob.ret.toString();
         if (progress) {
-            progress->finished.send(ProgressResult(batchJob.ret));
+            progress->finish(ProgressResult(batchJob.ret));
         }
         return batchJob.ret;
     }
@@ -70,7 +70,7 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
     for (const Job& job : batchJob.val) {
         if (progress) {
             ++current;
-            progress->progressChanged.send(current, total, job.in.toStdString());
+            progress->progress(current, total, job.in.toStdString());
         }
 
         Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile, extensionUri, job.transposeOptions);
@@ -88,7 +88,7 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
     }
 
     if (progress) {
-        progress->finished.send(ProgressResult(ret));
+        progress->finish(ProgressResult(ret));
     }
 
     return ret;

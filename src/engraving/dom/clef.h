@@ -113,6 +113,9 @@ public:
     ClefType clefType() const;
     void setClefType(ClefType i);
 
+    bool isCourtesy() const { return m_isCourtesy; }
+    void setIsCourtesy(const bool v) { m_isCourtesy = v; }
+
     int subtype() const override { return int(clefType()); }
     TranslatableString subtypeUserName() const override;
 
@@ -165,6 +168,7 @@ private:
     bool m_isSmall = false;
     bool m_forInstrumentChange = false;
     bool m_isHeader = false;
+    bool m_isCourtesy = false;
     ClefToBarlinePosition m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     ClefTypeList m_clefTypes = ClefType::INVALID;
 };

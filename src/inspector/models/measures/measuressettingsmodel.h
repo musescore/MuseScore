@@ -39,6 +39,7 @@ class MeasuresSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool allSystemsAreLocked READ allSystemsAreLocked NOTIFY allSystemsAreLockedChanged)
     Q_PROPERTY(bool scoreIsInPageView READ scoreIsInPageView NOTIFY scoreIsInPageViewChanged)
     Q_PROPERTY(bool isMakeIntoSystemAvailable READ isMakeIntoSystemAvailable NOTIFY isMakeIntoSystemAvailableChanged)
+    Q_PROPERTY(size_t systemCount READ systemCount NOTIFY systemCountChanged)
 
 public:
     explicit MeasuresSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -78,6 +79,8 @@ public:
     bool scoreIsInPageView() const;
     bool isMakeIntoSystemAvailable() const;
 
+    size_t systemCount() const;
+
 protected:
     void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
 
@@ -85,16 +88,19 @@ private:
     void updateAllSystemsAreLocked();
     void updateScoreIsInPageView();
     void updateIsMakeIntoSystemAvailable();
+    void updateSystemCount();
 
 signals:
     void allSystemsAreLockedChanged(bool allLocked);
     void scoreIsInPageViewChanged(bool isInPageView);
     void isMakeIntoSystemAvailableChanged(bool isMakeIntoSystemAvailable);
+    void systemCountChanged(size_t count);
 
 private:
     bool m_allSystemsAreLocked = false;
     bool m_scoreIsInPageView = false;
     bool m_isMakeIntoSystemAvailable = false;
+    size_t m_systemCount = 0;
 };
 }
 

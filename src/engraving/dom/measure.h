@@ -282,6 +282,7 @@ public:
     bool visible(staff_idx_t staffIdx) const;
     bool stemless(staff_idx_t staffIdx) const;
     bool isFinalMeasureOfSection() const;
+    LayoutBreak* sectionBreakElement(bool includeNextFrames = true) const;
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
     bool isLastInSystem() const;
@@ -351,10 +352,12 @@ public:
 
     void checkHeader();
     void checkTrailer();
+    void checkEndOfMeasureChange();
 
     void respaceSegments();
 
     bool canAddStringTunings(staff_idx_t staffIdx) const;
+    bool canAddStaffTypeChange(staff_idx_t staffIdx) const;
 
 private:
 

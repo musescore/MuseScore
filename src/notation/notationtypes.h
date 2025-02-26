@@ -102,6 +102,7 @@ using Stem = mu::engraving::Stem;
 using Hook = mu::engraving::Hook;
 using Fraction = mu::engraving::Fraction;
 using NoteInputMethod = mu::engraving::NoteEntryMethod;
+using NoteInputParams = mu::engraving::NoteInputParams;
 using AccidentalType = mu::engraving::AccidentalType;
 using OttavaType = mu::engraving::OttavaType;
 using HairpinType = mu::engraving::HairpinType;
@@ -144,6 +145,7 @@ using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
+using staff_idx_t = mu::engraving::staff_idx_t;
 using ChangesRange = mu::engraving::ScoreChangesRange;
 using GuitarBendType = mu::engraving::GuitarBendType;
 using engraving::LoopBoundaryType;
@@ -152,14 +154,14 @@ using VoiceAssignment = mu::engraving::VoiceAssignment;
 
 static const muse::String COMMON_GENRE_ID("common");
 
-enum class DragMode
+enum class DragMode : unsigned char
 {
     BothXY = 0,
     OnlyX,
     OnlyY
 };
 
-enum class MoveDirection
+enum class MoveDirection : unsigned char
 {
     Undefined = 0,
     Left,
@@ -168,7 +170,7 @@ enum class MoveDirection
     Down
 };
 
-enum class MoveSelectionType
+enum class MoveSelectionType : unsigned char
 {
     Undefined = 0,
     EngravingItem,
@@ -180,7 +182,7 @@ enum class MoveSelectionType
     String // TAB Staff
 };
 
-enum class ExpandSelectionMode
+enum class ExpandSelectionMode : unsigned char
 {
     BeginSystem,
     EndSystem,
@@ -188,30 +190,31 @@ enum class ExpandSelectionMode
     EndScore,
 };
 
-enum class AddRemoveSystemLockType
+enum class AddRemoveSystemLockType : signed char
 {
     AfterEachSystem = -1,
     None = 0,
     MeasuresInterval
 };
 
-enum class BoxType
+enum class BoxType : unsigned char
 {
     Unknown,
     Vertical,
     Horizontal,
     Measure,
-    Text
+    Text,
+    Fret
 };
 
-enum class AddBoxesTarget {
+enum class AddBoxesTarget : unsigned char {
     AfterSelection,
     BeforeSelection,
     AtStartOfScore,
     AtEndOfScore
 };
 
-enum class NoteName
+enum class NoteName : unsigned char
 {
     C = 0,
     D,
@@ -222,45 +225,33 @@ enum class NoteName
     B
 };
 
-enum class NoteAddingMode
+using NoteVal = mu::engraving::NoteVal;
+using NoteValList = mu::engraving::NoteValList;
+
+enum class NoteAddingMode : unsigned char
 {
     CurrentChord,
     NextChord,
     InsertChord
 };
 
-enum class PastingType {
+enum class PastingType : unsigned char {
     Default,
     Half,
     Double,
     Special
 };
 
-struct NoteInputState
-{
-    NoteInputMethod method = NoteInputMethod::UNKNOWN;
-    Duration duration;
-    AccidentalType accidentalType = AccidentalType::NONE;
-    std::set<SymbolId> articulationIds;
-    bool isRest = false;
-    bool withSlur = false;
-    engraving::voice_idx_t currentVoiceIndex = 0;
-    engraving::track_idx_t currentTrack = 0;
-    int currentString = 0;
-    Drumset* drumset = nullptr;
-    StaffGroup staffGroup = StaffGroup::STANDARD;
-    const Staff* staff = nullptr;
-    Segment* segment = nullptr;
-};
+using NoteInputState = mu::engraving::InputState;
 
-enum class NoteFilter
+enum class NoteFilter : unsigned char
 {
     All,
     WithTie,
     WithSlur
 };
 
-enum class ZoomType {
+enum class ZoomType : unsigned char {
     Percentage,
     PageWidth,
     WholePage,
@@ -500,7 +491,7 @@ struct LoopBoundaries
     }
 };
 
-enum class ScoreConfigType
+enum class ScoreConfigType : unsigned char
 {
     ShowInvisibleElements,
     ShowUnprintableElements,
@@ -546,7 +537,7 @@ struct MeasureBeat
     int maxBeatIndex = 0;
 };
 
-enum class BracketsType
+enum class BracketsType : unsigned char
 {
     Brackets,
     Braces,
@@ -625,6 +616,12 @@ struct StringTuningsInfo
 };
 
 using InstrumentStringTuningsMap = std::map<std::string, std::vector<StringTuningsInfo> >;
+
+enum class PercussionPanelAutoShowMode {
+    UNPITCHED_STAFF,
+    UNPITCHED_STAFF_NOTE_INPUT,
+    NEVER,
+};
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

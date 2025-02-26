@@ -48,6 +48,8 @@ public:
     bool muted() const;
     async::Notification mutedChanged() const;
 
+    bool isSilent() const;
+
     void notifyNoAudioSignal();
 
     const AudioOutputParams& outputParams() const override;
@@ -65,7 +67,7 @@ public:
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
 private:
-    void completeOutput(float* buffer, unsigned int samplesCount) const;
+    void completeOutput(float* buffer, unsigned int samplesCount);
 
     TrackId m_trackId = -1;
 
@@ -77,6 +79,8 @@ private:
     std::vector<IFxProcessorPtr> m_fxProcessors = {};
 
     dsp::CompressorPtr m_compressor = nullptr;
+
+    bool m_isSilent = true;
 
     async::Notification m_mutedChanged;
     mutable async::Channel<AudioOutputParams> m_paramsChanges;

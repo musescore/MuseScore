@@ -33,7 +33,7 @@ namespace mu::engraving {
 class Note;
 class Harmony;
 
-enum class BeatType : char;
+enum class BeatType : unsigned char;
 
 //---------------------------------------------------------
 //   PlayEvent

@@ -85,7 +85,7 @@ using namespace mu::engraving;
 
 #define SCOREDEF_IDX -1
 
-#define MEI_BASIC_VERSION "5.0+basic"
+#define MEI_BASIC_VERSION "5.1+basic"
 
 #define MEI_FB_HARM "fb-harm"
 
@@ -128,7 +128,7 @@ bool MeiImporter::read(const muse::io::path_t& path)
 
     pugi::xml_attribute meiVersion = root.attribute("meiversion");
     if (!meiVersion || String(meiVersion.value()) != String(MEI_BASIC_VERSION)) {
-        Convert::logs.push_back(String("The MEI file does not seem to be a MEI basic version '%1' file").arg(String(MEI_BASIC_VERSION)));
+        Convert::logs.push_back(String("The MEI file does not seem to be a MEI Basic version '%1' file").arg(String(MEI_BASIC_VERSION)));
     }
 
     bool success = true;
@@ -1942,7 +1942,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     if (accidNode) {
         meiAccid.Read(accidNode);
     } else {
-        // Support for non MEI-Basic accid and accid.ges encoded in <note> - this is not academic...
+        // Support for non MEI Basic accid and accid.ges encoded in <note> - this is not academic...
         meiAccid.Read(noteNode);
         // Remove the xml:id read from the note in that case
         meiAccid.m_xmlId = "";
@@ -1994,7 +1994,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     Convert::colorFromMEI(accid, meiAccid);
     this->readXmlId(accid, meiAccid.m_xmlId);
     accid->setAccidentalType(pitchSt.accidType);
-    //accid->setBracket(AccidentalBracket::BRACKET); // Not supported in MEI-Basic
+    accid->setBracket(pitchSt.accidBracket);
     accid->setRole(pitchSt.accidRole);
     note->add(accid);
 
@@ -3256,6 +3256,8 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
         const int staffIdx = this->getStaffIndex(meiStaffDef.GetN());
         staff->setId(staffIdx);
         staff->setLines(Fraction(0, 1), staffSt.lines);
+        staff->staffType(Fraction(0, 1))->setInvisible(staffSt.invisible);
+        staff->staffType(Fraction(0, 1))->setUserMag(staffSt.scale / 100);
         part->instrument()->setTranspose(staffSt.interval);
 
         m_score->appendStaff(staff);
@@ -3316,7 +3318,7 @@ void MeiImporter::addLayoutBreakToMeasure(Measure* measure, LayoutBreakType layo
 
     LayoutBreak* layoutBreak = Factory::createLayoutBreak(measure);
     layoutBreak->setLayoutBreakType(layoutBreakType);
-    layoutBreak->setTrack(muse::nidx); // this are system elements
+    layoutBreak->setTrack(0);
     measure->add(layoutBreak);
 }
 

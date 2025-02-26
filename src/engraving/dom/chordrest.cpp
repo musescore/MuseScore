@@ -644,7 +644,9 @@ void ChordRest::replaceBeam(Beam* newBeam)
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
     if (secondChordRest == nullptr) {
-        secondChordRest = nextChordRest(const_cast<ChordRest*>(this));
+        ChordRestNavigateOptions options;
+        options.disableOverRepeats = true;
+        secondChordRest = nextChordRest(const_cast<ChordRest*>(this), options);
     }
     int currentTick = tick().ticks();
     Slur* result = nullptr;
@@ -811,24 +813,11 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
 {
     Fraction end = tick() + actualTicks();
     for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
-        // chordrest ends at afrac+actualFraction
-        // we return the segment at or after the end of the chordrest
-        // Segment::afrac() is based on ticks; use DurationElement::afrac() if possible
-        EngravingItem* e = s;
-        if (s->isChordRestType()) {
-            // Find the first non-NULL element in the segment
-            for (EngravingItem* ee : s->elist()) {
-                if (ee) {
-                    e = ee;
-                    break;
-                }
-            }
-        }
-        if (e->tick() >= end) {
+        if (s->tick() >= end) {
             return s;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -1328,7 +1317,7 @@ bool ChordRest::hasFollowingJumpItem() const
 
         const Marker* marker = toMarker(e);
 
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+        if (marker->isRightMarker()) {
             return true;
         }
     }
@@ -1384,7 +1373,7 @@ bool ChordRest::hasPrecedingJumpItem() const
         }
 
         const Marker* marker = toMarker(e);
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+        if (marker->isRightMarker()) {
             continue;
         }
 
@@ -1394,7 +1383,7 @@ bool ChordRest::hasPrecedingJumpItem() const
     // Voltas
     auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
     for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick()) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick() || toVolta(spanner.value)->isFirstVolta()) {
             continue;
         }
 

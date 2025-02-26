@@ -39,7 +39,6 @@ Item {
 
     ShortcutsModel {
         id: shortcutsModel
-
         selection: shortcutsView.sourceSelection
     }
 
@@ -51,29 +50,26 @@ Item {
         shortcutsModel.reset()
     }
 
+    function startEditCurrentShortcut() {
+        editShortcutDialog.load(shortcutsModel.currentShortcut, shortcutsModel.shortcuts())
+        editShortcutDialog.open()
+    }
+
     Component.onCompleted: {
         shortcutsModel.load()
-
         topPanel.setSearchText(root.shortcutCodeKey)
     }
 
     QtObject {
         id: prv
-
         readonly property int buttonMinWidth: 104
     }
 
-    EditShortcutDialog {
+    StandardEditShortcutDialog {
         id: editShortcutDialog
 
-        onApplySequenceRequested: function(newSequence, conflictShortcutIndex) {
+        onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
             shortcutsModel.applySequenceToCurrentShortcut(newSequence, conflictShortcutIndex)
-        }
-
-        property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
-
-        function startEditCurrentShortcut() {
-            editShortcutDialog.startEdit(shortcutsModel.currentShortcut, shortcutsModel.shortcuts())
         }
     }
 
@@ -88,7 +84,7 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
 
-            canEditCurrentShortcut: editShortcutDialog.canEditCurrentShortcut
+            canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
             canClearCurrentShortcuts: shortcutsView.hasSelection
 
             buttonMinWidth: prv.buttonMinWidth
@@ -97,7 +93,7 @@ Item {
             navigation.order: root.navigationOrderStart + 1
 
             onStartEditCurrentShortcutRequested: {
-                editShortcutDialog.startEditCurrentShortcut()
+                root.startEditCurrentShortcut()
             }
 
             onClearSelectedShortcutsRequested: {
@@ -118,7 +114,7 @@ Item {
             navigationOrderStart: root.navigationOrderStart + 2
 
             onStartEditCurrentShortcutRequested: {
-                editShortcutDialog.startEditCurrentShortcut()
+                root.startEditCurrentShortcut()
             }
         }
 

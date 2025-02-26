@@ -1393,7 +1393,14 @@ String String::number(double n, int prec)
         --correctedIdx;
     }
 
-    return fromAscii(s.c_str(), correctedIdx + 1);
+    // remove extra '-'
+    const char* cs = s.c_str();
+    if (correctedIdx == 1 && std::strncmp(cs, "-0", 2) == 0) {
+        ++cs;
+        --correctedIdx;
+    }
+
+    return fromAscii(cs, correctedIdx + 1);
 }
 
 float String::toFloat(bool* ok) const

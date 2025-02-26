@@ -45,7 +45,7 @@ Column {
 
     PropertyCheckBox {
         id: showCourtesyKeySignature
-        text: qsTrc("inspector", "Show courtesy key signature on previous system")
+        text: qsTrc("inspector", "Show courtesy key signature")
         propertyItem: root.model ? root.model.hasToShowCourtesy : null
 
         navigation.name: "ShowCourtesyKeySignature"

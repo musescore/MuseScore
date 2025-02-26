@@ -23,12 +23,14 @@
 #pragma once
 
 #include "../types/types.h"
+#include "types.h"
 
 #include "interval.h"
 
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
+class Score;
 class Chord;
 class EngravingItem;
 class KeySig;
@@ -38,10 +40,12 @@ class Measure;
 class Score;
 class Segment;
 class System;
+class Staff;
 class Tuplet;
 class Volta;
+struct NoteVal;
 
-enum class Key;
+enum class Key : signed char;
 
 extern RectF handleRect(const PointF& pos);
 
@@ -70,7 +74,7 @@ extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
 extern Volta* findVolta(const Segment* seg, const Score* score);
-extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr);
+extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
 extern Note* searchTieNote114(Note* note);
 
 extern int absStep(int pitch);
@@ -82,6 +86,8 @@ extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalDiatonicSteps);
+extern int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick);
+extern AccidentalVal noteValToAccidentalVal(const NoteVal& nval, const Staff* staff, const Fraction& tick);
 extern int compareNotesPos(const Note* n1, const Note* n2);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
@@ -95,6 +101,7 @@ extern bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff
 
 extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests);
 extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords);
+extern std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves = {});
 
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 
@@ -109,4 +116,7 @@ extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
 extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure);
 extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
 extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
+extern bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg);
+
+extern bool chordContainsNoteVal(const Chord* chord, const NoteVal& nval);
 } // namespace mu::engraving

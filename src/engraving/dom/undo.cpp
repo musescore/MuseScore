@@ -89,20 +89,46 @@ using namespace mu::engraving;
 namespace mu::engraving {
 extern Measure* tick2measure(int tick);
 
-static std::vector<const EngravingObject*> compoundObjects(const EngravingObject* object)
+static const std::unordered_map<CommandType, CommandType> COMMAND_TYPE_INVERSION {
+    { CommandType::AddElement, CommandType::RemoveElement },
+    { CommandType::RemoveElement, CommandType::AddElement },
+
+    { CommandType::AddBracket, CommandType::RemoveBracket },
+    { CommandType::RemoveBracket, CommandType::AddBracket },
+
+    { CommandType::AddExcerpt, CommandType::RemoveExcerpt },
+    { CommandType::RemoveExcerpt, CommandType::AddExcerpt },
+
+    { CommandType::AddSystemObjectStaff, CommandType::RemoveSystemObjectStaff },
+    { CommandType::RemoveSystemObjectStaff, CommandType::AddSystemObjectStaff },
+
+    { CommandType::InsertMeasures, CommandType::RemoveMeasures },
+    { CommandType::RemoveMeasures, CommandType::InsertMeasures },
+
+    { CommandType::InsertStaff, CommandType::RemoveStaff },
+    { CommandType::RemoveStaff, CommandType::InsertStaff },
+
+    { CommandType::InsertPart, CommandType::RemovePart },
+    { CommandType::RemovePart, CommandType::InsertPart },
+
+    { CommandType::Link, CommandType::Unlink },
+    { CommandType::Unlink, CommandType::Link },
+};
+
+static std::vector<EngravingObject*> compoundObjects(EngravingObject* object)
 {
-    std::vector<const EngravingObject*> objects;
+    std::vector<EngravingObject*> objects;
 
     if (object->isChord()) {
         const Chord* chord = toChord(object);
         for (const Note* note : chord->notes()) {
-            for (const Note* compoundNote : note->compoundNotes()) {
+            for (Note* compoundNote : note->compoundNotes()) {
                 objects.push_back(compoundNote);
             }
         }
     } else if (object->isNote()) {
         const Note* note = toNote(object);
-        for (const Note* compoundNote : note->compoundNotes()) {
+        for (Note* compoundNote : note->compoundNotes()) {
             objects.push_back(compoundNote);
         }
     }
@@ -647,7 +673,7 @@ const UndoMacro::SelectionInfo& UndoMacro::redoSelectionInfo() const
     return m_redoSelectionInfo;
 }
 
-UndoMacro::ChangesInfo UndoMacro::changesInfo() const
+UndoMacro::ChangesInfo UndoMacro::changesInfo(bool undo) const
 {
     ChangesInfo result;
 
@@ -664,19 +690,26 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo() const
             }
         }
 
-        for (const EngravingObject* object : command->objectItems()) {
+        if (undo) {
+            auto it = COMMAND_TYPE_INVERSION.find(type);
+            if (it != COMMAND_TYPE_INVERSION.end()) {
+                type = it->second;
+            }
+        }
+
+        for (EngravingObject* object : command->objectItems()) {
             if (!object) {
                 continue;
             }
 
             result.changedObjectTypes.insert(object->type());
 
-            auto item = dynamic_cast<const EngravingItem*>(object);
+            auto item = dynamic_cast<EngravingItem*>(object);
             if (!item) {
                 continue;
             }
 
-            result.changedItems.insert(item);
+            result.changedItems[item].insert(type);
         }
     }
 
@@ -996,7 +1029,7 @@ bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) 
     return false;
 }
 
-std::vector<const EngravingObject*> AddElement::objectItems() const
+std::vector<EngravingObject*> AddElement::objectItems() const
 {
     return compoundObjects(element);
 }
@@ -1350,6 +1383,9 @@ void RemoveStaff::undo(EditData*)
 void RemoveStaff::redo(EditData*)
 {
     staff->score()->removeStaff(staff);
+    if (wasSystemObjectStaff) {
+        staff->score()->removeSystemObjectStaff(staff);
+    }
 }
 
 void RemoveStaff::cleanup(bool undo)
@@ -1358,6 +1394,36 @@ void RemoveStaff::cleanup(bool undo)
         delete staff;
         staff = nullptr;
     }
+}
+
+AddSystemObjectStaff::AddSystemObjectStaff(Staff* s)
+    : staff(s)
+{
+}
+
+void AddSystemObjectStaff::undo(EditData*)
+{
+    staff->score()->removeSystemObjectStaff(staff);
+}
+
+void AddSystemObjectStaff::redo(EditData*)
+{
+    staff->score()->addSystemObjectStaff(staff);
+}
+
+RemoveSystemObjectStaff::RemoveSystemObjectStaff(Staff* s)
+    : staff(s)
+{
+}
+
+void RemoveSystemObjectStaff::undo(EditData*)
+{
+    staff->score()->addSystemObjectStaff(staff);
+}
+
+void RemoveSystemObjectStaff::redo(EditData*)
+{
+    staff->score()->removeSystemObjectStaff(staff);
 }
 
 //---------------------------------------------------------
@@ -2011,6 +2077,9 @@ void ChangeStyle::flip(EditData*)
 
     score->setStyle(style, overlap);
     changeChordStyle(score);
+    if (tmp.spatium() != style.spatium()) {
+        score->spatiumChanged(tmp.spatium(), style.spatium());
+    }
     score->styleChanged();
     style = tmp;
 }
@@ -2038,6 +2107,11 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
         break;
     case Sid::defaultsVersion:
         score->style().setDefaultStyleVersion(newValue.toInt());
+        break;
+    case Sid::createMultiMeasureRests:
+        if (oldValue.toBool() == true && newValue.toBool() == false) {
+            score->updateSystemLocksOnDisableMMRests();
+        }
         break;
     default:
         break;
@@ -2296,7 +2370,7 @@ void InsertRemoveMeasures::insertMeasures()
             }
             Chord* chord = toChord(e);
             for (Note* n : chord->notes()) {
-                Tie* tie = n->tieFor();
+                Tie* tie = n->tieForNonPartial();
                 if (!tie) {
                     continue;
                 }
@@ -2498,10 +2572,10 @@ void AddExcerpt::redo(EditData*)
     excerpt->masterScore()->addExcerpt(excerpt);
 }
 
-std::vector<const EngravingObject*> AddExcerpt::objectItems() const
+std::vector<EngravingObject*> AddExcerpt::objectItems() const
 {
     if (excerpt) {
-        if (const MasterScore* score = excerpt->masterScore()) {
+        if (MasterScore* score = excerpt->masterScore()) {
             return { score };
         }
     }
@@ -2547,10 +2621,10 @@ void RemoveExcerpt::redo(EditData*)
     excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
-std::vector<const EngravingObject*> RemoveExcerpt::objectItems() const
+std::vector<EngravingObject*> RemoveExcerpt::objectItems() const
 {
     if (excerpt) {
-        if (const MasterScore* score = excerpt->masterScore()) {
+        if (MasterScore* score = excerpt->masterScore()) {
             return { score };
         }
     }
@@ -2728,7 +2802,7 @@ void ChangeProperty::flip(EditData*)
     flags = ps;
 }
 
-std::vector<const EngravingObject*> ChangeProperty::objectItems() const
+std::vector<EngravingObject*> ChangeProperty::objectItems() const
 {
     return compoundObjects(element);
 }
@@ -3046,6 +3120,22 @@ void ChangeDrumset::flip(EditData*)
 }
 
 //---------------------------------------------------------
+//   FretDataChange
+//---------------------------------------------------------
+
+void FretDataChange::redo(EditData*)
+{
+    m_undoData = FretUndoData(m_diagram);
+
+    m_diagram->updateDiagram(m_harmonyName);
+}
+
+void FretDataChange::undo(EditData*)
+{
+    m_undoData.updateDiagram();
+}
+
+//---------------------------------------------------------
 //   FretDot
 //---------------------------------------------------------
 
@@ -3217,10 +3307,10 @@ void ChangeHarpPedalState::flip(EditData*)
     diagram->triggerLayout();
 }
 
-std::vector<const EngravingObject*> ChangeHarpPedalState::objectItems() const
+std::vector<EngravingObject*> ChangeHarpPedalState::objectItems() const
 {
     Part* part = diagram->part();
-    std::vector<const EngravingObject*> objs{ diagram };
+    std::vector<EngravingObject*> objs{ diagram };
     if (!part) {
         return objs;
     }
@@ -3249,10 +3339,10 @@ void ChangeSingleHarpPedal::flip(EditData*)
     diagram->triggerLayout();
 }
 
-std::vector<const EngravingObject*> ChangeSingleHarpPedal::objectItems() const
+std::vector<EngravingObject*> ChangeSingleHarpPedal::objectItems() const
 {
     Part* part = diagram->part();
-    std::vector<const EngravingObject*> objs{ diagram };
+    std::vector<EngravingObject*> objs{ diagram };
     if (!part) {
         return objs;
     }
@@ -3329,7 +3419,7 @@ void AddSystemLock::cleanup(bool undo)
     }
 }
 
-std::vector<const EngravingObject*> AddSystemLock::objectItems() const
+std::vector<EngravingObject*> AddSystemLock::objectItems() const
 {
     return { m_systemLock->startMB(), m_systemLock->endMB() };
 }
@@ -3357,7 +3447,7 @@ void RemoveSystemLock::cleanup(bool undo)
     }
 }
 
-std::vector<const EngravingObject*> RemoveSystemLock::objectItems() const
+std::vector<EngravingObject*> RemoveSystemLock::objectItems() const
 {
     return { m_systemLock->startMB(), m_systemLock->endMB() };
 }

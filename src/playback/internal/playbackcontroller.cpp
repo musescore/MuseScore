@@ -25,6 +25,7 @@
 
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/utils.h"
+#include "engraving/dom/factory.h"
 
 #include "audio/audioutils.h"
 #include "audio/devtools/inputlag.h"
@@ -88,15 +89,6 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return muse::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
-static bool shouldLoadDrumset(const AudioResourceMeta& oldMeta, const AudioResourceMeta& newMeta)
-{
-    if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
-        return false;
-    }
-
-    return oldMeta.type == AudioResourceType::MuseSamplerSoundPack || newMeta.type == AudioResourceType::MuseSamplerSoundPack;
-}
-
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
@@ -115,6 +107,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
     dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE, this, &PlaybackController::toggleHearPlaybackWhenEditing);
+    dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
@@ -129,7 +122,7 @@ void PlaybackController::init()
             return;
         }
 
-        m_loadingProgress.started.notify();
+        m_loadingProgress.start();
 
         playback()->addSequence().onResolve(this, [this](const TrackSequenceId& sequenceId) {
             setupNewCurrentSequence(sequenceId);
@@ -362,6 +355,28 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
     notationPlayback()->triggerEventsForItems(elementsForPlaying);
 }
 
+void PlaybackController::playNotes(const NoteValList& notes, const staff_idx_t staffIdx, const Segment* segment)
+{
+    Segment* seg = const_cast<Segment*>(segment);
+    Chord* chord = engraving::Factory::createChord(seg);
+    chord->setParent(seg);
+
+    std::vector<const EngravingItem*> elements;
+
+    for (const NoteVal& nval : notes) {
+        Note* note = engraving::Factory::createNote(chord);
+        note->setParent(chord);
+        note->setStaffIdx(staffIdx);
+        note->setNval(nval);
+        elements.push_back(note);
+    }
+
+    playElements(elements);
+
+    delete chord;
+    DeleteAll(elements);
+}
+
 void PlaybackController::playMetronome(int tick)
 {
     notationPlayback()->triggerMetronome(tick);
@@ -425,11 +440,27 @@ void PlaybackController::onAudioResourceChanged(const InstrumentTrackId& trackId
         return;
     }
 
-    if (shouldLoadDrumset(oldMeta, newMeta)) {
+    if (shouldLoadDrumset(trackId, oldMeta, newMeta)) {
         m_drumsetLoader.loadDrumset(m_notation, trackId, newMeta);
     }
 
     notationPlayback->removeSoundFlags({ trackId });
+}
+
+bool PlaybackController::shouldLoadDrumset(const engraving::InstrumentTrackId& trackId, const AudioResourceMeta& oldMeta,
+                                           const AudioResourceMeta& newMeta) const
+{
+    if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
+        return false;
+    }
+
+    const Part* part = masterNotationParts()->part(trackId.partId);
+    const Instrument* instrument = part ? part->instrumentById(trackId.instrumentId) : nullptr;
+    if (!instrument || !instrument->useDrumset()) {
+        return false;
+    }
+
+    return oldMeta.type == AudioResourceType::MuseSamplerSoundPack || newMeta.type == AudioResourceType::MuseSamplerSoundPack;
 }
 
 void PlaybackController::addSoundFlagsIfNeed(const std::vector<EngravingItem*>& selection)
@@ -545,7 +576,11 @@ void PlaybackController::onPartChanged(const Part* part)
 
 void PlaybackController::onSelectionChanged()
 {
-    INotationSelectionPtr selection = this->selection();
+    const INotationSelectionPtr selection = this->selection();
+    if (!selection || !m_player) {
+        return;
+    }
+
     bool selectionTypeChanged = m_isRangeSelection && !selection->isRange();
     m_isRangeSelection = selection->isRange();
 
@@ -564,7 +599,7 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    currentPlayer()->resetLoop();
+    m_player->resetLoop();
 
     seekRangeSelection();
     updateSoloMuteStates();
@@ -793,6 +828,14 @@ void PlaybackController::toggleHearPlaybackWhenEditing()
     configuration()->setPlayNotesWhenEditing(!wasPlayNotesWhenEditing);
 }
 
+void PlaybackController::reloadPlaybackCache()
+{
+    INotationPlaybackPtr playback = notationPlayback();
+    if (playback) {
+        playback->reload();
+    }
+}
+
 void PlaybackController::openPlaybackSetupDialog()
 {
     interactive()->open("musescore://playback/soundprofilesdialog");
@@ -1009,7 +1052,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
             onTrackNewlyAdded(instrumentTrackId);
         }
 
-        if (shouldLoadDrumset(originMeta, appliedParams.in.resourceMeta)) {
+        if (shouldLoadDrumset(instrumentTrackId, originMeta, appliedParams.in.resourceMeta)) {
             m_drumsetLoader.loadDrumset(m_notation, instrumentTrackId, appliedParams.in.resourceMeta);
         }
     })
@@ -1267,10 +1310,10 @@ void PlaybackController::setupSequenceTracks()
         m_loadingTrackCount--;
 
         size_t current = trackCount - m_loadingTrackCount;
-        m_loadingProgress.progressChanged.send(current, trackCount, title);
+        m_loadingProgress.progress(current, trackCount, title);
 
         if (m_loadingTrackCount == 0) {
-            m_loadingProgress.finished.send(muse::make_ok());
+            m_loadingProgress.finish(muse::make_ok());
             m_isPlayAllowedChanged.notify();
         }
     };
@@ -1283,7 +1326,7 @@ void PlaybackController::setupSequenceTracks()
         addAuxTrack(idx, onAddFinished);
     }
 
-    m_loadingProgress.progressChanged.send(0, trackCount, title);
+    m_loadingProgress.progress(0, trackCount, title);
 
     notationPlayback()->trackAdded().onReceive(this, [this, onAddFinished](const InstrumentTrackId& instrumentTrackId) {
         addTrack(instrumentTrackId, onAddFinished);

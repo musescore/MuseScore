@@ -46,6 +46,7 @@ namespace mu::engraving {
 
 static const ElementStyle lyricsElementStyle {
     { Sid::lyricsPlacement, Pid::PLACEMENT },
+    { Sid::lyricsAvoidBarlines, Pid::AVOID_BARLINES },
 };
 
 //---------------------------------------------------------
@@ -328,8 +329,15 @@ void Lyrics::adjustPrevious()
 
 void Lyrics::setNeedRemoveInvalidSegments()
 {
-    // Allow "invalid" segments when there is a partial lyric line in a following repeat segment
-    if (chordRest()->hasFollowingJumpItem() && repeatHasPartialLyricLine(measure())) {
+    // Allow "invalid" segments when there is a following repeat item
+
+    const Measure* meas = measure();
+    const ChordRest* separatorEndChord = m_separator ? toChordRest(m_separator->endElement()) : nullptr;
+    const ChordRest* lastChordRest = meas ? meas->lastChordRest(track()) : nullptr;
+    const bool endChordIsLastInMeasure = separatorEndChord == lastChordRest;
+    const bool hasFollowingJump = lastChordRest ? lastChordRest->hasFollowingJumpItem() : false;
+
+    if (endChordIsLastInMeasure && hasFollowingJump) {
         return;
     }
     m_needRemoveInvalidSegments = true;
@@ -363,6 +371,19 @@ void Lyrics::removeFromScore()
         }
     }
 
+    if (!plainText().isEmpty()) {
+        for (auto sp : score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks())) {
+            if (!sp.value->isPartialLyricsLine() || sp.value->track() != track()) {
+                continue;
+            }
+            PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
+            if (partialLine->isEndMelisma() || partialLine->no() != no() || partialLine->placement() != placement()) {
+                continue;
+            }
+            score()->undoRemoveElement(partialLine);
+        }
+    }
+
     if (m_separator) {
         m_separator->removeUnmanaged();
         delete m_separator;
@@ -388,6 +409,8 @@ PropertyValue Lyrics::getProperty(Pid propertyId) const
         return m_ticks;
     case Pid::VERSE:
         return m_no;
+    case Pid::AVOID_BARLINES:
+        return m_avoidBarlines;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -447,6 +470,9 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         }
         m_no = v.toInt();
         break;
+    case Pid::AVOID_BARLINES:
+        m_avoidBarlines = v.toBool();
+        break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
             return false;
@@ -474,6 +500,8 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
         return Fraction(0, 1);
     case Pid::VERSE:
         return 0;
+    case Pid::AVOID_BARLINES:
+        return style().styleB(Sid::lyricsAvoidBarlines);
     case Pid::ALIGN:
         if (isMelisma()) {
             return style().styleV(Sid::lyricsMelismaAlign);

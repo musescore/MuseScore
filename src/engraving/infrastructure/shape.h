@@ -68,7 +68,7 @@ class Shape
 {
 public:
 
-    enum class Type {
+    enum class Type : unsigned char {
         Fixed,      // fixed size, like just bbox
 //        FixedX,     // not implemented (reserved)
 //        FixedY,     // not implemented (reserved)
@@ -128,6 +128,7 @@ public:
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
     std::vector<ShapeElement>& elements() { return m_elements; }
+    std::vector<RectF> toRects() const;
 
     std::optional<ShapeElement> find_if(const std::function<bool(const ShapeElement&)>& func) const;
     std::optional<ShapeElement> find_first(ElementType type) const;
@@ -146,6 +147,8 @@ public:
     Shape scaled(const SizeF&) const;
     Shape& adjust(double xp1, double yp1, double xp2, double yp2);
     Shape adjusted(double xp1, double yp1, double xp2, double yp2) const;
+    Shape& pad(double p);
+    Shape padded(double p) const;
 
     const RectF& bbox() const;
     double minVerticalDistance(const Shape&, double minHorizontalClearance = 0.0) const;

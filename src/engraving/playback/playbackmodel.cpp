@@ -385,6 +385,10 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         collectChangesTracks(trackId, trackChanges);
     }
 
+    if (segment->isTimeTickType()) {
+        return; // optimization: search only for annotations
+    }
+
     for (const EngravingItem* item : segment->elist()) {
         if (!item || !item->isChordRest() || !item->part()) {
             continue;
@@ -457,7 +461,7 @@ void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const Mea
     bool isFirstSegmentOfRepeatedMeasure = true;
 
     for (const Segment* seg = referringMeasure->first(); seg; seg = seg->next()) {
-        if (!seg->isChordRestType()) {
+        if (!seg->isChordRestType() && !seg->isTimeTickType()) {
             continue;
         }
 
@@ -497,7 +501,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
             bool isFirstSegmentOfMeasure = true;
 
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-                if (!segment->isChordRestType()) {
+                if (!segment->isChordRestType() && !segment->isTimeTickType()) {
                     continue;
                 }
 
@@ -821,7 +825,9 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
         return result;
     }
 
-    for (const EngravingItem* item : changesRange.changedItems) {
+    for (const auto& pair : changesRange.changedItems) {
+        const EngravingItem* item = pair.first;
+
         if (item->isNote()) {
             const Note* note = toNote(item);
             const Chord* chord = note->chord();
@@ -951,9 +957,9 @@ PlaybackContextPtr PlaybackModel::playbackCtx(const InstrumentTrackId& trackId)
 void PlaybackModel::applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries)
 {
     const Tie* tie;
-    if (tie = note->tieFor()) {
+    if ((tie = note->tieFor())) {
         applyTieTickBoundaries(tie, tickBoundaries);
-    } else if (tie = note->tieBack()) {
+    } else if ((tie = note->tieBack())) {
         applyTieTickBoundaries(tie, tickBoundaries);
     }
 }

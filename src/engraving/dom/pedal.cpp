@@ -268,10 +268,6 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     *sys = endSeg->measure()->system();
     double x = endSeg->x() + endSeg->measure()->x();
 
-    if (endText() == "<sym>keyboardPedalUp</sym>") {
-        x -= symWidth(SymId::keyboardPedalUp);
-    }
-
     x -= (endSeg->isChordRestType() && nextPedal ? 1.25 : 0.75) * spatium();
 
     return PointF(x, 0.0);

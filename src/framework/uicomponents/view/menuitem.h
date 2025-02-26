@@ -57,6 +57,7 @@ class MenuItem : public QObject, public async::Asyncable
     Q_PROPERTY(QString section READ section NOTIFY sectionChanged)
 
     Q_PROPERTY(int icon READ icon_property NOTIFY actionChanged)
+    Q_PROPERTY(QString iconColor READ iconColor_property NOTIFY actionChanged)
 
     Q_PROPERTY(bool enabled READ enabled_property NOTIFY stateChanged)
 
@@ -89,6 +90,7 @@ public:
     ui::UiAction action() const;
     ui::UiActionState state() const;
     muse::actions::ActionData args() const;
+    const muse::actions::ActionQuery& query() const;
 
     bool isValid() const;
 
@@ -102,10 +104,13 @@ public slots:
     void setState(const ui::UiActionState& state);
     void setSelectable(bool selectable);
     void setSelected(bool selected);
+    void setCheckable(bool checkable);
+    void setChecked(bool checked);
     void setRole(muse::uicomponents::MenuItemRole role);
     void setSubitems(const QList<uicomponents::MenuItem*>& subitems);
     void setAction(const ui::UiAction& action);
     void setArgs(const muse::actions::ActionData& args);
+    void setQuery(const muse::actions::ActionQuery& query);
 
 signals:
     void idChanged(QString id);
@@ -124,6 +129,7 @@ private:
     QString description_property() const;
 
     int icon_property() const;
+    QString iconColor_property() const;
 
     bool enabled_property() const;
 
@@ -142,6 +148,7 @@ private:
     bool m_selected = false;
     MenuItemRole m_role = MenuItemRole::NoRole;
     muse::actions::ActionData m_args;
+    muse::actions::ActionQuery m_query;
     QList<MenuItem*> m_subitems;
 
     ui::UiAction m_action;

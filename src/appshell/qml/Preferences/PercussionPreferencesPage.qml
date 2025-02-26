@@ -39,165 +39,140 @@ PreferencesPage {
         percussionPreferencesModel.init()
     }
 
-    BaseSection {
-        id: percussionPanelPreferences
+    Column {
+        id: contentColumn
 
-        title: qsTrc("appshell/preferences", "Percussion")
-        rowSpacing: 20
+        width: root.width
+        spacing: root.sectionsSpacing
 
-        navigation.section: root.navigationSection
-
-        CheckBox {
-            id: unpitchedSelectedCheckbox
+        BaseSection {
+            id: autoShowSection
 
             enabled: percussionPreferencesModel.useNewPercussionPanel
-            width: parent.width
-
-            text: qsTrc("appshell/preferences", "Open the percussion panel when an unpitched staff is selected")
-
-            navigation.name: "UnpitchedSelectedCheckbox"
-            navigation.panel: percussionPanelPreferences.navigation
-            navigation.row: 0
-
-            checked: percussionPreferencesModel.autoShowPercussionPanel
-
-            onClicked:  {
-                percussionPreferencesModel.autoShowPercussionPanel = !unpitchedSelectedCheckbox.checked
-            }
-        }
-
-        Column {
-            id: swappingOptionsColumn
 
             width: parent.width
-            spacing: 12
+            rowSpacing: 16
+
+            title: qsTrc("notation/percussion", "Triggering the percussion panel")
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
             StyledTextLabel {
-                id: padSwapInfo
+                id: autoShowLabel
 
-                enabled: percussionPreferencesModel.useNewPercussionPanel
                 width: parent.width
 
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.Wrap
-                text: qsTrc("notation/percussion", "When swapping the positions of two drum pads:")
+                text: qsTrc("notation/percussion", "Open the panel automatically:")
             }
 
             RadioButtonGroup {
-                id: radioButtons
+                id: autoShowModesBox
 
-                property int navigationRowStart: unpitchedSelectedCheckbox.navigation.row + 1
-                property int navigationRowEnd: radioButtons.navigationRowStart + model.length
+                property int navigationRowEnd: model.length
 
-                enabled: percussionPreferencesModel.useNewPercussionPanel
+                spacing: 12
+                orientation: Qt.Vertical
 
                 width: parent.width
-                spacing: swappingOptionsColumn.spacing
 
-                orientation: ListView.Vertical
+                model: percussionPreferencesModel.autoShowModes
 
-                model: [
-                    { text: qsTrc("notation/percussion", "Move MIDI notes and keyboard shortcuts with their sounds"), value: true },
-                    { text: qsTrc("notation/percussion", "Leave MIDI notes and keyboard shortcuts fixed to original pad positions"), value: false }
-                ]
-
-                delegate: Row {
+                delegate: RoundedRadioButton {
                     width: parent.width
-                    spacing: 6
 
-                    RoundedRadioButton {
-                        id: radioButton
+                    checked: modelData.checked
+                    text: modelData.title
 
-                        anchors.verticalCenter: parent.verticalCenter
+                    navigation.name: modelData.title
+                    navigation.panel: autoShowSection.navigation
+                    navigation.row: model.index
+                    navigation.column: 0
 
-                        navigation.name: modelData.text
-                        navigation.panel: percussionPanelPreferences.navigation
-                        navigation.row: radioButtons.navigationRowStart + model.index
-
-                        checked: modelData.value === percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts
-
-                        onToggled: {
-                            percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts = modelData.value
-                        }
-                    }
-
-                    //! NOTE: Can't use radioButton.text because it won't wrap
-                    StyledTextLabel {
-                        width: parent.width - parent.spacing - radioButton.width
-
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        horizontalAlignment: Text.AlignLeft
-                        wrapMode: Text.Wrap
-                        text: modelData.text
-
-                        MouseArea {
-                            id: mouseArea
-
-                            anchors.fill: parent
-
-                            onClicked: {
-                                percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts = modelData.value
-                            }
-                        }
+                    onToggled: {
+                        percussionPreferencesModel.setAutoShowMode(model.index)
                     }
                 }
             }
 
             CheckBox {
-                id: alwaysAsk
+                id: autoCloseCheckBox
 
-                enabled: percussionPreferencesModel.useNewPercussionPanel
+                enabled: !percussionPreferencesModel.neverAutoShow
+
                 width: parent.width
 
-                text: qsTrc("global", "Always ask")
+                text: qsTrc("notation/percussion", "Close the panel automatically")
 
-                navigation.name: "AlwaysAskCheckBox"
-                navigation.panel: percussionPanelPreferences.navigation
-                navigation.row: radioButtons.navigationRowEnd
+                navigation.name: "AutoClosePercussionPanelCheckBox"
+                navigation.panel: autoShowSection.navigation
+                navigation.row: autoShowModesBox.navigationRowEnd
+                navigation.column: 0
 
-                checked: percussionPreferencesModel.showPercussionPanelPadSwapDialog
+                checked: !percussionPreferencesModel.neverAutoShow && percussionPreferencesModel.autoClosePercussionPanel
 
                 onClicked:  {
-                    percussionPreferencesModel.showPercussionPanelPadSwapDialog = !alwaysAsk.checked
+                    percussionPreferencesModel.autoClosePercussionPanel = !autoCloseCheckBox.checked
                 }
             }
         }
 
-        Row {
-            id: useLegacyToggleRow
+        SeparatorLine {}
 
-            height: useLegacyToggle.height
+        //! NOTE: "Pad swap options" and the associated dialog were dropped from percussion panel MVP (version 4.5).
+        //! See PR #25810 when re-implementing...
+        // BaseSection {
+        //     id: padSwappingOptionsSection
+        //     ...
+        // }
+
+        // SeparatorLine {}
+
+        BaseSection {
+            id: legacyToggleSection
+
             width: parent.width
+            rowSpacing: 20
 
-            spacing: 6
+            title: qsTrc("appshell/preferences", "Legacy panel")
 
-            ToggleButton {
-                id: useLegacyToggle
+            navigation.section: root.navigationSection
+            navigation.order: autoShowSection.navigation.order + 1
 
-                checked: !percussionPreferencesModel.useNewPercussionPanel
+            Row {
+                id: useLegacyToggleRow
 
-                navigation.name: "UseLegacyPercussionPanel"
-                navigation.panel: percussionPanelPreferences.navigation
-                navigation.row: alwaysAsk.navigation.row + 1
+                height: useLegacyToggle.height
+                width: parent.width
 
-                onToggled: {
-                    percussionPreferencesModel.useNewPercussionPanel = !percussionPreferencesModel.useNewPercussionPanel
+                spacing: 6
+
+                ToggleButton {
+                    id: useLegacyToggle
+
+                    checked: !percussionPreferencesModel.useNewPercussionPanel
+
+                    navigation.name: "UseLegacyPercussionPanel"
+                    navigation.panel: legacyToggleSection.navigation
+
+                    onToggled: {
+                        percussionPreferencesModel.useNewPercussionPanel = !percussionPreferencesModel.useNewPercussionPanel
+                    }
                 }
-            }
 
-            StyledTextLabel {
-                id: legacyToggleInfo
+                StyledTextLabel {
+                    id: legacyToggleInfo
 
-                enabled: percussionPreferencesModel.useNewPercussionPanel
+                    height: parent.height
 
-                height: parent.height
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
 
-                horizontalAlignment: Text.AlignLeft
-                verticalAlignment: Text.AlignVCenter
-
-                wrapMode: Text.Wrap
-                text: qsTrc("notation/percussion", "Use legacy percussion panel")
+                    wrapMode: Text.Wrap
+                    text: qsTrc("notation/percussion", "Use legacy percussion panel")
+                }
             }
         }
     }

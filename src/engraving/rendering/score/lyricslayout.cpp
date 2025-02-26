@@ -42,8 +42,13 @@ using namespace mu::engraving::rendering::score;
 
 static Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p)
 {
-    Lyrics* l = 0;
+    Lyrics* l = nullptr;
+    const Segment* originalSeg = s;
     while ((s = s->next1(SegmentType::ChordRest))) {
+        if (!segmentsAreAdjacentInRepeatStructure(originalSeg, s)) {
+            return nullptr;
+        }
+
         track_idx_t strack = staffIdx * VOICES;
         track_idx_t etrack = strack + VOICES;
         // search through all tracks of current staff looking for a lyric in specified verse
@@ -156,8 +161,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     double x = o.x() - cr->x();
 
     TLayout::layoutBaseTextBase1(item, ctx);
-
-    item->computeHighResShape(item->fontMetrics());
+    TLayout::computeTextHighResShape(item, ldata);
 
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;
@@ -792,6 +796,7 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     const MStyle& style = item->style();
     const bool melisma = lyricsLine->isEndMelisma();
     const bool hasFollowingJump = endChordRest->hasFollowingJumpItem();
+    const bool hasPrecedingJump = endChordRest->hasPrecedingJumpItem();
 
     if (!melisma && !item->isPartialLyricsLineSegment() && !endLyrics && !hasFollowingJump) {
         return 0.0;
@@ -802,6 +807,18 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     // Full melisma or dashes at end of system
     if (!item->isSingleEndType() || dashesEndOfSystem || !lyricsLine->endElement()) {
         return system->endingXForOpenEndedLines();
+    }
+
+    // Partial dashes after a repeat
+    if (!melisma && hasPrecedingJump && item->isPartialLyricsLineSegment()) {
+        if (endLyrics) {
+            const double lyricsLeftEdge = endLyrics->pageX() - systemPageX + endLyrics->ldata()->bbox().left();
+            return lyricsLeftEdge - style.styleMM(Sid::lyricsDashPad);
+        } else if (endChordRest->isChord()) {
+            const Chord* endChord = toChord(endChordRest);
+            const Note* note = endChord->up() ? endChord->downNote() : endChord->upNote();
+            return note->pageX() - systemPageX + note->headWidth();
+        }
     }
 
     // Full dashes or melisma before a repeat - possibly with a partial dash/repeat on the other side of the repeat

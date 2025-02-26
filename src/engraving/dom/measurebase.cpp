@@ -567,7 +567,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
-        lb->setTrack(muse::nidx);           // this are system elements
+        lb->setTrack(0);
         lb->setParent(mb);
         score()->undoAddElement(lb);
     }
@@ -706,9 +706,20 @@ bool MeasureBase::isBefore(const EngravingItem* other) const
 
 bool MeasureBase::isBefore(const MeasureBase* other) const
 {
+    if (this == other) {
+        return false;
+    }
+
     Fraction otherTick = other->tick();
     if (otherTick != m_tick) {
         return m_tick < otherTick;
+    }
+
+    if (this->isMeasure() && other->isMeasure()) {
+        // (this == other) has already been excluded, so this is only
+        // possible if one is the overlying mmRest starting on the other.
+        // Let's set by convention that the mmRest isBefore the underlying measure.
+        return toMeasure(this)->isMMRest();
     }
 
     bool otherIsMMRest = other->isMeasure() && toMeasure(other)->isMMRest();

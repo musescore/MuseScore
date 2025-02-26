@@ -27,7 +27,9 @@
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
+
 #include "uicomponents/view/menuitem.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -70,12 +72,9 @@ public:
     QVariant currentViewMode();
     bool zoomEnabled() const;
     int currentZoomPercentage() const;
-    muse::uicomponents::MenuItemList makeAvailableViewModeList();
-    muse::uicomponents::MenuItemList makeAvailableZoomList();
 
     Q_INVOKABLE void load();
 
-    Q_INVOKABLE void selectWorkspace();
     Q_INVOKABLE void toggleConcertPitch();
     Q_INVOKABLE void setCurrentViewMode(const QString& modeCode);
 
@@ -86,6 +85,7 @@ public:
     Q_INVOKABLE void zoomOut();
 
     Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void handleWorkspacesMenuItem(const QString& itemId);
 
 public slots:
     void setCurrentZoomPercentage(int zoomPercentage);
@@ -104,6 +104,9 @@ private:
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
+    void initAvailableViewModeList();
+    void initAvailableZoomList();
+
     muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode);
 
     void dispatch(const muse::actions::ActionCode& code, const muse::actions::ActionData& args = muse::actions::ActionData());
@@ -120,6 +123,13 @@ private:
     QVariantList availableZoomList_property();
 
     QVariantList menuItemListToVariantList(const muse::uicomponents::MenuItemList& list) const;
+
+    muse::uicomponents::MenuItem* m_currentWorkspaceItem = nullptr;
+    muse::uicomponents::MenuItem* m_concertPitchItem = nullptr;
+    muse::uicomponents::MenuItemList m_availableViewModeList;
+    muse::uicomponents::MenuItemList m_availableZoomList;
+
+    std::shared_ptr<muse::uicomponents::AbstractMenuModel> m_workspacesMenuModel;
 };
 }
 

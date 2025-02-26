@@ -32,7 +32,9 @@ std::string Att::StrToStr(std::string str) const
 
 std::string Att::DblToStr(double data) const
 {
-    return StringFormat("%f", data);
+    std::stringstream sstream;
+    sstream << round(data * 10000.0) / 10000.0;
+    return sstream.str();
 }
 
 std::string Att::IntToStr(int data) const
@@ -42,7 +44,7 @@ std::string Att::IntToStr(int data) const
 
 std::string Att::VUToStr(data_VU data) const
 {
-    return StringFormat("%fvu", data);
+    return DblToStr(data) + "vu";
 }
 
 // Basic converters for reading
@@ -59,7 +61,7 @@ int Att::StrToInt(const std::string &value) const
 
 data_VU Att::StrToVU(const std::string &value, bool logWarning) const
 {
-    std::regex test("[+-]?[0-9]*(\\.[0-9]+)?(vu)?");
+    static const std::regex test("[+-]?[0-9]*(\\.[0-9]+)?(vu)?");
     if (!std::regex_match(value, test)) {
         if (logWarning && !value.empty()) LogWarning("Unsupported virtual unit value '%s'", value.c_str());
         return MEI_UNSET;
@@ -154,6 +156,21 @@ data_BULGE Att::StrToBulge(const std::string &value, bool logWarning) const
         bulge.push_back({ distance, offset });
     }
     return bulge;
+}
+
+std::string Att::DegreesToStr(data_DEGREES data) const
+{
+    return StringFormat("%f", data);
+}
+
+data_DEGREES Att::StrToDegrees(const std::string &value, bool logWarning) const
+{
+    double degrees = atof(value.c_str());
+    if ((degrees > 360.0) || (degrees < -360.0)) {
+        if (logWarning) LogWarning("Unsupported data.DEGREES '%s'", value.c_str());
+        return 0;
+    }
+    return degrees;
 }
 
 std::string Att::DurationToStr(data_DURATION data) const
@@ -313,7 +330,7 @@ std::string Att::FontsizenumericToStr(data_FONTSIZENUMERIC data) const
 
 data_FONTSIZENUMERIC Att::StrToFontsizenumeric(const std::string &value, bool logWarning) const
 {
-    std::regex test("[0-9]*(\\.[0-9]+)?(pt)");
+    static const std::regex test("[0-9]*(\\.[0-9]+)?(pt)");
     if (!std::regex_match(value, test)) {
         if (logWarning && !value.empty()) LogWarning("Unsupported data.FONTSIZENUMERIC '%s'", value.c_str());
         return MEI_UNSET;
@@ -343,7 +360,7 @@ data_KEYSIGNATURE Att::StrToKeysignature(const std::string &value, bool logWarni
     int alterationNumber = 0;
     data_ACCIDENTAL_WRITTEN alterationType = ACCIDENTAL_WRITTEN_NONE;
 
-    std::regex test("mixed|0|([1-9]|1[0-2])[f|s]");
+    static const std::regex test("mixed|0|([1-9]|1[0-2])[f|s]");
     if (!std::regex_match(value, test)) {
         if (logWarning) LogWarning("Unsupported data.KEYSIGNATURE '%s'", value.c_str());
         return { -1, ACCIDENTAL_WRITTEN_NONE };
@@ -365,7 +382,9 @@ data_KEYSIGNATURE Att::StrToKeysignature(const std::string &value, bool logWarni
 
 std::string Att::MeasurebeatToStr(data_MEASUREBEAT data) const
 {
-    return StringFormat("%dm+%.4f", data.first, data.second);
+    std::stringstream sstream;
+    sstream << data.first << "m+" << round(data.second * 10000.0) / 10000.0;
+    return sstream.str();
 }
 
 data_MEASUREBEAT Att::StrToMeasurebeat(std::string value, bool) const
@@ -397,7 +416,7 @@ std::string Att::MeasurementsignedToStr(data_MEASUREMENTSIGNED data) const
         value = StringFormat("%dpx", data.GetPx() / DEFINITION_FACTOR);
     }
     else if (data.GetType() == MEASUREMENTTYPE_vu) {
-        value = StringFormat("%.4fvu", data.GetVu());
+        value = VUToStr(data.GetVu());
     }
 
     return value;
@@ -407,7 +426,7 @@ data_MEASUREMENTSIGNED Att::StrToMeasurementsigned(const std::string &value, boo
 {
     data_MEASUREMENTSIGNED data;
 
-    std::regex px(".*px$");
+    static const std::regex px(".*px$");
     if (std::regex_match(value, px)) {
         data.SetPx(atoi(value.substr(0, value.find("px")).c_str()) * DEFINITION_FACTOR);
     }
@@ -442,7 +461,7 @@ std::string Att::MetercountPairToStr(const data_METERCOUNT_pair &data) const
 
 data_METERCOUNT_pair Att::StrToMetercountPair(const std::string &value) const
 {
-    std::regex re("[\\*\\+/-]");
+    static const std::regex re("[\\*\\+/-]");
     std::sregex_token_iterator first{ value.begin(), value.end(), re, -1 }, last;
     std::vector<std::string> tokens{ first, last };
 
@@ -612,12 +631,12 @@ data_ORIENTATION Att::StrToOrientation(const std::string &value, bool logWarning
 
 std::string Att::PercentToStr(data_PERCENT data) const
 {
-    return StringFormat("%.2f%%", data);
+    return DblToStr(data) + "%";
 }
 
 data_PERCENT Att::StrToPercent(const std::string &value, bool logWarning) const
 {
-    std::regex test("[0-9]+(\\.?[0-9]*)?%");
+    static const std::regex test("[0-9]+(\\.?[0-9]*)?%");
     if (!std::regex_match(value, test)) {
         if (logWarning) LogWarning("Unsupported data.PERCENT '%s'", value.c_str());
         return 0;
@@ -625,14 +644,9 @@ data_PERCENT Att::StrToPercent(const std::string &value, bool logWarning) const
     return atof(value.substr(0, value.find("%")).c_str());
 }
 
-std::string Att::PercentLimitedToStr(data_PERCENT_LIMITED data) const
-{
-    return StringFormat("%.2f%%", data);
-}
-
 data_PERCENT_LIMITED Att::StrToPercentLimited(const std::string &value, bool logWarning) const
 {
-    std::regex test("[0-9]+(\\.?[0-9]*)?%");
+    static const std::regex test("[0-9]+(\\.?[0-9]*)?%");
     if (!std::regex_match(value, test)) {
         if (logWarning) LogWarning("Unsupported data.PERCENT.LIMITED '%s'", value.c_str());
         return 0;
@@ -640,16 +654,11 @@ data_PERCENT_LIMITED Att::StrToPercentLimited(const std::string &value, bool log
     return atof(value.substr(0, value.find("%")).c_str());
 }
 
-std::string Att::PercentLimitedSignedToStr(data_PERCENT_LIMITED_SIGNED data) const
-{
-    return StringFormat("%.2f%%", data);
-}
-
 data_PERCENT_LIMITED_SIGNED Att::StrToPercentLimitedSigned(const std::string &value, bool logWarning) const
 {
-    std::regex test("(+|-)?[0-9]+(\\.?[0-9]*)?%");
+    static const std::regex test("(+|-)?[0-9]+(\\.?[0-9]*)?%");
     if (!std::regex_match(value, test)) {
-        if (logWarning) LogWarning("Unsupported data.PERCENT.LIMITED.SIGNEd '%s'", value.c_str());
+        if (logWarning) LogWarning("Unsupported data.PERCENT.LIMITED.SIGNED '%s'", value.c_str());
         return 0;
     }
     return atof(value.substr(0, value.find("%")).c_str());

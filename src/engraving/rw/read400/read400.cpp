@@ -55,11 +55,15 @@
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
-Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
+muse::Ret Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
 {
     ReadContext ctx(score);
-    if (data && data->overriddenSpatium.has_value()) {
-        ctx.setSpatium(data->overriddenSpatium.value());
+    if (data) {
+        if (data->overriddenSpatium.has_value()) {
+            ctx.setSpatium(data->overriddenSpatium.value());
+        }
+
+        ctx.setPropertiesToSkip(data->propertiesToSkip);
     }
 
     if (!score->isMaster() && data) {
@@ -83,9 +87,9 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         } else if (tag == "Score") {
             if (!readScore400(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
-                    return Err::FileCriticallyCorrupted;
+                    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
                 }
-                return Err::FileBadFormat;
+                return make_ret(Err::FileBadFormat, e.errorString());
             }
         } else if (tag == "museScore") {
             // pass
@@ -106,7 +110,7 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         data->settingsCompat = ctx.settingCompat();
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)

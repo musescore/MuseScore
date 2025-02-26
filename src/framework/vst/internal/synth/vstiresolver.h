@@ -28,15 +28,15 @@
 #include "modularity/ioc.h"
 #include "audio/isynthresolver.h"
 
-#include "ivstpluginsregister.h"
-#include "ivstmodulesrepository.h"
+#include "../../ivstinstancesregister.h"
+#include "../../ivstmodulesrepository.h"
 #include "vstsynthesiser.h"
 
 namespace muse::vst {
 class VstiResolver : public audio::synth::ISynthResolver::IResolver, public Injectable
 {
     Inject<IVstModulesRepository> pluginModulesRepo = { this };
-    Inject<IVstPluginsRegister> pluginsRegister = { this };
+    Inject<IVstInstancesRegister> instancesRegister = { this };
 public:
 
     VstiResolver(const modularity::ContextPtr& iocCtx)

@@ -72,7 +72,7 @@ void TimeSig::setParent(Segment* parent)
 
 double TimeSig::mag() const
 {
-    return staff() ? staff()->staffMag(tick()) : 1.0;
+    return timeSigPlacement() == TimeSigPlacement::NORMAL && staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------
@@ -200,6 +200,9 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
         return int(m_timeSigType);
     case Pid::SCALE:
         return m_scale;
+    case Pid::IS_COURTESY:
+        return _isCourtesy;
+
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -242,6 +245,9 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SCALE:
         m_scale = v.value<ScaleF>();
         break;
+    case Pid::IS_COURTESY:
+        _isCourtesy = v.toBool();
+        break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
@@ -274,6 +280,8 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
         return int(TimeSigType::NORMAL);
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
+    case Pid::IS_COURTESY:
+        return false;
     default:
         return EngravingItem::propertyDefault(id);
     }

@@ -24,6 +24,7 @@
 
 #include "dom/note.h"
 #include "dom/spanner.h"
+#include "dom/laissezvib.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "internal/spannersmetaparser.h"
@@ -69,6 +70,8 @@ void NoteArticulationsParser::doParse(const EngravingItem* item, const Rendering
     parsePersistentMeta(ctx, result);
     parseGhostNote(note, ctx, result);
     parseNoteHead(note, ctx, result);
+    parseSymbols(note, ctx, result);
+    parseLaissezVibrer(note, ctx, result);
     parseSpanners(note, ctx, result);
 }
 
@@ -152,44 +155,57 @@ void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingCo
         return;
     }
 
-    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(mpe::ArticulationType::GhostNote);
-    if (pattern.empty()) {
-        return;
-    }
-
-    appendArticulationData(mpe::ArticulationMeta(mpe::ArticulationType::GhostNote,
-                                                 pattern,
-                                                 ctx.nominalTimestamp,
-                                                 ctx.nominalDuration), result);
+    appendArticulations({ mpe::ArticulationType::GhostNote }, ctx, result);
 }
 
 void NoteArticulationsParser::parseNoteHead(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    ArticulationTypeSet types;
     mpe::ArticulationType typeByNoteHeadGroup = articulationTypeByNoteheadGroup(note->headGroup());
 
     if (typeByNoteHeadGroup != mpe::ArticulationType::Undefined) {
-        types.insert(typeByNoteHeadGroup);
+        appendArticulations({ typeByNoteHeadGroup }, ctx, result);
     } else if (note->ldata()->cachedNoteheadSym.has_value()) {
         SymId symId = note->ldata()->cachedNoteheadSym.value(); // fastest way to get the notehead symbol
-        types = SymbolsMetaParser::symbolToArticulations(symId);
+        ArticulationTypeSet types = SymbolsMetaParser::symbolToArticulations(symId);
+        appendArticulations(types, ctx, result);
+    }
+}
+
+void NoteArticulationsParser::parseSymbols(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    for (const EngravingItem* item : note->el()) {
+        if (item && item->isSymbol()) {
+            ArticulationTypeSet types = SymbolsMetaParser::symbolToArticulations(toSymbol(item)->sym());
+            appendArticulations(types, ctx, result);
+        }
+    }
+}
+
+void NoteArticulationsParser::parseLaissezVibrer(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    const LaissezVib* laissezVib = note->laissezVib();
+    if (!laissezVib || !laissezVib->playSpanner()) {
+        return;
     }
 
-    for (mpe::ArticulationType type : types) {
-        if (type == mpe::ArticulationType::Undefined) {
-            continue;
-        }
-
-        const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
-        if (pattern.empty()) {
-            continue;
-        }
-
-        appendArticulationData(mpe::ArticulationMeta(type,
-                                                     pattern,
-                                                     ctx.nominalTimestamp,
-                                                     ctx.nominalDuration), result);
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(mpe::ArticulationType::LaissezVibrer);
+    if (pattern.empty()) {
+        return;
     }
+
+    const Measure* noteMeasure = note->findMeasure();
+    if (!noteMeasure) {
+        return;
+    }
+
+    const Measure* nextMeasure = noteMeasure->nextMeasure();
+    const Fraction endTick = nextMeasure ? nextMeasure->endTick() : noteMeasure->endTick();
+    const timestamp_t endTime = timestampFromTicks(ctx.score, endTick.ticks() + ctx.positionTickOffset);
+
+    appendArticulationData(mpe::ArticulationMeta(mpe::ArticulationType::LaissezVibrer,
+                                                 pattern,
+                                                 ctx.nominalTimestamp,
+                                                 endTime - ctx.nominalTimestamp), result);
 }
 
 void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
@@ -212,5 +228,25 @@ void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingCon
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
         SpannersMetaParser::parse(spanner, spannerContext, result);
+    }
+}
+
+void NoteArticulationsParser::appendArticulations(const mpe::ArticulationTypeSet& types, const RenderingContext& ctx,
+                                                  mpe::ArticulationMap& result)
+{
+    for (mpe::ArticulationType type : types) {
+        if (type == mpe::ArticulationType::Undefined) {
+            continue;
+        }
+
+        const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
+        if (pattern.empty()) {
+            continue;
+        }
+
+        appendArticulationData(mpe::ArticulationMeta(type,
+                                                     pattern,
+                                                     ctx.nominalTimestamp,
+                                                     ctx.nominalDuration), result);
     }
 }

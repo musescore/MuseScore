@@ -298,10 +298,14 @@ int RepeatList::utime2utick(double secs) const
 ///
 std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTick(int utick) const
 {
-    return std::lower_bound(this->cbegin(), this->cend(), utick, [](RepeatSegment const* rs, int utick) {
-        // Skip RS where endtick is less than us
-        return utick > (rs->utick + rs->len());
-    });
+    for (auto it = cbegin(); it != cend(); ++it) {
+        const RepeatSegment* seg = *it;
+        if (utick >= seg->utick && utick < seg->utick + seg->len()) {
+            return it;
+        }
+    }
+
+    return cend();
 }
 
 //---------------------------------------------------------
@@ -338,7 +342,7 @@ void RepeatList::flatten()
 //          - d.s. al fine
 //          - d.s. al coda
 //---------------------------------------------------------
-enum class RepeatListElementType {
+enum class RepeatListElementType : unsigned char {
     SECTION_BREAK,
     VOLTA_START,
     VOLTA_END,

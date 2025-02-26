@@ -32,7 +32,9 @@
       <beamMinLen>1.3</beamMinLen>
       <dotNoteDistance>0.45</dotNoteDistance>
       <dotDotDistance>0.6</dotDotDistance>
+      <propertyDistanceHead>0.5</propertyDistanceHead>
       <propertyDistanceStem>0.6</propertyDistanceStem>
+      <propertyDistance>0.5</propertyDistance>
       <lastSystemFillLimit>0.29</lastSystemFillLimit>
       <hairpinHeight>1.3</hairpinHeight>
       <hairpinContHeight>0.6</hairpinContHeight>

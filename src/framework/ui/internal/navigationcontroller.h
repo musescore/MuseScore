@@ -68,6 +68,9 @@ public:
     INavigationPanel* activePanel() const override;
     INavigationControl* activeControl() const override;
 
+    const INavigationControl* findControl(const std::string& section, const std::string& panel,
+                                          const std::string& controlName) const override;
+
     void setDefaultNavigationControl(INavigationControl* control) override;
 
     void resetNavigation() override;

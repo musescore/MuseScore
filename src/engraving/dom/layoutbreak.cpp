@@ -52,6 +52,7 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     m_startWithLongNames = false;
     m_startWithMeasureOne = false;
     m_firstSystemIndentation = false;
+    m_showCourtesy = false;
     m_layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
     initElementStyle(&sectionBreakStyle);
@@ -60,6 +61,7 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     resetProperty(Pid::START_WITH_LONG_NAMES);
     resetProperty(Pid::START_WITH_MEASURE_ONE);
     resetProperty(Pid::FIRST_SYSTEM_INDENTATION);
+    resetProperty(Pid::SHOW_COURTESY);
 }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
@@ -70,6 +72,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     m_startWithLongNames     = lb.m_startWithLongNames;
     m_startWithMeasureOne    = lb.m_startWithMeasureOne;
     m_firstSystemIndentation = lb.m_firstSystemIndentation;
+    m_showCourtesy           = lb.m_showCourtesy;
 }
 
 void LayoutBreak::setParent(MeasureBase* parent)
@@ -140,6 +143,8 @@ PropertyValue LayoutBreak::getProperty(Pid propertyId) const
         return m_startWithMeasureOne;
     case Pid::FIRST_SYSTEM_INDENTATION:
         return m_firstSystemIndentation;
+    case Pid::SHOW_COURTESY:
+        return m_showCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -167,6 +172,9 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::FIRST_SYSTEM_INDENTATION:
         setFirstSystemIndentation(v.toBool());
+        break;
+    case Pid::SHOW_COURTESY:
+        setShowCourtesy(v.toBool());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -205,6 +213,8 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
         return true;
     case Pid::FIRST_SYSTEM_INDENTATION:
         return true;
+    case Pid::SHOW_COURTESY:
+        return false;
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -217,6 +227,15 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
 muse::TranslatableString LayoutBreak::subtypeUserName() const
 {
     return TConv::userName(layoutBreakType());
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String LayoutBreak::accessibleInfo() const
+{
+    return translatedSubtypeUserName();
 }
 
 void LayoutBreak::added()

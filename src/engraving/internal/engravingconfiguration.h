@@ -95,6 +95,8 @@ public:
     Color frameColor() const override;
     muse::async::Channel<Color> frameColorChanged() const override;
 
+    Color scoreGreyColor() const override;
+
     Color invisibleColor() const override;
     muse::async::Channel<Color> invisibleColorChanged() const override;
 

@@ -49,17 +49,21 @@ public:
 
     bool isNoteInputMode() const override;
 
-    NoteInputState state() const override;
+    const NoteInputState& state() const override;
 
-    void startNoteInput(bool focusNotation = true) override;
+    void startNoteInput(NoteInputMethod method = NoteInputMethod::BY_NOTE_NAME, bool focusNotation = true) override;
     void endNoteInput(bool resetState = false) override;
-    void toggleNoteInputMethod(NoteInputMethod method) override;
-    void addNote(NoteName noteName, NoteAddingMode addingMode) override;
+
+    muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const override;
+    muse::async::Notification noteInputEnded() const override;
+
+    bool usingNoteInputMethod(NoteInputMethod method) const override;
+    void setNoteInputMethod(NoteInputMethod method) override;
+
+    void addNote(const NoteInputParams& params, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) override;
     void removeNote(const muse::PointF& pos) override;
-    muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const override;
-    muse::async::Notification noteInputEnded() const override;
 
     void addTuplet(const TupletOptions& options) override;
 
@@ -70,6 +74,11 @@ public:
 
     void doubleNoteInputDuration() override;
     void halveNoteInputDuration() override;
+
+    // Used in the input-by-duration mode
+    void setInputNote(const NoteInputParams& params) override;
+    void setInputNotes(const NoteValList& notes) override;
+    void moveInputNotes(bool up, PitchMode mode) override;
 
     void setAccidental(AccidentalType accidentalType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
@@ -89,6 +98,11 @@ private:
 
     EngravingItem* resolveNoteInputStartPosition() const;
 
+    bool shouldSetupInputNote() const;
+    void setupInputNote();
+
+    NoteVal noteValForLine(int line) const;
+
     void startEdit(const muse::TranslatableString& actionName);
     void apply();
 
@@ -97,8 +111,6 @@ private:
     void notifyNoteAddedChanged();
     void notifyAboutNoteInputStarted(bool focusNotation = true);
     void notifyAboutNoteInputEnded();
-
-    std::set<SymbolId> articulationIds() const;
 
     const IGetScore* m_getScore = nullptr;
     INotationInteraction* m_interaction = nullptr;

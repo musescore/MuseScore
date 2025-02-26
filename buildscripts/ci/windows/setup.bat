@@ -39,10 +39,9 @@ MKDIR %TEMP_DIR%
 :: Install Qt
 ECHO "=== Install Qt ==="
 
-:: r2 - added websocket module
-SET "Qt_ARCHIVE=Qt624_msvc2019_64_r2.7z"
-SET "QT_DIR=C:\Qt\6.2.4"
-SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
+SET "Qt_ARCHIVE=Qt-6.2.11-Windows-amd64.zip"
+SET "QT_DIR=C:\Qt\6.2.11"
+SET "QT_URL=https://github.com/cbjeukendrup/musescore_build_qt/releases/download/v12861016856/%Qt_ARCHIVE%"
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
@@ -57,9 +56,6 @@ SET PATH=%JACK_DIR%;%PATH%
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O  %TEMP_DIR%\dependencies.7z
 CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
-
-CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z" -O  %TEMP_DIR%\VST3_SDK.7z
-CALL "7z" x -y %TEMP_DIR%\VST3_SDK.7z "-oC:\vst"
 
 IF %BUILD_WIN_PORTABLE% == ON (
 ECHO "=== Installing PortableApps.com Tools ==="

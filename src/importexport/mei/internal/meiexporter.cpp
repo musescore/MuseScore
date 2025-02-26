@@ -116,7 +116,7 @@ bool MeiExporter::write(std::string& meiData)
         decl.append_attribute("encoding") = "UTF-8";
 
         // schema processing instruction
-        std::string schema = "https://music-encoding.org/schema/5.0/mei-basic.rng";
+        std::string schema = "https://music-encoding.org/schema/5.1/mei-basic.rng";
         decl = meiDoc.append_child(pugi::node_declaration);
         decl.set_name("xml-model");
         decl.append_attribute("href") = schema.c_str();
@@ -153,7 +153,7 @@ bool MeiExporter::write(std::string& meiData)
         }
 
         libmei::AttConverter converter;
-        libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_0plusbasic;
+        libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_1plusbasic;
         m_mei.append_attribute("meiversion") = (converter.MeiVersionMeiversionToStr(meiVersion)).c_str();
 
         this->writeHeader();

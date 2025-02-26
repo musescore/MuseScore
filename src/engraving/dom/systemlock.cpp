@@ -77,7 +77,7 @@ const SystemLock* SystemLocks::lockContaining(const MeasureBase* mb) const
     return lock->contains(mb) ? lock : nullptr;
 }
 
-std::vector<const SystemLock*> SystemLocks::locksContainedInRange(const MeasureBase* start, const MeasureBase* end)
+std::vector<const SystemLock*> SystemLocks::locksContainedInRange(const MeasureBase* start, const MeasureBase* end) const
 {
     std::vector<const SystemLock*> result;
 
@@ -160,5 +160,12 @@ void SystemLockIndicator::setSelected(bool v)
 char16_t SystemLockIndicator::iconCode() const
 {
     return 0xF487;
+}
+
+String SystemLockIndicator::formatBarsAndBeats() const
+{
+    int startMeas = systemLock()->startMB()->no() + 1;
+    int endMeas = systemLock()->endMB()->no() + 1;
+    return muse::mtrc("engraving", "Start measure: %1; End measure: %2").arg(startMeas).arg(endMeas);
 }
 } // namespace mu::engraving

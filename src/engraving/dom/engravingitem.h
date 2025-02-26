@@ -76,7 +76,7 @@ class StaffType;
 //   OffsetChange
 //---------------------------------------------------------
 
-enum class OffsetChange {
+enum class OffsetChange : signed char {
     RELATIVE_OFFSET   = -1,
     NONE              =  0,
     ABSOLUTE_OFFSET   =  1
@@ -113,18 +113,21 @@ enum class ElementFlag {
     NO_BREAK               = 0x00100000,
     HEADER                 = 0x00200000,
     TRAILER                = 0x00400000,      // also used in segment
-    KEYSIG                 = 0x00800000,
+    COURTESY_KEYSIG        = 0x00800000,
+    COURTESY_TIMESIG       = 0x01000000,
+    COURTESY_CLEF          = 0x02000000,
 
     // segment flags
-    ENABLED                = 0x01000000,      // used for segments
-    EMPTY                  = 0x02000000,
-    WRITTEN                = 0x04000000,
+    ENABLED                = 0x04000000,      // used for segments
+    EMPTY                  = 0x08000000,
+    WRITTEN                = 0x10000000,
+    END_OF_MEASURE_CHANGE         = 0x20000000
 };
 
 typedef muse::Flags<ElementFlag> ElementFlags;
 DECLARE_OPERATORS_FOR_FLAGS(ElementFlags)
 
-enum class KerningType
+enum class KerningType : unsigned char
 {
     KERNING,
     NON_KERNING,
@@ -328,7 +331,7 @@ public:
 
     staff_idx_t staffIdx() const;
     void setStaffIdx(staff_idx_t val);
-    staff_idx_t staffIdxOrNextVisible() const; // for system objects migrating
+    staff_idx_t effectiveStaffIdx() const; // for system objects migrating
     bool isTopSystemObject() const;
     virtual staff_idx_t vStaffIdx() const;
     voice_idx_t voice() const;
@@ -513,6 +516,7 @@ public:
         virtual void reset()
         {
             m_shape.reset();
+            m_mask.reset();
             //! NOTE Temporary removed, have problems, need investigation
             //m_pos.reset();
         }
@@ -582,6 +586,9 @@ public:
             setBbox(r);
         }
 
+        void setMask(const Shape& m) { m_mask.set_value(m); }
+        const Shape& mask() const { return m_mask.value(); }
+
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
         void connectItemSnappedBefore(EngravingItem* itemBefore);
@@ -633,6 +640,7 @@ public:
         double m_mag = 1.0;                     // standard magnification (derived value)
         ld_field<PointF> m_pos = "pos";         // Reference position, relative to _parent, set by autoplace
         ld_field<Shape> m_shape = "shape";
+        ld_field<Shape> m_mask = "mask";
 
         EngravingItem* m_itemSnappedBefore = nullptr;
         EngravingItem* m_itemSnappedAfter = nullptr;

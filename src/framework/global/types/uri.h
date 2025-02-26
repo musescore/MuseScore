@@ -115,4 +115,13 @@ inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::Uri
     return s;
 }
 
+template<>
+struct std::hash<muse::Uri>
+{
+    std::size_t operator()(const muse::Uri& uri) const noexcept
+    {
+        return std::hash<std::string> {}(uri.toString());
+    }
+};
+
 #endif // MUSE_GLOBAL_URI_H

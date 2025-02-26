@@ -84,7 +84,7 @@ constexpr bool operator&(ArticulationShowIn a1, ArticulationShowIn a2)
     return static_cast<unsigned char>(a1) & static_cast<unsigned char>(a2);
 }
 
-enum class ArticulationsUpdateMode {
+enum class ArticulationsUpdateMode : unsigned char {
     Insert,
     Remove
 };
@@ -204,7 +204,7 @@ private:
 
     void setupShowOnTabStyles();
 
-    enum class AnchorGroup {
+    enum class AnchorGroup : unsigned char {
         ARTICULATION,
         LUTE_FINGERING,
         OTHER

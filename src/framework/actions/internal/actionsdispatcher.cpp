@@ -21,6 +21,8 @@
  */
 #include "actionsdispatcher.h"
 
+#include <sstream>
+
 #include "actionable.h"
 
 #include "log.h"
@@ -46,6 +48,17 @@ void ActionsDispatcher::dispatch(const ActionCode& actionCode)
 
 void ActionsDispatcher::dispatch(const ActionCode& actionCode, const ActionData& data)
 {
+    // is query?
+    ActionQuery query = ActionQuery(actionCode);
+    if (query.isValid()) {
+        IF_ASSERT_FAILED(data.empty()) {
+            LOGE() << "not supported action data with query";
+        }
+        dispatch(query);
+        return;
+    }
+
+    // code
     auto it = m_clients.find(actionCode);
     if (it == m_clients.end()) {
         LOGW() << "not a registered action: " << actionCode;
@@ -59,39 +72,32 @@ void ActionsDispatcher::dispatch(const ActionQuery& actionQuery)
 {
     //! NOTE Try find full query
     const std::string full = actionQuery.toString();
-    auto it = m_clients.find(full);
-    if (it != m_clients.end()) {
-        static ActionData dummy;
-        doDispatch(it->second, full, dummy);
-        return;
-    }
-
-    const ActionCode code = actionQuery.uri().toString();
-    it = m_clients.find(code);
-    if (it != m_clients.end()) {
-        LOGW() << "not a registered action: " << code;
-        return;
-    }
-
-    const ActionQuery::Params& params = actionQuery.params();
-    ActionData data;
-    int i = 0;
-    for (const auto& p : params) {
-        const Val& val = p.second;
-        switch (val.type()) {
-        case Val::Type::Bool:
-            data.setArg<bool>(i, val.toBool());
-            break;
-        case Val::Type::String:
-            data.setArg<std::string>(i, val.toString());
-            break;
-        default:
-            UNREACHABLE;
-            data.setArg<int>(i, 0); // dummy
+    ActionCode code = full;
+    auto it = m_clients.find(code);
+    if (it == m_clients.end()) {
+        //! Try find just uri
+        code = actionQuery.uri().toString();
+        it = m_clients.find(code);
+        if (it == m_clients.end()) {
+            LOGW() << "not a registered action: '" << code << "'";
+            //dump();
+            return;
         }
     }
 
+    ActionData data;
+    data.setArg<std::string>(0, full);
     doDispatch(it->second, code, data);
+}
+
+void ActionsDispatcher::dump() const
+{
+    std::stringstream s;
+    for (const auto& p : m_clients) {
+        s << "'" << p.first << "'\n";
+    }
+
+    LOGDA() << "\n" << s.str();
 }
 
 void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& actionCode, const ActionData& data)
@@ -140,7 +146,9 @@ void ActionsDispatcher::reg(Actionable* client, const ActionCode& actionCode, co
 
 void ActionsDispatcher::reg(Actionable* client, const ActionQuery& actionQuery, const ActionCallBackWithQuery& call)
 {
-    reg(client, actionQuery.toString(), [call](const ActionCode& action, const ActionData&) { call(ActionQuery(action)); });
+    reg(client, actionQuery.toString(), [call](const ActionCode&, const ActionData& data) {
+        call(ActionQuery(data.arg<std::string>(0)));
+    });
 }
 
 bool ActionsDispatcher::isReg(Actionable* client) const

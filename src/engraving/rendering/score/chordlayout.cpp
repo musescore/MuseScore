@@ -1360,6 +1360,9 @@ void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const L
 
     assert(!item->notes().empty());
 
+    // Beams with one chord will be removed later, ignore
+    const bool hasBeam = item->beam() && item->beam()->elements().size() > 1;
+
     const StaffType* tab = item->staff() ? item->staff()->staffTypeForElement(item) : 0;
     bool isTabStaff = tab && tab->isTabStaff();
     if (isTabStaff) {
@@ -1380,7 +1383,7 @@ void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const L
     }
 
     if (item->stemDirection() != DirectionV::AUTO
-        && !item->beam()
+        && !hasBeam
         && !item->tremoloTwoChord()) {
         ldata->up = item->stemDirection() == DirectionV::UP;
         return;
@@ -1391,7 +1394,7 @@ void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const L
         return;
     }
 
-    if (item->beam()) {
+    if (hasBeam) {
         computeUpBeamCase(const_cast<Chord*>(item), item->beam(), ctx);
         return;
     } else if (item->tremoloTwoChord()) {
@@ -1430,7 +1433,9 @@ void ChordLayout::computeUp(ChordRest* item, const LayoutContext& ctx)
         computeUp(ch, ch->mutldata(), ctx);
     } else {
         // base ChordRest
-        if (item->beam()) {
+        // Beams with one chord will be removed later, ignore
+        const bool hasBeam = item->beam() && item->beam()->elements().size() > 1;
+        if (hasBeam) {
             item->mutldata()->up = item->beam()->up();
         } else {
             item->mutldata()->up = true;
@@ -3503,7 +3508,7 @@ void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const
 
     double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
     shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight), item);
-    if (item->numberVisible()) {
+    if (item->shouldShowNumber()) {
         shape.add(item->numberRect().translated(item->numberPos()), item);
     }
 

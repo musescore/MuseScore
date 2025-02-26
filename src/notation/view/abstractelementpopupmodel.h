@@ -51,7 +51,8 @@ public:
         TYPE_STRING_TUNINGS,
         TYPE_SOUND_FLAG,
         TYPE_DYNAMIC,
-        TYPE_PARTIAL_TIE
+        TYPE_PARTIAL_TIE,
+        TYPE_SHADOW_NOTE
     };
     Q_ENUM(PopupModelType)
 
@@ -70,6 +71,8 @@ signals:
     void itemRectChanged(QRect rect);
 
 protected:
+    virtual void updateItemRect();
+
     muse::PointF fromLogical(muse::PointF point) const;
     muse::RectF fromLogical(muse::RectF rect) const;
 
@@ -86,6 +89,7 @@ protected:
     void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
 
     EngravingItem* m_item = nullptr;
+    QRect m_itemRect;
 
 private:
     INotationSelectionPtr selection() const;
@@ -93,10 +97,7 @@ private:
     engraving::ElementType elementType() const;
     const engraving::ElementTypeSet& dependentElementTypes() const;
 
-    void updateItemRect();
-
     PopupModelType m_modelType = PopupModelType::TYPE_UNDEFINED;
-    QRect m_itemRect;
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
