@@ -417,7 +417,6 @@ bool NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParam
 
     const mu::engraving::InputState& inputState = score()->inputState();
     const Staff* staff = score()->staff(position.staffIdx);
-    const mu::engraving::Instrument* instr = staff->part()->instrument();
 
     mu::engraving::Segment* segment = position.segment;
     qreal segmentSkylineTopY = 0;
@@ -432,6 +431,8 @@ bool NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParam
 
     Fraction tick = segment->tick();
     qreal mag = staff->staffMag(tick);
+
+    const mu::engraving::Instrument* instr = staff->part()->instrument(tick);
 
     // in any empty measure, pos will be right next to barline
     // so pad this by barNoteDistance
