@@ -13,6 +13,10 @@
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.364</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -320,6 +324,10 @@
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+        <showCourtesiesRepeats>0</showCourtesiesRepeats>
+        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
         <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -517,6 +525,10 @@
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+        <showCourtesiesRepeats>0</showCourtesiesRepeats>
+        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
         <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
