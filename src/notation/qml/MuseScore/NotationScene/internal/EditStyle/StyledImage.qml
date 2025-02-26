@@ -42,7 +42,6 @@ Rectangle {
     color: "#ffffff"
     border.color: ui.theme.strokeColor
     border.width: 1
-    radius: 3
 
     Image {
         id: image
@@ -54,5 +53,3 @@ Rectangle {
         opacity: enabled ? 1.0 : 0.2
     }
 }
-
-
