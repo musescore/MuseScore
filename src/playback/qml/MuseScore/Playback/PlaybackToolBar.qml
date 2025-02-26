@@ -34,7 +34,7 @@ Item {
 
     property bool floating: false
 
-    width: content.width
+    width: content.width + (floating ? 12 : 0)
     height: content.height
 
     property NavigationPanel navigationPanel: NavigationPanel {
@@ -75,7 +75,7 @@ Item {
         }
 
         StyledSlider {
-            width: playbackActions.width - 12
+            width: playbackActions.width
             visible: root.floating
             value: thePlaybackModel.playPosition
 
@@ -85,7 +85,7 @@ Item {
         }
 
         PlaybackSpeedSlider {
-            width: playbackActions.width - 12
+            width: playbackActions.width
             visible: root.floating
 
             playbackModel: thePlaybackModel

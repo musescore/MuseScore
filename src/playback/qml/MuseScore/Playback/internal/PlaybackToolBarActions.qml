@@ -38,7 +38,11 @@ Item {
 
     property bool floating: false
 
-    width: childrenRect.width
+    // Not `+ endSeparator.width`: this way, the separator itself is outside the view,
+    // which means that it will be exactly at the position of the KDDockWidgets separator
+    // between this toolbar and the undo/redo toolbar.
+    width: endSeparator.visible ? endSeparator.x
+                                : tempoLoader.x + tempoLoader.width
     height: 30
 
     ListView {
@@ -181,12 +185,15 @@ Item {
             id: tempoViewComponent
 
             Item {
-                implicitWidth: tempoView.implicitWidth
+                // 2 * ui.theme.defaultButtonSize ≈ "60 but scaled to body text size"
+                // See https://github.com/musescore/MuseScore/pull/25621#issuecomment-2564382857
+                implicitWidth: 2 * ui.theme.defaultButtonSize
                 implicitHeight: ui.theme.defaultButtonSize
 
                 TempoView {
                     id: tempoView
-                    anchors.centerIn: parent
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
 
                     noteSymbol: root.playbackModel.tempo.noteSymbol
                     tempoValue: root.playbackModel.tempo.value
@@ -201,11 +208,15 @@ Item {
             id: tempoButtonComponent
 
             FlatButton {
+                // 2 * ui.theme.defaultButtonSize ≈ "60 but scaled to body text size"
+                // See https://github.com/musescore/MuseScore/pull/25621#issuecomment-2564382857
+                implicitWidth: 2 * ui.theme.defaultButtonSize
                 implicitHeight: ui.theme.defaultButtonSize
-                margins: 8
 
                 accentButton: playbackSpeedPopup.isOpened
                 transparent: !accentButton
+
+                toolTipTitle: qsTrc("playback", "Speed")
 
                 navigation.panel: root.navPanel
                 navigation.order: measureAndBeatFields.navigationOrderEnd + 1
@@ -234,8 +245,9 @@ Item {
     }
 
     SeparatorLine {
+        id: endSeparator
         anchors.left: tempoLoader.right
-        anchors.leftMargin: 12
+        anchors.leftMargin: 6
         anchors.topMargin: 2
         anchors.bottomMargin: 2
 
