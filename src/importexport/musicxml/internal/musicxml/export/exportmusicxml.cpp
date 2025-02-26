@@ -40,6 +40,7 @@
 #include "exportmusicxml.h"
 
 #include <math.h>
+#include <set>
 
 #include "containers.h"
 #include "realfn.h"
@@ -6467,8 +6468,8 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t str
 
 void ExportMusicXml::work(const MeasureBase* /*measure*/)
 {
-    String workTitle  = m_score->metaTag(u"workTitle");
-    String workNumber = m_score->metaTag(u"workNumber");
+    const String workTitle  = m_score->metaTag(u"workTitle");
+    const String workNumber = m_score->metaTag(u"workNumber");
     if (!(workTitle.isEmpty() && workNumber.isEmpty())) {
         m_xml.startElement("work");
         if (!workNumber.isEmpty()) {
@@ -7138,8 +7139,8 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
     xml.startElement("identification");
 
     // the creator types commonly found in MusicXML
-    std::vector<String> creators = { u"arranger", u"composer", u"lyricist", u"poet", u"translator" };
-    for (const String& type : creators) {
+    std::set<String> metaTagNames = { u"arranger", u"composer", u"lyricist", u"poet", u"translator" };
+    for (const String& type : metaTagNames) {
         String creator = score->metaTag(type);
         if (!creator.isEmpty()) {
             xml.tag("creator", { { "type", type } }, creator);
@@ -7148,6 +7149,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 
     if (!score->metaTag(u"copyright").isEmpty()) {
         xml.tag("rights", score->metaTag(u"copyright"));
+        metaTagNames.insert(u"copyright");
     }
 
     xml.startElement("encoding");
@@ -7179,7 +7181,20 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 
     if (!score->metaTag(u"source").isEmpty()) {
         xml.tag("source", score->metaTag(u"source"));
+        metaTagNames.insert(u"source");
     }
+
+    metaTagNames.insert({ u"workTitle", u"workNumber", u"movementTitle", u"movementNumber" });
+    xml.startElement("miscellaneous");
+    for (const auto& metaTag : score->metaTags()) {
+        auto search = metaTagNames.find(metaTag.first);
+        if (search != metaTagNames.end()) {
+            continue;
+        } else if (!metaTag.second.isEmpty()) {
+            xml.tag("miscellaneous-field", { { "name", metaTag.first } }, metaTag.second);
+        }
+    }
+    xml.endElement();
 
     xml.endElement();
 }
