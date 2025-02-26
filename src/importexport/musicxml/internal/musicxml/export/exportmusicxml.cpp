@@ -7184,7 +7184,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
         metaTagNames.insert(u"source");
     }
 
-    metaTagNames.insert({ u"workTitle", u"workNumber", u"movementTitle", u"movementNumber" });
+    metaTagNames.insert({ u"workTitle", u"workNumber", u"movementTitle", u"movementNumber", u"originalFormat" });
     xml.startElement("miscellaneous");
     for (const auto& metaTag : score->metaTags()) {
         auto search = metaTagNames.find(metaTag.first);
