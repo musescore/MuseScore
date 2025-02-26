@@ -514,7 +514,6 @@ public:
     void doUndoAddElement(EngravingItem*);
     void removeElement(EngravingItem*);
     void doUndoRemoveElement(EngravingItem*);
-    bool containsElement(const EngravingItem*) const;
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
     Note* addMidiPitch(int pitch, bool addFlag, bool allowTransposition);
@@ -1082,6 +1081,8 @@ private:
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
     void selectAdd(EngravingItem* e);
     void selectRange(EngravingItem* e, staff_idx_t staffIdx);
+
+    bool canReselectItem(const EngravingItem* item) const;
 
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
