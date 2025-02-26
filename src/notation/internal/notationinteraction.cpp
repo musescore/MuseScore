@@ -5239,9 +5239,9 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
         return;
     }
 
-    startEdit(steps >= 0
-              ? TranslatableString("undoableAction", "Increase duration")
-              : TranslatableString("undoableAction", "Decrease duration"));
+    startEdit(steps > 0 // negative: increase, positive: decrease
+              ? TranslatableString("undoableAction", "Decrease duration")
+              : TranslatableString("undoableAction", "Increase duration"));
     score()->cmdIncDecDuration(steps, stepByDots);
     apply();
 }
