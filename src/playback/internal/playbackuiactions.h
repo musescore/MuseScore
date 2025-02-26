@@ -60,6 +60,7 @@ private:
     static const muse::ui::UiActionList m_midiInputPitchActions;
     static const muse::ui::UiActionList m_settingsActions;
     static const muse::ui::UiActionList m_loopBoundaryActions;
+    static const muse::ui::UiActionList m_diagnosticActions;
 
     std::shared_ptr<PlaybackController> m_controller;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;

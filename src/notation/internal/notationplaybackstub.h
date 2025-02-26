@@ -30,6 +30,7 @@ public:
     NotationPlaybackStub();
 
     void init() override;
+    void reload() override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const override;

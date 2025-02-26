@@ -174,6 +174,8 @@ private:
     void toggleLoopPlayback();
     void toggleHearPlaybackWhenEditing();
 
+    void reloadPlaybackCache();
+
     void openPlaybackSetupDialog();
 
     void addLoopBoundary(notation::LoopBoundaryType type);

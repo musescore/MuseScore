@@ -436,6 +436,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
     MenuItemList items {
         makeMenuItem("diagnostic-save-diagnostic-files"),
+        makeMenuItem("playback-reload-cache"),
         makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
     };
 
