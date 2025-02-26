@@ -1527,7 +1527,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     //
     // we cannot remove a courtesy time signature
     //
-    if (m->tick() != s->tick()) {
+    if (s->isCourtesySegment()) {
         return;
     }
     Fraction tick = m->tick();

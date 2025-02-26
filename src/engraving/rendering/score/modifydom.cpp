@@ -271,7 +271,13 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         return ClefToBarlinePosition::AUTO;
     };
 
-    Measure* nextMeasure = measure->nextMeasure();
+    MeasureBase* nextMb = measure->next();
+
+    if (!nextMb || !nextMb->isMeasure()) {
+        return;
+    }
+
+    Measure* nextMeasure = toMeasure(nextMb);
 
     const bool sigsShouldBeInThisMeasure = ((measure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
                                             || (measure->repeatJump() && ctx.conf().styleB(Sid::changesBeforeBarlineOtherJumps)));
@@ -308,7 +314,8 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         }
 
         // Move key sigs and time sigs at the end of this measure into the next measure
-        if ((seg.isKeySigType() || seg.isTimeSigType()) && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
+        if ((seg.isKeySigType() || seg.isTimeSigType()) && !seg.header() && !seg.trailer()
+            && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
             segsToMoveToNextMeasure.push_back(&seg);
         }
     }
@@ -352,7 +359,8 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         }
 
         // Move key sigs and time sigs at the start of the next measure to the end of this measure
-        if ((seg.isTimeSigType() || seg.isKeySigType()) && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
+        if ((seg.isTimeSigType() || seg.isKeySigType()) && !seg.header() && !seg.trailer()
+            && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
             segsToMoveToThisMeasure.push_back(&seg);
         }
     }
@@ -379,7 +387,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     // Sort segments at start of first measure
     Measure* prevMeasure = measure->prevMeasure();
     if (prevMeasure && prevMeasure == ctx.dom().firstMeasure()) {
-        ModifyDom::removeAndAddBeginSegments(prevMeasure);
+        removeAndAddBeginSegments(prevMeasure);
     }
 }
 
