@@ -629,6 +629,8 @@ StyledFlickable {
                             Layout.alignment: Qt.AlignRight
 
                             forceHeight: 64
+                            horizontalPadding: 0
+                            verticalPadding: 0
 
                             source: clefBeforeRepeatsButton.checked ? (betweenRepeatsCheckbox.checked ? "courtesyImages/clefs-before_repeat-allow_changes"
                                                                                                       : "courtesyImages/clefs-before_repeat-disallow_changes")
