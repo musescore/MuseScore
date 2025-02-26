@@ -390,7 +390,7 @@ bool HorizontalSpacing::stopCheckingPreviousSegments(const SegmentPosition& prev
     Fraction prevSegEndTick = prevSeg->tick() + prevSeg->ticks();
     Fraction curSegTick = curSeg->tick();
 
-    if (prevSegEndTick >= curSegTick) {
+    if (prevSegEndTick >= curSegTick || curSeg->hasTimeSigAboveStaves()) {
         return false;
     }
 
@@ -1515,7 +1515,7 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
 
 bool HorizontalSpacing::isAlwaysKernable(const EngravingItem* item)
 {
-    return item->isTextBase() || item->isChordLine() || item->isParenthesis();
+    return item->isTextBase() || item->isChordLine();
 }
 
 bool HorizontalSpacing::ignoreItems(const EngravingItem* item1, const EngravingItem* item2)
