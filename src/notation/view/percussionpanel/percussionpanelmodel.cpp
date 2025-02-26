@@ -231,11 +231,8 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         return;
     }
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 
     m_padListModel->focusLastActivePad();
 }
@@ -411,11 +408,8 @@ void PercussionPanelModel::onDuplicatePadRequested(int pitch)
 
     updatedDrumset.setDrum(nextAvailablePitch, duplicateDrum);
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Duplicate percussion panel pad"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 void PercussionPanelModel::onDeletePadRequested(int pitch)
@@ -431,11 +425,8 @@ void PercussionPanelModel::onDeletePadRequested(int pitch)
     Drumset updatedDrumset = *m_padListModel->drumset();
     updatedDrumset.setDrum(pitch, engraving::DrumInstrument());
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Delete percussion panel pad"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
@@ -452,11 +443,8 @@ void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
         return;
     }
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion shortcut"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMode)
@@ -515,11 +503,8 @@ void PercussionPanelModel::resetLayout()
         return;
     }
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Reset percussion panel layout"));
-    score()->undo(new engraving::ChangeDrumset(inst, defaultLayout, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, defaultLayout);
 }
 
 Drumset PercussionPanelModel::standardDefaultDrumset() const
