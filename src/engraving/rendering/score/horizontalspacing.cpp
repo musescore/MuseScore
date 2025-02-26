@@ -342,7 +342,7 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
         }
 
         bool timeSigAboveBarlineCase = segmentHasTimeSigAboveStaff && prevSeg->isEndBarLineType() && prevSeg->tick() == segment->tick();
-        bool timeSigAboveKeySigCase = segmentHasTimeSigAboveStaff && prevSeg->isType(SegmentType::KeySigType)
+        bool timeSigAboveKeySigCase = segmentHasTimeSigAboveStaff && prevSeg->isType(SegmentType::KeySig)
                                       && prevSeg->tick() == segment->tick();
 
         if (timeSigAboveBarlineCase) {
@@ -1515,7 +1515,7 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
 
 bool HorizontalSpacing::isAlwaysKernable(const EngravingItem* item)
 {
-    return item->isTextBase() || item->isChordLine();
+    return item->isTextBase() || item->isChordLine() || item->isParenthesis();
 }
 
 bool HorizontalSpacing::ignoreItems(const EngravingItem* item1, const EngravingItem* item2)
@@ -1544,6 +1544,8 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         return computeNoteKerningType(toNote(item1), item2);
     case ElementType::STEM_SLASH:
         return computeStemSlashKerningType(toStemSlash(item1), item2);
+    case ElementType::PARENTHESIS:
+        return item2->isBarLine() ? KerningType::NON_KERNING : KerningType::KERNING;
     default:
         return KerningType::KERNING;
     }
