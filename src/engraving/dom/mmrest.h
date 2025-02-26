@@ -41,7 +41,6 @@ public:
     MMRest* clone() const override { return new MMRest(*this, false); }
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
-    bool numberVisible() const { return m_numberVisible; }
     bool shouldShowNumber() const;
 
     PropertyValue propertyDefault(Pid) const override;

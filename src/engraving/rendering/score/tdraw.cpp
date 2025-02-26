@@ -2227,7 +2227,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
             double halfHBarThickness = hBarThickness * .5;
-            if (item->numberVisible() // avoid painting line through number
+            if (item->shouldShowNumber() // avoid painting line through number
                 && item->style().styleB(Sid::mmRestNumberMaskHBar)
                 && numberBox.bottom() >= -halfHBarThickness
                 && numberBox.top() <= halfHBarThickness) {
