@@ -1308,7 +1308,8 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       map["brass-bend"]             = SymId::brassBend ;
       map["flip"]                   = SymId::brassFlip;
       map["smear"]                  = SymId::brassSmear ;
-      map["open"]                   = SymId::brassMuteOpen;
+      map["half-muted"]             = SymId::brassMuteHalfClosed ; // ignoring the smufl attribute
+      map["golpe"]                  = SymId::guitarGolpe ;
 
       map["belltree"]               = SymId::handbellsBelltree;
       map["damp"]                   = SymId::handbellsDamp3;
