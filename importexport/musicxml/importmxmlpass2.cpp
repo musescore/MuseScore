@@ -8404,9 +8404,7 @@ void MusicXMLParserNotations::parse()
                   _arpeggioType = _e.attributes().value("direction").toString();
                   if (_arpeggioType.isEmpty())
                         _arpeggioType = "none";
-                  QColor color = _e.attributes().value("color").toString();
-                  if (color.isValid())
-                        _arpeggioColor = color;
+                  _arpeggioColor =_e.attributes().value("color").toString();
                   _e.skipCurrentElement();  // skip but don't log
                   }
             else if (_e.name() == "articulations") {
@@ -8422,6 +8420,7 @@ void MusicXMLParserNotations::parse()
                   glissandoSlide();
                   }
             else if (_e.name() == "non-arpeggiate") {
+                  _arpeggioColor = _e.attributes().value("color").toString();
                   _arpeggioType = "non-arpeggiate";
                   _e.skipCurrentElement();  // skip but don't log
                   }
