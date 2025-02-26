@@ -107,6 +107,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
     dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE, this, &PlaybackController::toggleHearPlaybackWhenEditing);
+    dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
@@ -571,7 +572,11 @@ void PlaybackController::onPartChanged(const Part* part)
 
 void PlaybackController::onSelectionChanged()
 {
-    INotationSelectionPtr selection = this->selection();
+    const INotationSelectionPtr selection = this->selection();
+    if (!selection || !m_player) {
+        return;
+    }
+
     bool selectionTypeChanged = m_isRangeSelection && !selection->isRange();
     m_isRangeSelection = selection->isRange();
 
@@ -590,7 +595,7 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    currentPlayer()->resetLoop();
+    m_player->resetLoop();
 
     seekRangeSelection();
     updateSoloMuteStates();
@@ -818,6 +823,14 @@ void PlaybackController::toggleHearPlaybackWhenEditing()
 {
     bool wasPlayNotesWhenEditing = configuration()->playNotesWhenEditing();
     configuration()->setPlayNotesWhenEditing(!wasPlayNotesWhenEditing);
+}
+
+void PlaybackController::reloadPlaybackCache()
+{
+    INotationPlaybackPtr playback = notationPlayback();
+    if (playback) {
+        playback->reload();
+    }
 }
 
 void PlaybackController::openPlaybackSetupDialog()

@@ -849,9 +849,14 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 {
     Segment* seg = getParentSeg();
     Fraction duration = seg->ticks();
-    Segment* cur = seg->next();
-    auto rsIt = score()->repeatList().findRepeatSegmentFromUTick(utick);
 
+    const RepeatList& repeats = score()->repeatList();
+    auto rsIt = repeats.findRepeatSegmentFromUTick(utick);
+    if (rsIt == repeats.cend()) {
+        return duration;
+    }
+
+    Segment* cur = seg->next();
     Measure const* currentMeasure = seg->measure();
     Measure const* endMeasure = (stopAtMeasureEnd) ? currentMeasure : (*rsIt)->lastMeasure();
     Harmony const* nextHarmony = nullptr;
@@ -892,9 +897,9 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
             // End of repeatSegment or search boundary reached
             if (stopAtMeasureEnd) {
                 break;
-            } else {
+            } else if (!nextHarmony) {
                 // move to next RepeatSegment
-                if (++rsIt != score()->repeatList().end()) {
+                if (++rsIt != repeats.end()) {
                     currentMeasure = (*rsIt)->firstMeasure();
                     endMeasure     = (*rsIt)->lastMeasure();
                     cur = currentMeasure->first();
@@ -902,6 +907,12 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
             }
         }
     } while ((nextHarmony == nullptr) && (cur != nullptr));
+
+    if (nextHarmony && rsIt != repeats.end()) {
+        int tickOffset = (*rsIt)->utick - (*rsIt)->tick;
+        int nextHarmonyUtick = nextHarmony->tick().ticks() + tickOffset;
+        duration = Fraction::fromTicks(nextHarmonyUtick - utick);
+    }
 
     return duration;
 }
@@ -1062,9 +1073,12 @@ const ChordDescription* Harmony::getDescription(const String& name, const Parsed
 
 const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
-    Fraction tick = this->tick();
     const Staff* st = staff();
+    IF_ASSERT_FAILED(st) {
+        return m_realizedHarmony;
+    }
 
+    const Fraction tick = this->tick();
     const CapoParams& capo = st->capo(tick);
 
     int offset = 0;
@@ -1080,7 +1094,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     //Adjust for Nashville Notation, might be temporary
     // TODO: set dirty on add/remove of keysig
     if (m_harmonyType == HarmonyType::NASHVILLE && !m_realizedHarmony.valid()) {
-        Key key = staff()->key(tick);
+        Key key = st->key(tick);
 
         //parse root
         int rootTpc = function2Tpc(m_function, key);

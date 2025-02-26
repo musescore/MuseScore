@@ -141,8 +141,10 @@ private:
 
     void setupPartsConnections();
     void setupStavesConnections(const muse::ID& stavesPartId);
-    void listenNotationSelectionChanged();
+    void setupNotationConnections();
+
     void updateSelectedRows();
+    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes);
 
     void clear();
     void deleteItems();
@@ -186,8 +188,9 @@ private:
     using NotationKey = QString;
     QHash<NotationKey, QList<muse::ID> > m_sortedPartIdList;
 
-    bool m_layoutPanelVisible = true;
+    mu::engraving::ScoreChangesRange m_scoreChangesCache;
 
+    bool m_layoutPanelVisible = true;
     bool m_shouldUpdateSystemObjectLayers = false;
 
     bool m_dragInProgress = false;

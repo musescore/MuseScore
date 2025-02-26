@@ -30,6 +30,8 @@ using namespace muse;
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractLayoutPanelTreeItem(LayoutPanelItemType::PART, masterNotation, notation, parent), Injectable(iocCtxForQmlObject(this))
 {
+    setIsSelectable(true);
+
     listenVisibilityChanged();
 }
 
@@ -54,7 +56,6 @@ void PartTreeItem::init(const notation::Part* masterPart)
     setSettingsEnabled(partExists);
     setIsExpandable(partExists);
     setIsRemovable(partExists);
-    setIsSelectable(partExists);
 
     m_part = part;
     m_isInited = true;

@@ -42,7 +42,7 @@ public:
     bool handleParamChange(const ParamChangeEvent& param);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
-    muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
+    muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel, muse::audio::msecs_t playbackPosition = 0);
 
     void flush();
     void allNotesOff();

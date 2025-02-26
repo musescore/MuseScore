@@ -270,10 +270,19 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& stavesPartId)
     });
 }
 
-void LayoutPanelTreeModel::listenNotationSelectionChanged()
+void LayoutPanelTreeModel::setupNotationConnections()
 {
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateSelectedRows();
+    });
+
+    m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
+        if (!m_layoutPanelVisible) {
+            m_scoreChangesCache.combine(changes);
+            return;
+        }
+
+        onScoreChanged(changes);
     });
 }
 
@@ -305,6 +314,17 @@ void LayoutPanelTreeModel::updateSelectedRows()
         if (item) {
             m_selectionModel->select(createIndex(item->row(), 0, item), QItemSelectionModel::Select);
         }
+    }
+}
+
+void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChangesRange& changes)
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        item->onScoreChanged(changes);
     }
 }
 
@@ -363,7 +383,7 @@ void LayoutPanelTreeModel::load()
     endResetModel();
 
     setupPartsConnections();
-    listenNotationSelectionChanged();
+    setupNotationConnections();
 
     updateIsAddingSystemMarkingsAvailable();
 
@@ -407,6 +427,11 @@ void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
 
     if (visible) {
         updateSelectedRows();
+
+        if (m_scoreChangesCache.isValid()) {
+            onScoreChanged(m_scoreChangesCache);
+            m_scoreChangesCache.clear();
+        }
     }
 }
 
@@ -1009,7 +1034,8 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
     m_shouldUpdateSystemObjectLayers = false;
 
     // Create copy, because we're going to modify them
-    std::vector<Staff*> newSystemObjectStaves = m_masterNotation->notation()->parts()->systemObjectStaves();
+    const INotationPartsPtr notationParts = m_masterNotation->notation()->parts();
+    std::vector<Staff*> newSystemObjectStaves = notationParts->systemObjectStaves();
     QList<AbstractLayoutPanelTreeItem*> children = m_rootItem->childItems();
 
     // Remove old system object layers
@@ -1036,6 +1062,8 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
         endRemoveRows();
     }
 
+    SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(notationParts->systemObjectStaves());
+
     // Update position of existing layers if changed
     for (SystemObjectsLayerTreeItem* layerItem : existingSystemObjectLayers) {
         const PartTreeItem* partItem = findPartItemByStaff(layerItem->staff());
@@ -1052,16 +1080,10 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             endMoveRows();
         }
 
-        layerItem->updateSystemObjects();
-    }
-
-    if (newSystemObjectStaves.empty()) {
-        return;
+        layerItem->setSystemObjects(systemObjects[layerItem->staff()]);
     }
 
     // Create new system object layers
-    SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(newSystemObjectStaves);
-
     for (const Staff* staff : newSystemObjectStaves) {
         for (const PartTreeItem* partItem : partItems) {
             if (staff->part() != partItem->part()) {

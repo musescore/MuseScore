@@ -113,7 +113,8 @@ void VstAudioClient::setVolumeGain(const muse::audio::gain_t newVolumeGain)
     m_volumeGain = newVolumeGain;
 }
 
-muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel)
+muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::samples_t samplesPerChannel,
+                                               muse::audio::msecs_t playbackPosition)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
@@ -130,6 +131,8 @@ muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesP
     //! which indicates how many samples are used in a process call can change from call to call,
     //! but never bigger than the maxSamplesPerBlock
     m_processData.numSamples = samplesPerChannel;
+
+    m_processContext.projectTimeSamples = (playbackPosition / 1000000.f) * m_samplesInfo.sampleRate;
 
     if (samplesPerChannel > m_samplesInfo.maxSamplesPerBlock) {
         setMaxSamplesPerBlock(samplesPerChannel);
@@ -422,7 +425,7 @@ bool VstAudioClient::fillOutputBufferInstrument(samples_t sampleCount, float* ou
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
                 output[offset + audioChannelIndex] += sample * m_volumeGain;
 
-                if (isSilence && !RealIsNull(sample)) {
+                if (isSilence && sample != 0.f) {
                     isSilence = false;
                 }
             }
@@ -450,7 +453,7 @@ bool VstAudioClient::fillOutputBufferFx(samples_t sampleCount, float* output)
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
                 output[offset + audioChannelIndex] = sample * m_volumeGain;
 
-                if (isSilence && !RealIsNull(sample)) {
+                if (isSilence && sample != 0.f) {
                     isSilence = false;
                 }
             }

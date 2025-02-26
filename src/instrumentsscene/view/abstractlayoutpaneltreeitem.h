@@ -91,6 +91,8 @@ public:
 
     virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
 
+    virtual void onScoreChanged(const mu::engraving::ScoreChangesRange& changes);
+
     AbstractLayoutPanelTreeItem* parentItem() const;
     void setParentItem(AbstractLayoutPanelTreeItem* parent);
 
