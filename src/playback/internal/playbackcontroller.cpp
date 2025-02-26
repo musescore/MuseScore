@@ -830,9 +830,9 @@ void PlaybackController::toggleHearPlaybackWhenEditing()
 
 void PlaybackController::reloadPlaybackCache()
 {
-    INotationPlaybackPtr playback = notationPlayback();
-    if (playback) {
-        playback->reload();
+    INotationPlaybackPtr nPlayback = notationPlayback();
+    if (nPlayback) {
+        nPlayback->reload();
     }
 }
 
