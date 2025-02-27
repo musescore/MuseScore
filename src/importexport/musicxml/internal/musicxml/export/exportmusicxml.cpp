@@ -3577,7 +3577,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         const Ornament* ornam = toOrnament(art);
         const SymId sid = ornam->symId();
         String mxmlOrnam = symIdToOrnam(sid);
-        
+
         String placement;
         if (!ornam->isStyled(Pid::ARTICULATION_ANCHOR) && ornam->anchor() != ArticulationAnchor::AUTO) {
             placement = (ornam->anchor() == ArticulationAnchor::BOTTOM ? u"below" : u"above");
