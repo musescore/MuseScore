@@ -222,6 +222,9 @@ private:
     bool isNotationPage() const;
     bool isStandardStaff() const;
     bool isTablatureStaff() const;
+
+    void checkForScoreCorruptions();
+
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(const muse::actions::ActionData& data),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
