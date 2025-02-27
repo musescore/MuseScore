@@ -552,7 +552,7 @@ bool MidiFile::readEvent(MidiEvent* event)
         }
     }
 
-    unsigned char* data;
+    std::vector<unsigned char> data;
     int dataLen;
 
     if (me == 0xf0 || me == 0xf7) {
@@ -562,9 +562,8 @@ bool MidiFile::readEvent(MidiEvent* event)
             LOGD("readEvent: error 3");
             return false;
         }
-        data    = new unsigned char[len + 1];
         dataLen = len;
-        read(data, len);
+        read(data.data(), len);
         data[dataLen] = 0;        // always terminate with zero
         if (data[len - 1] != 0xf7) {
             LOGD("SYSEX does not end with 0xf7!");
@@ -587,9 +586,8 @@ bool MidiFile::readEvent(MidiEvent* event)
             LOGD("readEvent: error 6");
             return false;
         }
-        data = new unsigned char[dataLen + 1];
         if (dataLen) {
-            read(data, dataLen);
+            read(data.data(), dataLen);
         }
         data[dataLen] = 0;          // always terminate with zero so we get valid C++ strings
 

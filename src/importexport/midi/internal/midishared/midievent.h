@@ -29,7 +29,7 @@ namespace mu::iex::midi {
 class MidiEvent : public engraving::MidiCoreEvent
 {
 protected:
-    uchar* _edata { nullptr }; // always zero terminated (_data[_len] == 0; )
+    std::vector<uchar> _edata;
     int _len { 0 };
     int _metaType { 0 };
 
@@ -38,8 +38,8 @@ public:
     MidiEvent(uchar t, uchar c, uchar a, uchar b)
         : MidiCoreEvent(t, c, a, b), _edata(0), _len(0) {}
 
-    const uchar* edata() const { return _edata; }
-    void setEData(uchar* d) { _edata = d; }
+    const uchar* edata() const { return _edata.data(); }
+    void setEData(std::vector<uchar>& d) { _edata = d; }
     int len() const { return _len; }
     void setLen(int l) { _len = l; }
     int metaType() const { return _metaType; }
