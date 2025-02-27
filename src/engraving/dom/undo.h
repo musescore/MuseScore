@@ -756,8 +756,8 @@ class ChangePatch : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangePatch(Score* s, InstrChannel* c, const MidiPatch* pt)
-        : score(s), channel(c), patch(*pt) {}
+    ChangePatch(Score* s, InstrChannel* c, const MidiPatch& pt)
+        : score(s), channel(c), patch(pt) {}
     UNDO_NAME("ChangePatch")
     UNDO_CHANGED_OBJECTS({ score })
 };
