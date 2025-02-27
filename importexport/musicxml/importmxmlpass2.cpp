@@ -7850,15 +7850,16 @@ void MusicXMLParserNotations::harmonic()
                   notation.setSubType(name);
                   _e.skipCurrentElement();  // skip but don't log
                   }
-            else { // TODO: add artificial harmonic when supported by musescore
+            else if (name == "artificial") { // TODO: add artificial harmonic when supported by musescore
                   _logger->logError(QString("unsupported harmonic type/pitch '%1'").arg(name), &_e);
+                  notation.setSymId(SymId::noSym);
                   _e.skipCurrentElement();
                   }
+            else
+                  _e.skipCurrentElement();
             }
 
-      if (!notation.subType().isEmpty()) {
-            _notations.push_back(notation);
-            }
+      _notations.push_back(notation);
       }
 
 //---------------------------------------------------------
