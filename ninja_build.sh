@@ -55,7 +55,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         -t|--target) TARGET="$2"; shift;;
         -j|--jobs) JOBS="$2"; shift;;
-        -h|--help) SHOW_HELP=1; shift;;
+        -h|--help) SHOW_HELP=1;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
