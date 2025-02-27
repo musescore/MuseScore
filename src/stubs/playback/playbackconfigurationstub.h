@@ -40,6 +40,10 @@ public:
     void setPlayHarmonyWhenEditing(bool value) override;
     muse::async::Channel<bool> playHarmonyWhenEditingChanged() const override;
 
+    bool playNotesOnMidiInput() const override;
+    void setPlayNotesOnMidiInput(bool value) override;
+    muse::async::Channel<bool> playNotesOnMidiInputChanged() const override;
+
     PlaybackCursorType cursorType() const override;
 
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
