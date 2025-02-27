@@ -3112,6 +3112,8 @@ static std::vector<String> symIdToArtic(const SymId sid)
         return { u"staccato" };
         break;
 
+    case SymId::articStaccatissimoAbove:
+    case SymId::articStaccatissimoBelow:
     case SymId::articStaccatissimoWedgeAbove:
     case SymId::articStaccatissimoWedgeBelow:
         return { u"staccatissimo" };
@@ -3182,8 +3184,6 @@ static std::vector<String> symIdToArtic(const SymId sid)
         return { u"tenuto", u"accent" };
         break;
 
-    case SymId::articStaccatissimoAbove:
-    case SymId::articStaccatissimoBelow:
     case SymId::articStaccatissimoStrokeAbove:
     case SymId::articStaccatissimoStrokeBelow:
         return { u"spiccato" };
@@ -3488,6 +3488,7 @@ static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notation
             }
         }
         tagName += color2xml(breath);
+        tagName += ExportMusicXml::positioningAttributes(breath);
         if (breath->placement() == PlacementV::BELOW) {
             tagName += u" placement=\"below\"";
         } else if (ExportMusicXml::configuration()->exportMu3Compat()) {
@@ -3548,6 +3549,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 }
             }
             mxmlArtic += color2xml(a);
+            mxmlArtic += ExportMusicXml::positioningAttributes(a);
 
             notations.tag(m_xml, a);
             articulations.tag(m_xml);
@@ -4086,6 +4088,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
             }
             attr += color2xml(f);
+            attr += ExportMusicXml::positioningAttributes(f);
 
             if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING) {
                 xml.tagRaw(u"pluck" + attr, t);
