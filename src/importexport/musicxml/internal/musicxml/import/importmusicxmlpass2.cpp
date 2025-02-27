@@ -8353,6 +8353,7 @@ void MusicXmlParserNotations::harmonic()
             m_e.skipCurrentElement();  // skip but don't log
         } else if (name == "artificial") {   // TODO: add artificial harmonic when supported by MuseScore
             m_logger->logError(String(u"unsupported harmonic type/pitch '%1'").arg(name), &m_e);
+            notation.setSymId(SymId::noSym);
             m_e.skipCurrentElement();
         } else {
             m_e.skipCurrentElement();
