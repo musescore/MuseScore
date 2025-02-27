@@ -73,28 +73,6 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "show-corrupted-measures", &EngravingDebuggingOptions::showCorruptedMeasures }
 };
 
-void NotationActionController::checkForScoreCorruptions()
-{
-    String name = currentMasterNotation()->masterScore()->name();
-    Ret ret = currentMasterNotation()->masterScore()->sanityCheck();
-    if (ret) {
-        std::string title = muse::mtrc("project", "Score “%1” seems to be sane and healthy").arg(name).toStdString();
-        std::string body = muse::trc("project",
-                                     "This score does not seem to contain errors that could cause MuseScore Studio to malfunction.");
-
-        interactive()->info(title, body, {
-            interactive()->buttonData(IInteractive::Button::Ok) }).button();
-    } else {
-        std::string title = muse::mtrc("project", "Score “%1” is corrupted").arg(name).toStdString();
-        std::string body = muse::trc("project", "This score contains errors that could cause MuseScore Studio to malfunction.\n"
-                                                "Fix those at the earliest to prevent crashes and further corruptions.");
-
-        interactive()->warning(title, body, ret.text(), {
-            interactive()->buttonData(IInteractive::Button::Ok) }).button();
-    }
-    return;
-}
-
 void NotationActionController::init()
 {
     TRACEFUNC;
@@ -2308,6 +2286,29 @@ bool NotationActionController::isToggleVisibleAllowed() const
         return !(interaction->isTextEditingStarted());
     }
     return false;
+}
+
+void NotationActionController::checkForScoreCorruptions()
+{
+    project::INotationProjectPtr project = globalContext()->currentProject();
+    if (!project) {
+        return;
+    }
+
+    String fileName = io::filename(project->path()).toString();
+
+    Ret ret = project->masterNotation()->masterScore()->sanityCheck();
+    if (ret) {
+        std::string title = muse::mtrc("project", "File “%1” seems not corrupted").arg(fileName).toStdString();
+        std::string body = muse::trc("project", "This file does not seem to contain errors.");
+        interactive()->info(title, body);
+    } else {
+        std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(fileName).toStdString();
+        std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction.\n"
+                                                "Please fix those at the earliest, to prevent crashes and further corruptions.");
+
+        interactive()->warning(title, body, ret.text());
+    }
 }
 
 void NotationActionController::registerAction(const ActionCode& code,
