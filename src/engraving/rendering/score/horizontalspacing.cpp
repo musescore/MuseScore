@@ -1038,7 +1038,12 @@ void HorizontalSpacing::setPositionsAndWidths(const std::vector<SegmentPosition>
         Measure* curSegMeasure = curSeg->measure();
         Measure* nextSegMeasure = nextSeg->measure();
 
-        double segWidth = curSegMeasure == nextSegMeasure || nextSeg->isStartRepeatBarLineType() ? nextX - curX : curSeg->minRight();
+        bool leadingNonCRException = ((nextSeg->isKeySigType() || nextSeg->isTimeSigType()
+                                       || nextSeg->isClefType()) && !curSeg->isType(SegmentType::BarLineType));
+        bool computeWidthByDifferenceFromNext = curSegMeasure == nextSegMeasure || nextSeg->isStartRepeatBarLineType()
+                                                || leadingNonCRException;
+
+        double segWidth = computeWidthByDifferenceFromNext ? nextX - curX : curSeg->minRight();
 
         curSeg->setWidth(segWidth);
 
