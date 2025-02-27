@@ -196,6 +196,8 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "slap", { SoundId::Slap, SoundCategory::Percussions, { SoundSubCategory::Hand } } },
         { "stamp", { SoundId::Stamp, SoundCategory::Percussions, { SoundSubCategory::Foot } } },
 
+        { "taiko", { SoundId::Taiko, SoundCategory::Percussions } },
+
         { "percussion-synthesizer", { SoundId::Synthesizer, SoundCategory::Percussions, { SoundSubCategory::Electric,
                                                                                           SoundSubCategory::Percussive } } },
     };
