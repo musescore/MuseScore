@@ -150,6 +150,7 @@ Ret Score::sanityCheckLocal()
     };
 
     setHasCorruptedMeasures(false);
+
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
         size_t endStaff  = staves().size();
@@ -159,6 +160,7 @@ Ret Score::sanityCheckLocal()
             Fraction voices[VOICES];
 
             m->setCorrupted(staffIdx, false);
+            setHasCorruptedMeasures(true);
 
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 for (voice_idx_t v = 0; v < VOICES; ++v) {
@@ -189,6 +191,7 @@ Ret Score::sanityCheckLocal()
                 errors << muse::mtrc("engraving", "<b>Corrupted measure</b>: %1, measure %2, staff %3.")
                     .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1);
                 m->setCorrupted(staffIdx, true);
+                setHasCorruptedMeasures(true);
             }
 
             if (voices[0] != mLen) {
@@ -196,6 +199,7 @@ Ret Score::sanityCheckLocal()
                 errors << muse::mtrc("engraving", "<b>Incomplete measure</b>: %1, measure %2, staff %3. Found: %4. Expected: %5.")
                     .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(voices[0].toString(), mLen.toString());
                 m->setCorrupted(staffIdx, true);
+                setHasCorruptedMeasures(true);
                 // try to fix a bad full measure rest
                 if (fmrest0) {
                     // fmrest0->setDuration(mLen * fmrest0->staff()->timeStretch(fmrest0->tick()));
@@ -209,6 +213,7 @@ Ret Score::sanityCheckLocal()
                     errors << muse::mtrc("engraving", "<b>Voice too long</b>: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.")
                         .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
                     m->setCorrupted(staffIdx, true);
+                    setHasCorruptedMeasures(true);
                 }
             }
         }

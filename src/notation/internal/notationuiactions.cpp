@@ -2602,6 +2602,7 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show element masks"),
+             TranslatableString("action", "Show/hide element masks"),
              Checkable::Yes
              ),
     UiAction("show-corrupted-measures",

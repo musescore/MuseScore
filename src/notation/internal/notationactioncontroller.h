@@ -53,8 +53,6 @@ class NotationActionController : public muse::actions::Actionable, public muse::
 public:
     void init();
 
-    void checkForScoreCorruptions();
-
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     muse::async::Notification currentNotationChanged() const;
@@ -224,6 +222,9 @@ private:
     bool isNotationPage() const;
     bool isStandardStaff() const;
     bool isTablatureStaff() const;
+
+    void checkForScoreCorruptions();
+
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(const muse::actions::ActionData& data),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
