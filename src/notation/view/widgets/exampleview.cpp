@@ -137,10 +137,6 @@ void ExampleView::setDropRectangle(const RectF&)
 {
 }
 
-void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
-{
-}
-
 void ExampleView::drawBackground(Painter* p, const RectF& r) const
 {
     if (m_backgroundPixmap == 0 || m_backgroundPixmap->isNull()) {

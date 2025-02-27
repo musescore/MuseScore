@@ -66,10 +66,8 @@ public:
 
     void changeEditElement(engraving::EngravingItem*) override;
     void setDropRectangle(const muse::RectF&) override;
-    void cmdAddSlur(engraving::Note* firstNote, Note* lastNote);
     void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
-    const muse::Rect geometry() const override { return muse::Rect(QFrame::geometry()); }
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
