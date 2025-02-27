@@ -41,6 +41,9 @@ static constexpr ui::UiContext UiCtxHomeOpened = "UiCtxHomeOpened";
 static constexpr ui::UiContext UiCtxProjectOpened = "UiCtxProjectOpened";
 static constexpr ui::UiContext UiCtxProjectFocused = "UiCtxProjectFocused";
 
+// dialogs
+static constexpr ui::UiContext UiCtxDialogOpened = "UiCtxDialogOpened";
+
 enum class Checkable {
     No = 0,
     Yes
