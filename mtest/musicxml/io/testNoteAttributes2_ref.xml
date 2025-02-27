@@ -246,6 +246,9 @@
         <type>quarter</type>
         <stem>down</stem>
         <notations>
+          <ornaments>
+            <other-ornament smufl="brassMuteClosed"/>
+            </ornaments>
           <technical>
             <stopped/>
             </technical>

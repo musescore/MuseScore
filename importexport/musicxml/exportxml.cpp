@@ -2963,8 +2963,6 @@ static QString symIdToOrnam(const SymId sid)
       {
       switch (sid) {
             case SymId::ornamentTrill:
-            case SymId::ornamentShake3:
-            case SymId::ornamentShakeMuffat1:
                   return "trill-mark";
                   break;
             case SymId::ornamentTurn:
@@ -3022,15 +3020,11 @@ static QString symIdToOrnam(const SymId sid)
             case SymId::ornamentPrecompSlide:
                   return "schleifer";
                   break;
-            case SymId::ornamentTremblementCouperin:
-                  return "other-ornament smufl=\"ornamentTremblementCouperin\"";
-                  break;
-            case SymId::ornamentPinceCouperin:
-                  return "other-ornament smufl=\"ornamentPinceCouperin\"";
-                  break;
 
             default:
-                  ; // nothing
+                  // use other-ornament
+                  const char* name = Sym::id2name(sid);
+                  return QString("other-ornament smufl=\"%1\"").arg(name);
                   break;
             }
 
@@ -3330,26 +3324,26 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       for (const Articulation* a : na) {
             if (!ExportMusicXml::canWrite(a))
                   continue;
+            if (!a->isOrnament())
+                  continue;
 
-            SymId sid = a->symId();
+            const SymId sid = a->symId();
             QString mxmlOrnam = symIdToOrnam(sid);
 
-            if (!mxmlOrnam.isEmpty()) {
-                  QString placement;
+            QString placement;
+            if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD)
+                  placement = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
+            if (!placement.isEmpty())
+                  mxmlOrnam += QString(" placement=\"%1\"").arg(placement);
+            mxmlOrnam += color2xml(a);
 
-                  if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD)
-                        placement = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
-                  if (!placement.isEmpty())
-                        mxmlOrnam += QString(" placement=\"%1\"").arg(placement);
-                  mxmlOrnam += color2xml(a);
-
-                  notations.tag(_xml);
-                  ornaments.tag(_xml);
-                  _xml.tagE(mxmlOrnam);
-                  // accidental-mark is missing
-                  }
+            notations.tag(_xml);
+            ornaments.tag(_xml);
+            _xml.tagE(mxmlOrnam);
+            // accidental-mark is missing
+            //for (const Accidental* accidental : a->accidentalsAboveAndBelow())
+            //      writeAccidental(_xml, "accidental-mark", accidental);
             }
-
       tremoloSingleStartStop(chord, notations, ornaments, _xml);
       wavyLineStartStop(chord, notations, ornaments, trillStart, trillStop);
       ornaments.etag(_xml);
@@ -3451,7 +3445,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
             SymId sid = a->symId();
             if (symIdToArtics(sid).empty()
-                && symIdToOrnam(sid).isEmpty()
                 && symIdToTechn(sid).isEmpty()
                 && !isLaissezVibrer(sid)) {
                   qDebug("unknown chord attribute %d %s", int(sid), qPrintable(a->userName()));
