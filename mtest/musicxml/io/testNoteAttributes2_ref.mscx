@@ -185,7 +185,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articStaccatissimoWedgeAbove</subtype>
+              <subtype>articStaccatissimoAbove</subtype>
               </Articulation>
             <StemDirection>down</StemDirection>
             <Note>
@@ -196,7 +196,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articStaccatissimoWedgeAbove</subtype>
+              <subtype>articStaccatissimoAbove</subtype>
               </Articulation>
             <StemDirection>down</StemDirection>
             <Note>
@@ -451,7 +451,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articStaccatissimoBelow</subtype>
+              <subtype>articStaccatissimoStrokeBelow</subtype>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>

@@ -1288,8 +1288,8 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       map["staccato"]               = SymId::articStaccatoAbove;
       map["tenuto"]                 = SymId::articTenutoAbove;
       map["detached-legato"]        = SymId::articTenutoStaccatoAbove;
-      map["staccatissimo"]          = SymId::articStaccatissimoWedgeAbove;
-      map["spiccato"]               = SymId::articStaccatissimoAbove;
+      map["staccatissimo"]          = SymId::articStaccatissimoAbove;
+      map["spiccato"]               = SymId::articStaccatissimoStrokeAbove;
       map["stress"]                 = SymId::articStressAbove;
       map["unstress"]               = SymId::articUnstressAbove;
       map["soft-accent"]            = SymId::articSoftAccentAbove;
