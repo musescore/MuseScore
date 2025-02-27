@@ -2624,6 +2624,12 @@ void MeasureLayout::removeSystemHeader(Measure* m)
         return;
     }
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
+        if (seg->isKeySigType()) {
+            bool keySigChangeHappensHere = m->score()->keyList().count(m->tick().ticks()) > 0;
+            if (!keySigChangeHappensHere || seg->header()) {
+                seg->setEnabled(false);
+            }
+        }
         if (!seg->header()) {
             break;
         }
