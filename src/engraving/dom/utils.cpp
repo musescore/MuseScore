@@ -1708,19 +1708,4 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
 
     return true;
 }
-
-bool chordContainsNoteVal(const Chord* chord, const NoteVal& nval)
-{
-    if (!chord) {
-        return false;
-    }
-
-    for (const Note* note : chord->notes()) {
-        if (note->noteVal() == nval) {
-            return true;
-        }
-    }
-
-    return false;
-}
 }

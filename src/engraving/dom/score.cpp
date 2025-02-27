@@ -3219,7 +3219,7 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                     }
 
                     for (const NoteVal& nval : m_is.notes()) {
-                        if (chordContainsNoteVal(chord, nval)) {
+                        if (chord && chord->findNote(nval.pitch)) {
                             continue;
                         }
 
