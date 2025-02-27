@@ -315,6 +315,8 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
             MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
 
             result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
+        } else {
+            __builtin_unreachable();
         }
     } else {
         const std::vector<Event> events = e.toMIDI10();
