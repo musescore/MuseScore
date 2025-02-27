@@ -157,7 +157,7 @@ static std::pair<XMLNode*, XmlStreamReader::TokenType> resolveNode(XMLNode* curr
         }
 
         XMLNode* sibling = currentNode->NextSibling();
-        if (!sibling || sibling->ToElement() || sibling->ToText()) {
+        if (!sibling || sibling->ToElement() || sibling->ToText() || sibling->ToComment()) {
             return { currentNode, XmlStreamReader::TokenType::EndElement };
         }
     }
@@ -474,11 +474,11 @@ double XmlStreamReader::readDouble(bool* ok)
 
 int64_t XmlStreamReader::lineNumber() const
 {
-    if (!m_xml->doc.Error() && m_xml->node) {
-        return m_xml->node->GetLineNum();
+    int64_t lineNum = m_xml->doc.ErrorLineNum();
+    if (lineNum == 0 && m_xml->node) {
+        lineNum = m_xml->node->GetLineNum();
     }
-
-    return m_xml->doc.ErrorLineNum();
+    return lineNum;
 }
 
 int64_t XmlStreamReader::columnNumber() const
