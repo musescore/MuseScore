@@ -50,6 +50,10 @@ public:
     void setPlayHarmonyWhenEditing(bool value) override;
     muse::async::Channel<bool> playHarmonyWhenEditingChanged() const override;
 
+    bool playNotesOnMidiInput() const override;
+    void setPlayNotesOnMidiInput(bool value) override;
+    muse::async::Channel<bool> playNotesOnMidiInputChanged() const override;
+
     PlaybackCursorType cursorType() const override;
 
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
@@ -93,6 +97,7 @@ private:
     muse::async::Notification m_playNotesWhenEditingChanged;
     muse::async::Channel<bool> m_playChordWhenEditingChanged;
     muse::async::Channel<bool> m_playHarmonyWhenEditingChanged;
+    muse::async::Channel<bool> m_playNotesOnMidiInputChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
     muse::async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;

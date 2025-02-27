@@ -68,6 +68,21 @@ muse::async::Channel<bool> PlaybackConfigurationStub::playHarmonyWhenEditingChan
     return ch;
 }
 
+bool PlaybackConfigurationStub::playNotesOnMidiInput() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setPlayNotesOnMidiInput(bool)
+{
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::playNotesOnMidiInputChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 PlaybackCursorType PlaybackConfigurationStub::cursorType() const
 {
     return PlaybackCursorType::SMOOTH;
