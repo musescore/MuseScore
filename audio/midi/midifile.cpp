@@ -164,7 +164,7 @@ bool MidiFile::writeTrack(const MidiTrack &t)
 
       status   = -1;
       int tick = 0;
-      for (auto i : t.events()) {
+      for (auto& i : t.events()) {
             int ntick = i.first;
             putvl(ntick - tick);    // write tick delta
             //
@@ -544,7 +544,6 @@ bool MidiFile::readEvent(MidiEvent* event)
                   break;
             }
 
-      unsigned char* data;
       int dataLen;
 
       if (me == 0xf0 || me == 0xf7) {
@@ -554,23 +553,21 @@ bool MidiFile::readEvent(MidiEvent* event)
                   qDebug("readEvent: error 3");
                   return false;
                   }
-            data    = new unsigned char[len+1];
             dataLen = len;
-            read(data, len);
-            data[dataLen] = 0;    // always terminate with zero
-            if (data[len-1] != 0xf7) {
+            std::vector<unsigned char> data(len + 1);
+            read(data.data(), len);
+            if (data[len - 1] != 0xf7) {
                   qDebug("SYSEX does not end with 0xf7!");
                   // more to come?
                   }
             else
                   dataLen--;      // don't count 0xf7
             event->setType(ME_SYSEX);
-            event->setEData(data);
+            event->setEData(std::move(data));
             event->setLen(dataLen);
             return true;
             }
-
-      if (me == ME_META) {
+      else if (me == ME_META) {
             status = -1;                  // no running status
             uchar type;
             read(&type, 1);
@@ -579,15 +576,14 @@ bool MidiFile::readEvent(MidiEvent* event)
                   qDebug("readEvent: error 6");
                   return false;
                   }
-            data = new unsigned char[dataLen + 1];
+            std::vector<unsigned char> data(dataLen + 1);
             if (dataLen)
-                  read(data, dataLen);
-            data[dataLen] = 0;      // always terminate with zero so we get valid C++ strings
+                  read(data.data(), dataLen);
 
             event->setType(ME_META);
             event->setMetaType(type);
             event->setLen(dataLen);
-            event->setEData(data);
+            event->setEData(std::move(data));
             return true;
             }
 

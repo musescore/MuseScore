@@ -169,7 +169,14 @@ void MidiFile::skip(qint64 len)
       {
       if (len <= 0)
             return;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char tmp[len];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> buffer(len);
+      char *tmp = buffer.data();
+#endif
       read(tmp, len);
       }
 
@@ -230,7 +237,6 @@ int MidiFile::readEvent(MidiEvent* event)
                   break;
             }
 
-      uchar* data;
       int dataLen;
 
       if (me == 0xf0 || me == 0xf7) {
@@ -238,17 +244,15 @@ int MidiFile::readEvent(MidiEvent* event)
             int len = getvl();
             if (len == -1)
                   throw(QString("readEvent: error 3"));
-            data    = new unsigned char[len+1];
             dataLen = len;
-            read(data, len);
-            data[dataLen] = 0;    // always terminate with zero
-            if (data[len-1] != 0xf7) {
+            std::vector<unsigned char> data(len + 1);
+            read(data.data(), len);
+            if (data[len - 1] != 0xf7) {
                   qDebug("SYSEX does not end with 0xf7!");
                   // more to come?
                   }
             else
                   dataLen--;      // don't count 0xf7
-            delete[] data;
 #if 0
             event->setType(MidiEventType::SYSEX);
             event->setData(data);
@@ -257,18 +261,17 @@ int MidiFile::readEvent(MidiEvent* event)
 #endif
             return 1;
             }
-
-      if (me == 0xff) { // MidiEventType::META) {
+      else if (me == 0xff) { // MidiEventType::META) {
             status = -1;                  // no running status
             uchar type;
             read(&type, 1);
             dataLen = getvl();                // read len
             if (dataLen == -1)
                   throw(QString("readEvent: error 6"));
-            data = new unsigned char[dataLen + 1];
+            std::vector<unsigned char> data(dataLen + 1);
             if (dataLen)
-                  read(data, dataLen);
-            data[dataLen] = 0;      // always terminate with zero so we get valid C++ strings
+                  read(data.data(), dataLen);
+
             if (type == META_TEMPO) {
                   unsigned tempo = data[2] + (data[1] << 8) + (data[0] << 16);
                   double t = 1000000.0 / double(tempo);
@@ -276,7 +279,6 @@ int MidiFile::readEvent(MidiEvent* event)
                   }
 //else
 //printf("META %02x\n", type);
-            delete[] data;
             if (type == META_EOT)
                   return 2;
             return 1;
