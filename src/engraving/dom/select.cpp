@@ -1563,7 +1563,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
     if (tick < tickStart()) {
         m_startSegment = seg;
         activeSegmentIsStart = true;
-    } else if (etick >= tickEnd()) {
+    } else if (etick > tickEnd()) {
         m_endSegment = segAfter;
     } else {
         if (m_activeSegment == m_startSegment) {
