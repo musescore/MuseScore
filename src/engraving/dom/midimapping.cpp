@@ -259,8 +259,8 @@ void MasterScore::removeDeletedMidiMapping()
 int MasterScore::updateMidiMapping()
 {
     int maxport = 0;
-    std::set<int> occupiedMidiChannels;// each entry is port*16+channel, port range: 0-inf, channel: 0-15
-    unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
+    std::set<int> occupiedMidiChannels; // each entry is port*16+channel, port range: 0-inf, channel: 0-15
+    unsigned int searchMidiMappingFrom = 0; // makes getting next free MIDI mapping faster
 
     for (const MidiMapping& mm :m_midiMapping) {
         if (mm.port() == -1 || mm.channel() == -1) {
@@ -275,56 +275,67 @@ int MasterScore::updateMidiMapping()
     for (Part* part : parts()) {
         for (const auto& pair : part->instruments()) {
             const Instrument* instr = pair.second;
-            bool drum = instr->useDrumset();
+            const bool useDrumset = instr->useDrumset();
             for (InstrChannel* channel : instr->channel()) {
-                bool channelExists = false;
-                for (const MidiMapping& mapping: m_midiMapping) {
-                    if (channel == mapping.m_masterChannel && channel->channel() != -1) {
-                        channelExists = true;
-                        break;
-                    }
-                }
-                // Channel could already exist, but have unassigned port or channel. Repair and continue
-                if (channelExists) {
-                    if (m_midiMapping[channel->channel()].port() == -1) {
-                        const int nm
-                            = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom, -1,
-                                                     m_midiMapping[channel->channel()].channel());
-                        m_midiMapping[channel->channel()].m_port = nm / 16;
-                    } else if (m_midiMapping[channel->channel()].channel() == -1) {
-                        if (drum) {
-                            m_midiMapping[channel->channel()].m_port = getNextFreeDrumMidiMapping(occupiedMidiChannels) / 16;
-                            m_midiMapping[channel->channel()].m_channel = 9;
-                            continue;
-                        }
-                        int nm = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom,
-                                                        m_midiMapping[channel->channel()].port());
-                        m_midiMapping[channel->channel()].m_port    = nm / 16;
-                        m_midiMapping[channel->channel()].m_channel = nm % 16;
-                    }
-                    continue;
-                }
-
-                int midiPort;
-                int midiChannel;
-                if (drum) {
-                    midiPort = getNextFreeDrumMidiMapping(occupiedMidiChannels) / 16;
-                    midiChannel = 9;
-                } else {
-                    int nm = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom);
-                    midiPort    = nm / 16;
-                    midiChannel = nm % 16;
-                }
-
-                if (midiPort > maxport) {
-                    maxport = midiPort;
-                }
-
-                addMidiMapping(channel, part, midiPort, midiChannel);
+                doUpdateMidiMapping(maxport, occupiedMidiChannels, searchMidiMappingFrom, part, channel, useDrumset);
             }
         }
     }
+
     return maxport;
+}
+
+void MasterScore::doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom,
+                                      Part* part, InstrChannel* channel, bool useDrumset)
+{
+    bool channelExists = false;
+    for (const MidiMapping& mapping : m_midiMapping) {
+        if (channel == mapping.m_masterChannel && channel->channel() != -1) {
+            channelExists = true;
+            break;
+        }
+    }
+
+    if (!channelExists) {
+        int midiPort;
+        int midiChannel;
+
+        if (useDrumset) {
+            midiPort = getNextFreeDrumMidiMapping(occupiedMidiChannels) / 16;
+            midiChannel = 9;
+        } else {
+            const int nm = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom);
+            midiPort    = nm / 16;
+            midiChannel = nm % 16;
+        }
+
+        if (midiPort > maxport) {
+            maxport = midiPort;
+        }
+
+        addMidiMapping(channel, part, midiPort, midiChannel);
+        return;
+    }
+
+    // Channel could already exist, but have unassigned port or channel...
+    MidiMapping& mapping = m_midiMapping.at(channel->channel());
+
+    if (mapping.port() == -1) {
+        const int nm = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom, -1, mapping.channel());
+        mapping.m_port = nm / 16;
+        return;
+    }
+
+    if (m_midiMapping[channel->channel()].channel() == -1) {
+        if (useDrumset) {
+            mapping.m_port = getNextFreeDrumMidiMapping(occupiedMidiChannels) / 16;
+            mapping.m_channel = 9;
+            return;
+        }
+        const int nm = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom,  mapping.port());
+        mapping.m_port    = nm / 16;
+        mapping.m_channel = nm % 16;
+    }
 }
 
 //---------------------------------------------------------

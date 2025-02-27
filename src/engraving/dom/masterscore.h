@@ -200,7 +200,10 @@ private:
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
+
     int updateMidiMapping();
+    void doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, Part* part,
+                             InstrChannel* channel, bool useDrumset);
 
     friend class EngravingProject;
     friend class compat::ScoreAccess;
