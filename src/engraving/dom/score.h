@@ -355,7 +355,7 @@ public:
 
     bool resolveNoteInputParams(int noteIdx, bool addFlag, NoteInputParams& out) const;
 
-    void cmdAddPitch(const EditData&, const NoteInputParams& params, bool addFlag, bool insert);
+    void cmdAddPitch(const NoteInputParams& params, bool addFlag, bool insert);
     void cmdAddPitch(int note, bool addFlag, bool insert);
 
     void cmdAddStretch(double);

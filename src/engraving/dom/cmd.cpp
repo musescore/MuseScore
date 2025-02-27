@@ -5009,7 +5009,7 @@ bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out)
 //   cmdAddPitch
 ///   insert note or add note to chord
 //---------------------------------------------------------
-void Score::cmdAddPitch(const EditData& ed, const NoteInputParams& params, bool addFlag, bool insert)
+void Score::cmdAddPitch(const NoteInputParams& params, bool addFlag, bool insert)
 {
     InputState& is = inputState();
     if (!is.isValid()) {
@@ -5041,8 +5041,6 @@ void Score::cmdAddPitch(const EditData& ed, const NoteInputParams& params, bool 
     }
 
     cmdAddPitch(params.step, addFlag, insert);
-
-    ed.view()->adjustCanvasPosition(is.cr());
 }
 
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)
