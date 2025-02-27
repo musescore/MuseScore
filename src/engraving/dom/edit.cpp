@@ -2064,7 +2064,10 @@ Tie* Score::cmdToggleTie()
             Note* note2 = tieNoteList[i];
             if (note2) {
                 Note* note = noteList[i];
-                tie = createAndAddTie(note, note2);
+
+                Note* startNote = note->tick() <= note2->tick() ? note : note2;
+                Note* endNote = startNote == note2 ? note : note2;
+                tie = createAndAddTie(startNote, endNote);
             }
         }
     } else {
@@ -2084,8 +2087,12 @@ Tie* Score::cmdToggleTie()
         }
 
         if (shouldTieListSelection) {
-            Note* startNote = noteList.at(0);
-            Note* endNote = noteList.at(1);
+            Note* note = noteList.at(0);
+            Note* note2 = noteList.at(1);
+
+            Note* startNote = note->tick() <= note2->tick() ? note : note2;
+            Note* endNote = startNote == note2 ? note : note2;
+
             if (startNote->part() == endNote->part() && startNote->pitch() == endNote->pitch()
                 && startNote->unisonIndex() == endNote->unisonIndex() && startNote->tick() != endNote->tick()) {
                 tie = createAndAddTie(startNote, endNote);
