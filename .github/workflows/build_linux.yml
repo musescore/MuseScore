@@ -31,7 +31,7 @@ on:
 
 jobs:
   linux_x64:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -95,7 +95,7 @@ jobs:
         path: ./build.artifacts/
 
   run_mtests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
         # Enable AddressSanitizer in the mtest build
         CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"

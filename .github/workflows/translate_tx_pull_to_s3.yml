@@ -10,7 +10,7 @@ on:
 
 jobs:
   tx2s3:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: "Configure workflow"
       run: |
