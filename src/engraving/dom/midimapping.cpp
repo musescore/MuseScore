@@ -290,7 +290,8 @@ void MasterScore::doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiC
 {
     bool channelExists = false;
     for (const MidiMapping& mapping : m_midiMapping) {
-        if (channel == mapping.m_masterChannel && channel->channel() != -1) {
+        const bool validChannelIndex = channel->channel() >= 0 && channel->channel() < static_cast<int>(m_midiMapping.size());
+        if (channel == mapping.m_masterChannel && validChannelIndex) {
             channelExists = true;
             break;
         }
