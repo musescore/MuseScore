@@ -18,6 +18,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Muse.UiComponents 
+import Muse.Ui
 import MuseScore 3.0
 import FileIO 
 
@@ -634,11 +635,11 @@ MuseScore {
 
         StyledTabButton {
             id: westernTab 
-            text: "Western Temperaments" 
+            text: "Western temperaments" 
         }
         StyledTabButton {
             id: middleEasternTab
-            text: "Middle Eastern Temperaments" 
+            text: "Middle Eastern temperaments" 
         }
     }    
 
@@ -647,15 +648,80 @@ MuseScore {
         anchors.top: window.top
         anchors.leftMargin:20
         anchors.topMargin: 60
-        GroupBox {                 
+        spacing: 12
+        RowLayout {
+            width: parent.width
+            FlatButton {
+                id: addButton
+                text: "Add"  
+                Layout.fillWidth: true               
+                onClicked: addDialog.open() 
+
+                StyledPopupView {        
+                    id: addDialog                                                                  
+                    contentWidth:  addButton.width //c1.childrenRect.width
+                    contentHeight: c1.childrenRect.height 
+                    Column {
+                        width: parent.width 
+                        id: c1                            
+                        spacing: 12
+                        TextInputField {                                            
+                            id: customTempName                            
+                            hint: "Temperament name"  
+                            focus: true 
+                            onTextEditingFinished: function (newText) { currentText = newText }                                  
+                        }
+                        FlatButton {
+                            width: parent.width 
+                            text: "Ok"
+                            accentButton: true
+                            onClicked: {                   
+                                addTemperament()
+                                addDialog.close()
+                                saveCustomTemperaments()
+                                customTempName.currentText = ""                                       
+                            }   
+                        } 
+                    }  
+                }
+            }
+            
+            FlatButton {
+                id: removeButton
+                icon: IconCode.DELETE_TANK              
+                enabled: {
+                    switch (tabBar.currentIndex) {
+                    case 0:
+                        if (westernTemperaments.indexOf(currentTemperament) < westernTemperamentsLength)  {
+                            return false
+                        }
+                        else {
+                            return true
+                        }
+                    case 1:
+                        if (middleEasternTemperaments.indexOf(currentTemperament) < middleEasternTemperamentsLength)  {
+                            return false
+                        }
+                        else {
+                            return true
+                        }
+                    }
+                }                               
+                onClicked: {
+                    removeTemperament()
+                    saveCustomTemperaments()
+                }
+            }                    
+        }
+        GroupBox {                            
             width:260
-            height: 530
+            height: 500
             ButtonGroup { id: tempGroup }   
 
             StyledListView {
                 id: westernListView
                 width: parent.width
-                height: parent.height-30                      
+                height: parent.height-10                      
                 visible: westernTab.checked  
                 model: westernTemperaments
 
@@ -676,7 +742,7 @@ MuseScore {
             StyledListView {
                 id: middleEasternListView
                 width: parent.width
-                height: parent.height-30                    
+                height: parent.height-10                   
                 visible: middleEasternTab.checked 
                 model: middleEasternTemperaments
 
@@ -699,13 +765,13 @@ MuseScore {
         anchors.top: parent.top
         anchors.topMargin: 60
         anchors.margins: 20
+        spacing: 12
         x: 310
-        GroupBox {
-            //title: "Advanced"
+        GroupBox {            
             ColumnLayout {
                 spacing: 10
                 GroupBox {
-                    title: "Root Note"
+                    title: "Root note"
                     GridLayout {
                         columns: 6
                         anchors.margins: 10
@@ -724,7 +790,7 @@ MuseScore {
                 }
 
                 GroupBox {
-                    title: "Pure Tone"
+                    title: "Pure tone"
                     GridLayout {
                         columns: 6
                         anchors.margins: 10
@@ -743,7 +809,7 @@ MuseScore {
                 }
 
                 GroupBox {
-                    title: "Pure note offset"                    
+                    title: "Pure tone offset"                    
                     TextInputField {
                         Layout.maximumWidth: 40
                         id: tweakValue
@@ -763,7 +829,7 @@ MuseScore {
                 }
 
                 GroupBox {
-                    title: "Final Offsets"
+                    title: "Final offsets"
                     GridLayout {
                         columns: 6
                         anchors.margins: 0
@@ -793,58 +859,13 @@ MuseScore {
                         }
                     }
                 }
-
-                RowLayout {
-                    FlatButton {
-                        id: addButton
-                        text: "Add"                                
-                        isNarrow: true
-                        onClicked: addDialog.open() 
-
-                        StyledPopupView {        
-                            id: addDialog                             
-                            contentWidth:  c1.childrenRect.width
-                            contentHeight: c1.childrenRect.height 
-                            Column {
-                                id: c1  
-                                spacing: 30
-                                TextInputField {                
-                                    id: customTempName
-                                    hint: "Temperament name"  
-                                    focus: true 
-                                    onTextEditingFinished: function (newText) { currentText = newText }                                  
-                                }
-                                FlatButton {
-                                    //anchors.horizontalCenter: parent.horizontalCenter
-                                    text: "Ok"
-                                    accentButton: true
-                                    onClicked: {                   
-                                        addTemperament()
-                                        addDialog.close()
-                                        saveCustomTemperaments()
-                                        customTempName.currentText = ""                                       
-                                    }   
-                                } 
-                            }  
-                        }
-                    }
-                    
-                    FlatButton {
-                        id: removeButton
-                        text: "Remove"
-                        isNarrow: true                                
-                        onClicked: {
-                            removeTemperament()
-                            saveCustomTemperaments()
-                        }
-                    }                    
-                }
             }
         }
 
         CheckBox {
+            anchors.topMargin: 12
             id: annotateValue
-            text: qsTr("Annotate")
+            text: qsTr("Show tuning offset values above notes")
             checked: false
             onClicked: checked = !checked 
         }        
@@ -855,13 +876,13 @@ MuseScore {
         anchors.bottom: window.bottom
         anchors.right: window.right
         anchors.margins: 20
-        buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]                   
+        buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Apply ]                   
 
         onStandardButtonClicked: function(buttonId) {
             if (buttonId === ButtonBoxModel.Cancel) {                
                 quit()                            
             } 
-            else if (buttonId === ButtonBoxModel.Ok) {
+            else if (buttonId === ButtonBoxModel.Apply) {
                 if (applyTemperament()) {                    
                     quit()                                
                 }
@@ -912,28 +933,18 @@ MuseScore {
 
     function removeTemperament() {
         switch (tabBar.currentIndex) {
-            case 0:
-                if (westernTemperaments.indexOf(currentTemperament) < westernTemperamentsLength) {
-                    error("Cannot remove Built-in temperaments")
-                } 
-                else {
-                    westernTemperaments = westernTemperaments.filter(x => x !== currentTemperament)
-                    westernListView.positionViewAtEnd()
-                    westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
-                    westernListView.itemAtIndex(westernTemperaments.length-1).checked = true 
-                }
+            case 0:                
+                westernTemperaments = westernTemperaments.filter(x => x !== currentTemperament)
+                westernListView.positionViewAtEnd()
+                westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
+                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true                 
                 break
 
-            case 1:
-                if (middleEasternTemperaments.indexOf(currentTemperament) < middleEasternTemperamentsLength) {
-                    error("Cannot remove Built-in temperaments")
-                } 
-                else {
-                    middleEasternTemperaments = middleEasternTemperaments.filter(x => x !== currentTemperament)
-                    middleEasternListView.positionViewAtEnd()
-                    middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
-                    middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true
-                }
+            case 1:                
+                middleEasternTemperaments = middleEasternTemperaments.filter(x => x !== currentTemperament)
+                middleEasternListView.positionViewAtEnd()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true                
                 break
         }
     }
