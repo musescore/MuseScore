@@ -87,18 +87,6 @@ muse::TranslatableString Fermata::subtypeUserName() const
 }
 
 //---------------------------------------------------------
-//   chordRest
-//---------------------------------------------------------
-
-ChordRest* Fermata::chordRest() const
-{
-    if (explicitParent() && explicitParent()->isChordRest()) {
-        return toChordRest(explicitParent());
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
