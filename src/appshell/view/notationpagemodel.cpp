@@ -234,8 +234,10 @@ void NotationPageModel::updatePercussionPanelVisibility()
 {
     TRACEFUNC;
 
+    //! NOTE: If the user is entering percussion notes with the piano keyboard, we can assume that they
+    //! don't want the percussion panel to auto-show...
     const muse::dock::IDockWindow* window = dockWindowProvider()->window();
-    if (!window) {
+    if (!window || window->isDockOpenAndCurrentInFrame(PIANO_KEYBOARD_PANEL_NAME)) {
         return;
     }
 
