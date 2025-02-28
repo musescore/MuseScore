@@ -85,7 +85,8 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     params.dpi = dpi;
     params.spatium = configuration()->paletteSpatium() * params.mag;
 
-    params.drawStaff = m_cell->drawStaff;
+    //! NOTE: Slight hack - we can now specify exactly now many staff lines we want...
+    params.numStaffLines = m_cell->drawStaff ? 5 : 0;
 
     notation::EngravingItemPreviewPainter::paintPreview(element, params);
 }

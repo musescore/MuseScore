@@ -46,7 +46,7 @@ void EngravingItemPreviewPainter::paintPreview(mu::engraving::EngravingItem* ele
     }
 
     PointF origin = params.rect.center(); // draw element at center of cell by default
-    if (params.drawStaff) {
+    if (params.numStaffLines > 0) {
         const double topLinePos = paintStaff(params); // draw dummy staff lines onto rect.
         origin.setY(topLinePos); // vertical position relative to staff instead of cell center.
     }
@@ -118,7 +118,7 @@ void EngravingItemPreviewPainter::paintPreviewForActionIcon(mu::engraving::Engra
     painter->restore();
 }
 
-/// Paint a 5 line staff centered within a QRect and return the distance from the
+/// Paint a staff centered within a QRect and return the distance from the
 /// top of the QRect to the uppermost staff line.
 double EngravingItemPreviewPainter::paintStaff(PaintParams& params)
 {
@@ -135,8 +135,7 @@ double EngravingItemPreviewPainter::paintStaff(PaintParams& params)
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * params.spatium);
     painter->setPen(pen);
 
-    constexpr int numStaffLines = 5;
-    const double staffHeight = params.spatium * (numStaffLines - 1);
+    const double staffHeight = params.spatium * (params.numStaffLines - 1);
     const double topLineDist = params.rect.center().y() - (staffHeight / 2.0);
 
     // lines bounded horizontally by edge of target (with small margin)
@@ -146,7 +145,7 @@ double EngravingItemPreviewPainter::paintStaff(PaintParams& params)
 
     // draw staff lines with middle line centered vertically on target
     double y = topLineDist;
-    for (int i = 0; i < numStaffLines; ++i) {
+    for (int i = 0; i < params.numStaffLines; ++i) {
         painter->drawLine(LineF(x1, y, x2, y));
         y += params.spatium;
     }
@@ -178,7 +177,7 @@ void EngravingItemPreviewPainter::paintPreviewForItem(mu::engraving::EngravingIt
 
     PointF origin = element->ldata()->bbox().center();
 
-    if (params.drawStaff) {
+    if (params.numStaffLines > 0) {
         // y = 0 is position of the element's parent.
         // If the parent is the staff (or a segment on the staff) then
         // y = 0 corresponds to the position of the top staff line.

@@ -32,6 +32,7 @@ Column {
 
     property int panelMode: -1
     property bool useNotationPreview: false
+    property alias notationPreviewNumStaffLines: notationPreview.numStaffLines
 
     property alias footerHeight: footerArea.height
 
