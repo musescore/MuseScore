@@ -455,8 +455,6 @@ void LayoutPanelTreeModel::addSystemMarkings()
     if (const Staff* staff = resolveNewSystemObjectStaff()) {
         m_masterNotation->parts()->addSystemObjects({ staff->id() });
     }
-
-    updateIsAddingSystemMarkingsAvailable();
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsUp()
@@ -1104,6 +1102,8 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             break;
         }
     }
+
+    updateIsAddingSystemMarkingsAvailable();
 }
 
 const PartTreeItem* LayoutPanelTreeModel::findPartItemByStaff(const Staff* staff) const
