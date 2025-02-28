@@ -547,6 +547,7 @@ void NotationActionController::init()
             engravingConfiguration()->setDebuggingOptions(options);
         });
     }
+    dispatcher()->reg(this, "check-for-score-corruptions", [this] { checkForScoreCorruptions(); });
 }
 
 bool NotationActionController::canReceiveAction(const ActionCode& code) const
@@ -2284,6 +2285,29 @@ bool NotationActionController::isToggleVisibleAllowed() const
         return !(interaction->isTextEditingStarted());
     }
     return false;
+}
+
+void NotationActionController::checkForScoreCorruptions()
+{
+    project::INotationProjectPtr project = globalContext()->currentProject();
+    if (!project) {
+        return;
+    }
+
+    String fileName = io::filename(project->path()).toString();
+
+    Ret ret = project->masterNotation()->masterScore()->sanityCheck();
+    if (ret) {
+        std::string title = muse::mtrc("project", "File “%1” seems not corrupted").arg(fileName).toStdString();
+        std::string body = muse::trc("project", "This file does not seem to contain errors.");
+        interactive()->info(title, body);
+    } else {
+        std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(fileName).toStdString();
+        std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction.\n"
+                                                "Please fix those at the earliest, to prevent crashes and further corruptions.");
+
+        interactive()->warning(title, body, ret.text());
+    }
 }
 
 void NotationActionController::registerAction(const ActionCode& code,

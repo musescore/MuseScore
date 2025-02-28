@@ -2562,6 +2562,7 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show element bounding rectangles"),
+             TranslatableString("action", "Show/hide element bounding rectangles"),
              Checkable::Yes
              ),
     UiAction("color-element-shapes",
@@ -2574,6 +2575,7 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show segment shapes"),
+             TranslatableString("action", "Show/hide segment shapes"),
              Checkable::Yes
              ),
     UiAction("color-segment-shapes",
@@ -2586,25 +2588,34 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show skylines"),
+             TranslatableString("action", "Show/hide skylines"),
              Checkable::Yes
              ),
     UiAction("show-system-bounding-rects",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show system bounding rectangles"),
+             TranslatableString("action", "Show/hide system bounding rectangles"),
              Checkable::Yes
              ),
     UiAction("show-element-masks",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show element masks"),
+             TranslatableString("action", "Show/hide element masks"),
              Checkable::Yes
              ),
     UiAction("show-corrupted-measures",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show corrupted measures"),
+             TranslatableString("action", "Show/hide corrupted measures"),
              Checkable::Yes
+             ),
+    UiAction("check-for-score-corruptions",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Check for score corruptions")
              ),
     UiAction("edit-strings",
              mu::context::UiCtxProjectOpened,
