@@ -48,7 +48,7 @@ public:
 
         bool useElementColors = false;
         bool colorsInversionEnabled = false;
-        bool drawStaff = false;
+        int numStaffLines = 0;
     };
 
     static void paintPreview(mu::engraving::EngravingItem* element, PaintParams& params);

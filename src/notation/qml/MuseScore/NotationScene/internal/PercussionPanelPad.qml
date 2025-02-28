@@ -35,6 +35,7 @@ DropArea {
 
     property int panelMode: -1
     property bool useNotationPreview: false
+    property int notationPreviewNumStaffLines: 0
     property bool showEditOutline: false
 
     property alias totalBorderWidth: padLoader.anchors.margins
@@ -210,6 +211,7 @@ DropArea {
                     padModel: root.padModel
                     panelMode: root.panelMode
                     useNotationPreview: root.useNotationPreview
+                    notationPreviewNumStaffLines: root.notationPreviewNumStaffLines
 
                     footerHeight: prv.footerHeight
 
