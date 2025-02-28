@@ -837,8 +837,7 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
             } else if (tag == "Articulation"
                        || tag == "Ornament"
                        || tag == "Arpeggio"
-                       || tag == "TremoloSingleChord"
-                       || tag == "Lyrics") {
+                       || tag == "TremoloSingleChord") {
                 // Elements that can be attached only to a Chord
                 Measure* meas = score->tick2measure(destTick);
                 Segment* seg = meas ? meas->undoGetSegment(SegmentType::ChordRest, destTick) : nullptr;
@@ -978,18 +977,18 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                     el->setParent(seg);
                     score->undoAddElement(el);
                 }
-            } else if (tag == "FiguredBass") {
-                // TODO: when overhauling FiguredBass, clean this up
-                //
-                // FiguredBass is currently positioned respecting the distance in chords, while
-                // it may be more appropriate to respect time distance, using TimeTick segments.
+            } else if (tag == "Lyrics" || tag == "FiguredBass") {
+                // These elements are positioned respecting the distance in chords,
+                // rather than the time distance.
+                // TODO: is that appropriate for FiguredBass too? To be considered
+                // when overhauling FiguredBass.
                 for (; currSegm && segDelta > 0; segDelta--) {
                     currSegm = currSegm->nextCR(destTrack);
                 }
                 // check the intended dest. track and segment exist
                 if (destTrack >= maxTrack || currSegm == nullptr) {
                     LOGD("PasteSymbols: no track or segment for %s", tag.ascii());
-                    e.skipCurrentElement();                           // ignore
+                    e.skipCurrentElement(); // ignore
                     continue;
                 }
                 // check there is a segment element in the required track
@@ -999,87 +998,116 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                     continue;
                 }
 
-                // FiguredBass always belongs to first staff voice
-                destTrack = trackZeroVoice(destTrack);
-                Fraction ticks;
-                FiguredBass* el = Factory::createFiguredBass(currSegm);
-                el->setTrack(destTrack);
-                TRead::read(el, e, ctx);
-                el->setTrack(destTrack);
-                // if f.b. is off-note, we have to locate a place before currSegm
-                // where an on-note f.b. element could (potentially) be
-                // (while having an off-note f.b. without an on-note one before it
-                // is un-idiomatic, possible mismatch in rhythmic patterns between
-                // copy source and paste destination does not allow to be too picky)
-                if (!el->onNote()) {
-                    FiguredBass* onNoteFB = nullptr;
-                    Segment* prevSegm = currSegm;
-                    bool done1    = false;
-                    while (prevSegm) {
-                        if (done1) {
+                if (tag == "Lyrics") {
+                    // with lyrics, skip rests
+                    ChordRest* cr = toChordRest(currSegm->element(destTrack));
+                    while (!cr->isChord() && currSegm) {
+                        currSegm = currSegm->nextCR(destTrack);
+                        if (currSegm) {
+                            cr = toChordRest(currSegm->element(destTrack));
+                        } else {
                             break;
                         }
-                        prevSegm = prevSegm->prev1(SegmentType::ChordRest);
-                        // if there is a ChordRest in the dest. track
-                        // this segment is a (potential) f.b. location
-                        if (prevSegm->element(destTrack) != nullptr) {
-                            done1 = true;
-                        }
-                        // in any case, look for a f.b. in annotations:
-                        // if there is a f.b. element in the right track,
-                        // this is an (actual) f.b. location
-                        for (EngravingItem* a : prevSegm->annotations()) {
-                            if (a->isFiguredBass() && a->track() == destTrack) {
-                                onNoteFB = toFiguredBass(a);
-                                done1 = true;
-                            }
-                        }
                     }
-                    if (!prevSegm) {
-                        LOGD("PasteSymbols: can't place off-note FiguredBass");
-                        delete el;
+                    if (currSegm == nullptr) {
+                        LOGD("PasteSymbols: no segment for Lyrics");
+                        e.skipCurrentElement();
                         continue;
                     }
-                    // by default, split on-note duration in half: half on-note and half off-note
-                    Fraction totTicks  = currSegm->tick() - prevSegm->tick();
-                    Fraction destTick1 = prevSegm->tick() + (totTicks * Fraction(1, 2));
-                    ticks         = totTicks * Fraction(1, 2);
-                    if (onNoteFB) {
-                        onNoteFB->setTicks(totTicks * Fraction(1, 2));
+                    if (!cr->isChord()) {
+                        LOGD("PasteSymbols: can't paste Lyrics to rest");
+                        e.skipCurrentElement();
+                        continue;
                     }
-                    // look for a segment at this tick; if none, create one
-                    Segment* nextSegm = prevSegm;
-                    while (nextSegm && nextSegm->tick() < destTick1) {
-                        nextSegm = nextSegm->next1(SegmentType::ChordRest);
-                    }
-                    if (!nextSegm || nextSegm->tick() > destTick1) {                            // no ChordRest segm at this tick
-                        nextSegm = Factory::createSegment(prevSegm->measure(), SegmentType::ChordRest, destTick1);
-                        if (!nextSegm) {
-                            LOGD("PasteSymbols: can't find or create destination segment for FiguredBass");
+                    Lyrics* el = Factory::createLyrics(cr);
+                    el->setTrack(destTrack);
+                    TRead::read(el, e, ctx);
+                    el->setTrack(destTrack);
+                    el->setParent(cr);
+                    score->undoAddElement(el);
+                } else if (tag == "FiguredBass") {
+                    // FiguredBass always belongs to first staff voice
+                    destTrack = trackZeroVoice(destTrack);
+                    Fraction ticks;
+                    FiguredBass* el = Factory::createFiguredBass(currSegm);
+                    el->setTrack(destTrack);
+                    TRead::read(el, e, ctx);
+                    el->setTrack(destTrack);
+                    // if f.b. is off-note, we have to locate a place before currSegm
+                    // where an on-note f.b. element could (potentially) be
+                    // (while having an off-note f.b. without an on-note one before it
+                    // is un-idiomatic, possible mismatch in rhythmic patterns between
+                    // copy source and paste destination does not allow to be too picky)
+                    if (!el->onNote()) {
+                        FiguredBass* onNoteFB = nullptr;
+                        Segment* prevSegm = currSegm;
+                        bool done1    = false;
+                        while (prevSegm) {
+                            if (done1) {
+                                break;
+                            }
+                            prevSegm = prevSegm->prev1(SegmentType::ChordRest);
+                            // if there is a ChordRest in the dest. track
+                            // this segment is a (potential) f.b. location
+                            if (prevSegm->element(destTrack) != nullptr) {
+                                done1 = true;
+                            }
+                            // in any case, look for a f.b. in annotations:
+                            // if there is a f.b. element in the right track,
+                            // this is an (actual) f.b. location
+                            for (EngravingItem* a : prevSegm->annotations()) {
+                                if (a->isFiguredBass() && a->track() == destTrack) {
+                                    onNoteFB = toFiguredBass(a);
+                                    done1 = true;
+                                }
+                            }
+                        }
+                        if (!prevSegm) {
+                            LOGD("PasteSymbols: can't place off-note FiguredBass");
                             delete el;
                             continue;
                         }
-                        score->undoAddElement(nextSegm);
+                        // by default, split on-note duration in half: half on-note and half off-note
+                        Fraction totTicks  = currSegm->tick() - prevSegm->tick();
+                        Fraction destTick1 = prevSegm->tick() + (totTicks * Fraction(1, 2));
+                        ticks         = totTicks * Fraction(1, 2);
+                        if (onNoteFB) {
+                            onNoteFB->setTicks(totTicks * Fraction(1, 2));
+                        }
+                        // look for a segment at this tick; if none, create one
+                        Segment* nextSegm = prevSegm;
+                        while (nextSegm && nextSegm->tick() < destTick1) {
+                            nextSegm = nextSegm->next1(SegmentType::ChordRest);
+                        }
+                        if (!nextSegm || nextSegm->tick() > destTick1) {                        // no ChordRest segm at this tick
+                            nextSegm = Factory::createSegment(prevSegm->measure(), SegmentType::ChordRest, destTick1);
+                            if (!nextSegm) {
+                                LOGD("PasteSymbols: can't find or create destination segment for FiguredBass");
+                                delete el;
+                                continue;
+                            }
+                            score->undoAddElement(nextSegm);
+                        }
+                        currSegm = nextSegm;
+                    } else {
+                        // by default, assign to FiguredBass element the duration of the chord it refers to
+                        ticks = toChordRest(currSegm->element(destTrack))->ticks();
                     }
-                    currSegm = nextSegm;
-                } else {
-                    // by default, assign to FiguredBass element the duration of the chord it refers to
-                    ticks = toChordRest(currSegm->element(destTrack))->ticks();
-                }
-                // in both cases, look for an existing f.b. element in segment and remove it, if found
-                FiguredBass* oldFB = nullptr;
-                for (EngravingItem* a : currSegm->annotations()) {
-                    if (a->isFiguredBass() && a->track() == destTrack) {
-                        oldFB = toFiguredBass(a);
-                        break;
+                    // in both cases, look for an existing f.b. element in segment and remove it, if found
+                    FiguredBass* oldFB = nullptr;
+                    for (EngravingItem* a : currSegm->annotations()) {
+                        if (a->isFiguredBass() && a->track() == destTrack) {
+                            oldFB = toFiguredBass(a);
+                            break;
+                        }
                     }
+                    if (oldFB) {
+                        score->undoRemoveElement(oldFB);
+                    }
+                    el->setParent(currSegm);
+                    el->setTicks(ticks);
+                    score->undoAddElement(el);
                 }
-                if (oldFB) {
-                    score->undoRemoveElement(oldFB);
-                }
-                el->setParent(currSegm);
-                el->setTicks(ticks);
-                score->undoAddElement(el);
             } else {
                 LOGD("PasteSymbols: element %s not handled", tag.ascii());
                 e.skipCurrentElement();     // ignore
