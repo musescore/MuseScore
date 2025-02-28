@@ -212,6 +212,10 @@ public:
     void setUseNewPercussionPanel(bool use) override;
     muse::async::Notification useNewPercussionPanelChanged() const override;
 
+    bool percussionPanelUseNotationPreview() const override;
+    void setPercussionPanelUseNotationPreview(bool use);
+    muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
+
     PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
     void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) override;
     muse::async::Notification percussionPanelAutoShowModeChanged() const override;

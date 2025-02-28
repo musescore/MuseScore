@@ -148,7 +148,6 @@ private:
 
     PanelMode::Mode m_currentPanelMode = PanelMode::Mode::WRITE;
     PanelMode::Mode m_panelModeToRestore = PanelMode::Mode::WRITE;
-    bool m_useNotationPreview = false;
 
     PercussionPanelPadListModel* m_padListModel = nullptr;
 };
