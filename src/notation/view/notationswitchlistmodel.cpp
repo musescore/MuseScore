@@ -93,7 +93,7 @@ void NotationSwitchListModel::loadNotations()
     m_notations << masterNotation->notation();
     listenNotationOpeningStatus(masterNotation->notation());
 
-    for (IExcerptNotationPtr excerpt: masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt: masterNotation->excerpts()) {
         if (excerpt->notation()->isOpen()) {
             m_notations << excerpt->notation();
         }
@@ -272,7 +272,7 @@ void NotationSwitchListModel::closeOtherNotations(int index)
     // Copy the list to avoid modifying it while iterating
     QList<INotationPtr> notations = m_notations;
 
-    for (INotationPtr notation : notations) {
+    for (const INotationPtr& notation : notations) {
         if (!isMasterNotation(notation) && notation != notationToKeepOpen) {
             currentMasterNotation()->setExcerptIsOpen(notation, false);
         }

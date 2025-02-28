@@ -167,7 +167,7 @@ void MixerChannel::setSampleRate(unsigned int sampleRate)
         m_audioSource->setSampleRate(sampleRate);
     }
 
-    for (IFxProcessorPtr fx : m_fxProcessors) {
+    for (const IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setSampleRate(sampleRate);
     }
 }
@@ -205,7 +205,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
         return processedSamplesCount;
     }
 
-    for (IFxProcessorPtr fx : m_fxProcessors) {
+    for (const IFxProcessorPtr& fx : m_fxProcessors) {
         if (!fx->active()) {
             continue;
         }

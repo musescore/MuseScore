@@ -262,18 +262,17 @@ QVariantMap BackendApi::readBeatsColors(const muse::io::path_t& filePath)
         return QVariantMap();
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(fileData.val.toQByteArrayNoCopy());
-    QJsonObject obj = document.object();
-    QJsonArray colors = obj.value("highlight").toArray();
+    const QJsonDocument document = QJsonDocument::fromJson(fileData.val.toQByteArrayNoCopy());
+    const QJsonObject obj = document.object();
+    const QJsonArray colors = obj.value("highlight").toArray();
 
     QVariantMap result;
 
-    for (const QJsonValue colorObj: colors) {
-        QJsonObject cobj = colorObj.toObject();
-        QJsonArray beatsIndexes = cobj.value("beats").toArray();
-        QColor beatsColor = QColor(cobj.value("color").toString());
+    for (const QJsonValueRef colorObj: colors) {
+        const QJsonArray beatsIndexes = colorObj[u"beats"].toArray();
+        const QColor beatsColor = QColor(colorObj[u"color"].toString());
 
-        for (const QJsonValue index: beatsIndexes) {
+        for (const QJsonValueRef index: beatsIndexes) {
             result[index.toString()] = beatsColor;
         }
     }
@@ -537,7 +536,7 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
 
     ExcerptNotationList excerpts = allExcerpts(masterNotation);
 
-    for (IExcerptNotationPtr excerpt : excerpts) {
+    for (const IExcerptNotationPtr& excerpt : excerpts) {
         mu::engraving::Score* partScore = excerpt->notation()->elements()->msScore();
         std::map<String, String> partMetaTags = partScore->metaTags();
 
@@ -591,7 +590,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
 
     ExcerptNotationList excerpts = allExcerpts(masterNotation);
 
-    for (IExcerptNotationPtr e : excerpts) {
+    for (const IExcerptNotationPtr& e : excerpts) {
         QJsonValue partNameVal(e->name());
         partsNamesArray.append(partNameVal);
 
@@ -677,7 +676,7 @@ void BackendApi::switchToPageView(IMasterNotationPtr masterNotation)
 {
     //! NOTE: All operations must be done in page view mode
     masterNotation->notation()->setViewMode(ViewMode::PAGE);
-    for (IExcerptNotationPtr excerpt : masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : masterNotation->excerpts()) {
         excerpt->notation()->setViewMode(ViewMode::PAGE);
     }
 }
@@ -686,7 +685,7 @@ void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
 {
     //! NOTE: Due to optimization, only the master score is layouted
     //!       Let's layout all the scores of the excerpts
-    for (IExcerptNotationPtr excerpt : masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : masterNotation->excerpts()) {
         Score* score = excerpt->notation()->elements()->msScore();
         if (!score->autoLayoutEnabled()) {
             score->doLayout();

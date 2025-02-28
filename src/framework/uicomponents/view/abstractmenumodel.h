@@ -61,7 +61,7 @@ public:
 
 signals:
     void itemsChanged();
-    void itemChanged(uicomponents::MenuItem* item);
+    void itemChanged(muse::uicomponents::MenuItem* item);
 
 protected:
     enum Roles {
