@@ -717,7 +717,9 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
         int removeEventsFromTick = std::max(tickFrom, repeatStartTick);
         timestamp_t removeEventsFrom = timestampFromTicks(m_score, removeEventsFromTick + tickPositionOffset);
 
-        int removeEventsToTick = std::min(tickTo, repeatEndTick);
+        //! NOTE: the end tick of the current repeat segment == the start tick of the next repeat segment
+        //! so subtract 1 to avoid removing events belonging to the next segment
+        int removeEventsToTick = std::min(tickTo, repeatEndTick - 1);
         timestamp_t removeEventsTo = timestampFromTicks(m_score, removeEventsToTick + tickPositionOffset);
 
         removeEventsFromRange(trackFrom, trackTo, removeEventsFrom, removeEventsTo);
