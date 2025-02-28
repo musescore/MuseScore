@@ -42,7 +42,7 @@
                         <staffDef n="2" lines="5" meter.count="4" meter.unit="4" lines.visible="false">
                            <clef shape="G" line="2" />
                         </staffDef>
-                        <staffDef n="3" lines="5" meter.count="4" meter.unit="4">
+                        <staffDef n="3" lines="5" meter.count="4" meter.unit="4" lines.color="#33FF00">
                            <clef shape="F" line="4" />
                         </staffDef>
                      </staffGrp>

@@ -118,6 +118,7 @@ public:
         int lines;
         bool invisible;
         double scale;
+        engraving::Color color;
         engraving::Interval interval;
     };
 

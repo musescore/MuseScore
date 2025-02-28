@@ -51,7 +51,9 @@
       <Staff id="3">
         <StaffType group="pitched">
           <name>stdNormal</name>
+          <color r="51" g="255" b="0" a="255"/>
           </StaffType>
+        <color r="51" g="255" b="0" a="255"/>
         </Staff>
       <trackName></trackName>
       <Instrument id="piano">
