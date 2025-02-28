@@ -56,6 +56,7 @@ inline ActionCodeList allMidiActions()
         "pad-note-32",
         "pad-note-64",
         "undo",
+        "rest",
         "pad-rest",
         "tie",
         "pad-dot",
