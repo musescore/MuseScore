@@ -236,6 +236,10 @@ public:
     void setUseNewPercussionPanel(bool use) override;
     muse::async::Notification useNewPercussionPanelChanged() const override;
 
+    bool percussionPanelUseNotationPreview() const override;
+    void setPercussionPanelUseNotationPreview(bool use) override;
+    muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
+
     PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
     void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode percussionPanelAutoShowMode) override;
     muse::async::Notification percussionPanelAutoShowModeChanged() const override;
@@ -299,6 +303,7 @@ private:
     muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;
     muse::async::Notification m_useNewPercussionPanelChanged;
+    muse::async::Notification m_percussionPanelUseNotationPreviewChanged;
     muse::async::Notification m_percussionPanelAutoShowModeChanged;
     muse::async::Notification m_autoClosePercussionPanelChanged;
     muse::async::Notification m_showPercussionPanelPadSwapDialogChanged;

@@ -221,6 +221,10 @@ public:
     MOCK_METHOD(void, setUseNewPercussionPanel, (bool), (override));
     MOCK_METHOD(muse::async::Notification, useNewPercussionPanelChanged, (), (const, override));
 
+    MOCK_METHOD(bool, percussionPanelUseNotationPreview, (), (const, override));
+    MOCK_METHOD(void, setPercussionPanelUseNotationPreview, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, percussionPanelUseNotationPreviewChanged, (), (const, override));
+
     MOCK_METHOD(PercussionPanelAutoShowMode, percussionPanelAutoShowMode, (), (const, override));
     MOCK_METHOD(void, setPercussionPanelAutoShowMode, (PercussionPanelAutoShowMode), (override));
     MOCK_METHOD(muse::async::Notification, percussionPanelAutoShowModeChanged, (), (const, override));
