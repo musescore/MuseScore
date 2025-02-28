@@ -563,8 +563,8 @@ bool MidiFile::readEvent(MidiEvent* event)
             return false;
         }
         dataLen = len;
+        data.resize(len + 1);
         read(data.data(), len);
-        data[dataLen] = 0;        // always terminate with zero
         if (data[len - 1] != 0xf7) {
             LOGD("SYSEX does not end with 0xf7!");
             // more to come?
@@ -572,7 +572,7 @@ bool MidiFile::readEvent(MidiEvent* event)
             dataLen--;            // don't count 0xf7
         }
         event->setType(ME_SYSEX);
-        event->setEData(data);
+        event->setEData(std::move(data));
         event->setLen(dataLen);
         return true;
     }
@@ -587,14 +587,14 @@ bool MidiFile::readEvent(MidiEvent* event)
             return false;
         }
         if (dataLen) {
+            data.resize(dataLen + 1);
             read(data.data(), dataLen);
         }
-        data[dataLen] = 0;          // always terminate with zero so we get valid C++ strings
 
         event->setType(ME_META);
         event->setMetaType(type);
         event->setLen(dataLen);
-        event->setEData(data);
+        event->setEData(std::move(data));
         return true;
     }
 
