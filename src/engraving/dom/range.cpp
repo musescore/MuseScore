@@ -23,6 +23,8 @@
 #include "range.h"
 
 #include "barline.h"
+#include "jump.h"
+#include "marker.h"
 #include "chord.h"
 #include "excerpt.h"
 #include "factory.h"
@@ -668,6 +670,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
 ScoreRange::~ScoreRange()
 {
     muse::DeleteAll(m_tracks);
+    deleteJumpsAndMarkers();
 }
 
 //---------------------------------------------------------
@@ -711,6 +714,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             m_tracks.push_back(dl);
         }
     }
+    backupJumpsAndMarkers(first, last);
 }
 
 //---------------------------------------------------------
@@ -769,6 +773,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
             score->undoAddElement(a.e);
         }
     }
+    restoreJumpsAndMarkers(score, tick);
     return true;
 }
 
@@ -825,6 +830,94 @@ bool ScoreRange::truncate(const Fraction& f)
 Fraction ScoreRange::ticks() const
 {
     return m_tracks.empty() ? Fraction() : m_tracks.front()->ticks();
+}
+
+//---------------------------------------------------------
+//   endOfMeasure
+//---------------------------------------------------------
+
+bool ScoreRange::endOfMeasure(EngravingItem* e) const
+{
+    bool result = false;
+
+    if (e->isMarker()
+        && ((muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()) || toMarker(e)->markerType() == MarkerType::FINE))) {
+        result = true;
+    } else if (e->isJump()) {
+        result = true;
+    }
+    return result;
+}
+
+//---------------------------------------------------------
+//   backupJumpsAndMarkers
+//---------------------------------------------------------
+
+void ScoreRange::backupJumpsAndMarkers(Segment* first, Segment* last)
+{
+    Measure* fm = first->measure();
+    Measure* lm = last->measure();
+
+    for (Measure* m = fm; m && m != lm->nextMeasure(); m = m->nextMeasure()) {
+        // Backup Markers and Jumps (Measures's son)
+        for (EngravingItem* e : m->el()) {
+            if (e && (e->isMarker() || e->isJump())) {
+                JumpsMarkersBackup mJMBackup;
+                mJMBackup.sPosition = (endOfMeasure(e) ? m->endTick() : m->tick());
+                mJMBackup.e = e->clone();
+                m_jumpsMarkers.push_back(mJMBackup);
+            }
+        }
+        // Last Measure
+        if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+            break;
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   restoreJumpsAndMarkers
+//---------------------------------------------------------
+void ScoreRange::restoreJumpsAndMarkers(Score* score, const Fraction& tick) const
+{
+    //---------------------------------------------------------
+    //   addJumpMarker
+    //---------------------------------------------------------
+    auto addJumpMarker = [&](Measure* m, EngravingItem* e)
+    {
+        // We add every element as a Measure could have as many elements (even of the same type) as the users decides
+        EngravingItem* ce = e->clone();
+        ce->setParent(m);
+        ce->setTrack(0);
+        m->add(ce);
+    };
+
+    for (const JumpsMarkersBackup& jmb : m_jumpsMarkers) {
+        for (Measure* m = score->tick2measure(tick); m; m = m->nextMeasure()) {
+            // Markers: we keep them as long as they are in the measure before the final tick
+            // Jumps: we keep them as long as they are in the measure after the start tick
+            if (((endOfMeasure(jmb.e)) && ((jmb.sPosition > m->tick()) && (jmb.sPosition <= m->endTick())))
+                || ((!endOfMeasure(jmb.e)) && ((jmb.sPosition >= m->tick()) && (jmb.sPosition < m->endTick())))) {
+                addJumpMarker(m, jmb.e);
+            }
+
+            // Double check to deal only with suitable Measures
+            if (m->sectionBreak() || (m->nextMeasure() && (m->nextMeasure()->first(SegmentType::TimeSig)))) {
+                break;
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   deleteJumpsAndMarkers
+//---------------------------------------------------------
+
+void ScoreRange::deleteJumpsAndMarkers()
+{
+    for (const JumpsMarkersBackup& jmb : m_jumpsMarkers) {
+        delete jmb.e;
+    }
 }
 
 //---------------------------------------------------------
