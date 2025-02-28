@@ -658,13 +658,12 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
 {
     TRACEFUNC;
 
-    if (!isVoiceIndexValid(voiceIndex)) {
+    mu::engraving::InputState& inputState = score()->inputState();
+    if (!isVoiceIndexValid(voiceIndex) || voiceIndex == inputState.voice()) {
         return;
     }
 
-    mu::engraving::InputState& inputState = score()->inputState();
     inputState.setVoice(voiceIndex);
-
     notifyAboutStateChanged();
 }
 

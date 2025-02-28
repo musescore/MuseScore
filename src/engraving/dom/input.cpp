@@ -141,7 +141,7 @@ void InputState::setVoice(voice_idx_t v)
 {
     const Score* score = m_segment ? m_segment->score() : nullptr;
 
-    if (!score || v >= VOICES || m_track == muse::nidx) {
+    if (!score || v >= VOICES || v == voice() || m_track == muse::nidx) {
         return;
     }
 
