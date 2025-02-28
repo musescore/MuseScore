@@ -629,6 +629,21 @@ muse::async::Notification NotationConfigurationStub::useNewPercussionPanelChange
     return n;
 }
 
+bool NotationConfigurationStub::percussionPanelUseNotationPreview() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPercussionPanelUseNotationPreview(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::percussionPanelUseNotationPreviewChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::autoShowPercussionPanel() const
 {
     return true;
