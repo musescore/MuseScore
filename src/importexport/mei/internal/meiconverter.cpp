@@ -2808,8 +2808,8 @@ libmei::StaffDef Convert::staffToMEI(const engraving::Staff* staff)
         meiStaffDef.SetLines(staffType->lines());
     }
     // @lines.color
-    if (staff->staffType(engraving::Fraction(0, 1))->color() != engravingConfiguration()->defaultColor()) {
-        meiStaffDef.SetLinesColor(staff->staffType(engraving::Fraction(0, 1))->color().toString());
+    if (staffType->color() != engravingConfiguration()->defaultColor()) {
+        meiStaffDef.SetLinesColor(staffType->color().toString());
     }
     // @lines.visible
     if (staff->isLinesInvisible(engraving::Fraction(0, 1))) {
