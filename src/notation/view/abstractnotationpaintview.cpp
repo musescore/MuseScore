@@ -629,8 +629,8 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     bool isPrinting = publishMode() || m_inputController->readonly();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
 
-    const ui::UiContext ctx = uiContextResolver()->currentUiContext();
-    const bool isOnNotationPage = ctx == ui::UiCtxProjectOpened || ctx == ui::UiCtxProjectFocused;
+    const ui::UiContext uiCtx = uiContextResolver()->currentUiContext();
+    const bool isOnNotationPage = uiCtx == ui::UiCtxProjectOpened || uiCtx == ui::UiCtxProjectFocused;
 
     const INotationNoteInputPtr noteInput = notationNoteInput();
     if (noteInput->isNoteInputMode() && isOnNotationPage) {
@@ -646,12 +646,12 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     m_loopOutMarker->paint(painter);
 
     if (notation()->viewMode() == engraving::LayoutMode::LINE) {
-        ContinuousPanel::NotationViewContext ctx;
-        ctx.xOffset = m_matrix.dx();
-        ctx.yOffset = m_matrix.dy();
-        ctx.scaling = currentScaling();
-        ctx.fromLogical = [this](const PointF& pos) -> PointF { return fromLogical(pos); };
-        m_continuousPanel->paint(*painter, ctx);
+        ContinuousPanel::NotationViewContext nvCtx;
+        nvCtx.xOffset = m_matrix.dx();
+        nvCtx.yOffset = m_matrix.dy();
+        nvCtx.scaling = currentScaling();
+        nvCtx.fromLogical = [this](const PointF& pos) -> PointF { return fromLogical(pos); };
+        m_continuousPanel->paint(*painter, nvCtx);
     }
 }
 
