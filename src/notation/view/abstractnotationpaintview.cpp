@@ -629,9 +629,11 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     bool isPrinting = publishMode() || m_inputController->readonly();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
 
-    INotationNoteInputPtr noteInput = notationNoteInput();
+    const ui::UiContext ctx = uiContextResolver()->currentUiContext();
+    const bool isOnNotationPage = ctx == ui::UiCtxProjectOpened || ctx == ui::UiCtxProjectFocused;
 
-    if (noteInput->isNoteInputMode()) {
+    const INotationNoteInputPtr noteInput = notationNoteInput();
+    if (noteInput->isNoteInputMode() && isOnNotationPage) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
             && !configuration()->useNoteInputCursorInInputByDuration()) {
             m_ruler->paint(painter, noteInput->state());

@@ -35,6 +35,10 @@ using namespace muse::ui;
 
 static const muse::Uri HOME_PAGE_URI("musescore://home");
 static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
+static const muse::Uri PUBLISH_PAGE_URI("musescore://publish");
+static const muse::Uri DEVTOOLS_PAGE_URI("musescore://devtools");
+
+static const muse::Uri EXTENSIONS_DIALOG_URI("muse://extensions/viewer");
 
 static const QString NOTATION_NAVIGATION_PANEL("ScoreView");
 
@@ -119,6 +123,21 @@ UiContext UiContextResolver::currentUiContext() const
         return context::UiCtxProjectOpened;
     }
 
+    if (currentUri == PUBLISH_PAGE_URI) {
+        return context::UiCtxPublishOpened;
+    }
+
+    if (currentUri == DEVTOOLS_PAGE_URI) {
+        return context::UiCtxDevToolsOpened;
+    }
+
+    if (interactive()->isCurrentUriDialog().val) {
+        bool isExtensionDialog = currentUri == EXTENSIONS_DIALOG_URI;
+        if (!isExtensionDialog) {
+            return context::UiCtxDialogOpened;
+        }
+    }
+
     return context::UiCtxUnknown;
 }
 
@@ -128,7 +147,10 @@ bool UiContextResolver::match(const muse::ui::UiContext& currentCtx, const muse:
         return true;
     }
 
-    if (actCtx == context::UiCtxProjectOpened && globalContext()->currentNotation()) {
+    //! NOTE: Context could be unknown if a plugin is currently open, in which case we should return true under
+    //! the following circumstances (see issue #24673)...
+    if ((currentCtx == context::UiCtxProjectFocused || currentCtx == context::UiCtxUnknown)
+        && actCtx == context::UiCtxProjectOpened && globalContext()->currentNotation()) {
         return true;
     }
 
