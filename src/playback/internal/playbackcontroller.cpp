@@ -135,6 +135,10 @@ void PlaybackController::init()
         updateLoop();
     });
 
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        notifyActionCheckedChanged(MIDI_ON_CODE);
+    });
+
     configuration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
         notifyActionCheckedChanged(TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE);
     });
@@ -313,13 +317,13 @@ void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
     m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
 }
 
-void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
+void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
         return;
     }
 
-    if (!configuration()->playNotesWhenEditing()) {
+    if ((!configuration()->playNotesWhenEditing()) || (isMidi && !configuration()->playNotesOnMidiInput())) {
         return;
     }
 
@@ -768,9 +772,8 @@ void PlaybackController::toggleMetronome()
 
 void PlaybackController::toggleMidiInput()
 {
-    bool midiInputEnabled = notationConfiguration()->isMidiInputEnabled();
-    notationConfiguration()->setIsMidiInputEnabled(!midiInputEnabled);
-    notifyActionCheckedChanged(MIDI_ON_CODE);
+    bool wasMidiInputEnabled = notationConfiguration()->isMidiInputEnabled();
+    notationConfiguration()->setIsMidiInputEnabled(!wasMidiInputEnabled);
 }
 
 void PlaybackController::setMidiUseWrittenPitch(bool useWrittenPitch)

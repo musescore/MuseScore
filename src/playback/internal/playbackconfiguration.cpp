@@ -37,6 +37,7 @@ static const std::string moduleName("playback");
 
 static const Settings::Key PLAYBACK_CURSOR_TYPE_KEY(moduleName, "application/playback/cursorType");
 static const Settings::Key PLAY_NOTES_WHEN_EDITING(moduleName, "score/note/playOnClick");
+static const Settings::Key PLAY_NOTES_ON_MIDI_INPUT(moduleName, "score/note/playOnMidiInput");
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
 
@@ -102,6 +103,10 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
     settings()->valueChanged(PLAY_HARMONY_WHEN_EDITING).onReceive(this, [this](const Val& val) {
         m_playHarmonyWhenEditingChanged.send(val.toBool());
+    });
+    settings()->setDefaultValue(PLAY_NOTES_ON_MIDI_INPUT, Val(true));
+    settings()->valueChanged(PLAY_NOTES_ON_MIDI_INPUT).onReceive(this, [this](const Val& val) {
+        m_playNotesOnMidiInputChanged.send(val.toBool());
     });
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
@@ -183,6 +188,21 @@ void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
 async::Channel<bool> PlaybackConfiguration::playHarmonyWhenEditingChanged() const
 {
     return m_playHarmonyWhenEditingChanged;
+}
+
+bool PlaybackConfiguration::playNotesOnMidiInput() const
+{
+    return settings()->value(PLAY_NOTES_ON_MIDI_INPUT).toBool();
+}
+
+void PlaybackConfiguration::setPlayNotesOnMidiInput(bool value)
+{
+    settings()->setSharedValue(PLAY_NOTES_ON_MIDI_INPUT, Val(value));
+}
+
+muse::async::Channel<bool> PlaybackConfiguration::playNotesOnMidiInputChanged() const
+{
+    return m_playNotesOnMidiInputChanged;
 }
 
 PlaybackCursorType PlaybackConfiguration::cursorType() const

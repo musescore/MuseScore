@@ -180,17 +180,27 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
         return;
     }
 
-    beginCommand(TranslatableString("undoableAction", "Add hairpin"));
+    engraving::Dynamic* dynamic = toDynamic(m_item);
 
-    Hairpin* pin = Factory::createHairpin(m_item->score()->dummy()->segment());
-    if (itemType == ItemType::Crescendo) {
-        pin->setHairpinType(HairpinType::CRESC_HAIRPIN);
-    } else if (itemType == ItemType::Decrescendo) {
-        pin->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+    HairpinType hairpinType = itemType == ItemType::Crescendo
+                              ? HairpinType::CRESC_HAIRPIN
+                              : HairpinType::DECRESC_HAIRPIN;
+
+    if (Hairpin* existingHairpin = dynamic->rightHairpin()) {
+        if (existingHairpin->hairpinType() == hairpinType) {
+            return;
+        }
+        beginCommand(TranslatableString("undoableAction", "Change hairpin type"));
+        existingHairpin->undoChangeProperty(Pid::HAIRPIN_TYPE, int(hairpinType));
+        endCommand();
+        updateNotation();
+        return;
     }
 
-    m_item->score()->addHairpinToDynamic(pin, toDynamic(m_item));
-
+    beginCommand(TranslatableString("undoableAction", "Add hairpin"));
+    Hairpin* hairpin = Factory::createHairpin(m_item->score()->dummy()->segment());
+    hairpin->setHairpinType(hairpinType);
+    m_item->score()->addHairpinToDynamic(hairpin, dynamic);
     endCommand();
     updateNotation();
 }

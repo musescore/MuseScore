@@ -96,10 +96,13 @@ PreferencesPage {
 
         NotePreviewSection {
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
-            playChordWhenEditing: noteInputModel.playChordWhenEditing
             playPreviewNotesInInputByDuration: noteInputModel.playPreviewNotesInInputByDuration
-            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
+            playChordWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordWhenEditing : false
+            playChordSymbolWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordSymbolWhenEditing : false
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
+
+            playNotesOnMidiInput: noteInputModel.playNotesWhenEditing && noteInputModel.midiInputEnabled ? noteInputModel.playNotesOnMidiInput : false
+            playNotesOnMidiInputBoxEnabled: noteInputModel.midiInputEnabled && noteInputModel.playNotesWhenEditing
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
@@ -122,6 +125,10 @@ PreferencesPage {
 
             onNotePlayDurationChangeRequested: function(duration) {
                 noteInputModel.notePlayDurationMilliseconds = duration
+            }
+
+            onPlayNotesOnMidiInputChangeRequested: function(play) {
+                noteInputModel.playNotesOnMidiInput = play
             }
         }
 
@@ -158,7 +165,6 @@ PreferencesPage {
             onWarnGuitarBendsChangeRequested: function(warn) {
                 noteInputModel.warnGuitarBends = warn
             }
-
         }
     }
 }

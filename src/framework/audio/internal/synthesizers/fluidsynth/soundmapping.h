@@ -753,6 +753,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Slap,  { mpe::SoundSubCategory::Hand } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Stamp,  { mpe::SoundSubCategory::Foot } }, { midi::Program(128, 0) } },
 
+        { { mpe::SoundId::Taiko, {} }, { midi::Program(128, 0) } },
+
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
                                           mpe::SoundSubCategory::Percussive } }, { midi::Program(128, 0) } }
     };
