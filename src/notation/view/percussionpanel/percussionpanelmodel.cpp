@@ -119,6 +119,18 @@ void PercussionPanelModel::setUseNotationPreview(bool useNotationPreview)
     emit useNotationPreviewChanged(m_useNotationPreview);
 }
 
+int PercussionPanelModel::notationPreviewNumStaffLines() const
+{
+    if (!interaction()) {
+        return 0;
+    }
+
+    const NoteInputState& inputState = interaction()->noteInput()->state();
+    const Staff* staff = inputState.staff();
+
+    return staff ? staff->lines(inputState.tick()) : 0;
+}
+
 PercussionPanelPadListModel* PercussionPanelModel::padListModel() const
 {
     return m_padListModel;
@@ -245,6 +257,8 @@ void PercussionPanelModel::customizeKit()
 void PercussionPanelModel::setUpConnections()
 {
     const auto updatePadModels = [this](Drumset* drumset) {
+        emit notationPreviewNumStaffLinesChanged();
+
         if (drumset && m_padListModel->drumset() && *drumset == *m_padListModel->drumset()) {
             return;
         }
