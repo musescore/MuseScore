@@ -3,7 +3,8 @@
         <file>qml/MuseScore/Playback/qmldir</file>
         <file>qml/MuseScore/Playback/PlaybackToolBar.qml</file>
         <file>qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml</file>
-        <file>qml/MuseScore/Playback/internal/TempoSlider.qml</file>
+        <file>qml/MuseScore/Playback/internal/PlaybackSpeedSlider.qml</file>
+        <file>qml/MuseScore/Playback/internal/PlaybackSpeedPopup.qml</file>
         <file>qml/MuseScore/Playback/MixerPanel.qml</file>
         <file>qml/MuseScore/Playback/internal/MixerPanelToolbar.qml</file>
         <file>qml/MuseScore/Playback/internal/MixerPanelSection.qml</file>
