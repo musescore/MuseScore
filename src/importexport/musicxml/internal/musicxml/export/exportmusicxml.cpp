@@ -3314,6 +3314,12 @@ static String symIdToTechn(const SymId sid)
     case SymId::pluckedSnapPizzicatoBelow:
         return u"snap-pizzicato";
         break;
+    case SymId::guitarLeftHandTapping:
+        return u"tap hand=\"left\"";
+        break;
+    case SymId::guitarRightHandTapping:
+        return u"tap hand=\"right\"";
+        break;
     case SymId::keyboardPedalHeel1:
     case SymId::keyboardPedalHeel2:
     case SymId::keyboardPedalHeel3:
