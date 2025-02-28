@@ -937,7 +937,7 @@ bool GuitarPro5::read(IODevice* io)
                 bar.volta.voltaInfo.push_back(voltaNumber & 1);
                 voltaNumber >>= 1;
             }
-            bar.repeats = bar.volta.voltaInfo.size() + 1;
+            bar.repeats = static_cast<int>(bar.volta.voltaInfo.size()) + 1;
         }
         if (barBits & SCORE_KEYSIG) {
             int currentKey = readUInt8();

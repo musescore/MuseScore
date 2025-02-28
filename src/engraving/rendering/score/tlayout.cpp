@@ -1460,11 +1460,11 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     //! NOTE: layout fret diagrams and calculate sizes
 
-    const int totalDiagrams = fretDiagrams.size();
+    const size_t totalDiagrams = fretDiagrams.size();
     double maxFretDiagramHeight = 0.0;
     double maxFretDiagramWidth = 0.0;
 
-    for (int i = 0; i < totalDiagrams; ++i) {
+    for (size_t i = 0; i < totalDiagrams; ++i) {
         FretDiagram* fretDiagram = fretDiagrams[i];
         if (!fretDiagram) {
             continue;
@@ -1496,12 +1496,12 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     const double spatium = item->spatium();
 
-    const int chordsPerRow = item->chordsPerRow();
+    const size_t chordsPerRow = item->chordsPerRow();
     const double rowGap = item->rowGap().val() * spatium;
     const double columnGap = item->columnGap().val() * spatium;
 
-    const int rows = std::ceil(double(totalDiagrams) / double(chordsPerRow));
-    const int columns = std::min(totalDiagrams, chordsPerRow);
+    const size_t rows = std::ceil(double(totalDiagrams) / double(chordsPerRow));
+    const size_t columns = std::min(totalDiagrams, chordsPerRow);
 
     static constexpr double MARGINS = 8.0;
     const double totalTableHeight = rows * cellHeight + (rows - 1) * rowGap + MARGINS;
@@ -1531,16 +1531,16 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
                           : alignH == AlignH::RIGHT ? item->width() - totalTableWidth : 0.0;
     const double startY = !muse::RealIsNull(topMargin) ? topMargin : -bottomMargin;
 
-    for (int i = 0; i < totalDiagrams; ++i) {
+    for (size_t i = 0; i < totalDiagrams; ++i) {
         FretDiagram* fretDiagram = fretDiagrams[i];
         if (!fretDiagram) {
             continue;
         }
 
-        int row = i / chordsPerRow;
-        int col = i % chordsPerRow;
+        size_t row = i / chordsPerRow;
+        size_t col = i % chordsPerRow;
 
-        int itemsInRow = std::min(chordsPerRow, totalDiagrams - row * chordsPerRow);
+        size_t itemsInRow = std::min(chordsPerRow, totalDiagrams - row * chordsPerRow);
         double rowOffsetX = alignH == AlignH::HCENTER
                             ? (totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap)) / 2
                             : alignH == AlignH::RIGHT
