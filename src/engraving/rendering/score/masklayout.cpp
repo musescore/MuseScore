@@ -141,6 +141,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
     }
 
     if (mask.empty()) {
+        barline->mutldata()->setMask(mask);
         return;
     }
 
