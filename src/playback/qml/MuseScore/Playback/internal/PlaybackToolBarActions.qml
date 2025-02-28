@@ -179,21 +179,24 @@ Item {
 
         readonly property int navigationOrderEnd: item?.navigation?.order ?? measureAndBeatFields.navigationOrderEnd
 
+        // Fixed width prevents items from jumping around; but we
+        // scale it according to the font size to prevent clipping
+        readonly property real tempoViewWidth: 60 * (ui.theme.bodyFont.pixelSize / ui.theme.defaultFont.pixelSize)
+
         sourceComponent: root.floating ? tempoViewComponent : tempoButtonComponent
 
         Component {
             id: tempoViewComponent
 
             Item {
-                // 2 * ui.theme.defaultButtonSize ≈ "60 but scaled to body text size"
-                // See https://github.com/musescore/MuseScore/pull/25621#issuecomment-2564382857
-                implicitWidth: 2 * ui.theme.defaultButtonSize
-                implicitHeight: ui.theme.defaultButtonSize
+                implicitWidth: tempoLoader.tempoViewWidth
+                implicitHeight: root.height
 
                 TempoView {
                     id: tempoView
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: 1 // for nicer visual alignment
 
                     noteSymbol: root.playbackModel.tempo.noteSymbol
                     tempoValue: root.playbackModel.tempo.value
@@ -208,10 +211,8 @@ Item {
             id: tempoButtonComponent
 
             FlatButton {
-                // 2 * ui.theme.defaultButtonSize ≈ "60 but scaled to body text size"
-                // See https://github.com/musescore/MuseScore/pull/25621#issuecomment-2564382857
-                implicitWidth: 2 * ui.theme.defaultButtonSize
-                implicitHeight: ui.theme.defaultButtonSize
+                implicitWidth: tempoLoader.tempoViewWidth
+                implicitHeight: root.height
 
                 accentButton: playbackSpeedPopup.isOpened
                 transparent: !accentButton
@@ -223,6 +224,7 @@ Item {
 
                 contentItem: TempoView {
                     anchors.centerIn: parent
+                    anchors.verticalCenterOffset: 1 // for nicer visual alignment
 
                     noteSymbol: root.playbackModel.tempo.noteSymbol
                     tempoValue: root.playbackModel.tempo.value
