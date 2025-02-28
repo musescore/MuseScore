@@ -183,7 +183,7 @@ size_t MeasuresSettingsModel::systemCount() const
 void MeasuresSettingsModel::updateScoreIsInPageView()
 {
     const Score* score = currentNotation()->elements()->msScore();
-    bool isInPageView = score->layoutMode() == LayoutMode::PAGE;
+    bool isInPageView = score->layoutMode() != LayoutMode::LINE;
 
     if (m_scoreIsInPageView != isInPageView) {
         m_scoreIsInPageView = isInPageView;
