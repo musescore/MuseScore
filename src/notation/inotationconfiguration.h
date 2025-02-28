@@ -231,6 +231,10 @@ public:
     virtual void setUseNewPercussionPanel(bool use) = 0;
     virtual muse::async::Notification useNewPercussionPanelChanged() const = 0;
 
+    virtual bool percussionPanelUseNotationPreview() const = 0;
+    virtual void setPercussionPanelUseNotationPreview(bool use) = 0;
+    virtual muse::async::Notification percussionPanelUseNotationPreviewChanged() const = 0;
+
     virtual PercussionPanelAutoShowMode percussionPanelAutoShowMode() const = 0;
     virtual void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) = 0;
     virtual muse::async::Notification percussionPanelAutoShowModeChanged() const = 0;
