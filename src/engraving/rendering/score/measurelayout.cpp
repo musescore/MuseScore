@@ -317,7 +317,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             }
         }
         if (!found) {
-            mmrMeasure->add(e->clone());
+            mmrMeasure->add(e->isLayoutBreak() ? e->clone() : e->linkedClone());
         }
     }
     for (EngravingItem* e : oldList) {
