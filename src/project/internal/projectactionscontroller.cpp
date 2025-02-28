@@ -1829,7 +1829,10 @@ void ProjectActionsController::continueLastSession()
 
 void ProjectActionsController::exportScore()
 {
-    interactive()->open("musescore://project/export");
+    static const std::string EXPORT_URI = "musescore://project/export";
+    if (!interactive()->isOpened(EXPORT_URI).val) {
+        interactive()->open(EXPORT_URI);
+    }
 }
 
 void ProjectActionsController::printScore()
