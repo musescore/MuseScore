@@ -195,19 +195,21 @@ inline QString extractSyllable(const QString& text)
 {
     QString _text = text;
 
-    _text.replace(QRegularExpression("\r+"), "\n");
-    _text.replace(QRegularExpression("\n+"), "\n");
+    static const QRegularExpression lineBreaks("(\r|\n)+");
+    _text.replace(lineBreaks, "\n");
     if (_text.startsWith(u"\n")) {
         _text.remove("\n");
     }
 
-    int textPos = _text.indexOf(QRegularExpression("\\S"));
+    static const QRegularExpression nonWhitespace("\\S");
+    int textPos = _text.indexOf(nonWhitespace);
     if (textPos == -1) {
         return QString();
     }
 
+    static const QRegularExpression separators("(_| |-|\n)");
     QRegularExpressionMatch match;
-    int splitPos = _text.indexOf(QRegularExpression("(_| |-|\n)"), textPos, &match);
+    int splitPos = _text.indexOf(separators, textPos, &match);
     if (splitPos == -1) {
         splitPos = _text.size();
     } else {

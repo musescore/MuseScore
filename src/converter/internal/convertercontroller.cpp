@@ -243,27 +243,26 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         return rv;
     }
 
-    QByteArray data = file.readAll();
+    const QByteArray data = file.readAll();
+
     QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    const QJsonDocument doc = QJsonDocument::fromJson(data, &err);
     if (err.error != QJsonParseError::NoError || !doc.isArray()) {
         rv.ret = make_ret(Err::BatchJobFileFailedParse, err.errorString().toStdString());
         return rv;
     }
 
-    QJsonArray arr = doc.array();
+    const QJsonArray arr = doc.array();
 
     auto correctUserInputPath = [](const QString& path) -> QString {
         return io::Dir::fromNativeSeparators(path).toQString();
     };
 
-    for (const QJsonValue& v : arr) {
-        QJsonObject obj = v.toObject();
-
+    for (const QJsonValueRef obj : arr) {
         Job job;
-        job.in = correctUserInputPath(obj["in"].toString());
+        job.in = correctUserInputPath(obj[u"in"].toString());
 
-        QJsonObject transposeOptionsObj = obj["transpose"].toObject();
+        QJsonObject transposeOptionsObj = obj[u"transpose"].toObject();
         if (!transposeOptionsObj.isEmpty()) {
             RetVal<TransposeOptions> transposeOptions = ConverterUtils::parseTransposeOptions(transposeOptionsObj);
             if (!transposeOptions.ret) {
@@ -273,20 +272,20 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
             job.transposeOptions = transposeOptions.val;
         }
 
-        QJsonValue outValue = obj["out"];
+        const QJsonValue outValue = obj[u"out"];
         if (outValue.isString()) {
             job.out = correctUserInputPath(outValue.toString());
             rv.val.push_back(std::move(job));
         } else if (outValue.isArray()) {
-            QJsonArray outArray = outValue.toArray();
-            for (const QJsonValue& outItem : outArray) {
+            const QJsonArray outArray = outValue.toArray();
+            for (const QJsonValueRef outItem : outArray) {
                 Job partJob = job; // Copy the input path
                 if (outItem.isString()) {
                     partJob.out = correctUserInputPath(outItem.toString());
                 } else if (outItem.isArray() && outItem.toArray().size() == 2) {
-                    QJsonArray partOutArray = outItem.toArray();
-                    QString prefix = correctUserInputPath(partOutArray[0].toString());
-                    QString suffix = partOutArray[1].toString();
+                    const QJsonArray partOutArray = outItem.toArray();
+                    const QString prefix = correctUserInputPath(partOutArray[0].toString());
+                    const QString suffix = partOutArray[1].toString();
                     partJob.out = prefix + "*" + suffix; // Use "*" as a placeholder for part names
                 }
                 rv.val.push_back(std::move(partJob));
@@ -392,7 +391,7 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
     TRACEFUNC;
 
     INotationPtrList notations;
-    for (IExcerptNotationPtr e : masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
         notations.push_back(e->notation());
     }
 
@@ -428,7 +427,7 @@ Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::
     TRACEFUNC;
 
     INotationPtrList notations;
-    for (IExcerptNotationPtr e : masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
         notations.push_back(e->notation());
     }
 
@@ -451,7 +450,7 @@ Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMast
     TRACEFUNC;
 
     INotationPtrList notations;
-    for (IExcerptNotationPtr e : masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
         notations.push_back(e->notation());
     }
 

@@ -39,7 +39,7 @@ QList<int> ButtonBoxModel::load()
     std::unordered_map <int, std::vector <LayoutButton*> > sortedButtons;
     int maxCustomRole = static_cast<int>(ButtonRole::CustomRole);
 
-    QList<QQuickItem*> buttonsItems = m_buttonsItems.list();
+    const QList<QQuickItem*> buttonsItems = m_buttonsItems.list();
     for (const QQuickItem* item : buttonsItems) {
         QVariant buttonTypeVar = item->property("buttonId");
         int type = static_cast<int>(ButtonType::CustomButton);

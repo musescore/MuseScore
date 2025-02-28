@@ -59,7 +59,7 @@ void PaletteTree::write(mu::engraving::XmlWriter& xml, bool pasteMode) const
 {
     xml.startElement("PaletteBox"); // for compatibility with old palettes file format
 
-    for (PalettePtr palette : palettes) {
+    for (const PalettePtr& palette : palettes) {
         palette->write(xml, pasteMode);
     }
 
@@ -68,7 +68,7 @@ void PaletteTree::write(mu::engraving::XmlWriter& xml, bool pasteMode) const
 
 void PaletteTree::retranslate()
 {
-    for (PalettePtr palette : palettes) {
+    for (const PalettePtr& palette : palettes) {
         palette->retranslate();
     }
 }

@@ -285,12 +285,12 @@ bool PaletteWidget::setFilterText(const QString& text)
     m_filteredCells.clear();
     // if palette name is searched for, display all elements in the palette
     if (name().startsWith(t, Qt::CaseInsensitive)) {
-        PaletteCellPtr c = cells().front();
-        for (PaletteCellPtr cell : cells()) {
+        const PaletteCellPtr& c = cells().front();
+        for (const PaletteCellPtr& cell : cells()) {
             m_filteredCells.push_back(cell);
         }
 
-        bool contains = t.isEmpty() || c;
+        const bool contains = t.isEmpty() || c;
         if (!contains) {
             m_isFilterActive = true;
         }
@@ -299,12 +299,12 @@ bool PaletteWidget::setFilterText(const QString& text)
         }
     }
 
-    for (PaletteCellPtr cell : cells()) {
-        QStringList h = cell->name.toLower().split(" ");
-        bool c        = false;
-        QStringList n = t.split(" ");
-        for (QString hs : h) {
-            for (QString ns : n) {
+    for (const PaletteCellPtr& cell : cells()) {
+        const QStringList h = cell->name.toLower().split(" ");
+        const QStringList n = t.split(" ");
+        bool c = false;
+        for (const QString& hs : h) {
+            for (const QString& ns : n) {
                 if (!ns.trimmed().isEmpty()) {
                     c = hs.trimmed().startsWith(ns.trimmed());
                 }
@@ -316,7 +316,7 @@ bool PaletteWidget::setFilterText(const QString& text)
         if (t.isEmpty() || c) {
             m_filteredCells.push_back(cell);
         }
-        bool contains = t.isEmpty() || c;
+        const bool contains = t.isEmpty() || c;
         if (!contains) {
             m_isFilterActive = true;
         }
