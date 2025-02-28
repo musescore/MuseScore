@@ -319,6 +319,11 @@ ValCh<Uri> Interactive::currentUri() const
     return provider()->currentUri();
 }
 
+RetVal<bool> Interactive::isCurrentUriDialog() const
+{
+    return provider()->isCurrentUriDialog();
+}
+
 std::vector<Uri> Interactive::stack() const
 {
     return provider()->stack();

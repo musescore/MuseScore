@@ -525,6 +525,20 @@ ValCh<Uri> InteractiveProvider::currentUri() const
     return v;
 }
 
+RetVal<bool> InteractiveProvider::isCurrentUriDialog() const
+{
+    if (m_stack.empty()) {
+        return RetVal<bool>::make_ok(false);
+    }
+
+    const ObjectInfo& last = m_stack.last();
+    if (!last.window) {
+        return RetVal<bool>::make_ok(false);
+    }
+
+    return RetVal<bool>::make_ok(last.window != mainWindow()->qWindow());
+}
+
 async::Notification InteractiveProvider::currentUriAboutToBeChanged() const
 {
     return m_currentUriAboutToBeChanged;

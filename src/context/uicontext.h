@@ -35,6 +35,8 @@ static constexpr muse::ui::UiContext UiCtxHomeOpened = muse::ui::UiCtxHomeOpened
 static constexpr muse::ui::UiContext UiCtxProjectOpened = muse::ui::UiCtxProjectOpened;
 static constexpr muse::ui::UiContext UiCtxProjectFocused = muse::ui::UiCtxProjectFocused;
 
+static constexpr muse::ui::UiContext UiCtxDialogOpened = muse::ui::UiCtxDialogOpened;
+
 // application-specific contexts
 static constexpr muse::ui::UiContext UiCtxPublishOpened = "UiCtxPublishOpened";
 static constexpr muse::ui::UiContext UiCtxDevToolsOpened = "UiCtxDevToolsOpened";

@@ -38,6 +38,8 @@ static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
 static const muse::Uri PUBLISH_PAGE_URI("musescore://publish");
 static const muse::Uri DEVTOOLS_PAGE_URI("musescore://devtools");
 
+static const muse::Uri EXTENSIONS_DIALOG_URI("muse://extensions/viewer");
+
 static const QString NOTATION_NAVIGATION_PANEL("ScoreView");
 
 void UiContextResolver::init()
@@ -127,6 +129,13 @@ UiContext UiContextResolver::currentUiContext() const
 
     if (currentUri == DEVTOOLS_PAGE_URI) {
         return context::UiCtxDevToolsOpened;
+    }
+
+    if (interactive()->isCurrentUriDialog().val) {
+        bool isExtensionDialog = currentUri == EXTENSIONS_DIALOG_URI;
+        if (!isExtensionDialog) {
+            return context::UiCtxDialogOpened;
+        }
     }
 
     return context::UiCtxUnknown;

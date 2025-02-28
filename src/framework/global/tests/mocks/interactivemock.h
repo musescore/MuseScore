@@ -83,6 +83,7 @@ public:
     MOCK_METHOD(void, closeAllDialogs, (), (override));
 
     MOCK_METHOD(ValCh<Uri>, currentUri, (), (const, override));
+    MOCK_METHOD(RetVal<bool>, isCurrentUriDialog, (), (const, override));
     MOCK_METHOD(std::vector<Uri>, stack, (), (const, override));
 
     MOCK_METHOD(Ret, openUrl, (const std::string&), (const, override));
