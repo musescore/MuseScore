@@ -329,6 +329,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     }
 
     std::vector<Segment*> segsToMoveToThisMeasure;
+    std::vector<Segment*> segsToRemove;
     for (Segment& seg : nextMeasure->segments()) {
         if (seg.tick() != nextMeasure->tick() || seg.isChordRestType()) {
             continue;
@@ -361,8 +362,17 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         // Move key sigs and time sigs at the start of the next measure to the end of this measure
         if ((seg.isTimeSigType() || seg.isKeySigType()) && !seg.header() && !seg.trailer()
             && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
+            if (measure->findSegmentR(seg.segmentType(), measure->ticks())) {
+                segsToRemove.push_back(&seg);
+                continue;
+            }
             segsToMoveToThisMeasure.push_back(&seg);
         }
+    }
+
+    for (Segment* seg : segsToRemove) {
+        // Don't add duplicate segs to the end of a measure
+        ctx.mutDom().doUndoRemoveElement(seg);
     }
 
     for (Segment* seg : segsToMoveToNextMeasure) {
