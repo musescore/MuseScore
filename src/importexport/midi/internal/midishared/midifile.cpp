@@ -179,7 +179,7 @@ bool MidiFile::writeTrack(const MidiTrack& t)
 
     status   = -1;
     int tick = 0;
-    for (auto i : t.events()) {
+    for (const auto& i : t.events()) {
         int ntick = i.first;
         putvl(ntick - tick);        // write tick delta
         //
