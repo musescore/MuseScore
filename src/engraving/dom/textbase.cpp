@@ -3364,7 +3364,7 @@ bool TextBase::isNonTextualEditAllowed(EditData& ed) const
         Key_Down
     };
 
-    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
+    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key)) && !(ed.modifiers & AltModifier);
 }
 
 void TextBase::checkMeasureBoundariesAndMoveIfNeed()
