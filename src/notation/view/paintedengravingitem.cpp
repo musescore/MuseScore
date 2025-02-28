@@ -43,7 +43,25 @@ void PaintedEngravingItem::setEngravingItemVariant(QVariant engravingItemVariant
         return;
     }
     m_item = item;
+
+    update();
     emit engravingItemVariantChanged();
+}
+
+int PaintedEngravingItem::numStaffLines() const
+{
+    return m_numStaffLines;
+}
+
+void PaintedEngravingItem::setNumStaffLines(int numStaffLines)
+{
+    if (m_numStaffLines == numStaffLines) {
+        return;
+    }
+    m_numStaffLines = numStaffLines;
+
+    update();
+    emit numStaffLinesChanged();
 }
 
 double PaintedEngravingItem::spatium() const
@@ -57,6 +75,8 @@ void PaintedEngravingItem::setSpatium(double spatium)
         return;
     }
     m_spatium = spatium;
+
+    update();
     emit spatiumChanged();
 }
 
@@ -86,7 +106,7 @@ void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter, qr
 
     params.spatium = m_spatium;
 
-    params.drawStaff = true;
+    params.numStaffLines = m_numStaffLines;
 
     painter.fillRect(params.rect, configuration()->noteBackgroundColor());
 

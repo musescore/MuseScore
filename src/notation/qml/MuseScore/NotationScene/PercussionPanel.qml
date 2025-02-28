@@ -285,6 +285,7 @@ Item {
                         panelEnabled: percModel.enabled
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
+                        notationPreviewNumStaffLines: percModel.notationPreviewNumStaffLines
 
                         // When swapping, only show the outline for the swap origin  and the swap target...
                         showEditOutline: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT

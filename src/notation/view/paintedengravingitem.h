@@ -39,6 +39,8 @@ class PaintedEngravingItem : public QQuickPaintedItem
     Q_OBJECT
 
     Q_PROPERTY(QVariant engravingItem READ engravingItemVariant WRITE setEngravingItemVariant NOTIFY engravingItemVariantChanged)
+    Q_PROPERTY(int numStaffLines READ numStaffLines WRITE setNumStaffLines NOTIFY numStaffLinesChanged)
+
     Q_PROPERTY(double spatium READ spatium WRITE setSpatium NOTIFY spatiumChanged)
 
 public:
@@ -47,6 +49,9 @@ public:
     QVariant engravingItemVariant() const;
     void setEngravingItemVariant(QVariant engravingItemVariant);
 
+    int numStaffLines() const;
+    void setNumStaffLines(int numStaffLines);
+
     double spatium() const;
     void setSpatium(double spatium);
 
@@ -54,12 +59,15 @@ public:
 
 signals:
     void engravingItemVariantChanged();
+    void numStaffLinesChanged();
     void spatiumChanged();
 
 private:
     void paintNotationPreview(muse::draw::Painter& painter, qreal dpi) const;
 
     mu::engraving::ElementPtr m_item;
+    int m_numStaffLines = 0;
+
     double m_spatium = 1.0;
 };
 }
