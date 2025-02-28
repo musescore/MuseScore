@@ -651,11 +651,13 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
             }
 
             Segment* prevBarlineSeg = nullptr;
+            Segment* prevRepeatAnnounceTimeSigSeg = nullptr;
             if (centerOnBarline) {
                 for (Segment* prevSeg = seg.prev1(); prevSeg && prevSeg->tick() == seg.tick(); prevSeg = prevSeg->prev1()) {
                     if (prevSeg->isEndBarLineType()) {
                         prevBarlineSeg = prevSeg;
-                        break;
+                    } else if (prevSeg->isTimeSigRepeatAnnounceType()) {
+                        prevRepeatAnnounceTimeSigSeg = prevSeg;
                     }
                 }
             }
@@ -673,7 +675,9 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
                     }
                     continue;
                 }
-                if (prevBarlineSeg && prevBarlineSeg->system() == system) {
+
+                if (prevBarlineSeg && prevBarlineSeg->system() == system && !prevRepeatAnnounceTimeSigSeg) {
+                    // Center timeSig on its segment
                     RectF bbox = timeSig->ldata()->bbox();
                     double newXPos = -0.5 * (bbox.right() + bbox.left());
                     double xPosDiff = timeSig->pos().x() - newXPos;
@@ -681,6 +685,33 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
 
                     for (EngravingItem* el : parens) {
                         el->mutldata()->moveX(-xPosDiff);
+                    }
+                } else if (!seg.isTimeSigRepeatAnnounceType()) {
+                    // Left-align to parenthesis if present
+                    double xLeftParens = DBL_MAX;
+                    for (EngravingItem* paren : parens) {
+                        if (toParenthesis(paren)->direction() == DirectionH::LEFT) {
+                            xLeftParens = paren->x() + paren->ldata()->bbox().left();
+                        }
+                    }
+                    if (xLeftParens != DBL_MAX) {
+                        timeSig->mutldata()->moveX(-xLeftParens);
+                        for (EngravingItem* paren : parens) {
+                            paren->mutldata()->moveX(-xLeftParens);
+                        }
+                    }
+                } else {
+                    // TimeSigRepeatAnnounce: right-align to segment
+                    double xRight = -DBL_MAX;
+                    xRight = std::max(xRight, timeSig->shape().right() + timeSig->x());
+                    for (EngravingItem* paren : parens) {
+                        xRight = std::max(xRight, paren->ldata()->bbox().right() + paren->x());
+                    }
+                    if (xRight != -DBL_MAX) {
+                        timeSig->mutldata()->moveX(-xRight);
+                        for (EngravingItem* paren : parens) {
+                            paren->mutldata()->moveX(-xRight);
+                        }
                     }
                 }
             }

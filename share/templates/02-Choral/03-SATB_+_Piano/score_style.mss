@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Style>
     <pageWidth>8.26772</pageWidth>
     <pageHeight>11.6929</pageHeight>

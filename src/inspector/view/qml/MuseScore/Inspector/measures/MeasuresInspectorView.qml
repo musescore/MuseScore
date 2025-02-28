@@ -172,7 +172,8 @@ InspectorSectionView {
 
         FlatButton {
             id: makeIntoOneSystem
-            enabled: model.isMakeIntoSystemAvailable
+            visible: model.scoreIsInPageView
+            enabled: root.model ? model.isMakeIntoSystemAvailable : false
 
             Layout.topMargin: 4
             Layout.fillWidth: true
