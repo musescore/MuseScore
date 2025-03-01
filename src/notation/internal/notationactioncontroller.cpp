@@ -70,7 +70,7 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "show-skylines", &EngravingDebuggingOptions::showSkylines },
     { "show-system-bounding-rects", &EngravingDebuggingOptions::showSystemBoundingRects },
     { "show-element-masks", &EngravingDebuggingOptions::showElementMasks },
-    { "show-corrupted-measures", &EngravingDebuggingOptions::showCorruptedMeasures }
+    { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures }
 };
 
 void NotationActionController::init()
@@ -2303,7 +2303,7 @@ void NotationActionController::checkForScoreCorruptions()
         interactive()->info(title, body);
     } else {
         std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(fileName).toStdString();
-        std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction.\n"
+        std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction. "
                                                 "Please fix those at the earliest, to prevent crashes and further corruptions.");
 
         interactive()->warning(title, body, ret.text());

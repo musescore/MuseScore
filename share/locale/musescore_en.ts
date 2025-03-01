@@ -8718,11 +8718,6 @@ text x-height):</translation>
         <translation type="unfinished">Show/hide element masks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2611"/>
-        <source>Show corrupted measures</source>
-        <translation type="unfinished">Show corrupted measures</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1998"/>
         <source>Full measure rest</source>
         <translation type="unfinished">Full measure rest</translation>
@@ -10312,9 +10307,10 @@ text x-height):</translation>
         <translation type="unfinished">Mark i&amp;rregular measures</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2611"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
-        <source>Show/hide corrupted measures</source>
-        <translation type="unfinished">Show/hide corrupted measures</translation>
+        <source>Mark corrupted measures</source>
+        <translation type="unfinished">Mark corrupted measures</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2618"/>
@@ -28744,10 +28740,8 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2306"/>
-        <source>This file contains errors that could cause MuseScore Studio to malfunction.
-Please fix those at the earliest, to prevent crashes and further corruptions.</source>
-        <translation type="unfinished">This file contains errors that could cause MuseScore Studio to malfunction.
-Please fix those at the earliest, to prevent crashes and further corruptions.</translation>
+        <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
+        <translation type="unfinished">This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1765"/>
