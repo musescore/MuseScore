@@ -33,7 +33,7 @@ defaults:
 
 jobs:
   update-release-info:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     environment:
       name: ${{ inputs.environment }} # can be empty/blank (if so, URL will not be shown)
       url: ${{ github.server_url }}/${{ github.repository }}/releases/${{ inputs.tag && format('tag/{0}', inputs.tag) || 'latest' }} # show on run page

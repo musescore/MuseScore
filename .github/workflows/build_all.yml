@@ -107,8 +107,7 @@ jobs:
         # Expose edge cases like different command versions, CRLF line endings, etc.
         # Use same OS versions as used in real build workflows.
         os:
-        - ubuntu-20.04 # linux_x64, backend
-        - ubuntu-22.04 # linux_arm32, linux_arm64
+        - ubuntu-22.04 # linux_x64, backend, linux_arm32, linux_arm64
         - macos-latest
         - windows-2022 # windows_x64, windows_portable
     runs-on: ${{ matrix.os }}
