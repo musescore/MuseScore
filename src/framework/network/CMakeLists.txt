@@ -35,6 +35,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/networkmanagercreator.h
     )
 
+list(APPEND MODULE_LINK Qt::Qml)
+list(APPEND MODULE_LINK_PUBLIC Qt::Network)
+
 if (MUSE_MODULE_NETWORK_WEBSOCKET)
     set(MODULE_SRC ${MODULE_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/api/websocketapi.cpp
@@ -43,7 +46,8 @@ if (MUSE_MODULE_NETWORK_WEBSOCKET)
         ${CMAKE_CURRENT_LIST_DIR}/api/websocketserverapi.h
     )
 
-    set(MODULE_DEF -DMUSE_MODULE_NETWORK_WEBSOCKET)
+    list(APPEND MODULE_DEF -DMUSE_MODULE_NETWORK_WEBSOCKET)
+    list(APPEND MODULE_LINK Qt::WebSockets)
 endif()
 
 setup_module()
