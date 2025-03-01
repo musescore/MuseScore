@@ -110,7 +110,7 @@ void NotationNavigator::rescale()
         scaling = height() / scoreHeight;
     }
 
-    if (qFuzzyIsNull(scaling)) {
+    if (RealIsNull(scaling)) {
         return;
     }
 
