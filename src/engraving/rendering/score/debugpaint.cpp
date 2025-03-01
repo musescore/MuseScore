@@ -248,7 +248,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
         }
     }
 
-    if (options.showCorruptedMeasures && score->hasCorruptedMeasures()) {
+    if (options.markCorruptedMeasures && score->hasCorruptedMeasures()) {
         painter.setPen(Pen(Color::RED, 4.0));
         painter.setBrush(BrushStyle::NoBrush);
 
