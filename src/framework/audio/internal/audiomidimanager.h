@@ -27,14 +27,19 @@
 
 #include "iaudiodriver.h"
 
-#include "audiodeviceslistener.h"
+#include "platform/lin/audiodeviceslistener.h"
+#include "playback/iplaybackconfiguration.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
-class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
+class AudioMidiManager : public IAudioDriver, public async::Asyncable
 {
+    Inject<mu::playback::IPlaybackConfiguration> playbackConfiguration;
+    Inject<mu::playback::IPlaybackController> playbackController;
+
 public:
-    LinuxAudioDriver();
-    ~LinuxAudioDriver();
+    AudioMidiManager();
+    ~AudioMidiManager();
 
     void init() override;
 
@@ -48,37 +53,55 @@ public:
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& deviceId) override;
     bool resetToDefaultOutputDevice() override;
-    async::Notification outputDeviceChanged() const override;
+    muse::async::Notification outputDeviceChanged() const override;
 
     AudioDeviceList availableOutputDevices() const override;
-    async::Notification availableOutputDevicesChanged() const override;
+    muse::async::Notification availableOutputDevicesChanged() const override;
 
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
-    async::Notification outputDeviceBufferSizeChanged() const override;
+    muse::async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
-    async::Notification outputDeviceSampleRateChanged() const override;
+    muse::async::Notification outputDeviceSampleRateChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+
+    void isPlayingChanged();
+    void positionChanged(muse::audio::secs_t secs, muse::midi::tick_t tick);
+
+    bool isPlaying() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
 
     void resume() override;
     void suspend() override;
 
 private:
-    async::Notification m_outputDeviceChanged;
+    bool makeDevice(const AudioDeviceID& deviceId);
+    bool reopen(const AudioDeviceID& deviceId, Spec newSpec);
+    muse::async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;
+#ifndef Q_OS_MACOS
     AudioDevicesListener m_devicesListener;
-    async::Notification m_availableOutputDevicesChanged;
+#endif
+    muse::async::Notification m_availableOutputDevicesChanged;
 
     std::string m_deviceId;
 
-    async::Notification m_bufferSizeChanged;
-    async::Notification m_sampleRateChanged;
+    muse::async::Notification m_bufferSizeChanged;
+    muse::async::Notification m_sampleRateChanged;
+    int m_audioDelayCompensate;
+
+    struct IAudioDriver::Spec m_spec;
+    std::unique_ptr<AudioDriverState> m_current_audioDriverState;
 };
 }
 
