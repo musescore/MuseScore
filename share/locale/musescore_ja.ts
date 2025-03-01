@@ -42,12 +42,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>段ごとの小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation type="unfinished"/>
+        <translation>段ごとにX小節でレイアウトをロック</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -58,13 +58,13 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system locks to each system</source>
-        <translation type="unfinished"/>
+        <translation>それぞれの段に段ロックを追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system locks</source>
-        <translation type="unfinished"/>
+        <translation>現在の段ロックを削除</translation>
     </message>
 </context>
 <context>
@@ -72,7 +72,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="14"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>キットをカスタマイズ</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="50"/>
@@ -1100,11 +1100,6 @@
         <translation>大きさ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.ui" line="154"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="173"/>
         <source>Style group:</source>
         <translation>スタイルグループ:</translation>
@@ -1117,7 +1112,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="354"/>
         <source>Merge matching rests:</source>
-        <translation type="unfinished"/>
+        <translation>一致する休符を統合:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="367"/>
@@ -1283,13 +1278,13 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1034"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1037"/>
         <source>Apply and go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>適用して前の譜表に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1053"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1056"/>
         <source>Apply and go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>適用して次の譜表に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="458"/>
@@ -1327,7 +1322,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="680"/>
         <source>Interval from written to sounding pitch</source>
-        <translation>記譜音から実音高までの音程</translation>
+        <translation>記譜音から実音までの音程</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="683"/>
@@ -1712,25 +1707,25 @@
     <name>EditStyleBase</name>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="32"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13054"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13057"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13436"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13439"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
         <source>Style</source>
         <translation>スタイル</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14437"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
         <source>Edit text style</source>
         <translation>テキストスタイルを編集</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14555"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14564"/>
         <source>Padding:</source>
         <translation>パディング:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14601"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14610"/>
         <source>Reset &apos;Padding&apos; value</source>
         <translation>「パディング」の値をリセット</translation>
     </message>
@@ -1784,31 +1779,31 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6581"/>
         <source>Beams</source>
         <translation>連桁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6620"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6623"/>
         <source>Tuplets</source>
         <translation>連符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7382"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7385"/>
         <source>Arpeggios</source>
         <translation>アルペジオ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8535"/>
         <source>Hairpins</source>
         <translation>松葉</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11073"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11076"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14115"/>
         <source>Fermatas</source>
         <translation>フェルマータ</translation>
     </message>
@@ -1818,8 +1813,8 @@
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8328"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14254"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8331"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14263"/>
         <source>Dynamics</source>
         <translation>強弱記号</translation>
     </message>
@@ -1902,74 +1897,74 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5557"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5576"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5897"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6058"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6165"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6304"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6343"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6531"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6694"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7020"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7071"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7147"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7176"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7198"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7407"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7423"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7439"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7579"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7621"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7663"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7705"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7781"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7865"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7907"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7988"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8146"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8429"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8570"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8658"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8697"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8739"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8905"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8944"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9187"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9295"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9463"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9593"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10329"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10390"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11092"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11278"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11546"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11675"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11700"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11909"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11925"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12011"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12110"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12281"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12444"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12483"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12939"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13556"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13608"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13630"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13665"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5887"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6061"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6168"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6232"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6307"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6534"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6697"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7074"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7150"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7179"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7201"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7410"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7426"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7582"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7666"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7708"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7784"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7868"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7991"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8149"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8432"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8573"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8742"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8908"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8947"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9190"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9298"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9466"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9596"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11095"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11549"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11678"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12014"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12135"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12287"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12453"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12492"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13617"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13639"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13674"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2044,147 +2039,148 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5223"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5279"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5709"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5854"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6019"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6078"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6145"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6188"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6268"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6356"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6498"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6668"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6726"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6767"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6857"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6956"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7055"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7233"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7271"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7329"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7589"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7631"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7673"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7721"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7791"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7875"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7923"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8004"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8162"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8351"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8364"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8377"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8390"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8458"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8544"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8603"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8622"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8674"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8723"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8765"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8827"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8853"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8879"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8928"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9077"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9171"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9233"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9311"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9340"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9372"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9428"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9447"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9518"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9537"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9603"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9616"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9649"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9728"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9741"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9842"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9861"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9923"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9983"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10119"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10348"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10409"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10497"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10510"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10539"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10645"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10658"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10687"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11128"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11148"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11171"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11294"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11314"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11380"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11459"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11472"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11501"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11562"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11722"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11735"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11748"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11784"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11797"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11820"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12037"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12155"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12168"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12220"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12310"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12341"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12368"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12396"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12454"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12467"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12572"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12738"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12761"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12809"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13250"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13283"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14478"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14542"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14575"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14598"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14638"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14703"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14716"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14771"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14801"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14814"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14827"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14906"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14967"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6148"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6191"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6671"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6879"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7634"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7724"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7926"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8078"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8354"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8677"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8726"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8931"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9080"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9343"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9375"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9431"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9540"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9652"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9731"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9845"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9926"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9986"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10122"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10500"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10513"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10542"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11131"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11297"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11317"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11475"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11823"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12079"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12161"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12226"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12261"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12316"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12377"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12405"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12421"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12463"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12581"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12818"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13226"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13292"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14551"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14584"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14607"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14647"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14712"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14823"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14935"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14976"/>
         <source>Reset to default</source>
         <translation>デフォルトにリセット</translation>
     </message>
@@ -2221,7 +2217,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="575"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>1つの譜表のみにまたがる括弧を表示する</translation>
+        <translation>単一譜表のみにまたがる括弧を表示する</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="585"/>
@@ -2242,14 +2238,6 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
         <source>Select swing ratio:</source>
         <translation>スウィングの比を選択:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="798"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8413"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11871"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14954"/>
-        <source>%</source>
-        <translation>%</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="829"/>
@@ -2567,96 +2555,16 @@ space unit</extracomment>
         <translation>最初の小節に表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8403"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8557"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9155"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9672"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9900"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10036"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10677"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11118"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11370"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11491"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12030"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12751"/>
-        <source>Position above:</source>
-        <translation>上位置:</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3011"/>
         <source>Interval:</source>
         <translation>間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3036"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3301"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8344"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8707"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9639"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10473"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10621"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11161"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11340"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11435"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11777"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12701"/>
-        <source>Position below:</source>
-        <translation>下位置:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3052"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3210"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5712"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8461"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8606"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9606"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10062"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10542"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11751"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12764"/>
-        <source>Reset &apos;Position above&apos; value</source>
-        <translation>「上位置」の値をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3220"/>
         <source>Vertical placement:</source>
         <translation>縦位置:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3324"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8354"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8677"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9986"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10122"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10513"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11475"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12741"/>
-        <source>Reset &apos;Position below&apos; value</source>
-        <translation>「下位置」の値をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3275"/>
         <source>Horizontal placement:</source>
         <translation>横位置:</translation>
@@ -2833,7 +2741,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4016"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation>シャープ系とフラット系が切り替わるときは変更後の調号の前に配置。そうでなければ後ろに配置。</translation>
+        <translation>♯ または ♭ の数を減らす変更の場合は調号の後に。 ♯ 系と ♭ 系の間で変更する場合は前に</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4026"/>
@@ -2857,7 +2765,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation>「拍子記号と縦線の距離」の値をリセット</translation>
     </message>
@@ -3069,146 +2977,146 @@ space unit</extracomment>
         <translation>デフォルトの縦オフセット:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7102"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
         <translation>「括弧の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7472"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7475"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
         <translation>TAB譜で表示されるアルペジオを標準記譜で表示しない</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7750"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7753"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7955"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7756"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7958"/>
         <source>Ties</source>
         <translation>タイ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8248"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
         <source>Default positions of dynamics and hairpins</source>
         <translation>強弱記号と松葉のデフォルトの位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8276"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
         <translation>声部1と3は譜表の上、声部2と4は譜表の下</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
         <source>Place above the staff on vocal instruments</source>
         <translation>声楽楽器では譜表の上に配置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8321"/>
         <source>Center on grand staff instruments automatically</source>
         <translation>大譜表楽器では自動的に中央に配置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10205"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10208"/>
         <source>Label for full bends</source>
         <translation>フルベンドのラベル</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10316"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10319"/>
         <source>Arrow height:</source>
         <translation>矢印の高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10441"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10444"/>
         <source>Tablature fret numbers</source>
         <translation>TAB譜のフレット番号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10447"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
         <source>Use cue sized numbers for grace note bends</source>
         <translation>装飾音符のベンドに小音符の大きさの数字を使用</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11657"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
         <source>Edit lyrics text style</source>
         <translation>歌詞のテキストスタイルを編集</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11764"/>
         <source>Min. gap between lyrics:</source>
         <translation>歌詞間の最小間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11858"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11861"/>
         <source>Min. margin to current staff:</source>
         <translation>現在の譜表への最小のマージン:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11813"/>
         <source>Min. margin to other staves:</source>
         <translation>他の譜表への最小のマージン:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11972"/>
         <source>Line height (% of text size):</source>
         <translation>行の高さ
 (テキストサイズに対する割合): </translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12096"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
         <source>Dash</source>
         <translation>破線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12145"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12151"/>
         <source>Max. dash gap:</source>
         <translation>最大の破線間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12187"/>
         <source>Min. dash gap:</source>
         <translation>最大の破線間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12370"/>
         <source>Omit dash when space is limited</source>
         <translation>スペースが限られているとき破線を省略</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12381"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
         <translation>段の最初の音符の音節の前に
 破線を書き直す</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12398"/>
         <source>Dash placement at the start of the system:</source>
         <translation>段の始めでの破線の配置:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8484"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8490"/>
         <source>Override score font</source>
         <translation>スコアフォントを上書き</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8451"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8454"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12069"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12072"/>
         <source>Avoid barlines</source>
         <translation>縦線を回避</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12641"/>
         <source>Snap to dynamics</source>
         <translation>強弱記号にスナップ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13156"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13165"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13894"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13903"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
         <translation>通常の五線譜およびTAB譜に表示したい要素を選択</translation>
     </message>
@@ -3220,17 +3128,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation type="unfinished"/>
+        <translation>グリッサンドと音符に固定された線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
         <source>Cue sizes</source>
-        <translation type="unfinished"/>
+        <translation>小音符の大きさ</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2064"/>
         <source>Reduce rhythmic spacing for small notes</source>
-        <translation type="unfinished"/>
+        <translation>小音符のリズム間隔を削減</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3436"/>
@@ -3368,14 +3276,97 @@ first note of the system</source>
         <translation>音部記号、調号と拍子記号</translation>
     </message>
     <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8406"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9903"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11121"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11494"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
+        <source>Offset above:</source>
+        <translation>上オフセット:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3301"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9642"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11164"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11343"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11438"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12710"/>
+        <source>Offset below:</source>
+        <translation>下オフセット:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3052"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5712"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8464"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10065"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10545"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11154"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
+        <source>Reset &apos;Offset above&apos; value</source>
+        <translation>「上オフセット」の値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3075"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8357"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9453"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9989"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10664"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11386"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11478"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12750"/>
+        <source>Reset &apos;Offset below&apos; value</source>
+        <translation>「下オフセット」の値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
+        <source>Horizontal position:</source>
+        <translation>横位置:</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5292"/>
         <source>Mask barlines</source>
-        <translation type="unfinished"/>
+        <translation>縦線をマスク</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Mask barlines when intersecting text</source>
-        <translation type="unfinished"/>
+        <translation>テキストが交差するとき縦線をマスク</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5393"/>
@@ -3439,219 +3430,224 @@ first note of the system</source>
         <translation>幅</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5844"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5874"/>
         <source>Minimum width:</source>
         <translation>最小幅:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5903"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
         <translation>「小節の最小幅」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5947"/>
+        <source>measure(s)</source>
+        <translation>小節</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6025"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
         <translation>「数字の縦位置」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6035"/>
         <source>Center between staves on multi-staff instruments</source>
-        <translation type="unfinished"/>
+        <translation>複数譜表の楽器の譜表間で中央揃え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6084"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「数字と重なるとき長休符を分断」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6135"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6138"/>
         <source>Maximum number of measures:</source>
         <translation>最大の小節数:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6178"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6181"/>
         <source>Spacing of symbols:</source>
         <translation>記号の間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6201"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6204"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6207"/>
         <source>H-bar</source>
-        <translation type="unfinished"/>
+        <translation>長休符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6245"/>
         <source>Reset &apos;Horizontal stroke thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「横線の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6274"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「縦線との間隔」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6323"/>
         <source>Reset &apos;Vertical stroke thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「縦線の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6362"/>
         <source>Reset &apos;Vertical stroke height&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「縦線の高さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6402"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6405"/>
         <source>Show extenders on 4-measure repeats</source>
         <translation>4小節の繰り返しにエクステンダーを表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6422"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6425"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6428"/>
         <source>Number consecutive measure repeats</source>
         <translation>連続した小節の繰り返しに数字をつける</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6437"/>
         <source>Every</source>
         <translation>すべての</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6454"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6457"/>
         <source>measures</source>
         <translation>小節ごとに追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6488"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6491"/>
         <source>With parentheses</source>
         <translation>括弧つき</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6514"/>
         <source>Number position:</source>
         <translation>数字の位置:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6671"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6674"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation>「最大傾斜」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6681"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6684"/>
         <source>Maximum slope:</source>
         <translation>最大傾斜:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6713"/>
         <source>Vertical distance from stem:</source>
         <translation>符幹からの縦方向の距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6732"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation>「符幹からの縦方向の距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6773"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation>「符頭からの縦方向の距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
         <source>Vertical distance from notehead:</source>
         <translation>符頭からの縦方向の距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6825"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6828"/>
         <source>Avoid staves</source>
         <translation>譜表を回避</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6835"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6838"/>
         <source>Properties</source>
         <translation>プロパティ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6844"/>
         <source>Direction:</source>
         <translation>向き:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6863"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>「数字の種類」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6879"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6882"/>
         <source>Reset &apos;Direction&apos; value</source>
         <translation>「向き」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6890"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6893"/>
         <source>Number</source>
         <translation>数</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6898"/>
         <source>Ratio</source>
         <translation>比</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6903"/>
         <source>None</source>
         <comment>no tuplet number</comment>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6909"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6980"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6983"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6917"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6922"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6940"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6943"/>
         <source>Number type:</source>
         <translation>数字の種類:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6985"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6988"/>
         <source>Bracket</source>
         <translation>括弧</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6993"/>
         <source>None</source>
         <comment>no tuplet bracket</comment>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7001"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7004"/>
         <source>Brackets</source>
         <translation>角括弧</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7010"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
         <translation>括弧の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7042"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
         <translation>括弧のフックの高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7061"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation>「括弧のフックの高さ」の値をリセット</translation>
     </message>
@@ -3679,49 +3675,49 @@ first note of the system</source>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8818"/>
         <source>Voltas</source>
         <translation>反復記号括弧</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9132"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9135"/>
         <source>Ottavas</source>
         <translation>オッターヴァ</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9573"/>
         <source>Pedal lines</source>
         <translation>ペダル線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9894"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9897"/>
         <source>Trill lines</source>
         <translation>トリル線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10033"/>
         <source>Vibrato lines</source>
         <translation>ビブラート線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10213"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10216"/>
         <source>Bends</source>
         <translation>ベンド</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10464"/>
         <source>Text lines</source>
         <translation>テキスト線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10612"/>
         <source>System text lines</source>
         <translation>段テキスト線</translation>
     </message>
@@ -3732,7 +3728,7 @@ first note of the system</source>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12626"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12635"/>
         <source>Expression text</source>
         <translation>発想標語テキスト</translation>
     </message>
@@ -3770,950 +3766,928 @@ first note of the system</source>
         <translation>括弧の種類:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5940"/>
         <source>Fixed, based on time signature of:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5887"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5845"/>
         <source>Proportional to time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5926"/>
         <source>Cap width after:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5917"/>
-        <source> / 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5937"/>
-        <source> measures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5954"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5960"/>
         <source>On single empty measure</source>
-        <translation type="unfinished"/>
+        <translation>単一の空の小節で</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5966"/>
         <source>Use normal rest</source>
-        <translation type="unfinished"/>
+        <translation>標準の休符を使用</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5993"/>
         <source>Use H-bar</source>
-        <translation type="unfinished"/>
+        <translation>長休符を使用</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6000"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6003"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6006"/>
         <source>Number layout</source>
-        <translation type="unfinished"/>
+        <translation>数字のレイアウト</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6071"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6074"/>
         <source>Break H-bar if number overlaps</source>
-        <translation type="unfinished"/>
+        <translation>数字と重なるとき長休符を分断</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6213"/>
         <source>Horizontal stroke thickness:</source>
-        <translation type="unfinished"/>
+        <translation>横線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6284"/>
         <source>Margin within barlines:</source>
-        <translation type="unfinished"/>
+        <translation>縦線との間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6291"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6294"/>
         <source>Vertical stroke thickness:</source>
-        <translation type="unfinished"/>
+        <translation>縦線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6330"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6333"/>
         <source>Vertical stroke height:</source>
-        <translation type="unfinished"/>
+        <translation>縦線の高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6962"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
         <translation>「括弧の種類」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6972"/>
         <source>Bracket type:</source>
         <comment>Bracket type for tuplets</comment>
         <translation>括弧の種類:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7166"/>
         <source>Distance after stem of last note:</source>
         <translation>最後の音符の符幹からの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7220"/>
         <source>Distance after head of last note:</source>
         <translation>最後の音符の符頭からの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7239"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation>「最後の音符の符頭からの距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7258"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation>「先頭の音符の符頭までの距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7277"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation>「先頭の音符の符幹までの距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7287"/>
         <source>Distance before stem of first note:</source>
         <translation>先頭の音符の符幹までの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7313"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7316"/>
         <source>Distance before head of first note:</source>
         <translation>先頭の音符の符頭までの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7335"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation>「最後の音符の符幹からの距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7391"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7394"/>
         <source>Hook length:</source>
         <translation>フックの長さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7452"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8645"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9009"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9207"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9662"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10244"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10377"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12506"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7455"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9012"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9665"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10247"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12515"/>
         <source>Line thickness:</source>
         <translation>線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7465"/>
         <source>Distance to note:</source>
         <translation>音符までの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7539"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7542"/>
         <source>Slurs &amp;&amp; ties</source>
         <translation>スラーとタイ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7644"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7846"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7647"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7849"/>
         <source>Dotted line thickness:</source>
         <translation>点線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7686"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7888"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8334"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11079"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11419"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12691"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7689"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8337"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11082"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11422"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12700"/>
         <source>Autoplace min. distance:</source>
         <translation>自動配置の最小距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7560"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7762"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7563"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7765"/>
         <source>Line thickness at end:</source>
         <translation>線終端の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7602"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7807"/>
         <source>Line thickness middle:</source>
         <translation>線中間の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7972"/>
         <source>Minimum tie length:</source>
         <translation>最小のタイの長さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7724"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8393"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11131"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11565"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12812"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7727"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11134"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11568"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12821"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation>「自動配置の最小距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7595"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7797"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
         <translation>「線終端の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7634"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7637"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7839"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
         <translation>「線中間の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7676"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7881"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
         <translation>「点線の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8007"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8168"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation>「最小のタイの長さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8638"/>
         <source>Height:</source>
         <translation>高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8749"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8752"/>
         <source>Continue height:</source>
         <translation>継続部の高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8771"/>
         <source>Reset &apos;Height&apos; value</source>
         <translation>「高さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8628"/>
         <source>Reset &apos;Continue height&apos; value</source>
         <translation>「継続部の高さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8587"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8590"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>自動配置での強弱記号との距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8550"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation>「自動配置での強弱記号との距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9718"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9950"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10086"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10552"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10700"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11514"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12774"/>
-        <source>Placement:</source>
-        <translation>配置:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9963"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10099"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10500"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11462"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12728"/>
-        <source>Reset &apos;Placement&apos; value</source>
-        <translation>「配置」の値をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8726"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8931"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9431"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9731"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12457"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8934"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12466"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation>「線の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8299"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8302"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8833"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9655"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9966"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10102"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10503"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10651"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11465"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11803"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12737"/>
         <source>Reset &apos;Position&apos; value</source>
         <translation>「位置」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8963"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9080"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9343"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9521"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9540"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9619"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9845"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8859"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8966"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9083"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9524"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9622"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9848"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9867"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation>「線の種類」の値をリセット</translation>
+        <translation>「線のスタイル」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9317"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation>「フックの高さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8892"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9138"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9777"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9141"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9780"/>
         <source>Dash size:</source>
         <translation>破線の大きさ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12056"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9721"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9953"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10089"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10555"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11252"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12059"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12783"/>
         <source>Position:</source>
         <translation>位置:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9197"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9629"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9632"/>
         <source>Line style:</source>
-        <translation>線の種類:</translation>
+        <translation>線のスタイル:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8999"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9002"/>
         <source>Hook height:</source>
         <translation>フックの高さ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9033"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9247"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9250"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9693"/>
         <source>Continuous</source>
         <translation>実線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9038"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9695"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9041"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9698"/>
         <source>Dashed</source>
         <translation>破線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9043"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9257"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9260"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9703"/>
         <source>Dotted</source>
         <translation>点線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9048"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9262"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9705"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9051"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9265"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9708"/>
         <source>Dash-dotted</source>
         <translation>破線 点線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9053"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9267"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9056"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9713"/>
         <source>Dash-dot-dotted</source>
         <translation>破線 点線 点線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9061"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9064"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9415"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9797"/>
         <source>Gap size:</source>
         <translation>間隔の大きさ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9275"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9278"/>
         <source>Hook height above:</source>
         <translation>上フックの高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9285"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9288"/>
         <source>Numbers only</source>
         <translation>数字のみ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9327"/>
         <source>Hook height below:</source>
         <translation>下フックの高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9375"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9378"/>
         <source>Reset &apos;Numbers only&apos; value</source>
         <translation>「数字のみ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10219"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10222"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10225"/>
         <source>Standard staff</source>
         <translation>標準譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10244"/>
         <source>Line thickness on standard staves:</source>
         <translation>標準譜表での線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10267"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
         <translation>「標準譜表での線の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10302"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation>「矢印の幅」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10286"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10289"/>
         <source>Arrow width:</source>
         <translation>矢印の幅:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10354"/>
         <source>Reset &apos;Arrow height&apos; value</source>
         <translation>「矢印の高さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10374"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10377"/>
         <source>Line thickness on tablature staves:</source>
         <translation>TAB譜表での線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10415"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
         <translation>「TAB譜表での線の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10757"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10760"/>
         <source>Articulations &amp;&amp; ornaments</source>
         <translation>アーティキュレーションと装飾記号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10763"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10766"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation>「アーティキュレーションの距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10773"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10806"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10838"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10776"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10809"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10841"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10786"/>
         <source>Distance from stem:</source>
         <translation>符幹からの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10796"/>
         <source>Articulation size:</source>
         <translation>アーティキュレーションの大きさ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10848"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10851"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation>「符幹の距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10855"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10858"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation>「符頭の距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10862"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10865"/>
         <source>Distance from staff:</source>
         <translation>譜表からの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10888"/>
         <source>Distance from notehead:</source>
         <translation>符頭からの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10898"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation>「アーティキュレーションの大きさ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10905"/>
         <source>Minimum vertical distance:</source>
         <translation>最小の縦距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10951"/>
         <source>Articulation alignment when positioned at the stem</source>
         <translation>符幹側に配置されるときのアーティキュレーションの整列</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10957"/>
         <source>Align with stem</source>
         <translation>符幹と揃える</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10961"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
         <source>Align with notehead</source>
         <translation>符頭と揃える</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10968"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10971"/>
         <source>Center between stem and notehead</source>
         <translation>符幹と符頭の間の中央</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10994"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10997"/>
         <source>Combined articulation</source>
         <translation>結合されたアーティキュレーション</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11003"/>
         <source>Always keep together</source>
         <translation>常に結合を保持</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11010"/>
         <source>Prefer closeness to notehead (combined articulations may become separated)</source>
         <translation>符頭への近さを優先する (結合されたアーティキュレーションが分離されることがあります)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12216"/>
         <source>Dash thickness:</source>
         <translation>破線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12264"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation>「最大の破線の間隔」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12399"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12408"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation>「常に破線を表示」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12313"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12319"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation>「最小の破線の長さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12306"/>
         <source>Max. dash length:</source>
         <translation>最大の破線の長さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12223"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12229"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation>「最大の破線の長さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation>「破線の太さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12268"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12274"/>
         <source>Min. dash length:</source>
         <translation>最小の破線の長さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11896"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11899"/>
         <source>Align verse number</source>
         <translation>歌詞番号を揃える</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11728"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation>「歌詞番号を揃える」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11741"/>
         <source>Reset &apos;Min. distance&apos; value</source>
         <translation>「最小距離」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12958"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12967"/>
         <source>Line height:</source>
         <translation>行の高さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12043"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation>「最小の下余白」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11839"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation>「行の高さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11790"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation>「最小の上余白」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14849"/>
         <source>Align:</source>
         <translation>整列:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8383"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
         <translation>「縦線を回避」の設定をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8370"/>
         <source>Reset &apos;Scale&apos; value</source>
         <translation>「大きさ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12655"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12664"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
         <translation>「強弱記号にスナップ」の設定をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12877"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14870"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14879"/>
         <source>Size:</source>
         <translation>大きさ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12893"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14683"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14692"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12909"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12918"/>
         <source>from top of staff</source>
         <translation>譜表の上部から</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12938"/>
         <source>of font height</source>
         <translation>文字高に対して</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8496"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12993"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8499"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13002"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14702"/>
         <source>Font:</source>
         <translation>フォント:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12177"/>
         <source>Reset &apos;Dash gap&apos; value</source>
         <translation>「破線間隔」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12323"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12329"/>
         <source>Vertical position (% of 
 text x-height):</source>
         <translation>縦位置
 (テキストのxの高さに対する割合):</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12353"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
         <translation>「縦位置 (テキストのxの高さに対する割合)」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12380"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
         <translation>「スペースが限られているとき破線を省略」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12415"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12424"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
         <translation>「段の始めでの破線の配置」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12430"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12439"/>
         <source>Extension line</source>
         <translation>延長線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12479"/>
         <source>Reset &apos;Min. line length&apos; value</source>
         <translation>「最小の線の長さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12499"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12508"/>
         <source>Min. line length:</source>
         <translation>最小の線の長さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12525"/>
         <source>Line gap:</source>
         <translation>線間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12548"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12557"/>
         <source>Reset &apos;Line gap&apos; value</source>
         <translation>「線間隔」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12574"/>
         <source>Omit extension line when space is limited</source>
         <translation>スペースが限られているとき延長線を省略</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12584"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
         <translation>「スペースが限られているとき延長線を省略」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6045"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13013"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13022"/>
         <source>Vertical position:</source>
         <translation>縦位置:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8043"/>
         <source>Minimum hanging tie length:</source>
-        <translation type="unfinished"/>
+        <translation>最小の吊り下げタイの長さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8078"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8081"/>
         <source>Reset &apos;Minimum hanging tie length&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>「最小の吊り下げタイの長さ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8127"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8130"/>
         <source>Minimum laissez vibrer length:</source>
-        <translation type="unfinished"/>
+        <translation>最小のレセヴィブレの長さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8190"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8193"/>
         <source>Use SMuFL symbols</source>
-        <translation type="unfinished"/>
+        <translation>SMuFL 記号を使用</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10166"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10172"/>
         <source>Glissandos</source>
         <translation>グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10177"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10183"/>
         <source>Note-anchored lines</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
-        <translation type="unfinished"/>
+        <translation>トリル小音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
         <source>Show only for intervals other than seconds</source>
-        <translation type="unfinished"/>
+        <translation>2度以外の音程にのみ表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11049"/>
         <source>Show for all intervals</source>
-        <translation type="unfinished"/>
+        <translation>すべての音程に表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12076"/>
-        <source>Reset avoid barlines</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13028"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13031"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13040"/>
         <source>Alignment</source>
         <translation>整列</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13046"/>
         <source>Top</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13044"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13053"/>
         <source>Bottom</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13072"/>
         <source>Modern</source>
         <translation>現代</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13070"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13079"/>
         <source>Historic</source>
         <translation>古典</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13136"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13145"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation>カポのフレット位置:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13180"/>
         <source>Appearance</source>
         <translation>見た目</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13229"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
         <translation>「エクステンションの縦オフセット」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13230"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13239"/>
         <source>Extension vertical offset:</source>
         <translation>エクステンションの縦オフセット:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13240"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13249"/>
         <source>Extension scaling:</source>
         <translation>エクステンション スケーリング:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13253"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13262"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
         <translation>「エクステンション スケーリング」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13263"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13272"/>
         <source>Modifier scaling:</source>
         <translation>モディファイア スケーリング:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13273"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13282"/>
         <source>Modifier vertical offset:</source>
         <translation>モディファイアの縦オフセット:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13286"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13295"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
         <translation>「モディファイア スケーリング」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13308"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
         <translation>「モディファイアの縦オフセット」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13330"/>
         <source>Lower case minor chords</source>
         <translation>小文字のマイナーコード</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13328"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13337"/>
         <source>Lower case bass notes</source>
         <translation>根音を小文字に</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13335"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13344"/>
         <source>All caps note names</source>
-        <translation>すべて大文字</translation>
+        <translation>すべて大文字の音名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13358"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13370"/>
         <source>Spelling</source>
         <translation>表記</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13392"/>
         <source>German</source>
         <translation>ドイツ語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13402"/>
         <source>Full German</source>
         <translation>すべてドイツ語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13403"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13412"/>
         <source>Solfeggio</source>
         <translation>ソルフェージュ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13413"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13422"/>
         <source>French</source>
         <translation>フランス語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13455"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13464"/>
         <source>Jazz</source>
         <translation>ジャズ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13471"/>
         <source>Custom</source>
         <translation>ユーザー定義</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13484"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
         <source>Load XML</source>
         <translation>XMLを読み込み</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13510"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13519"/>
         <source>Positioning</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13525"/>
         <source>Maximum shift below:</source>
         <translation>最大の下シフト:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13533"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13542"/>
         <source>Distance to fretboard diagram:</source>
         <translation>フレットボードダイアグラムまでの距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13552"/>
         <source>Maximum shift above:</source>
         <translation>最大の上シフト:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13584"/>
         <source>Minimum chord spacing:</source>
         <translation>最小のコード間隔:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13585"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13594"/>
         <source>Maximum barline distance:</source>
         <translation>最大の縦線の距離:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8474"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8477"/>
         <source>Scale:</source>
         <translation>大きさ:</translation>
     </message>
@@ -4725,37 +4699,37 @@ text x-height):</source>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6399"/>
         <source>Measure repeats</source>
         <translation>小節の繰り返し</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11220"/>
         <source>Staff text</source>
         <translation>譜表テキスト</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11413"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11416"/>
         <source>Tempo text</source>
         <translation>テンポテキスト</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12685"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12694"/>
         <source>Rehearsal marks</source>
         <translation>練習番号</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12878"/>
         <source>Figured bass</source>
         <translation>数字付き低音</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13100"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13109"/>
         <source>Chord symbols</source>
         <translation>コード記号</translation>
     </message>
@@ -4815,318 +4789,323 @@ text x-height):</source>
         <translation>長休符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6107"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6113"/>
         <source>Old-style multimeasure rests</source>
         <translation>旧式の長休符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6659"/>
         <source>Vertical distance from notes</source>
         <translation>音符からの縦方向の距離</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7141"/>
         <source>Horizontal distance from notes</source>
         <translation>音符からの横方向の距離</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11645"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11648"/>
         <source>Lyrics text</source>
         <translation>歌詞のテキスト</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13309"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13312"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13321"/>
         <source>Automatic capitalization</source>
         <translation>自動大文字化</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10277"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13855"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10283"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13864"/>
         <source>Tablature</source>
         <translation>TAB譜</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14297"/>
         <source>Staccato</source>
         <translation>スタッカート</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13983"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13992"/>
         <source>Accent and marcato marks</source>
         <translation>アクセントとマルカートの記号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14120"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14129"/>
         <source>Harmonic marks</source>
         <translation>ハーモニクス記号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14092"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14101"/>
         <source>Turns</source>
         <translation>ターン</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14075"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14084"/>
         <source>Palm mute (P.M.)</source>
         <translation>パームミュート (P.M.)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14237"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14246"/>
         <source>Let ring</source>
         <translation>レットリング</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7548"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14046"/>
         <source>Slurs</source>
         <translation>スラー</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14196"/>
         <source>Wah open/close</source>
         <translation>ワウ 開く/閉じる</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14189"/>
         <source>Crescendo and diminuendo lines</source>
         <translation>クレッシェンドとディミヌエンド線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14039"/>
         <source>Simple</source>
         <translation>シンプル</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14160"/>
         <source>Common</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14063"/>
         <source>Golpe</source>
         <translation>ゴルペ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14032"/>
         <source>Mordents</source>
         <translation>モルデント</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13999"/>
         <source>Rasgueado</source>
         <translation>ラスゲアード</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14379"/>
         <source>Parentheses indicating ties</source>
         <translation>タイをを示す括弧</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14392"/>
         <source>Always show at the start of a measure</source>
         <translation>常に小節の始めに表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14397"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14406"/>
         <source>Always show parenthesized fret marks when articulation markings are present</source>
         <translation>アーティキュレーション記号が存在するときには常に括弧付きのフレと記号を表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14896"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14905"/>
         <source>Line spacing:</source>
         <translation>行間:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14928"/>
         <source>Use musical symbols font for tuplet numbers</source>
         <translation>連符の数字に音楽記号フォントを使用</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14938"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
         <translation>「連符の数字に音楽記号フォントを使用」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14950"/>
         <source>Musical symbols scale:</source>
         <translation>音楽記号の大きさ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14979"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
         <translation>「音楽記号の大きさ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15048"/>
         <source>Reset all styles to default</source>
         <translation>すべてのスタイルをデフォルトにリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14449"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Frame:</source>
         <translation>フレーム:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12082"/>
+        <source>Reset &apos;Avoid barlines&apos;</source>
+        <translation>「縦線を回避」をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13379"/>
         <source>Standard</source>
         <comment>chord symbol spelling</comment>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13454"/>
         <source>Standard</source>
         <comment>chord symbol style</comment>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14340"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14349"/>
         <source>Tied fret marks</source>
         <translation>タイで結ばれたフレット記号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14355"/>
         <source>Show ties and repeat fret marks</source>
         <translation>タイと繰り返しのフレット記号を表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14353"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14362"/>
         <source>Show ties only</source>
         <translation>タイのみを表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14360"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14369"/>
         <source>Show initial fret mark only</source>
         <translation>最初のフレット記号のみを表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14376"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14385"/>
         <source>Only show at the start of a system</source>
         <translation>段の始めのみに表示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14399"/>
         <source>Never show</source>
         <translation>表示しない</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14479"/>
         <source>Circle</source>
         <translation>円形</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14481"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14490"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation>「フレーム」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14509"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14518"/>
         <source>Thickness:</source>
         <translation>太さ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14541"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation>「背景」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14545"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14587"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation>「枠線」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14574"/>
         <source>Corner radius:</source>
         <translation>角の丸み:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14627"/>
         <source>Border:</source>
         <translation>枠線:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14628"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14637"/>
         <source>Highlight:</source>
         <translation>背景:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14650"/>
         <source>Reset &apos;Corner radius&apos; value</source>
         <translation>「角の半径」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14670"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14679"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation>「フォントスタイル」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14706"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14715"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation>「揃え」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14728"/>
         <source>Reset &apos;Color&apos; value</source>
         <translation>「色」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14738"/>
         <source>Color:</source>
         <translation>色:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14745"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14909"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14918"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation>「フォントサイズ」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14758"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14767"/>
         <source>Style:</source>
         <translation>スタイル:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14774"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14783"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
         <translation>「譜表の大きさに従う」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14784"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14793"/>
         <source>Offset:</source>
         <translation>オフセット:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14803"/>
         <source>Follow staff size</source>
         <translation>譜表の大きさに従う</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14813"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation>「名前」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14817"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14826"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation>「フォントフェイス」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14839"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation>「オフセット」の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14859"/>
         <source>Name:</source>
         <translation>名前:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14883"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14892"/>
         <source>li</source>
         <translation>行</translation>
     </message>
@@ -5138,7 +5117,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="851"/>
         <source>Show number ‘1’</source>
-        <translation type="unfinished"/>
+        <translation>数字「1」を表示</translation>
     </message>
 </context>
 <context>
@@ -5305,12 +5284,6 @@ text x-height):</source>
         <translation>表記:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.ui" line="118"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.ui" line="154"/>
-        <source>/</source>
-        <translation>/</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="134"/>
         <source>Actual:</source>
         <translation>実際:</translation>
@@ -5418,12 +5391,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="471"/>
         <source>Apply and go to previous measure</source>
-        <translation type="unfinished"/>
+        <translation>適用して前の小節に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="487"/>
         <source>Apply and go to next measure</source>
-        <translation type="unfinished"/>
+        <translation>適用して次の小節に移動</translation>
     </message>
 </context>
 <context>
@@ -5788,7 +5761,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="82"/>
         <source>Same note name:</source>
-        <translation>同じ音:</translation>
+        <translation>同じ音名:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="145"/>
@@ -5872,11 +5845,6 @@ text x-height):</source>
         <source>Select swing ratio:</source>
         <translation>スウィング比率:</translation>
     </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="125"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
 </context>
 <context>
     <name>SymbolDialogBase</name>
@@ -5917,12 +5885,6 @@ text x-height):</source>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
         <source>Value:</source>
         <translation>値:</translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="98"/>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="200"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="112"/>
@@ -6009,11 +5971,6 @@ text x-height):</source>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="75"/>
         <source>Text:</source>
         <translation>テキスト:</translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="101"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
 </context>
 <context>
@@ -6374,11 +6331,6 @@ text x-height):</source>
         <translation>比:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="71"/>
-        <source>/</source>
-        <translation>/</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="131"/>
         <source>Format</source>
         <translation>表示形式</translation>
@@ -6671,7 +6623,7 @@ text x-height):</source>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="234"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="77"/>
         <source>Undo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>「%1」を元に戻す</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="239"/>
@@ -6685,7 +6637,7 @@ text x-height):</source>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="240"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="85"/>
         <source>Redo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>「%1」をやり直す</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2052"/>
@@ -6958,12 +6910,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation type="unfinished"/>
+        <translation>段ごとの小節…(&amp;Y)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Measures per system…</source>
-        <translation type="unfinished"/>
+        <translation>段ごとの小節…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
@@ -7120,7 +7072,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="69"/>
         <source>Insert %1</source>
-        <translation>%1 を挿入</translation>
+        <translation>%1を挿入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1447"/>
@@ -7313,7 +7265,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="60"/>
         <source>Customize kit…</source>
-        <translation type="unfinished"/>
+        <translation>キットをカスタマイズ…</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="65"/>
@@ -7718,19 +7670,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="637"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="638"/>
         <source>Add/remove system lock</source>
-        <translation type="unfinished"/>
+        <translation>段ロックを追加/削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>小節を前の段に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="651"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>小節を次の段に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
@@ -7936,12 +7888,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1243"/>
         <source>&amp;Note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
         <source>Add note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1255"/>
@@ -7996,7 +7948,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1225"/>
         <source>&amp;Dynamic</source>
-        <translation type="unfinished"/>
+        <translation>強弱記号</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
@@ -8026,7 +7978,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1338"/>
         <source>C&amp;hord symbol</source>
-        <translation type="unfinished"/>
+        <translation>コード記号(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1339"/>
@@ -8375,7 +8327,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1770"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
         <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <translation>歌詞の行を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
@@ -8643,12 +8595,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
         <source>Add laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレを追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
@@ -8737,7 +8689,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2600"/>
         <source>Show element masks</source>
-        <translation type="unfinished"/>
+        <translation>要素マスクを表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2606"/>
@@ -8864,22 +8816,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2066"/>
         <source>Input by note name</source>
-        <translation type="unfinished"/>
+        <translation>音名で入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
         <source>Toggle note input mode: input by note name</source>
-        <translation type="unfinished"/>
+        <translation>音符入力モードを切り替え: 音名で入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2073"/>
         <source>Input by duration</source>
-        <translation type="unfinished"/>
+        <translation>長さで入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
         <source>Toggle note input mode: input by duration</source>
-        <translation type="unfinished"/>
+        <translation>音符入力モードを切り替え: 長さで入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
@@ -9114,12 +9066,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
         <source>&amp;History</source>
-        <translation type="unfinished"/>
+        <translation>履歴(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
         <source>Show/hide undo history</source>
-        <translation type="unfinished"/>
+        <translation>操作履歴を表示/非表示</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="160"/>
@@ -9214,7 +9166,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>Show/hide layout panel</source>
-        <translation type="unfinished"/>
+        <translation>レイアウトパネルを表示/非表示</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="193"/>
@@ -9271,22 +9223,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="96"/>
         <source>Written pitch</source>
-        <translation type="unfinished"/>
+        <translation>記譜音</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="97"/>
         <source>Input written pitch</source>
-        <translation type="unfinished"/>
+        <translation>記譜音を入力</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="104"/>
         <source>Sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>実音</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="105"/>
         <source>Input sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>実音を入力</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="123"/>
@@ -9297,12 +9249,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="131"/>
         <source>Hear playback when editing</source>
-        <translation type="unfinished"/>
+        <translation>編集時に再生を聞く</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="132"/>
         <source>Toggle hear playback when editing</source>
-        <translation type="unfinished"/>
+        <translation>編集時に再生を聞くを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="139"/>
@@ -9473,7 +9425,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1842"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1843"/>
         <source>Mirror notehead</source>
-        <translation>符頭の反転</translation>
+        <translation>符頭を反転</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="283"/>
@@ -9574,12 +9526,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>リズムのスラッシュ表記を切り替え(&amp;A)</translation>
+        <translation>リズムのスラッシュ記譜を切り替え(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation>リズミックスラッシュ表記を切り替え</translation>
+        <translation>リズムのスラッシュ記譜を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
@@ -9635,7 +9587,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="658"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>選択範囲から段を作成</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
@@ -9780,7 +9732,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
         <source>Add dynamic</source>
-        <translation type="unfinished"/>
+        <translation>強弱記号を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1231"/>
@@ -9966,19 +9918,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1615"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
         <source>Lock/unlock all systems</source>
-        <translation type="unfinished"/>
+        <translation>すべての段をロック/アンロック</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1621"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1622"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>選択した段をロック/アンロック</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1650"/>
         <source>Flip horizontally</source>
-        <translation type="unfinished"/>
+        <translation>水平に反転</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1662"/>
@@ -10357,7 +10309,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="42"/>
         <source>Show &amp;scripts…</source>
-        <translation>スクリプトを表示</translation>
+        <translation>スクリプトを表示…(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="38"/>
@@ -10384,12 +10336,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="42"/>
         <source>Configure workspace</source>
-        <translation>ワークスペースを設定</translation>
+        <translation>ワークスペースを構成</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="43"/>
         <source>Configure workspace…</source>
-        <translation>ワークスペースを設定…</translation>
+        <translation>ワークスペースを構成…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
@@ -10409,7 +10361,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation>グラフィックカードの詳細を見る</translation>
+        <translation>グラフィックの情報を表示…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
@@ -10434,22 +10386,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="77"/>
         <source>Show &amp;actions list</source>
-        <translation type="unfinished"/>
+        <translation>操作リストを表示(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="82"/>
         <source>Test query action</source>
-        <translation type="unfinished"/>
+        <translation>テストクエリ操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="87"/>
         <source>Test query action with params 1</source>
-        <translation type="unfinished"/>
+        <translation>パラメータ付きテストクエリ操作1</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="92"/>
         <source>Test query action with params 2</source>
-        <translation type="unfinished"/>
+        <translation>パラメータ付きテストクエリ操作2</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
@@ -10469,7 +10421,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
         <source>Show API dump</source>
-        <translation type="unfinished"/>
+        <translation>API ダンプを表示</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
@@ -10484,12 +10436,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
         <source>Use old view</source>
-        <translation type="unfinished"/>
+        <translation>古いビューを使用</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="44"/>
         <source>Use new view</source>
-        <translation type="unfinished"/>
+        <translation>新しいビューを使用</translation>
     </message>
 </context>
 <context>
@@ -10515,7 +10467,7 @@ text x-height):</source>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="90"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="86"/>
         <source>Muse Sounds</source>
-        <translation type="unfinished"/>
+        <translation>Muse Sounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="91"/>
@@ -10553,7 +10505,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="164"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>拡張機能ツールバー</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="220"/>
@@ -10745,14 +10697,16 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation type="unfinished"/>
+        <translation>本当に環境設定をリセットしますか？</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>この操作により、すべてのアプリの環境設定がリセットされ、カスタムショートカットがすべて削除されます。この操作では、スコアは削除されません。
+
+この操作は元に戻せません。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
@@ -10786,7 +10740,7 @@ This action cannot be undone.</source>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="118"/>
         <source>Get &lt;a href=&quot;%1&quot;&gt;help&lt;/a&gt; with the program or &lt;a href=&quot;%2&quot;&gt;contribute&lt;/a&gt; to its development.</source>
-        <translation>プログラムの&lt;a href=&quot;%1&quot;&gt;ヘルプ&lt;/a&gt;を得る、または開発に&lt;a href=&quot;%2&quot;&gt;貢献&lt;/a&gt;する。</translation>
+        <translation>プログラムの&lt;a href=&quot;%1&quot;&gt;ヘルプ&lt;/a&gt;を取得、または開発に&lt;a href=&quot;%2&quot;&gt;貢献&lt;/a&gt;する。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="131"/>
@@ -10797,7 +10751,8 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
         <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 1999-2025 MuseScore Limited.
+&lt;a href=&quot;%1&quot;&gt;GNU一般公衆ライセンスバージョン3&lt;/a&gt; の下で公開。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -10863,7 +10818,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Discover new sound libraries in MuseHub and enjoy realistic score playback</source>
-        <translation type="unfinished"/>
+        <translation>MuseHub で新しい音ライブラリを発見し、リアルなスコア再生を楽しみましょう</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -10986,7 +10941,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="483"/>
         <source>A&amp;ctions</source>
-        <translation type="unfinished"/>
+        <translation>操作(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="484"/>
@@ -11001,7 +10956,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="486"/>
         <source>E&amp;xtensions</source>
-        <translation type="unfinished"/>
+        <translation>拡張機能(&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="487"/>
@@ -11011,12 +10966,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
         <source>&amp;VST</source>
-        <translation type="unfinished"/>
+        <translation>VST(&amp;V)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="492"/>
         <source>&amp;Diagnostics</source>
-        <translation type="unfinished"/>
+        <translation>診断(&amp;D)</translation>
     </message>
 </context>
 <context>
@@ -11345,17 +11300,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="44"/>
         <source>Note preview</source>
-        <translation type="unfinished"/>
+        <translation>音符のプレビュー</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="70"/>
         <source>Hear playback when adding, editing, and selecting notes</source>
-        <translation type="unfinished"/>
+        <translation>音符の追加、編集、選択時に再生を聞く</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="77"/>
         <source>Playback duration:</source>
-        <translation type="unfinished"/>
+        <translation>再生の長さ:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="100"/>
@@ -11365,12 +11320,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="117"/>
         <source>Play chord symbols and Nashville numbers</source>
-        <translation type="unfinished"/>
+        <translation>コード記号とナッシュビルナンバーを再生</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="134"/>
         <source>Play when setting pitch (input by duration mode only)</source>
-        <translation type="unfinished"/>
+        <translation>音高を設定したときに再生 (長さで入力モードのみ)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
@@ -11381,27 +11336,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="48"/>
         <source>Default input mode:</source>
-        <translation type="unfinished"/>
+        <translation>デフォルトの入力モード:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="62"/>
         <source>Apply accidentals, augmentation dots, and articulations:</source>
-        <translation type="unfinished"/>
+        <translation>臨時記号、付点、アーティキュレーションを適用:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
         <source>To next note entered</source>
-        <translation type="unfinished"/>
+        <translation>次に入力される音符に</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="70"/>
         <source>To previous note entered</source>
-        <translation type="unfinished"/>
+        <translation>前に入力された音符に</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="81"/>
         <source>Input by duration mode cursor:</source>
-        <translation type="unfinished"/>
+        <translation>長さで入力モードのカーソル:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="88"/>
@@ -11411,12 +11366,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="89"/>
         <source>On staff</source>
-        <translation type="unfinished"/>
+        <translation>譜表内</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="37"/>
         <source>Note colors</source>
-        <translation type="unfinished"/>
+        <translation>音符の色</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="43"/>
@@ -11552,7 +11507,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="167"/>
         <source>Images</source>
-        <translation>イメージ</translation>
+        <translation>画像</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="168"/>
@@ -11893,7 +11848,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
         <source>MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>MIDI デバイス</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="69"/>
@@ -11903,27 +11858,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="78"/>
         <source>When pressing a key, begin note input at the selected measure, note, or rest</source>
-        <translation type="unfinished"/>
+        <translation>キーを押したとき、選択した小節、音符、休符から音符の入力を開始</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="93"/>
         <source>Real-time input modes</source>
-        <translation type="unfinished"/>
+        <translation>リアルタイム入力モード</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="106"/>
         <source>Advance to next note on key release</source>
-        <translation type="unfinished"/>
+        <translation>鍵盤を離したら次の音符に進む</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="123"/>
         <source>Delay between notes:</source>
-        <translation type="unfinished"/>
+        <translation>音符間の遅延:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="139"/>
         <source>Legacy panel</source>
-        <translation type="unfinished"/>
+        <translation>従来のパネル</translation>
     </message>
 </context>
 <context>
@@ -13049,7 +13004,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="261"/>
         <source>Image</source>
-        <translation>イメージ</translation>
+        <translation>画像</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="262"/>
@@ -13395,7 +13350,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="178"/>
         <source>Laissez vibrer segment</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレセグメント</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
@@ -13405,43 +13360,43 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>Note-anchored line segment</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線セグメント</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
         <source>Partial tie segment</source>
-        <translation type="unfinished"/>
+        <translation>部分的なタイセグメント</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Partial tie</source>
-        <translation type="unfinished"/>
+        <translation>部分的なタイ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>Partial extension line segment</source>
-        <translation type="unfinished"/>
+        <translation>部分的な延長線セグメント</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
         <source>System lock</source>
-        <translation type="unfinished"/>
+        <translation>段ロック</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
         <source>Parenthesis</source>
-        <translation>丸括弧</translation>
+        <translation>括弧</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1274"/>
         <source>Note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
@@ -13451,12 +13406,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
         <source>Partial extension line</source>
-        <translation type="unfinished"/>
+        <translation>部分的な延長線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="316"/>
         <source>Time tick anchor</source>
-        <translation>時間刻みアンカー</translation>
+        <translation>時間刻み固定点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="322"/>
@@ -13471,7 +13426,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="324"/>
         <source>Jumps</source>
-        <translation type="unfinished"/>
+        <translation>ジャンプ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="325"/>
@@ -13788,22 +13743,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2413"/>
         <source>Slide out down (rough)</source>
-        <translation>下へスライドアウト(ラフ)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2414"/>
         <source>Slide out up (rough)</source>
-        <translation>上へスライドアウト(ラフ)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2415"/>
         <source>Slide in above (rough)</source>
-        <translation>上にあるスライド(ラフ)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2416"/>
         <source>Slide in below (rough)</source>
-        <translation>下にあるスライド(ラフ)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2533"/>
@@ -14158,7 +14113,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="134"/>
         <source>Score grey color</source>
-        <translation type="unfinished"/>
+        <translation>スコアのグレー色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="138"/>
@@ -14168,7 +14123,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="145"/>
         <source>Invisible color</source>
-        <translation type="unfinished"/>
+        <translation>不可視の色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="152"/>
@@ -14178,7 +14133,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="159"/>
         <source>Do not save EIDs</source>
-        <translation type="unfinished"/>
+        <translation>EID を保存しない</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -14248,14 +14203,14 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="73"/>
         <source>Tie to %1 (m. %2)</source>
         <extracomment>%1 represents the preceding jump item eg. coda. %2 represents the measure number</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1にタイ (%2小節)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="84"/>
         <source>start of score</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>スコアの最初</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="100"/>
@@ -14276,7 +14231,7 @@ Fret %1 on strings %2</source>
         <source>“%1” volta</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;. %1 in this string represents the volta's text set by the user</extracomment>
-        <translation type="unfinished"/>
+        <translation>「%1」番括弧</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="123"/>
@@ -14284,14 +14239,14 @@ Fret %1 on strings %2</source>
         <source>start repeat</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>反復開始</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="142"/>
         <source>next note</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>次の音符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="146"/>
@@ -14303,27 +14258,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="209"/>
         <source>Toggle partial tie</source>
-        <translation type="unfinished"/>
+        <translation>部分的なタイを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="469"/>
         <source>Replace full tie with partial tie</source>
-        <translation type="unfinished"/>
+        <translation>完全なタイを部分的なタイで置換</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="470"/>
         <source>Replace partial tie with full tie</source>
-        <translation type="unfinished"/>
+        <translation>部分的なタイを完全なタイで置換</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="184"/>
         <source>Remove partial tie</source>
-        <translation type="unfinished"/>
+        <translation>部分的なタイを削除</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/systemlock.cpp" line="169"/>
         <source>Start measure: %1; End measure: %2</source>
-        <translation type="unfinished"/>
+        <translation>開始小節: %1; 終了小節: %2</translation>
     </message>
 </context>
 <context>
@@ -17273,17 +17228,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3533"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation>臨時記号の再構成</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3534"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation>臨時記号による統合の再構成</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3535"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation>臨時記号によるチルダの再構成</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3541"/>
@@ -18838,7 +18793,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="103"/>
         <source>Manually</source>
-        <translation>手動</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -19445,12 +19400,6 @@ Fret %1 on strings %2</source>
         <translation>行</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="58"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="63"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="106"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
@@ -19496,11 +19445,6 @@ Fret %1 on strings %2</source>
         <translation>今後確認しない</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
-        <source>°</source>
-        <translation>°</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/Playlist.qml" line="142"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="172"/>
@@ -19516,7 +19460,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation type="unfinished"/>
+        <translation>この設定は環境設定でいつでも変更できます</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -20000,7 +19944,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="82"/>
         <source>Configure grid</source>
-        <translation>グリッドを設定</translation>
+        <translation>グリッドを構成</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="64"/>
@@ -20241,17 +20185,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="94"/>
         <source>Move to system</source>
-        <translation type="unfinished"/>
+        <translation>段に移動</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="115"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="117"/>
         <source>Move measure(s) to previous system</source>
-        <translation type="unfinished"/>
+        <translation>小節を前の段に移動</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="134"/>
@@ -20261,48 +20205,48 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="136"/>
         <source>Move measure(s) to next system</source>
-        <translation type="unfinished"/>
+        <translation>小節を次の段に移動</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="159"/>
         <source>Unlock selected systems</source>
-        <translation type="unfinished"/>
+        <translation>選択した段をアンロック</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="160"/>
         <source>Unlock selected system</source>
-        <translation type="unfinished"/>
+        <translation>選択した段をアンロック</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="161"/>
         <source>Lock selected systems</source>
-        <translation type="unfinished"/>
+        <translation>選択した段をロック</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="162"/>
         <source>Lock selected system</source>
-        <translation type="unfinished"/>
+        <translation>選択した段をロック</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="164"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>選択した段をロック/アンロック</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation type="unfinished"/>
+        <translation>選択した段の小節をまとめ、次の段に移動しないようにする</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="186"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="188"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>選択範囲から段を作成</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="189"/>
         <source>Create a system containing only the selected measure(s)</source>
-        <translation type="unfinished"/>
+        <translation>選択した小節のみを含む段を作成</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
@@ -20619,7 +20563,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation>慣例の音部記号を表示</translation>
+        <translation>予告の音部記号を表示</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20689,7 +20633,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="162"/>
         <source>Finger for string %1</source>
-        <translation>運指 %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="200"/>
@@ -20862,7 +20806,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation type="unfinished"/>
+        <translation>予告の調号を表示</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -20973,7 +20917,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="47"/>
         <source>Line style</source>
-        <translation>線の種類</translation>
+        <translation>線のスタイル</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="83"/>
@@ -21123,7 +21067,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
         <source>Number offset</source>
-        <translation type="unfinished"/>
+        <translation>数字のオフセット</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
@@ -21347,7 +21291,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
         <source>Hide courtesy clefs and signatures</source>
-        <translation type="unfinished"/>
+        <translation>予告の音部記号と調号を非表示</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -21481,7 +21425,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation type="unfinished"/>
+        <translation>予告の拍子記号を表示</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -21607,7 +21551,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="82"/>
         <source>Rotation</source>
-        <translation>回転</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="96"/>
@@ -21900,7 +21844,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/images/imagesettingsmodel.cpp" line="35"/>
         <source>Image</source>
-        <translation>イメージ</translation>
+        <translation>画像</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/instrumentname/instrumentnamesettingsmodel.cpp" line="33"/>
@@ -22029,12 +21973,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="53"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレ</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="59"/>
         <source>Tie (partial)</source>
-        <translation type="unfinished"/>
+        <translation>タイ (部分的)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="110"/>
@@ -22334,7 +22278,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
         <source>Cue note visibility</source>
-        <translation type="unfinished"/>
+        <translation>小音符の可視性</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="219"/>
@@ -22374,7 +22318,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
         <source>Laissez vibrer placement</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレの配置</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="98"/>
@@ -22393,7 +22337,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="106"/>
         <source>Minimum length</source>
-        <translation>最短</translation>
+        <translation>最小の長さ</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
@@ -22518,7 +22462,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/notelinesettingsmodel.cpp" line="31"/>
         <source>Note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/measures/measuressettingsmodel.cpp" line="37"/>
@@ -22528,7 +22472,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml" line="44"/>
         <source>Score style preset</source>
-        <translation type="unfinished"/>
+        <translation>スコアのスタイルのプリセット</translation>
     </message>
 </context>
 <context>
@@ -22646,7 +22590,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="136"/>
         <source>traits</source>
-        <translation>特徴</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="191"/>
@@ -22727,17 +22671,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="94"/>
         <source>Move selected system markings up</source>
-        <translation type="unfinished"/>
+        <translation>選択した段指示を上に移動</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="119"/>
         <source>Move selected system markings down</source>
-        <translation type="unfinished"/>
+        <translation>選択した段指示を下に移動</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="144"/>
         <source>Remove selected system markings</source>
-        <translation type="unfinished"/>
+        <translation>選択した段指示を削除</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="117"/>
@@ -22768,17 +22712,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="40"/>
         <source>Add instruments or system markings</source>
-        <translation type="unfinished"/>
+        <translation>楽器または段指示を追加</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="49"/>
         <source>System markings (tempo, rehearsal marks, etc.)</source>
-        <translation type="unfinished"/>
+        <translation>段指示 (テンポ、リハーサルマークなど)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="47"/>
         <source>New instrument</source>
-        <translation type="unfinished"/>
+        <translation>新しい楽器</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="313"/>
@@ -22818,7 +22762,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml" line="57"/>
         <source>Display at this position on the score</source>
-        <translation type="unfinished"/>
+        <translation>スコアのこの位置に表示</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
@@ -22883,12 +22827,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="38"/>
         <source>System markings</source>
-        <translation type="unfinished"/>
+        <translation>段指示</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
         <source>System markings hidden</source>
-        <translation type="unfinished"/>
+        <translation>段指示は非表示</translation>
     </message>
 </context>
 <context>
@@ -22950,7 +22894,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation type="unfinished"/>
+        <translation>世界で最も人気のある楽譜作成ソフト MuseScore を学ぶための最も包括的なリソース、 Mastering MuseScore へようこそ！私はマーク・サバテッラです。10年以上前の MuseScore のリリース以来、開発、サポート、プロモーションに携わってきました。
+
+楽譜作成ソフトを使い始めたばかりの方も、高度な浄書や再生テクニックを探求したいパワーユーザーの方も、私の代表的なオンラインコース Mastering MuseScore では MuseScore を最大限に活用するために必要な知識をすべて網羅しています。
+
+さらに、 Mastering MuseScore には、ミュージシャンによるサポートコミュニティ、ディスカッションスペース、ライブストリーム、その他の関連コースやサービスがあり、あなたの最高の音楽制作をサポートします。この機会に、最も有名な専門家のうちの 1 人から MuseScore を学びましょう！
+
+(注: Mastering MuseScore は英語でのみ受講可能です)</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="97"/>
@@ -22994,12 +22944,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/internal/SoundLibraryItem.qml" line="120"/>
         <source>Get it now</source>
-        <translation type="unfinished"/>
+        <translation>今すぐ取得</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="167"/>
         <source>Sorry, we are unable to load these sounds right now</source>
-        <translation type="unfinished"/>
+        <translation>申し訳ございませんが、現在これらのサウンドを読み込めません</translation>
     </message>
 </context>
 <context>
@@ -23071,7 +23021,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="49"/>
         <source>Customization actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Customize toolbar&quot; popup</extracomment>
-        <translation>カスタマイズアクション</translation>
+        <translation>カスタマイズ操作</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="61"/>
@@ -23141,7 +23091,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="48"/>
         <source>Line type:</source>
-        <translation type="unfinished"/>
+        <translation>線の種類:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="51"/>
@@ -23157,12 +23107,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="71"/>
         <source>Show text:</source>
-        <translation type="unfinished"/>
+        <translation>テキストを表示:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="83"/>
         <source>Edit glissando text style</source>
-        <translation type="unfinished"/>
+        <translation>グリッサンドのテキストスタイルを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="100"/>
@@ -23204,7 +23154,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="42"/>
         <source>Parts actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Parts&quot; dialog</extracomment>
-        <translation>パートアクション</translation>
+        <translation>パート操作</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="55"/>
@@ -23230,7 +23180,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
         <source>Close search</source>
-        <translation type="unfinished"/>
+        <translation>検索を閉じる</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
@@ -23316,7 +23266,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/braille/internal/notationbraille.cpp" line="886"/>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="731"/>
         <source>Normal mode</source>
-        <translation>通常モード</translation>
+        <translation>標準モード</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="961"/>
@@ -23437,12 +23387,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="130"/>
         <source>Move measures</source>
-        <translation type="unfinished"/>
+        <translation>小節を移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="132"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>選択範囲から段を作成</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="208"/>
@@ -23472,12 +23422,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="257"/>
         <source>To previous system</source>
-        <translation type="unfinished"/>
+        <translation>前の段に</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="258"/>
         <source>To next system</source>
-        <translation type="unfinished"/>
+        <translation>次の段に</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -23716,7 +23666,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="47"/>
         <source>Line style:</source>
-        <translation>線の種類:</translation>
+        <translation>線のスタイル:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="50"/>
@@ -23737,12 +23687,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="64"/>
         <source>Dash (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>ダッシュ (破線):</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="70"/>
         <source>Gap (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>間隔 (破線):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="81"/>
@@ -23869,7 +23819,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="80"/>
         <source>Nut line thickness:</source>
-        <translation>線の太さ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="88"/>
@@ -23975,12 +23925,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="222"/>
         <source>Trimmed</source>
-        <translation>短縮済み</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="223"/>
         <source>Extended</source>
-        <translation>拡張済み</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="229"/>
@@ -24498,7 +24448,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="181"/>
         <source>Note input preview note color</source>
-        <translation type="unfinished"/>
+        <translation>音符入力のプレビューの音符の色</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="249"/>
@@ -24553,7 +24503,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="92"/>
         <source>Placement of inner ties with respect to augmentation dots:</source>
-        <translation type="unfinished"/>
+        <translation>付点に対する内側のタイの配置:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="101"/>
@@ -24563,12 +24513,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
         <source>Always before dots</source>
-        <translation type="unfinished"/>
+        <translation>常に付点の前</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="117"/>
         <source>Always after dots</source>
-        <translation type="unfinished"/>
+        <translation>常に付点の後</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
@@ -24593,42 +24543,42 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
         <source>Input pitch</source>
-        <translation type="unfinished"/>
+        <translation>音高を入力</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>拡張機能ツールバー</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="375"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>履歴</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="619"/>
         <source>Note input modes</source>
-        <translation type="unfinished"/>
+        <translation>音符入力モード</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="620"/>
         <source>Discover different ways to input notes in MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio で音符を入力するさまざまな方法をご覧ください。</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml" line="56"/>
         <source>Edit note-anchored line text style</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線のテキストスタイルを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="57"/>
         <source>Dynamics Popup</source>
-        <translation type="unfinished"/>
+        <translation>強弱記号ポップアップ</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="735"/>
         <source>Small parentheses</source>
-        <translation type="unfinished"/>
+        <translation>小括弧</translation>
     </message>
 </context>
 <context>
@@ -25022,7 +24972,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="81"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="455"/>
         <source>Visibility:</source>
-        <translation type="unfinished"/>
+        <translation>可視性:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="88"/>
@@ -25037,7 +24987,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="101"/>
         <source>Hide tab clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>初めて現れる段の後でTAB記号を非表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
@@ -25072,17 +25022,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="159"/>
         <source>On all staves</source>
-        <translation type="unfinished"/>
+        <translation>すべての譜表に</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="160"/>
         <source>Above staves</source>
-        <translation type="unfinished"/>
+        <translation>譜表の上に</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="161"/>
         <source>Across staves</source>
-        <translation type="unfinished"/>
+        <translation>譜表をまたいで</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
@@ -25092,12 +25042,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="189"/>
         <source>Style and size</source>
-        <translation type="unfinished"/>
+        <translation>スタイルと大きさ</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="203"/>
         <source>Numeral style:</source>
-        <translation type="unfinished"/>
+        <translation>数字のスタイル</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="249"/>
@@ -25173,72 +25123,72 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="484"/>
         <source>Clefs, key &amp; time signatures at repeats and jumps</source>
-        <translation type="unfinished"/>
+        <translation>繰り返しとジャンプの音部記号、調号と拍子記号</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="528"/>
         <source>Use parentheses</source>
-        <translation type="unfinished"/>
+        <translation>括弧を使用</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="568"/>
         <source>Place all changes before the barline</source>
-        <translation type="unfinished"/>
+        <translation>すべての変更を縦線の前に配置</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="572"/>
         <source>At repeats</source>
-        <translation type="unfinished"/>
+        <translation>繰り返しで</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="578"/>
         <source>At all other jumps</source>
-        <translation type="unfinished"/>
+        <translation>他のすべてのジャンプで</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="586"/>
         <source>Changes that apply only after repeats and jumps</source>
-        <translation type="unfinished"/>
+        <translation>繰り返しとジャンプの後にのみ適用する変更</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="596"/>
         <source>Place clefs before repeats</source>
-        <translation type="unfinished"/>
+        <translation>繰り返しの前に音部記号を配置</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="605"/>
         <source>Place clefs after repeats</source>
-        <translation type="unfinished"/>
+        <translation>繰り返しの後に音部記号を配置</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="641"/>
         <source>Allow changes between end-start repeats</source>
-        <translation type="unfinished"/>
+        <translation>繰り返しの終了と開始の間の変更を許可</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="681"/>
         <source>Courtesies</source>
-        <translation type="unfinished"/>
+        <translation>予告</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="696"/>
         <source>Show at repeats</source>
-        <translation type="unfinished"/>
+        <translation>繰り返しで表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="707"/>
         <source>Show at all other jumps</source>
-        <translation type="unfinished"/>
+        <translation>他のすべてのジャンプで表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="718"/>
         <source>Show when cancelling a change before repeats</source>
-        <translation type="unfinished"/>
+        <translation>繰り返し前の変更をキャンセルするときに表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="729"/>
         <source>Show when cancelling a change before all other jumps</source>
-        <translation type="unfinished"/>
+        <translation>他のすべてのジャンプ前の変更をキャンセルするときに表示</translation>
     </message>
 </context>
 <context>
@@ -25246,7 +25196,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="180"/>
         <source>Properties for measure %1</source>
-        <translation type="unfinished"/>
+        <translation>%1小節目のプロパティ</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="226"/>
@@ -25274,49 +25224,49 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="56"/>
         <source>Triggering the percussion panel</source>
-        <translation type="unfinished"/>
+        <translation>打楽器パネルの起動</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="68"/>
         <source>Open the panel automatically:</source>
-        <translation type="unfinished"/>
+        <translation>自動的にパネルを開く:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="107"/>
         <source>Close the panel automatically</source>
-        <translation type="unfinished"/>
+        <translation>パネルを自動的に閉じる</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="174"/>
         <source>Use legacy percussion panel</source>
-        <translation type="unfinished"/>
+        <translation>従来の打楽器パネルを使用</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="70"/>
         <source>Row: %1</source>
         <extracomment>%1 will be the row number of a percussion panel pad</extracomment>
-        <translation type="unfinished"/>
+        <translation>行: %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="73"/>
         <source>Column: %1</source>
         <extracomment>%1 will be the column number of a percussion panel pad</extracomment>
-        <translation type="unfinished"/>
+        <translation>列: %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="91"/>
         <source>Empty pad</source>
-        <translation type="unfinished"/>
+        <translation>空のパッド</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="118"/>
         <source>footer</source>
-        <translation type="unfinished"/>
+        <translation>フッター</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="72"/>
         <source>Write</source>
-        <translation type="unfinished"/>
+        <translation>書く</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="139"/>
@@ -25327,7 +25277,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="200"/>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="139"/>
         <source>Finish editing</source>
-        <translation type="unfinished"/>
+        <translation>編集を終了</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="232"/>
@@ -25337,17 +25287,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="253"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>キットをカスタマイズ</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="417"/>
         <source>Add row</source>
-        <translation type="unfinished"/>
+        <translation>行を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="438"/>
         <source>Select an unpitched percussion staff to see available sounds</source>
-        <translation type="unfinished"/>
+        <translation>無音程打楽器の譜表を選択すると使用可能なサウンドが表示されます</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="117"/>
@@ -25357,7 +25307,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="140"/>
         <source>Edit layout</source>
-        <translation type="unfinished"/>
+        <translation>レイアウトを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="146"/>
@@ -25367,22 +25317,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="149"/>
         <source>Notation preview</source>
-        <translation type="unfinished"/>
+        <translation>記譜プレビュー</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="158"/>
         <source>Reset layout</source>
-        <translation type="unfinished"/>
+        <translation>レイアウトをリセット</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>
         <source>When an unpitched percussion staff is selected</source>
-        <translation type="unfinished"/>
+        <translation>無音程打楽器の譜表が選択されたとき</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="138"/>
         <source>When inputting notation on an unpitched percussion staff</source>
-        <translation type="unfinished"/>
+        <translation>無音程打楽器の譜表に記譜を入力したとき</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="141"/>
@@ -25547,7 +25497,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/internal/undohistorymodel.cpp" line="96"/>
         <source>File opened</source>
-        <translation type="unfinished"/>
+        <translation>ファイルを開きました</translation>
     </message>
 </context>
 <context>
@@ -26709,7 +26659,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="132"/>
         <source>Allow reordering palettes</source>
-        <translation type="unfinished"/>
+        <translation>パレットの並べ替えを許可</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="164"/>
@@ -26724,7 +26674,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/DrumsetPanel.qml" line="66"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>キットをカスタマイズ</translation>
     </message>
 </context>
 <context>
@@ -28339,7 +28289,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
         <source>Get more effects</source>
-        <translation type="unfinished"/>
+        <translation>さらにエフェクトを取得</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -28374,7 +28324,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
         <source>Get more sounds</source>
-        <translation type="unfinished"/>
+        <translation>さらにサウンドを取得</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="391"/>
@@ -28622,7 +28572,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation>スコアアクション</translation>
+        <translation>スコア操作</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
@@ -28673,13 +28623,13 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>
         <source>Get help for this issue on musescore.org.</source>
-        <translation>musescore.org でこの問題に対するヘルプを得ることができます。</translation>
+        <translation>musescore.org でこの問題に対するヘルプを取得できます。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1587"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1768"/>
         <source>Get help</source>
-        <translation>ヘルプを表示</translation>
+        <translation>ヘルプを取得</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1502"/>
@@ -28690,7 +28640,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
-        <translation>この楽譜は破損しておりエラーが含まれています。エラーを手動で修正するか、スコアをコンピュータに保存して、 musescore.org でこの問題のヘルプを得ることができます。</translation>
+        <translation>この楽譜は破損しておりエラーが含まれています。エラーを手動で修正するか、スコアをコンピュータに保存して、 musescore.org でこの問題のヘルプを取得できます。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1510"/>
@@ -28711,12 +28661,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1537"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
-        <translation>ファイルが使用できなくなる可能性がありますが、ローカルに保存を続けることができます。手動でエラーの修正を試みるか、 musescore.org でこの問題のヘルプを得ることができます。</translation>
+        <translation>ファイルが使用できなくなる可能性がありますが、ローカルに保存を続けることができます。手動でエラーの修正を試みるか、 musescore.org でこの問題のヘルプを取得できます。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1539"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
-        <translation>ファイルが使用できなくなる可能性がありますが、ローカルに保存を続けることができます。スコアを保存するには、最後に保存したバージョンに戻すか、エラーを手動で修正してください。また、 musescore.org でこの問題のヘルプを得ることができます。</translation>
+        <translation>ファイルが使用できなくなる可能性がありますが、ローカルに保存を続けることができます。スコアを保存するには、最後に保存したバージョンに戻すか、エラーを手動で修正してください。また、 musescore.org でこの問題のヘルプを取得できます。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1546"/>
@@ -28731,7 +28681,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
-        <translation>このスコアは破損しています。 musescore.org でこの問題のヘルプを得ることができます。</translation>
+        <translation>このスコアは破損しています。 musescore.org でこの問題のヘルプを取得できます。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1652"/>
@@ -28772,7 +28722,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1637"/>
         <source>Try again</source>
-        <translation type="unfinished"/>
+        <translation>もう一度試す</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
@@ -28867,7 +28817,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="129"/>
         <source>Create backup of file on disk before saving new changes</source>
-        <translation type="unfinished"/>
+        <translation>新しい変更を保存する前にディスクにファイルのバックアップを作成</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="346"/>
@@ -29126,7 +29076,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="598"/>
         <source>Please try again later, or get help for this problem on musescore.org.</source>
-        <translation>時間をおいてもう一度試してみるか、 musescore.org でこの問題のヘルプを参照してください。</translation>
+        <translation>時間をおいてもう一度試してみるか、 musescore.org でこの問題のヘルプを取得してください。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
@@ -29516,12 +29466,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="45"/>
         <source>Use MuseScore element IDs</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 要素 ID を使用</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
         <source>Masking compatibility (Adobe Illustrator only)</source>
-        <translation type="unfinished"/>
+        <translation>マスクの互換性 (Adobe Illustrator のみ)</translation>
     </message>
 </context>
 <context>
@@ -30183,12 +30133,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1621"/>
         <source>An error occurred while saving your score</source>
-        <translation type="unfinished"/>
+        <translation>スコアを保存中にエラーが発生しました</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation type="unfinished"/>
+        <translation>スコアを保持するには、もう一度保存をお試しください。このメッセージが再度現れる場合は、スコアを新しいコピーとして保存してください。この問題については、%1 でもヘルプを取得できます。&lt;br/&gt;&lt;br/&gt;エラーの詳細 (サポートを求める際に引用してください): %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -30239,7 +30189,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="543"/>
         <source>Get help</source>
-        <translation>ヘルプを表示</translation>
+        <translation>ヘルプを取得</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="558"/>
@@ -30314,12 +30264,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="830"/>
         <source>File “%1” could not be opened for validation. %2</source>
-        <translation type="unfinished"/>
+        <translation>ファイル「%1」 を検証のために開けませんでした。%2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="841"/>
         <source>“%1” is corrupted or damaged.</source>
-        <translation type="unfinished"/>
+        <translation>「%1」は破損または損傷しています。</translation>
     </message>
 </context>
 <context>
@@ -30349,7 +30299,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="642"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="649"/>
         <source>Please try again later, or get help for this problem on audio.com.</source>
-        <translation>時間をおいてもう一度試してみるか、 audio.com でこの問題のヘルプを参照してください。</translation>
+        <translation>時間をおいてもう一度試してみるか、 audio.com でこの問題のヘルプを取得してください。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="645"/>
@@ -30542,22 +30492,22 @@ failed.</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="38"/>
         <source>Enter shortcut</source>
-        <translation type="unfinished"/>
+        <translation>ショートカットを入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="71"/>
         <source>Define percussion keyboard shortcut</source>
-        <translation type="unfinished"/>
+        <translation>打楽器のキーボードショートカットを定義</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="85"/>
         <source>Reassign shortcut for &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished"/>
+        <translation>「%1」のショートカットを再割り当て</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="168"/>
         <source>When this instrument is selected, &lt;b&gt;%1&lt;/b&gt; will no longer run &lt;b&gt;%2&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>この楽器が選択されているとき、&lt;b&gt;%1&lt;/b&gt;は&lt;b&gt;%2&lt;/b&gt;を実行しなくなります。</translation>
     </message>
 </context>
 <context>
@@ -30623,7 +30573,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="134"/>
         <source>Got it</source>
-        <translation type="unfinished"/>
+        <translation>了解</translation>
     </message>
     <message>
         <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="134"/>
@@ -30733,7 +30683,7 @@ failed.</source>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="44"/>
         <source>Directories actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Choose Directories&quot; dialog</extracomment>
-        <translation>ディレクトリアクション</translation>
+        <translation>ディレクトリ操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="57"/>
@@ -30960,7 +30910,7 @@ failed.</source>
         <location filename="../../src/engraving/dom/edit.cpp" line="1931"/>
         <location filename="../../src/engraving/dom/edit.cpp" line="2055"/>
         <source>Add tie</source>
-        <translation type="unfinished"/>
+        <translation>タイを追加</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="741"/>
@@ -30971,7 +30921,7 @@ failed.</source>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="786"/>
         <source>Add long slur</source>
-        <translation type="unfinished"/>
+        <translation>長いスラーを追加</translation>
     </message>
     <message>
         <location filename="../../src/engraving/api/v1/qmlpluginapi.cpp" line="281"/>
@@ -30981,28 +30931,28 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/api/v1/score.cpp" line="247"/>
         <source>Plugin edit</source>
-        <translation type="unfinished"/>
+        <translation>プラグインの編集</translation>
     </message>
     <message>
         <location filename="../../src/engraving/devtools/corruptscoredevtoolsmodel.cpp" line="44"/>
         <source>Corrupt score</source>
         <extracomment>&quot;Corrupt&quot; is used as a verb here, i.e. &quot;Make the current score corrupted&quot; (for testing purposes).</extracomment>
-        <translation type="unfinished"/>
+        <translation>スコアを破損させる</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/cmd.cpp" line="2842"/>
         <source>Reset all positions</source>
-        <translation type="unfinished"/>
+        <translation>すべての位置をリセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2056"/>
         <source>Remove tie</source>
-        <translation type="unfinished"/>
+        <translation>タイを削除</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2110"/>
         <source>Toggle laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>レセヴィブレを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="4144"/>
@@ -31013,58 +30963,58 @@ failed.</source>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="750"/>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="770"/>
         <source>Regenerate figured bass text</source>
-        <translation type="unfinished"/>
+        <translation>数字付き低音のテキストを再生成</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/lyrics.cpp" line="192"/>
         <source>Paste lyrics</source>
-        <translation type="unfinished"/>
+        <translation>歌詞を貼り付け</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="908"/>
         <source>Paste text</source>
-        <translation type="unfinished"/>
+        <translation>テキストを貼り付け</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="106"/>
         <source>Change tie anchor</source>
-        <translation type="unfinished"/>
+        <translation>タイの固定点を変更</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/unrollrepeats.cpp" line="102"/>
         <source>Create parts</source>
-        <translation type="unfinished"/>
+        <translation>パートを作成</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="379"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="163"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="175"/>
         <source>Edit element property</source>
-        <translation type="unfinished"/>
+        <translation>要素のプロパティを編集</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="461"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1248"/>
         <source>Edit style</source>
-        <translation>スタイルの編集</translation>
+        <translation>スタイルを編集</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="143"/>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="485"/>
         <source>Make element(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>要素を可視化</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="144"/>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="487"/>
         <source>Make element(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>要素を不可視化</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5489"/>
         <source>Change voice</source>
-        <translation type="unfinished"/>
+        <translation>声部を変更</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="151"/>
@@ -31074,12 +31024,12 @@ failed.</source>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="277"/>
         <source>Edit bend curve</source>
-        <translation type="unfinished"/>
+        <translation>ベンド曲線を編集</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/stems/stemsettingsmodel.cpp" line="114"/>
         <source>Change stem direction</source>
-        <translation type="unfinished"/>
+        <translation>符幹の向きを変更</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/ornaments/ornamentsettingsmodel.cpp" line="256"/>
@@ -31105,35 +31055,35 @@ failed.</source>
         <location filename="../../src/notation/internal/excerptnotation.cpp" line="145"/>
         <source>Rename part</source>
         <extracomment>Means: &quot;edit the name of a part score&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>パートの名前を変更</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="538"/>
         <source>Add/remove parts</source>
-        <translation type="unfinished"/>
+        <translation>パートを追加/削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="581"/>
         <source>Reset part</source>
-        <translation type="unfinished"/>
+        <translation>パートをリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="70"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="237"/>
         <source>Add/remove instruments</source>
-        <translation type="unfinished"/>
+        <translation>楽器を追加/削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="106"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="871"/>
         <source>Remove instruments</source>
-        <translation type="unfinished"/>
+        <translation>楽器を削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="121"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="995"/>
         <source>Remove staves</source>
-        <translation type="unfinished"/>
+        <translation>譜表を削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="140"/>
@@ -31145,7 +31095,7 @@ failed.</source>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="168"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="591"/>
         <source>Add linked staff</source>
-        <translation type="unfinished"/>
+        <translation>リンクされた譜表を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="192"/>
@@ -31163,19 +31113,19 @@ failed.</source>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="265"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="734"/>
         <source>Add system markings</source>
-        <translation type="unfinished"/>
+        <translation>段指示を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="282"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="768"/>
         <source>Remove system markings</source>
-        <translation type="unfinished"/>
+        <translation>段指示を削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="295"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="802"/>
         <source>Move system markings</source>
-        <translation type="unfinished"/>
+        <translation>段指示を移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="463"/>
@@ -31190,17 +31140,17 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="468"/>
         <source>Mirror notehead</source>
-        <translation>符頭の反転</translation>
+        <translation>符頭を反転</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="483"/>
         <source>Enter full-measure rest</source>
-        <translation type="unfinished"/>
+        <translation>全休符を入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2143"/>
         <source>Display concert pitch</source>
-        <translation type="unfinished"/>
+        <translation>実音を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2144"/>
@@ -31210,62 +31160,62 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="550"/>
         <source>Toggle visible</source>
-        <translation type="unfinished"/>
+        <translation>可視を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1091"/>
         <source>Drag element</source>
-        <translation type="unfinished"/>
+        <translation>要素をドラッグ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1727"/>
         <source>Drop element</source>
-        <translation type="unfinished"/>
+        <translation>要素をドロップ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1973"/>
         <source>Move range</source>
-        <translation type="unfinished"/>
+        <translation>範囲を移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1974"/>
         <source>Copy range</source>
-        <translation type="unfinished"/>
+        <translation>範囲をコピー</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="2047"/>
         <source>Apply palette element</source>
-        <translation type="unfinished"/>
+        <translation>パレット要素を適用</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3552"/>
         <source>Move chord/rest to staff</source>
-        <translation type="unfinished"/>
+        <translation>和音/休符を譜表に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3582"/>
         <source>Move chord/rest</source>
-        <translation type="unfinished"/>
+        <translation>和音/休符を移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3632"/>
         <source>Toggle snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>前にスナップを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3673"/>
         <source>Toggle snap to next</source>
-        <translation type="unfinished"/>
+        <translation>次にスナップを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3803"/>
         <source>Change pitch</source>
-        <translation type="unfinished"/>
+        <translation>音高を変更</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3820"/>
         <source>Move lyrics</source>
-        <translation type="unfinished"/>
+        <translation>歌詞を移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3832"/>
@@ -31280,43 +31230,43 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3974"/>
         <source>Edit text</source>
-        <translation type="unfinished"/>
+        <translation>テキストを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4383"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
-        <translation type="unfinished"/>
+        <translation>キー操作による編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4484"/>
         <source>Split measure</source>
-        <translation>小節の分割</translation>
+        <translation>小節を分割</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4499"/>
         <source>Join measures</source>
-        <translation>小節の結合</translation>
+        <translation>小節を結合</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4651"/>
         <source>Add horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>横型フレームを追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4652"/>
         <source>Add vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>縦型フレームを追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4653"/>
         <source>Add text frame</source>
-        <translation type="unfinished"/>
+        <translation>テキストフレームを追加</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4654"/>
         <source>Add %n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>%n小節を追加</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4719"/>
@@ -31342,141 +31292,141 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4956"/>
         <source>Add ottava</source>
-        <translation type="unfinished"/>
+        <translation>オッターヴァを追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4963"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4999"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="183"/>
         <source>Add hairpin</source>
-        <translation type="unfinished"/>
+        <translation>松葉を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5085"/>
         <source>Toggle accidental</source>
-        <translation type="unfinished"/>
+        <translation>臨時記号を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5145"/>
         <source>Toggle augmentation dots</source>
-        <translation type="unfinished"/>
+        <translation>付点を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5374"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>選択した段をロック/アンロック</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5381"/>
         <source>Lock/unlock all systems</source>
-        <translation type="unfinished"/>
+        <translation>すべての段をロック/アンロック</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5388"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>選択範囲から段を作成</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5511"/>
         <source>Add note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>音符に固定された線を追加</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5787"/>
         <source>Delete %n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>%n小節を削除</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7468"/>
         <source>Add accidental</source>
-        <translation type="unfinished"/>
+        <translation>臨時記号を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5048"/>
         <source>Add brackets</source>
-        <translation type="unfinished"/>
+        <translation>括弧を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4907"/>
         <source>Flip horizontally</source>
-        <translation type="unfinished"/>
+        <translation>水平に反転</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5053"/>
         <source>Add braces</source>
-        <translation type="unfinished"/>
+        <translation>波括弧を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5058"/>
         <source>Add parentheses</source>
-        <translation type="unfinished"/>
+        <translation>括弧を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5128"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7442"/>
         <source>Toggle articulation</source>
-        <translation type="unfinished"/>
+        <translation>アーティキュレーションを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5179"/>
         <source>Add grace note</source>
-        <translation type="unfinished"/>
+        <translation>装飾音符を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5206"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="698"/>
         <source>Add tuplet</source>
-        <translation type="unfinished"/>
+        <translation>連符を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5227"/>
         <source>Set beam type</source>
-        <translation type="unfinished"/>
+        <translation>連桁の種類を設定</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5239"/>
         <source>Increase duration</source>
-        <translation type="unfinished"/>
+        <translation>長さを増やす</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5240"/>
         <source>Decrease duration</source>
-        <translation type="unfinished"/>
+        <translation>長さを減らす</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5257"/>
         <source>Change hairpin type</source>
-        <translation type="unfinished"/>
+        <translation>松葉の種類を変更</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5300"/>
         <source>Add dynamic</source>
-        <translation type="unfinished"/>
+        <translation>強弱記号を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5353"/>
         <source>Toggle layout break</source>
-        <translation type="unfinished"/>
+        <translation>レイアウト区切りを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5360"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>小節を前の段に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5367"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>小節を次の段に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5395"/>
         <source>Apply system lock to selection</source>
-        <translation type="unfinished"/>
+        <translation>選択範囲に段ロックを適用</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5405"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>段ごとの小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5412"/>
@@ -31486,27 +31436,27 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5436"/>
         <source>Swap voices</source>
-        <translation type="unfinished"/>
+        <translation>声部を交換</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5467"/>
         <source>Add interval</source>
-        <translation type="unfinished"/>
+        <translation>音程を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5474"/>
         <source>Enter note at fret %1</source>
-        <translation type="unfinished"/>
+        <translation>フレット%1に音符を入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5500"/>
         <source>Change voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>声部の割り当てを変更</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5582"/>
         <source>Add text</source>
-        <translation>テキストの追加</translation>
+        <translation>テキストを追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5650"/>
@@ -31516,7 +31466,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5669"/>
         <source>Add figured bass</source>
-        <translation type="unfinished"/>
+        <translation>数字付き低音を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5684"/>
@@ -31531,7 +31481,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5708"/>
         <source>Add time signature</source>
-        <translation type="unfinished"/>
+        <translation>拍子記号を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5719"/>
@@ -31551,7 +31501,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5798"/>
         <source>Delete range</source>
-        <translation type="unfinished"/>
+        <translation>範囲を削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5805"/>
@@ -31566,12 +31516,12 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5827"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation>リズミックスラッシュ表記を切り替え</translation>
+        <translation>リズムのスラッシュ記譜を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5834"/>
         <source>Change enharmonic spelling</source>
-        <translation type="unfinished"/>
+        <translation>異名同音表記を変更</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5841"/>
@@ -31596,7 +31546,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5869"/>
         <source>Reset text style overrides</source>
-        <translation>上書きしたテキストスタイルをリセット</translation>
+        <translation>テキストスタイルの上書きをリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5876"/>
@@ -31611,102 +31561,102 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5913"/>
         <source>Reset to default layout</source>
-        <translation type="unfinished"/>
+        <translation>デフォルトのレイアウトにリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5939"/>
         <source>Set score view settings</source>
-        <translation type="unfinished"/>
+        <translation>スコアビュー設定を設定</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6117"/>
         <source>Navigate to lyrics</source>
-        <translation type="unfinished"/>
+        <translation>歌詞に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6245"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6265"/>
         <source>Navigate to next syllable</source>
-        <translation type="unfinished"/>
+        <translation>次の音節に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6447"/>
         <source>Navigate to verse</source>
-        <translation type="unfinished"/>
+        <translation>次の行に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6538"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6592"/>
         <source>Navigate to next chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>次のコード記号に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6629"/>
         <source>Navigate to chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>コード記号に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6684"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6728"/>
         <source>Navigate to next figured bass</source>
-        <translation type="unfinished"/>
+        <translation>次の数字付き低音に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6776"/>
         <source>Navigate to figured bass</source>
-        <translation type="unfinished"/>
+        <translation>数字付き低音に移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7072"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7079"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7127"/>
         <source>Enter lyrics extension line</source>
-        <translation type="unfinished"/>
+        <translation>歌詞の延長線を入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7208"/>
         <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <translation>歌詞の行を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7256"/>
         <source>Enter guitar bend</source>
-        <translation type="unfinished"/>
+        <translation>ギターベンドを入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7366"/>
         <source>Format text</source>
-        <translation type="unfinished"/>
+        <translation>テキストをフォーマット</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7386"/>
         <source>Toggle subscript</source>
-        <translation type="unfinished"/>
+        <translation>下付き文字を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7388"/>
         <source>Toggle superscript</source>
-        <translation type="unfinished"/>
+        <translation>上付き文字を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7390"/>
         <source>Toggle subscript/superscript</source>
-        <translation type="unfinished"/>
+        <translation>下付き文字/上付き文字を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7447"/>
         <source>Toggle ornament</source>
-        <translation type="unfinished"/>
+        <translation>装飾記号を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7452"/>
         <source>Toggle automatic placement</source>
-        <translation type="unfinished"/>
+        <translation>自動配置を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7463"/>
         <source>Add clef</source>
-        <translation type="unfinished"/>
+        <translation>音部記号を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7473"/>
@@ -31723,32 +31673,32 @@ failed.</source>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="435"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="477"/>
         <source>Enter note</source>
-        <translation type="unfinished"/>
+        <translation>音符を入力</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationmidiinput.cpp" line="351"/>
         <source>Realtime advance</source>
-        <translation type="unfinished"/>
+        <translation>リアルタイムアドバンス</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="457"/>
         <source>Pad note</source>
-        <translation type="unfinished"/>
+        <translation>音符を伸縮</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="502"/>
         <source>Delete note</source>
-        <translation type="unfinished"/>
+        <translation>音符を削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="901"/>
         <source>Double note input duration</source>
-        <translation type="unfinished"/>
+        <translation>音符入力の長さを2倍にする</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="914"/>
         <source>Halve note input duration</source>
-        <translation type="unfinished"/>
+        <translation>音符入力の長さを半分にする</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="257"/>
@@ -31759,13 +31709,13 @@ failed.</source>
         <location filename="../../src/notation/internal/notationparts.cpp" line="279"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
         <source>Show instrument</source>
-        <translation type="unfinished"/>
+        <translation>楽器を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="280"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3043"/>
         <source>Hide instrument</source>
-        <translation type="unfinished"/>
+        <translation>楽器を非表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="307"/>
@@ -31795,62 +31745,62 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="412"/>
         <source>Set instrument name</source>
-        <translation type="unfinished"/>
+        <translation>楽器名を設定</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="439"/>
         <source>Set abbreviated instrument name</source>
-        <translation type="unfinished"/>
+        <translation>楽器の略称を設定</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="466"/>
         <source>Show voice %1</source>
-        <translation type="unfinished"/>
+        <translation>声部%1を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="467"/>
         <source>Hide voice %1</source>
-        <translation type="unfinished"/>
+        <translation>声部%1を非表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="496"/>
         <source>Show staff</source>
-        <translation type="unfinished"/>
+        <translation>譜表を表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="497"/>
         <source>Hide staff</source>
-        <translation type="unfinished"/>
+        <translation>譜表を非表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="524"/>
         <source>Set staff type</source>
-        <translation type="unfinished"/>
+        <translation>譜表の種類を設定</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="546"/>
         <source>Edit staff properties</source>
-        <translation type="unfinished"/>
+        <translation>譜表のプロパティを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="614"/>
         <source>Add instrument</source>
-        <translation>楽器の追加</translation>
+        <translation>楽器を追加</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="632"/>
         <source>Reset instrument formatting</source>
-        <translation type="unfinished"/>
+        <translation>楽器のフォーマットをリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="1050"/>
         <source>Move instruments</source>
-        <translation type="unfinished"/>
+        <translation>楽器を移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="1079"/>
         <source>Move staves</source>
-        <translation type="unfinished"/>
+        <translation>譜表を移動</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationstyle.cpp" line="116"/>
@@ -31860,22 +31810,22 @@ failed.</source>
     <message>
         <location filename="../../src/notation/view/internal/harppedalpopupmodel.cpp" line="179"/>
         <source>Edit harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>ハープペダルダイアグラムを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="142"/>
         <source>Set string tuning</source>
-        <translation type="unfinished"/>
+        <translation>調弦を設定</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="232"/>
         <source>Load string tunings preset</source>
-        <translation type="unfinished"/>
+        <translation>調弦のプリセットを読み込み</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="285"/>
         <source>Set number of strings</source>
-        <translation type="unfinished"/>
+        <translation>弦の数を設定</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="356"/>
@@ -31885,67 +31835,67 @@ failed.</source>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="236"/>
         <source>Edit percussion panel layout</source>
-        <translation type="unfinished"/>
+        <translation>打楽器パネルのレイアウトを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="416"/>
         <source>Duplicate percussion panel pad</source>
-        <translation type="unfinished"/>
+        <translation>打楽器パネルパッドを複製</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="436"/>
         <source>Delete percussion panel pad</source>
-        <translation type="unfinished"/>
+        <translation>打楽器パネルパッドを削除</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="455"/>
         <source>Edit percussion shortcut</source>
-        <translation type="unfinished"/>
+        <translation>打楽器ショートカットを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="518"/>
         <source>Reset percussion panel layout</source>
-        <translation type="unfinished"/>
+        <translation>打楽器パネルのレイアウトをリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="318"/>
         <source>Edit measure properties</source>
-        <translation type="unfinished"/>
+        <translation>小節のプロパティを編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="101"/>
         <source>Edit page settings</source>
-        <translation type="unfinished"/>
+        <translation>ページ設定を編集</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="144"/>
         <source>Edit staff text properties</source>
-        <translation type="unfinished"/>
+        <translation>譜表テキストのプロパティを編集</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="212"/>
         <source>Edit time signature properties</source>
-        <translation type="unfinished"/>
+        <translation>拍子記号のプロパティを編集</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="183"/>
         <source>Toggle sound flag preset</source>
-        <translation type="unfinished"/>
+        <translation>サウンドフラグのプリセットを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="210"/>
         <source>Toggle sound flag playing technique</source>
-        <translation type="unfinished"/>
+        <translation>サウンドフラグの奏法を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="333"/>
         <source>Reset sound flag</source>
-        <translation type="unfinished"/>
+        <translation>サウンドフラグをリセット</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="359"/>
         <source>Toggle ‘Apply sound flag to all staves’</source>
-        <translation type="unfinished"/>
+        <translation>「すべての譜表にサウンドフラグを適用」を切り替え</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="1084"/>
@@ -31961,13 +31911,13 @@ failed.</source>
         <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="99"/>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="192"/>
         <source>Make system marking(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>段指示を可視化</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="100"/>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="193"/>
         <source>Make system marking(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>段指示を不可視化</translation>
     </message>
 </context>
 <context>
