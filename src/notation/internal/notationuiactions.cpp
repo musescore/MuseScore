@@ -737,7 +737,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Insert &fretboard diagram legend"),
-             TranslatableString("action", "Insert &fretboard diagram legend"),
+             TranslatableString("action", "Insert fretboard diagram legend"),
              IconCode::Code::FRET_FRAME
              ),
     UiAction("append-hbox",
