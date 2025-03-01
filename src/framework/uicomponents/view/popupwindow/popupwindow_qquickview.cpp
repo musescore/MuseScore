@@ -63,6 +63,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // dialog
     if (isDialogMode) {
         m_view->setFlags(Qt::Dialog);
+        m_view->setIcon(QIcon(uiConfiguration()->appIconPath().toString()));
 
         if (isFrameless) {
             m_view->setColor(QColor(Qt::transparent));

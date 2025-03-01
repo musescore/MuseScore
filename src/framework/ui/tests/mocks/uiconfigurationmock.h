@@ -61,6 +61,8 @@ public:
     MOCK_METHOD(int, iconsFontSize, (IconSizeType), (const, override));
     MOCK_METHOD(async::Notification, iconsFontChanged, (), (const, override));
 
+    MOCK_METHOD(io::path_t, appIconPath, (), (const, override));
+
     MOCK_METHOD(std::string, musicalFontFamily, (), (const, override));
     MOCK_METHOD(int, musicalFontSize, (), (const, override));
     MOCK_METHOD(async::Notification, musicalFontChanged, (), (const, override));

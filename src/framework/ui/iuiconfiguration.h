@@ -75,6 +75,8 @@ public:
     virtual int iconsFontSize(IconSizeType type) const = 0;
     virtual async::Notification iconsFontChanged() const = 0;
 
+    virtual io::path_t appIconPath() const = 0;
+
     virtual std::string musicalFontFamily() const = 0;
     virtual int musicalFontSize() const = 0;
     virtual async::Notification musicalFontChanged() const = 0;
