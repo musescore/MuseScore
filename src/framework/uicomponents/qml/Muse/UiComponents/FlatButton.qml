@@ -160,7 +160,7 @@ FocusScope {
             states: [
                 State {
                     name: "PRESSED"
-                    when: mouseArea.pressed
+                    when: mouseArea.pressed && root.enabled
 
                     PropertyChanges {
                         target: background
@@ -171,7 +171,7 @@ FocusScope {
 
                 State {
                     name: "HOVERED"
-                    when: mouseArea.containsMouse && !mouseArea.pressed
+                    when: mouseArea.containsMouse && !mouseArea.pressed && root.enabled
 
                     PropertyChanges {
                         target: background
@@ -300,7 +300,10 @@ FocusScope {
         id: mouseArea
         anchors.fill: parent
 
-        enabled: root.enabled
+        // Disabling the MouseArea together with the button has side effects if the button
+        // becomes disabled on its own click. See issue #26645 and the PR for it for details.
+        //enabled: root.enabled
+
         hoverEnabled: true
 
         onClicked: function(mouse) {
@@ -319,7 +322,7 @@ FocusScope {
                 return
             }
 
-            if (mouseArea.containsMouse) {
+            if (mouseArea.containsMouse && root.enabled) {
                 ui.tooltip.show(root, root.toolTipTitle, root.toolTipDescription, root.toolTipShortcut)
             } else {
                 ui.tooltip.hide(root)
