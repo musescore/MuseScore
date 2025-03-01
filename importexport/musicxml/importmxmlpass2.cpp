@@ -7795,6 +7795,12 @@ void MusicXMLParserNotations::technical()
                   harmonMute();
             else if (_e.name() == "hole")
                   hole();
+            else if (_e.name() == "tap") {
+                  id = (_e.attributes().value("hand").toString() == "left") ? SymId::guitarLeftHandTapping : SymId::guitarRightHandTapping;
+                  _notations.push_back(Notation::notationWithAttributes(_e.name().toString(),
+                                                                        _e.attributes(), "technical", id));
+                  _e.skipCurrentElement();  // skip but don't log
+                  }
             else if (_e.name() == "other-technical")
                   otherTechnical();
             else
