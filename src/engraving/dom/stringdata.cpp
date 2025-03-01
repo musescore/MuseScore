@@ -364,9 +364,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
         for (int i = strings - 1; i >= 0; i--) {
             instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
-                if (pitch == strg.pitch || !strg.open) {
-                    *string = strings - i - 1;
-                }
+                *string = strings - i - 1;
                 *fret = pitch - strg.pitch;
                 return true;
             }
