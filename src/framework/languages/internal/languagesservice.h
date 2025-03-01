@@ -66,6 +66,7 @@ private:
     void setCurrentLanguage(const QString& languageCode);
     QString effectiveLanguageCode(QString languageCode) const;
     Ret loadLanguage(Language& lang);
+    Ret doLoadLanguage(Language& lang);
 
     void th_update(const QString& languageCode, Progress progress);
     bool canUpdate(const QString& languageCode);
