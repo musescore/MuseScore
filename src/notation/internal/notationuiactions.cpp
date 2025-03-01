@@ -2613,11 +2613,11 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              TranslatableString("action", "Show/hide element masks"),
              Checkable::Yes
              ),
-    UiAction("show-corrupted-measures",
+    UiAction("mark-corrupted-measures",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Show corrupted measures"),
-             TranslatableString("action", "Show/hide corrupted measures"),
+             TranslatableString("action", "Mark corrupted measures"),
+             TranslatableString("action", "Mark corrupted measures"),
              Checkable::Yes
              ),
     UiAction("check-for-score-corruptions",
