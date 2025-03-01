@@ -552,7 +552,6 @@ bool MidiFile::readEvent(MidiEvent* event)
         }
     }
 
-    std::vector<unsigned char> data;
     int dataLen;
 
     if (me == 0xf0 || me == 0xf7) {
@@ -563,7 +562,7 @@ bool MidiFile::readEvent(MidiEvent* event)
             return false;
         }
         dataLen = len;
-        data.resize(len + 1);
+        std::vector<unsigned char> data(len + 1);
         read(data.data(), len);
         if (data[len - 1] != 0xf7) {
             LOGD("SYSEX does not end with 0xf7!");
@@ -586,7 +585,7 @@ bool MidiFile::readEvent(MidiEvent* event)
             LOGD("readEvent: error 6");
             return false;
         }
-        data.resize(dataLen + 1);
+        std::vector<unsigned char> data(dataLen + 1);
         if (dataLen) {
             read(data.data(), dataLen);
         }
