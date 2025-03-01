@@ -54,6 +54,7 @@ const ClefInfo ClefInfo::clefTable[] = {
     { ClefType::G8_VA,   2, 52, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8va,         StaffGroup::STANDARD },
     { ClefType::G15_MA,  2, 59, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15ma,        StaffGroup::STANDARD },
     { ClefType::G8_VB_O, 2, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbOld,      StaffGroup::STANDARD },
+    { ClefType::G8_VB_C, 2, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbCClef,    StaffGroup::STANDARD },
     { ClefType::G8_VB_P, 2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbParens,   StaffGroup::STANDARD },
     { ClefType::G_1,     1, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::gClef,            StaffGroup::STANDARD },
 
