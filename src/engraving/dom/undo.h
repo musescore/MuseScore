@@ -29,9 +29,6 @@
 
 #include <map>
 
-#include "modularity/ioc.h"
-#include "../iengravingfontsprovider.h"
-
 #include "../style/style.h"
 #include "../compat/midi/midipatch.h"
 
@@ -59,12 +56,9 @@
 #include "stafftype.h"
 #include "stringdata.h"
 #include "stringtunings.h"
-#include "synthesizerstate.h"
 #include "soundflag.h"
-#include "text.h"
 
 #include "tremolotwochord.h"
-#include "tremolobar.h"
 
 namespace mu::engraving {
 class Bend;
@@ -763,8 +757,8 @@ class ChangePatch : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangePatch(Score* s, InstrChannel* c, const MidiPatch* pt)
-        : score(s), channel(c), patch(*pt) {}
+    ChangePatch(Score* s, InstrChannel* c, const MidiPatch& pt)
+        : score(s), channel(c), patch(pt) {}
     UNDO_NAME("ChangePatch")
     UNDO_CHANGED_OBJECTS({ score })
 };

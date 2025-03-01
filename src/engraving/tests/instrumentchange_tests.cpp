@@ -115,12 +115,12 @@ TEST_F(Engraving_InstrumentChangeTests, testMixer)
     InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
     int idx = score->staff(0)->channel(s->tick(), 0);
     InstrChannel* c = score->staff(0)->part()->instrument(s->tick())->channel(idx);
-    MidiPatch* mp = new MidiPatch;
-    mp->bank = 0;
-    mp->drum = false;
-    mp->name = "Viola";
-    mp->prog = 41;
-    mp->synti = "Fluid";
+    MidiPatch mp;
+    mp.bank = 0;
+    mp.drum = false;
+    mp.name = "Viola";
+    mp.prog = 41;
+    mp.synti = "Fluid";
     score->startCmd(TranslatableString::untranslatable("Instrument change tests"));
     ic->setXmlText("Mixer Viola");
     score->undo(new ChangePatch(score, c, mp));

@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_IMASTERNOTATION_H
-#define MU_NOTATION_IMASTERNOTATION_H
+#pragma once
 
-#include "types/retval.h"
+#include "async/notification.h"
+#include "types/ret.h"
 
 #include "inotation.h"
 #include "iexcerptnotation.h"
@@ -66,5 +66,3 @@ public:
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
 }
-
-#endif // MU_NOTATION_IMASTERNOTATION_H
