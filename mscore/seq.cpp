@@ -728,7 +728,7 @@ void Seq::addCountInClicks()
 //   process
 //    This function is called in a realtime context. This
 //    means that no blocking operations are allowed which
-//    includes memory allocation. The usual thread synchronisation
+//    includes memory allocation. The usual thread synchronization
 //    methods like semaphores can also not be used.
 //-------------------------------------------------------------------
 

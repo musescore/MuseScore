@@ -80,7 +80,7 @@
 //
 //    This sets the generator in a state as if the last N (= degree) bits
 //    were those defined by x (the LSB of x represents the oldest bit).
-//    This can be used to synchronise a BER counter to a received bit stream,
+//    This can be used to synchronize a BER counter to a received bit stream,
 //    or to set the initial state when emulating a generator of the first form
 //    when the output is taken from the feedback.
 //
