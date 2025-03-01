@@ -551,6 +551,7 @@ enum class ClefType : signed char {
     G8_VA,
     G15_MA,
     G8_VB_O,
+    G8_VB_C,
     G8_VB_P,
     G_1,
     C1,
