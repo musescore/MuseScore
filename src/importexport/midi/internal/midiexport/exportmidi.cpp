@@ -90,10 +90,8 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
         auto es = sigmap->lower_bound(endTick);
 
         for (auto is = bs; is != es; ++is) {
-            SigEvent se   = is->second;
-            std::vector<unsigned char> data;
+            SigEvent se = is->second;
             Fraction ts(se.timesig());
-            data.push_back(static_cast<unsigned char>(ts.numerator()));
             int n;
             switch (ts.denominator()) {
             case 1:  n = 0;
@@ -114,15 +112,15 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
                      qPrintable(ts.toString()));
                 break;
             }
-            data.push_back(static_cast<unsigned char>(n));
-            data.push_back(24);
-            data.push_back(8);
 
             MidiEvent ev;
             ev.setType(ME_META);
             ev.setMetaType(META_TIME_SIGNATURE);
-            ev.setEData(std::move(data));
             ev.setLen(4);
+            ev.setEData({ static_cast<unsigned char>(ts.numerator()),
+                          static_cast<unsigned char>(n),
+                          24,
+                          8 });
             track.insert(CompatMidiRender::tick(context, is->first + tickOffset), ev);
         }
     }
@@ -152,8 +150,7 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
                 Key key = ik->second.concertKey();           // -7 -- +7
                 ev.setMetaType(META_KEY_SIGNATURE);
                 ev.setLen(2);
-                std::vector<unsigned char> data { static_cast<unsigned char>(key), 0 /* major */ };
-                ev.setEData(std::move(data));
+                ev.setEData({ static_cast<unsigned char>(key), 0 /* major */ });
                 int tick = ik->first + tickOffset;
                 track1.insert(CompatMidiRender::tick(context, tick), ev);
                 if (tick == 0) {
@@ -168,8 +165,7 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
             ev.setType(ME_META);
             ev.setMetaType(META_KEY_SIGNATURE);
             ev.setLen(2);
-            std::vector<unsigned char> data { 0 /* key */, 0 /* major */ };
-            ev.setEData(std::move(data));
+            ev.setEData({ 0 /* key */, 0 /* major */ });
             track1.insert(0, ev);
         }
 
@@ -197,10 +193,9 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
 
         ev.setMetaType(META_TEMPO);
         ev.setLen(3);
-        std::vector<unsigned char> data { static_cast<unsigned char>(tempo >> 16),
-                                          static_cast<unsigned char>(tempo >> 8),
-                                          static_cast<unsigned char>(tempo) };
-        ev.setEData(std::move(data));
+        ev.setEData({ static_cast<unsigned char>(tempo >> 16),
+                      static_cast<unsigned char>(tempo >> 8),
+                      static_cast<unsigned char>(tempo) });
         track.insert(it->first, ev);
     }
 }
@@ -294,8 +289,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     ev.setType(ME_META);
                     ev.setMetaType(META_PORT_CHANGE);
                     ev.setLen(1);
-                    std::vector<unsigned char> data { static_cast<unsigned char>(track.outPort()) };
-                    ev.setEData(std::move(data));
+                    ev.setEData({ static_cast<unsigned char>(track.outPort()) });
                     track.insert(0, ev);
                 }
 
