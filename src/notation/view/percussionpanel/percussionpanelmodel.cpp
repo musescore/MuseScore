@@ -322,12 +322,10 @@ void PercussionPanelModel::setUpConnections()
         });
     }
 
-    if (configuration()) {
-        configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
-            const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
-            emit useNotationPreviewChanged(useNotationPreview);
-        });
-    }
+    configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
+        const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
+        emit useNotationPreviewChanged(useNotationPreview);
+    });
 }
 
 void PercussionPanelModel::setDrumset(engraving::Drumset* drumset)
