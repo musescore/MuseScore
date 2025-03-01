@@ -1100,11 +1100,6 @@
         <translation>縮放比例：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.ui" line="154"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="173"/>
         <source>Style group:</source>
         <translation>樣式群組：</translation>
@@ -1712,25 +1707,25 @@
     <name>EditStyleBase</name>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="32"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13054"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13057"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13436"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13439"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
         <source>Style</source>
         <translation>樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14437"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
         <source>Edit text style</source>
         <translation>編輯文字樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14555"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14564"/>
         <source>Padding:</source>
         <translation>內距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14601"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14610"/>
         <source>Reset &apos;Padding&apos; value</source>
         <translation>重設「內距」值</translation>
     </message>
@@ -1784,31 +1779,31 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6581"/>
         <source>Beams</source>
         <translation>符槓</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6620"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6623"/>
         <source>Tuplets</source>
         <translation>連音</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7382"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7385"/>
         <source>Arpeggios</source>
         <translation>琶音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8535"/>
         <source>Hairpins</source>
         <translation>音量漸變記號線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11073"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11076"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14115"/>
         <source>Fermatas</source>
         <translation>延長記號</translation>
     </message>
@@ -1818,8 +1813,8 @@
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8328"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14254"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8331"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14263"/>
         <source>Dynamics</source>
         <translation>力度記號</translation>
     </message>
@@ -1902,74 +1897,74 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5557"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5576"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5897"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6058"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6165"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6304"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6343"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6531"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6694"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7020"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7071"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7147"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7176"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7198"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7407"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7423"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7439"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7579"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7621"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7663"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7705"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7781"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7865"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7907"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7988"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8146"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8429"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8570"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8658"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8697"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8739"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8905"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8944"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9187"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9295"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9463"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9593"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10329"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10390"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11092"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11278"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11546"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11675"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11700"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11909"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11925"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12011"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12110"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12281"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12444"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12483"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12939"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13556"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13608"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13630"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13665"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5887"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6061"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6168"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6232"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6307"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6534"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6697"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7074"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7150"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7179"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7201"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7410"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7426"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7582"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7666"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7708"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7784"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7868"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7991"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8149"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8432"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8573"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8742"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8908"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8947"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9190"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9298"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9466"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9596"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11095"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11549"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11678"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12014"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12135"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12287"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12453"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12492"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13617"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13639"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13674"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2044,147 +2039,148 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5223"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5279"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5709"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5854"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6019"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6078"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6145"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6188"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6268"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6356"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6498"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6668"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6726"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6767"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6857"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6956"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7055"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7233"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7271"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7329"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7589"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7631"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7673"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7721"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7791"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7875"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7923"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8004"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8162"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8351"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8364"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8377"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8390"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8458"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8544"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8603"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8622"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8674"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8723"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8765"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8827"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8853"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8879"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8928"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9077"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9171"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9233"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9311"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9340"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9372"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9428"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9447"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9518"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9537"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9603"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9616"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9649"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9728"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9741"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9842"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9861"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9923"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9983"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10119"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10348"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10409"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10497"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10510"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10539"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10645"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10658"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10687"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11128"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11148"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11171"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11294"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11314"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11380"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11459"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11472"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11501"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11562"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11722"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11735"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11748"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11784"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11797"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11820"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12037"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12155"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12168"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12220"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12310"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12341"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12368"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12396"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12454"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12467"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12572"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12738"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12761"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12809"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13250"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13283"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14478"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14542"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14575"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14598"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14638"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14703"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14716"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14771"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14801"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14814"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14827"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14906"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14967"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6148"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6191"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6671"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6879"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7634"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7724"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7926"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8078"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8354"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8677"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8726"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8931"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9080"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9343"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9375"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9431"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9540"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9652"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9731"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9845"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9926"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9986"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10122"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10500"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10513"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10542"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11131"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11297"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11317"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11475"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11823"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12079"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12161"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12226"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12261"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12316"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12377"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12405"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12421"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12463"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12581"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12818"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13226"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13292"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14551"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14584"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14607"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14647"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14712"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14823"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14935"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14976"/>
         <source>Reset to default</source>
         <translation>重設為預設值</translation>
     </message>
@@ -2242,14 +2238,6 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
         <source>Select swing ratio:</source>
         <translation>選擇搖擺節拍比例：</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="798"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8413"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11871"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14954"/>
-        <source>%</source>
-        <translation>%</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="829"/>
@@ -2567,96 +2555,16 @@ space unit</extracomment>
         <translation>顯示第一小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8403"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8557"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9155"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9672"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9900"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10036"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10677"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11118"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11370"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11491"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12030"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12751"/>
-        <source>Position above:</source>
-        <translation>置於譜表上方的位移：</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3011"/>
         <source>Interval:</source>
         <translation>間隔：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3036"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3301"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8344"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8707"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9639"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10473"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10621"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11161"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11340"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11435"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11777"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12701"/>
-        <source>Position below:</source>
-        <translation>置於譜表下方的位移：</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3052"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3210"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5712"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8461"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8606"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9606"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10062"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10542"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11751"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12764"/>
-        <source>Reset &apos;Position above&apos; value</source>
-        <translation>重設「置於譜表上方的位移」設定值</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3220"/>
         <source>Vertical placement:</source>
         <translation>垂直位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3324"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8354"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8677"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9986"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10122"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10513"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11475"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12741"/>
-        <source>Reset &apos;Position below&apos; value</source>
-        <translation>重設「置於譜表下方的位移」設定值</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3275"/>
         <source>Horizontal placement:</source>
         <translation>水平位置：</translation>
@@ -2857,7 +2765,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation>重設「拍號距離小節線」設定值</translation>
     </message>
@@ -3069,145 +2977,145 @@ space unit</extracomment>
         <translation>預設垂直偏移：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7102"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
         <translation>重設「括線粗細」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7472"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7475"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
         <translation>不要在指法譜顯示標準記譜法的琶音符號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7750"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7753"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7955"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7756"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7958"/>
         <source>Ties</source>
         <translation>延音線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8248"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
         <source>Default positions of dynamics and hairpins</source>
         <translation>力度記號與漸強記號的默認位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8276"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
         <translation>1&amp;3聲部處於譜表上方，2&amp;4聲部處於譜表下方</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
         <source>Place above the staff on vocal instruments</source>
         <translation>力度記號放在聲樂譜表上方</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8321"/>
         <source>Center on grand staff instruments automatically</source>
         <translation>力度記號放在大譜表樂器的中間</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10205"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10208"/>
         <source>Label for full bends</source>
         <translation>全彎音標籤</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10316"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10319"/>
         <source>Arrow height:</source>
         <translation>箭頭高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10441"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10444"/>
         <source>Tablature fret numbers</source>
         <translation>指法譜品格數</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10447"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
         <source>Use cue sized numbers for grace note bends</source>
         <translation>為倚音彎音使用提示大小的數字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11657"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
         <source>Edit lyrics text style</source>
         <translation>編輯唱詞的文本樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11764"/>
         <source>Min. gap between lyrics:</source>
         <translation>唱詞段最小間距</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11858"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11861"/>
         <source>Min. margin to current staff:</source>
         <translation>當前譜表的最小內邊距</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11813"/>
         <source>Min. margin to other staves:</source>
         <translation>其他譜表的最小內邊距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11972"/>
         <source>Line height (% of text size):</source>
         <translation>綫高（字號比例）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12096"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
         <source>Dash</source>
         <translation>─ ─ ─ ─ ─（虛線）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12145"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12151"/>
         <source>Max. dash gap:</source>
         <translation>最大虛綫間隔：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12187"/>
         <source>Min. dash gap:</source>
         <translation>最小虛綫間隔：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12370"/>
         <source>Omit dash when space is limited</source>
         <translation>空間不足時省略虛綫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12381"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
         <translation>在譜行組的第一個音符上
 重申音節前的虛線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12398"/>
         <source>Dash placement at the start of the system:</source>
         <translation>譜行組開頭的虛線位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8484"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8490"/>
         <source>Override score font</source>
         <translation>覆寫樂譜字體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8451"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8454"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12069"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12072"/>
         <source>Avoid barlines</source>
         <translation>避開小節線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12641"/>
         <source>Snap to dynamics</source>
         <translation>貼齊力度記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13156"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13165"/>
         <source>Playback</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13894"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13903"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
         <translation>選擇您希望在常用和簡易指法譜中顯示的元素</translation>
     </message>
@@ -3367,6 +3275,89 @@ first note of the system</source>
         <translation>譜號、調號、拍號</translation>
     </message>
     <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8406"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9903"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11121"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11494"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
+        <source>Offset above:</source>
+        <translation>上方偏移：</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3301"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9642"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11164"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11343"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11438"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12710"/>
+        <source>Offset below:</source>
+        <translation>下方偏移：</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3052"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5712"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8464"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10065"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10545"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11154"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
+        <source>Reset &apos;Offset above&apos; value</source>
+        <translation>重設“上方偏移”值</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3075"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8357"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9453"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9989"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10664"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11386"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11478"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12750"/>
+        <source>Reset &apos;Offset below&apos; value</source>
+        <translation>重設“下方偏移”值</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
+        <source>Horizontal position:</source>
+        <translation>水平位置：</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5292"/>
         <source>Mask barlines</source>
         <translation>小節線襯</translation>
@@ -3438,219 +3429,224 @@ first note of the system</source>
         <translation>Width</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5844"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5874"/>
         <source>Minimum width:</source>
         <translation>最小寬度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5903"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
         <translation>重設「小節最小寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5947"/>
+        <source>measure(s)</source>
+        <translation>小節</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6025"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
         <translation>重設「數字垂直位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6035"/>
         <source>Center between staves on multi-staff instruments</source>
         <translation>在多譜樂器的譜表之間居中</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6084"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
         <translation>重置“若數字重疊則斷開H型休止符”值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6135"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6138"/>
         <source>Maximum number of measures:</source>
         <translation>小節最大數量：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6178"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6181"/>
         <source>Spacing of symbols:</source>
         <translation>符號間隔：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6201"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6204"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6207"/>
         <source>H-bar</source>
         <translation>H式休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6245"/>
         <source>Reset &apos;Horizontal stroke thickness&apos; value</source>
         <translation>重設「橫條粗細」值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6274"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
         <translation>重設「小節線之間的休止符邊距」值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6323"/>
         <source>Reset &apos;Vertical stroke thickness&apos; value</source>
         <translation>重置“垂直端粗細”值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6362"/>
         <source>Reset &apos;Vertical stroke height&apos; value</source>
         <translation>重置“垂直端高度”值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6402"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6405"/>
         <source>Show extenders on 4-measure repeats</source>
         <translation>在 4 小節反覆記號記號顯示延長線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6422"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6425"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6428"/>
         <source>Number consecutive measure repeats</source>
         <translation>小節連續反覆次數</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6437"/>
         <source>Every</source>
         <translation>每</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6454"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6457"/>
         <source>measures</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6488"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6491"/>
         <source>With parentheses</source>
         <translation>帶圓括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6514"/>
         <source>Number position:</source>
         <translation>數字位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6671"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6674"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation>重設「括線最大斜度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6681"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6684"/>
         <source>Maximum slope:</source>
         <translation>括線最大斜度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6713"/>
         <source>Vertical distance from stem:</source>
         <translation>與符桿的垂直距離：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6732"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation>重設「與符桿的垂直距離」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6773"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation>重設「與符頭的垂直距離」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
         <source>Vertical distance from notehead:</source>
         <translation>與符頭的垂直距離：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6825"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6828"/>
         <source>Avoid staves</source>
         <translation>避開譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6835"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6838"/>
         <source>Properties</source>
         <translation>屬性</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6844"/>
         <source>Direction:</source>
         <translation>方向：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6863"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>重設「數字類型」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6879"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6882"/>
         <source>Reset &apos;Direction&apos; value</source>
         <translation>重設「方向」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6890"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6893"/>
         <source>Number</source>
         <translation>數字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6898"/>
         <source>Ratio</source>
         <translation>比例</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6903"/>
         <source>None</source>
         <comment>no tuplet number</comment>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6909"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6980"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6983"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6917"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6922"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6940"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6943"/>
         <source>Number type:</source>
         <translation>數字類型：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6985"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6988"/>
         <source>Bracket</source>
         <translation>括線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6993"/>
         <source>None</source>
         <comment>no tuplet bracket</comment>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7001"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7004"/>
         <source>Brackets</source>
         <translation>括線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7010"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
         <translation>括線厚度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7042"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
         <translation>括線高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7061"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation>重設「括線高度」設定值</translation>
     </message>
@@ -3678,49 +3674,49 @@ first note of the system</source>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8818"/>
         <source>Voltas</source>
         <translation>跳躍號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9132"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9135"/>
         <source>Ottavas</source>
         <translation>八度</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9573"/>
         <source>Pedal lines</source>
         <translation>踏板線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9894"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9897"/>
         <source>Trill lines</source>
         <translation>顫音線條</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10033"/>
         <source>Vibrato lines</source>
         <translation>揉顫線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10213"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10216"/>
         <source>Bends</source>
         <translation>彎音</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10464"/>
         <source>Text lines</source>
         <translation>文字線條</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10612"/>
         <source>System text lines</source>
         <translation>譜表組文字線條</translation>
     </message>
@@ -3731,7 +3727,7 @@ first note of the system</source>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12626"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12635"/>
         <source>Expression text</source>
         <translation>表情文字</translation>
     </message>
@@ -3769,950 +3765,928 @@ first note of the system</source>
         <translation>括線類型：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5940"/>
         <source>Fixed, based on time signature of:</source>
         <translation>相對拍號的：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5887"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5845"/>
         <source>Proportional to time signature</source>
         <translation>與拍號成常比</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5926"/>
         <source>Cap width after:</source>
         <translation>後方寬度上限：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5917"/>
-        <source> / 4</source>
-        <translation> / 4</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5937"/>
-        <source> measures</source>
-        <translation> 小節</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5954"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5960"/>
         <source>On single empty measure</source>
         <translation>在單獨的空小節中</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5966"/>
         <source>Use normal rest</source>
         <translation>使用常規休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5993"/>
         <source>Use H-bar</source>
         <translation>使用H式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6000"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6003"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6006"/>
         <source>Number layout</source>
         <translation>數字版式：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6071"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6074"/>
         <source>Break H-bar if number overlaps</source>
         <translation>若數字重疊則斷開H型休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6213"/>
         <source>Horizontal stroke thickness:</source>
         <translation>橫條粗細：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6284"/>
         <source>Margin within barlines:</source>
         <translation>小節線內邊距</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6291"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6294"/>
         <source>Vertical stroke thickness:</source>
         <translation>垂直端粗細：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6330"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6333"/>
         <source>Vertical stroke height:</source>
         <translation>垂直端高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6962"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
         <translation>重設「括線類型」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6972"/>
         <source>Bracket type:</source>
         <comment>Bracket type for tuplets</comment>
         <translation>括線類型：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7166"/>
         <source>Distance after stem of last note:</source>
         <translation>與最末音符桿的間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7220"/>
         <source>Distance after head of last note:</source>
         <translation>與最末音符頭的間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7239"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation>重設「與最末音符頭的間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7258"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation>重設「與首音符頭的間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7277"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation>重設「與首音符桿的間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7287"/>
         <source>Distance before stem of first note:</source>
         <translation>與首音符桿的間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7313"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7316"/>
         <source>Distance before head of first note:</source>
         <translation>與首音符頭的間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7335"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation>重設「與最末音符桿的間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7391"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7394"/>
         <source>Hook length:</source>
         <translation>括線長度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7452"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8645"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9009"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9207"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9662"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10244"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10377"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12506"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7455"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9012"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9665"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10247"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12515"/>
         <source>Line thickness:</source>
         <translation>線條厚度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7465"/>
         <source>Distance to note:</source>
         <translation>與音符的間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7539"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7542"/>
         <source>Slurs &amp;&amp; ties</source>
         <translation>連音弧與延音線 (&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7644"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7846"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7647"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7849"/>
         <source>Dotted line thickness:</source>
         <translation>點狀線厚度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7686"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7888"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8334"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11079"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11419"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12691"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7689"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8337"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11082"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11422"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12700"/>
         <source>Autoplace min. distance:</source>
         <translation>自動擺放時至少距離：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7560"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7762"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7563"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7765"/>
         <source>Line thickness at end:</source>
         <translation>線條兩端厚度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7602"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7807"/>
         <source>Line thickness middle:</source>
         <translation>線條中段厚度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7972"/>
         <source>Minimum tie length:</source>
         <translation>連結線最短長度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7724"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8393"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11131"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11565"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12812"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7727"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11134"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11568"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12821"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation>重設「自動擺放時最小間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7595"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7797"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
         <translation>重設「線條兩端厚度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7634"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7637"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7839"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
         <translation>重設「線條中段厚度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7676"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7881"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
         <translation>重設「虛線粗細」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8007"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8168"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation>重設「連結線最短長度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8638"/>
         <source>Height:</source>
         <translation>高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8749"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8752"/>
         <source>Continue height:</source>
         <translation>延續高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8771"/>
         <source>Reset &apos;Height&apos; value</source>
         <translation>重設「高度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8628"/>
         <source>Reset &apos;Continue height&apos; value</source>
         <translation>重設「延續高度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8587"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8590"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>自動擺放，距離力度記號：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8550"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation>重設「自動擺放，距離力度記號」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9718"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9950"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10086"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10552"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10700"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11514"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12774"/>
-        <source>Placement:</source>
-        <translation>置於譜表：</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9963"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10099"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10500"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11462"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12728"/>
-        <source>Reset &apos;Placement&apos; value</source>
-        <translation>重設「位置」設定值</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8726"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8931"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9431"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9731"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12457"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8934"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12466"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation>重設「線條厚度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8299"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8302"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8833"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9655"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9966"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10102"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10503"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10651"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11465"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11803"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12737"/>
         <source>Reset &apos;Position&apos; value</source>
         <translation>重設「位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8963"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9080"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9343"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9521"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9540"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9619"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9845"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8859"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8966"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9083"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9524"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9622"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9848"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9867"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation>重設「線條樣式」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9317"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation>重設「括線高度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8892"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9138"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9777"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9141"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9780"/>
         <source>Dash size:</source>
         <translation>虛線粗細：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12056"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9721"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9953"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10089"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10555"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11252"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12059"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12783"/>
         <source>Position:</source>
         <translation>位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9197"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9629"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9632"/>
         <source>Line style:</source>
         <translation>線條樣式：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8999"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9002"/>
         <source>Hook height:</source>
         <translation>勾線高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9033"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9247"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9250"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9693"/>
         <source>Continuous</source>
         <translation>連續</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9038"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9695"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9041"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9698"/>
         <source>Dashed</source>
         <translation>虛線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9043"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9257"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9260"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9703"/>
         <source>Dotted</source>
         <translation>點狀</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9048"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9262"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9705"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9051"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9265"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9708"/>
         <source>Dash-dotted</source>
         <translation>虛點線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9053"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9267"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9056"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9713"/>
         <source>Dash-dot-dotted</source>
         <translation>雙點虛線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9061"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9064"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9415"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9797"/>
         <source>Gap size:</source>
         <translation>線條間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9275"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9278"/>
         <source>Hook height above:</source>
         <translation>上方垂線高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9285"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9288"/>
         <source>Numbers only</source>
         <translation>只顯示數字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9327"/>
         <source>Hook height below:</source>
         <translation>下方垂線高度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9375"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9378"/>
         <source>Reset &apos;Numbers only&apos; value</source>
         <translation>重設「只顯示數字」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10219"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10222"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10225"/>
         <source>Standard staff</source>
         <translation>標準譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10244"/>
         <source>Line thickness on standard staves:</source>
         <translation>標準譜表的線條粗細：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10267"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
         <translation>重設「標準譜表的線條粗細」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10302"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation>重設「箭頭寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10286"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10289"/>
         <source>Arrow width:</source>
         <translation>箭頭寬度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10354"/>
         <source>Reset &apos;Arrow height&apos; value</source>
         <translation>重設「箭頭高度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10374"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10377"/>
         <source>Line thickness on tablature staves:</source>
         <translation>指法譜譜線粗細：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10415"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
         <translation>重設「指法譜譜線粗細」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10757"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10760"/>
         <source>Articulations &amp;&amp; ornaments</source>
         <translation>奏法記號與裝飾音符號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10763"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10766"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation>重設「演奏法記號間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10773"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10806"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10838"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10776"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10809"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10841"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation> 個譜線間隔</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10786"/>
         <source>Distance from stem:</source>
         <translation>到符槓的距離：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10796"/>
         <source>Articulation size:</source>
         <translation>演奏法記號大小：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10848"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10851"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation>重設「符桿間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10855"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10858"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation>重設「符頭間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10862"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10865"/>
         <source>Distance from staff:</source>
         <translation>到譜表的距離：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10888"/>
         <source>Distance from notehead:</source>
         <translation>到符頭的距離：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10898"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation>重設「演奏法記號大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10905"/>
         <source>Minimum vertical distance:</source>
         <translation>最小垂直距離：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10951"/>
         <source>Articulation alignment when positioned at the stem</source>
         <translation>放在符桿上的演奏法記號對齊方式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10957"/>
         <source>Align with stem</source>
         <translation>與符桿對齊</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10961"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
         <source>Align with notehead</source>
         <translation>與符頭對齊</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10968"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10971"/>
         <source>Center between stem and notehead</source>
         <translation>在符桿與符頭中間</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10994"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10997"/>
         <source>Combined articulation</source>
         <translation>複合演奏法記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11003"/>
         <source>Always keep together</source>
         <translation>總是放在一起</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11010"/>
         <source>Prefer closeness to notehead (combined articulations may become separated)</source>
         <translation>盡量靠近符頭（複合演奏法記號可能會分離）</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12216"/>
         <source>Dash thickness:</source>
         <translation>虛線厚度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12264"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation>重設「最大虛線間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12399"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12408"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation>重設「總是顯示虛線」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12313"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12319"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation>重設「最小虛線長度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12306"/>
         <source>Max. dash length:</source>
         <translation>最大虛線長度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12223"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12229"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation>重設「最大虛線長度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation>重設「虛線厚度」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12268"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12274"/>
         <source>Min. dash length:</source>
         <translation>最小虛線長度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11896"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11899"/>
         <source>Align verse number</source>
         <translation>對齊歌詞編號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11728"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation>重設「對齊歌詞編號」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11741"/>
         <source>Reset &apos;Min. distance&apos; value</source>
         <translation>重設「最小間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12958"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12967"/>
         <source>Line height:</source>
         <translation>行高：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12043"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation>重設「最小下方邊距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11839"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation>重設「行高」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11790"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation>重設「最小上方邊距」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14849"/>
         <source>Align:</source>
         <translation>對齊：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8383"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
         <translation>重設「避開小節線」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8370"/>
         <source>Reset &apos;Scale&apos; value</source>
         <translation>重設「縮放比例」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12655"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12664"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
         <translation>重設「貼齊力度記號」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12877"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14870"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14879"/>
         <source>Size:</source>
         <translation>字體大小：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12893"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14683"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14692"/>
         <source>pt</source>
         <translation>點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12909"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12918"/>
         <source>from top of staff</source>
         <translation>從譜表上方</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12938"/>
         <source>of font height</source>
         <translation>字體高度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8496"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12993"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8499"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13002"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14702"/>
         <source>Font:</source>
         <translation>字型：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12177"/>
         <source>Reset &apos;Dash gap&apos; value</source>
         <translation>重置‘虛線外邊距’值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12323"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12329"/>
         <source>Vertical position (% of 
 text x-height):</source>
         <translation>垂直位置（相對文本
 垂直高度的百分比）：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12353"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
         <translation>重置‘垂直位置（文本高度的%）’值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12380"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
         <translation>重置‘空間有限時省略虛線’值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12415"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12424"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
         <translation>重置‘虛線位置位於譜行組開頭’值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12430"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12439"/>
         <source>Extension line</source>
         <translation>延長綫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12479"/>
         <source>Reset &apos;Min. line length&apos; value</source>
         <translation>重置“最小線長”值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12499"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12508"/>
         <source>Min. line length:</source>
         <translation>最小線長：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12525"/>
         <source>Line gap:</source>
         <translation>行間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12548"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12557"/>
         <source>Reset &apos;Line gap&apos; value</source>
         <translation>重置‘行間距’值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12574"/>
         <source>Omit extension line when space is limited</source>
         <translation>空間有限時省略延長線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12584"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
         <translation>重置 &apos;空間有限時省略延長線&apos; 值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6045"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13013"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13022"/>
         <source>Vertical position:</source>
         <translation>垂直位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8043"/>
         <source>Minimum hanging tie length:</source>
         <translation>最小懸浮延音線長度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8078"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8081"/>
         <source>Reset &apos;Minimum hanging tie length&apos; value</source>
         <translation>重置“最小懸浮延音線長度”值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
         <source>Laissez vibrer</source>
         <translation>放任號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8127"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8130"/>
         <source>Minimum laissez vibrer length:</source>
         <translation>最小放任號長度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8190"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8193"/>
         <source>Use SMuFL symbols</source>
         <translation>使用SMuFL符號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10166"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10172"/>
         <source>Glissandos</source>
         <translation>滑奏</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10177"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10183"/>
         <source>Note-anchored lines</source>
         <translation>音符錨索</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
         <translation>小顫音音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
         <source>Show only for intervals other than seconds</source>
         <translation>僅顯示二度以外的音程</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11049"/>
         <source>Show for all intervals</source>
         <translation>顯示所有音程</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12076"/>
-        <source>Reset avoid barlines</source>
-        <translation>重設避開小節線</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13028"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13031"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13040"/>
         <source>Alignment</source>
         <translation>對齊</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13046"/>
         <source>Top</source>
         <translation>頂部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13044"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13053"/>
         <source>Bottom</source>
         <translation>底部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13072"/>
         <source>Modern</source>
         <translation>現代</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13070"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13079"/>
         <source>Historic</source>
         <translation>古代</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13136"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13145"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation>移調夾在指板上的位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13180"/>
         <source>Appearance</source>
         <translation>外觀</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13229"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
         <translation>重設「延伸音垂直位移」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13230"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13239"/>
         <source>Extension vertical offset:</source>
         <translation>延伸音垂直位移：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13240"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13249"/>
         <source>Extension scaling:</source>
         <translation>延伸音縮放比例：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13253"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13262"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
         <translation>重設「延伸比例」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13263"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13272"/>
         <source>Modifier scaling:</source>
         <translation>變化音縮放比例：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13273"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13282"/>
         <source>Modifier vertical offset:</source>
         <translation>變化音垂直位移</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13286"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13295"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
         <translation>重設「變化音縮放比例」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13308"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
         <translation>重設「變化音垂直位移」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13330"/>
         <source>Lower case minor chords</source>
         <translation>小、減和弦使用小寫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13328"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13337"/>
         <source>Lower case bass notes</source>
         <translation>最低音使用小寫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13335"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13344"/>
         <source>All caps note names</source>
         <translation>音名全部大寫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13358"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13370"/>
         <source>Spelling</source>
         <translation>音名拼寫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13392"/>
         <source>German</source>
         <translation>德語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13402"/>
         <source>Full German</source>
         <translation>完整德語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13403"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13412"/>
         <source>Solfeggio</source>
         <translation>唱名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13413"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13422"/>
         <source>French</source>
         <translation>法語</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13455"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13464"/>
         <source>Jazz</source>
         <translation>爵士</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13471"/>
         <source>Custom</source>
         <translation>自訂</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13484"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
         <source>Load XML</source>
         <translation>載入 XML </translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13510"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13519"/>
         <source>Positioning</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13525"/>
         <source>Maximum shift below:</source>
         <translation>最大向下位移：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13533"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13542"/>
         <source>Distance to fretboard diagram:</source>
         <translation>距離指板圖：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13552"/>
         <source>Maximum shift above:</source>
         <translation>最大向上位移：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13584"/>
         <source>Minimum chord spacing:</source>
         <translation>最小和弦間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13585"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13594"/>
         <source>Maximum barline distance:</source>
         <translation>最大小節線間距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8474"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8477"/>
         <source>Scale:</source>
         <translation>縮放比例：</translation>
     </message>
@@ -4724,37 +4698,37 @@ text x-height):</source>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6399"/>
         <source>Measure repeats</source>
         <translation>小節反覆號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11220"/>
         <source>Staff text</source>
         <translation>譜表文字</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11413"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11416"/>
         <source>Tempo text</source>
         <translation>速度文字</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12685"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12694"/>
         <source>Rehearsal marks</source>
         <translation>排練號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12878"/>
         <source>Figured bass</source>
         <translation>數字低音</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13100"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13109"/>
         <source>Chord symbols</source>
         <translation>和弦代號</translation>
     </message>
@@ -4814,318 +4788,323 @@ text x-height):</source>
         <translation>小節休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6107"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6113"/>
         <source>Old-style multimeasure rests</source>
         <translation>老式小節休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6659"/>
         <source>Vertical distance from notes</source>
         <translation>與音符的垂直距離</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7141"/>
         <source>Horizontal distance from notes</source>
         <translation>與音符的橫向距離</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11645"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11648"/>
         <source>Lyrics text</source>
         <translation>歌詞文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13309"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13312"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13321"/>
         <source>Automatic capitalization</source>
         <translation>自動大寫字母</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10277"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13855"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10283"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13864"/>
         <source>Tablature</source>
         <translation>指法譜</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14297"/>
         <source>Staccato</source>
         <translation>斷音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13983"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13992"/>
         <source>Accent and marcato marks</source>
         <translation>重音與加強音記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14120"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14129"/>
         <source>Harmonic marks</source>
         <translation>泛音記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14092"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14101"/>
         <source>Turns</source>
         <translation>迴音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14075"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14084"/>
         <source>Palm mute (P.M.)</source>
         <translation>悶音 (P.M.)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14237"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14246"/>
         <source>Let ring</source>
         <translation>持續延音 (Let ring)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7548"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14046"/>
         <source>Slurs</source>
         <translation>圓滑線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14196"/>
         <source>Wah open/close</source>
         <translation>哇音開／關</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14189"/>
         <source>Crescendo and diminuendo lines</source>
         <translation>漸強與漸弱線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14039"/>
         <source>Simple</source>
         <translation>簡單</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14160"/>
         <source>Common</source>
         <translation>常用樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14063"/>
         <source>Golpe</source>
         <translation>打板</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14032"/>
         <source>Mordents</source>
         <translation>波音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13999"/>
         <source>Rasgueado</source>
         <translation>輪指</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14379"/>
         <source>Parentheses indicating ties</source>
         <translation>表示延音線的括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14392"/>
         <source>Always show at the start of a measure</source>
         <translation>總在小節開頭顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14397"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14406"/>
         <source>Always show parenthesized fret marks when articulation markings are present</source>
         <translation>總是在運音法記號出現時顯示帶括號品號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14896"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14905"/>
         <source>Line spacing:</source>
         <translation>行距：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14928"/>
         <source>Use musical symbols font for tuplet numbers</source>
         <translation>為連音數字使用音樂符號字體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14938"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
         <translation>重置“為連音數字使用音樂符號字體”值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14950"/>
         <source>Musical symbols scale:</source>
         <translation>音樂符號比例</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14979"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
         <translation>重置“音樂符號比例”值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15048"/>
         <source>Reset all styles to default</source>
         <translation>重設所有樣式設定值為預設值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14449"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Frame:</source>
         <translation>邊框：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12082"/>
+        <source>Reset &apos;Avoid barlines&apos;</source>
+        <translation>重設“避開小節線”</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13379"/>
         <source>Standard</source>
         <comment>chord symbol spelling</comment>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13454"/>
         <source>Standard</source>
         <comment>chord symbol style</comment>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14340"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14349"/>
         <source>Tied fret marks</source>
         <translation>連結品格號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14355"/>
         <source>Show ties and repeat fret marks</source>
         <translation>顯示延音線並重復品格號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14353"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14362"/>
         <source>Show ties only</source>
         <translation>僅顯示延音綫</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14360"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14369"/>
         <source>Show initial fret mark only</source>
         <translation>僅顯示初始品格號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14376"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14385"/>
         <source>Only show at the start of a system</source>
         <translation>總在譜行組開頭顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14399"/>
         <source>Never show</source>
         <translation>總不顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14479"/>
         <source>Circle</source>
         <translation>圓形</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14481"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14490"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation>重設「邊框」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14509"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14518"/>
         <source>Thickness:</source>
         <translation>厚度：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14541"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation>重設「背景」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14545"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14587"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation>重設「框線」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14574"/>
         <source>Corner radius:</source>
         <translation>圓角半徑：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14627"/>
         <source>Border:</source>
         <translation>框線：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14628"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14637"/>
         <source>Highlight:</source>
         <translation>醒目標示：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14650"/>
         <source>Reset &apos;Corner radius&apos; value</source>
         <translation>重設「圓角半徑」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14670"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14679"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation>重設「字型樣式」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14706"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14715"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation>重設「對齊」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14728"/>
         <source>Reset &apos;Color&apos; value</source>
         <translation>重設「顏色」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14738"/>
         <source>Color:</source>
         <translation>顏色：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14745"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14909"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14918"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation>重設「字型大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14758"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14767"/>
         <source>Style:</source>
         <translation>樣式：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14774"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14783"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
         <translation>重設「跟隨譜表大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14784"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14793"/>
         <source>Offset:</source>
         <translation>偏移：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14803"/>
         <source>Follow staff size</source>
         <translation>跟隨譜表大小</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14813"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation>重設「名稱」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14817"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14826"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation>重設「字型」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14839"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation>重設「偏移」設定值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14859"/>
         <source>Name:</source>
         <translation>名稱：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14883"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14892"/>
         <source>li</source>
         <translation> 行</translation>
     </message>
@@ -5302,12 +5281,6 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="111"/>
         <source>Nominal:</source>
         <translation>譜面上的：</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.ui" line="118"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.ui" line="154"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="134"/>
@@ -5871,11 +5844,6 @@ text x-height):</source>
         <source>Select swing ratio:</source>
         <translation>選擇搖擺節拍比例：</translation>
     </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="125"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
 </context>
 <context>
     <name>SymbolDialogBase</name>
@@ -5916,12 +5884,6 @@ text x-height):</source>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
         <source>Value:</source>
         <translation>數值：</translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="98"/>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="200"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="112"/>
@@ -6008,11 +5970,6 @@ text x-height):</source>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="75"/>
         <source>Text:</source>
         <translation>文字：</translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="101"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
 </context>
 <context>
@@ -6371,11 +6328,6 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="42"/>
         <source>Ratio:</source>
         <translation>比例：</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="71"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="131"/>
@@ -19445,12 +19397,6 @@ Fret %1 on strings %2</source>
         <translation>li</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="58"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="63"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="106"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
@@ -19494,11 +19440,6 @@ Fret %1 on strings %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
         <source>Don’t ask again</source>
         <translation>不要再詢問</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
-        <source>°</source>
-        <translation>°</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>

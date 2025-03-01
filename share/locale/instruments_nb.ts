@@ -11941,14 +11941,14 @@
         <source>Hand Cymbals.</source>
         <comment>cymbal description</comment>
         <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hånd-cymbaler.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4039"/>
         <source>Hand Cymbals</source>
         <comment>cymbal trackName</comment>
         <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hånd-cymbaler</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4043"/>
@@ -15483,63 +15483,63 @@
         <source>Large drum kit.</source>
         <comment>drumset description</comment>
         <extracomment>description for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stort trommesett.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3877"/>
         <source>Drum Kit (large)</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trommesett (stort)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3884"/>
         <source>Minimal drum kit, 4-piece.</source>
         <comment>drum-kit-4 description</comment>
         <extracomment>description for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Minimalt trommesett, 4 deler.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3886"/>
         <source>Drum Kit (minimal)</source>
         <comment>drum-kit-4 trackName</comment>
         <extracomment>trackName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trommesett (minimalt)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3893"/>
         <source>Common drum kit, 5-piece.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vanlig trommesett, 5 deler.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3895"/>
         <source>Drum Kit (common)</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trommesett (vanlig)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4010"/>
         <source>China cymbal for drum kit.</source>
         <comment>chinese-cymbal description</comment>
         <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kina-cymbal for trommesett.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4012"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal trackName</comment>
         <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kina-cymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4014"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal longName</comment>
         <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kina-cymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4041"/>
@@ -19636,17 +19636,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3410"/>
         <source>Percussion - Pitched</source>
-        <translation>Melodisk perkusjon</translation>
+        <translation>Melodisk slagverk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3800"/>
         <source>Percussion - Unpitched</source>
-        <translation>Perkusjon</translation>
+        <translation>Slagverk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4352"/>
         <source>Percussion - Marching</source>
-        <translation>Marsjperkusjon</translation>
+        <translation>Marsjslagverk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4391"/>

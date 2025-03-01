@@ -1100,11 +1100,6 @@
         <translation>Schaal:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.ui" line="154"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="173"/>
         <source>Style group:</source>
         <translation>Stijlgroep:</translation>
@@ -1712,25 +1707,25 @@
     <name>EditStyleBase</name>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="32"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13054"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13057"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13436"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13439"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
         <source>Style</source>
         <translation>Stijl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14437"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
         <source>Edit text style</source>
         <translation>Bewerk tekststijl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14555"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14564"/>
         <source>Padding:</source>
         <translation>Ruimte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14601"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14610"/>
         <source>Reset &apos;Padding&apos; value</source>
         <translation>Herstel &apos;Ruimte&apos; waarde</translation>
     </message>
@@ -1784,31 +1779,31 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6581"/>
         <source>Beams</source>
         <translation>Waardestrepen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6620"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6623"/>
         <source>Tuplets</source>
         <translation>Antimetrische figuren</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7382"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7385"/>
         <source>Arpeggios</source>
         <translation>Arpeggio&apos;s</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8535"/>
         <source>Hairpins</source>
         <translation>Cresc./decresc.(diminuendo)-tekens</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11073"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11076"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14115"/>
         <source>Fermatas</source>
         <translation>Fermata</translation>
     </message>
@@ -1818,8 +1813,8 @@
         <translation>Liedtekst</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8328"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14254"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8331"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14263"/>
         <source>Dynamics</source>
         <translation>Dynamische tekens</translation>
     </message>
@@ -1902,74 +1897,74 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5557"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5576"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5897"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6058"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6165"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6304"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6343"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6531"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6694"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7020"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7071"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7147"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7176"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7198"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7407"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7423"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7439"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7579"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7621"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7663"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7705"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7781"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7865"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7907"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7988"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8146"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8429"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8570"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8658"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8697"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8739"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8905"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8944"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9187"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9295"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9463"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9593"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10329"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10390"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11092"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11278"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11546"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11675"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11700"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11909"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11925"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12011"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12110"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12281"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12444"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12483"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12939"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13556"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13608"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13630"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13665"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5887"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6061"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6168"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6232"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6307"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6534"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6697"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7074"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7150"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7179"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7201"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7410"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7426"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7582"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7666"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7708"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7784"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7868"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7991"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8149"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8432"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8573"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8742"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8908"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8947"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9190"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9298"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9466"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9596"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11095"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11549"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11678"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12014"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12135"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12287"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12453"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12492"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13617"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13639"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13674"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2044,147 +2039,148 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5223"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5279"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5709"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5854"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6019"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6078"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6145"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6188"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6268"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6356"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6498"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6668"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6726"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6767"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6857"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6956"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7055"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7233"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7271"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7329"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7589"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7631"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7673"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7721"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7791"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7875"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7923"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8004"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8162"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8351"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8364"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8377"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8390"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8458"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8544"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8603"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8622"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8674"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8723"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8765"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8827"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8853"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8879"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8928"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9077"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9171"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9233"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9311"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9340"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9372"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9428"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9447"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9518"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9537"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9603"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9616"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9649"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9728"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9741"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9842"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9861"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9923"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9983"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10119"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10348"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10409"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10497"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10510"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10539"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10645"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10658"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10687"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11128"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11148"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11171"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11294"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11314"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11380"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11459"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11472"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11501"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11562"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11722"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11735"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11748"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11784"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11797"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11820"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12037"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12155"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12168"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12220"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12310"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12341"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12368"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12396"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12454"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12467"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12572"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12738"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12761"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12809"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13250"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13283"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13296"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14478"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14542"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14575"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14598"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14638"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14703"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14716"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14771"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14801"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14814"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14827"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14906"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14967"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6148"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6191"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6671"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6879"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7634"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7724"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7926"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8078"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8354"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8677"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8726"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8931"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9080"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9343"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9375"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9431"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9540"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9652"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9731"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9845"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9926"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9986"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10122"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10500"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10513"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10542"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11131"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11297"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11317"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11475"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11823"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12079"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12161"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12174"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12226"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12261"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12316"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12377"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12405"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12421"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12463"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12581"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12818"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13226"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13292"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14551"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14584"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14607"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14647"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14712"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14823"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14935"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14976"/>
         <source>Reset to default</source>
         <translation>Herstel naar standaardwaarde</translation>
     </message>
@@ -2242,14 +2238,6 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
         <source>Select swing ratio:</source>
         <translation>Kies swingratio:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="798"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8413"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11871"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14954"/>
-        <source>%</source>
-        <translation>%</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="829"/>
@@ -2567,96 +2555,16 @@ space unit</extracomment>
         <translation>Laat eerste zien</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8403"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8557"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9155"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9672"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9900"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10036"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10529"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10677"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11118"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11370"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11491"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12030"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12751"/>
-        <source>Position above:</source>
-        <translation>Positie boven:</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3011"/>
         <source>Interval:</source>
         <translation>Interval:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3036"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3301"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8344"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8707"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9217"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9639"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10473"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10621"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11161"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11340"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11435"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11777"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12701"/>
-        <source>Position below:</source>
-        <translation>Positie onder:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3052"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3210"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5712"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8461"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8606"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9606"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10062"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10542"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11751"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12764"/>
-        <source>Reset &apos;Position above&apos; value</source>
-        <translation>Herstel &apos;Positie boven&apos; waarde</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3220"/>
         <source>Vertical placement:</source>
         <translation>Verticale plaatsing:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3324"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8354"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8677"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9986"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10122"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10513"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11475"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12741"/>
-        <source>Reset &apos;Position below&apos; value</source>
-        <translation>Herstel &apos;Positie onder&apos; waarde</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3275"/>
         <source>Horizontal placement:</source>
         <translation>Horizontale plaatsing:</translation>
@@ -2857,7 +2765,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6501"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation>Herstel &apos;Maatsoort tot maatstreep afstand&apos; waarde</translation>
     </message>
@@ -3069,145 +2977,145 @@ space unit</extracomment>
         <translation>Standaard verticale correctie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7102"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
         <translation>Herstel &apos;Haakdikte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7472"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7475"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
         <translation>Verberg arpeggio&apos;s in standaard notatie als deze in tablatuur worden getoond</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7750"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7753"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7955"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7756"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7958"/>
         <source>Ties</source>
         <translation>Overbindingen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8248"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
         <source>Default positions of dynamics and hairpins</source>
         <translation>Standaardpositie dynamiek en cresc./decresc.-tekens</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8276"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
         <translation>Stem 1 &amp; 3 boven de balk, stem 2 &amp; 4 onder de balk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
         <source>Place above the staff on vocal instruments</source>
         <translation>Plaats boven de balk voor zang instrumenten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8321"/>
         <source>Center on grand staff instruments automatically</source>
         <translation>Centreer automatisch tussen dubbele notenbalken</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10205"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10208"/>
         <source>Label for full bends</source>
         <translation>Label voor full bends</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10316"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10319"/>
         <source>Arrow height:</source>
         <translation>Pijlhoogte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10441"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10444"/>
         <source>Tablature fret numbers</source>
         <translation>Tablatuur fretnummers</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10447"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
         <source>Use cue sized numbers for grace note bends</source>
         <translation>Gebruik cijfers in klein formaat voor siernoot bends</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11657"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
         <source>Edit lyrics text style</source>
         <translation>Bewerk tekststijl</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11764"/>
         <source>Min. gap between lyrics:</source>
         <translation>Min. afstand tussen liedtekst:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11858"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11861"/>
         <source>Min. margin to current staff:</source>
         <translation>Min. marge tot bijbehorende notenbalk:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11813"/>
         <source>Min. margin to other staves:</source>
         <translation>Min. marge tot andere notenbalken:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11972"/>
         <source>Line height (% of text size):</source>
         <translation>Regelhoogte (% van tekstgrootte):</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12096"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
         <source>Dash</source>
         <translation>Streepje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12145"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12151"/>
         <source>Max. dash gap:</source>
         <translation>Max. afstand rondom streepje:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12187"/>
         <source>Min. dash gap:</source>
         <translation>Min. afstand rondom streepje:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12370"/>
         <source>Omit dash when space is limited</source>
         <translation>Laat streepje weg bij ruimtegebrek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12381"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
         <translation>Herhaal streepje bij lettergreep
 van eerste noot van het systeem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12398"/>
         <source>Dash placement at the start of the system:</source>
         <translation>Plaatsing van streepje aan begin van systeem:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8484"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8490"/>
         <source>Override score font</source>
         <translation>Gebruik afwijkend lettertype</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8451"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12066"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8454"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12069"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12072"/>
         <source>Avoid barlines</source>
         <translation>Ontwijk maatstrepen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12641"/>
         <source>Snap to dynamics</source>
         <translation>Uitlijnen op dynamiek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13156"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13165"/>
         <source>Playback</source>
         <translation>Afspelen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13894"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13903"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
         <translation>Selecteer de elementen die u in reguliere en eenvoudige tablatuurbalken wilt weergeven</translation>
     </message>
@@ -3367,6 +3275,89 @@ van eerste noot van het systeem</translation>
         <translation>Muzieksleutels, toon- &amp; maatsoorten</translation>
     </message>
     <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8406"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9903"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11121"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11494"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
+        <source>Offset above:</source>
+        <translation>Correctie boven:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3301"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9642"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10476"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10624"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11164"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11343"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11438"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12710"/>
+        <source>Offset below:</source>
+        <translation>Correctie onder:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3052"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5712"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8464"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10065"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10545"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11154"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
+        <source>Reset &apos;Offset above&apos; value</source>
+        <translation>Herstel &apos;Correctie boven&apos; waarde</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3075"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8357"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9453"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9747"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9989"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10664"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11386"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11478"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12750"/>
+        <source>Reset &apos;Offset below&apos; value</source>
+        <translation>Herstel &apos;Correctie onder&apos; waarde</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
+        <source>Horizontal position:</source>
+        <translation>Horizontale positie:</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5292"/>
         <source>Mask barlines</source>
         <translation>Onderbreek maatstrepen</translation>
@@ -3438,219 +3429,224 @@ van eerste noot van het systeem</translation>
         <translation>Breedte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5844"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5874"/>
         <source>Minimum width:</source>
         <translation>Minimum breedte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5903"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
         <translation>Herstel &apos;Minimum maatbreedte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5947"/>
+        <source>measure(s)</source>
+        <translation>maten</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6025"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
         <translation>Herstel &apos;Verticale positie van getal&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6035"/>
         <source>Center between staves on multi-staff instruments</source>
         <translation>Centreer tussen balken bij instrumenten met meerdere balken</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6081"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6084"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
         <translation>Herstel ‘Onderbreek H-balk bij overlap met aantal’ naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6135"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6138"/>
         <source>Maximum number of measures:</source>
         <translation>Maximum aantal maten:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6178"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6181"/>
         <source>Spacing of symbols:</source>
         <translation>Afstand van symbolen:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6201"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6204"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6207"/>
         <source>H-bar</source>
         <translation>H-balk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6242"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6245"/>
         <source>Reset &apos;Horizontal stroke thickness&apos; value</source>
         <translation>Herstel &apos;Horizontale lijndikte&apos; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6274"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
         <translation>Herstel &apos;Marge binnen maatstrepen&apos; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6323"/>
         <source>Reset &apos;Vertical stroke thickness&apos; value</source>
         <translation>Herstel &apos;Verticale lijndikte&apos; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6359"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6362"/>
         <source>Reset &apos;Vertical stroke height&apos; value</source>
         <translation>Herstel &apos;Verticale lijnlengte&apos; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6402"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6405"/>
         <source>Show extenders on 4-measure repeats</source>
         <translation>Toon verlengers bij herhalingen van 4 maten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6422"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6425"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6428"/>
         <source>Number consecutive measure repeats</source>
         <translation>Aantal opeenvolgende maatherhalingen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6437"/>
         <source>Every</source>
         <translation>Iedere</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6454"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6457"/>
         <source>measures</source>
         <translation>maten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6488"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6491"/>
         <source>With parentheses</source>
         <translation>Met haakjes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6514"/>
         <source>Number position:</source>
         <translation>Positie getal:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6671"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6674"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation>Herstel &apos;Maximale hellingshoek&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6681"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6684"/>
         <source>Maximum slope:</source>
         <translation>Maximale hellingshoek:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6713"/>
         <source>Vertical distance from stem:</source>
         <translation>Verticale afstand vanaf stok:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6732"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation>Herstel &apos;Verticale afstand van de stok&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6773"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation>Herstel &apos;Verticale afstand vanaf de notenkop&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
         <source>Vertical distance from notehead:</source>
         <translation>Verticale afstand vanaf de notenkop:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6825"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6828"/>
         <source>Avoid staves</source>
         <translation>Ontwijk notenbalken</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6835"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6838"/>
         <source>Properties</source>
         <translation>Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6844"/>
         <source>Direction:</source>
         <translation>Richting:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6863"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>Herstel &apos;Nummertype&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6879"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6882"/>
         <source>Reset &apos;Direction&apos; value</source>
         <translation>Herstel &apos;Richting&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6890"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6893"/>
         <source>Number</source>
         <translation>Getal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6898"/>
         <source>Ratio</source>
         <translation>Verhouding</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6903"/>
         <source>None</source>
         <comment>no tuplet number</comment>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6909"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6980"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6983"/>
         <source>Auto</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6917"/>
         <source>Up</source>
         <translation>Omhoog</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6922"/>
         <source>Down</source>
         <translation>Omlaag</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6940"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6943"/>
         <source>Number type:</source>
         <translation>Nummertype:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6985"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6988"/>
         <source>Bracket</source>
         <translation>Haak</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6993"/>
         <source>None</source>
         <comment>no tuplet bracket</comment>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7001"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7004"/>
         <source>Brackets</source>
         <translation>Haken</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7010"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
         <translation>Haakdikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7042"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
         <translation>Haakhoogte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7058"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7061"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation>Herstel &apos;Haak hoogte&apos; waarde</translation>
     </message>
@@ -3678,49 +3674,49 @@ van eerste noot van het systeem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8818"/>
         <source>Voltas</source>
         <translation>Volta&apos;s</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9132"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9135"/>
         <source>Ottavas</source>
         <translation>Ottavas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9573"/>
         <source>Pedal lines</source>
         <translation>Pedaallijnen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9894"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9897"/>
         <source>Trill lines</source>
         <translation>Trillerlijnen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10033"/>
         <source>Vibrato lines</source>
         <translation>Vibratolijnen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10213"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10216"/>
         <source>Bends</source>
         <translation>Bend/toonbuigingen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10464"/>
         <source>Text lines</source>
         <translation>Tekstlijnen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10612"/>
         <source>System text lines</source>
         <translation>Systeemtekstlijnen</translation>
     </message>
@@ -3731,7 +3727,7 @@ van eerste noot van het systeem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12626"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12635"/>
         <source>Expression text</source>
         <translation>Expressietekst</translation>
     </message>
@@ -3769,950 +3765,928 @@ van eerste noot van het systeem</translation>
         <translation>Haaktype:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5940"/>
         <source>Fixed, based on time signature of:</source>
         <translation>Vast, gebaseerd op deze maatsoort:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5887"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5845"/>
         <source>Proportional to time signature</source>
         <translation>Proportioneel aan maatsoort</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5926"/>
         <source>Cap width after:</source>
         <translation>Begrens breedte na:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5917"/>
-        <source> / 4</source>
-        <translation> / 4</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5937"/>
-        <source> measures</source>
-        <translation>maten</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5954"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5960"/>
         <source>On single empty measure</source>
         <translation>Voor enkele lege maat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5963"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5966"/>
         <source>Use normal rest</source>
         <translation>Gebruik normale rust</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5993"/>
         <source>Use H-bar</source>
         <translation>Gebruik H-balk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6000"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6003"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6006"/>
         <source>Number layout</source>
         <translation>Aanduiding aantal maten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6071"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6074"/>
         <source>Break H-bar if number overlaps</source>
         <translation>Onderbreek H-balk bij overlap met aantal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6213"/>
         <source>Horizontal stroke thickness:</source>
         <translation>Horizontale lijndikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6281"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6284"/>
         <source>Margin within barlines:</source>
         <translation>Marge binnen maatstrepen:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6291"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6294"/>
         <source>Vertical stroke thickness:</source>
         <translation>Verticale lijndikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6330"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6333"/>
         <source>Vertical stroke height:</source>
         <translation>Verticale lijnlengte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6962"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
         <translation>Herstel &apos;Haaktype&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6972"/>
         <source>Bracket type:</source>
         <comment>Bracket type for tuplets</comment>
         <translation>Haaktype:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7166"/>
         <source>Distance after stem of last note:</source>
         <translation>Afstand na de stok van de laatste noot:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7220"/>
         <source>Distance after head of last note:</source>
         <translation>Afstand na de kop van de laatste noot:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7239"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation>Herstel &apos;Afstand achter de kop van de laatste noot&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7258"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation>Herstel &apos;Afstand voor de kop van de eerste noot&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7277"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation>Herstel &apos;Afstand voor de stok van de eerste noot&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7287"/>
         <source>Distance before stem of first note:</source>
         <translation>Afstand voor de stok van de eerste noot:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7313"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7316"/>
         <source>Distance before head of first note:</source>
         <translation>Afstand voor de kop van de eerste noot:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7335"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation>Herstel &apos;Afstand achter de stok van de laatste noot&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7391"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7394"/>
         <source>Hook length:</source>
         <translation>Haaklengte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7452"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8645"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9009"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9207"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9662"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10244"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10377"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12506"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7455"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9012"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9665"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10247"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12515"/>
         <source>Line thickness:</source>
         <translation>Lijndikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7465"/>
         <source>Distance to note:</source>
         <translation>Afstand tot de noot:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7539"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7542"/>
         <source>Slurs &amp;&amp; ties</source>
         <translation>Legatobogen &amp;&amp; overbindingen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7644"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7846"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7647"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7849"/>
         <source>Dotted line thickness:</source>
         <translation>Stippellijndikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7686"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7888"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8334"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11079"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11419"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12691"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7689"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8337"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11082"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11422"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12700"/>
         <source>Autoplace min. distance:</source>
         <translation>Min. afstand automatisch plaatsen:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7560"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7762"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7563"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7765"/>
         <source>Line thickness at end:</source>
         <translation>Lijndikte aan het einde:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7602"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7807"/>
         <source>Line thickness middle:</source>
         <translation>Lijndikte in het midden:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7972"/>
         <source>Minimum tie length:</source>
         <translation>Minimum lengte overbindingsboog:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7724"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7926"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8393"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11131"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11565"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12812"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7727"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11134"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11568"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12821"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation>Herstel &apos;Automatisch plaatsen min. afstand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7595"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7797"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
         <translation>Herstel &apos;Lijndikte aan het einde&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7634"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7637"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7839"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
         <translation>Herstel &apos;Lijndikte in het midden&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7676"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7881"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
         <translation>Herstel &apos;Gestippelde lijndikte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8007"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8168"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation>Herstel &apos;Minimum boog lengte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8638"/>
         <source>Height:</source>
         <translation>Hoogte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8749"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8752"/>
         <source>Continue height:</source>
         <translation>Vervolglijnhoogte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8771"/>
         <source>Reset &apos;Height&apos; value</source>
         <translation>Herstel &apos;Hoogte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8628"/>
         <source>Reset &apos;Continue height&apos; value</source>
         <translation>Herstel &apos;Vervolggrootte op volgende regel&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8587"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8590"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>Automatisch plaatsen, afstand tot dynamische tekens:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8550"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation>Herstel &apos;Automatisch plaatsen, afstand tot dynamische tekens&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9718"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9950"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10086"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10552"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10700"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11514"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12774"/>
-        <source>Placement:</source>
-        <translation>Plaatsing:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9652"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9963"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10099"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10500"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11462"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12728"/>
-        <source>Reset &apos;Placement&apos; value</source>
-        <translation>Herstel &apos;Plaatsing&apos; waarde</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8726"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8931"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9431"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9731"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12457"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8934"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12466"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation>Herstel &apos;Lijndikte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8299"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8302"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8833"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9655"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9966"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10102"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10503"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10651"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11465"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11803"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12737"/>
         <source>Reset &apos;Position&apos; value</source>
         <translation>Herstel &apos;Positie&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8963"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9080"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9343"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9521"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9540"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9619"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9845"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8859"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8966"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9083"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9524"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9622"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9848"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9867"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation>Herstel &apos;Lijnstijl&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9317"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation>Herstel &apos;Haak hoogte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8892"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9138"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9777"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9141"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9780"/>
         <source>Dash size:</source>
         <translation>Streepje grootte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12056"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9721"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9953"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10089"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10555"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11252"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12059"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12783"/>
         <source>Position:</source>
         <translation>Positie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9197"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9629"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9200"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9632"/>
         <source>Line style:</source>
         <translation>Lijnstijl:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8999"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9002"/>
         <source>Hook height:</source>
         <translation>Haakhoogte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9033"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9247"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9250"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9693"/>
         <source>Continuous</source>
         <translation>Doorgetrokken lijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9038"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9695"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9041"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9698"/>
         <source>Dashed</source>
         <translation>Streeplijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9043"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9257"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9260"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9703"/>
         <source>Dotted</source>
         <translation>Stippellijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9048"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9262"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9705"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9051"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9265"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9708"/>
         <source>Dash-dotted</source>
         <translation>Streep-punt-lijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9053"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9267"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9056"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9713"/>
         <source>Dash-dot-dotted</source>
         <translation>Streep-punt-punt-lijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9061"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9064"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9415"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9797"/>
         <source>Gap size:</source>
         <translation>Vrije ruimte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9275"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9278"/>
         <source>Hook height above:</source>
         <translation>Haak hoogte boven:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9285"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9288"/>
         <source>Numbers only</source>
         <translation>Alleen nummers</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9327"/>
         <source>Hook height below:</source>
         <translation>Haak hoogte onder:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9375"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9378"/>
         <source>Reset &apos;Numbers only&apos; value</source>
         <translation>Herstel &apos;Alleen nummers&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10219"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10222"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10225"/>
         <source>Standard staff</source>
         <translation>Standaardnotenbalk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10244"/>
         <source>Line thickness on standard staves:</source>
         <translation>Lijndikte op standaard notenbalken:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10267"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
         <translation>Herstel &apos;Lijndikte op standaard notenbalken&apos; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10302"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation>Herstel &apos;Pijlbreedte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10286"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10289"/>
         <source>Arrow width:</source>
         <translation>Pijlbreedte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10351"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10354"/>
         <source>Reset &apos;Arrow height&apos; value</source>
         <translation>Herstel &apos;Pijlhoogte&apos; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10374"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10377"/>
         <source>Line thickness on tablature staves:</source>
         <translation>Lijndikte op tablatuurbalken:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10415"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
         <translation>Herstel &apos;Lijndikte op tablatuurbalken&apos; naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10757"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10760"/>
         <source>Articulations &amp;&amp; ornaments</source>
         <translation>Articulaties &amp;&amp; versieringen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10763"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10766"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation>Herstel &apos;Articulatieafstand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10773"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10806"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10838"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10776"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10809"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10841"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10786"/>
         <source>Distance from stem:</source>
         <translation>Afstand vanaf stok:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10796"/>
         <source>Articulation size:</source>
         <translation>Articulatiegrootte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10848"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10851"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation>Herstel &apos;Stok afstand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10855"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10858"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation>Herstel &apos;Notenkop afstand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10862"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10865"/>
         <source>Distance from staff:</source>
         <translation>Afstand vanaf notenbalk:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10888"/>
         <source>Distance from notehead:</source>
         <translation>Afstand vanaf nootkop:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10895"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10898"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation>Herstel &apos;Articulatie grootte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10905"/>
         <source>Minimum vertical distance:</source>
         <translation>Minimale verticale afstand:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10948"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10951"/>
         <source>Articulation alignment when positioned at the stem</source>
         <translation>Uitlijnen articulatie bij plaatsing bij de stok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10957"/>
         <source>Align with stem</source>
         <translation>Uitlijnen met stok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10961"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
         <source>Align with notehead</source>
         <translation>Uitlijnen met nootkop</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10968"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10971"/>
         <source>Center between stem and notehead</source>
         <translation>Centreer tussen stok en nootkop</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10994"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10997"/>
         <source>Combined articulation</source>
         <translation>Gecombineerde articulatie</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11003"/>
         <source>Always keep together</source>
         <translation>Altijd bij elkaar houden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11007"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11010"/>
         <source>Prefer closeness to notehead (combined articulations may become separated)</source>
         <translation>Geef voorkeur aan nabijheid van de nootkop (gecombineerde articulaties kunnen gescheiden worden)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12210"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12216"/>
         <source>Dash thickness:</source>
         <translation>Dikte streepje:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12264"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation>Herstel &apos;Max. streepje afstand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12399"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12408"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation>Herstel &apos;Forceer altijd gestreept&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12313"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12319"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation>Herstel &apos;Min. streepje lengte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12306"/>
         <source>Max. dash length:</source>
         <translation>Max. streepje lengte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12223"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12229"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation>Herstel &apos;Max. streepje lengte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation>Herstel &apos;Streepje dikte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12268"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12274"/>
         <source>Min. dash length:</source>
         <translation>Min. streepje lengte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11896"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11899"/>
         <source>Align verse number</source>
         <translation>Vers nummer uitlijnen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11728"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation>Herstel &apos;Vers nummer uitlijnen&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11741"/>
         <source>Reset &apos;Min. distance&apos; value</source>
         <translation>Herstel &apos;Min. afstand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12958"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12967"/>
         <source>Line height:</source>
         <translation>Regelhoogte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12043"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation>Herstel &apos;Min. benedenmarge&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11839"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation>Herstel &apos;Lijnhoogte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11790"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation>Herstel &apos;Min. bovenmarge&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14849"/>
         <source>Align:</source>
         <translation>Uitlijnen:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8383"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
-        <translation>Herstel &apos;Vermijd maatstrepen&apos; instelling</translation>
+        <translation>Herstel &apos;Ontwijk maatstrepen&apos; instelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8370"/>
         <source>Reset &apos;Scale&apos; value</source>
         <translation>Herstel &apos;Schaal&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12655"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12664"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
         <translation>Herstel &apos;Uitlijnen op dynamiek&apos; instelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12877"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14870"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14879"/>
         <source>Size:</source>
         <translation>Grootte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12893"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14683"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14692"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12909"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12918"/>
         <source>from top of staff</source>
         <translation>vanaf de bovenkant van de notenbalk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12938"/>
         <source>of font height</source>
         <translation>van de lettertype hoogte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8496"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12993"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8499"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13002"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14702"/>
         <source>Font:</source>
         <translation>Lettertype:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12177"/>
         <source>Reset &apos;Dash gap&apos; value</source>
         <translation>Herstel &apos;Streepje afstand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12323"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12329"/>
         <source>Vertical position (% of 
 text x-height):</source>
         <translation>Verticale positie (% van 
 x-hoogte van tekst)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12353"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
         <translation>Herstel &apos;Verticale positie (% van x-hoogte van tekst)&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12380"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
         <translation>Herstel &apos;Laat streepje weg bij ruimtegebrek&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12415"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12424"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
         <translation>Herstel &apos;Plaatsing van streepje aan begin van systeem&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12430"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12439"/>
         <source>Extension line</source>
         <translation>Verlenglijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12479"/>
         <source>Reset &apos;Min. line length&apos; value</source>
         <translation>Hersel &apos;Min. lijn lengte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12499"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12508"/>
         <source>Min. line length:</source>
         <translation>Min. lijn lengte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12525"/>
         <source>Line gap:</source>
         <translation>Vrije ruimte lijn:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12548"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12557"/>
         <source>Reset &apos;Line gap&apos; value</source>
         <translation>Herstel &apos;Vrije ruimte lijn&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12574"/>
         <source>Omit extension line when space is limited</source>
         <translation>Laat verlenglijn weg bij ruimtegebrek</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12584"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
         <translation>Herstel &apos;Laat verlenglijn weg bij ruimtegebrek&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6045"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13013"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13022"/>
         <source>Vertical position:</source>
         <translation>Verticale positie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8043"/>
         <source>Minimum hanging tie length:</source>
         <translation>Minimumlengte ‘overhangende’ overbinding:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8078"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8081"/>
         <source>Reset &apos;Minimum hanging tie length&apos; value</source>
         <translation>Herstel ‘Minimumlengte overhangende overbinding’ naar standaardwaarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
         <source>Laissez vibrer</source>
         <translation>Laissez vibrer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8127"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8130"/>
         <source>Minimum laissez vibrer length:</source>
         <translation>Minimumlengte ‘Laissez vibrer’:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8190"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8193"/>
         <source>Use SMuFL symbols</source>
         <translation>Gebruik SMuFL-symbolen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10166"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10172"/>
         <source>Glissandos</source>
         <translation>Glissando&apos;s</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10177"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10183"/>
         <source>Note-anchored lines</source>
         <translation>Noot-gebonden lijnen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11033"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
         <translation>Triller siernoot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
         <source>Show only for intervals other than seconds</source>
         <translation>Toon alleen voor intervallen anders dan secunde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11049"/>
         <source>Show for all intervals</source>
         <translation>Toon voor alle intervallen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12076"/>
-        <source>Reset avoid barlines</source>
-        <translation>Herstel ‘Ontwijk maatstrepen’ naar standaardwaarde</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13028"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13031"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13040"/>
         <source>Alignment</source>
         <translation>Uitlijning</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13046"/>
         <source>Top</source>
         <translation>Bovenaan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13044"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13053"/>
         <source>Bottom</source>
         <translation>Beneden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13072"/>
         <source>Modern</source>
         <translation>Modern</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13070"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13079"/>
         <source>Historic</source>
         <translation>Historisch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13136"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13145"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation>Capo fret positie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13180"/>
         <source>Appearance</source>
         <translation>Vorm</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13229"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
         <translation>Hertstel &apos;Uitbreiding verticale correctie&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13230"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13239"/>
         <source>Extension vertical offset:</source>
         <translation>Uitbreiding verticale correctie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13240"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13249"/>
         <source>Extension scaling:</source>
         <translation>Uitbreiding schaalfactor:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13253"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13262"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
         <translation>Herstel &apos;Uitbreiding schaalfactor&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13263"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13272"/>
         <source>Modifier scaling:</source>
         <translation>Toevoeging schaalfactor:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13273"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13282"/>
         <source>Modifier vertical offset:</source>
         <translation>Toevoeging verticale correctie:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13286"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13295"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
         <translation>Herstel &apos;Toevoeging schaalfactor&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13299"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13308"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
         <translation>Herstel &apos;Toevoeging verticale correctie&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13330"/>
         <source>Lower case minor chords</source>
         <translation>Mineurakkoorden in kleine letters</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13328"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13337"/>
         <source>Lower case bass notes</source>
         <translation>Basnoten in kleine letters</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13335"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13344"/>
         <source>All caps note names</source>
         <translation>Nootnamen in hoofdletters</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13358"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13370"/>
         <source>Spelling</source>
         <translation>Spelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13392"/>
         <source>German</source>
         <translation>Duits</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13393"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13402"/>
         <source>Full German</source>
         <translation>Volledig Duits</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13403"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13412"/>
         <source>Solfeggio</source>
         <translation>Solfeggio</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13413"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13422"/>
         <source>French</source>
         <translation>Frans</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13455"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13464"/>
         <source>Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13462"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13471"/>
         <source>Custom</source>
         <translation>Eigen aangepast</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13484"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
         <source>Load XML</source>
         <translation>Laad XML</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13510"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13519"/>
         <source>Positioning</source>
         <translation>Positionering</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13525"/>
         <source>Maximum shift below:</source>
         <translation>Maximale verschuiving onder:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13533"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13542"/>
         <source>Distance to fretboard diagram:</source>
         <translation>Afstand tot fretborddiagram:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13552"/>
         <source>Maximum shift above:</source>
         <translation>Maximale verschuiving boven:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13575"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13584"/>
         <source>Minimum chord spacing:</source>
         <translation>Minimale akkoordafstand:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13585"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13594"/>
         <source>Maximum barline distance:</source>
         <translation>Maximum maatstreepafstand:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8474"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8477"/>
         <source>Scale:</source>
         <translation>Schaal:</translation>
     </message>
@@ -4724,37 +4698,37 @@ x-hoogte van tekst)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6399"/>
         <source>Measure repeats</source>
         <translation>Maatherhalingen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11220"/>
         <source>Staff text</source>
         <translation>Notenbalktekst</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11413"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11416"/>
         <source>Tempo text</source>
         <translation>Tempotekst</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12685"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12694"/>
         <source>Rehearsal marks</source>
         <translation>Repetitietekens</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12869"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12878"/>
         <source>Figured bass</source>
         <translation>Basso continuo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13100"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13109"/>
         <source>Chord symbols</source>
         <translation>Akkoordsymbolen</translation>
     </message>
@@ -4814,319 +4788,324 @@ x-hoogte van tekst)</translation>
         <translation>Meermaatsrusten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6107"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6113"/>
         <source>Old-style multimeasure rests</source>
         <translation>Oude stijl meermaatsrusten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6659"/>
         <source>Vertical distance from notes</source>
         <translation>Verticale afstand vanaf de noten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7138"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7141"/>
         <source>Horizontal distance from notes</source>
         <translation>Horizontale afstand vanaf de noten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11645"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11648"/>
         <source>Lyrics text</source>
         <translation>Liedtekst</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13309"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13312"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13321"/>
         <source>Automatic capitalization</source>
         <translation>Automatische hoofdletters</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="249"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10277"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13855"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10283"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13864"/>
         <source>Tablature</source>
         <translation>Tablatuur</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14297"/>
         <source>Staccato</source>
         <translation>Staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13983"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13992"/>
         <source>Accent and marcato marks</source>
         <translation>Accent- en marcato-tekens</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14120"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14129"/>
         <source>Harmonic marks</source>
         <translation>Harmonische tekens</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14092"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14101"/>
         <source>Turns</source>
         <translation>Dubbelslagen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14075"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14084"/>
         <source>Palm mute (P.M.)</source>
         <translation>Palm dempen (P.D.)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14237"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14246"/>
         <source>Let ring</source>
         <translation>Laat klinken</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7548"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14046"/>
         <source>Slurs</source>
         <translation>Legatobogen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14196"/>
         <source>Wah open/close</source>
         <translation>Wah open/gesloten</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14189"/>
         <source>Crescendo and diminuendo lines</source>
         <translation>Crescendo- en diminuendo-tekens</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14039"/>
         <source>Simple</source>
         <translation>Eenvoudig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14160"/>
         <source>Common</source>
         <translation>Regulier</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14063"/>
         <source>Golpe</source>
         <translation>Golpe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14032"/>
         <source>Mordents</source>
         <translation>Mordents</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13999"/>
         <source>Rasgueado</source>
         <translation>Rasgueado</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14379"/>
         <source>Parentheses indicating ties</source>
         <translation>Gebruik haakjes om overbindingen aan te geven</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14383"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14392"/>
         <source>Always show at the start of a measure</source>
         <translation>Altijd aan het begin van een maat laten zien</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14397"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14406"/>
         <source>Always show parenthesized fret marks when articulation markings are present</source>
         <translation>Altijd fretmarkeringen tussen haakjes laten zien
 wanneer articulatiemarkeringen aanwezig zijn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14896"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14905"/>
         <source>Line spacing:</source>
         <translation>Regelafstand:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14919"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14928"/>
         <source>Use musical symbols font for tuplet numbers</source>
         <translation>Gebruik muzieksymbolenlettertype voor cijfers bij antimetrische figuren</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14938"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
         <translation>Herstel waarde voor &apos;Gebruik muzieksymbolenlettertype voor cijfers bij antimetrische figuren&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14950"/>
         <source>Musical symbols scale:</source>
         <translation>Schaling voor muzieksymbolen:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14979"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
         <translation>Herstel waarde voor &apos;Schaling voor muzieksymbolen&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15048"/>
         <source>Reset all styles to default</source>
         <translation>Herstel alle stijlen naar standaard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14449"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Frame:</source>
         <translation>Kader:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12082"/>
+        <source>Reset &apos;Avoid barlines&apos;</source>
+        <translation>Herstel &apos;Ontwijk maatstrepen&apos; </translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13379"/>
         <source>Standard</source>
         <comment>chord symbol spelling</comment>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13454"/>
         <source>Standard</source>
         <comment>chord symbol style</comment>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14340"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14349"/>
         <source>Tied fret marks</source>
         <translation>Overgebonden fretmarkeringen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14355"/>
         <source>Show ties and repeat fret marks</source>
         <translation>Toon overbindingen en herhaal fretmarkeringen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14353"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14362"/>
         <source>Show ties only</source>
         <translation>Laat alleen overbindingen zien</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14360"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14369"/>
         <source>Show initial fret mark only</source>
         <translation>Laat alleen eerste fretmarkering zien</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14376"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14385"/>
         <source>Only show at the start of a system</source>
         <translation>Alleen aan het begin van een systeem laten zien</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14399"/>
         <source>Never show</source>
         <translation>Nooit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14479"/>
         <source>Circle</source>
         <translation>Cirkel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14481"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14490"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation>Herstel &apos;Kader&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14509"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14518"/>
         <source>Thickness:</source>
         <translation>Dikte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14541"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation>Herstel &apos;Achtergrond&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14545"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14578"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14587"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation>Herstel &apos;Rand&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14565"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14574"/>
         <source>Corner radius:</source>
         <translation>Hoekradius:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14627"/>
         <source>Border:</source>
         <translation>Rand:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14628"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14637"/>
         <source>Highlight:</source>
         <translation>Markeren:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14650"/>
         <source>Reset &apos;Corner radius&apos; value</source>
         <translation>Herstel &apos;Hoekradius&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14670"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14679"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation>Herstel &apos;Lettertype stijl&apos; waarden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14706"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14715"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation>Herstel &apos;Uitlijning&apos; waarden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14728"/>
         <source>Reset &apos;Color&apos; value</source>
         <translation>Herstel &apos;Kleur&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14738"/>
         <source>Color:</source>
         <translation>Kleur:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14745"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14909"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14918"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation>Herstel &apos;Lettertype grootte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14758"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14767"/>
         <source>Style:</source>
         <translation>Stijl:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14774"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14783"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
         <translation>Herstel &apos;Volg notenbalk grootte&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14784"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14793"/>
         <source>Offset:</source>
         <translation>Afstand:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14794"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14803"/>
         <source>Follow staff size</source>
         <translation>Volg notenbalk grootte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14813"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation>Herstel &apos;Naam&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14817"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14826"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation>Herstel &apos;Lettertype uiterlijk&apos; waarde</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14830"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14839"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation>Herstel &apos;Correctie&apos; waarden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14859"/>
         <source>Name:</source>
         <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14883"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14892"/>
         <source>li</source>
         <translation>re</translation>
     </message>
@@ -5303,12 +5282,6 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="111"/>
         <source>Nominal:</source>
         <translation>Weergave:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.ui" line="118"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.ui" line="154"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="134"/>
@@ -5872,11 +5845,6 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
         <source>Select swing ratio:</source>
         <translation>Kies swingratio:</translation>
     </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="125"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
 </context>
 <context>
     <name>SymbolDialogBase</name>
@@ -5917,12 +5885,6 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
         <source>Value:</source>
         <translation>Waarde:</translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="98"/>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="200"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="112"/>
@@ -6009,11 +5971,6 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="75"/>
         <source>Text:</source>
         <translation>Tekst:</translation>
-    </message>
-    <message>
-        <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="101"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
 </context>
 <context>
@@ -6372,11 +6329,6 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="42"/>
         <source>Ratio:</source>
         <translation>Verhouding:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="71"/>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="131"/>
@@ -19448,12 +19400,6 @@ Fret %1 op snaren %2</translation>
         <translation>re</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="58"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="63"/>
-        <source>%</source>
-        <translation>%</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="106"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
@@ -19497,11 +19443,6 @@ Fret %1 op snaren %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
         <source>Don’t ask again</source>
         <translation>Vraag niet opnieuw</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
-        <source>°</source>
-        <translation>°</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
