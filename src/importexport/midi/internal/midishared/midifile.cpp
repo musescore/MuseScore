@@ -586,8 +586,8 @@ bool MidiFile::readEvent(MidiEvent* event)
             LOGD("readEvent: error 6");
             return false;
         }
+        data.resize(dataLen + 1);
         if (dataLen) {
-            data.resize(dataLen + 1);
             read(data.data(), dataLen);
         }
 
