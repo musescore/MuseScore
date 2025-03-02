@@ -23,9 +23,6 @@
 #include "actionicon.h"
 
 #include "property.h"
-#include "score.h"
-
-#include "log.h"
 
 using namespace mu;
 using namespace muse::draw;
