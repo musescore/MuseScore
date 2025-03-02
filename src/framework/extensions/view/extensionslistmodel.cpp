@@ -100,6 +100,10 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
     case rCategory:
         return plugin.category.toQString();
     case rVersion:
+        if (plugin.version.empty()) {
+            //: No version is specified for this plugin.
+            return muse::qtrc("extensions", "Not specified");
+        }
         return plugin.version.toQString();
     case rShortcuts: {
         std::vector<std::string> shortcuts;
