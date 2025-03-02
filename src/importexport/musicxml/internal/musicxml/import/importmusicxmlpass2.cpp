@@ -1416,6 +1416,8 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         { u"flip",                   SymId::brassFlip },
         { u"smear",                  SymId::brassSmear },
         { u"open",                   SymId::brassMuteOpen },
+        { u"half-muted",             SymId::brassMuteHalfClosed }, // ignoring the smufl attribute
+        { u"golpe",                  SymId::guitarGolpe },
 
         { u"belltree", SymId::handbellsBelltree },
         { u"damp", SymId::handbellsDamp3 },
