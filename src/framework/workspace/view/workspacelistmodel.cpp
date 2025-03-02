@@ -25,6 +25,7 @@
 #include "internal/workspaceutils.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace muse::workspace;
 using namespace muse;
