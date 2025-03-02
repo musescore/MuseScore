@@ -188,6 +188,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(articulationAnchor,      ARTICULATION_ANCHOR)
     API_PROPERTY(direction,               DIRECTION)
     API_PROPERTY(stemDirection,           STEM_DIRECTION)
+    API_PROPERTY(hookReversed,            HOOK_REVERSED)
     API_PROPERTY(noStem,                  NO_STEM)
     API_PROPERTY(slurDirection,           SLUR_DIRECTION)
     API_PROPERTY(leadingSpace,            LEADING_SPACE)
