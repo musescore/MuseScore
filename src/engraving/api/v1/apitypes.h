@@ -213,6 +213,7 @@ Q_ENUM_NS(AccidentalType);
 enum class ElementType {
     ///.\{
     INVALID               = int(mu::engraving::ElementType::INVALID),
+
     BRACKET_ITEM          = int(mu::engraving::ElementType::BRACKET_ITEM),
     PART                  = int(mu::engraving::ElementType::PART),
     STAFF                 = int(mu::engraving::ElementType::STAFF),
@@ -294,7 +295,6 @@ enum class ElementType {
     STAFF_STATE           = int(mu::engraving::ElementType::STAFF_STATE),
     NOTEHEAD              = int(mu::engraving::ElementType::NOTEHEAD),
     NOTEDOT               = int(mu::engraving::ElementType::NOTEDOT),
-    TREMOLO               = int(mu::engraving::ElementType::INVALID), // deprecated
     TREMOLO_SINGLECHORD   = int(mu::engraving::ElementType::TREMOLO_SINGLECHORD),
     TREMOLO_TWOCHORD      = int(mu::engraving::ElementType::TREMOLO_TWOCHORD),
     IMAGE                 = int(mu::engraving::ElementType::IMAGE),
@@ -325,25 +325,27 @@ enum class ElementType {
     BRACKET               = int(mu::engraving::ElementType::BRACKET),
     SEGMENT               = int(mu::engraving::ElementType::SEGMENT),
     SYSTEM                = int(mu::engraving::ElementType::SYSTEM),
-    COMPOUND              = int(mu::engraving::ElementType::COMPOUND),
     CHORD                 = int(mu::engraving::ElementType::CHORD),
     SLUR                  = int(mu::engraving::ElementType::SLUR),
-    ELEMENT               = int(mu::engraving::ElementType::ELEMENT),
-    ELEMENT_LIST          = int(mu::engraving::ElementType::ELEMENT_LIST),
-    STAFF_LIST            = int(mu::engraving::ElementType::STAFF_LIST),
-    MEASURE_LIST          = int(mu::engraving::ElementType::MEASURE_LIST),
     HBOX                  = int(mu::engraving::ElementType::HBOX),
     VBOX                  = int(mu::engraving::ElementType::VBOX),
     TBOX                  = int(mu::engraving::ElementType::TBOX),
     FBOX                  = int(mu::engraving::ElementType::FBOX),
     ACTION_ICON           = int(mu::engraving::ElementType::ACTION_ICON),
-    OSSIA                 = int(mu::engraving::ElementType::OSSIA),
     BAGPIPE_EMBELLISHMENT = int(mu::engraving::ElementType::BAGPIPE_EMBELLISHMENT),
     STICKING              = int(mu::engraving::ElementType::STICKING),
     GRACE_NOTES_GROUP     = int(mu::engraving::ElementType::GRACE_NOTES_GROUP),
 
     ROOT_ITEM             = int(mu::engraving::ElementType::ROOT_ITEM),
     DUMMY                 = int(mu::engraving::ElementType::DUMMY),
+
+    TREMOLO               = int(mu::engraving::ElementType::INVALID), // deprecated
+    COMPOUND              = int(mu::engraving::ElementType::INVALID), // deprecated
+    ELEMENT               = int(mu::engraving::ElementType::INVALID), // deprecated
+    ELEMENT_LIST          = int(mu::engraving::ElementType::INVALID), // deprecated
+    STAFF_LIST            = int(mu::engraving::ElementType::INVALID), // deprecated
+    MEASURE_LIST          = int(mu::engraving::ElementType::INVALID), // deprecated
+    OSSIA                 = int(mu::engraving::ElementType::INVALID), // deprecated
 
     MAXTYPE               = int(mu::engraving::ElementType::MAXTYPE)
                             ///\}

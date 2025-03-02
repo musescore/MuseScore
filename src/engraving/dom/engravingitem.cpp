@@ -1595,10 +1595,6 @@ bool EngravingItem::isPrintable() const
     case ElementType::SPACER:
     case ElementType::SHADOW_NOTE:
     case ElementType::LASSO:
-    case ElementType::ELEMENT_LIST:
-    case ElementType::STAFF_LIST:
-    case ElementType::MEASURE_LIST:
-    case ElementType::SELECTION:
         return false;
     default:
         return true;
