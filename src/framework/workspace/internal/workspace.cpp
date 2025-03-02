@@ -43,7 +43,7 @@ Workspace::Workspace(const io::path_t& filePath, const modularity::ContextPtr& i
     });
 }
 
-Workspace::Workspace(const io::path_t& filePath, const Workspace* other, const ContextPtr& iocCtx)
+Workspace::Workspace(const io::path_t& filePath, const Workspace* other, const modularity::ContextPtr& iocCtx)
     : Workspace(filePath, iocCtx)
 {
     m_file = std::make_shared<WorkspaceFile>(filePath, other->m_file.get());
