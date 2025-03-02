@@ -1230,18 +1230,18 @@ PalettePanel* MuseScore::newClefsPalettePanel(bool defaultPalettePanel)
       sp->setYOffset(1.0);
 
       static std::vector<ClefType> clefsDefault  {
-            ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
-            ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
-            ClefType::C4,    ClefType::C5, ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
-            ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::PERC,
+            ClefType::G, ClefType::G8_VA, ClefType::G15_MA, ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
+            ClefType::G8_VB_P, ClefType::G_1, ClefType::C1, ClefType::C2, ClefType::C3,
+            ClefType::C4, ClefType::C5, ClefType::F, ClefType::F_8VA, ClefType::F_15MA,
+            ClefType::F8_VB, ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::PERC,
             ClefType::PERC2, ClefType::TAB, ClefType::TAB4
             };
       static std::vector<ClefType> clefsMaster  {
-            ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
-            ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
-            ClefType::C4,    ClefType::C4_8VB,    ClefType::C5,  ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C, ClefType::C1_F20C, ClefType::C3_F20C, ClefType::C4_F20C,
-            ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
-            ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,  ClefType::PERC,
+            ClefType::G, ClefType::G8_VA, ClefType::G15_MA, ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
+            ClefType::G8_VB_C, ClefType::G8_VB_P, ClefType::G_1, ClefType::C1, ClefType::C2, ClefType::C3,
+            ClefType::C4, ClefType::C4_8VB, ClefType::C5, ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C, ClefType::C1_F20C, ClefType::C3_F20C, ClefType::C4_F20C,
+            ClefType::F, ClefType::F_8VA, ClefType::F_15MA,
+            ClefType::F8_VB, ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C, ClefType::PERC,
             ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
             };
 

@@ -15,18 +15,18 @@
  Implementation of classes Clef (partial) and ClefList (complete).
 */
 
+#include "ambitus.h"
 #include "clef.h"
 #include "measure.h"
-#include "ambitus.h"
-#include "xml.h"
+#include "part.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "stafftype.h"
 #include "sym.h"
 #include "symbol.h"
 #include "system.h"
-#include "score.h"
-#include "staff.h"
-#include "segment.h"
-#include "stafftype.h"
-#include "part.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -70,7 +70,10 @@ const ClefInfo ClefInfo::clefTable[] = {
 { "TAB4", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClef,        QT_TRANSLATE_NOOP("clefTable", "Tablature 4 lines"),                 StaffGroup::TAB       },
 { "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClefSerif,    QT_TRANSLATE_NOOP("clefTable", "Tablature Serif"),                   StaffGroup::TAB       },
 { "TAB4_SERIF", "TAB", 5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif,   QT_TRANSLATE_NOOP("clefTable", "Tablature Serif 4 lines"),           StaffGroup::TAB       },
+// new clefs to be added between here
 { "C4_8VB", "C",       4, -1, 30, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, SymId::cClef8vb,                 QT_TRANSLATE_NOOP("clefTable", "Tenor clef 8va bassa"),              StaffGroup::STANDARD  },
+{ "G8vbc", "G",        2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbCClef,            QT_TRANSLATE_NOOP("clefTable", "G clef ottava bassa with C clef"),   StaffGroup::STANDARD  },
+// and here in oder to not break TAB clef style
       };
 
 //---------------------------------------------------------
