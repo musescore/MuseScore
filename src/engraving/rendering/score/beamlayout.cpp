@@ -926,17 +926,13 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         restToBeamPadding = 0.35 * spatium;
     }
 
-    Shape beamShape = beam->shape().translate(beam->pagePos());
-    beamShape.remove_if([&](ShapeElement& el) {
-        return el.item() && el.item()->isBeamSegment() && toBeamSegment(el.item())->isBeamlet;
-    });
+    const Shape beamShape = beam->shape().translate(beam->pagePos());
+    const Shape restShape = rest->shape().translate(rest->pagePos() - rest->offset());
+    const double minBeamToRestXDist = up && firstRest ? 0.1 * spatium : 0.0;
 
-    Shape restShape = rest->shape().translate(rest->pagePos() - rest->offset());
-    double minBeamToRestXDist = up && firstRest ? 0.1 * spatium : 0.0;
-
-    double restToBeamClearance = up
-                                 ? beamShape.verticalClearance(restShape, minBeamToRestXDist)
-                                 : restShape.verticalClearance(beamShape);
+    const double restToBeamClearance = up
+                                       ? beamShape.verticalClearance(restShape, minBeamToRestXDist)
+                                       : restShape.verticalClearance(beamShape);
 
     if (restToBeamClearance > restToBeamPadding) {
         return;
@@ -948,7 +944,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         rest->verticalClearance().setBelow(restToBeamClearance);
     }
 
-    bool restIsLocked = rest->verticalClearance().locked();
+    const bool restIsLocked = rest->verticalClearance().locked();
     if (!restIsLocked) {
         double overlap = (restToBeamPadding - restToBeamClearance);
         double lineDistance = rest->staff()->lineDistance(rest->tick()) * spatium;
