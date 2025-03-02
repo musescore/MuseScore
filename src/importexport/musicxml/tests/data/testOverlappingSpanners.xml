@@ -610,7 +610,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <bracket type="stop" number="1" line-end="down" end-length="15"/>
+          <bracket type="stop" number="1" line-end="down"/>
           </direction-type>
         <staff>1</staff>
         </direction>
@@ -652,7 +652,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <bracket type="stop" number="2" line-end="up" end-length="15"/>
+          <bracket type="stop" number="2" line-end="up"/>
           </direction-type>
         <staff>2</staff>
         </direction>
