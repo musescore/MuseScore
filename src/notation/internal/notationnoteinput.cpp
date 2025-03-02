@@ -658,23 +658,9 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
 {
     TRACEFUNC;
 
-    if (!isVoiceIndexValid(voiceIndex)) {
-        return;
-    }
-
     mu::engraving::InputState& inputState = score()->inputState();
-
-    // TODO: Inserting notes to a new voice in the middle of a tuplet is not yet supported. In this case
-    // we'll move the input to the start of the tuplet...
-    if (const Segment* prevSeg = inputState.segment()) {
-        const ChordRest* prevCr = prevSeg->cr(inputState.track());
-        //! NOTE: if there's an existing ChordRest at the new voiceIndex, we don't need to move the cursor
-        if (prevCr && prevCr->topTuplet() && !prevSeg->cr(voiceIndex)) {
-            Segment* newSeg = score()->tick2segment(prevCr->topTuplet()->tick());
-            if (newSeg) {
-                inputState.setSegment(newSeg);
-            }
-        }
+    if (!isVoiceIndexValid(voiceIndex) || voiceIndex == inputState.voice()) {
+        return;
     }
 
     inputState.setVoice(voiceIndex);
