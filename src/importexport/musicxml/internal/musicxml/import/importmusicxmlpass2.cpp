@@ -4896,7 +4896,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             TextLine* textLine = toTextLine(sline);
             // if (placement.empty()) placement = "above";  // TODO ? set default
 
-            if (!endLength.empty()) {
+            if (configuration()->importLayout() && !endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setBeginHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
             }
@@ -4951,7 +4951,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             }
             TextLine* textLine = toTextLine(sline);
 
-            if (!endLength.empty()) {
+            if (configuration()->importLayout() && !endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setEndHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
             }
