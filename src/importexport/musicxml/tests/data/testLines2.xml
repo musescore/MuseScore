@@ -99,7 +99,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <bracket type="stop" number="1" line-end="down" end-length="15"/>
+          <bracket type="stop" number="1" line-end="down"/>
           </direction-type>
         </direction>
       </measure>
@@ -206,7 +206,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <bracket type="stop" number="1" line-end="up" end-length="15"/>
+          <bracket type="stop" number="1" line-end="up"/>
           </direction-type>
         </direction>
       </measure>
@@ -275,7 +275,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <bracket type="start" number="1" line-end="down" line-type="solid" end-length="15"/>
+          <bracket type="start" number="1" line-end="down" line-type="solid"/>
           </direction-type>
         </direction>
       <note>
@@ -300,7 +300,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <bracket type="stop" number="1" line-end="down" end-length="15"/>
+          <bracket type="stop" number="1" line-end="down"/>
           </direction-type>
         </direction>
       <note>
