@@ -5023,21 +5023,6 @@ void Score::cmdAddPitch(const NoteInputParams& params, bool addFlag, bool insert
     if (ds) {
         is.setDrumNote(params.drumPitch);
         is.setVoice(ds->voice(params.drumPitch));
-
-        if (is.segment()) {
-            Segment* seg = is.segment();
-            while (seg) {
-                if (seg->element(is.track())) {
-                    break;
-                }
-                seg = seg->prev(SegmentType::ChordRest);
-            }
-            if (seg) {
-                is.setSegment(seg);
-            } else {
-                is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
-            }
-        }
     }
 
     cmdAddPitch(params.step, addFlag, insert);
