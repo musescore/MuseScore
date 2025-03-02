@@ -8504,10 +8504,7 @@ void MusicXmlParserNotations::arpeggio()
     if (m_arpeggioNo == 0) {
         m_arpeggioNo = 1;
     }
-    Color color = Color::fromString(m_e.attribute("color"));
-    if (color.isValid()) {
-        m_arpeggioColor = color;
-    }
+    m_arpeggioColor = Color::fromString(m_e.attribute("color"));
     m_e.skipCurrentElement();  // skip but don't log
 }
 
@@ -8994,6 +8991,7 @@ void MusicXmlParserNotations::parse()
         } else if (m_e.name() == "glissando") {
             glissandoSlide();
         } else if (m_e.name() == "non-arpeggiate") {
+            m_arpeggioColor = Color::fromString(m_e.attribute("color"));
             m_arpeggioType = u"non-arpeggiate";
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "ornaments") {
