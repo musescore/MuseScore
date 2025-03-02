@@ -3105,6 +3105,15 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
             } else {
                 m_logger->logError(String(u"illegal staff-lines %1").arg(staffLines), &m_e);
             }
+        } else if (m_e.name() == "line-detail") {
+            const Color color = Color::fromString(m_e.attribute("color"));
+            if (color.isValid()) {
+                m_score->staff(staffIdx)->staffType(Fraction(0, 1))->setColor(color);
+            }
+            if (m_e.attribute("print-object") == u"no") {
+                m_score->staff(staffIdx)->staffType(Fraction(0, 1))->setInvisible(true);
+            }
+            m_e.skipCurrentElement();
         } else if (m_e.name() == "staff-tuning") {
             staffTuning(&stringData);
         } else if (m_e.name() == "staff-size") {
