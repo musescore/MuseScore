@@ -199,7 +199,7 @@ private slots:
       void lines1() { mxmlIoTest("testLines1"); }
       void lines2() { mxmlIoTest("testLines2"); }
       void lines3() { mxmlIoTest("testLines3"); }
-      void lines4() { mxmlMscxExportTestRef("testLines4"); }
+      void lines4() { mxmlIoTest("testLines4"); }
       void lineDetails() { mxmlMscxExportTestRef("testLineDetails"); }
       void localTimesig1() { mxmlMscxExportTestRef("testLocalTimesig1"); }
       void localTimesig2() { mxmlMscxExportTestRef("testLocalTimesig2"); }

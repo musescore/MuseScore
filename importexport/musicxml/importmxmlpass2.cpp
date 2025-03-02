@@ -4478,8 +4478,9 @@ void MusicXMLParserDirection::handleChordSym(const int track, const Fraction tic
 void MusicXMLParserDirection::bracket(const QString& type, const int number,
                                       QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops)
       {
-      QStringRef lineEnd = _e.attributes().value("line-end");
-      QStringRef lineType = _e.attributes().value("line-type");
+      const QStringRef lineEnd = _e.attributes().value("line-end");
+      const QStringRef lineType = _e.attributes().value("line-type");
+      const QStringRef endLength = _e.attributes().value("end-length");
       const bool isWavy = lineType == "wavy";
       const ElementType elementType = isWavy ? ElementType::TRILL : ElementType::TEXTLINE;
       const MusicXmlExtendedSpannerDesc& spdesc = _pass2.getSpanner({ elementType, number });
@@ -4502,9 +4503,22 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
                   TextLine* textLine = toTextLine(sline);
                   // if (placement.isEmpty()) placement = "above";  // TODO ? set default
 
-                  textLine->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
-                  if (lineEnd == "up")
+                  if (!endLength.isEmpty()) {
+                        qreal length = endLength.toDouble();
+                        textLine->setBeginHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                        }
+                  if (lineEnd == "up") {
+                        textLine->setBeginHookType(HookType::HOOK_90);
                         textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
+                        }
+                  else if (lineEnd == "down")
+                        textLine->setBeginHookType(HookType::HOOK_90);
+                  else if (lineEnd == "both")
+                        textLine->setBeginHookType(HookType::HOOK_90T);
+                  else if (lineEnd == "arrow")
+                        _logger->logError(QString("line-end \"arrow\" not supported"));
+                  else if (lineEnd == "none")
+                        textLine->setBeginHookType(HookType::NONE);
 
                   // hack: combine with a previous words element
                   if (!_wordsText.isEmpty()) {
@@ -4541,9 +4555,23 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
                   if (!sline)
                         sline = new TextLine(_score);
                   TextLine* textLine = toTextLine(sline);
-                  textLine->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
-                  if (lineEnd == "up")
+
+                  if (!endLength.isEmpty()) {
+                        qreal length = endLength.toDouble();
+                        textLine->setEndHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                        }
+                  if (lineEnd == "up") {
+                        textLine->setEndHookType(HookType::HOOK_90);
                         textLine->setEndHookHeight(-1 * textLine->endHookHeight());
+                        }
+                  else if (lineEnd == "down")
+                        textLine->setEndHookType(HookType::HOOK_90);
+                  else if (lineEnd == "both")
+                        textLine->setEndHookType(HookType::HOOK_90T);
+                  else if (lineEnd == "arrow")
+                        _logger->logError(QString("line-end \"arrow\" not supported"));
+                  else if (lineEnd == "none")
+                        textLine->setEndHookType(HookType::NONE);
                   }
 
             stops.append(MusicXmlSpannerDesc(sline, elementType, number));
