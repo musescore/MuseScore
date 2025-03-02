@@ -173,7 +173,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     };
 
     String uiCtx = DEFAULT_UI_CONTEXT;
-    int needProperties = 6; // title, description, pluginType, category, thumbnail, requiresScore
+    int needProperties = 7; // title, description, pluginType, category, thumbnail, requiresScore, version
     int propertiesFound = 0;
     bool insideMuseScoreItem = false;
     size_t current, previous = 0;
@@ -242,6 +242,9 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
             if (requiresScore == u"false") {
                 uiCtx = "Any";
             }
+            ++propertiesFound;
+        } else if (line.startsWith(u"version:")) {
+            m.version = dropQuotes(line.mid(8).trimmed());
             ++propertiesFound;
         }
 

@@ -36,7 +36,7 @@ Column {
     property string search: ""
     property string selectedCategory: ""
     property bool pluginIsEnabled: false
-    property string selectedPluginCodeKey: ""
+    property string selectedPluginUri: ""
 
     property var flickableItem: null
     property int headerHeight: titleLabel.height + spacing
@@ -137,7 +137,7 @@ Column {
 
                 name: model.name
                 thumbnailUrl: model.thumbnailUrl
-                selected: model.codeKey === root.selectedPluginCodeKey
+                selected: model.uri === root.selectedPluginUri
 
                 navigation.panel: root.navigationPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)

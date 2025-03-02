@@ -94,7 +94,6 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
             JsonObject act;
             act["code"] = a.first;
             act["exec_point"] = a.second.execPoint;
-            act["shortcut"] = a.second.shortcut;
             acts.append(act);
         }
         obj["actions"] = acts;
@@ -163,7 +162,6 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
                 std::string code = ao.value("code").toStdString();
                 Action::Config ac;
                 ac.execPoint = ao.value("exec_point").toStdString();
-                ac.shortcut = ao.value("shortcut").toStdString();
 
                 c.actions[code] = ac;
             }
@@ -217,7 +215,6 @@ std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs()
             bool enabled = obj.value("enabled").toBool();
             Action::Config ac;
             ac.execPoint = enabled ? EXEC_MANUALLY : EXEC_DISABLED;
-            ac.shortcut = obj.value("shortcut").toStdString();
 
             //! NOTE Special case
             if (codeKey == "addCourtesyAccidentals") {

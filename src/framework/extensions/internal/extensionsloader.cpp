@@ -124,6 +124,7 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
     m.description = obj.value("description").toString();
     m.category = obj.value("category").toString();
     m.thumbnail = obj.value("thumbnail").toStdString();
+    m.version = obj.value("version").toString();
     m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
 
     String uiCtx = obj.value("ui_context", String(DEFAULT_UI_CONTEXT)).toString();
