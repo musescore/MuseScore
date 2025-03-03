@@ -45,6 +45,7 @@ public:
     virtual Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) = 0;
 
     virtual Ret makePath(const io::path_t& path) const = 0;
+    virtual Ret makeLink(const io::path_t& targetPath, const io::path_t& linkPath) const = 0;
 
     virtual EntryType entryType(const io::path_t& path) const = 0;
 
