@@ -764,6 +764,15 @@ void Dynamic::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
     }
 }
 
+bool Dynamic::isTextualEditAllowed(EditData& ed) const
+{
+    if (ed.key == Key_Tab) {
+        return false;
+    }
+
+    return TextBase::isTextualEditAllowed(ed);
+}
+
 //---------------------------------------------------------
 //   hasLeftHairpin
 //---------------------------------------------------------
