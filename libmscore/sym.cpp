@@ -6861,6 +6861,7 @@ void ScoreFont::load(bool system)
             { "thickBarlineThickness",         Sid::endBarWidth },
             { "thinBarlineThickness",          Sid::barWidth },
             { "thinBarlineThickness",          Sid::doubleBarWidth },
+            { "thinThickBarlineSeparation",    Sid::endBarDistance },
             { "tieEndpointThickness",          Sid::tieEndWidth },
             { "tieMidpointThickness",          Sid::tieMidWidth },
             { "tupletBracketThickness",        Sid::tupletBracketWidth }
