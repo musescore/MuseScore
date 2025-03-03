@@ -113,54 +113,31 @@ PopupPanel {
         }
 
         Column {
-            width: 585
-
+            width: Math.min(585, parent.width)
             spacing: 8
 
             StyledTextLabel {
                 id: titleLabel
-
+                width: parent.width
+                horizontalAlignment: Text.AlignLeft
                 text: Boolean(root.title) ? root.title : ""
                 font: ui.theme.headerBoldFont
             }
 
-            Row {
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                spacing: 4
-
+            StyledTextLabel {
                 visible: Boolean(root.additionalInfoModel)
+                width: parent.width
+                horizontalAlignment: Text.AlignLeft
+                font: ui.theme.largeBodyFont
 
-                Repeater {
-                    model: root.additionalInfoModel
-                    Row {
-                        spacing: 4
-                        Rectangle {
-                            width: 2
-                            height: parent.height - 4
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: ui.theme.fontPrimaryColor
-
-                            visible: index !== 0
-                        }
-
-                        StyledTextLabel {
-                            font: ui.theme.largeBodyFont
-                            text: modelData.title
-                        }
-
-                        StyledTextLabel {
-                            font: ui.theme.largeBodyBoldFont
-                            text: modelData.value
-                        }
-                    }
-                }
+                text: root.additionalInfoModel
+                      ?.map(pair => `${pair.title} <b>${pair.value}</b>`)
+                      ?.join(" | ")
             }
         }
 
         StyledTextLabel {
-            width: 585
+            width: Math.min(585, parent.width)
             height: 88
 
             opacity: 0.75
