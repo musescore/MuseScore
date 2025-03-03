@@ -1778,7 +1778,8 @@ void Convert::harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, co
 
     // @place
     if (meiHarpPedal.HasPlace()) {
-        harpPedalDiagram->setPlacement(meiHarpPedal.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        harpPedalDiagram->setPlacement(meiHarpPedal.GetPlace()
+                                       == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
         harpPedalDiagram->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
