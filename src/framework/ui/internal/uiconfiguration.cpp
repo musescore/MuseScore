@@ -59,6 +59,8 @@ static const int TOOLTIP_DELAY = 500;
 
 void UiConfiguration::init()
 {
+    m_config = ConfigReader::read(":/configs/ui.cfg");
+
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFontFamily()));
@@ -511,6 +513,11 @@ int UiConfiguration::iconsFontSize(IconSizeType type) const
 muse::async::Notification UiConfiguration::iconsFontChanged() const
 {
     return m_iconsFontChanged;
+}
+
+io::path_t UiConfiguration::appIconPath() const
+{
+    return m_config.value("appIconPath").toPath();
 }
 
 std::string UiConfiguration::musicalFontFamily() const
