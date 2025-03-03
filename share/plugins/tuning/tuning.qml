@@ -808,25 +808,63 @@ MuseScore {
                     }
                 }
 
-                GroupBox {
-                    title: "Pure tone offset"                    
-                    TextInputField {
-                        Layout.maximumWidth: 40
-                        id: tweakValue
-                        currentText: "0.0"                            
-                        validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }                        
-                        onTextEditingFinished:  function (newText) {
-                                                    if ( newText != "" ) {
-                                                        currentText = newText
+                RowLayout {
+                    anchors.top: pureTones.bottom
+                    spacing: 30                     
+                    GroupBox {
+                        title: "Pure tone offset" 
+                        TextInputField {
+                            width: 80
+                            id: tweakValue
+                            currentText: "0.0"                            
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }                        
+                            onTextEditingFinished:  function (newText) {
+                                                        if ( newText != "" ) {
+                                                            currentText = newText
+                                                        }
+                                                        else { 
+                                                            currentText = "0.0"
+                                                        }
+                                                        frequency.currentValue = 440 * Math.pow(2, parseFloat(currentText) / 1200).toFixed(2)
+                                                        tweaked() 
                                                     }
-                                                    else { 
-                                                        currentText = "0.0"
-                                                    }
-                                                    tweaked() 
-                                                }
+                            StyledTextLabel {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.right: parent.right
+                                    anchors.rightMargin: 20
+                                    text: "ℂ"                                
+                            }  
+                        }  
                     }
-                    
-                }
+                    GroupBox {                        
+                        title: "Frequency"    
+                        width: frequency.width + 20             
+                        IncrementalPropertyControl {                
+                            id: frequency
+                            width : 90           
+                            
+                            step: 0.1
+                            decimals: 2
+                            currentValue: 440
+
+                            onValueEdited: function(newValue) {
+                                if (currentValue== null) {currentValue = 440}
+                                else {currentValue = newValue}
+
+                                tweakValue.currentText = (1200 * Math.log2(currentValue / 440)).toFixed(1).toString()
+                                tweaked()
+                            }
+
+                            StyledTextLabel {
+                                    anchors.verticalCenter: frequency.verticalCenter
+                                    anchors.right: parent.right
+                                    anchors.rightMargin: 25
+                                    text: "Hz"                                    
+                            }
+                            
+                        }  
+                    }
+                }      
 
                 GroupBox {
                     title: "Final offsets"
