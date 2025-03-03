@@ -612,6 +612,10 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
         return configuration()->highlightSelectionColor(track() == muse::nidx ? 0 : voice());
     }
 
+    if (flag(ElementFlag::IS_PREVIEW)) {
+        return configuration()->formattingColor();
+    }
+
     bool marked = false;
     if (isNote()) {
         marked = toNote(this)->mark();
