@@ -214,6 +214,17 @@ void NotationConfiguration::init()
 
     if (!userStylesPath().empty()) {
         fileSystem()->makePath(userStylesPath());
+
+#if !defined(Q_OS_LINUX)
+        // Create shortcut or symlink to global styles folder. Doesn't overwrite an existing file
+        // or link, which means it won't work on Linux because the global styles folder is inside
+        // the AppImage, and the AppImage mountpoint changes on each run. TODO: Check for existing
+        // link, read it, and if necessary update it. This would make it work on Linux too.
+        fileSystem()->makeLink(
+            globalConfiguration()->appDataPath() + "/styles",
+            userStylesPath() + "/Built-in styles"
+            );
+#endif
     }
 
     settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(BY_NOTE_NAME_INPUT_METHOD));
