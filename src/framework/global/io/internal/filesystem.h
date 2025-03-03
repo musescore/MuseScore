@@ -36,6 +36,7 @@ public:
     Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) override;
 
     Ret makePath(const io::path_t& path) const override;
+    Ret makeLink(const io::path_t& targetPath, const io::path_t& linkPath) const override;
 
     EntryType entryType(const io::path_t& path) const override;
 
