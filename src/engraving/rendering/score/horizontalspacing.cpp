@@ -1192,10 +1192,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
         return f->minRight() + ns->minLeft() + f->style().styleMM(Sid::headerToLineStartDistance);
     }
 
-    bool systemHeaderGap = f->segmentType() != SegmentType::ChordRest && f->segmentType() != SegmentType::StartRepeatBarLine
-                           && f->rtick().isZero() && !f->hasTimeSigAboveStaves()
-                           && (ns->measure()->isFirstInSystem() || ns->measure()->prev()->isHBox())
-                           && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()));
+    bool systemHeaderGap = needsHeaderSpacingExceptions(f, ns);
 
     double ww = -DBL_MAX;          // can remain negative
     double d = 0.0;
@@ -1278,6 +1275,21 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
     computeHangingLineWidth(f, ns, w, systemHeaderGap, systemEnd);
 
     return w;
+}
+
+bool HorizontalSpacing::needsHeaderSpacingExceptions(const Segment* seg, const Segment* nextSeg)
+{
+    static const std::unordered_set<SegmentType> HEADER_SEGMENT_TYPES = { SegmentType::HeaderClef,
+                                                                          SegmentType::KeySig,
+                                                                          SegmentType::KeySigStartRepeatAnnounce,
+                                                                          SegmentType::Ambitus,
+                                                                          SegmentType::TimeSig,
+                                                                          SegmentType::TimeSigStartRepeatAnnounce };
+
+    return muse::contains(HEADER_SEGMENT_TYPES, seg->segmentType())
+           && seg->rtick().isZero() && !seg->hasTimeSigAboveStaves()
+           && (nextSeg->measure()->isFirstInSystem() || nextSeg->measure()->prev()->isHBox())
+           && (nextSeg->isStartRepeatBarLineType() || nextSeg->isChordRestType());
 }
 
 //---------------------------------------------------------

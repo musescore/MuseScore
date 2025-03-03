@@ -113,6 +113,7 @@ private:
     static double durationStretchForMMRests(const Segment* segment);
     static double durationStretchForTicks(double slope, const Fraction& ticks);
     static bool needsCueSizeSpacing(const Segment* segment);
+    static bool needsHeaderSpacingExceptions(const Segment* seg, const Segment* nextSeg);
 
     static void applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width);
     static CrossBeamSpacing computeCrossBeamSpacing(Segment* thisSeg, Segment* nextSeg);
