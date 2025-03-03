@@ -556,20 +556,27 @@ StyledFlickable {
                 spacing: 12
                 anchors.fill: parent
 
-                StyledTextLabel {
-                    text: qsTrc("notation/editstyle/timesignatures", "Place all changes before the barline")
-                }
+                StyledGroupBox {
+                    Layout.fillWidth: true
 
-                CheckBox {
-                    text: qsTrc("notation/editstyle/timesignatures", "At repeats")
-                    checked: pageModel.changesBeforeBarlineRepeats.value === true
-                    onClicked: pageModel.changesBeforeBarlineRepeats.value = !pageModel.changesBeforeBarlineRepeats.value
-                }
+                    title: qsTrc("notation/editstyle/timesignatures", "Changes that apply to both the repeat/jump and the subsequent bar")
 
-                CheckBox {
-                    text: qsTrc("notation/editstyle/timesignatures", "At all other jumps")
-                    checked: pageModel.changesBeforeBarlineOtherJumps.value === true
-                    onClicked: pageModel.changesBeforeBarlineOtherJumps.value = !pageModel.changesBeforeBarlineOtherJumps.value
+                    ColumnLayout {
+                        spacing: 8
+                        anchors.fill: parent
+
+                        CheckBox {
+                            text: qsTrc("notation/editstyle/timesignatures", "At repeats, only show changes before the barline")
+                            checked: pageModel.changesBeforeBarlineRepeats.value === true
+                            onClicked: pageModel.changesBeforeBarlineRepeats.value = !pageModel.changesBeforeBarlineRepeats.value
+                        }
+
+                        CheckBox {
+                            text: qsTrc("notation/editstyle/timesignatures", "At all other jumps, only show changes before the barline")
+                            checked: pageModel.changesBeforeBarlineOtherJumps.value === true
+                            onClicked: pageModel.changesBeforeBarlineOtherJumps.value = !pageModel.changesBeforeBarlineOtherJumps.value
+                        }
+                    }
                 }
 
                 StyledGroupBox {
@@ -679,7 +686,7 @@ StyledFlickable {
                             imageOFF: "courtesyImages/cancel_repeat-off"
                             imageParens: "courtesyImages/cancel_repeat-on-parens"
 
-                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a change before repeats")
+                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a courtesy before repeats")
                         }
 
                         CourtesyShowAndParenToggle {
@@ -690,7 +697,7 @@ StyledFlickable {
                             imageOFF: "courtesyImages/cancel_other-off"
                             imageParens: "courtesyImages/cancel_other-on-parens"
 
-                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a change before all other jumps")
+                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a courtesy before all other jumps")
                         }
 
                         CheckBox {
