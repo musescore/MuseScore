@@ -38,6 +38,7 @@
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/keysig.h"
@@ -474,6 +475,8 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         } else {
             item = Factory::createHarmony(chordRest->segment());
         }
+    } else if (meiElement.m_name == "harpPedal") {
+        item = Factory::createHarpPedalDiagram(chordRest->segment());
     } else if (meiElement.m_name == "reh") {
         item = Factory::createRehearsalMark(chordRest->segment());
     } else if (meiElement.m_name == "tempo") {
@@ -2253,6 +2256,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             } else {
                 success = success && this->readHarm(xpathNode.node(), measure);
             }
+        } else if (elementName == "harpPedal") {
+            success = success && this->readHarpPedal(xpathNode.node(), measure);
         } else if (elementName == "lv") {
             success = success && this->readLv(xpathNode.node(), measure);
         } else if (elementName == "mordent") {
@@ -2627,6 +2632,31 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
     this->readLines(harmNode, meiLines, meiLine);
 
     Convert::harmFromMEI(harmony, meiLines, meiHarm, warning);
+
+    return true;
+}
+
+/**
+ * Read a harpPedal.
+ */
+
+bool MeiImporter::readHarpPedal(pugi::xml_node harpPedalNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::HarpPedal meiHarpPedal;
+    meiHarpPedal.Read(harpPedalNode);
+
+    HarpPedalDiagram* harpPedalDiagram = static_cast<HarpPedalDiagram*>(this->addAnnotation(meiHarpPedal, measure));
+    if (!harpPedalDiagram) {
+        // Warning message given in MeiImporter::addAnnotation
+        return true;
+    }
+
+    Convert::harpPedalFromMEI(harpPedalDiagram, meiHarpPedal, warning);
 
     return true;
 }

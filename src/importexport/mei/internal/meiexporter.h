@@ -136,6 +136,7 @@ private:
     bool writeFing(const engraving::Fingering* fing, const std::string& startid);
     bool writeHairpin(const engraving::Hairpin* hairpin, const std::string& startid);
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
+    bool writeHarpPedal(const engraving::HarpPedalDiagram* harpPedalDiagram, const std::string& startid);
     bool writeOctave(const engraving::Ottava* ottava, const std::string& startid);
     bool writeOrnament(const engraving::Ornament* ornament, const std::string& startid);
     bool writePedal(const engraving::Pedal* pedal, const std::string& startid);
