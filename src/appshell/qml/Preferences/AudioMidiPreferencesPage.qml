@@ -82,6 +82,19 @@ PreferencesPage {
 
         SeparatorLine {}
 
+        JackSection {
+            jackTransportEnable: audioMidiModel.jackTransportEnable
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
+            onJackTransportEnableChangeRequested: function(enable) {
+                audioMidiModel.jackTransportEnable = enable
+            }
+        }
+
+        SeparatorLine {}
+
         MixerSection {
             muteHiddenInstruments: audioMidiModel.muteHiddenInstruments
 

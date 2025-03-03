@@ -215,7 +215,7 @@ async::Channel<secs_t> Player::playbackPositionChanged() const
 
 PlaybackStatus Player::playbackStatus() const
 {
-    ONLY_AUDIO_MAIN_THREAD;
+    //ONLY_AUDIO_MAIN_THREAD;
     return m_playbackStatus;
 }
 

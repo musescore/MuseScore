@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MIDI_ALSAMIDIOUTPORT_H
-#define MUSE_MIDI_ALSAMIDIOUTPORT_H
+#ifndef MU_MIDI_LINUXMIDIINPORT_H
+#define MU_MIDI_LINUXMIDIINPORT_H
 
 #include <memory>
+#include <thread>
 
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "midi/imidioutport.h"
+
+#include "framework/audio/audiomodule.h"
+#include "framework/audio/iaudiodriver.h"
+#include "imidiinport.h"
 #include "internal/midideviceslistener.h"
 
+#include "internal/platform/alsa/alsamidiinport.h"
+
 namespace muse::midi {
-class AlsaMidiOutPort : public IMidiOutPort, public async::Asyncable
+class LinuxMidiInPort : public IMidiInPort, public async::Asyncable
 {
+    Inject<muse::audio::IAudioDriver> audioDriver;
 public:
-    AlsaMidiOutPort() = default;
-    ~AlsaMidiOutPort() = default;
+    LinuxMidiInPort() = default;
+    ~LinuxMidiInPort() = default;
 
     void init();
     void deinit();
 
-    MidiDeviceList availableDevices() const override;
+    std::vector<MidiDevice> availableDevices() const override;
     async::Notification availableDevicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
@@ -47,23 +55,31 @@ public:
     MidiDeviceID deviceID() const override;
     async::Notification deviceChanged() const override;
 
-    bool supportsMIDI20Output() const override;
-
-    Ret sendEvent(const Event& e) override;
+    async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
+    Ret run();
+    void stop();
+
+    static void process(LinuxMidiInPort* self);
+    void doProcess();
+
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
-    struct Alsa;
-    std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
+    std::shared_ptr<std::thread> m_thread;
+    std::atomic<bool> m_running{ false };
     async::Notification m_deviceChanged;
 
     async::Notification m_availableDevicesChanged;
     MidiDevicesListener m_devicesListener;
 
     mutable std::mutex m_devicesMutex;
+
+    async::Channel<tick_t, Event > m_eventReceived;
+
+    std::unique_ptr<AlsaMidiInPort> m_midiInPortAlsa;
 };
 }
 
-#endif // MUSE_MIDI_ALSAMIDIOUTPORT_H
+#endif // MU_MIDI_LINUXMIDIINPORT_H
