@@ -245,15 +245,23 @@ else ()
     set(Z_LIB z)
 endif ()
 
-list(APPEND MODULE_INCLUDE_PRIVATE
-    ${Z_INCLUDE}
-    )
+list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
+list(APPEND MODULE_LINK ${Z_LIB})
 
-list(APPEND MODULE_LINK
-    ${Z_LIB}
-)
 list(APPEND MODULE_LINK ${TINYXML_MODULE_LINK})
 set(MODULE_DEF ${TINYXML_MODULE_DEF})
+
+if (QT_SUPPORT)
+    # These are needed by so many modules, that we make them public here,
+    # so that other modules get them transitively.
+    list(APPEND MODULE_LINK_PUBLIC Qt::Core Qt::Gui)
+
+    # These are needed by the PCH; if we don't make them public, modules
+    # that don't use them won't be able to use the PCH with some compilers.
+    list(APPEND MODULE_LINK_PUBLIC Qt::Quick Qt::Widgets)
+endif()
+
+list(APPEND MODULE_LINK_PUBLIC ${CMAKE_DL_LIBS})
 
 if (MUSE_ENABLE_CUSTOM_ALLOCATOR)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_ENABLE_CUSTOM_ALLOCATOR)

@@ -16,9 +16,9 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21.1) # Min. required by Qt 6.8
 
 project(MuseScore LANGUAGES C CXX)
 
@@ -152,7 +152,6 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
 endif()
 
-set(QT_MIN_VERSION "6.2.4")
 set(QT_ADD_STATEMACHINE ON)
 if (MUSE_MODULE_NETWORK_WEBSOCKET)
     set(QT_ADD_WEBSOCKET ON)
