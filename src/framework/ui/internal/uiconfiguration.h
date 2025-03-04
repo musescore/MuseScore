@@ -121,7 +121,10 @@ public:
 
 private:
     void initThemes();
+    void correctUserFontIfNeeded();
+
     void notifyAboutCurrentThemeChanged();
+
     void updateCurrentTheme();
     void updateThemes();
 
