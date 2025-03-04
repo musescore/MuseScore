@@ -247,18 +247,14 @@ bool NavigableAppMenuModel::processEventForOpenedMenu(QEvent* event)
     bool isNavigationWithSymbol = !keyEvent->modifiers()
                                   && keyEvent->text().length() == 1;
 
-    if (!isNavigationWithSymbol) {
+    if (!isNavigationWithSymbol || isNavigateKey(keyEvent->key())) {
         return false;
     }
 
-    QSet<int> activatePossibleKeys = possibleKeys(keyEvent);
-    if (hasSubItem(m_openedMenuId, activatePossibleKeys)) {
-        navigateToSubItem(m_openedMenuId, activatePossibleKeys);
-        event->accept();
-        return true;
-    }
-
-    return false;
+    QChar symbol = keyEvent->text()[0];
+    emit navigateWithSymbolRequested(symbol);
+    event->accept();
+    return true;
 }
 
 bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
@@ -411,54 +407,12 @@ bool NavigableAppMenuModel::hasItem(const QSet<int>& activatePossibleKeys)
     return !menuItemId(items(), activatePossibleKeys).isEmpty();
 }
 
-bool NavigableAppMenuModel::hasSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys)
-{
-    MenuItem& menuItem = findMenu(menuId);
-    if (menuItem.subitems().empty()) {
-        return false;
-    }
-
-    return !menuItemId(menuItem.subitems(), activatePossibleKeys).isEmpty();
-}
-
 void NavigableAppMenuModel::navigate(const QSet<int>& activatePossibleKeys)
 {
     saveMUNavigationSystemState();
 
     setHighlightedMenuId(menuItemId(items(), activatePossibleKeys));
     activateHighlightedMenu();
-}
-
-void NavigableAppMenuModel::navigateToSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys)
-{
-    MenuItem& menuItem = findMenu(menuId);
-    MenuItem& subItem = findItem(this->menuItemId(menuItem.subitems(), activatePossibleKeys));
-    if (!subItem.isValid()) {
-        return;
-    }
-
-    INavigationSection* section = navigationController()->activeSection();
-    INavigationPanel* panel = navigationController()->activePanel();
-
-    if (!section || !panel) {
-        return;
-    }
-
-    navigationController()->requestActivateByName(section->name().toStdString(),
-                                                  panel->name().toStdString(),
-                                                  subItem.id().toStdString());
-
-    INavigationControl* control = navigationController()->activeControl();
-    if (!control) {
-        return;
-    }
-
-    control->trigger();
-
-    bool isMenu = !subItem.subitems().isEmpty();
-    if (!isMenu) {
-        resetNavigation();
-    }
 }
 
 void NavigableAppMenuModel::resetNavigation()
@@ -530,6 +484,24 @@ QString NavigableAppMenuModel::highlightedMenuId() const
 QString NavigableAppMenuModel::openedMenuId() const
 {
     return m_openedMenuId;
+}
+
+bool NavigableAppMenuModel::menuItemMatchesSymbol(MenuItem* menuItem, const QChar& symbol)
+{
+    QString title = menuItem->action().title.qTranslatedWithMnemonicAmpersand();
+
+    int activateKeyIndex = title.indexOf('&');
+    if (activateKeyIndex == -1) {
+        return false;
+    }
+
+    auto keys = possibleKeys(symbol.toUpper());
+    auto menuActivatePossibleKeys = possibleKeys(title[activateKeyIndex + 1].toUpper());
+    if (menuActivatePossibleKeys.intersects(keys)) {
+        return true;
+    }
+
+    return false;
 }
 
 QString NavigableAppMenuModel::menuItemId(const MenuItemList& items, const QSet<int>& activatePossibleKeys)
