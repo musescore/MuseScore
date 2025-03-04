@@ -127,6 +127,9 @@ public:
     }
 
     Q_INVOKABLE mu::palette::PaletteElementEditor* elementEditor(const QModelIndex& index);
+
+private:
+    QMap<Palette::Type, PaletteElementEditor*> m_paletteElementEditorMap;
 };
 
 // ========================================================

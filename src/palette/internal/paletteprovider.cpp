@@ -193,14 +193,18 @@ static QModelIndex convertProxyIndex(const QModelIndex& srcIndex, const QAbstrac
 // ========================================================
 // AbstractPaletteController
 // ========================================================
-
 PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex& paletteIndex)
 {
-    PaletteElementEditor* ed
-        = new PaletteElementEditor(this, paletteIndex,
-                                   paletteIndex.data(
-                                       PaletteTreeModel::PaletteTypeRole).value<Palette::Type>(), this);
-    QQmlEngine::setObjectOwnership(ed, QQmlEngine::JavaScriptOwnership);
+    Palette::Type paletteType = paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<Palette::Type>();
+
+    if (m_paletteElementEditorMap.contains(paletteType)) {
+        return m_paletteElementEditorMap[paletteType];
+    }
+
+    PaletteElementEditor* ed = new PaletteElementEditor(this, paletteIndex,
+                                                        paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<Palette::Type>(), this);
+
+    m_paletteElementEditorMap.insert(paletteType, ed);
     return ed;
 }
 
