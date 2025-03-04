@@ -362,7 +362,8 @@ bool NavigableAppMenuModel::isNavigateKey(int key) const
         Qt::Key_Down,
         Qt::Key_Space,
         Qt::Key_Escape,
-        Qt::Key_Return
+        Qt::Key_Return,
+        Qt::Key_Enter
     };
 
     return keys.contains(static_cast<Qt::Key>(key));
@@ -393,6 +394,7 @@ void NavigableAppMenuModel::navigate(int scanCode)
     case Qt::Key_Down:
     case Qt::Key_Space:
     case Qt::Key_Return:
+    case Qt::Key_Enter:
         activateHighlightedMenu();
         break;
     case Qt::Key_Escape:
