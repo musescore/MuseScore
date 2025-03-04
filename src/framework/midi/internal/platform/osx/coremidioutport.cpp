@@ -82,7 +82,7 @@ void CoreMidiOutPort::deinit()
 
 void CoreMidiOutPort::initCore()
 {
-    OSStatus result;
+    OSStatus result = 0;
 
     static auto onCoreMidiNotificationReceived = [](const MIDINotification* notification, void* refCon) {
         auto self = static_cast<CoreMidiOutPort*>(refCon);
@@ -287,7 +287,7 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    OSStatus result;
+    OSStatus result = 0;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
     // Note: there could be three cases: MIDI2+MIDIEventList, MIDI1+MIDIEventList, MIDI1+MIDIPacketList.
