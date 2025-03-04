@@ -59,6 +59,15 @@ inline String audioSourceName(const AudioInputParams& params)
     return String::fromStdString(params.resourceMeta.id);
 }
 
+inline String audioSourcePackName(const AudioInputParams& params)
+{
+    if (params.type() == AudioSourceType::MuseSampler) {
+        return params.resourceMeta.attributeVal(u"musePack");
+    }
+
+    return String();
+}
+
 inline String audioSourceCategoryName(const AudioInputParams& params)
 {
     if (params.type() == AudioSourceType::MuseSampler) {
