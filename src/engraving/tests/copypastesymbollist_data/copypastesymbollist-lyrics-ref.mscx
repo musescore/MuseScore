@@ -253,6 +253,10 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
+            <Lyrics>
+              <syllabic>begin</syllabic>
+              <text>mez</text>
+              </Lyrics>
             <Note>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -261,8 +265,8 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <syllabic>begin</syllabic>
-              <text>mez</text>
+              <syllabic>end</syllabic>
+              <text>zo</text>
               </Lyrics>
             <Note>
               <pitch>76</pitch>
@@ -272,8 +276,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <syllabic>end</syllabic>
-              <text>zo</text>
+              <text>del</text>
               </Lyrics>
             <Note>
               <pitch>77</pitch>
@@ -291,7 +294,8 @@
           <Chord>
             <durationType>eighth</durationType>
             <Lyrics>
-              <text>del</text>
+              <syllabic>begin</syllabic>
+              <text>cam</text>
               </Lyrics>
             <Note>
               <pitch>79</pitch>
@@ -307,6 +311,12 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <Lyrics>
+              <syllabic>end</syllabic>
+              <ticks>480</ticks>
+              <ticks_f>1/4</ticks_f>
+              <text>min</text>
+              </Lyrics>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -325,10 +335,6 @@
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
-            <Lyrics>
-              <syllabic>begin</syllabic>
-              <text>cam</text>
-              </Lyrics>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -336,6 +342,9 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <Lyrics>
+              <text>di</text>
+              </Lyrics>
             <Note>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -343,6 +352,10 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <Lyrics>
+              <syllabic>begin</syllabic>
+              <text>no</text>
+              </Lyrics>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -350,6 +363,10 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
+            <Lyrics>
+              <syllabic>end</syllabic>
+              <text>stra</text>
+              </Lyrics>
             <Note>
               <pitch>77</pitch>
               <tpc>13</tpc>
@@ -362,8 +379,8 @@
           <Chord>
             <durationType>half</durationType>
             <Lyrics>
-              <syllabic>end</syllabic>
-              <text>min</text>
+              <syllabic>begin</syllabic>
+              <text>vi</text>
               </Lyrics>
             <Note>
               <pitch>76</pitch>
@@ -372,10 +389,6 @@
             </Chord>
           <Chord>
             <durationType>half</durationType>
-            <Lyrics>
-              <syllabic>begin</syllabic>
-              <text>no</text>
-              </Lyrics>
             <Note>
               <pitch>74</pitch>
               <tpc>16</tpc>
