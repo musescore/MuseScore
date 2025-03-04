@@ -37,7 +37,7 @@ class AbstractElementPopupModel : public QObject, public muse::Injectable, publi
     Q_OBJECT
 
     Q_PROPERTY(PopupModelType modelType READ modelType CONSTANT)
-    Q_PROPERTY(QRect itemRect READ itemRect NOTIFY itemRectChanged)
+    Q_PROPERTY(QRectF itemRect READ itemRect NOTIFY itemRectChanged)
 
 public:
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
@@ -59,7 +59,7 @@ public:
     AbstractElementPopupModel(PopupModelType modelType, QObject* parent = nullptr);
 
     PopupModelType modelType() const;
-    QRect itemRect() const;
+    QRectF itemRect() const;
 
     static bool supportsPopup(const mu::engraving::EngravingItem* element);
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
@@ -68,7 +68,7 @@ public:
 
 signals:
     void dataChanged();
-    void itemRectChanged(QRect rect);
+    void itemRectChanged(QRectF rect);
 
 protected:
     virtual void updateItemRect();
@@ -89,7 +89,7 @@ protected:
     void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
 
     EngravingItem* m_item = nullptr;
-    QRect m_itemRect;
+    QRectF m_itemRect;
 
 private:
     INotationSelectionPtr selection() const;
