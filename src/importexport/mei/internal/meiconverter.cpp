@@ -1751,6 +1751,104 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     return meiHarm;
 }
 
+void Convert::harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, const libmei::HarpPedal& meiHarpPedal, bool& warning)
+{
+    IF_ASSERT_FAILED(harpPedalDiagram) {
+        return;
+    }
+
+    warning = false;
+
+    harpPedalDiagram->setIsDiagram(true);
+
+    // @d
+    harpPedalDiagram->setPedal(engraving::HarpStringType::D, harpPedalPositionFromMEI(meiHarpPedal.GetD()));
+    // @c
+    harpPedalDiagram->setPedal(engraving::HarpStringType::C, harpPedalPositionFromMEI(meiHarpPedal.GetC()));
+    // @b
+    harpPedalDiagram->setPedal(engraving::HarpStringType::B, harpPedalPositionFromMEI(meiHarpPedal.GetB()));
+    // @e
+    harpPedalDiagram->setPedal(engraving::HarpStringType::E, harpPedalPositionFromMEI(meiHarpPedal.GetE()));
+    // @f
+    harpPedalDiagram->setPedal(engraving::HarpStringType::F, harpPedalPositionFromMEI(meiHarpPedal.GetF()));
+    // @g
+    harpPedalDiagram->setPedal(engraving::HarpStringType::G, harpPedalPositionFromMEI(meiHarpPedal.GetG()));
+    // @a
+    harpPedalDiagram->setPedal(engraving::HarpStringType::A, harpPedalPositionFromMEI(meiHarpPedal.GetA()));
+
+    // @place
+    if (meiHarpPedal.HasPlace()) {
+        harpPedalDiagram->setPlacement(meiHarpPedal.GetPlace()
+                                       == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        harpPedalDiagram->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+
+    // @color
+    Convert::colorFromMEI(harpPedalDiagram, meiHarpPedal);
+}
+
+libmei::HarpPedal Convert::harpPedalToMEI(const engraving::HarpPedalDiagram* harpPedalDiagram)
+{
+    libmei::HarpPedal meiHarpPedal;
+
+    // @d
+    meiHarpPedal.SetD(harpPedalPositionToMEI(harpPedalDiagram->getPedalState().at(0)));
+    // @c
+    meiHarpPedal.SetC(harpPedalPositionToMEI(harpPedalDiagram->getPedalState().at(1)));
+    // @b
+    meiHarpPedal.SetB(harpPedalPositionToMEI(harpPedalDiagram->getPedalState().at(2)));
+    // @e
+    meiHarpPedal.SetE(harpPedalPositionToMEI(harpPedalDiagram->getPedalState().at(3)));
+    // @f
+    meiHarpPedal.SetF(harpPedalPositionToMEI(harpPedalDiagram->getPedalState().at(4)));
+    // @g
+    meiHarpPedal.SetG(harpPedalPositionToMEI(harpPedalDiagram->getPedalState().at(5)));
+    // @a
+    meiHarpPedal.SetA(harpPedalPositionToMEI(harpPedalDiagram->getPedalState().at(6)));
+
+    // @place
+    if (harpPedalDiagram->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiHarpPedal.SetPlace(Convert::placeToMEI(harpPedalDiagram->placement()));
+    }
+
+    // @color
+    Convert::colorToMEI(harpPedalDiagram, meiHarpPedal);
+
+    // @staff
+    Convert::staffIdentToMEI(harpPedalDiagram, meiHarpPedal);
+
+    return meiHarpPedal;
+}
+
+libmei::data_HARPPEDALPOSITION Convert::harpPedalPositionToMEI(const engraving::PedalPosition& pedalPosition)
+{
+    switch (pedalPosition) {
+    case engraving::PedalPosition::FLAT:
+        return libmei::HARPPEDALPOSITION_f;
+    case engraving::PedalPosition::NATURAL:
+        return libmei::HARPPEDALPOSITION_n;
+    case engraving::PedalPosition::SHARP:
+        return libmei::HARPPEDALPOSITION_s;
+    case engraving::PedalPosition::UNSET:
+    default:
+        return libmei::HARPPEDALPOSITION_NONE;
+    }
+}
+
+engraving::PedalPosition Convert::harpPedalPositionFromMEI(const libmei::data_HARPPEDALPOSITION& pedalPosition)
+{
+    switch (pedalPosition) {
+    case libmei::HARPPEDALPOSITION_f:
+        return engraving::PedalPosition::FLAT;
+    case libmei::HARPPEDALPOSITION_n:
+        return engraving::PedalPosition::NATURAL;
+    case libmei::HARPPEDALPOSITION_s:
+        return engraving::PedalPosition::SHARP;
+    default:
+        return engraving::PedalPosition::UNSET;
+    }
+}
+
 void Convert::lvFromMEI(engraving::LaissezVib* lv, const libmei::Lv& meiLv, bool& warning)
 {
     warning = false;
@@ -2775,6 +2873,7 @@ Convert::StaffStruct Convert::staffFromMEI(const libmei::StaffDef& meiStaffDef, 
     }
     staffSt.invisible = meiStaffDef.GetLinesVisible() == libmei::BOOLEAN_false;
     staffSt.scale = meiStaffDef.HasScale() ? meiStaffDef.GetScale() : 100;
+    staffSt.color = engraving::Color::fromString(meiStaffDef.GetLinesColor());
 
     // Set it only if both are given
     if (meiStaffDef.HasTransDiat() && meiStaffDef.HasTransSemi()) {
@@ -2805,6 +2904,10 @@ libmei::StaffDef Convert::staffToMEI(const engraving::Staff* staff)
     const engraving::StaffType* staffType = staff->staffType(engraving::Fraction(0, 1));
     if (staffType) {
         meiStaffDef.SetLines(staffType->lines());
+    }
+    // @lines.color
+    if (staffType->color() != engravingConfiguration()->defaultColor()) {
+        meiStaffDef.SetLinesColor(staffType->color().toString());
     }
     // @lines.visible
     if (staff->isLinesInvisible(engraving::Fraction(0, 1))) {

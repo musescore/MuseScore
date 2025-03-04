@@ -10,59 +10,37 @@
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer">K. Rettinghaus</metaTag>
+    <metaTag name="composer">Klaus Rettinghaus</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title type=&quot;main&quot;&gt;Staff type properties&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;K. Rettinghaus&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2025-02-14T09:54:48&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
+    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title type=&quot;main&quot;&gt;Harp pedals test&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;Klaus Rettinghaus&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2025-03-03T14:50:02&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Staff type properties</metaTag>
+    <metaTag name="workTitle">Harp pedals test</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
-          <mag>0.7</mag>
           </StaffType>
-        </Staff>
-      <trackName></trackName>
-      <Instrument id="violin">
-        <longName>Violin</longName>
-        <shortName>Vln.</shortName>
-        <trackName></trackName>
-        <instrumentId>strings.violin</instrumentId>
-        <Channel>
-          <program value="40"/>
-          </Channel>
-        </Instrument>
-      </Part>
-    <Part id="2">
-      <Staff id="2">
-        <StaffType group="pitched">
-          <name>stdNormal</name>
-          <invisible>1</invisible>
-          </StaffType>
-        <invisible>1</invisible>
         <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="3">
+      <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
-          <color r="51" g="255" b="0" a="255"/>
           </StaffType>
-        <color r="51" g="255" b="0" a="255"/>
         </Staff>
       <trackName></trackName>
-      <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+      <Instrument id="harp">
+        <longName>Harp</longName>
+        <shortName>Hrp.</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>pluck.harp</instrumentId>
         <Channel>
-          <program value="0"/>
+          <program value="46"/>
           </Channel>
         </Instrument>
       </Part>
@@ -71,11 +49,11 @@
         <height>10</height>
         <Text>
           <style>title</style>
-          <text>Staff type properties</text>
+          <text>Harp pedals test</text>
           </Text>
         <Text>
           <style>composer</style>
-          <text>K. Rettinghaus</text>
+          <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>
       <Measure>
@@ -89,6 +67,20 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <HarpPedalDiagram>
+            <pedalState>
+              <string name="0">0</string>
+              <string name="1">1</string>
+              <string name="2">2</string>
+              <string name="3">1</string>
+              <string name="4">0</string>
+              <string name="5">0</string>
+              <string name="6">0</string>
+              </pedalState>
+            <placement>below</placement>
+            <color r="0" g="150" b="255" a="255"/>
+            <text><sym>harpPedalRaised</sym><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalDivider</sym><sym>harpPedalCentered</sym><sym>harpPedalRaised</sym><sym>harpPedalRaised</sym><sym>harpPedalRaised</sym></text>
+            </HarpPedalDiagram>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -97,6 +89,18 @@
         </Measure>
       <Measure>
         <voice>
+          <HarpPedalDiagram>
+            <pedalState>
+              <string name="0">1</string>
+              <string name="1">2</string>
+              <string name="2">1</string>
+              <string name="3">1</string>
+              <string name="4">2</string>
+              <string name="5">1</string>
+              <string name="6">1</string>
+              </pedalState>
+            <text><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalDivider</sym><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalCentered</sym></text>
+            </HarpPedalDiagram>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -105,6 +109,18 @@
         </Measure>
       <Measure>
         <voice>
+          <HarpPedalDiagram>
+            <pedalState>
+              <string name="0">1</string>
+              <string name="1">2</string>
+              <string name="2">1</string>
+              <string name="3">1</string>
+              <string name="4">2</string>
+              <string name="5">1</string>
+              <string name="6">1</string>
+              </pedalState>
+            <text><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalDivider</sym><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalCentered</sym></text>
+            </HarpPedalDiagram>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -118,58 +134,11 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure>
-        <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
-          <TimeSig>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
-          </voice>
-        </Measure>
-      </Staff>
-    <Staff id="3">
       <Measure>
         <voice>
           <Clef>
@@ -210,7 +179,6 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>
