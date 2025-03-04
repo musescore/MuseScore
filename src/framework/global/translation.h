@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_TRANSLATION_H
-#define MUSE_GLOBAL_TRANSLATION_H
+#pragma once
 
 #include <string>
 
@@ -46,6 +45,6 @@ QString qtrc(const char* context, const String& key, const String& disambiguatio
 #ifdef NO_QT_SUPPORT
 #define QT_TRANSLATE_NOOP(ctx, msg) msg
 #endif
-}
 
-#endif // MUSE_GLOBAL_TRANSLATION_H
+#define QT_TRANSLATE_NOOP_U16(ctx, msg) u##msg
+}
