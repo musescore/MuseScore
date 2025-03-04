@@ -6,7 +6,7 @@ on:
 jobs:
   setup:
     name: "Setup VTests workflow"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       do_run: ${{ steps.output_data.outputs.do_run }}
       reference_sha: ${{ steps.output_data.outputs.reference_sha }}
@@ -59,7 +59,7 @@ jobs:
 
   build_current:
     name: "Build current"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -95,7 +95,7 @@ jobs:
 
   build_reference:
     name: "Build reference"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -133,7 +133,7 @@ jobs:
 
   generate_and_compare:
     name: "Generate and Compare"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [setup, build_current, build_reference]
     if: needs.setup.outputs.do_run == 'true'
     steps:
