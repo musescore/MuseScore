@@ -496,6 +496,46 @@ void PageLayout::layoutArticAndFingeringOnCrossStaffBeams(LayoutContext& ctx, Sy
     }
 }
 
+void PageLayout::removeEmptySystems(LayoutContext& ctx)
+{
+    Page* page = ctx.mutState().page();
+
+    auto removeSystem = [&](System* system) -> void {
+        // erase system from page
+        std::vector<System*>& pageSystems = page->systems();
+        auto pageFoundSystem = std::find(pageSystems.begin(), pageSystems.end(), system);
+        if (pageFoundSystem != pageSystems.end()) {
+            pageSystems.erase(pageFoundSystem);
+        }
+
+        // erase system from score
+        std::vector<System*>& scoreSystems = ctx.mutDom().systems();
+        auto scoreFoundSystem = std::find(scoreSystems.begin(), scoreSystems.end(), system);
+        if (scoreFoundSystem != scoreSystems.end()) {
+            scoreSystems.erase(scoreFoundSystem);
+        }
+
+        // erase system from layoutcontext
+        std::vector<System*>& ctxSystems = ctx.mutState().systemList();
+        auto ctxFoundSystem = std::find(ctxSystems.begin(), ctxSystems.end(), system);
+        if (ctxFoundSystem != ctxSystems.end()) {
+            ctxSystems.erase(ctxFoundSystem);
+        }
+
+        // finally delete system
+        delete system;
+    };
+
+    std::vector<System*> systems = ctx.state().systemList();
+
+    for (System* sys : systems) {
+        if (!sys->measures().empty()) {
+            continue;
+        }
+        removeSystem(sys);
+    }
+}
+
 //---------------------------------------------------------
 //   layoutPage
 //    restHeight - vertical space which has to be distributed
