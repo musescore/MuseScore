@@ -81,7 +81,7 @@ Column {
 
             title: qsTrc("project", "Composer")
 
-            defaultText: qsTrc("project", "Composer / arranger")
+            defaultText: qsTrc("project", "Composer / Arranger")
 
             navigationPanel: root.navigationPanel
             navigationColumn: 1
