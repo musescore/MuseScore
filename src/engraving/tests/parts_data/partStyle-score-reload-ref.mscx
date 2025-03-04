@@ -583,16 +583,16 @@
           </VBox>
         <Measure>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              </Clef>
             <TimeSig>
               <linked>
                 </linked>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              </Clef>
             <Rest>
               <linked>
                 </linked>
