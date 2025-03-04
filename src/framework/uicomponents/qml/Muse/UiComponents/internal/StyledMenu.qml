@@ -129,6 +129,7 @@ MenuView {
                 } else {
                     root.close()
                 }
+                event.accepted = true
             }
         }
 
