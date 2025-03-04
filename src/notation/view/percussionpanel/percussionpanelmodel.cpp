@@ -357,15 +357,25 @@ void PercussionPanelModel::updateSoundTitle(const InstrumentTrackId& trackId)
     }
 
     const audio::AudioInputParams& params = audioSettings()->trackInputParams(trackId);
-
     const QString name = muse::audio::audioSourceName(params).toQString();
-    const QString category = muse::audio::audioSourceCategoryName(params).toQString();
-    if (name.isEmpty() || category.isEmpty()) {
+    if (name.isEmpty()) {
         setSoundTitle(QString());
         return;
     }
 
-    setSoundTitle(category + ": " + name);
+    const QString pack = muse::audio::audioSourcePackName(params).toQString();
+    if (!pack.isEmpty() && pack != name) {
+        setSoundTitle(pack + ": " + name);
+        return;
+    }
+
+    const QString category = muse::audio::audioSourceCategoryName(params).toQString();
+    if (!category.isEmpty() && category != name) {
+        setSoundTitle(category + ": " + name);
+        return;
+    }
+
+    setSoundTitle(name);
 }
 
 bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)

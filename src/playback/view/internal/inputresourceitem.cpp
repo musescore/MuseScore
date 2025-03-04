@@ -252,8 +252,15 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
             // Create submenu only if there are 2 or more vendors
             if (vendorMap.size() > 1 && !vendor.first.empty()) {
                 QString vendorString = vendor.first.toQString();
+                QString vendorTitle = vendorString;
+
+                // The user has only 1 pack installed, add it to the vendor name
+                if (vendor.second.size() == 1) {
+                    vendorTitle += ": " + vendor.second.begin()->first.toQString();
+                }
+
                 subItemsByType << buildMenuItem(vendorString,
-                                                vendorString,
+                                                vendorTitle,
                                                 isCurrentVendor,
                                                 subItemsByVendor);
             } else {

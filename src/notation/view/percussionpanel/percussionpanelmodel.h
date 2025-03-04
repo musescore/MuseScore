@@ -77,10 +77,7 @@ public:
     explicit PercussionPanelModel(QObject* parent = nullptr);
 
     bool enabled() const;
-    void setEnabled(bool enabled);
-
     QString soundTitle() const;
-    void setSoundTitle(const QString& soundTitle);
 
     PanelMode::Mode currentPanelMode() const;
     void setCurrentPanelMode(const PanelMode::Mode& panelMode);
@@ -117,9 +114,11 @@ signals:
 private:
     void setUpConnections();
 
+    void setEnabled(bool enabled);
     void setDrumset(mu::engraving::Drumset* drumset);
 
     void updateSoundTitle(const InstrumentTrackId& trackId);
+    void setSoundTitle(const QString& soundTitle);
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
