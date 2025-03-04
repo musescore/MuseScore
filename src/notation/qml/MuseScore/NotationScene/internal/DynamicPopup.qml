@@ -23,6 +23,8 @@ StyledPopupView {
 
     showArrow: false
 
+    takeFocusOnClick: false
+
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
