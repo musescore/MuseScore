@@ -853,7 +853,7 @@ void Measure::add(EngravingItem* e)
         }
         el().push_back(e);
         break;
-
+    // fallthrough
     case ElementType::MEASURE:
         m_mmRest = toMeasure(e);
         break;
