@@ -127,7 +127,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <bracket type="stop" number="1" line-end="down" end-length="15" color="#FF40FF"/>
+          <bracket type="stop" number="1" line-end="down" color="#FF40FF"/>
           </direction-type>
         </direction>
       <direction placement="below">
