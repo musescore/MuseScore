@@ -104,6 +104,8 @@ public:
 
     String formatBarsAndBeats() const override;
 
+    void undoChangeProperty(Pid, const PropertyValue&, PropertyFlags) override { return; } // not editable
+
 private:
     const SystemLock* m_systemLock = nullptr;
 };
