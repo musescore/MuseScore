@@ -6763,7 +6763,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
                 const bool isGerman = noteheadText == u"H" || (noteheadText == u"B" && mnp.alter());
                 headScheme = isGerman ? NoteHeadScheme::HEAD_PITCHNAME_GERMAN : NoteHeadScheme::HEAD_PITCHNAME;
             } else {
-                const std::vector<String> names = {u"Do", u"Re", u"Mi", u"Fa", u"Sol", u"La", u"Si"};
+                const std::vector<String> names = { u"Do", u"Re", u"Mi", u"Fa", u"Sol", u"La", u"Si" };
                 const bool isFixed = names.at(mnp.step()) == noteheadText;
                 headScheme = isFixed ? NoteHeadScheme::HEAD_SOLFEGE_FIXED : NoteHeadScheme::HEAD_SOLFEGE;
             }
