@@ -42,6 +42,7 @@
 #include "dom/measure.h"
 #include "dom/guitarbend.h"
 #include "dom/laissezvib.h"
+#include "dom/parenthesis.h"
 #include "dom/partialtie.h"
 
 #include "tlayout.h"
@@ -1859,16 +1860,26 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
     }
 
     const Segment* adjSeg = outgoing ? seg->next1() : seg->prev1();
-    while (adjSeg && (!adjSeg->isActive() || !adjSeg->enabled())) {
+    while (adjSeg && (!adjSeg->isActive() || !adjSeg->enabled() || adjSeg->allElementsInvisible())) {
         adjSeg = outgoing ? adjSeg->next1() : adjSeg->prev1();
     }
 
     double widthToSegment = 0.0;
     if (adjSeg) {
         EngravingItem* element = adjSeg->element(staff2track(item->vStaffIdx()));
+        track_idx_t strack = track2staff(item->track());
+        track_idx_t etrack = strack + VOICES - 1;
+        for (EngravingItem* paren : adjSeg->findAnnotations(ElementType::PARENTHESIS, strack, etrack)) {
+            if ((outgoing && toParenthesis(paren)->direction() == DirectionH::LEFT)
+                || (!outgoing && toParenthesis(paren)->direction() == DirectionH::RIGHT)) {
+                element = paren;
+                break;
+            }
+        }
+
         const double elementWidth = element ? element->width() : 0.0;
-        widthToSegment = outgoing ? adjSeg->xPosInSystemCoords() - sPos.p1.x() : sPos.p2.x()
-                         - (adjSeg->xPosInSystemCoords() + elementWidth);
+        const double elPos = adjSeg->xPosInSystemCoords() + (element ? element->pos().x() + element->shape().bbox().x() : 0.0);
+        widthToSegment = outgoing ? elPos - sPos.p1.x() : sPos.p2.x() - (elPos + elementWidth);
         widthToSegment -= 0.25 * item->spatium();
     }
 
