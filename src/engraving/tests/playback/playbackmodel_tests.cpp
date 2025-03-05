@@ -845,6 +845,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
+    EXPECT_EQ(result.originEvents.size(), expectedChangedEventsCount);
 
     // [THEN] Updated events map will match our expectations
     result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
@@ -852,13 +853,23 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
-    // [WHEN] Notation has been changed
+    // [WHEN] Score has been changed: the range starts ouside the repeat and ends inside it
     ScoreChangesRange range;
-    range.tickFrom = 480; // 2nd note of the 1st measure
+    range.tickFrom = 480; // 2nd note of the 1st measure (outside the repeat)
     range.tickTo = 3840; // 1st note of the 3rd measure (inside the repeat)
     range.staffIdxFrom = 0;
     range.staffIdxTo = 0;
     range.changedTypes = { ElementType::NOTE };
+
+    score->changesChannel().send(range);
+
+    // [WHEN] Score has been changed: the range is inside the repeat and tickTo == the end tick of the repeat
+    // See: https://github.com/musescore/MuseScore/issues/25899
+    range.tickFrom = 4800; // 3rd note of the 3rd measure (inside the repeat)
+    range.tickTo = 5760; // end tick of the repeat
+    range.staffIdxFrom = 0;
+    range.staffIdxTo = 0;
+    range.changedTypes = { ElementType::PEDAL };
 
     score->changesChannel().send(range);
 }
