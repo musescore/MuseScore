@@ -3316,6 +3316,22 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
         }
     }
 
+    const int dots = m_is.duration().dots();
+
+    if (toggleForSelectionOnly && dots > 0 && !crs.empty()) {
+        bool shouldRemoveDots = true;
+        for (const ChordRest* cr : crs) {
+            if (dots != cr->dots()) {
+                shouldRemoveDots = false;
+                break;
+            }
+        }
+
+        if (shouldRemoveDots) {
+            m_is.setDots(0);
+        }
+    }
+
     for (ChordRest* cr : crs) {
         if (cr->isChord() && (toChord(cr)->isGrace())) {
             //
@@ -3343,8 +3359,11 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
         m_is.setDuration(oldDuration);
         m_is.setRest(oldRest);
         m_is.setAccidentalType(oldAccidentalType);
+
         if (noteEntryMode()) {
-            m_is.moveToNextInputPos();
+            if (m_is.lastSegment() == m_is.segment()) {
+                m_is.moveToNextInputPos();
+            }
         }
     }
 }
