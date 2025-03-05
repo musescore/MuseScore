@@ -128,7 +128,7 @@ ScoresView {
                 anchors.rightMargin: root.sideMargin
 
                 title: qsTrc("project", "You don’t have any online scores yet")
-                body: qsTrc("project", "Scores will appear here when you save a file to the cloud, or publish a score on <a href=\"https://musescore.com\">musescore.com</a>.")
+                body: qsTrc("project", "Scores will appear here when you save a file to the cloud, or publish a score on <a href=\"https://musescore.com\">MuseScore.com</a>.")
             }
         }
     }
@@ -153,7 +153,7 @@ ScoresView {
                     width: parent.width
 
                     title: qsTrc("project", "You are not signed in")
-                    body: qsTrc("project", "Log in or create a new account on <a href=\"https://musescore.com\">musescore.com</a> to view online scores.")
+                    body: qsTrc("project", "Log in or create a new account on <a href=\"https://musescore.com\">MuseScore.com</a> to view online scores.")
                 }
 
                 Row {
