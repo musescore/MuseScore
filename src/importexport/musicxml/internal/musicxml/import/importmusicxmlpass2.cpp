@@ -1417,6 +1417,8 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         { u"flip",                   SymId::brassFlip },
         { u"smear",                  SymId::brassSmear },
         { u"open",                   SymId::brassMuteOpen },
+        { u"half-muted",             SymId::brassMuteHalfClosed }, // ignoring the smufl attribute
+        { u"golpe",                  SymId::guitarGolpe },
 
         { u"belltree", SymId::handbellsBelltree },
         { u"damp", SymId::handbellsDamp3 },
@@ -3103,6 +3105,15 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
             } else {
                 m_logger->logError(String(u"illegal staff-lines %1").arg(staffLines), &m_e);
             }
+        } else if (m_e.name() == "line-detail") {
+            const Color color = Color::fromString(m_e.attribute("color"));
+            if (color.isValid()) {
+                m_score->staff(staffIdx)->staffType(Fraction(0, 1))->setColor(color);
+            }
+            if (m_e.attribute("print-object") == u"no") {
+                m_score->staff(staffIdx)->staffType(Fraction(0, 1))->setInvisible(true);
+            }
+            m_e.skipCurrentElement();
         } else if (m_e.name() == "staff-tuning") {
             staffTuning(&stringData);
         } else if (m_e.name() == "staff-size") {
@@ -8493,10 +8504,7 @@ void MusicXmlParserNotations::arpeggio()
     if (m_arpeggioNo == 0) {
         m_arpeggioNo = 1;
     }
-    Color color = Color::fromString(m_e.attribute("color"));
-    if (color.isValid()) {
-        m_arpeggioColor = color;
-    }
+    m_arpeggioColor = Color::fromString(m_e.attribute("color"));
     m_e.skipCurrentElement();  // skip but don't log
 }
 
@@ -8983,6 +8991,7 @@ void MusicXmlParserNotations::parse()
         } else if (m_e.name() == "glissando") {
             glissandoSlide();
         } else if (m_e.name() == "non-arpeggiate") {
+            m_arpeggioColor = Color::fromString(m_e.attribute("color"));
             m_arpeggioType = u"non-arpeggiate";
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "ornaments") {
