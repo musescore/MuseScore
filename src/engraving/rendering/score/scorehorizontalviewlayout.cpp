@@ -278,7 +278,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     System* system = ctx.mutDom().systems().front();
     SystemLayout::setInstrumentNames(system, ctx, /* longNames */ true);
 
-    PointF pos;
+    double curSystemWidth = 0.0;
     bool firstMeasure = true;       //lc.startTick.isZero();
 
     //set first measure to lc.nextMeasures for following
@@ -288,20 +288,20 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     MeasureLayout::getNextMeasure(ctx);
 
     while (ctx.state().curMeasure()) {
-        double ww = 0.0;
         if (ctx.state().curMeasure()->isVBox() || ctx.state().curMeasure()->isTBox()) {
             ctx.mutState().curMeasure()->resetExplicitParent();
             MeasureLayout::getNextMeasure(ctx);
             continue;
         }
         system->appendMeasure(ctx.mutState().curMeasure());
+        bool createHeader = ctx.state().prevMeasure()->isHBox() && toHBox(ctx.state().prevMeasure())->createSystemHeader();
         if (ctx.state().curMeasure()->isMeasure()) {
             Measure* m = toMeasure(ctx.mutState().curMeasure());
             if (m->mmRest()) {
                 m->mmRest()->resetExplicitParent();
             }
             if (firstMeasure) {
-                SystemLayout::layoutSystem(system, ctx, pos.rx());
+                SystemLayout::layoutSystem(system, ctx, curSystemWidth, true);
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
@@ -309,8 +309,10 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                     }
                 }
                 MeasureLayout::addSystemHeader(m, true, ctx);
-                pos.rx() += system->leftMargin();
+                curSystemWidth += system->leftMargin();
                 firstMeasure = false;
+            } else if (createHeader) {
+                MeasureLayout::addSystemHeader(m, false, ctx);
             } else if (m->header()) {
                 MeasureLayout::removeSystemHeader(m);
             }
@@ -325,56 +327,61 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 if (ctx.conf().isMode(LayoutMode::HORIZONTAL_FIXED)) {
                     MeasureLayout::createEndBarLines(m, true, ctx);
                     layoutSegmentsWithDuration(m, visibleParts);
-                    ww = m->width();
-                    MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
+                    double measureWidth = m->width();
+                    MeasureLayout::stretchMeasureInPracticeMode(m, measureWidth, ctx);
+                    m->setPos(curSystemWidth, m->y());
+                    curSystemWidth += measureWidth;
                 } else {
-                    MeasureLayout::createEndBarLines(m, false, ctx);
                     MeasureLayout::computePreSpacingItems(m, ctx);
-                    HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
-                    ww = m->width();
+                    MeasureLayout::createEndBarLines(m, false, ctx);
+                    MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
+                    curSystemWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
                     MeasureLayout::layoutMeasureElements(m, ctx);
                 }
             } else {
                 // for measures not in range, use existing layout
-                ww = m->width();
-                if (m->pos() != pos) {
+                double measureWidth = m->width();
+                if (!muse::RealIsEqual(m->x(), curSystemWidth)) {
                     // fix beam positions
                     // other elements with system as parent are processed in layoutSystemElements()
                     // but full beam processing is expensive and not needed if we adjust position here
-                    PointF p = pos - m->pos();
+                    PointF p = PointF(curSystemWidth, 0.0) - m->pos();
                     for (const Segment& s : m->segments()) {
                         if (!s.isChordRestType()) {
                             continue;
                         }
                         for (size_t track = 0; track < ctx.dom().ntracks(); ++track) {
                             EngravingItem* e = s.element(static_cast<track_idx_t>(track));
-                            if (e) {
-                                ChordRest* cr = toChordRest(e);
-                                if (cr->beam() && cr->beam()->elements().front() == cr) {
-                                    cr->beam()->mutldata()->move(p);
-                                }
+                            if (!e) {
+                                continue;
+                            }
+                            ChordRest* cr = toChordRest(e);
+                            if (cr->beam() && cr->beam()->elements().front() == cr) {
+                                cr->beam()->mutldata()->move(p);
                             }
                         }
                     }
                 }
+                m->setPos(curSystemWidth, m->y());
+                curSystemWidth += measureWidth;
             }
-            m->setPos(pos);
-            MeasureLayout::layoutStaffLines(m, ctx);
         } else if (ctx.state().curMeasure()->isHBox()) {
-            MeasureBase* curM = ctx.mutState().curMeasure();
-            HBox* curHBox = toHBox(curM);
-            curHBox->setPos(pos + PointF(curHBox->absoluteFromSpatium(curHBox->topGap()), 0.0));
-            TLayout::layoutBaseMeasureBase(curHBox, curHBox->mutldata(), ctx);
-            ww = curHBox->width();
+            curSystemWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
         }
-        pos.rx() += ww;
 
         MeasureLayout::getNextMeasure(ctx);
     }
 
+    for (MeasureBase* m : system->measures()) {
+        if (!m->isMeasure()) {
+            continue;
+        }
+        MeasureLayout::layoutStaffLines(toMeasure(m), ctx);
+    }
+
     SystemLayout::hideEmptyStaves(system, ctx, true);
 
-    system->setWidth(pos.x());
+    system->setWidth(curSystemWidth);
 }
 
 static Segment* findFirstEnabledSegment(Measure* measure)
