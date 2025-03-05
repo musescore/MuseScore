@@ -2093,8 +2093,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::HFRAME
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::TFRAME
                                                   || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::STAFF_TYPE_CHANGE
-                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::MEASURE
-                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::BRACKETS));
+                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::MEASURE));
 
     if (sel.isList()) {
         ChordRest* cr1 = sel.firstChordRest();
