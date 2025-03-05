@@ -554,7 +554,7 @@ MuseScore {
         var j = (currentPureTone - currentRoot + 12) % 12;
         var pureNoteAdjustment = table.offsets[j];
         var finalOffset = offset - pureNoteAdjustment;
-        var tweakFinalOffset = finalOffset + parseFloat(tweakValue.currentText);
+        var tweakFinalOffset = finalOffset + tweakValue.currentValue
         return tweakFinalOffset
     }
 
@@ -595,7 +595,7 @@ MuseScore {
 
         rootNotes.itemAt(currentRoot).checked=true 
         pureTones.itemAt(currentPureTone).checked=true
-        tweakValue.currentText = currentTweak.toFixed(1)
+        tweakValue.currentValue = currentTweak
         
         recalculate(getTuning())      
     }
@@ -606,7 +606,7 @@ MuseScore {
         currentTweak = 0.0
 
         pureTones.itemAt(currentPureTone).checked=true
-        tweakValue.currentText = currentTweak.toFixed(1)
+        tweakValue.currentValue = currentTweak
         
         recalculate(getTuning())       
     }
@@ -614,13 +614,13 @@ MuseScore {
     function pureToneClicked(note) {        
         currentPureTone = note
         currentTweak = 0.0
-        tweakValue.currentText = currentTweak.toFixed(1)
+        tweakValue.currentValue = currentTweak
         recalculate(getTuning())       
     }
 
     function tweaked() {  
-        currentTweak = parseFloat(tweakValue.currentText)
-        tweakValue.currentText = currentTweak.toFixed(1) 
+        currentTweak = tweakValue.currentValue
+        tweakValue.currentValue = currentTweak 
         recalculate(getTuning())        
     }    
 
@@ -810,22 +810,27 @@ MuseScore {
 
                 GroupBox {
                     title: "Pure tone offset"                    
-                    TextInputField {
-                        Layout.maximumWidth: 40
+                    IncrementalPropertyControl {
                         id: tweakValue
-                        currentText: "0.0"                            
-                        validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }                        
-                        onTextEditingFinished:  function (newText) {
-                                                    if ( newText != "" ) {
-                                                        currentText = newText
-                                                    }
-                                                    else { 
-                                                        currentText = "0.0"
-                                                    }
-                                                    tweaked() 
-                                                }
-                    }
-                    
+                        width: 80
+                        maxValue: 99.9                           
+                        minValue: -99.9
+                        step: 0.1
+                        decimals: 1 
+                        currentValue: 0.0
+
+                        onValueEdited:  function (newValue) {
+                            currentValue = newValue                            
+                            tweaked() 
+                        }
+
+                        StyledTextLabel {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 30
+                            text: "ℂ"                                
+                        }  
+                    }                      
                 }
 
                 GroupBox {
