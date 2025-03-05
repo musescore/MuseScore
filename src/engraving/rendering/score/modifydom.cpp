@@ -281,6 +281,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
 
     const bool sigsShouldBeInThisMeasure = ((measure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
                                             || (measure->repeatJump() && ctx.conf().styleB(Sid::changesBeforeBarlineOtherJumps)));
+    std::vector<Segment*> segsToRemove;
 
     std::vector<Segment*> segsToMoveToNextMeasure;
     for (Segment& seg : measure->segments()) {
@@ -316,6 +317,10 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         // Move key sigs and time sigs at the end of this measure into the next measure
         if ((seg.isKeySigType() || seg.isTimeSigType()) && !seg.header() && !seg.trailer()
             && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
+            if (nextMeasure && nextMeasure->findSegmentR(seg.segmentType(), Fraction(0, 1))) {
+                segsToRemove.push_back(&seg);
+                continue;
+            }
             segsToMoveToNextMeasure.push_back(&seg);
         }
     }
@@ -329,7 +334,6 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     }
 
     std::vector<Segment*> segsToMoveToThisMeasure;
-    std::vector<Segment*> segsToRemove;
     for (Segment& seg : nextMeasure->segments()) {
         if (seg.tick() != nextMeasure->tick() || seg.isChordRestType()) {
             continue;
@@ -371,7 +375,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     }
 
     for (Segment* seg : segsToRemove) {
-        // Don't add duplicate segs to the end of a measure
+        // Don't add duplicate segs to a measure
         ctx.mutDom().doUndoRemoveElement(seg);
     }
 

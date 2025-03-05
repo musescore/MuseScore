@@ -1031,12 +1031,23 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         etrack = strack + VOICES;
     }
 
+    std::vector<Segment*> endOfMeasureTimeSigsToRemove;
+
     for (Measure* m = fm; m; m = m->nextMeasure()) {
         if (!m->isFullMeasureRest()) {
             fmr = false;
         }
 
-        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        for (Segment* s = m->first(); s; s = s->next()) {
+            if (!s->isChordRestType() && !(s->isTimeSigType() && s->endOfMeasureChange())) {
+                continue;
+            }
+
+            if (s->isTimeSigType()) {
+                endOfMeasureTimeSigsToRemove.push_back(s);
+                continue;
+            }
+
             for (track_idx_t track = strack; track < etrack; ++track) {
                 ChordRest* cr = toChordRest(s->element(track));
                 if (cr && cr->isChord()) {
@@ -1075,6 +1086,10 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
                 }
             }
         }
+    }
+
+    for (Segment* seg : endOfMeasureTimeSigsToRemove) {
+        doUndoRemoveElement(seg);
     }
 
     ScoreRange range;
@@ -1194,15 +1209,24 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
     Measure* fm1 = fm;
     Measure* nm  = nullptr;
     LayoutBreak* sectionBreak = nullptr;
+    Segment* endOfMeasureTimeSigSeg = nullptr;
 
     //
     // split into Measure segments fm-lm
     //
-    auto foundLM = [fm, staffIdx](MeasureBase* curMeas, Measure* curLM) {
+    auto foundLM = [fm, staffIdx, &endOfMeasureTimeSigSeg](MeasureBase* curMeas, Measure* curLM) {
         if (!curMeas || !curMeas->isMeasure() || curLM->sectionBreak()) {
             return true;
         }
-        Segment* timeSigSeg = toMeasure(curMeas)->first(SegmentType::TimeSig);
+        Segment* timeSigSeg = toMeasure(curMeas)->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+        if (!timeSigSeg && curMeas->prevMeasure()) {
+            // find time sig at end of previous measure
+            Measure* prevMeasure = curMeas->prevMeasure();
+            timeSigSeg = prevMeasure->findSegmentR(SegmentType::TimeSig, prevMeasure->ticks());
+            if (timeSigSeg) {
+                endOfMeasureTimeSigSeg = timeSigSeg;
+            }
+        }
         if (timeSigSeg && curMeas != fm) {
             return staffIdx == muse::nidx || timeSigSeg->element(staff2track(staffIdx));
         }
@@ -1312,16 +1336,18 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
     if (!nm) {
         return true;
     }
-    Segment* s = nm->undoGetSegment(SegmentType::TimeSig, nm->tick());
+    Segment* timeSigSeg = nm->undoGetSegment(SegmentType::TimeSig, nm->tick());
+
     for (size_t i = 0; i < nstaves(); ++i) {
         if (staffIdx != muse::nidx && i != staffIdx) {
             continue;
         }
-        if (!s->element(i * VOICES)) {
-            TimeSig* ots = staff(i)->timeSig(nm->tick());
+        if (!timeSigSeg->element(staff2track(i))) {
+            TimeSig* ots = endOfMeasureTimeSigSeg
+                           ? toTimeSig(endOfMeasureTimeSigSeg->element(staff2track(i))) : staff(i)->timeSig(nm->tick());
             if (ots) {
                 TimeSig* nts = Factory::copyTimeSig(*ots);
-                nts->setParent(s);
+                nts->setParent(timeSigSeg);
                 if (sectionBreak) {
                     nts->setGenerated(false);
                     nts->setShowCourtesySig(false);
@@ -1357,8 +1383,15 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
     }
 
     track_idx_t track = staffIdx * VOICES;
-    Segment* seg = fm->undoGetSegment(SegmentType::TimeSig, tick);
-    TimeSig* ots = toTimeSig(seg->element(track));
+    Segment* seg = fm->findSegment(SegmentType::TimeSig, tick);
+    TimeSig* ots = seg ? toTimeSig(seg->element(track)) : nullptr;
+
+    // Check same tick at end of previous measure
+    if (!ots) {
+        Measure* prevMeasure = fm->prevMeasure();
+        seg = prevMeasure ? prevMeasure->findSegmentR(SegmentType::TimeSig, prevMeasure->ticks()) : seg;
+        ots = seg ? toTimeSig(seg->element(track)) : nullptr;
+    }
 
     if (ots && (*ots == *ts)) {
         //
@@ -1368,6 +1401,8 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
         delete ts;
         return;
     }
+
+    seg = fm->undoGetSegment(SegmentType::TimeSig, tick);
 
     auto getStaffIdxRange = [this, local, staffIdx](const Score* score) -> std::pair<staff_idx_t /*start*/, staff_idx_t /*end*/> {
         staff_idx_t startStaffIdx, endStaffIdx;
