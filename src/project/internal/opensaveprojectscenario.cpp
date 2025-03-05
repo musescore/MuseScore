@@ -231,8 +231,8 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     }
 
     std::string dialogText = isPublishShare
-                             ? muse::trc("project/save", "Log in to musescore.com to save this score to the cloud.")
-                             : muse::trc("project/save", "Log in to musescore.com to publish this score.");
+                             ? muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.")
+                             : muse::trc("project/save", "Log in to MuseScore.com to publish this score.");
     RetVal<Val> retVal = museScoreComService()->authorization()->ensureAuthorization(true, dialogText);
     if (!retVal.ret) {
         return retVal.ret;
@@ -465,7 +465,7 @@ static std::string cloudStatusCodeErrorMessage(const Ret& ret, bool withHelp = f
     }
 
     if (withHelp) {
-        message += "\n\n" + muse::trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
+        message += "\n\n" + muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.org.");
     }
 
     return message;
@@ -484,7 +484,7 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
         message = muse::trc("project/cloud", "The file could not be downloaded to your disk.");
         break;
     case int(cloud::Err::Status403_AccountNotActivated):
-        message = muse::trc("project/cloud", "Your musescore.com account needs to be verified first. "
+        message = muse::trc("project/cloud", "Your MuseScore.com account needs to be verified first. "
                                              "Please activate your account via the link in the activation email.");
         break;
     case int(cloud::Err::Status403_NotOwner):
@@ -505,7 +505,7 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
         break;
 
     case int(cloud::Err::NetworkError):
-        message = muse::trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
+        message = muse::trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">MuseScore.com</a>. "
                                              "Please check your internet connection or try again later.");
         break;
     default:
@@ -550,7 +550,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
 
     switch (ret.code()) {
     case int(cloud::Err::Status403_AccountNotActivated):
-        msg = muse::trc("project/cloud", "Your musescore.com account needs to be verified first. "
+        msg = muse::trc("project/cloud", "Your MuseScore.com account needs to be verified first. "
                                          "Please activate your account via the link in the activation email.");
         buttons = { okBtn };
         break;
@@ -591,11 +591,11 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
         break;
 
     case int(cloud::Err::NetworkError):
-        msg = muse::trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
+        msg = muse::trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">MuseScore.com</a>. "
                                          "Please check your internet connection or try again later.");
         break;
     default:
-        msg = muse::trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
+        msg = muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.org.");
         break;
     }
 
@@ -627,7 +627,7 @@ Ret OpenSaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
 
     switch (ret.code()) {
     case int(cloud::Err::Status403_AccountNotActivated):
-        msg = muse::trc("project/share", "Your audio.com account needs to be verified first. "
+        msg = muse::trc("project/share", "Your Audio.com account needs to be verified first. "
                                          "Please activate your account via the link in the activation email.");
         break;
     case int(cloud::Err::UnknownStatusCode): {
@@ -639,14 +639,14 @@ Ret OpenSaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
         } else {
             msg = muse::trc("project/share", "Audio.com returned an unknown error code.");
         }
-        msg += "\n\n" + muse::trc("project/share", "Please try again later, or get help for this problem on audio.com.");
+        msg += "\n\n" + muse::trc("project/share", "Please try again later, or get help for this problem on Audio.com.");
     } break;
     case int(cloud::Err::NetworkError):
-        msg = muse::trc("project/share", "Could not connect to audio.com. "
+        msg = muse::trc("project/share", "Could not connect to Audio.com. "
                                          "Please check your internet connection or try again later.");
         break;
     default:
-        msg = muse::trc("project/share", "Please try again later, or get help for this problem on audio.com.");
+        msg = muse::trc("project/share", "Please try again later, or get help for this problem on Audio.com.");
         break;
     }
 

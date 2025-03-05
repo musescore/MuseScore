@@ -439,7 +439,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
         return;
     }
 
-    std::string dialogText = muse::trc("project/save", "Log in or create a free account on musescore.com to open this score.");
+    std::string dialogText = muse::trc("project/save", "Log in or create a free account on MuseScore.com to open this score.");
     Ret ret = museScoreComService()->authorization()->ensureAuthorization(false, dialogText).ret;
     if (!ret) {
         return;
@@ -536,7 +536,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     }
 
     // Ensure logged in
-    std::string dialogText = muse::trc("project/save", "Log in or create a free account on musescore.com to open this score.");
+    std::string dialogText = muse::trc("project/save", "Log in or create a free account on MuseScore.com to open this score.");
     Ret ret = museScoreComService()->authorization()->ensureAuthorization(false, dialogText).ret;
     if (!ret) {
         return ret;
@@ -994,7 +994,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
     if (!isCloudAvailable) {
         warnCloudIsNotAvailable();
     } else {
-        std::string dialogText = muse::trc("project/save", "Log in to musescore.com to save this score to the cloud.");
+        std::string dialogText = muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
         RetVal<Val> retVal = museScoreComService()->authorization()->ensureAuthorization(true, dialogText);
         if (!retVal.ret) {
             return false;
@@ -1376,7 +1376,7 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
 
     std::string msg = muse::trc("project/save", "All saved changes will now update to the cloud. "
-                                                "You can manage this file in the score manager on musescore.com.");
+                                                "You can manage this file in the score manager on MuseScore.com.");
 
     int btn = interactive()->info(muse::trc("global", "Success!"), msg, { viewOnlineBtn, okBtn },
                                   static_cast<int>(IInteractive::Button::Ok)).button();
@@ -1502,7 +1502,7 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     std::string title = muse::trc("project", "Your score cannot be uploaded to the cloud");
     std::string body = muse::trc("project", "This score has become corrupted and contains errors. "
                                             "You can fix the errors manually, or save the score to your computer "
-                                            "and get help for this issue on musescore.org.");
+                                            "and get help for this issue on MuseScore.org.");
 
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
@@ -1535,10 +1535,10 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreLocally(const 
 {
     std::string title = muse::trc("project", "This score has become corrupted and contains errors");
     std::string body = !canRevert ? muse::trc("project", "You can continue saving it locally, although the file may become unusable. "
-                                                         "You can try to fix the errors manually, or get help for this issue on musescore.org.")
+                                                         "You can try to fix the errors manually, or get help for this issue on MuseScore.org.")
                        : muse::trc("project", "You can continue saving it locally, although the file may become unusable. "
                                               "To preserve your score, revert to the last saved version, or fix the errors manually. "
-                                              "You can also get help for this issue on musescore.org.");
+                                              "You can also get help for this issue on MuseScore.org.");
 
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
@@ -1582,7 +1582,7 @@ void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLoca
 {
     std::string title = location.isLocal() ? muse::trc("project", "Your score cannot be saved")
                         : muse::trc("project", "Your score cannot be uploaded to the cloud");
-    std::string body = muse::trc("project", "This score is corrupted. You can get help for this issue on musescore.org.");
+    std::string body = muse::trc("project", "This score is corrupted. You can get help for this issue on MuseScore.org.");
 
     IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, muse::trc("project", "Get help"));
 
@@ -1742,7 +1742,7 @@ void ProjectActionsController::warnFileTooNew(const muse::io::path_t& filepath)
 {
     interactive()->error(muse::qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
                          muse::trc("project", "This file was saved using a newer version of MuseScore Studio. "
-                                              "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version."));
+                                              "Please visit <a href=\"https://musescore.org\">MuseScore.org</a> to obtain the latest version."));
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
@@ -1763,7 +1763,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
 void ProjectActionsController::warnProjectCriticallyCorrupted(const String& projectName, const std::string& errorText)
 {
     std::string title = muse::mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
-    std::string body = muse::trc("project", "Get help for this issue on musescore.org.");
+    std::string body = muse::trc("project", "Get help for this issue on MuseScore.org.");
 
     IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, muse::trc("project", "Get help"), true /*accent*/);
 
