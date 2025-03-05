@@ -278,14 +278,20 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     System* system = ctx.mutDom().systems().front();
     SystemLayout::setInstrumentNames(system, ctx, /* longNames */ true);
 
+    double targetSystemWidth = ctx.dom().nmeasures() * ctx.conf().styleMM(Sid::minMeasureWidth).val();
+    system->setWidth(targetSystemWidth);
+
     double curSystemWidth = 0.0;
-    bool firstMeasure = true;       //lc.startTick.isZero();
+    bool firstMeasureInScore = true;       //lc.startTick.isZero();
+    bool firstMeasureInLayout = true;
 
     //set first measure to lc.nextMeasures for following
     //utilizing in getNextMeasure()
     ctx.mutState().setNextMeasure(ctx.mutDom().first());
     ctx.mutState().setTick(Fraction(0, 1));
     MeasureLayout::getNextMeasure(ctx);
+
+    std::set<Measure*> measuresToLayout;
 
     while (ctx.state().curMeasure()) {
         if (ctx.state().curMeasure()->isVBox() || ctx.state().curMeasure()->isTBox()) {
@@ -294,13 +300,14 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
             continue;
         }
         system->appendMeasure(ctx.mutState().curMeasure());
-        bool createHeader = ctx.state().prevMeasure()->isHBox() && toHBox(ctx.state().prevMeasure())->createSystemHeader();
+        bool createHeader = ctx.state().prevMeasure() && ctx.state().prevMeasure()->isHBox()
+                            && toHBox(ctx.state().prevMeasure())->createSystemHeader();
         if (ctx.state().curMeasure()->isMeasure()) {
             Measure* m = toMeasure(ctx.mutState().curMeasure());
             if (m->mmRest()) {
                 m->mmRest()->resetExplicitParent();
             }
-            if (firstMeasure) {
+            if (firstMeasureInScore) {
                 SystemLayout::layoutSystem(system, ctx, curSystemWidth, true);
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
@@ -310,7 +317,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 }
                 MeasureLayout::addSystemHeader(m, true, ctx);
                 curSystemWidth += system->leftMargin();
-                firstMeasure = false;
+                firstMeasureInScore = false;
             } else if (createHeader) {
                 MeasureLayout::addSystemHeader(m, false, ctx);
             } else if (m->header()) {
@@ -335,8 +342,11 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                     MeasureLayout::computePreSpacingItems(m, ctx);
                     MeasureLayout::createEndBarLines(m, false, ctx);
                     MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
-                    curSystemWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
-                    MeasureLayout::layoutMeasureElements(m, ctx);
+                    curSystemWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system, firstMeasureInLayout);
+                    measuresToLayout.insert(m);
+                    if (firstMeasureInLayout) {
+                        firstMeasureInLayout = false;
+                    }
                 }
             } else {
                 // for measures not in range, use existing layout
@@ -370,6 +380,10 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
         }
 
         MeasureLayout::getNextMeasure(ctx);
+    }
+
+    for (Measure* m : measuresToLayout) {
+        MeasureLayout::layoutMeasureElements(m, ctx);
     }
 
     for (MeasureBase* m : system->measures()) {
