@@ -146,7 +146,7 @@ MenuItem* PlaybackToolBarModel::makeInputPitchMenu()
         items << makeMenuItem(action.code);
     }
 
-    MenuItem* menu = makeMenu(muse::TranslatableString("notation", "Input pitch"), items);
+    MenuItem* menu = makeMenu(muse::TranslatableString("notation", "MIDI input pitch"), items);
     UiAction action = menu->action();
     action.iconCode = IconCode::Code::MUSIC_NOTES;
     menu->setAction(action);
