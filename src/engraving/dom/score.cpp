@@ -3666,10 +3666,10 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
         if (startSegment) {
             Segment* endSegment = findElementEndSegment(this, e, m_selection.endSegment());
             staff_idx_t elementStaffIdx = e->staffIdx();
-            Fraction tick = startSegment->tick();
-            Fraction etick = endSegment->tick();
-
             if (endSegment && elementStaffIdx != muse::nidx) {
+                Fraction tick = startSegment->tick();
+                Fraction etick = endSegment->tick();
+
                 m_selection.extendRangeSelection(startSegment, endSegment, elementStaffIdx, tick, etick);
                 m_selection.updateSelectedElements();
 
@@ -3770,6 +3770,7 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
     staff_idx_t endStaffIdx = startStaffIdx + 1;
 
     track_idx_t activeTrack = newElement->track();
+    bool activeSegmentIsStart = false;
 
     if (newElement->isMeasure()) {
         Measure* m = toMeasure(newElement);
@@ -3777,6 +3778,7 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
 
         if (tick < startSegment->tick()) {
             startSegment = m->first(SegmentType::ChordRest);
+            activeSegmentIsStart = true;
         }
         if (m == lastMeasure()) {
             endSegment = nullptr;
@@ -3792,6 +3794,7 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
         Segment* newStartSegment = findElementStartSegment(this, newElement);
         if (newStartSegment && newStartSegment->tick() < startSegment->tick()) {
             startSegment = newStartSegment;
+            activeSegmentIsStart = true;
         }
 
         Segment* newEndSegment = findElementEndSegment(this, newElement, newStartSegment);
@@ -3810,6 +3813,7 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
     m_selection.updateSelectedElements();
 
     m_selection.setActiveTrack(activeTrack);
+    m_selection.setActiveSegment(activeSegmentIsStart ? startSegment : endSegment);
 
     return true;
 }

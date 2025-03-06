@@ -167,6 +167,8 @@ public:
 
     size_t ntracks() const;
 
+    size_t nmeasures() const;
+
     const Measure* tick2measure(const Fraction& tick) const;
     const Measure* firstMeasure() const;
     const Measure* lastMeasure() const;
