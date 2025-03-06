@@ -759,4 +759,7 @@ TEST_F(GuitarPro_Tests, gpTupletEmptyMeasure) {
 TEST_F(GuitarPro_Tests, gpSkippedTiedNotes) {
     gpReadTest("skipped_tied_notes", "gp5");
 }
+TEST_F(GuitarPro_Tests, gpRSEStringed) {
+    gpReadTest("rse-stringed", "gp");
+}
 }
