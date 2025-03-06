@@ -544,29 +544,15 @@ MuseScore {
         errorDialog.open()
     }
 
-    /**
-     * map a note (pitch modulo 12) to a value in one of the above tables
-     * then adjust for the choice of pure note and tweak.
-     */
-    function lookUp(note, table) {
-        var i = ((note * 7) - currentRoot + 12) % 12;
-        var offset = table.offsets[i];
-        var j = (currentPureTone - currentRoot + 12) % 12;
-        var pureNoteAdjustment = table.offsets[j];
-        var finalOffset = offset - pureNoteAdjustment;
-        var tweakFinalOffset = finalOffset + tweakValue.currentValue
-        return tweakFinalOffset
-    }
-
-    /**
-     * returns a function for use by recalculate()
-     *
-     * We use an abstract function here because recalculate can be passed
-     * a different function, i.e. when restoring from a save file.
-     */
     function getTuning() {
-        return function(pitch) {
-            return lookUp(pitch, currentTemperament);
+        return function(pitch, temp=currentTemperament) {
+            var i = ((pitch * 7) - currentRoot + 12) % 12;
+            var offset = temp.offsets[i];
+            var j = (currentPureTone - currentRoot + 12) % 12;
+            var pureNoteAdjustment = temp.offsets[j];
+            var finalOffset = offset - pureNoteAdjustment;
+            var tweakFinalOffset = finalOffset + tweakValue.currentValue
+            return tweakFinalOffset
         }
     }
 
