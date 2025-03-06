@@ -546,7 +546,7 @@ MuseScore {
 
     function getTuning() {
         return function(pitch, temp=currentTemperament) {
-            var i = ((pitch * 7) - currentRoot + 12) % 12;
+            var i = (pitch - currentRoot + 12) % 12;
             var offset = temp.offsets[i];
             var j = (currentPureTone - currentRoot + 12) % 12;
             var pureNoteAdjustment = temp.offsets[j];
@@ -565,7 +565,7 @@ MuseScore {
     
     function recalculate(tuning) {        
         for (var i=0; i<12; i++) {
-            finalOffsets.itemAt(i*7 % 12).children[1].currentText = tuning(i).toFixed(1)
+            finalOffsets.itemAt(i).children[1].currentText = tuning(i).toFixed(1)
         }           
     }    
 
