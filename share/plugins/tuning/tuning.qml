@@ -573,14 +573,10 @@ MuseScore {
     function getFinalTuning() {
         return function(pitch) {
             pitch = pitch % 12
-            return getFinalOffset(finalOffsets.itemAt(pitch*7 % 12).children[1] )             
+            return parseFloat(finalOffsets.itemAt(pitch*7 % 12).children[1].currentText )             
         }
     }
-
-    function getFinalOffset(textField) {
-        return parseFloat(textField.currentText)
-    }
-
+    
     function recalculate(tuning) {        
         for (var i=0; i<12; i++) {
             finalOffsets.itemAt(i*7 % 12).children[1].currentText = tuning(i).toFixed(1)
