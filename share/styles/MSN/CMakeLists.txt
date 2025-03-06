@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -19,17 +19,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 install(FILES
-      MuseJazz.mss
-      chords_std.xml
-      chords_jazz.xml
-      chords.xml
-      stdchords.xml
-      jazzchords.xml
-      cchords_muse.xml
-      cchords_nrb.xml
-      cchords_rb.xml
-      cchords_sym.xml
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}styles
-      )
-
-add_subdirectory(MSN)
+    16mm_MSN.mss
+    18mm_MSN.mss
+    20mm_MSN.mss
+    22mm_MSN.mss
+    25mm_MSN.mss
+    DESTINATION "${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}styles/Modified Stave Notation"
+)
