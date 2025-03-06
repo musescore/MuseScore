@@ -24,6 +24,8 @@
 #include "internal/applicationuiactions.h"
 #include "dockwindow/idockwindow.h"
 
+#include "async/async.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -69,6 +71,10 @@ void NotationPageModel::init()
 
     notationConfiguration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
         updateDrumsetPanelVisibility();
+        updatePercussionPanelVisibility();
+    });
+
+    notationConfiguration()->percussionPanelAutoShowModeChanged().onNotify(this, [this]() {
         updatePercussionPanelVisibility();
     });
 }
@@ -209,7 +215,11 @@ void NotationPageModel::updateDrumsetPanelVisibility()
         if (open == window->isDockOpenAndCurrentInFrame(DRUMSET_PANEL_NAME)) {
             return;
         }
-        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, open));
+
+        //! NOTE: ensure we don't dispatch it multiple times in succession
+        muse::async::Async::call(this, [=]() {
+            dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, open));
+        });
     };
 
     // This should never be open when the new percussion panel is in use...
@@ -245,7 +255,11 @@ void NotationPageModel::updatePercussionPanelVisibility()
         if (open == window->isDockOpenAndCurrentInFrame(PERCUSSION_PANEL_NAME)) {
             return;
         }
-        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PERCUSSION_PANEL_NAME, open));
+
+        //! NOTE: ensure we don't dispatch it multiple times in succession
+        muse::async::Async::call(this, [=]() {
+            dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PERCUSSION_PANEL_NAME, open));
+        });
     };
 
     // This should never be open when the old drumset panel is in use...
@@ -255,14 +269,13 @@ void NotationPageModel::updatePercussionPanelVisibility()
     }
 
     const PercussionPanelAutoShowMode autoShowMode = notationConfiguration()->percussionPanelAutoShowMode();
-    const bool autoClose = notationConfiguration()->autoClosePercussionPanel();
-
     const INotationPtr notation = globalContext()->currentNotation();
     if (!notation || !notation->elements() || autoShowMode == PercussionPanelAutoShowMode::NEVER) {
         return;
     }
 
     const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+    const bool autoClose = notationConfiguration()->autoClosePercussionPanel();
     if (noteInput && !noteInput->isNoteInputMode() && autoShowMode == PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) {
         if (autoClose) {
             setPercussionPanelOpen(false);
