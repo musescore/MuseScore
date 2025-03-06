@@ -47,7 +47,7 @@ public:
 
     static double computeSpacingForFullSystem(System* system, double stretchReduction = 1.0, double squeezeFactor = 1.0,
                                               bool overrideMinMeasureWidth = false);
-    static double updateSpacingForLastAddedMeasure(System* system);
+    static double updateSpacingForLastAddedMeasure(System* system, bool startOfContinuousLayoutRegion = false);
     static void squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
 
