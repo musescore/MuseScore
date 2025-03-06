@@ -1615,7 +1615,7 @@ int ProjectActionsController::warnScoreHasBecomeCorruptedAfterSave(const Ret& re
 {
     const QString errDetailsMessage = QString::fromStdString(ret.toString()).toHtmlEscaped();
 
-    const QString supportForumLink = String("<a href=\"%1\" style=\"text-decoration: none\">musescore.org</a>")
+    const QString supportForumLink = String("<a href=\"%1\" style=\"text-decoration: none\">MuseScore.org</a>")
                                      .arg(configuration()->supportForumUrl().toString());
 
     const std::string title = muse::trc("project/save", "An error occurred while saving your score");
