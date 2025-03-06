@@ -77,6 +77,11 @@ QString PaletteElementEditor::actionName() const
     return QString();
 }
 
+void PaletteElementEditor::setPaletteIndex(QPersistentModelIndex paletteIndex)
+{
+    _paletteIndex = paletteIndex;
+}
+
 void PaletteElementEditor::onElementAdded(const ElementPtr element)
 {
     if (!element) {
@@ -193,14 +198,20 @@ static QModelIndex convertProxyIndex(const QModelIndex& srcIndex, const QAbstrac
 // ========================================================
 // AbstractPaletteController
 // ========================================================
-
 PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex& paletteIndex)
 {
-    PaletteElementEditor* ed
-        = new PaletteElementEditor(this, paletteIndex,
-                                   paletteIndex.data(
-                                       PaletteTreeModel::PaletteTypeRole).value<Palette::Type>(), this);
-    QQmlEngine::setObjectOwnership(ed, QQmlEngine::JavaScriptOwnership);
+    Palette::Type paletteType = paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<Palette::Type>();
+
+    if (m_paletteElementEditorMap.contains(paletteType)) {
+        PaletteElementEditor* ed = m_paletteElementEditorMap[paletteType];
+        ed->setPaletteIndex(paletteIndex);
+        return ed;
+    }
+
+    PaletteElementEditor* ed = new PaletteElementEditor(this, paletteIndex,
+                                                        paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<Palette::Type>(), this);
+
+    m_paletteElementEditorMap.insert(paletteType, ed);
     return ed;
 }
 
