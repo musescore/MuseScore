@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "linuxaudiodriver.h"
+#include "alsaaudiodriver.h"
 
 #define ALSA_PCM_NEW_HW_PARAMS_API
 #include <alsa/asoundlib.h>
@@ -105,17 +105,17 @@ static void alsaCleanup()
 }
 }
 
-LinuxAudioDriver::LinuxAudioDriver()
+AlsaAudioDriver::AlsaAudioDriver()
 {
     m_deviceId = DEFAULT_DEVICE_ID;
 }
 
-LinuxAudioDriver::~LinuxAudioDriver()
+AlsaAudioDriver::~AlsaAudioDriver()
 {
     alsaCleanup();
 }
 
-void LinuxAudioDriver::init()
+void AlsaAudioDriver::init()
 {
     m_devicesListener.startWithCallback([this]() {
         return availableOutputDevices();
@@ -126,12 +126,12 @@ void LinuxAudioDriver::init()
     });
 }
 
-std::string LinuxAudioDriver::name() const
+std::string AlsaAudioDriver::name() const
 {
     return "MUAUDIO(ALSA)";
 }
 
-bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
+bool AlsaAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
     s_alsaData = new ALSAData();
     s_alsaData->samples = spec.samples;
@@ -205,27 +205,27 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     return true;
 }
 
-void LinuxAudioDriver::close()
+void AlsaAudioDriver::close()
 {
     alsaCleanup();
 }
 
-bool LinuxAudioDriver::isOpened() const
+bool AlsaAudioDriver::isOpened() const
 {
     return s_alsaData != nullptr;
 }
 
-const LinuxAudioDriver::Spec& LinuxAudioDriver::activeSpec() const
+const AlsaAudioDriver::Spec& AlsaAudioDriver::activeSpec() const
 {
     return s_format;
 }
 
-AudioDeviceID LinuxAudioDriver::outputDevice() const
+AudioDeviceID AlsaAudioDriver::outputDevice() const
 {
     return m_deviceId;
 }
 
-bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
+bool AlsaAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 {
     if (m_deviceId == deviceId) {
         return true;
@@ -247,17 +247,17 @@ bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
     return ok;
 }
 
-bool LinuxAudioDriver::resetToDefaultOutputDevice()
+bool AlsaAudioDriver::resetToDefaultOutputDevice()
 {
     return selectOutputDevice(DEFAULT_DEVICE_ID);
 }
 
-async::Notification LinuxAudioDriver::outputDeviceChanged() const
+async::Notification AlsaAudioDriver::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
 }
 
-AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
+AudioDeviceList AlsaAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
     devices.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
@@ -265,17 +265,17 @@ AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
     return devices;
 }
 
-async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
+async::Notification AlsaAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
 }
 
-unsigned int LinuxAudioDriver::outputDeviceBufferSize() const
+unsigned int AlsaAudioDriver::outputDeviceBufferSize() const
 {
     return s_format.samples;
 }
 
-bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
+bool AlsaAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
     if (s_format.samples == bufferSize) {
         return true;
@@ -297,12 +297,12 @@ bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
     return ok;
 }
 
-async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
+async::Notification AlsaAudioDriver::outputDeviceBufferSizeChanged() const
 {
     return m_bufferSizeChanged;
 }
 
-std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() const
+std::vector<unsigned int> AlsaAudioDriver::availableOutputDeviceBufferSizes() const
 {
     std::vector<unsigned int> result;
 
@@ -317,12 +317,12 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
     return result;
 }
 
-unsigned int LinuxAudioDriver::outputDeviceSampleRate() const
+unsigned int AlsaAudioDriver::outputDeviceSampleRate() const
 {
     return s_format.sampleRate;
 }
 
-bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+bool AlsaAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
     if (s_format.sampleRate == sampleRate) {
         return true;
@@ -344,12 +344,12 @@ bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
     return ok;
 }
 
-async::Notification LinuxAudioDriver::outputDeviceSampleRateChanged() const
+async::Notification AlsaAudioDriver::outputDeviceSampleRateChanged() const
 {
     return m_sampleRateChanged;
 }
 
-std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceSampleRates() const
+std::vector<unsigned int> AlsaAudioDriver::availableOutputDeviceSampleRates() const
 {
     // ALSA API is not of any help to get sample rates supported by the driver.
     // (snd_pcm_hw_params_get_rate_[min|max] will return 1 to 384000 Hz)
@@ -362,10 +362,10 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceSampleRates() c
     };
 }
 
-void LinuxAudioDriver::resume()
+void AlsaAudioDriver::resume()
 {
 }
 
-void LinuxAudioDriver::suspend()
+void AlsaAudioDriver::suspend()
 {
 }
