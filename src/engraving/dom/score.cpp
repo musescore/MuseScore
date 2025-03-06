@@ -1816,21 +1816,20 @@ void Score::doUndoRemoveElement(EngravingItem* element)
     }
 }
 
-bool Score::containsElement(const EngravingItem* element) const
+bool Score::canReselectItem(const EngravingItem* item) const
 {
-    if (!element) {
+    if (!item || item->selected()) {
         return false;
     }
 
-    EngravingItem* parent = element->parentItem();
-    if (!parent) {
-        return false;
+    EngravingItem* seg = const_cast<EngravingItem*>(item->findAncestor(ElementType::SEGMENT));
+    if (seg) {
+        std::vector<EngravingItem*> elements;
+        seg->scanElements(&elements, collectElements, false /*all*/);
+        return muse::contains(elements, const_cast<EngravingItem*>(item));
     }
 
-    std::vector<EngravingItem*> elements;
-    parent->scanElements(&elements, collectElements, false /*all*/);
-
-    return std::find(elements.cbegin(), elements.cend(), element) != elements.cend();
+    return true;
 }
 
 //---------------------------------------------------------
@@ -3219,7 +3218,7 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
                     }
 
                     for (const NoteVal& nval : m_is.notes()) {
-                        if (chordContainsNoteVal(chord, nval)) {
+                        if (chord && chord->findNote(nval.pitch)) {
                             continue;
                         }
 
@@ -3317,6 +3316,22 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
         }
     }
 
+    const int dots = m_is.duration().dots();
+
+    if (toggleForSelectionOnly && dots > 0 && !crs.empty()) {
+        bool shouldRemoveDots = true;
+        for (const ChordRest* cr : crs) {
+            if (dots != cr->dots()) {
+                shouldRemoveDots = false;
+                break;
+            }
+        }
+
+        if (shouldRemoveDots) {
+            m_is.setDots(0);
+        }
+    }
+
     for (ChordRest* cr : crs) {
         if (cr->isChord() && (toChord(cr)->isGrace())) {
             //
@@ -3331,10 +3346,11 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
     if (!elementsToSelect.empty()) {
         std::vector<EngravingItem*> selectList;
         for (EngravingItem* e : elementsToSelect) {
-            if (e && !e->selected()) {
+            if (canReselectItem(e)) {
                 selectList.push_back(e);
             }
         }
+
         select(selectList, SelectType::ADD, 0);
         selection().updateSelectedElements();
     }
@@ -3343,8 +3359,11 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
         m_is.setDuration(oldDuration);
         m_is.setRest(oldRest);
         m_is.setAccidentalType(oldAccidentalType);
+
         if (noteEntryMode()) {
-            m_is.moveToNextInputPos();
+            if (m_is.lastSegment() == m_is.segment()) {
+                m_is.moveToNextInputPos();
+            }
         }
     }
 }

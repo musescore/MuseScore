@@ -71,7 +71,7 @@ public:
 
     async::Notification loadingCompleted() const override;
 
-    async::Channel<muse::audio::AudioUnitConfig> pluginSettingsChanged() const;
+    async::Channel<muse::audio::AudioUnitConfig> pluginSettingsChanged() const override;
 
 private:
     void rescanParams();

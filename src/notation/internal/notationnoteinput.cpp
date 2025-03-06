@@ -855,7 +855,14 @@ void NotationNoteInput::updateInputState()
 {
     TRACEFUNC;
 
-    score()->inputState().update(score()->selection());
+    NoteInputState& is = score()->inputState();
+    is.update(score()->selection());
+
+    if (!configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
+        is.setAccidentalType(AccidentalType::NONE);
+        is.setDots(0);
+        is.setArticulationIds({});
+    }
 
     notifyAboutStateChanged();
 }

@@ -1809,7 +1809,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     connectTies();
 
     if (elementToSelect) {
-        if (containsElement(elementToSelect)) {
+        if (canReselectItem(elementToSelect)) {
             select(elementToSelect, SelectType::SINGLE, 0);
         }
     }
