@@ -500,9 +500,6 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
                 }
             }
         }
-        if (!droppedElements.empty()) {
-            select(droppedElements.back());
-        }
     } else if (ms->hasFormat(mimeStaffListFormat)) {
         ChordRest* cr = 0;
         if (m_selection.isRange()) {
