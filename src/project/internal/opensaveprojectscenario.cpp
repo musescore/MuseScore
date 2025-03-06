@@ -505,8 +505,9 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
         break;
 
     case int(cloud::Err::NetworkError):
-        message = muse::trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">MuseScore.com</a>. "
-                                             "Please check your internet connection or try again later.");
+        message = muse::mtrc("project/cloud", "Could not connect to <a href=\"%1\">MuseScore.com</a>. "
+                                              "Please check your internet connection or try again later.")
+                  .arg(u"https://musescore.com").toStdString();
         break;
     default:
         message = muse::trc("project/cloud", "Please try again later.");
@@ -591,8 +592,9 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
         break;
 
     case int(cloud::Err::NetworkError):
-        msg = muse::trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">MuseScore.com</a>. "
-                                         "Please check your internet connection or try again later.");
+        msg = muse::mtrc("project/cloud", "Could not connect to <a href=\"%1\">MuseScore.com</a>. "
+                                          "Please check your internet connection or try again later.")
+              .arg(u"https://musescore.com").toStdString();
         break;
     default:
         msg = muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.org.");
