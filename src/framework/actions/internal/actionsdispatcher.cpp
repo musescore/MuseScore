@@ -41,8 +41,7 @@ ActionsDispatcher::~ActionsDispatcher()
 void ActionsDispatcher::dispatch(const ActionCode& actionCode)
 {
     static ActionData dummy;
-    dispatch(actionCode, dummy);
-}
+    dispatch(actionCode, dummy);}
 
 void ActionsDispatcher::dispatch(const ActionCode& actionCode, const ActionData& data)
 {

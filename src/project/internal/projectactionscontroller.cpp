@@ -64,6 +64,7 @@ static constexpr int SAVE_AS_BTN_ID    = RETRY_SAVE_BTN_ID + 1;
 void ProjectActionsController::init()
 {
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
+    dispatcher()->reg(this, "file-repair", this, &ProjectActionsController::openProject);
     dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
 
     dispatcher()->reg(this, "file-close", [this]() {
@@ -125,6 +126,7 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
     if (!currentNotationProject()) {
         static const std::unordered_set<ActionCode> DONT_REQUIRE_OPEN_PROJECT {
             "file-new",
+            "file-repair",
             "file-open",
             "file-import-pdf",
             "continue-last-session",

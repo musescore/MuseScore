@@ -180,6 +180,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
+        makeMenuItem("file-repair"),
         makeMenuItem("file-share-audio"),
         makeSeparator(),
         makeMenuItem("project-properties"),
