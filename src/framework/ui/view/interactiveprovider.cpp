@@ -26,6 +26,7 @@
 #include <QDialog>
 #include <QFileDialog>
 #include <QColorDialog>
+#include <QRegExp>
 #include <QGuiApplication>
 #include <QWindow>
 
@@ -491,6 +492,15 @@ void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType
         QStringList filterList;
         for (const std::string& nameFilter : filter) {
             filterList << QString::fromStdString(nameFilter);
+        }
+
+        // Extract default suffix from first filter if available
+        if (!filter.empty() && (type == FileDialogType::SelectSavingFile)) {
+            QString firstFilter = QString::fromStdString(filter[0]);
+            QRegExp rx("\\*\\.(\\w+)");
+            if (rx.indexIn(firstFilter) != -1) {
+                params["defaultSuffix"] = rx.cap(1);
+            }
         }
 
         params["nameFilters"] = filterList;
