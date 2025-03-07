@@ -121,13 +121,18 @@ void NotationViewInputController::init()
 
 void NotationViewInputController::onNotationChanged()
 {
-    INotationPtr notation = currentNotation();
-    if (!notation) {
+    INotationPtr currNotation = currentNotation();
+    if (!currNotation) {
         return;
     }
 
-    notation->interaction()->selectionChanged().onNotify(this, [this, notation]() {
-        EngravingItem* selectedItem = notation->interaction()->selection()->element();
+    currNotation->interaction()->selectionChanged().onNotify(this, [this]() {
+        const INotationPtr notation = currentNotation();
+        if (!notation) {
+            return;
+        }
+
+        const EngravingItem* selectedItem = notation->interaction()->selection()->element();
         ElementType type = selectedItem ? selectedItem->type() : ElementType::INVALID;
 
         bool noChanges = selectedItem && m_prevSelectedElement == selectedItem;
