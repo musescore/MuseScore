@@ -239,10 +239,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         m_notation->painting()->setViewMode(m_notation->viewState()->viewMode());
     }
 
-    INotationInteractionPtr interaction = notationInteraction();
-
-    m_notation->notationChanged().onNotify(this, [this, interaction]() {
-        interaction->hideShadowNote();
+    m_notation->notationChanged().onNotify(this, [this]() {
+        if (INotationInteractionPtr interaction = notationInteraction()) {
+            interaction->hideShadowNote();
+        }
         m_shadowNoteRect = RectF();
         scheduleRedraw();
     });
@@ -251,6 +251,8 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     if (isNoteEnterMode()) {
         emit activeFocusRequested();
     }
+
+    INotationInteractionPtr interaction = notationInteraction();
 
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
         onNoteInputStateChanged();

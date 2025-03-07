@@ -619,7 +619,7 @@ DockPage {
                         "title": qsTrc("notation", "Note input modes"),
                         "description": qsTrc("notation", "Discover different ways to input notes in MuseScore Studio."),
                         "controlUri": "control://NoteInputSection/NoteInputBar/note-input-by-duration",
-                        "videoExplanationUrl": "https://www.youtube.com/watch?v=OUXf7Y2CPQE&t"
+                        "videoExplanationUrl": "https://youtu.be/xm1-XkS9VzA?utm_source=mss-yt&utm_medium=enter-by-duration&utm_campaign=mss-yt-enter-by-duration"
                     }
                 ]
             }
