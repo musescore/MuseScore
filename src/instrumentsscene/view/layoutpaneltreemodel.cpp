@@ -234,12 +234,12 @@ void LayoutPanelTreeModel::setupPartsConnections()
     });
 }
 
-void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& stavesPartId)
+void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
 {
-    async::NotifyList<const Staff*> notationStaves = m_notation->parts()->staffList(stavesPartId);
+    async::NotifyList<const Staff*> notationStaves = m_notation->parts()->staffList(partId);
 
-    notationStaves.onItemChanged(m_partsNotifyReceiver.get(), [this, stavesPartId](const Staff* staff) {
-        auto partItem = m_rootItem->childAtId(stavesPartId, LayoutPanelItemType::PART);
+    notationStaves.onItemChanged(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
         if (!partItem) {
             return;
         }
@@ -252,17 +252,44 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& stavesPartId)
         staffItem->init(m_masterNotation->parts()->staff(staff->id()));
     });
 
-    notationStaves.onItemAdded(m_partsNotifyReceiver.get(), [this, stavesPartId](const Staff* staff) {
-        auto partItem = m_rootItem->childAtId(stavesPartId, LayoutPanelItemType::PART);
+    notationStaves.onItemRemoved(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
         if (!partItem) {
             return;
         }
 
-        const Staff* masterStaff = m_masterNotation->parts()->staff(staff->id());
-        auto staffItem = buildMasterStaffItem(masterStaff, partItem);
+        auto staffItem = partItem->childAtId(staff->id(), LayoutPanelItemType::STAFF);
+        if (!staffItem) {
+            return;
+        }
 
         QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
-        int dstRow = partItem->childCount() - 1;
+        int staffRow = staffItem->row();
+
+        beginRemoveRows(partIndex, staffRow, staffRow);
+        partItem->removeChildren(staffRow, 1, false);
+        endRemoveRows();
+    });
+
+    notationStaves.onItemAdded(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
+        if (!partItem) {
+            return;
+        }
+
+        if (partItem->childAtId(staff->id(), LayoutPanelItemType::STAFF)) {
+            return; // this staff item already exists in the part
+        }
+
+        const Staff* masterStaff = m_masterNotation->parts()->staff(staff->id());
+        size_t staffIdx = muse::indexOf(masterStaff->part()->staves(), const_cast<Staff*>(masterStaff));
+        if (staffIdx == muse::nidx) {
+            return;
+        }
+
+        auto staffItem = buildMasterStaffItem(masterStaff, partItem);
+        QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
+        int dstRow = static_cast<int>(staffIdx);
 
         beginInsertRows(partIndex, dstRow, dstRow);
         partItem->insertChild(staffItem, dstRow);

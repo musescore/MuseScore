@@ -140,7 +140,7 @@ private:
     void sortParts(notation::PartList& parts);
 
     void setupPartsConnections();
-    void setupStavesConnections(const muse::ID& stavesPartId);
+    void setupStavesConnections(const muse::ID& partId);
     void setupNotationConnections();
 
     void updateSelectedRows();
