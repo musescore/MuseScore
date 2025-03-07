@@ -46,7 +46,7 @@ body:
         * For playback issues: 
           * A short screen recording with audio of a minimal reproducible example 
           * A score containing the problem (please upload as a .zip file)
-          * Examples comparing both MS Basic and Muse Sounds (where applicable)
+          * Examples comparing both MS Basic and MuseSounds (where applicable)
         * For UI/interaction and all other issues: a short screen recording (ideally 20sec or less) and files (where applicable; please upload as a .zip file).
       placeholder: |
         Click into this text box and paste your files, videos and screenshots here.
