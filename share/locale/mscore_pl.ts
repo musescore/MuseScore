@@ -30648,7 +30648,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="302"/>
         <location filename="../../libmscore/drumset.cpp" line="250"/>
         <source>Acoustic Bass Drum</source>
-        <translation>Akustyczny bęben basowy</translation>
+        <translation>Bęben basowy akustyczny</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="303"/>
@@ -30806,12 +30806,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="296"/>
         <source>Scratch Push</source>
-        <translation>Scratch Push</translation>
+        <translation>Scratch push</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="297"/>
         <source>Scratch Pull</source>
-        <translation>Scratch Pull</translation>
+        <translation>Scratch pull</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="298"/>
@@ -30876,12 +30876,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="334"/>
         <source>High Agogo</source>
-        <translation>Wysoki agogo</translation>
+        <translation>Wysokie agogo</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="335"/>
         <source>Low Agogo</source>
-        <translation>Niski agogo</translation>
+        <translation>Niskie agogo</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="336"/>
@@ -30906,12 +30906,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="340"/>
         <source>Short Güiro</source>
-        <translation>Güiro - krótki</translation>
+        <translation>Guiro - krótkie</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="341"/>
         <source>Long Güiro</source>
-        <translation>Güiro - długi</translation>
+        <translation>Guiro - długie</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="342"/>
@@ -30931,12 +30931,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="345"/>
         <source>Mute Cuica</source>
-        <translation>Cuíca - tłumik</translation>
+        <translation>Cuica - tłumik</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="346"/>
         <source>Open Cuica</source>
-        <translation>Cuíca - otwarta</translation>
+        <translation>Cuica - otwarta</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="347"/>
