@@ -69,6 +69,7 @@ FocusScope {
     property alias navigation: navCtrl
     property alias accessible: navCtrl.accessible
 
+    property bool userInteraction: true
     property alias mouseArea: mouseArea
 
     property bool isClickOnKeyNavTriggered: true
@@ -299,6 +300,8 @@ FocusScope {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+
+        visible: root.userInteraction
 
         enabled: root.enabled
         hoverEnabled: true
