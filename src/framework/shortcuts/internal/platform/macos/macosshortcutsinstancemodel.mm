@@ -379,27 +379,29 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
 
             // Ensure standard order of modifiers by converting to/from QKeySequence
             QKeySequence untranslatedSequence = QKeySequence::fromString(untranslatedSequenceStr, QKeySequence::PortableText);
-            QString untranslatedSequenceStrNormalised = untranslatedSequence.toString(QKeySequence::PortableText);
-
-            // Always record the untranslated sequence
-            // Map to non-normalised, because that's what ShortcutsInstanceModel::doActivate expects
-            recordMapping(untranslatedSequenceStrNormalised, untranslatedSequenceStr, true);
-            recordAutoRepeat(untranslatedSequenceStrNormalised, sc.autoRepeat);
 
             // Attempt to translate from combination of keys to character, e.g., `Shift+.` becomes `>`, in the case of a QWERTY layout
             QKeySequence translatedSequence
                 = translateToCurrentKeyboardLayout(untranslatedSequence);
-            if (translatedSequence.isEmpty()) {
-                LOGW() << "Failed to translate sequence " << untranslatedSequenceStr;
-                continue;
+            if (translatedSequence.isEmpty() || !(untranslatedSequence[0].key() & 0xff) || untranslatedSequence[0].key() == Qt::Key_A) {
+                QString untranslatedSequenceStrNormalised = untranslatedSequence.toString(QKeySequence::PortableText);
+
+                // Record the untranslated sequence
+                // Map to non-normalised, because that's what ShortcutsInstanceModel::doActivate expects
+                recordMapping(untranslatedSequenceStrNormalised, untranslatedSequenceStr, true);
+                recordAutoRepeat(untranslatedSequenceStrNormalised, sc.autoRepeat);
             }
 
-            QString translatedSequenceStrNormalised = translatedSequence.toString(QKeySequence::PortableText);
+            if (translatedSequence.isEmpty()) {
+                LOGW() << "Failed to translate sequence " << untranslatedSequenceStr;
+            } else {
+                QString translatedSequenceStrNormalised = translatedSequence.toString(QKeySequence::PortableText);
 
-            // If it was successful, record the translated sequence too, and map it to the untranslated sequence
-            // Again, map to non-normalised
-            recordMapping(translatedSequenceStrNormalised, untranslatedSequenceStr, false);
-            recordAutoRepeat(translatedSequenceStrNormalised, sc.autoRepeat);
+                // If it was successful, record the translated sequence too, and map it to the untranslated sequence
+                // Again, map to non-normalised
+                recordMapping(translatedSequenceStrNormalised, untranslatedSequenceStr, false);
+                recordAutoRepeat(translatedSequenceStrNormalised, sc.autoRepeat);
+            }
         }
     }
 
