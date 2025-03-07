@@ -383,7 +383,7 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
             // Attempt to translate from combination of keys to character, e.g., `Shift+.` becomes `>`, in the case of a QWERTY layout
             QKeySequence translatedSequence
                 = translateToCurrentKeyboardLayout(untranslatedSequence);
-            if (translatedSequence.isEmpty() || !(untranslatedSequence[0].key() & 0xff)) {
+            if (translatedSequence.isEmpty() || !(untranslatedSequence[0].key() & 0xff) || untranslatedSequence[0].key() == Qt::Key_A) {
                 QString untranslatedSequenceStrNormalised = untranslatedSequence.toString(QKeySequence::PortableText);
 
                 // Record the untranslated sequence
