@@ -228,4 +228,6 @@ void SystemObjectsLayerTreeItem::updateState()
 {
     setTitle(formatLayerTitle(m_systemObjectGroups));
     setSettingsEnabled(!m_systemObjectGroups.empty());
+
+    setIsVisible(isLayerVisible(m_systemObjectGroups));
 }
