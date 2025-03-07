@@ -35,6 +35,7 @@
 #include "masterscore.h"
 #include "repeatlist.h"
 #include "keysig.h"
+#include "layoutbreak.h"
 #include "measure.h"
 #include "note.h"
 #include "page.h"
@@ -1707,5 +1708,25 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
     }
 
     return true;
+}
+
+std::vector<KeySig*> keySigsAtLayoutBreak(const LayoutBreak* layoutBreak)
+{
+    std::vector<KeySig*> keysigs;
+    MeasureBase* mb = layoutBreak ? layoutBreak->measure() : nullptr;
+    Measure* measure = mb ? mb->nextMeasure() : nullptr;
+    if (measure && measure->isMMRest()) {
+        // propagate to original measure
+        measure = measure->mmRestFirst();
+    }
+    Segment* seg = measure ? measure->findFirstR(SegmentType::KeySig, Fraction(0, 1)) : nullptr;
+    if (seg) {
+        for (staff_idx_t i = 0; i <= layoutBreak->score()->nstaves(); i++) {
+            if (KeySig* ks = toKeySig(seg->element(i * VOICES))) {
+                keysigs.push_back(ks);
+            }
+        }
+    }
+    return keysigs;
 }
 }

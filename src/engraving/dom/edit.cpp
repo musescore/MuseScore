@@ -2892,6 +2892,35 @@ void Score::deleteItem(EngravingItem* el)
                 }
             }
         }
+        // remove section break key signatures
+        if (lb->isSectionBreak()) {
+            bool isFirst = m && m->tick().isZero();
+            for (KeySig* ks : keySigsAtLayoutBreak(lb)) {
+                if (!ks->forSectionBreak()) {
+                    continue;
+                }
+                Staff* staff = ks->staff();
+                Fraction tick = ks->tick();
+                KeySigEvent actualKey = ks->keySigEvent();
+                KeySigEvent prevKey = staff->prevKey(tick);
+
+                // do not remove keysig on first measure, or if signatures differ
+
+                // if previous signature is "forInstrumentChange",
+                // comparation returns false, even if they are otherwise identical
+                // (because one is forInstrumentChange and second not)
+                // so we need to remove "forInstrumentChange" flag first
+                if (prevKey.forInstrumentChange()) {
+                    prevKey.setForInstrumentChange(false);
+                }
+
+                if (isFirst || actualKey != prevKey) {
+                    ks->setForSectionBreak(false);
+                } else {
+                    deleteItem(ks);
+                }
+            }
+        }
     }
     break;
 
@@ -6151,6 +6180,19 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         if (lb->layoutBreakType() == LayoutBreakType::SECTION) {
             doUndoAddElement(lb);
             MeasureBase* m = lb->measure();
+
+            // add Key Signature on Section Break
+            Fraction tick = m->endTick();
+            int ticks = tick.ticks();
+            for (Staff* staff : score()->staves()) {
+                KeyList* kl = staff->keyList();
+                KeySigEvent ks = kl->key(ticks);
+                if (kl->currentKeyTick(ticks) != ticks || ks.forInstrumentChange()) {
+                    ks.setForInstrumentChange(false);
+                    ks.setForSectionBreak(true);
+                    undoChangeKeySig(staff, tick, ks);
+                }
+            }
             if (m->isBox()) {
                 // for frames, use linked frames
                 LinkedObjects* links = m->links();
