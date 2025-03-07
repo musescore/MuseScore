@@ -212,8 +212,8 @@ private:
         muse::PointF logicalBeginPoint;
     } m_mouseDownInfo;
 
-    mu::engraving::EngravingItem* m_prevHitElement = nullptr;
-    mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
+    const mu::engraving::EngravingItem* m_prevHitElement = nullptr;
+    const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
 
     bool m_shouldStartEditOnLeftClickRelease = false;
     bool m_shouldTogglePopupOnLeftClickRelease = false;
