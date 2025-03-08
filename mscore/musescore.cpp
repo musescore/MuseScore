@@ -1787,6 +1787,8 @@ MuseScore::MuseScore()
       menuTools->addAction(getAction("slash-rhythm"));
       menuTools->addSeparator();
 
+      menuTools->addAction(getAction("enh-both"));
+      menuTools->addAction(getAction("enh-current"));
       menuTools->addAction(getAction("pitch-spell"));
       menuTools->addAction(getAction("reset-groupings"));
       menuTools->addAction(getAction("resequence-rehearsal-marks"));
@@ -2328,8 +2330,7 @@ void MuseScore::helpBrowser1() const
       QString help = QString("https://musescore.org/redirect/help?tag=handbook&locale=%1").arg(getLocaleISOCode());
       //try to find an exact match
       bool found = false;
-      const QList<LanguageItem> langItems = _languages;
-      for (const LanguageItem& item : langItems) {
+      for (const LanguageItem& item : _languages) {
             if (item.key == lang) {
                   QString handbook = item.handbook;
                   if (!handbook.isNull()) {
@@ -2342,7 +2343,7 @@ void MuseScore::helpBrowser1() const
       //try a to find a match on first two letters
       if (!found && lang.size() > 2) {
             lang = lang.left(2);
-            for (const LanguageItem& item : langItems) {
+            for (const LanguageItem& item : _languages) {
                   if (item.key == lang){
                       QString handbook = item.handbook;
                       if (!handbook.isNull())
@@ -8356,89 +8357,85 @@ void MuseScore::init(QStringList& argv)
 
 
 bool MuseScore::saveScoreParts(const QString& inFilePath, const QString& outFilePath)
-{
-    MasterScore* score = mscore->readScore(inFilePath);
-    if (!score) {
-        return false;
-    }
+      {
+      MasterScore* score = mscore->readScore(inFilePath);
+      if (!score)
+            return false;
 
-    if (!styleFile->isEmpty()) {
-        QFile f(*styleFile);
-        if (f.open(QIODevice::ReadOnly)) {
-            score->style().load(&f);
-        }
-    }
-    score->switchToPageMode();
+      if (!styleFile->isEmpty()) {
+            QFile f(*styleFile);
+            if (f.open(QIODevice::ReadOnly))
+                  score->style().load(&f);
+            }
+      score->switchToPageMode();
 
-    // if no parts, generate parts from existing instruments
-    if (score->excerpts().isEmpty()) {
-        auto excerpts = Excerpt::createAllExcerpt(score);
-        for (Excerpt* e : qAsConst(excerpts)) {
-              Score* nscore = new Score(e->oscore());
-              e->setPartScore(nscore);
-              nscore->style().set(Sid::createMultiMeasureRests, true);
-              auto excerptCmdFake = new AddExcerpt(e);
-              excerptCmdFake->redo(nullptr);
-              Excerpt::createExcerpt(e);
-        }
-    }
+      // if no parts, generate parts from existing instruments
+      if (score->excerpts().isEmpty()) {
+            auto excerpts = Excerpt::createAllExcerpt(score);
+            for (Excerpt*& e : excerpts) {
+                  Score* nscore = new Score(e->oscore());
+                  e->setPartScore(nscore);
+                  nscore->style().set(Sid::createMultiMeasureRests, true);
+                  auto excerptCmdFake = new AddExcerpt(e);
+                  excerptCmdFake->redo(nullptr);
+                  Excerpt::createExcerpt(e);
+                  }
+            }
 
-    QJsonArray partsObjList;
-    QJsonArray partsMetaList;
-    QJsonArray partsTitles;
+      QJsonArray partsObjList;
+      QJsonArray partsMetaList;
+      QJsonArray partsTitles;
 
-    for (Excerpt* excerpt : qAsConst(score->excerpts())) {
-        Score* part = excerpt->partScore();
-        QMap<QString, QString> partMetaTags = part->metaTags();
+      for (Excerpt*& excerpt : score->excerpts()) {
+            Score* part = excerpt->partScore();
+            QMap<QString, QString> partMetaTags = part->metaTags();
 
-        QJsonValue partTitle(part->title());
-        partsTitles << partTitle;
+            QJsonValue partTitle(part->title());
+            partsTitles << partTitle;
 
-        QVariantMap meta;
-        const QList<QString> keys;
-        for (const QString& key: keys) {
-            meta[key] = partMetaTags[key];
-        }
+            QVariantMap meta;
+            for (const QString& key: partMetaTags)
+                  meta[key] = partMetaTags[key];
 
-        QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
-        partsMetaList << partMetaObj;
+            QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
+            partsMetaList << partMetaObj;
 
-        QJsonValue partObj(QString::fromLatin1(exportMsczAsJSON(part)));
-        partsObjList << partObj;
-    }
+            QJsonValue partObj(QString::fromLatin1(exportMsczAsJSON(part)));
+            partsObjList << partObj;
+            }
 
-    QJsonObject json;
-    json["parts"] = partsTitles;
-    json["partsMeta"] = partsMetaList;
-    json["partsBin"] = partsObjList;
+      QJsonObject json;
+      json["parts"] = partsTitles;
+      json["partsMeta"] = partsMetaList;
+      json["partsBin"] = partsObjList;
 
-    QJsonDocument jsonDoc(json);
-    QFile out(outFilePath);
+      QJsonDocument jsonDoc(json);
+      QFile out(outFilePath);
 
-    bool res = out.open(QIODevice::WriteOnly);
-    if (res) {
-        out.write(jsonDoc.toJson(QJsonDocument::Compact));
-        out.close();
-    }
+      bool res = out.open(QIODevice::WriteOnly);
+      if (res) {
+            out.write(jsonDoc.toJson(QJsonDocument::Compact));
+            out.close();
+            }
 
-    delete score;
-    return res;
-}
+      delete score;
+      return res;
+      }
 
 QByteArray MuseScore::exportMsczAsJSON(Score* score)
-{
-    QBuffer buffer;
-    buffer.open(QIODevice::ReadWrite);
+      {
+      QBuffer buffer;
+      buffer.open(QIODevice::ReadWrite);
 
-    QString fileName = saveFilename(score->title()) + ".mscz";
-    score->saveCompressedFile(&buffer, fileName, false, true);
+      QString fileName = saveFilename(score->title()) + ".mscz";
+      score->saveCompressedFile(&buffer, fileName, false, true);
 
-    buffer.open(QIODevice::ReadOnly);
-    QByteArray scoreData = buffer.readAll();
-    buffer.close();
+      buffer.open(QIODevice::ReadOnly);
+      QByteArray scoreData = buffer.readAll();
+      buffer.close();
 
-    return scoreData.toBase64();
-}
+      return scoreData.toBase64();
+      }
 
 bool MuseScore::exportUnrolled(const QString& inFilePath)
 {

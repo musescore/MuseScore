@@ -343,8 +343,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "pitch-spell",
-         QT_TRANSLATE_NOOP("action","Respell Pitches"),
-         QT_TRANSLATE_NOOP("action","Respell pitches"),
+         QT_TRANSLATE_NOOP("action","&Optimize Enharmonic Spellings"),
+         QT_TRANSLATE_NOOP("action","Optimize enharmonic spellings"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut
@@ -2964,7 +2964,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
          "enh-both",
-         QT_TRANSLATE_NOOP("action","Change Enharmonic Spelling (Both Modes)"),
+         QT_TRANSLATE_NOOP("action","Change Enharmonic Spelling (&Both Modes)"),
          QT_TRANSLATE_NOOP("action","Change enharmonic spelling (both modes)"),
          QT_TRANSLATE_NOOP("action","Change enharmonic note (alters the spelling in concert pitch and transposed mode)")
          },
@@ -2972,7 +2972,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
          "enh-current",
-         QT_TRANSLATE_NOOP("action","Change Enharmonic Spelling (Current Mode)"),
+         QT_TRANSLATE_NOOP("action","Change Enharmonic Spelling (&Current Mode)"),
          QT_TRANSLATE_NOOP("action","Change enharmonic spelling (current mode)"),
          QT_TRANSLATE_NOOP("action","Change enharmonic note (alters the spelling in the current mode only)")
          },
