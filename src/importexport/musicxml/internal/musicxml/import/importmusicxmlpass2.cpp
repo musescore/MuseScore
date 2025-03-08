@@ -3063,8 +3063,8 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
     staff_idx_t staffIdx = m_score->staffIdx(part) + n;
 
     StringData stringData;
-    String visible = m_e.attribute("print-object");
-    String spacing = m_e.attribute("print-spacing");
+    String visible = m_e.asciiAttribute("print-object");
+    String spacing = m_e.asciiAttribute("print-spacing");
     if (visible == "no") {
         // EITHER:
         //  1) this indicates an empty staff that is hidden
@@ -3081,7 +3081,7 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
             // this doesn't apply to a measure, so we'll assume the entire staff has to be hidden.
             m_score->staff(staffIdx)->setVisible(false);
         }
-    } else if (visible == u"yes" || visible.empty()) {
+    } else if (visible == "yes" || visible.empty()) {
         if (measure) {
             m_score->staff(staffIdx)->setVisible(true);
             measure->setStaffVisible(staffIdx, true);
