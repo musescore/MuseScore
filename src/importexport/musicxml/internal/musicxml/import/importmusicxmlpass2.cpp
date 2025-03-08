@@ -2401,7 +2401,7 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo, Color beamColor)
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo, Color beamColor, const String fan)
 {
     if (!cr) {
         return;
@@ -2419,6 +2419,9 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         beam->setDirection(sd);
         if (beamColor.isValid()) {
             beam->setColor(beamColor);
+        }
+        if (!fan.empty() && fan != "none") {
+            beam->setAsFeathered(fan == "rit");
         }
     }
     // add ChordRest to beam
@@ -6696,6 +6699,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     bool isSingleDrumset = false;
     BeamMode bm;
     std::map<int, String> beamTypes;
+    String beamFan;
     String instrumentId;
     String tieType;
     MusicXmlParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
@@ -6712,6 +6716,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // element handled
         } else if (m_e.name() == "beam") {
             beamColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            beamFan = m_e.asciiAttribute("fan").ascii();
             beam(beamTypes);
         } else if (m_e.name() == "chord") {
             chord = true;
@@ -6983,7 +6988,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // regular note
             // handle beam
             if (!chord) {
-                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor);
+                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor, beamFan);
             }
 
             // append any grace chord after chord to the previous chord
