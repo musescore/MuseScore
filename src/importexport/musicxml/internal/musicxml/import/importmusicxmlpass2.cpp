@@ -1669,10 +1669,7 @@ static void setChordRestDuration(ChordRest* cr, TDuration duration, const Fracti
 
 /**
  * Add a rest to the score
- * TODO: beam handling
  * TODO: display step handling
- * TODO: visible handling
- * TODO: whole measure rest handling
  */
 
 static Rest* addRest(Score*, Measure* m,
