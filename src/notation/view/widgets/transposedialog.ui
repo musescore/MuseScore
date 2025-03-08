@@ -131,6 +131,12 @@
             </item>
             <item row="1" column="0">
              <widget class="QRadioButton" name="upKey">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="accessibleName">
                <string>Up</string>
               </property>
@@ -141,6 +147,18 @@
             </item>
             <item row="2" column="0">
              <widget class="QRadioButton" name="downKey">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>32</height>
+               </size>
+              </property>
               <property name="accessibleName">
                <string>Down</string>
               </property>
@@ -151,6 +169,12 @@
             </item>
             <item row="0" column="0">
              <widget class="QRadioButton" name="closestKey">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="accessibleName">
                <string>Closest</string>
               </property>
@@ -388,6 +412,12 @@
          </property>
          <item row="0" column="0">
           <widget class="QRadioButton" name="upDiatonic">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="accessibleName">
             <string>Up</string>
            </property>
@@ -438,6 +468,12 @@
          </item>
          <item row="1" column="0">
           <widget class="QRadioButton" name="downDiatonic">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="accessibleName">
             <string>Down</string>
            </property>
@@ -448,6 +484,12 @@
          </item>
          <item row="2" column="0">
           <widget class="QCheckBox" name="keepDegreeAlterations">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="accessibleName">
             <string>Keep degree alterations</string>
            </property>
