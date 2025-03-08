@@ -2401,7 +2401,8 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo, Color beamColor, const String fan)
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam,
+                                 bool hasBeamingInfo, Color beamColor, const String fan)
 {
     if (!cr) {
         return;
@@ -2420,8 +2421,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         if (beamColor.isValid()) {
             beam->setColor(beamColor);
         }
-        if (!fan.empty() && fan != "none") {
-            beam->setAsFeathered(fan == "rit");
+        if (!fan.empty() && fan != u"none") {
+            beam->setAsFeathered(fan == u"rit");
         }
     }
     // add ChordRest to beam
@@ -3066,8 +3067,8 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
     staff_idx_t staffIdx = m_score->staffIdx(part) + n;
 
     StringData stringData;
-    String visible = m_e.asciiAttribute("print-object");
-    String spacing = m_e.asciiAttribute("print-spacing");
+    AsciiStringView visible = m_e.asciiAttribute("print-object");
+    AsciiStringView spacing = m_e.asciiAttribute("print-spacing");
     if (visible == "no") {
         // EITHER:
         //  1) this indicates an empty staff that is hidden
@@ -6716,7 +6717,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // element handled
         } else if (m_e.name() == "beam") {
             beamColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-            beamFan = m_e.asciiAttribute("fan").ascii();
+            beamFan = m_e.attribute("fan");
             beam(beamTypes);
         } else if (m_e.name() == "chord") {
             chord = true;
