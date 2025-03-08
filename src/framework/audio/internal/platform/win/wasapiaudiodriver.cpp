@@ -338,6 +338,28 @@ void WasapiAudioDriver::reopen()
     open(m_activeSpec, &m_activeSpec);
 }
 
+int WasapiAudioDriver::audioDelayCompensate(void) const
+{
+    return 0;
+}
+
+void WasapiAudioDriver::setAudioDelayCompensate(const int frames)
+{
+}
+
+bool WasapiAudioDriver::isPlaying() const
+{
+    return false;
+}
+
+void WasapiAudioDriver::remotePlayOrStop(bool ps) const
+{
+}
+
+void WasapiAudioDriver::remoteSeek(msecs_t millis) const
+{
+}
+
 AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
 {
     using namespace winrt::Windows::Media::Devices;
