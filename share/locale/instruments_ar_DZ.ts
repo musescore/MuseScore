@@ -5851,14 +5851,14 @@
         <source>Brass</source>
         <comment>brass trackName</comment>
         <extracomment>trackName for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brass</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2084"/>
         <source>Brass</source>
         <comment>brass longName</comment>
         <extracomment>longName for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brass</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2086"/>
@@ -19190,7 +19190,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>
         <source>Brass</source>
-        <translation>Brass</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="126"/>
