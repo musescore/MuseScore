@@ -2898,7 +2898,7 @@ Measure* Measure::mmRestLast() const
 //    otherwise, return the measure itself.
 //---------------------------------------------------------
 
-const Measure* Measure::coveringMMRestOrThis() const
+Measure* Measure::coveringMMRestOrThis()
 {
     if (!style().styleB(Sid::createMultiMeasureRests)) {
         return this;
@@ -2922,6 +2922,11 @@ const Measure* Measure::coveringMMRestOrThis() const
     }
 
     return 0;
+}
+
+const Measure* Measure::coveringMMRestOrThis() const
+{
+    return const_cast<Measure*>(this)->coveringMMRestOrThis();
 }
 
 int Measure::measureRepeatCount(staff_idx_t staffIdx) const

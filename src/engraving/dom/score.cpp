@@ -3492,7 +3492,7 @@ void Score::selectSingle(EngravingItem* e, staff_idx_t staffIdx)
         setUpdateAll();
     } else {
         if (e->isMeasure()) {
-            doSelect(e, SelectType::RANGE, staffIdx);
+            doSelect(toMeasure(e)->coveringMMRestOrThis(), SelectType::RANGE, staffIdx);
             return;
         }
         addRefresh(e->pageBoundingRect());
@@ -3539,11 +3539,11 @@ void Score::selectAdd(EngravingItem* e)
     }
 
     if (e->isMeasure()) {
-        Measure* m = toMeasure(e);
+        Measure* m = toMeasure(e)->coveringMMRestOrThis();
         Fraction tick  = m->tick();
         if (m_selection.isNone()) {
             m_selection.setRange(m->tick2segment(tick),
-                                 m == lastMeasure() ? 0 : m->last(),
+                                 m == lastMeasureMM() ? 0 : m->last(),
                                  0,
                                  nstaves());
             setUpdateAll();
@@ -3637,9 +3637,9 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
     }
 
     if (e->isMeasure()) {
-        Measure* m = toMeasure(e);
+        Measure* m = toMeasure(e)->coveringMMRestOrThis();
         Segment* startSegment = m->first(SegmentType::ChordRest);
-        Segment* endSegment = m == lastMeasure() ? nullptr : m->last();
+        Segment* endSegment = m == lastMeasureMM() ? nullptr : m->last();
         Fraction tick = m->tick();
         Fraction etick = tick + m->ticks();
 
@@ -3773,14 +3773,14 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
     bool activeSegmentIsStart = false;
 
     if (newElement->isMeasure()) {
-        Measure* m = toMeasure(newElement);
+        Measure* m = toMeasure(newElement)->coveringMMRestOrThis();
         const Fraction tick = m->tick();
 
         if (tick < startSegment->tick()) {
             startSegment = m->first(SegmentType::ChordRest);
             activeSegmentIsStart = true;
         }
-        if (m == lastMeasure()) {
+        if (m == lastMeasureMM()) {
             endSegment = nullptr;
         } else if (endSegment && tick + m->ticks() > endSegment->tick()) {
             endSegment = m->last();
