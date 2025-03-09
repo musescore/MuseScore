@@ -573,6 +573,7 @@ enum class ClefType : signed char {
     TAB4_SERIF,
     // new clefs to be added between here
     C4_8VB,
+    G8_VB_C,
     // and here in oder to not break TAB clef style
     MAX
 };
