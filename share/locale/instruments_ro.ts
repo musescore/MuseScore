@@ -335,14 +335,14 @@
         <source>Bass Flute</source>
         <comment>bass-flute trackName</comment>
         <extracomment>trackName for Bass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Bass</translation>
+        <translation>Flaut bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="315"/>
         <source>Bass Flute</source>
         <comment>bass-flute longName</comment>
         <extracomment>longName for Bass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Bass</translation>
+        <translation>Flaut bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="317"/>
@@ -391,14 +391,14 @@
         <source>Contrabass Flute</source>
         <comment>contrabass-flute trackName</comment>
         <extracomment>trackName for Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Contrabass</translation>
+        <translation>Flaut contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="333"/>
         <source>Contrabass Flute</source>
         <comment>contrabass-flute longName</comment>
         <extracomment>longName for Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Contrabass</translation>
+        <translation>Flaut contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="335"/>
@@ -447,14 +447,14 @@
         <source>Double Contrabass Flute</source>
         <comment>double-contrabass-flute trackName</comment>
         <extracomment>trackName for Double Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Dublu Contrabass</translation>
+        <translation>Flaut dublu contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="351"/>
         <source>Double Contrabass Flute</source>
         <comment>double-contrabass-flute longName</comment>
         <extracomment>longName for Double Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Dublu Contrabass</translation>
+        <translation>Flaut dublu contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="353"/>
@@ -475,14 +475,14 @@
         <source>Hyperbass Flute</source>
         <comment>hyperbass-flute trackName</comment>
         <extracomment>trackName for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Hyperbass</translation>
+        <translation>Flaut hiperbas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="360"/>
         <source>Hyperbass Flute</source>
         <comment>hyperbass-flute longName</comment>
         <extracomment>longName for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flaut Hyperbass</translation>
+        <translation>Flaut hiperbas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="362"/>
@@ -1539,7 +1539,7 @@
         <source>C Bass Ocarina</source>
         <comment>c-bass-ocarina longName</comment>
         <extracomment>longName for Bass Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarină bass în do</translation>
+        <translation>Ocarină bas în do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="704"/>
@@ -1679,14 +1679,14 @@
         <source>Bass Gemshorn</source>
         <comment>bass-gemshorn trackName</comment>
         <extracomment>trackName for Bass Gemshorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Corn de Căprioară Bass</translation>
+        <translation>Corn de căprioară bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="749"/>
         <source>Bass Gemshorn</source>
         <comment>bass-gemshorn longName</comment>
         <extracomment>longName for Bass Gemshorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Corn de Căprioară Bass</translation>
+        <translation>Corn de căprioară bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="751"/>
@@ -2295,14 +2295,14 @@
         <source>Bass Shawm</source>
         <comment>bass-shawm trackName</comment>
         <extracomment>trackName for Bass Shawm; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Shawn Bass</translation>
+        <translation>Shawn bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="946"/>
         <source>Bass Shawm</source>
         <comment>bass-shawm longName</comment>
         <extracomment>longName for Bass Shawm; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Shawn Bass</translation>
+        <translation>Shawn bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="948"/>
@@ -2491,14 +2491,14 @@
         <source>Bass Crumhorn</source>
         <comment>bass-crumhorn trackName</comment>
         <extracomment>trackName for Bass Crumhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cromornă Bass</translation>
+        <translation>Cromornă bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1009"/>
         <source>Bass Crumhorn</source>
         <comment>bass-crumhorn longName</comment>
         <extracomment>longName for Bass Crumhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cromornă Bass</translation>
+        <translation>Cromornă bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1011"/>
@@ -2659,14 +2659,14 @@
         <source>Bass Cornamuse</source>
         <comment>bass-cornamuse trackName</comment>
         <extracomment>trackName for Bass Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cornamuse Bass</translation>
+        <translation>Cornamuse bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1063"/>
         <source>Bass Cornamuse</source>
         <comment>bass-cornamuse longName</comment>
         <extracomment>longName for Bass Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cornamuse Bass</translation>
+        <translation>Cornamuse bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1065"/>
@@ -2771,14 +2771,14 @@
         <source>Bass Kelhorn</source>
         <comment>bass-kelhorn trackName</comment>
         <extracomment>trackName for Bass Kelhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kelhorn Bass</translation>
+        <translation>Kelhorn bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1099"/>
         <source>Bass Kelhorn</source>
         <comment>bass-kelhorn longName</comment>
         <extracomment>longName for Bass Kelhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kelhorn Bass</translation>
+        <translation>Kelhorn bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1101"/>
@@ -3226,7 +3226,7 @@
         <source>A Bass Duduk</source>
         <comment>a-bass-duduk longName</comment>
         <extracomment>longName for Bass Duduk; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Duduk Bass La</translation>
+        <translation>Duduk bas în la</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1243"/>
@@ -3576,14 +3576,14 @@
         <source>Basset Clarinet</source>
         <comment>basset-clarinet trackName</comment>
         <extracomment>trackName for Basset Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Basset</translation>
+        <translation>Clarinet baset</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1354"/>
         <source>Basset Clarinet</source>
         <comment>basset-clarinet longName</comment>
         <extracomment>longName for Basset Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Basset</translation>
+        <translation>Clarinet baset</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1356"/>
@@ -3632,14 +3632,14 @@
         <source>Basset Horn</source>
         <comment>basset-horn trackName</comment>
         <extracomment>trackName for Basset Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Corn Basset</translation>
+        <translation>Corn baset</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1372"/>
         <source>Basset Horn</source>
         <comment>basset-horn longName</comment>
         <extracomment>longName for Basset Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Corn Basset</translation>
+        <translation>Corn baset</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1374"/>
@@ -3660,14 +3660,14 @@
         <source>Bass Clarinet</source>
         <comment>bass-clarinet trackName</comment>
         <extracomment>trackName for Bass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1381"/>
         <source>Bass Clarinet</source>
         <comment>bass-clarinet longName</comment>
         <extracomment>longName for Bass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1383"/>
@@ -3688,14 +3688,14 @@
         <source>Bass Clarinet</source>
         <comment>bb-bass-clarinet trackName</comment>
         <extracomment>trackName for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1390"/>
         <source>Bass Clarinet</source>
         <comment>bb-bass-clarinet longName</comment>
         <extracomment>longName for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1392"/>
@@ -3730,7 +3730,7 @@
         <source>Bass Clarinet</source>
         <comment>bb-bass-clarinet-bass-clef longName</comment>
         <extracomment>longName for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1403"/>
@@ -3758,14 +3758,14 @@
         <source>Bass Clarinet</source>
         <comment>a-bass-clarinet trackName</comment>
         <extracomment>trackName for Bass Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1412"/>
         <source>Bass Clarinet</source>
         <comment>a-bass-clarinet longName</comment>
         <extracomment>longName for Bass Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1414"/>
@@ -3800,7 +3800,7 @@
         <source>Bass Clarinet</source>
         <comment>a-bass-clarinet-bass-clef) longName</comment>
         <extracomment>longName for Bass Clarinet (bass clef); transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Bass</translation>
+        <translation>Clarinet bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1425"/>
@@ -3856,14 +3856,14 @@
         <source>Contrabass Clarinet</source>
         <comment>contrabass-clarinet trackName</comment>
         <extracomment>trackName for Contrabass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Contrabass</translation>
+        <translation>Clarinet contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1443"/>
         <source>Contrabass Clarinet</source>
         <comment>contrabass-clarinet longName</comment>
         <extracomment>longName for Contrabass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Clarinet Contrabass</translation>
+        <translation>Clarinet contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1445"/>
@@ -4556,14 +4556,14 @@
         <source>Bass Saxophone</source>
         <comment>bass-saxophone trackName</comment>
         <extracomment>trackName for Bass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon Bass</translation>
+        <translation>Saxofon bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1667"/>
         <source>Bass Saxophone</source>
         <comment>bass-saxophone longName</comment>
         <extracomment>longName for Bass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon Bass</translation>
+        <translation>Saxofon bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1669"/>
@@ -4584,14 +4584,14 @@
         <source>Contrabass Saxophone</source>
         <comment>contrabass-saxophone trackName</comment>
         <extracomment>trackName for Contrabass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone Contrabass</translation>
+        <translation>Saxophone contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1676"/>
         <source>Contrabass Saxophone</source>
         <comment>contrabass-saxophone longName</comment>
         <extracomment>longName for Contrabass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone Contrabass</translation>
+        <translation>Saxophone contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1678"/>
@@ -4612,14 +4612,14 @@
         <source>Subcontrabass Saxophone</source>
         <comment>subcontrabass-saxophone trackName</comment>
         <extracomment>trackName for Subcontrabass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon Subcontrabass</translation>
+        <translation>Saxofon subcontrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1685"/>
         <source>Subcontrabass Saxophone</source>
         <comment>subcontrabass-saxophone longName</comment>
         <extracomment>longName for Subcontrabass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon Subcontrabass</translation>
+        <translation>Saxofon subcontrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1687"/>
@@ -4696,14 +4696,14 @@
         <source>Reed Contrabass</source>
         <comment>reed-contrabass trackName</comment>
         <extracomment>trackName for Reed Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Contrabass cu Ancie</translation>
+        <translation>Contrabas cu ancie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1712"/>
         <source>Reed Contrabass</source>
         <comment>reed-contrabass longName</comment>
         <extracomment>longName for Reed Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Contrabass cu Ancie</translation>
+        <translation>Contrabas cu ancie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1714"/>
@@ -4948,14 +4948,14 @@
         <source>Bass Sarrusophone</source>
         <comment>bass-sarrusophone trackName</comment>
         <extracomment>trackName for Bass Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sarusofon Bass</translation>
+        <translation>Sarusofon bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1793"/>
         <source>Bass Sarrusophone</source>
         <comment>bass-sarrusophone longName</comment>
         <extracomment>longName for Bass Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sarusofon Bass</translation>
+        <translation>Sarusofon bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1795"/>
@@ -4976,14 +4976,14 @@
         <source>Contrabass Sarrusophone</source>
         <comment>contrabass-sarrusophone trackName</comment>
         <extracomment>trackName for Contrabass Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sarusofon Contrabass</translation>
+        <translation>Sarusofon contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1802"/>
         <source>Contrabass Sarrusophone</source>
         <comment>contrabass-sarrusophone longName</comment>
         <extracomment>longName for Contrabass Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sarusofon Contrabass</translation>
+        <translation>Sarusofon contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1804"/>
@@ -5599,21 +5599,21 @@
         <source>Bass Hohner Harmonica</source>
         <comment>bass-harmonica-hohner trackName</comment>
         <extracomment>trackName for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Muzicuță Bass Hohner</translation>
+        <translation>Muzicuță bas Hohner</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2000"/>
         <source>Bass Hohner Harmonica</source>
         <comment>bass-harmonica-hohner longName</comment>
         <extracomment>longName for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Muzicuță Bass Hohner</translation>
+        <translation>Muzicuță bas Hohner</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2002"/>
         <source>Bs. Harm.</source>
         <comment>bass-harmonica-hohner shortName</comment>
         <extracomment>shortName for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Muz. Bass</translation>
+        <translation>Muz. bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2005"/>
@@ -5641,7 +5641,7 @@
         <source>Bs. Harm.</source>
         <comment>bass-harmonica-huang shortName</comment>
         <extracomment>shortName for Bass Huang Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Muz. Bass</translation>
+        <translation>Muz. bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2014"/>
@@ -5669,7 +5669,7 @@
         <source>Bs. Harm.</source>
         <comment>bass-harmonica shortName</comment>
         <extracomment>shortName for Bass Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Muz. Bass</translation>
+        <translation>Muz. bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2023"/>
@@ -5823,14 +5823,14 @@
         <source>Bass Sheng</source>
         <comment>bass-sheng trackName</comment>
         <extracomment>trackName for Bass Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sheng Bass</translation>
+        <translation>Sheng bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2072"/>
         <source>Bass Sheng</source>
         <comment>bass-sheng longName</comment>
         <extracomment>longName for Bass Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sheng Bass</translation>
+        <translation>Sheng bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2074"/>
@@ -6439,7 +6439,7 @@
         <source>B♭ basso</source>
         <comment>bb-horn-basso traitName</comment>
         <extracomment>traitName for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>si♭ basso</translation>
+        <translation>si♭ bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2264"/>
@@ -8455,14 +8455,14 @@
         <source>Contrabass Bugle</source>
         <comment>contrabass-bugle trackName</comment>
         <extracomment>trackName for Contrabass Bugle; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Goarnă Contrabass</translation>
+        <translation>Goarnă contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2894"/>
         <source>Contrabass Bugle</source>
         <comment>contrabass-bugle longName</comment>
         <extracomment>longName for Contrabass Bugle; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Goarnă Contrabass</translation>
+        <translation>Goarnă contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2896"/>
@@ -9190,14 +9190,14 @@
         <source>Contrabass Trombone</source>
         <comment>contrabass-trombone trackName</comment>
         <extracomment>trackName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombon Contrabass</translation>
+        <translation>Trombon contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3138"/>
         <source>Contrabass Trombone</source>
         <comment>contrabass-trombone longName</comment>
         <extracomment>longName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombon Contrabass</translation>
+        <translation>Trombon contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3140"/>
@@ -9232,14 +9232,14 @@
         <source>Bass Trombone</source>
         <comment>bass-trombone trackName</comment>
         <extracomment>trackName for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombon Bass</translation>
+        <translation>Trombon bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3125"/>
         <source>Bass Trombone</source>
         <comment>bass-trombone longName</comment>
         <extracomment>longName for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombon Bass</translation>
+        <translation>Trombon bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3127"/>
@@ -9736,14 +9736,14 @@
         <source>Sub-Contrabass Tuba</source>
         <comment>subcontrabass-tuba trackName</comment>
         <extracomment>trackName for Sub-Contrabass Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba Sub-Contrabass</translation>
+        <translation>Tuba sub-contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3298"/>
         <source>Sub-Contrabass Tuba</source>
         <comment>subcontrabass-tuba longName</comment>
         <extracomment>longName for Sub-Contrabass Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba Sub-Contrabass</translation>
+        <translation>Tuba sub-contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3300"/>
@@ -10345,14 +10345,14 @@
         <source>Bass Steel Drums</source>
         <comment>bass-steel-drums trackName</comment>
         <extracomment>trackName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Steel Drums Bass</translation>
+        <translation>Steel Drums bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3498"/>
         <source>Bass Steel Drums</source>
         <comment>bass-steel-drums longName</comment>
         <extracomment>longName for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Steel Drums Bass</translation>
+        <translation>Steel Drums bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3500"/>
@@ -11017,14 +11017,14 @@
         <source>Orff Bass Metallophone</source>
         <comment>orff-bass-metallophone trackName</comment>
         <extracomment>trackName for Orff Bass Metallophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Metalofon Bass Orff</translation>
+        <translation>Metalofon bas Orff</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3714"/>
         <source>Orff Bass Metallophone</source>
         <comment>orff-bass-metallophone longName</comment>
         <extracomment>longName for Orff Bass Metallophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Metalofon Bass Orff</translation>
+        <translation>Metalofon bas Orff</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3716"/>
@@ -11045,14 +11045,14 @@
         <source>Orff Bass Xylophone</source>
         <comment>orff-bass-xylophone trackName</comment>
         <extracomment>trackName for Orff Bass Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Xilofon Bass Orff</translation>
+        <translation>Xilofon bas Orff</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3723"/>
         <source>Orff Bass Xylophone</source>
         <comment>orff-bass-xylophone longName</comment>
         <extracomment>longName for Orff Bass Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Xilofon Bass Orff</translation>
+        <translation>Xilofon bas Orff</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3725"/>
@@ -11381,7 +11381,7 @@
         <source>Bass Drum</source>
         <comment>bass-drum longName</comment>
         <extracomment>longName for Bass Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tobă Mare (Bass Drum)</translation>
+        <translation>Tobă mare (bas)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3836"/>
@@ -12907,7 +12907,7 @@
         <source>Bass Drums</source>
         <comment>marching-bass-drums longName</comment>
         <extracomment>longName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tobă Bass</translation>
+        <translation>Tobe bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4379"/>
@@ -13453,14 +13453,14 @@
         <source>Bass</source>
         <comment>bass trackName</comment>
         <extracomment>trackName for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4563"/>
         <source>Bass</source>
         <comment>bass longName</comment>
         <extracomment>longName for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4565"/>
@@ -13551,7 +13551,7 @@
         <source>Bass</source>
         <comment>men channel</comment>
         <extracomment>channel for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4594"/>
@@ -14181,14 +14181,14 @@
         <source>Bass Synthesizer</source>
         <comment>bass-synthesizer trackName</comment>
         <extracomment>trackName for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sintetizator Bass</translation>
+        <translation>Sintetizator bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4802"/>
         <source>Bass Synthesizer</source>
         <comment>bass-synthesizer longName</comment>
         <extracomment>longName for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sintetizator Bass</translation>
+        <translation>Sintetizator bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4804"/>
@@ -14202,14 +14202,14 @@
         <source>synth-bass-1</source>
         <comment>bass-synthesizer channel</comment>
         <extracomment>channel for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>bass-sintz-1</translation>
+        <translation>sintz-bas-1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4808"/>
         <source>synth-bass-2</source>
         <comment>bass-synthesizer channel</comment>
         <extracomment>channel for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>bass-sintz-2</translation>
+        <translation>sintz-bas-2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4811"/>
@@ -15469,7 +15469,7 @@
         <source>Bass Drum</source>
         <comment>bass-drum trackName</comment>
         <extracomment>trackName for Bass Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tobă Mare (Bass Drum)</translation>
+        <translation>Tobă mare (bas)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3841"/>
@@ -16092,14 +16092,14 @@
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 5 coarde</translation>
+        <translation>Bas electric cu 5 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5302"/>
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass longName</comment>
         <extracomment>longName for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 5 coarde</translation>
+        <translation>Bas electric cu 5 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5304"/>
@@ -16141,7 +16141,7 @@
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass-high-c longName</comment>
         <extracomment>longName for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 5 coarde</translation>
+        <translation>Bas electric cu 5 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5317"/>
@@ -16183,7 +16183,7 @@
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass-tab longName</comment>
         <extracomment>longName for 5-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 5 coarde</translation>
+        <translation>Bas electric cu 5 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5331"/>
@@ -16204,7 +16204,7 @@
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass-tab-high-c longName</comment>
         <extracomment>longName for 5-str. Electric Bass (high C/tenor) (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 5 coarde</translation>
+        <translation>Bas electric cu 5 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5338"/>
@@ -16218,14 +16218,14 @@
         <source>6-str. Electric Bass</source>
         <comment>6-string-electric-bass trackName</comment>
         <extracomment>trackName for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 6 coarde</translation>
+        <translation>Bas electric cu 6 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5342"/>
         <source>6-str. Electric Bass</source>
         <comment>6-string-electric-bass longName</comment>
         <extracomment>longName for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 6 coarde</translation>
+        <translation>Bas electric cu 6 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5344"/>
@@ -16267,7 +16267,7 @@
         <source>6-str. Electric Bass</source>
         <comment>6-string-electric-bass-tab longName</comment>
         <extracomment>longName for 6-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric 6 coarde</translation>
+        <translation>Bas electric cu 6 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5358"/>
@@ -16281,14 +16281,14 @@
         <source>Bass Guitar</source>
         <comment>bass-guitar trackName</comment>
         <extracomment>trackName for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară bass</translation>
+        <translation>Chitară bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5362"/>
         <source>Bass Guitar</source>
         <comment>bass-guitar longName</comment>
         <extracomment>longName for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară bass</translation>
+        <translation>Chitară bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5364"/>
@@ -16323,14 +16323,14 @@
         <source>Electric Bass</source>
         <comment>electric-bass trackName</comment>
         <extracomment>trackName for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass electric</translation>
+        <translation>Bas electric</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5375"/>
         <source>Electric Bass</source>
         <comment>electric-bass longName</comment>
         <extracomment>longName for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass electric</translation>
+        <translation>Bas electric</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5377"/>
@@ -16365,14 +16365,14 @@
         <source>Fretless Electric Bass</source>
         <comment>fretless-electric-bass trackName</comment>
         <extracomment>trackName for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric fără Taste</translation>
+        <translation>Bas electric fără taste</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5388"/>
         <source>Fretless Electric Bass</source>
         <comment>fretless-electric-bass longName</comment>
         <extracomment>longName for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Electric fără Taste</translation>
+        <translation>Bas electric fără taste</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5390"/>
@@ -16407,21 +16407,21 @@
         <source>Acoustic Bass</source>
         <comment>acoustic-bass trackName</comment>
         <extracomment>trackName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass acustic</translation>
+        <translation>Bas acustic</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5401"/>
         <source>Acoustic Bass</source>
         <comment>acoustic-bass longName</comment>
         <extracomment>longName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass acustic</translation>
+        <translation>Bas acustic</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5403"/>
         <source>Bass</source>
         <comment>acoustic-bass shortName</comment>
         <extracomment>shortName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5405"/>
@@ -16477,7 +16477,7 @@
         <source>Bass Guitar</source>
         <comment>bass-guitar-tablature longName</comment>
         <extracomment>longName for Bass Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară bass</translation>
+        <translation>Chitară bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5423"/>
@@ -16498,7 +16498,7 @@
         <source>Electric Bass</source>
         <comment>electric-bass-4-str-tab longName</comment>
         <extracomment>longName for Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass electric</translation>
+        <translation>Bas electric</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5430"/>
@@ -17590,14 +17590,14 @@
         <source>Bass Balalaika</source>
         <comment>balalaika-bass trackName</comment>
         <extracomment>trackName for Bass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaică Bass</translation>
+        <translation>Balalaică bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5783"/>
         <source>Bass Balalaika</source>
         <comment>balalaika-bass longName</comment>
         <extracomment>longName for Bass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaică Bass</translation>
+        <translation>Balalaică bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5785"/>
@@ -17618,14 +17618,14 @@
         <source>Contrabass Balalaika</source>
         <comment>balalaika-contrabass trackName</comment>
         <extracomment>trackName for Contrabass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaică Contrabass</translation>
+        <translation>Balalaică contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5792"/>
         <source>Contrabass Balalaika</source>
         <comment>balalaika-contrabass longName</comment>
         <extracomment>longName for Contrabass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Balalaică Contrabass</translation>
+        <translation>Balalaică contrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5794"/>
