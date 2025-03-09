@@ -2964,7 +2964,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5702"/>
         <source>Combine voices that share the same stem direction</source>
-        <translation>合并移動方向一致的聲部</translation>
+        <translation>合併移動方向一致的聲部</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5769"/>
@@ -3047,12 +3047,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11861"/>
         <source>Min. margin to current staff:</source>
-        <translation>當前譜表的最小内邊距</translation>
+        <translation>當前譜表的最小內邊距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11813"/>
         <source>Min. margin to other staves:</source>
-        <translation>其他譜表的最小内邊距</translation>
+        <translation>其他譜表的最小內邊距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11972"/>
@@ -3127,17 +3127,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>滑音与音符锚索</translation>
+        <translation>滑音與音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
         <source>Cue sizes</source>
-        <translation>缩小化元素</translation>
+        <translation>縮小化元素</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2064"/>
         <source>Reduce rhythmic spacing for small notes</source>
-        <translation>减少小音符的节奏间距</translation>
+        <translation>減少小音符的節奏間距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3436"/>
@@ -3360,12 +3360,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5292"/>
         <source>Mask barlines</source>
-        <translation>小节线衬</translation>
+        <translation>小節線襯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Mask barlines when intersecting text</source>
-        <translation>文本压到小节线加衬</translation>
+        <translation>文本壓到小節線加襯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5393"/>
@@ -3451,12 +3451,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6035"/>
         <source>Center between staves on multi-staff instruments</source>
-        <translation>在多谱乐器的谱表之间居中</translation>
+        <translation>在多譜樂器的譜表之間居中</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6084"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
-        <translation>重置“若数字重叠则断开H型休止符”值</translation>
+        <translation>重置“若數字重疊則斷開H型休止符”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6138"/>
@@ -3477,17 +3477,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6245"/>
         <source>Reset &apos;Horizontal stroke thickness&apos; value</source>
-        <translation>重置“横条粗细”值</translation>
+        <translation>重置“橫條粗細”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6274"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
-        <translation>重置“小节线之间的休止符边距”值</translation>
+        <translation>重置“小節線之間的休止符邊距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6323"/>
         <source>Reset &apos;Vertical stroke thickness&apos; value</source>
-        <translation>重置“垂直端粗细”值</translation>
+        <translation>重置“垂直端粗細”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6362"/>
@@ -3767,28 +3767,28 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5940"/>
         <source>Fixed, based on time signature of:</source>
-        <translation>相对拍号的：</translation>
+        <translation>相對拍號的：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5845"/>
         <source>Proportional to time signature</source>
-        <translation>与拍号成常比</translation>
+        <translation>與拍號成常比</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5926"/>
         <source>Cap width after:</source>
-        <translation>后方宽度上限：</translation>
+        <translation>後方寬度上限：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5957"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5960"/>
         <source>On single empty measure</source>
-        <translation>在单独的空小节中</translation>
+        <translation>在單獨的空小節中</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5966"/>
         <source>Use normal rest</source>
-        <translation>使用常规休止符</translation>
+        <translation>使用常規休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5993"/>
@@ -3799,27 +3799,27 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6003"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6006"/>
         <source>Number layout</source>
-        <translation>数字版式：</translation>
+        <translation>數字版式：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6074"/>
         <source>Break H-bar if number overlaps</source>
-        <translation>若数字重叠则断开H型休止符</translation>
+        <translation>若數字重疊則斷開H型休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6213"/>
         <source>Horizontal stroke thickness:</source>
-        <translation>横条粗细：</translation>
+        <translation>橫條粗細：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6284"/>
         <source>Margin within barlines:</source>
-        <translation>小节线内边距</translation>
+        <translation>小節線內邊距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6294"/>
         <source>Vertical stroke thickness:</source>
-        <translation>垂直端粗细：</translation>
+        <translation>垂直端粗細：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6333"/>
@@ -4472,27 +4472,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8043"/>
         <source>Minimum hanging tie length:</source>
-        <translation>最小悬浮延音线长度：</translation>
+        <translation>最小懸浮延音線長度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8081"/>
         <source>Reset &apos;Minimum hanging tie length&apos; value</source>
-        <translation>重置“最小悬浮延音线长度”值</translation>
+        <translation>重置“最小懸浮延音線長度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
         <source>Laissez vibrer</source>
-        <translation>放任号</translation>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8130"/>
         <source>Minimum laissez vibrer length:</source>
-        <translation>最小放任号长度：</translation>
+        <translation>最小放任號長度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8193"/>
         <source>Use SMuFL symbols</source>
-        <translation>使用SMuFL符号</translation>
+        <translation>使用SMuFL符號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
@@ -4504,22 +4504,22 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10180"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10183"/>
         <source>Note-anchored lines</source>
-        <translation>音符锚索</translation>
+        <translation>音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
-        <translation>小颤音音符</translation>
+        <translation>小顫音音符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
         <source>Show only for intervals other than seconds</source>
-        <translation>仅显示二度以外的音程</translation>
+        <translation>僅顯示二度以外的音程</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11049"/>
         <source>Show for all intervals</source>
-        <translation>显示所有音程</translation>
+        <translation>顯示所有音程</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
@@ -5115,7 +5115,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="851"/>
         <source>Show number ‘1’</source>
-        <translation>显示数字“1”</translation>
+        <translation>顯示數字“1”</translation>
     </message>
 </context>
 <context>
@@ -5389,12 +5389,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="471"/>
         <source>Apply and go to previous measure</source>
-        <translation>应用并前往上一小节</translation>
+        <translation>應用並前往上一小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="487"/>
         <source>Apply and go to next measure</source>
-        <translation>应用并前往下一小节</translation>
+        <translation>應用並前往下一小節</translation>
     </message>
 </context>
 <context>
@@ -6456,7 +6456,7 @@ text x-height):</source>
 <context>
     <name>accessibility</name>
     <message>
-        <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="259"/>
+        <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="280"/>
         <source>Panel</source>
         <translation>面板</translation>
     </message>
@@ -6635,7 +6635,7 @@ text x-height):</source>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="240"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="85"/>
         <source>Redo ‘%1’</source>
-        <translation>恢复“%1”</translation>
+        <translation>恢復“%1”</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2052"/>
@@ -6908,12 +6908,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation>每行小节... (&amp;M)</translation>
+        <translation>每行小節... (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Measures per system…</source>
-        <translation>每行小节...</translation>
+        <translation>每行小節...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
@@ -7263,7 +7263,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="60"/>
         <source>Customize kit…</source>
-        <translation>自定义套组...</translation>
+        <translation>自定義套組...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="65"/>
@@ -7668,19 +7668,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="637"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="638"/>
         <source>Add/remove system lock</source>
-        <translation>添加/移除谱行锁</translation>
+        <translation>添加/移除譜行鎖</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <source>Move measure to previous system</source>
-        <translation>将小节移至上一谱行</translation>
+        <translation>將小節移至上一譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="651"/>
         <source>Move measure to next system</source>
-        <translation>将小节移至下一谱行</translation>
+        <translation>將小節移至下一譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
@@ -7886,12 +7886,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1243"/>
         <source>&amp;Note-anchored line</source>
-        <translation>音符锚线 (&amp;M)</translation>
+        <translation>音符錨線 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
         <source>Add note-anchored line</source>
-        <translation>添加音符锚线</translation>
+        <translation>添加音符錨線</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1255"/>
@@ -7976,7 +7976,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1338"/>
         <source>C&amp;hord symbol</source>
-        <translation>和弦符号 (&amp;H)</translation>
+        <translation>和弦符號 (&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1339"/>
@@ -8325,7 +8325,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1770"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
         <source>Add lyrics verse</source>
-        <translation>添加唱词段落</translation>
+        <translation>添加唱詞段落</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
@@ -8593,12 +8593,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
         <source>Laissez vibrer</source>
-        <translation>放任号</translation>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
         <source>Add laissez vibrer</source>
-        <translation>添加放任号</translation>
+        <translation>添加放任號</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
@@ -8660,39 +8660,59 @@ text x-height):</source>
         <translation>顯示元素的矩形邊界</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2570"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2565"/>
+        <source>Show/hide element bounding rectangles</source>
+        <translation>顯示/隱藏元素邊界矩形</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2571"/>
         <source>Color element shapes</source>
         <translation>元素形狀上色</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2576"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2577"/>
         <source>Show segment shapes</source>
         <translation>顯示區段形狀</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2582"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2578"/>
+        <source>Show/hide segment shapes</source>
+        <translation>顯示/隱藏區段形狀</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2584"/>
         <source>Color segment shapes</source>
         <translation>區段形狀上色</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2588"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2590"/>
         <source>Show skylines</source>
         <translation>顯示輪廓線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2594"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2591"/>
+        <source>Show/hide skylines</source>
+        <translation>顯示/隱藏輪廓線</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2597"/>
         <source>Show system bounding rectangles</source>
         <translation>顯示總譜的矩形邊界</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2600"/>
-        <source>Show element masks</source>
-        <translation>显示元素衬</translation>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2598"/>
+        <source>Show/hide system bounding rectangles</source>
+        <translation>顯示/隱藏譜行組邊界矩形</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2606"/>
-        <source>Show corrupted measures</source>
-        <translation>顯示有問題的小節</translation>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2604"/>
+        <source>Show element masks</source>
+        <translation>顯示元素襯</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2605"/>
+        <source>Show/hide element masks</source>
+        <translation>顯示/隱藏元素襯</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1998"/>
@@ -8814,22 +8834,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2066"/>
         <source>Input by note name</source>
-        <translation>通过音名输入</translation>
+        <translation>通過音名輸入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
         <source>Toggle note input mode: input by note name</source>
-        <translation>切换音符输入模式：按音符名称输入</translation>
+        <translation>切換音符輸入模式：按音符名稱輸入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2073"/>
         <source>Input by duration</source>
-        <translation>按时值输入</translation>
+        <translation>按時值輸入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
         <source>Toggle note input mode: input by duration</source>
-        <translation>切换音符输入模式：按时值输入</translation>
+        <translation>切換音符輸入模式：按時值輸入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
@@ -8977,139 +8997,149 @@ text x-height):</source>
         <translation>自動設置符槓模式</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="53"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="54"/>
         <source>Restart</source>
         <translation>重啓</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="58"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="59"/>
         <source>&amp;Full screen</source>
         <translation>全屏(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="65"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="66"/>
         <source>&amp;About MuseScore Studio…</source>
         <translation>關於&amp;MuseScore Studio…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="70"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="71"/>
         <source>About &amp;Qt…</source>
         <translation>關於 &amp;Qt…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="75"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="76"/>
         <source>About &amp;MusicXML…</source>
         <translation>關於 &amp;MusicXML…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="80"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="81"/>
         <source>Online &amp;handbook</source>
         <translation>在線手冊(&amp;h)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="86"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="87"/>
         <source>As&amp;k for help</source>
         <translation>尋求幫助(&amp;k)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="91"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Revert to &amp;factory settings</source>
         <translation>恢復初始設置(&amp;f)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="107"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
         <source>&amp;Playback controls</source>
         <translation>播放控件(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="109"/>
         <source>Show/hide playback controls</source>
         <translation>顯示/隱藏播放控件</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="115"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="116"/>
         <source>Show/hide note input toolbar</source>
         <translation>顯示/隱藏音符輸入工具欄</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="123"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
         <source>&amp;Palettes</source>
         <translation>符號面板(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="125"/>
         <source>Show/hide palettes</source>
         <translation>顯示/隱藏面板</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
         <source>Propert&amp;ies</source>
         <translation>屬性(&amp;i)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="139"/>
         <source>Show/hide properties</source>
         <translation>顯示/隱藏屬性</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="144"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
         <source>Se&amp;lection filter</source>
         <translation>篩選器(&amp;l)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>
         <source>Show/hide selection filter</source>
         <translation>顯示/隱藏篩選器</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
-        <source>&amp;History</source>
-        <translation>历史  (&amp;L)</translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
-        <source>Show/hide undo history</source>
-        <translation>显示/隐藏撤销历史</translation>
+        <source>&amp;History</source>
+        <translation>歷史  (&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="160"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
+        <source>Show/hide undo history</source>
+        <translation>顯示/隱藏撤銷歷史</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
         <source>&amp;Navigator</source>
         <translation>導航視圖(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
         <source>Show/hide navigator</source>
         <translation>顯示/隱藏導航視圖</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="169"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="170"/>
         <source>&amp;Braille</source>
         <translation>盲文(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="170"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="171"/>
         <source>Show/hide braille panel</source>
         <translation>顯示/隱藏盲文面板</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="178"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
         <source>Tim&amp;eline</source>
         <translation>時間軸(&amp;e)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="180"/>
         <source>Show/hide timeline</source>
         <translation>顯示/隱藏時間線</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="187"/>
         <source>Show/hide mixer</source>
         <translation>顯示/隱藏混音器</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="195"/>
         <source>Show/hide piano keyboard</source>
         <translation>顯示/隱藏琴鍵</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
+        <source>Percussion</source>
+        <translation>鼓譜</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="202"/>
+        <source>Show/hide percussion panel</source>
+        <translation>顯示/隱藏打擊樂面板</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="216"/>
@@ -9127,47 +9157,47 @@ text x-height):</source>
         <translation>偏好設置…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="93"/>
         <source>Revert to factory settings</source>
         <translation>恢復初始設置</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="59"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="60"/>
         <source>Full screen</source>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="81"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="82"/>
         <source>Open online handbook</source>
         <translation>開啓在線手冊</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="99"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the &amp;default layout</source>
         <translation>恢復默認版面(&amp;d)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="101"/>
         <source>Restore the default layout</source>
         <translation>恢復默認版面</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="115"/>
         <source>&amp;Note input</source>
         <translation>音符輸入(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
-        <source>&amp;Layout</source>
-        <translation>布局 (&amp;L)</translation>
-    </message>
-    <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
-        <source>Show/hide layout panel</source>
-        <translation>显示/隐藏布局面板</translation>
+        <source>&amp;Layout</source>
+        <translation>佈局 (&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="193"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
+        <source>Show/hide layout panel</source>
+        <translation>顯示/隱藏佈局面板</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
         <source>Piano &amp;keyboard</source>
         <translation>鋼琴鍵盤(&amp;k)</translation>
     </message>
@@ -9182,13 +9212,13 @@ text x-height):</source>
         <translation>檢查更新(&amp;u)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="185"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
         <source>Mixer</source>
         <translation>混音器</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="47"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="48"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="49"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
@@ -9221,22 +9251,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="96"/>
         <source>Written pitch</source>
-        <translation>谱面音高</translation>
+        <translation>譜面音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="97"/>
         <source>Input written pitch</source>
-        <translation>输入谱面音高</translation>
+        <translation>輸入譜面音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="104"/>
         <source>Sounding pitch</source>
-        <translation>听感音高</translation>
+        <translation>聽感音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="105"/>
         <source>Input sounding pitch</source>
-        <translation>输入听感音高</translation>
+        <translation>輸入聽感音高</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="123"/>
@@ -9247,17 +9277,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="131"/>
         <source>Hear playback when editing</source>
-        <translation>边编辑边听回放效果</translation>
+        <translation>邊編輯邊聽回放效果</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="132"/>
         <source>Toggle hear playback when editing</source>
-        <translation>切换边编辑边听回放效果</translation>
+        <translation>切換邊編輯邊聽回放效果</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="139"/>
         <source>Pan score automatically</source>
         <translation>自動追蹤光標</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="175"/>
+        <source>Reload playback cache</source>
+        <translation>重新加載播放緩存</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="86"/>
@@ -9585,7 +9620,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="658"/>
         <source>Create system from selection</source>
-        <translation>从选区创建谱行</translation>
+        <translation>從選區創建譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
@@ -9916,19 +9951,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1615"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
         <source>Lock/unlock all systems</source>
-        <translation>锁定/解锁所有谱行</translation>
+        <translation>鎖定/解鎖所有譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1621"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1622"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation>锁定/解锁所选谱行</translation>
+        <translation>鎖定/解鎖所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1650"/>
         <source>Flip horizontally</source>
-        <translation>水平翻转</translation>
+        <translation>水平翻轉</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1662"/>
@@ -10269,6 +10304,17 @@ text x-height):</source>
         <translation>標記不規則小節(&amp;i)</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2611"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
+        <source>Mark corrupted measures</source>
+        <translation>標記錯亂小節</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2618"/>
+        <source>Check for score corruptions</source>
+        <translation>檢查樂譜錯誤</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1686"/>
         <source>Previous beat (Chord symbol)</source>
         <translation>前一拍（和弦符號）</translation>
@@ -10384,22 +10430,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="77"/>
         <source>Show &amp;actions list</source>
-        <translation>显示操作列表 (&amp;X)</translation>
+        <translation>顯示操作列表 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="82"/>
         <source>Test query action</source>
-        <translation>测试查询操作</translation>
+        <translation>測試查詢操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="87"/>
         <source>Test query action with params 1</source>
-        <translation>使用参数1测试查询操作</translation>
+        <translation>使用參數1測試查詢操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="92"/>
         <source>Test query action with params 2</source>
-        <translation>使用参数2测试查询操作</translation>
+        <translation>使用參數2測試查詢操作</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
@@ -10419,7 +10465,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
         <source>Show API dump</source>
-        <translation>显示API转存</translation>
+        <translation>顯示API轉存</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
@@ -10429,17 +10475,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload Muse Sampler</source>
-        <translation>重載Muse采樣器</translation>
+        <translation>重載Muse採樣器</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
         <source>Use old view</source>
-        <translation>使用旧视图</translation>
+        <translation>使用舊視圖</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="44"/>
         <source>Use new view</source>
-        <translation>使用新视图</translation>
+        <translation>使用新視圖</translation>
     </message>
 </context>
 <context>
@@ -10503,7 +10549,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="164"/>
         <source>Extensions toolbar</source>
-        <translation>扩展包工具栏</translation>
+        <translation>擴展包工具欄</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="220"/>
@@ -10695,16 +10741,16 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation>您确定要重置偏好设置吗？</translation>
+        <translation>您確定要重置偏好設置嗎？</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation>此操作将重置您的所有应用偏好设置并删除所有自定义快捷方式。它不会删除您的任何乐谱。
+        <translation>此操作將重置您的所有應用偏好設置並刪除所有自定義快捷方式。它不會刪除您的任何樂譜。
 
-此操作无法撤消。</translation>
+此操作無法撤消。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
@@ -10749,8 +10795,8 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
         <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>版权所有 © 1999-2025 MuseScore有限公司。
-依照 &lt;a href=&quot;%1&quot;&gt;GNU通用公共许可协议第3版&lt;/a&gt;发布。</translation>
+        <translation>版權所有 © 1999-2025 MuseScore有限公司。
+依照 &lt;a href=&quot;%1&quot;&gt;GNU通用公共許可協議第3版&lt;/a&gt;發佈。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -10816,7 +10862,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Discover new sound libraries in MuseHub and enjoy realistic score playback</source>
-        <translation>在MuseHub中发现新的声音库，并享受逼真的乐谱播放</translation>
+        <translation>在MuseHub中發現新的聲音庫，並享受逼真的樂譜播放</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -10877,8 +10923,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
-        <source>If you choose to cancel, then be sure to check out our free MuseSounds playback library on musescore.org.</source>
-        <translation>倘若您选择取消，请务必在musescore.org上查看我们的免费MuseSounds播放库。</translation>
+        <source>If you choose to cancel, then be sure to check out our free MuseSounds playback library on MuseScore.org.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10927,49 +10973,49 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostics</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="425"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="426"/>
         <source>&amp;System</source>
         <translation>總譜(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="439"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="440"/>
         <source>&amp;Muse Sampler</source>
         <translation>&amp;Muse採樣器</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="483"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="485"/>
         <source>A&amp;ctions</source>
         <translation>操作 (&amp;Z)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="484"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="486"/>
         <source>&amp;Accessibility</source>
         <translation>便捷訪問(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="485"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="487"/>
         <source>&amp;Engraving</source>
         <translation>雕版(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="486"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
         <source>E&amp;xtensions</source>
-        <translation>扩展 (&amp;K</translation>
+        <translation>擴展 (&amp;K</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="487"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="489"/>
         <source>Auto&amp;bot</source>
         <translation>機器人(&amp;b)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="490"/>
         <source>&amp;VST</source>
         <translation>&amp;VST</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="492"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="494"/>
         <source>&amp;Diagnostics</source>
-        <translation>诊断 (&amp;D</translation>
+        <translation>診斷 (&amp;D</translation>
     </message>
 </context>
 <context>
@@ -11293,37 +11339,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="90"/>
         <source>Infer text type based on content where possible</source>
-        <translation>盡量按照内容來推測文本類型</translation>
+        <translation>盡量按照內容來推測文本類型</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="44"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="49"/>
         <source>Note preview</source>
-        <translation>音符预览</translation>
+        <translation>音符預覽</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="70"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="78"/>
         <source>Hear playback when adding, editing, and selecting notes</source>
-        <translation>在添加、编辑和选择笔记时预览回放</translation>
+        <translation>在添加、編輯和選擇筆記時預覽回放</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="77"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="85"/>
         <source>Playback duration:</source>
-        <translation>播放时长：</translation>
+        <translation>播放時長：</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="100"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="108"/>
         <source>Play chord when editing</source>
         <translation>編輯時播放和弦</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="117"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="125"/>
         <source>Play chord symbols and Nashville numbers</source>
-        <translation>演奏和弦符号和纳什维尔数字</translation>
+        <translation>演奏和弦符號和納什維爾數字</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="134"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="142"/>
         <source>Play when setting pitch (input by duration mode only)</source>
-        <translation>设置音高时播放（仅通过时值模式输入）</translation>
+        <translation>設置音高時播放（僅通過時值模式輸入）</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="159"/>
+        <source>Play MIDI input</source>
+        <translation>播放MIDI輸入</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
@@ -11334,27 +11385,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="48"/>
         <source>Default input mode:</source>
-        <translation>默认输入模式：</translation>
+        <translation>默認輸入模式：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="62"/>
         <source>Apply accidentals, augmentation dots, and articulations:</source>
-        <translation>应用变音号、附点及运音法记号</translation>
+        <translation>應用變音號、附點及運音法記號</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
         <source>To next note entered</source>
-        <translation>至下一个已输入音符</translation>
+        <translation>至下一個已輸入音符</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="70"/>
         <source>To previous note entered</source>
-        <translation>至上一个已输入音符</translation>
+        <translation>至上一個已輸入音符</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="81"/>
         <source>Input by duration mode cursor:</source>
-        <translation>以时值模式光标输入：</translation>
+        <translation>以時值模式光標輸入：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="88"/>
@@ -11364,12 +11415,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="89"/>
         <source>On staff</source>
-        <translation>在谱表内</translation>
+        <translation>在譜表內</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="37"/>
         <source>Note colors</source>
-        <translation>音符颜色</translation>
+        <translation>音符顏色</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="43"/>
@@ -11846,37 +11897,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
         <source>MIDI devices</source>
-        <translation>MIDI设备</translation>
+        <translation>MIDI設備</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="69"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="72"/>
         <source>Enable MIDI input</source>
         <translation>啓用 Midi 輸入</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="78"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="81"/>
         <source>When pressing a key, begin note input at the selected measure, note, or rest</source>
-        <translation>当按下按键时，在选定的小节、音符或休止处开始输入音符</translation>
+        <translation>當按下按鍵時，在選定的小節、音符或休止處開始輸入音符</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="93"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="96"/>
         <source>Real-time input modes</source>
-        <translation>实时输入模式</translation>
+        <translation>實時輸入模式</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="106"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="109"/>
         <source>Advance to next note on key release</source>
-        <translation>松开按键时前往下一个音符</translation>
+        <translation>松開按鍵時前往下一個音符</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="123"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="126"/>
         <source>Delay between notes:</source>
-        <translation>音符间延迟：</translation>
+        <translation>音符間延遲：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="139"/>
         <source>Legacy panel</source>
-        <translation>旧面板</translation>
+        <translation>舊面板</translation>
     </message>
 </context>
 <context>
@@ -11989,7 +12040,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="39"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation>這會創建一個包含了MuseScore Studio配置信息的.zip檔案，來幫助開發者診斷你遇到的問題。在把它發送給他人之前，你可以檢查此檔案的内容。</translation>
+        <translation>這會創建一個包含了MuseScore Studio配置信息的.zip檔案，來幫助開發者診斷你遇到的問題。在把它發送給他人之前，你可以檢查此檔案的內容。</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="53"/>
@@ -12128,75 +12179,75 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>弦線編號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="918"/>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1019"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="927"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1028"/>
         <source>with chord symbol %1</source>
         <translation>含和弦記號%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="920"/>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1020"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="929"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1029"/>
         <source>without chord symbol</source>
         <translation>無和弦記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="933"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="942"/>
         <source>string %1</source>
         <translation>弦%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="939"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="948"/>
         <source>circle marker</source>
         <translation>圓標</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="942"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="951"/>
         <source>cross marker</source>
         <translation>叉標</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="974"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="983"/>
         <source>%1 and %2</source>
         <translation>%1 和 %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/dom/fret.cpp" line="982"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="991"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation><numerusform>品格%1上有%n個點</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="994"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1003"/>
         <source>fret %1</source>
         <translation>品格 %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="998"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1007"/>
         <source>barré %1</source>
         <translation>橫按 %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1000"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1009"/>
         <source>beginning string %1</source>
         <translation>起始弦 %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1003"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1012"/>
         <source>and ending string %1</source>
         <translation>結束弦 %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1006"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1015"/>
         <source>partial barré %1 %2 %3</source>
         <translation>局部橫按 %1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/fret.cpp" line="1015"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1024"/>
         <source>no content</source>
         <translation>無內容</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/dom/fret.cpp" line="1024"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1033"/>
         <source>%n string(s) total</source>
         <translation><numerusform>共%n根弦</numerusform></translation>
     </message>
@@ -12209,23 +12260,23 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>自定義</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1602"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1616"/>
         <source>Roman numeral</source>
         <translation>羅馬數字</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1604"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1618"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1257"/>
         <source>Nashville number</source>
         <translation>納什維爾數字</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/harmony.cpp" line="1642"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="1656"/>
         <source>lower case</source>
         <translation>小寫</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/instrchange.cpp" line="150"/>
+        <location filename="../../src/engraving/dom/instrchange.cpp" line="153"/>
         <source>To %1</source>
         <extracomment>The text of an &quot;instrument change&quot; marking. It is an instruction to the player to switch to another instrument.</extracomment>
         <translation>改為%1</translation>
@@ -12342,12 +12393,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>對業餘者過高</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="434"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="431"/>
         <source>Note input will remove measure repeat</source>
         <translation>音符輸入將移除小節反復號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="435"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="432"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation>該小節包含一個小節反復號。若您在這裡輸入音符，它將被刪除。您想繼續嗎？</translation>
     </message>
@@ -13348,42 +13399,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="178"/>
         <source>Laissez vibrer segment</source>
-        <translation>放任号区段</translation>
+        <translation>放任號區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
         <source>Extension line segment</source>
-        <translation>唱词延长区段</translation>
+        <translation>唱詞延長區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>Note-anchored line segment</source>
-        <translation>音符锚索区段</translation>
+        <translation>音符錨索區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>Laissez vibrer</source>
-        <translation>放任号</translation>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
         <source>Partial tie segment</source>
-        <translation>局部延音线区段</translation>
+        <translation>局部延音線區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Partial tie</source>
-        <translation>局部延音线</translation>
+        <translation>局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>Partial extension line segment</source>
-        <translation>唱词局部延长线区段</translation>
+        <translation>唱詞局部延長線區段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="256"/>
         <source>System lock</source>
-        <translation>谱行锁</translation>
+        <translation>譜行鎖</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
@@ -13394,7 +13445,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1274"/>
         <source>Note-anchored line</source>
-        <translation>音符锚索</translation>
+        <translation>音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
@@ -13404,7 +13455,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
         <source>Partial extension line</source>
-        <translation>唱词局部延长线</translation>
+        <translation>唱詞局部延長線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="316"/>
@@ -13424,7 +13475,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="324"/>
         <source>Jumps</source>
-        <translation>跳转记号</translation>
+        <translation>跳轉記號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="325"/>
@@ -14000,8 +14051,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
-        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>此檔案使用了較新版本的MuseScore Studio保存。请訪問&lt;a href=&quot;https://musescore.org&quot;&gt;museScore.org&lt;/a&gt;來獲取最新版本。</translation>
+        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="92"/>
@@ -14051,27 +14102,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>無法創建比例為%1時值為%2的連音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7339"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7385"/>
         <source>Remove stale partial tie</source>
-        <translation>移除失效的局部延音线</translation>
+        <translation>移除失效的局部延音線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7351"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7397"/>
         <source>Reset incoming partial slur</source>
-        <translation>重置传入部分的分句线</translation>
+        <translation>重置傳入部分的分句線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7357"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7403"/>
         <source>Reset outgoing partial slur</source>
-        <translation>重置传出部分的分句线</translation>
+        <translation>重置傳出部分的分句線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/check.cpp" line="146"/>
+        <location filename="../../src/engraving/dom/check.cpp" line="145"/>
         <source>Full score</source>
         <translation>完整樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/check.cpp" line="150"/>
+        <location filename="../../src/engraving/dom/check.cpp" line="149"/>
         <source>Part score: %1</source>
         <extracomment>%1 is the name of a part score.</extracomment>
         <translation>分譜 %1</translation>
@@ -14082,13 +14133,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>&lt;b&gt;錯誤小節&lt;/b&gt;：%3譜表，%2節，%1。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/check.cpp" line="200"/>
+        <location filename="../../src/engraving/dom/check.cpp" line="199"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
         <translation>&lt;b&gt;不完整小節&lt;/b&gt;：%3譜表，%2節，%1。理應：%5，實際：%4。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/check.cpp" line="215"/>
+        <location filename="../../src/engraving/dom/check.cpp" line="213"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
         <translation>&lt;b&gt;聲部過長&lt;/b&gt;：%3譜表，%2節，%1，%4聲部。理應：%6，實際：%5。</translation>
@@ -14106,12 +14157,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="127"/>
         <source>Frame color</source>
-        <translation>边框颜色</translation>
+        <translation>邊框顏色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="134"/>
         <source>Score grey color</source>
-        <translation>乐谱灰色</translation>
+        <translation>樂譜灰色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="138"/>
@@ -14121,7 +14172,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="145"/>
         <source>Invisible color</source>
-        <translation>不可见颜色</translation>
+        <translation>不可見顏色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="152"/>
@@ -14201,35 +14252,35 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="73"/>
         <source>Tie to %1 (m. %2)</source>
         <extracomment>%1 represents the preceding jump item eg. coda. %2 represents the measure number</extracomment>
-        <translation>延音线连至%1（小节%2）</translation>
+        <translation>延音線連至%1（小節%2）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="84"/>
         <source>start of score</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>乐谱开头</translation>
+        <translation>樂譜開頭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="100"/>
         <source>coda</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>尾声</translation>
+        <translation>尾聲</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="103"/>
         <source>segno</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>segno记号</translation>
+        <translation>segno記號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="117"/>
         <source>“%1” volta</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;. %1 in this string represents the volta's text set by the user</extracomment>
-        <translation>“%1”八度记号</translation>
+        <translation>“%1”八度記號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="123"/>
@@ -14237,46 +14288,46 @@ Fret %1 on strings %2</source>
         <source>start repeat</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>开始反复</translation>
+        <translation>開始反復</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="142"/>
         <source>next note</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>下个音符</translation>
+        <translation>下個音符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="146"/>
         <source>invalid</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>无效</translation>
+        <translation>無效</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="209"/>
         <source>Toggle partial tie</source>
-        <translation>切换局部延音线</translation>
+        <translation>切換局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="469"/>
         <source>Replace full tie with partial tie</source>
-        <translation>用局部延音线替换全延音线</translation>
+        <translation>用局部延音線替換全延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="470"/>
         <source>Replace partial tie with full tie</source>
-        <translation>用全延音线替换局部延音线</translation>
+        <translation>用全延音線替換局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="184"/>
         <source>Remove partial tie</source>
-        <translation>移除局部延音线</translation>
+        <translation>移除局部延音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/systemlock.cpp" line="169"/>
         <source>Start measure: %1; End measure: %2</source>
-        <translation>起点小节：%1；终点小节：%2</translation>
+        <translation>起點小節：%1；終點小節：%2</translation>
     </message>
 </context>
 <context>
@@ -15755,12 +15806,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="909"/>
         <source>fp (Fortepiano)</source>
-        <translation>fp（強后立刻弱）</translation>
+        <translation>fp（強後立刻弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="911"/>
         <source>pf (Pianoforte)</source>
-        <translation>pf（弱后立刻強）</translation>
+        <translation>pf（弱後立刻強）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="914"/>
@@ -15795,12 +15846,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="926"/>
         <source>sfp (Sforzando-piano)</source>
-        <translation>sfp（突強后立刻弱）</translation>
+        <translation>sfp（突強後立刻弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="928"/>
         <source>sfpp (Sforzando-pianissimo)</source>
-        <translation>sfpp（突強后轉爲極弱）</translation>
+        <translation>sfpp（突強後轉爲極弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="931"/>
@@ -17226,17 +17277,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3533"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation>谐和地重新表达近似相等的变音号</translation>
+        <translation>諧和地重新表達近似相等的變音號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3534"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation>谐和地重新表达相等的变音号</translation>
+        <translation>諧和地重新表達相等的變音號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3535"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation>谐和地重新表达变音波形号</translation>
+        <translation>諧和地重新表達變音波形號</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3541"/>
@@ -18221,7 +18272,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5582"/>
         <source>Half-open 2 (Weinberg)</source>
-        <translation>半开2式（Weinberg）</translation>
+        <translation>半開2式（Weinberg）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5689"/>
@@ -18522,7 +18573,7 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/timesig</name>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="339"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="356"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1655"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1674"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="200"/>
@@ -18530,7 +18581,7 @@ Fret %1 on strings %2</source>
         <translation>常拍號（4/4）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="341"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="358"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1656"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1675"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="202"/>
@@ -18538,19 +18589,19 @@ Fret %1 on strings %2</source>
         <translation>二二拍子（簡寫）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="343"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="360"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1679"/>
         <source>Cut time (Bach)</source>
         <translation>二二拍（巴赫）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="345"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="362"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1680"/>
         <source>Cut triple time (9/8)</source>
         <translation>八九拍</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="347"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="364"/>
         <source>%1/%2 time</source>
         <translation>%1/%2拍</translation>
     </message>
@@ -18838,6 +18889,7 @@ Fret %1 on strings %2</source>
         <translation>增加</translation>
     </message>
     <message>
+        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="143"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="266"/>
@@ -18878,7 +18930,6 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="89"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="98"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
@@ -19193,8 +19244,8 @@ Fret %1 on strings %2</source>
         <translation>分鐘</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="130"/>
-        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="85"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="133"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="93"/>
         <source>ms</source>
         <extracomment>Abbreviation of &quot;milliseconds&quot;</extracomment>
         <translation>毫秒</translation>
@@ -19229,14 +19280,14 @@ Fret %1 on strings %2</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="261"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="271"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="81"/>
         <source>Collapse</source>
         <extracomment>Collapse a tree item</extracomment>
         <translation>合上</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="263"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="273"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="83"/>
         <source>Expand</source>
         <extracomment>Expand a tree item</extracomment>
@@ -19458,7 +19509,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation>可以随时在“偏好设置”中更改此设置</translation>
+        <translation>可以隨時在“偏好設置”中更改此設置</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -19779,7 +19830,7 @@ pickup measure</source>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="60"/>
         <source>Limit MusicXML export for compatibility with MuseScore 3</source>
         <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
-        <translation>强制以兼容MuseScore 3的方式導出MusicXML</translation>
+        <translation>強制以兼容MuseScore 3的方式導出MusicXML</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="65"/>
@@ -20183,17 +20234,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="94"/>
         <source>Move to system</source>
-        <translation>移到谱行</translation>
+        <translation>移到譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="115"/>
         <source>Previous</source>
-        <translation>上一个</translation>
+        <translation>上一個</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="117"/>
         <source>Move measure(s) to previous system</source>
-        <translation>将小节移至上一谱行组</translation>
+        <translation>將小節移至上一譜行組</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="134"/>
@@ -20203,48 +20254,48 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="136"/>
         <source>Move measure(s) to next system</source>
-        <translation>将小节移至下一谱行组</translation>
+        <translation>將小節移至下一譜行組</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="159"/>
         <source>Unlock selected systems</source>
-        <translation>解锁所选谱行</translation>
+        <translation>解鎖所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="160"/>
         <source>Unlock selected system</source>
-        <translation>解锁所选谱行</translation>
+        <translation>解鎖所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="161"/>
         <source>Lock selected systems</source>
-        <translation>锁定所选谱行</translation>
+        <translation>鎖定所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="162"/>
         <source>Lock selected system</source>
-        <translation>锁定所选谱行</translation>
+        <translation>鎖定所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="164"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation>锁定/解锁所选谱行</translation>
+        <translation>鎖定/解鎖所選譜行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation>将所选谱行的小节放在一行，并防止它们被挤到下一个谱行</translation>
+        <translation>將所選譜行的小節放在一行，並防止它們被擠到下一個譜行</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="186"/>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="188"/>
-        <source>Create system from selection</source>
-        <translation>从选区创建谱行组</translation>
-    </message>
-    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="187"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="189"/>
+        <source>Create system from selection</source>
+        <translation>從選區創建譜行組</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="190"/>
         <source>Create a system containing only the selected measure(s)</source>
-        <translation>创建一个只包含选定小节的谱行组</translation>
+        <translation>創建一個只包含選定小節的譜行組</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
@@ -20561,7 +20612,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation>显示建议的谱号</translation>
+        <translation>顯示建議的譜號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20702,7 +20753,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="65"/>
         <source>Barré</source>
-        <translation>食指横按</translation>
+        <translation>食指橫按</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="83"/>
@@ -20804,7 +20855,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation>显示提示调号</translation>
+        <translation>顯示提示調號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -21065,7 +21116,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
         <source>Number offset</source>
-        <translation>号码偏移</translation>
+        <translation>號碼偏移</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
@@ -21101,12 +21152,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="172"/>
         <source>Beam direction</source>
-        <translation>符杆方向</translation>
+        <translation>符桿方向</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
         <source>Move cross-staff beam</source>
-        <translation>移動跨譜表符杆</translation>
+        <translation>移動跨譜表符桿</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="227"/>
@@ -21166,7 +21217,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="188"/>
         <source>Combine with voices that share the same stem direction</source>
-        <translation>與移動方向一致的聲部合并</translation>
+        <translation>與移動方向一致的聲部合併</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
@@ -21226,7 +21277,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="64"/>
         <source>Show stem slash</source>
-        <translation>顯示符杆斜綫</translation>
+        <translation>顯示符桿斜綫</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
@@ -21289,7 +21340,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
         <source>Hide courtesy clefs and signatures</source>
-        <translation>隐藏提示谱号和记号</translation>
+        <translation>隱藏提示譜號和記號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -21423,7 +21474,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation>显示提示拍号</translation>
+        <translation>顯示提示拍號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -21971,12 +22022,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="53"/>
         <source>Laissez vibrer</source>
-        <translation>放任号</translation>
+        <translation>放任號</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="59"/>
         <source>Tie (partial)</source>
-        <translation>延音线（局部）</translation>
+        <translation>延音線（局部）</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="110"/>
@@ -22276,7 +22327,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
         <source>Cue note visibility</source>
-        <translation>小型音符可见性</translation>
+        <translation>小型音符可見性</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="219"/>
@@ -22316,7 +22367,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
         <source>Laissez vibrer placement</source>
-        <translation>放任号位置</translation>
+        <translation>放任號位置</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="98"/>
@@ -22335,7 +22386,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="106"/>
         <source>Minimum length</source>
-        <translation>最小长度</translation>
+        <translation>最小長度</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
@@ -22460,7 +22511,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/notelinesettingsmodel.cpp" line="31"/>
         <source>Note-anchored line</source>
-        <translation>音符锚索</translation>
+        <translation>音符錨索</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/measures/measuressettingsmodel.cpp" line="37"/>
@@ -22470,7 +22521,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml" line="44"/>
         <source>Score style preset</source>
-        <translation>乐谱样式预设</translation>
+        <translation>樂譜樣式預設</translation>
     </message>
 </context>
 <context>
@@ -22669,17 +22720,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="94"/>
         <source>Move selected system markings up</source>
-        <translation>上移所选谱行组记号</translation>
+        <translation>上移所選譜行組記號</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="119"/>
         <source>Move selected system markings down</source>
-        <translation>下移所选谱行组记号</translation>
+        <translation>下移所選譜行組記號</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="144"/>
         <source>Remove selected system markings</source>
-        <translation>移除所选谱行组记号</translation>
+        <translation>移除所選譜行組記號</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="117"/>
@@ -22710,20 +22761,20 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="40"/>
         <source>Add instruments or system markings</source>
-        <translation>添加乐器或谱行组标记</translation>
+        <translation>添加樂器或譜行組標記</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="49"/>
         <source>System markings (tempo, rehearsal marks, etc.)</source>
-        <translation>谱行组记号（速度、排练号等）</translation>
+        <translation>譜行組記號（速度、排練號等）</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="47"/>
         <source>New instrument</source>
-        <translation>新乐器</translation>
+        <translation>新樂器</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="313"/>
+        <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="323"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
@@ -22760,7 +22811,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml" line="57"/>
         <source>Display at this position on the score</source>
-        <translation>在乐谱上的这个位置显示</translation>
+        <translation>在樂譜上的這個位置顯示</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
@@ -22790,24 +22841,24 @@ pickup measure</source>
         <translation>收起所有樂器</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="888"/>
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="965"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
         <translation><numerusform>您確定要刪除所選的%n個樂器嗎？</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="893"/>
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="970"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
         <translation><numerusform>這將從總譜和及所有分譜中刪除%n個樂器。</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="239"/>
+        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="240"/>
         <source>Are you sure you want to reset all formatting?</source>
         <translation>您真的要重設所有格式嗎？</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="240"/>
+        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="241"/>
         <source>This action can not be undone</source>
         <translation>此操作無法撤消</translation>
     </message>
@@ -22825,12 +22876,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="38"/>
         <source>System markings</source>
-        <translation>谱行组记号</translation>
+        <translation>譜行組記號</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
         <source>System markings hidden</source>
-        <translation>已隐藏谱行组对象</translation>
+        <translation>已隱藏譜行組對象</translation>
     </message>
 </context>
 <context>
@@ -22892,13 +22943,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation>欢迎来到《精通MuseScore》——这里有学习全球最受欢迎的记谱软件：Musescore 的最全面的资源！我是Marc Sabatella，自十多年前MuseScore首次发布以来，我一直在帮助开发、支持和推广MuseScore。
+        <translation>歡迎來到《精通MuseScore》——這裡有學習全球最受歡迎的記譜軟件：Musescore 的最全面的資源！我是Marc Sabatella，自十多年前MuseScore首次發佈以來，我一直在幫助開發、支持和推廣MuseScore。
 
-无论您是刚开始使用软件，还是渴望探索高级制谱和播放技巧的高级用户，我的旗舰在线课程《精通MuseScore》涵盖了您需要了解的MuseScore的一切。
+無論您是剛開始使用軟件，還是渴望探索高級制譜和播放技巧的高級用戶，我的旗艦在線課程《精通MuseScore》涵蓋了您需要瞭解的MuseScore的一切。
 
-此外，《精通MuseScore》还设有一个支持性的音乐家社区，包括讨论区、直播和其他相关课程和服务，以帮助您创作出最好的音乐。利用这个机会从MuseScore最知名的专家之一那里学习MuseScore！
+此外，《精通MuseScore》還設有一個支持性的音樂家社區，包括討論區、直播和其他相關課程和服務，以幫助您創作出最好的音樂。利用這個機會從MuseScore最知名的專家之一那裡學習MuseScore！
 
- （注意：仅提供英语版本）</translation>
+ （注意：僅提供英語版本）</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="97"/>
@@ -23069,17 +23120,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="132"/>
         <source>Beam style</source>
-        <translation>符杠樣式</translation>
+        <translation>符槓樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="145"/>
         <source>Draw inner stems through beams</source>
-        <translation>符杠贯穿所有符杠</translation>
+        <translation>符槓貫穿所有符槓</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="146"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
-        <translation>符杠只连到外侧符杠（法式）</translation>
+        <translation>符槓只連到外側符槓（法式）</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
@@ -23105,12 +23156,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="71"/>
         <source>Show text:</source>
-        <translation>显示文本：</translation>
+        <translation>顯示文本：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="83"/>
         <source>Edit glissando text style</source>
-        <translation>编辑滑音线文本样式</translation>
+        <translation>編輯滑音線文本樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="100"/>
@@ -23210,7 +23261,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>音符輸入工具欄</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="195"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="188"/>
         <source>Show/hide toolbar buttons</source>
         <translation>顯示/隱藏工具欄按鈕</translation>
     </message>
@@ -23256,104 +23307,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="884"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="731"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="732"/>
         <source>Note input mode</source>
         <translation>音符輸入模式</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="886"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="731"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="732"/>
         <source>Normal mode</source>
         <translation>普通模式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="961"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="962"/>
         <source>Cannot create tuplet</source>
         <translation>無法創建連音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="961"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="962"/>
         <source>Note value is too short</source>
         <translation>音符時值過短</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1467"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1468"/>
         <source>All Supported Files</source>
         <translation>支持的全部檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1468"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1469"/>
         <source>Scalable Vector Graphics</source>
         <translation>可縮放矢量圖像</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1469"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1470"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1470"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1471"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG位圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1471"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1472"/>
         <source>Bitmap</source>
         <translation>點陣圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1472"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1473"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1475"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1476"/>
         <source>Insert Image</source>
         <translation>插入圖像</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1825"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1826"/>
         <source>MuseScore style files</source>
         <translation>MuseScore 樣式檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1826"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1827"/>
         <source>MuseScore style file</source>
         <translation>MuseScore 樣式檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1829"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1830"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2425"/>
         <source>Load style</source>
         <translation>加載樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1830"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1831"/>
         <source>Save style</source>
         <translation>保存樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1840"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1841"/>
         <source>The style file could not be loaded.</source>
         <translation>無法加載樣式檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1845"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1846"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation>這個樣式檔案來源於不同版本的 MuseScore Studio，所以無法確保你的樂譜顯示無誤。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1847"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1848"/>
         <source>Click OK to load anyway.</source>
         <translation>單擊確定以繼續加載。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1861"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1862"/>
         <source>The style file could not be saved.</source>
         <translation>無法保存樣式檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1862"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1863"/>
         <source>An error occurred.</source>
         <translation>發生錯誤。</translation>
     </message>
@@ -23385,12 +23436,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="130"/>
         <source>Move measures</source>
-        <translation>移动小节</translation>
+        <translation>移動小節</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="132"/>
         <source>Create system from selection</source>
-        <translation>从选区创建谱行组</translation>
+        <translation>從選區創建譜行組</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="208"/>
@@ -23420,12 +23471,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="257"/>
         <source>To previous system</source>
-        <translation>至上一谱行组</translation>
+        <translation>至上一譜行組</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="258"/>
         <source>To next system</source>
-        <translation>至下一谱行组</translation>
+        <translation>至下一譜行組</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -23685,12 +23736,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="64"/>
         <source>Dash (dashed line):</source>
-        <translation>虚线单长</translation>
+        <translation>虛線單長</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="70"/>
         <source>Gap (dashed line):</source>
-        <translation>虚线间隔</translation>
+        <translation>虛線間隔</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="81"/>
@@ -23728,7 +23779,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>視圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1473"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1474"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>全部</translation>
@@ -23817,7 +23868,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="80"/>
         <source>Nut line thickness:</source>
-        <translation>弦枕线粗细：</translation>
+        <translation>弦枕線粗細：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="88"/>
@@ -23882,7 +23933,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="176"/>
         <source>Barré</source>
-        <translation>食指横按</translation>
+        <translation>食指橫按</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="184"/>
@@ -23992,28 +24043,28 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="60"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="194"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="202"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="187"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="195"/>
         <source>Customize toolbar</source>
         <translation>自定工具欄</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="610"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="612"/>
         <source>Insert &amp;after selection…</source>
         <translation>在所選區域後插入…(&amp;a)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="611"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="613"/>
         <source>Insert &amp;before selection…</source>
         <translation>在所選區域前插入…(&amp;b)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="613"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="615"/>
         <source>Insert at &amp;start of score…</source>
         <translation>在樂譜開頭插入…(&amp;s)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="614"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="616"/>
         <source>Insert at &amp;end of score…</source>
         <translation>在樂譜末尾插入...(&amp;e)</translation>
     </message>
@@ -24444,12 +24495,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>下方</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="181"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="182"/>
         <source>Note input preview note color</source>
-        <translation>音符输入预览音符颜色</translation>
+        <translation>音符輸入預覽音符顏色</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="249"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="250"/>
         <source>Smooth panning</source>
         <translation>平滑平移</translation>
     </message>
@@ -24501,7 +24552,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="92"/>
         <source>Placement of inner ties with respect to augmentation dots:</source>
-        <translation>内延音线相对于附点的位置：</translation>
+        <translation>內延音線相對於附點的位置：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="101"/>
@@ -24511,12 +24562,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
         <source>Always before dots</source>
-        <translation>总在附点前</translation>
+        <translation>總在附點前</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="117"/>
         <source>Always after dots</source>
-        <translation>总在附点后</translation>
+        <translation>總在附點後</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
@@ -24541,17 +24592,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
         <source>Input pitch</source>
-        <translation>输入音高</translation>
+        <translation>輸入音高</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
         <source>Extensions toolbar</source>
-        <translation>扩展包工具栏</translation>
+        <translation>擴展包工具欄</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="375"/>
         <source>History</source>
-        <translation>历史</translation>
+        <translation>歷史</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="619"/>
@@ -24566,17 +24617,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml" line="56"/>
         <source>Edit note-anchored line text style</source>
-        <translation>编辑音符锚索文本样式</translation>
+        <translation>編輯音符錨索文本樣式</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="57"/>
         <source>Dynamics Popup</source>
-        <translation>动态弹出窗口</translation>
+        <translation>動態彈出窗口</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="735"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="699"/>
         <source>Small parentheses</source>
-        <translation>小括号</translation>
+        <translation>小括號</translation>
     </message>
 </context>
 <context>
@@ -24585,7 +24636,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/breaksdialog.cpp" line="43"/>
         <source>Lock layout with %1 measure(s) per system</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation>锁定版面为每行固定%1小节</translation>
+        <translation>鎖定版面為每行固定%1小節</translation>
     </message>
 </context>
 <context>
@@ -24779,7 +24830,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="802"/>
         <source>Inside the header</source>
-        <translation>在譜頭内</translation>
+        <translation>在譜頭內</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="804"/>
@@ -24968,9 +25019,9 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="81"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="455"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="459"/>
         <source>Visibility:</source>
-        <translation>可见性：</translation>
+        <translation>可見性：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="88"/>
@@ -24985,7 +25036,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="101"/>
         <source>Hide tab clefs after the first system where they appear</source>
-        <translation>在首个谱行组出现后隐藏指法谱号</translation>
+        <translation>在首個譜行組出現後隱藏指法譜號</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
@@ -25020,174 +25071,174 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="159"/>
         <source>On all staves</source>
-        <translation>在所有谱表上方</translation>
+        <translation>在所有譜表上方</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="160"/>
         <source>Above staves</source>
-        <translation>在谱表之上</translation>
+        <translation>在譜表之上</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="161"/>
         <source>Across staves</source>
-        <translation>横跨谱表</translation>
+        <translation>橫跨譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
         <source>Set where time signatures appear using the Layout panel.</source>
-        <translation>使用布局面板设置拍号的显示位置。</translation>
+        <translation>使用佈局面板設置拍號的顯示位置。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="189"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="191"/>
         <source>Style and size</source>
-        <translation>样式与大小</translation>
+        <translation>樣式與大小</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="203"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="205"/>
         <source>Numeral style:</source>
-        <translation>数字样式：</translation>
+        <translation>數字樣式：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="249"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="251"/>
         <source>Alignment with barlines:</source>
-        <translation>与小节线对齐：</translation>
+        <translation>與小節線對齊：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="250"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="252"/>
         <source>Alignment across staves:</source>
-        <translation>在谱表间对齐：</translation>
+        <translation>在譜表間對齊：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="290"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="292"/>
         <source>Scale:</source>
         <translation>縮放比例：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="353"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="355"/>
         <source>Gap between numbers
 (scaled):</source>
-        <translation>数字之间的间隔
-（经缩放）：</translation>
+        <translation>數字之間的間隔
+（經縮放）：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="377"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="379"/>
         <source>Vertical placement:</source>
         <translation>垂直位置：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="396"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="398"/>
         <source>Show courtesy time signatures</source>
         <translation>顯示建議性拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="415"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="417"/>
         <source>End-of-staff alignment:</source>
-        <translation>谱表末对齐：</translation>
+        <translation>譜表末對齊：</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="419"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="421"/>
         <source>Hang into page margin</source>
-        <translation>挂起到页边距</translation>
+        <translation>掛起到頁邊距</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="424"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="426"/>
         <source>Inset time signature</source>
-        <translation>嵌入拍号</translation>
+        <translation>嵌入拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="429"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="431"/>
         <source>Inset barline</source>
-        <translation>嵌入小节线</translation>
+        <translation>嵌入小節線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="448"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="452"/>
         <source>Key signatures</source>
         <translation>調號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="462"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="466"/>
         <source>Show on every system</source>
         <translation>在每個總譜上顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="463"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="467"/>
         <source>Hide after the first system where they appear</source>
         <translation>僅在總譜開頭顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="475"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="479"/>
         <source>Show courtesy key signatures</source>
         <translation>顯示建議性調號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="484"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="488"/>
         <source>Clefs, key &amp; time signatures at repeats and jumps</source>
-        <translation>在反复号及跳跃号处的谱号、调号和拍号</translation>
+        <translation>在反復號及跳躍號處的譜號、調號和拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="528"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="532"/>
         <source>Use parentheses</source>
-        <translation>使用括号</translation>
+        <translation>使用括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="568"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="560"/>
         <source>Place all changes before the barline</source>
-        <translation>将所有更改置于小节线之前</translation>
+        <translation>將所有更改置於小節線之前</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="572"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="564"/>
         <source>At repeats</source>
-        <translation>在反复号处</translation>
+        <translation>在反復號處</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="570"/>
+        <source>At all other jumps</source>
+        <translation>在所有其他跳躍號</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="578"/>
-        <source>At all other jumps</source>
-        <translation>在所有其他跳跃号</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="586"/>
         <source>Changes that apply only after repeats and jumps</source>
-        <translation>仅在重复和跳跃后才应用的更改</translation>
+        <translation>僅在重復和跳躍後才應用的更改</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="596"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="588"/>
         <source>Place clefs before repeats</source>
-        <translation>将谱号置于反复号前</translation>
+        <translation>將譜號置於反復號前</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="605"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="597"/>
         <source>Place clefs after repeats</source>
-        <translation>在反复号后放置谱号</translation>
+        <translation>在反復號後放置譜號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="641"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="619"/>
         <source>Allow changes between end-start repeats</source>
-        <translation>允许在结束-开始重复之间进行更改</translation>
+        <translation>允許在結束-開始重復之間進行更改</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="681"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="645"/>
         <source>Courtesies</source>
-        <translation>提示性记号</translation>
+        <translation>提示性記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="696"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="660"/>
         <source>Show at repeats</source>
-        <translation>在反复号处显示</translation>
+        <translation>在反復號處顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="707"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="671"/>
         <source>Show at all other jumps</source>
-        <translation>在所有其他跳跃号处显示</translation>
+        <translation>在所有其他跳躍號處顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="718"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="682"/>
         <source>Show when cancelling a change before repeats</source>
-        <translation>在重复号之前取消更改时显示</translation>
+        <translation>在重復號之前取消更改時顯示</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="729"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="693"/>
         <source>Show when cancelling a change before all other jumps</source>
-        <translation>在所有其他跳跃号之前取消更改时显示</translation>
+        <translation>在所有其他跳躍號之前取消更改時顯示</translation>
     </message>
 </context>
 <context>
@@ -25195,7 +25246,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="180"/>
         <source>Properties for measure %1</source>
-        <translation>小节%1属性</translation>
+        <translation>小節%1屬性</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="226"/>
@@ -25213,59 +25264,71 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="129"/>
         <source>Move MIDI notes and keyboard shortcuts with their sounds</source>
-        <translation>按其声音移动MIDI音符和键盘快捷键</translation>
+        <translation>按其聲音移動MIDI音符和鍵盤快捷鍵</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="130"/>
         <source>Leave MIDI notes and keyboard shortcuts fixed to original pad positions</source>
-        <translation>将MIDI音符和键盘快捷键固定在原始键盘位置</translation>
+        <translation>將MIDI音符和鍵盤快捷鍵固定在原始鍵盤位置</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="56"/>
         <source>Triggering the percussion panel</source>
-        <translation>触发打击乐器面板</translation>
+        <translation>觸發打擊樂器面板</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="68"/>
         <source>Open the panel automatically:</source>
-        <translation>自动打开面板</translation>
+        <translation>自動打開面板</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="107"/>
         <source>Close the panel automatically</source>
-        <translation>自动关闭面板</translation>
+        <translation>自動關閉面板</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="174"/>
         <source>Use legacy percussion panel</source>
-        <translation>使用旧版打击乐器面板</translation>
+        <translation>使用舊版打擊樂器面板</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="70"/>
-        <source>Row: %1</source>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="76"/>
+        <source>MIDI %1</source>
+        <extracomment>%1 will be the MIDI note for a drum (displayed in the percussion panel)</extracomment>
+        <translation>MIDI %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="85"/>
+        <source>Shortcut %1</source>
+        <extracomment>%1 will be the shortcut for a drum (displayed in the percussion panel)</extracomment>
+        <translation>快捷鍵 %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="92"/>
+        <source>Row %1</source>
         <extracomment>%1 will be the row number of a percussion panel pad</extracomment>
-        <translation>行：%1</translation>
+        <translation>行 %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="73"/>
-        <source>Column: %1</source>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="95"/>
+        <source>Column %1</source>
         <extracomment>%1 will be the column number of a percussion panel pad</extracomment>
-        <translation>列：%1</translation>
+        <translation>列 %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="91"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="115"/>
         <source>Empty pad</source>
         <translation>空白Pad</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="118"/>
-        <source>footer</source>
-        <translation>页脚</translation>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="142"/>
+        <source>options</source>
+        <translation>選項</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="72"/>
         <source>Write</source>
-        <translation>写</translation>
+        <translation>寫</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="139"/>
@@ -25274,9 +25337,9 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="200"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="139"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="149"/>
         <source>Finish editing</source>
-        <translation>完成编辑</translation>
+        <translation>完成編輯</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="232"/>
@@ -25289,54 +25352,59 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>自定義套組</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="417"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="413"/>
         <source>Add row</source>
         <translation>添加行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="438"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="435"/>
         <source>Select an unpitched percussion staff to see available sounds</source>
-        <translation>选择一个无音高打击乐谱表以查看可用的音色</translation>
+        <translation>選擇一個無音高打擊樂譜表以查看可用的音色</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="117"/>
         <source>Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?</source>
-        <translation>您还想移动触发这些声音的MIDI音符和键盘快捷键吗？</translation>
+        <translation>您還想移動觸發這些聲音的MIDI音符和鍵盤快捷鍵嗎？</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="140"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="150"/>
         <source>Edit layout</source>
-        <translation>编辑版面</translation>
+        <translation>編輯版面</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="146"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="156"/>
         <source>Pad names</source>
-        <translation>Pad名称</translation>
+        <translation>Pad名稱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="149"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="159"/>
         <source>Notation preview</source>
-        <translation>记号预览</translation>
+        <translation>記號預覽</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="158"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="168"/>
         <source>Reset layout</source>
         <translation>重置版面</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>
         <source>When an unpitched percussion staff is selected</source>
-        <translation>当选择无音高打击乐谱表时</translation>
+        <translation>當選擇無音高打擊樂譜表時</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="138"/>
         <source>When inputting notation on an unpitched percussion staff</source>
-        <translation>在在无音高打击乐谱表上输入符号时</translation>
+        <translation>在在無音高打擊樂譜表上輸入符號時</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="141"/>
         <source>Never</source>
         <translation>從不</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="98"/>
+        <source>Delete pad</source>
+        <translation>刪除打擊板</translation>
     </message>
 </context>
 <context>
@@ -25496,7 +25564,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/internal/undohistorymodel.cpp" line="96"/>
         <source>File opened</source>
-        <translation>已打开的文件</translation>
+        <translation>已打開的文件</translation>
     </message>
 </context>
 <context>
@@ -26658,7 +26726,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="132"/>
         <source>Allow reordering palettes</source>
-        <translation>允许面板重新排序</translation>
+        <translation>允許面板重新排序</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="164"/>
@@ -28266,17 +28334,17 @@ failed.</source>
         <translation>音頻%1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="941"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="957"/>
         <source>Metronome</source>
         <translation>節拍器</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="951"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="967"/>
         <source>Chords</source>
         <translation>和弦</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1291"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1307"/>
         <source>Loading audio samples</source>
         <translation>加載音頻樣本</translation>
     </message>
@@ -28605,24 +28673,30 @@ failed.</source>
         <translation>仍然打開</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1744"/>
-        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>此檔案使用了較新版本的MuseScore Studio保存。请訪問&lt;a href=&quot;https://musescore.org&quot;&gt;museScore.org&lt;/a&gt;來獲取最新版本。</translation>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2301"/>
+        <source>File “%1” seems not corrupted</source>
+        <translation>文件“%1”似乎沒有錯誤</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2302"/>
+        <source>This file does not seem to contain errors.</source>
+        <translation>此文件似乎不包含錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2305"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1750"/>
         <source>File “%1” is corrupted</source>
         <translation>檔案「%1」錯亂</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2306"/>
+        <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
+        <translation>此文件包含可能導致MuseScore Studio故障的錯誤。請盡早修復這些，以防止崩潰和進一步損壞。</translation>
+    </message>
+    <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1765"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation>檔案「%1」因錯亂無法打開。</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>
-        <source>Get help for this issue on musescore.org.</source>
-        <translation>在musescore.org上獲取有關此問題的幫助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1587"/>
@@ -28635,11 +28709,6 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1584"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation>你的樂譜無法上傳到雲端</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
-        <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
-        <translation>此樂譜已損壞。您可以手動修復這些錯誤，或者把它存儲到您的電腦里，然後到musescore.org上尋求幫助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1510"/>
@@ -28658,16 +28727,6 @@ failed.</source>
         <translation>此樂譜已損壞</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1537"/>
-        <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
-        <translation>儘管該檔案或將無法使用，您仍可以繼續將其存儲於本地。您可以嘗試手動修復這些錯誤，或者到musescore.org上尋求幫助。</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1539"/>
-        <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
-        <translation>儘管該存檔或將無法使用，您仍可以將其繼續存儲於本地。若您想要妥善地存儲樂譜，請恢復它到上次存儲的版本，或手動修復錯誤。您也可以到musescore.org上尋求幫助。</translation>
-    </message>
-    <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1546"/>
         <source>Save anyway</source>
         <translation>仍要存儲</translation>
@@ -28676,11 +28735,6 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1583"/>
         <source>Your score cannot be saved</source>
         <translation>無法存儲您的樂譜</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
-        <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
-        <translation>該樂譜已損壞。您可以到musescore.org上尋求幫助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1652"/>
@@ -28719,9 +28773,39 @@ failed.</source>
         <translation>此檔案包含錯誤，或導致MuseScore Studio故障。</translation>
     </message>
     <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
+        <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1537"/>
+        <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on MuseScore.org.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1539"/>
+        <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
+        <source>This score is corrupted. You can get help for this issue on MuseScore.org.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1637"/>
         <source>Try again</source>
         <translation>重試</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1744"/>
+        <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>
+        <source>Get help for this issue on MuseScore.org.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
@@ -28962,18 +29046,18 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
-        <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;.</source>
-        <translation>當您把樂譜保存到雲端或是在發佈&lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;上後，樂譜將出出現在此處。</translation>
+        <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
+        <source>Log in or create a new account on &lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt; to view online scores.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
         <source>You are not signed in</source>
         <translation>您尚未登錄</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
-        <source>Log in or create a new account on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; to view online scores.</source>
-        <translation>登入或在&lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;上創建新帳戶以查看在線樂譜。</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
@@ -29074,19 +29158,25 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="598"/>
-        <source>Please try again later, or get help for this problem on musescore.org.</source>
-        <translation>請稍後再試，或在musescore.org上獲取此問題的幫助。</translation>
+        <source>Please try again later, or get help for this problem on MuseScore.org.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
+        <source>Your MuseScore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="594"/>
+        <source>Could not connect to &lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
         <source>The file could not be downloaded to your disk.</source>
         <translation>該樂譜無法下載到您的磁盤。</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
-        <source>Your musescore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>需要先驗證您的musescore.com賬戶。請通過激活電子郵件中的鏈接激活您的賬戶。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
@@ -29097,12 +29187,6 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="495"/>
         <source>The score could not be found, or cannot be accessed by your account.</source>
         <translation>找不到樂譜，或您的帳戶無法訪問。</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="594"/>
-        <source>Could not connect to &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
-        <translation>無法連接到&lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;。請檢查您的互聯網連接或稍後重試。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="512"/>
@@ -29465,12 +29549,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="45"/>
         <source>Use MuseScore element IDs</source>
-        <translation>使用MuseScore元素识别号</translation>
+        <translation>使用MuseScore元素識別號</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
         <source>Masking compatibility (Adobe Illustrator only)</source>
-        <translation>遮罩兼容性（仅限Adobe Illustrator）</translation>
+        <translation>遮罩兼容性（僅限Adobe Illustrator）</translation>
     </message>
 </context>
 <context>
@@ -29489,7 +29573,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>給&lt;a href=&quot;%1&quot;&gt;Muse鼓譜打擊樂&lt;/a&gt;采用新的記號和音色</translation>
+        <translation>給&lt;a href=&quot;%1&quot;&gt;Muse鼓譜打擊樂&lt;/a&gt;採用新的記號和音色</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
@@ -30055,6 +30139,17 @@ failed.</source>
         <translation>節選</translation>
     </message>
     <message>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="997"/>
+        <source>Log in to MuseScore.com to save this score to the cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
+        <source>Log in to MuseScore.com to publish this score.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="380"/>
         <source>Publish changes online?</source>
@@ -30109,20 +30204,20 @@ failed.</source>
         <translation>每次保存可能需要幾分鐘，具體取決於您的樂譜大小。這些設置始終可以在首選項中更改。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="442"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="539"/>
-        <source>Log in or create a free account on musescore.com to open this score.</source>
-        <translation>登錄或在musescore.com上創建免費帳戶以打開此樂譜。</translation>
-    </message>
-    <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1375"/>
         <source>View online</source>
         <translation>在線查看</translation>
     </message>
     <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="442"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="539"/>
+        <source>Log in or create a free account on MuseScore.com to open this score.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1378"/>
-        <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
-        <translation>所有既存更改現在都將更新到雲端。您可以在musescore.com上的樂譜管理器中管理此檔案。</translation>
+        <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1603"/>
@@ -30137,23 +30232,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation>爲了保護你的樂譜，請你重新保存一次。如果這條消息仍然出現，请將你的樂譜保存為新的副本。你也可在%1上獲取有關此問題的幫助。&lt;br/&gt;&lt;br/&gt;錯誤詳細（尋求幫助時提供）：%2</translation>
+        <translation>爲了保護你的樂譜，請你重新保存一次。如果這條消息仍然出現，請將你的樂譜保存為新的副本。你也可在%1上獲取有關此問題的幫助。&lt;br/&gt;&lt;br/&gt;錯誤詳細（尋求幫助時提供）：%2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
         <translation>登錄或在Audio.com上創建新帳戶以分享您的音樂。</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="997"/>
-        <source>Log in to musescore.com to save this score to the cloud.</source>
-        <translation>登錄musescore.com以將此樂譜保存到雲端。</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
-        <source>Log in to musescore.com to publish this score.</source>
-        <translation>登錄musescore.com以發布此樂譜。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="381"/>
@@ -30280,8 +30364,8 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="630"/>
-        <source>Your audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>您的audio.com帳戶需要先進行驗證。請通過激活電子郵件中的鏈接激活您的帳戶。</translation>
+        <source>Your Audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="637"/>
@@ -30297,13 +30381,13 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="642"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="649"/>
-        <source>Please try again later, or get help for this problem on audio.com.</source>
-        <translation>請稍後再試，或在audio.com上獲取有關此問題的幫助。</translation>
+        <source>Please try again later, or get help for this problem on Audio.com.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="645"/>
-        <source>Could not connect to audio.com. Please check your internet connection or try again later.</source>
-        <translation>無法連接到audio.com。請檢查您的互聯網連接或稍後重試。</translation>
+        <source>Could not connect to Audio.com. Please check your internet connection or try again later.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -30339,22 +30423,21 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/StandardEditShortcutDialog.qml" line="64"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="91"/>
         <source>Define keyboard shortcut</source>
         <translation>自定義鍵盤快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="97"/>
+        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="98"/>
         <source>Old shortcut:</source>
         <translation>原快捷鍵：</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="108"/>
+        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="109"/>
         <source>New shortcut:</source>
         <translation>新的快捷鍵：</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="121"/>
+        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="122"/>
         <source>Type to set shortcut</source>
         <translation>輸入設置快捷鍵</translation>
     </message>
@@ -30441,7 +30524,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="115"/>
         <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="483"/>
-        <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="672"/>
+        <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="674"/>
         <source>None</source>
         <extracomment>No MIDI remote event</extracomment>
         <translation>無</translation>
@@ -30467,19 +30550,19 @@ failed.</source>
         <translation>導出快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="212"/>
-        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="124"/>
+        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="223"/>
+        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="140"/>
         <source>This shortcut is already assigned to: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>此快捷鍵已分配給&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="232"/>
-        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="173"/>
+        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="243"/>
+        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="189"/>
         <source>Are you sure you want to assign it to &lt;b&gt;%1&lt;/b&gt; instead?</source>
         <translation>您確定要將其分配給&lt;b&gt;%1&lt;/b&gt;嗎？</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="237"/>
+        <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="248"/>
         <source>Reassign shortcut</source>
         <translation>重新分配快捷鍵</translation>
     </message>
@@ -30491,22 +30574,27 @@ failed.</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="38"/>
         <source>Enter shortcut</source>
-        <translation>输入快捷键</translation>
+        <translation>輸入快捷鍵</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="71"/>
         <source>Define percussion keyboard shortcut</source>
-        <translation>自定义打击乐键盘快捷键</translation>
+        <translation>自定義打擊樂鍵盤快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="85"/>
+        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="101"/>
         <source>Reassign shortcut for &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>为&lt;b&gt;%1&lt;/b&gt;重分配快捷键</translation>
+        <translation>為&lt;b&gt;%1&lt;/b&gt;重分配快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="168"/>
+        <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="184"/>
         <source>When this instrument is selected, &lt;b&gt;%1&lt;/b&gt; will no longer run &lt;b&gt;%2&lt;/b&gt;.</source>
-        <translation>当选中该乐器时，&lt;b&gt;%1&lt;/b&gt;将不再运行&lt;b&gt;%2&lt;/b&gt;。</translation>
+        <translation>當選中該樂器時，&lt;b&gt;%1&lt;/b&gt;將不再運行&lt;b&gt;%2&lt;/b&gt;。</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="91"/>
+        <source>Define keyboard shortcut…</source>
+        <translation>定義鍵盤快捷鍵...</translation>
     </message>
 </context>
 <context>
@@ -30906,21 +30994,21 @@ failed.</source>
     <name>undoableAction</name>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="715"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="1931"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="2055"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="1966"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="2090"/>
         <source>Add tie</source>
-        <translation>添加延音线</translation>
+        <translation>添加延音線</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="741"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2557"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2590"/>
         <source>Add slur</source>
         <translation>添加連句線</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="786"/>
         <source>Add long slur</source>
-        <translation>添加长圆滑线</translation>
+        <translation>添加長圓滑線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/api/v1/qmlpluginapi.cpp" line="281"/>
@@ -30930,31 +31018,31 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/api/v1/score.cpp" line="247"/>
         <source>Plugin edit</source>
-        <translation>插件编辑</translation>
+        <translation>插件編輯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/devtools/corruptscoredevtoolsmodel.cpp" line="44"/>
         <source>Corrupt score</source>
         <extracomment>&quot;Corrupt&quot; is used as a verb here, i.e. &quot;Make the current score corrupted&quot; (for testing purposes).</extracomment>
-        <translation>损毁乐谱</translation>
+        <translation>損毀樂譜</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/cmd.cpp" line="2842"/>
         <source>Reset all positions</source>
-        <translation>重置所有位置布局</translation>
+        <translation>重置所有位置佈局</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="2056"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="2091"/>
         <source>Remove tie</source>
-        <translation>移除延音线</translation>
+        <translation>移除延音線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="2110"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="2152"/>
         <source>Toggle laissez vibrer</source>
-        <translation>切换放任号</translation>
+        <translation>切換放任號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="4144"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="4187"/>
         <source>Enter rest</source>
         <translation>輸入休止符</translation>
     </message>
@@ -30962,34 +31050,34 @@ failed.</source>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="750"/>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="770"/>
         <source>Regenerate figured bass text</source>
-        <translation>重生成数字低音文本</translation>
+        <translation>重生成數字低音文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/lyrics.cpp" line="192"/>
         <source>Paste lyrics</source>
-        <translation>粘贴唱词</translation>
+        <translation>粘貼唱詞</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="908"/>
         <source>Paste text</source>
-        <translation>粘贴文本</translation>
+        <translation>粘貼文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="106"/>
         <source>Change tie anchor</source>
-        <translation>更改延音线锚点</translation>
+        <translation>更改延音線錨點</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/unrollrepeats.cpp" line="102"/>
         <source>Create parts</source>
-        <translation>创建分谱</translation>
+        <translation>創建分譜</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="379"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="163"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="175"/>
         <source>Edit element property</source>
-        <translation>编辑元素属性</translation>
+        <translation>編輯元素屬性</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="461"/>
@@ -31001,130 +31089,130 @@ failed.</source>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="143"/>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="485"/>
         <source>Make element(s) visible</source>
-        <translation>使元素可见</translation>
+        <translation>使元素可見</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="144"/>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="487"/>
         <source>Make element(s) invisible</source>
-        <translation>使元素不可见</translation>
+        <translation>使元素不可見</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5489"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5522"/>
         <source>Change voice</source>
-        <translation>更改声部</translation>
+        <translation>更改聲部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/barlines/barlinesettingsmodel.cpp" line="151"/>
         <source>Set barline span interval as staff default</source>
-        <translation>将连谱线间隔设为谱表默认</translation>
+        <translation>將連譜線間隔設為譜表默認</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="277"/>
         <source>Edit bend curve</source>
-        <translation>编辑变音曲线</translation>
+        <translation>編輯變音曲線</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/stems/stemsettingsmodel.cpp" line="114"/>
         <source>Change stem direction</source>
-        <translation>更改符干方向</translation>
+        <translation>更改符乾方向</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/ornaments/ornamentsettingsmodel.cpp" line="256"/>
         <source>Set ornament interval step</source>
-        <translation>设置装饰音音程</translation>
+        <translation>設置裝飾音音程</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/ornaments/ornamentsettingsmodel.cpp" line="288"/>
         <source>Set ornament interval type</source>
-        <translation>设置装饰音音程类型</translation>
+        <translation>設置裝飾音音程類型</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/widgets/fretcanvas.cpp" line="272"/>
         <source>Edit fretboard diagram</source>
-        <translation>编辑品格图</translation>
+        <translation>編輯品格圖</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/widgets/fretcanvas.cpp" line="381"/>
         <source>Clear fretboard diagram</source>
-        <translation>清除品格图</translation>
+        <translation>清除品格圖</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/excerptnotation.cpp" line="145"/>
         <source>Rename part</source>
         <extracomment>Means: &quot;edit the name of a part score&quot;</extracomment>
-        <translation>重命名分谱</translation>
+        <translation>重命名分譜</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="538"/>
         <source>Add/remove parts</source>
-        <translation>添加/移除分谱</translation>
+        <translation>添加/移除分譜</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="581"/>
         <source>Reset part</source>
-        <translation>重置分谱</translation>
+        <translation>重置分譜</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="70"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="237"/>
         <source>Add/remove instruments</source>
-        <translation>添加/移除乐器</translation>
+        <translation>添加/移除樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="106"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="871"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="105"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="875"/>
         <source>Remove instruments</source>
-        <translation>移除乐器</translation>
+        <translation>移除樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="121"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="995"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="120"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="999"/>
         <source>Remove staves</source>
-        <translation>移除谱表</translation>
+        <translation>移除譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="140"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="568"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="139"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="565"/>
         <source>Add staff</source>
         <translation>添加譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="168"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="591"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="167"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="588"/>
         <source>Add linked staff</source>
-        <translation>添加联动谱表</translation>
+        <translation>添加聯動譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="192"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="652"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="191"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="649"/>
         <source>Replace instrument</source>
         <translation>替換樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="227"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="702"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="226"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="695"/>
         <source>Edit drumset</source>
         <translation>編輯鼓譜</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="265"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="734"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="264"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="736"/>
         <source>Add system markings</source>
-        <translation>添加谱行组记号</translation>
+        <translation>添加譜行組記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="282"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="768"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="277"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="770"/>
         <source>Remove system markings</source>
-        <translation>移除谱行组记号</translation>
+        <translation>移除譜行組記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotationparts.cpp" line="295"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="802"/>
+        <location filename="../../src/notation/internal/masternotationparts.cpp" line="286"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="805"/>
         <source>Move system markings</source>
-        <translation>移动谱行组记号</translation>
+        <translation>移動譜行組記號</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="463"/>
@@ -31144,526 +31232,528 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="483"/>
         <source>Enter full-measure rest</source>
-        <translation>输入全小节休止符</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2143"/>
-        <source>Display concert pitch</source>
-        <translation>显示标准音高</translation>
+        <translation>輸入全小節休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2144"/>
+        <source>Display concert pitch</source>
+        <translation>顯示標準音高</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2145"/>
         <source>Display transposed</source>
-        <translation>显示已移调内容</translation>
+        <translation>顯示已移調內容</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="550"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="549"/>
         <source>Toggle visible</source>
-        <translation>切换为可见</translation>
+        <translation>切換為可見</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1091"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1090"/>
         <source>Drag element</source>
-        <translation>拖动元素</translation>
+        <translation>拖動元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1727"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1732"/>
         <source>Drop element</source>
         <translation>放下元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1973"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1978"/>
         <source>Move range</source>
-        <translation>移动范围</translation>
+        <translation>移動範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1974"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="1979"/>
         <source>Copy range</source>
-        <translation>拷贝范围</translation>
+        <translation>拷貝範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2047"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2081"/>
         <source>Apply palette element</source>
-        <translation>应用面板元素</translation>
+        <translation>應用面板元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3552"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3585"/>
         <source>Move chord/rest to staff</source>
-        <translation>将和弦/休止符移到谱表</translation>
+        <translation>將和弦/休止符移到譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3582"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3615"/>
         <source>Move chord/rest</source>
-        <translation>移动和弦/休止符</translation>
+        <translation>移動和弦/休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3632"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3665"/>
         <source>Toggle snap to previous</source>
-        <translation>切换吸附至上一个</translation>
+        <translation>切換吸附至上一個</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3673"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3706"/>
         <source>Toggle snap to next</source>
-        <translation>切换吸附至下一个</translation>
+        <translation>切換吸附至下一個</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3803"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3836"/>
         <source>Change pitch</source>
         <translation>更改音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3820"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3853"/>
         <source>Move lyrics</source>
-        <translation>移动唱词</translation>
+        <translation>移動唱詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3832"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3865"/>
         <source>Nudge element</source>
         <translation>微移元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3868"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3901"/>
         <source>Nudge</source>
         <translation>微移</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3974"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4007"/>
         <source>Edit text</source>
-        <translation>编辑文本</translation>
+        <translation>編輯文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4383"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4416"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
-        <translation>按键性编辑</translation>
+        <translation>按鍵性編輯</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4484"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4517"/>
         <source>Split measure</source>
-        <translation>分割小节</translation>
+        <translation>分割小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4499"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4532"/>
         <source>Join measures</source>
-        <translation>合并小节</translation>
+        <translation>合併小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4651"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4684"/>
         <source>Add horizontal frame</source>
-        <translation>添加水平框体</translation>
+        <translation>添加水平框體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4652"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4685"/>
         <source>Add vertical frame</source>
-        <translation>添加垂直框体</translation>
+        <translation>添加垂直框體</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4653"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4686"/>
         <source>Add text frame</source>
         <translation>添加文本框</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4654"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4687"/>
         <source>Add %n measure(s)</source>
-        <translation><numerusform>添加%n小节</numerusform></translation>
+        <translation><numerusform>添加%n小節</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4719"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4753"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4752"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4786"/>
         <source>Repeat selection</source>
         <translation>重複選中區域</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4773"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4806"/>
         <source>Paste</source>
         <translation>粘貼</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4870"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4903"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4896"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4929"/>
         <source>Flip direction</source>
         <translation>翻轉方向</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4956"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4989"/>
         <source>Add ottava</source>
-        <translation>添加八度记号</translation>
+        <translation>添加八度記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4963"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4999"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="183"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4996"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5032"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="200"/>
         <source>Add hairpin</source>
-        <translation>添加楔形力度号</translation>
+        <translation>添加楔形力度號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5085"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5118"/>
         <source>Toggle accidental</source>
-        <translation>切换变音号</translation>
+        <translation>切換變音號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5145"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5178"/>
         <source>Toggle augmentation dots</source>
-        <translation>切换附点</translation>
+        <translation>切換附點</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5374"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5407"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation>锁定/解锁所选谱行</translation>
+        <translation>鎖定/解鎖所選譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5381"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5414"/>
         <source>Lock/unlock all systems</source>
-        <translation>锁定/解锁所有谱行</translation>
+        <translation>鎖定/解鎖所有譜行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5388"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5421"/>
         <source>Create system from selection</source>
-        <translation>从选区创建谱行组</translation>
+        <translation>從選區創建譜行組</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5511"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5544"/>
         <source>Add note-anchored line</source>
-        <translation>添加音符锚线</translation>
+        <translation>添加音符錨線</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5787"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5820"/>
         <source>Delete %n measure(s)</source>
-        <translation><numerusform>删除%n个小节</numerusform></translation>
+        <translation><numerusform>刪除%n個小節</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7468"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7556"/>
         <source>Add accidental</source>
-        <translation>添加变音号</translation>
+        <translation>添加變音號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5048"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5081"/>
         <source>Add brackets</source>
-        <translation>添加括号</translation>
+        <translation>添加括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4907"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4940"/>
         <source>Flip horizontally</source>
-        <translation>水平翻转</translation>
+        <translation>水平翻轉</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5053"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5086"/>
         <source>Add braces</source>
         <translation>添加括弧</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5058"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5091"/>
         <source>Add parentheses</source>
-        <translation>添加圆括号</translation>
+        <translation>添加圓括號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5128"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7442"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5161"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7530"/>
         <source>Toggle articulation</source>
-        <translation>切换运音法记号</translation>
+        <translation>切換運音法記號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5179"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5212"/>
         <source>Add grace note</source>
         <translation>添加倚音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5206"/>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="698"/>
-        <source>Add tuplet</source>
-        <translation>添加连音</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5227"/>
-        <source>Set beam type</source>
-        <translation>设置符杠类型</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5239"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="684"/>
+        <source>Add tuplet</source>
+        <translation>添加連音</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5260"/>
+        <source>Set beam type</source>
+        <translation>設置符槓類型</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5273"/>
         <source>Increase duration</source>
-        <translation>增加时值</translation>
+        <translation>增加時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5240"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5272"/>
         <source>Decrease duration</source>
-        <translation>减少时值</translation>
+        <translation>減少時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5257"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5290"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
         <source>Change hairpin type</source>
-        <translation>更改楔形力度号类型</translation>
+        <translation>更改楔形力度號類型</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5300"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5333"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
         <translation>其他力度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5353"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5386"/>
         <source>Toggle layout break</source>
-        <translation>切换换行符</translation>
+        <translation>切換換行符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5360"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5393"/>
         <source>Move measure to previous system</source>
-        <translation>将小节移至上一谱行组</translation>
+        <translation>將小節移至上一譜行組</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5367"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5400"/>
         <source>Move measure to next system</source>
-        <translation>将小节移至下一谱行组</translation>
+        <translation>將小節移至下一譜行組</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5395"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5428"/>
         <source>Apply system lock to selection</source>
-        <translation>将谱行锁应用到选区</translation>
+        <translation>將譜行鎖應用到選區</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5405"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5438"/>
         <source>Measures per system</source>
         <translation>每行小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5412"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5445"/>
         <source>Transposition</source>
-        <translation>移调</translation>
+        <translation>移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5436"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5469"/>
         <source>Swap voices</source>
-        <translation>交换声部</translation>
+        <translation>交換聲部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5467"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5500"/>
         <source>Add interval</source>
         <translation>添加音程</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5474"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5507"/>
         <source>Enter note at fret %1</source>
-        <translation>在%1品输入音符</translation>
+        <translation>在%1品輸入音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5500"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5533"/>
         <source>Change voice assignment</source>
-        <translation>更改声部指派</translation>
+        <translation>更改聲部指派</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5582"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5615"/>
         <source>Add text</source>
         <translation>添加文字</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5650"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5683"/>
         <source>Add image</source>
-        <translation>添加图片</translation>
+        <translation>添加圖片</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5669"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5702"/>
         <source>Add figured bass</source>
         <translation>添加數字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5684"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5717"/>
         <source>Increase layout stretch</source>
         <translation>增加小節寬度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5685"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5718"/>
         <source>Decrease layout stretch</source>
         <translation>縮減小節寬度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5708"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5741"/>
         <source>Add time signature</source>
-        <translation>添加拍号</translation>
+        <translation>添加拍號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5719"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5752"/>
         <source>Explode</source>
         <translation>自上而下拆分譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5730"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5763"/>
         <source>Implode</source>
         <translation>自下而上合併譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5741"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5774"/>
         <source>Realize chord symbols</source>
         <translation>具像化和弦符號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5798"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5831"/>
         <source>Delete range</source>
-        <translation>删除范围</translation>
+        <translation>刪除範圍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5805"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5838"/>
         <source>Remove empty trailing measures</source>
         <translation>刪除空白小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5816"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5849"/>
         <source>Fill with slashes</source>
         <translation>用斜槓填滿小節節拍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5827"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5860"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>切換節奏斜線記譜法</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5834"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5867"/>
         <source>Change enharmonic spelling</source>
-        <translation>更改异名同音的音名</translation>
+        <translation>更改異名同音的音名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5841"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5874"/>
         <source>Respell pitches</source>
         <translation>更改音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5848"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5881"/>
         <source>Regroup rhythms</source>
         <translation>重組旋律</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5855"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5888"/>
         <source>Resequence rehearsal marks</source>
         <translation>對排練記號進行排序</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5862"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5895"/>
         <source>Reset layout stretch</source>
         <translation>重設小節拉伸</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5869"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5902"/>
         <source>Reset text style overrides</source>
-        <translation>重置文本样式优先级</translation>
+        <translation>重置文本樣式優先級</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5876"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5909"/>
         <source>Reset beams</source>
         <translation>重置符槓</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5893"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5926"/>
         <source>Reset shapes and positions</source>
         <translation>重設形狀和位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5913"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5946"/>
         <source>Reset to default layout</source>
-        <translation>重置为默认版面</translation>
+        <translation>重置為默認版面</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5939"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5972"/>
         <source>Set score view settings</source>
-        <translation>设定乐谱视图</translation>
+        <translation>設定樂譜視圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6117"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6150"/>
         <source>Navigate to lyrics</source>
-        <translation>导航到唱词</translation>
+        <translation>導航到唱詞</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6245"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6265"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6278"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6340"/>
         <source>Navigate to next syllable</source>
-        <translation>导航到下一个音节</translation>
+        <translation>導航到下一個音節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6447"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6522"/>
         <source>Navigate to verse</source>
-        <translation>导航到段落</translation>
+        <translation>導航到段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6538"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6592"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6613"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6667"/>
         <source>Navigate to next chord symbol</source>
-        <translation>导航到下一个和弦符号</translation>
+        <translation>導航到下一個和弦符號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6629"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6704"/>
         <source>Navigate to chord symbol</source>
-        <translation>导航到和弦符号</translation>
+        <translation>導航到和弦符號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6684"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6728"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6759"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6803"/>
         <source>Navigate to next figured bass</source>
-        <translation>导航到下一个数字低音</translation>
+        <translation>導航到下一個數字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6776"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6851"/>
         <source>Navigate to figured bass</source>
-        <translation>导航到数字低音</translation>
+        <translation>導航到數字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7072"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7079"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7127"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7148"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7155"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7215"/>
         <source>Enter lyrics extension line</source>
-        <translation>输入唱词局部延长线</translation>
+        <translation>輸入唱詞局部延長線</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7208"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7296"/>
         <source>Add lyrics verse</source>
-        <translation>添加唱词段落</translation>
+        <translation>添加唱詞段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7256"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7344"/>
         <source>Enter guitar bend</source>
-        <translation>输入吉他弯音</translation>
+        <translation>輸入吉他彎音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7366"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7454"/>
         <source>Format text</source>
         <translation>格式化文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7386"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7474"/>
         <source>Toggle subscript</source>
-        <translation>切换下标</translation>
+        <translation>切換下標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7388"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7476"/>
         <source>Toggle superscript</source>
-        <translation>切换上标</translation>
+        <translation>切換上標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7390"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7478"/>
         <source>Toggle subscript/superscript</source>
-        <translation>切换下/上标</translation>
+        <translation>切換下/上標</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7447"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7535"/>
         <source>Toggle ornament</source>
-        <translation>切换装饰音</translation>
+        <translation>切換裝飾音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7452"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7540"/>
         <source>Toggle automatic placement</source>
-        <translation>切换自动布局</translation>
+        <translation>切換自動佈局</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7463"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7551"/>
         <source>Add clef</source>
-        <translation>添加谱号</translation>
+        <translation>添加譜號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7473"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
         <source>Transpose semitone</source>
-        <translation>半音移调</translation>
+        <translation>半音移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7479"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7567"/>
         <source>Transpose diatonically</source>
         <translation>全音移調</translation>
     </message>
@@ -31672,12 +31762,12 @@ failed.</source>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="435"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="477"/>
         <source>Enter note</source>
-        <translation>输入音符</translation>
+        <translation>輸入音符</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationmidiinput.cpp" line="351"/>
         <source>Realtime advance</source>
-        <translation>实时推进</translation>
+        <translation>實時推進</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="457"/>
@@ -31687,119 +31777,119 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="502"/>
         <source>Delete note</source>
-        <translation>删除音符</translation>
+        <translation>刪除音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="901"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="887"/>
         <source>Double note input duration</source>
-        <translation>加倍输入时值</translation>
+        <translation>加倍輸入時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="914"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="900"/>
         <source>Halve note input duration</source>
-        <translation>减半输入时值</translation>
+        <translation>減半輸入時值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="257"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="256"/>
         <source>Set score order</source>
-        <translation>设定乐谱顺序</translation>
+        <translation>設定樂譜順序</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="278"/>
+        <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
+        <source>Show instrument</source>
+        <translation>顯示樂器</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="279"/>
-        <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
-        <source>Show instrument</source>
-        <translation>显示乐器</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="280"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3043"/>
         <source>Hide instrument</source>
-        <translation>隐藏乐器</translation>
+        <translation>隱藏樂器</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="306"/>
+        <source>Set sharps/flats no preference</source>
+        <translation>設升/降號為無偏好</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="307"/>
-        <source>Set sharps/flats no preference</source>
-        <translation>设升/降号为无偏好</translation>
+        <source>Set prefer flats</source>
+        <translation>設置偏好降號</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="308"/>
-        <source>Set prefer flats</source>
-        <translation>设置偏好降号</translation>
+        <source>Set prefer sharps</source>
+        <translation>設置偏好升號</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="309"/>
-        <source>Set prefer sharps</source>
-        <translation>设置偏好升号</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="310"/>
         <source>Set sharps/flats automatic</source>
-        <translation>自动设置升/降号</translation>
+        <translation>自動設置升/降號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="312"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="311"/>
         <source>Set sharps/flats preference</source>
-        <translation>设置升/降号偏好</translation>
+        <translation>設置升/降號偏好</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="412"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="409"/>
         <source>Set instrument name</source>
-        <translation>设置乐器名称</translation>
+        <translation>設置樂器名稱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="439"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="436"/>
         <source>Set abbreviated instrument name</source>
-        <translation>设置缩写乐器名</translation>
+        <translation>設置縮寫樂器名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="466"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="463"/>
         <source>Show voice %1</source>
-        <translation>显示声部%1</translation>
+        <translation>顯示聲部%1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="467"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="464"/>
         <source>Hide voice %1</source>
-        <translation>隐藏声部%1</translation>
+        <translation>隱藏聲部%1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="496"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="493"/>
         <source>Show staff</source>
-        <translation>显示谱表</translation>
+        <translation>顯示譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="497"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="494"/>
         <source>Hide staff</source>
-        <translation>隐藏谱表</translation>
+        <translation>隱藏譜表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="524"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="521"/>
         <source>Set staff type</source>
-        <translation>设置谱表类型</translation>
+        <translation>設置譜表類型</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="546"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="543"/>
         <source>Edit staff properties</source>
-        <translation>编辑谱表属性</translation>
+        <translation>編輯譜表屬性</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="614"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="611"/>
         <source>Add instrument</source>
         <translation>添加樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="632"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="629"/>
         <source>Reset instrument formatting</source>
-        <translation>重置乐器格式</translation>
+        <translation>重置樂器格式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1050"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1054"/>
         <source>Move instruments</source>
-        <translation>移动乐器</translation>
+        <translation>移動樂器</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1079"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1083"/>
         <source>Move staves</source>
-        <translation>移动谱表</translation>
+        <translation>移動譜表</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationstyle.cpp" line="116"/>
@@ -31809,22 +31899,22 @@ failed.</source>
     <message>
         <location filename="../../src/notation/view/internal/harppedalpopupmodel.cpp" line="179"/>
         <source>Edit harp pedal diagram</source>
-        <translation>编辑竖琴踏板图</translation>
+        <translation>編輯竪琴踏板圖</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="142"/>
         <source>Set string tuning</source>
-        <translation>设置弦调律</translation>
+        <translation>設置弦調律</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="232"/>
         <source>Load string tunings preset</source>
-        <translation>加载弦调律预设</translation>
+        <translation>加載弦調律預設</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="285"/>
         <source>Set number of strings</source>
-        <translation>设置弦数</translation>
+        <translation>設置弦數</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="356"/>
@@ -31832,91 +31922,64 @@ failed.</source>
         <translation>編輯弦號</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="236"/>
-        <source>Edit percussion panel layout</source>
-        <translation>编辑打击乐面板版面</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="416"/>
-        <source>Duplicate percussion panel pad</source>
-        <translation>复制打击乐面板版面</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="436"/>
-        <source>Delete percussion panel pad</source>
-        <translation>删除打击乐面板</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="455"/>
-        <source>Edit percussion shortcut</source>
-        <translation>编辑打击乐快捷键</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="518"/>
-        <source>Reset percussion panel layout</source>
-        <translation>重置打击乐面板版面</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="318"/>
         <source>Edit measure properties</source>
-        <translation>编辑小节属性</translation>
+        <translation>編輯小節屬性</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="101"/>
         <source>Edit page settings</source>
-        <translation>编辑页面设置</translation>
+        <translation>編輯頁面設置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="144"/>
         <source>Edit staff text properties</source>
-        <translation>编辑谱表文本属性</translation>
+        <translation>編輯譜表文本屬性</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="212"/>
         <source>Edit time signature properties</source>
-        <translation>编辑拍号属性</translation>
+        <translation>編輯拍號屬性</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="183"/>
         <source>Toggle sound flag preset</source>
-        <translation>切换 音色旗标预设</translation>
+        <translation>切換 音色旗標預設</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="210"/>
         <source>Toggle sound flag playing technique</source>
-        <translation>切换音色旗标演奏技巧</translation>
+        <translation>切換音色旗標演奏技巧</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="333"/>
         <source>Reset sound flag</source>
-        <translation>重置音色旗标</translation>
+        <translation>重置音色旗標</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="359"/>
         <source>Toggle ‘Apply sound flag to all staves’</source>
-        <translation>切换“对所有谱表应用音色旗标”</translation>
+        <translation>切換“對所有譜表應用音色旗標”</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="1084"/>
         <source>Edit project properties</source>
-        <translation>编辑项目属性</translation>
+        <translation>編輯項目屬性</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectmigrator.cpp" line="157"/>
         <source>Migrate project</source>
-        <translation>迁移项目</translation>
+        <translation>遷移項目</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="99"/>
-        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="192"/>
         <source>Make system marking(s) visible</source>
-        <translation>使谱行组记号可见</translation>
+        <translation>使譜行組記號可見</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="100"/>
-        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="193"/>
         <source>Make system marking(s) invisible</source>
-        <translation>使谱行组记号不可见</translation>
+        <translation>使譜行組記號不可見</translation>
     </message>
 </context>
 <context>
@@ -31948,8 +32011,8 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
-        <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation>已持有MuseScore Studio的最新版本。請訪問&lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt;獲取更多前瞻性内容。</translation>
+        <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; for news on what’s coming next.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
@@ -31969,7 +32032,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="193"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
-        <translation>MuseScore Studio需要關閉才能完成安裝。如果你有任何沒有保存的變更，我們将提示你在MuseScore Studio關閉之前保存它們。</translation>
+        <translation>MuseScore Studio需要關閉才能完成安裝。如果你有任何沒有保存的變更，我們將提示你在MuseScore Studio關閉之前保存它們。</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="198"/>

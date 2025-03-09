@@ -11472,7 +11472,7 @@
         <source>Cuica.</source>
         <comment>cuica description</comment>
         <extracomment>description for Cuica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cuíca.</translation>
+        <translation>Cuica.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3868"/>
@@ -11913,7 +11913,7 @@
         <source>Suspended Cymbal.</source>
         <comment>crash-cymbal description</comment>
         <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Talerz podwieszany.</translation>
+        <translation>Talerz wiszący.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4030"/>
@@ -12368,7 +12368,7 @@
         <source>Güiro.</source>
         <comment>guiro description</comment>
         <extracomment>description for Güiro; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Güiro.</translation>
+        <translation>Guiro.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4183"/>

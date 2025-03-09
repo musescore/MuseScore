@@ -15567,14 +15567,14 @@
         <source>General MIDI percussion kit with Level 2 extensions.</source>
         <comment>percussion-synthesizer description</comment>
         <extracomment>description for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Набор ударных General MIDI с расширениями 2-го уровня</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4336"/>
         <source>General MIDI Percussion</source>
         <comment>percussion-synthesizer trackName</comment>
         <extracomment>trackName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Перкуссия General MIDI</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4338"/>
