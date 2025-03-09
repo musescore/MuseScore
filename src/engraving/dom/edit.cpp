@@ -6153,12 +6153,14 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             MeasureBase* m = lb->measure();
 
             // add Key Signature on Section Break
+            // TODO: special case for instrument change
             Fraction tick = m->endTick();
             int ticks = tick.ticks();
             for (Staff* staff : score()->staves()) {
                 KeyList* kl = staff->keyList();
                 if (kl->currentKeyTick(ticks) != ticks) {
                     KeySigEvent ks = kl->key(ticks);
+                    ks.setForSectionBreak(true);
                     undoChangeKeySig(staff, tick, ks);
                 }
             }
@@ -6980,6 +6982,28 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             for (int i = 0; i < repeat->numMeasures(); ++i) {
                 undoChangeMeasureRepeatCount(measure, 0, staffIdx);
                 measure = measure->nextMeasure();
+            }
+        }
+    }
+
+    // remove section break key signatures
+    if (element->isLayoutBreak() && toLayoutBreak(element)->isSectionBreak()) {
+        MeasureBase* mb = element->findMeasureBase();
+        Measure* nextMeasure = mb ? mb->nextMeasure() : nullptr;
+        if (nextMeasure && nextMeasure->isMMRest()) {
+            nextMeasure = nextMeasure->mmRestFirst();
+        }
+        Segment* keySeg = nextMeasure ? nextMeasure->findFirstR(SegmentType::KeySig, Fraction(0, 1)) : nullptr;
+        if (keySeg) {
+            for (staff_idx_t i = 0; i <= nstaves(); i++) {
+                KeySig* ks = toKeySig(keySeg->element(i * VOICES));
+                if (ks && ks->forSectionBreak()) {
+                    if (ks->tick().isZero()) { // this should never happen, but to be sure
+                        ks->setForSectionBreak(false);
+                    } else {
+                        deleteItem(ks);
+                    }
+                }
             }
         }
     }

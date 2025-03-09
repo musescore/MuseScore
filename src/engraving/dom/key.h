@@ -82,6 +82,8 @@ public:
     bool isAtonal() const { return m_mode == KeyMode::NONE; }
     void setForInstrumentChange(bool forInstrumentChange) { m_forInstrumentChange = forInstrumentChange; }
     bool forInstrumentChange() const { return m_forInstrumentChange; }
+    void setForSectionBreak(bool forSectionBreak) { m_forSectionBreak = forSectionBreak; }
+    bool forSectionBreak() const { return m_forSectionBreak; }
     void initFromSubtype(int);      // for backward compatibility
     int degInKey(int degree) const; // return "absolute degree"
     SymId symInKey(SymId sym, int degree) const;
@@ -97,6 +99,7 @@ private:
     KeyMode m_mode = KeyMode::UNKNOWN;
     bool m_custom = false;
     bool m_forInstrumentChange = false;
+    bool m_forSectionBreak = false;
     std::vector<CustDef> m_customKeyDefs;
 };
 
