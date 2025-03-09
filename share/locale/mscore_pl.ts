@@ -7044,7 +7044,7 @@ Domyślnie zostaną one umieszczone tak, aby ich prawy koniec znajdował się na
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="88"/>
         <source>Reset &apos;Change speed&apos; value</source>
-        <translation>Resetuj wartość &quot;Zmiana szybkości&quot;</translation>
+        <translation>Resetuj wartość &quot;Zmiana prędkości&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="108"/>
@@ -7064,7 +7064,7 @@ Domyślnie zostaną one umieszczone tak, aby ich prawy koniec znajdował się na
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="156"/>
         <source>Change speed</source>
-        <translation>Zmiana szybkości</translation>
+        <translation>Zmiana prędkości</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="163"/>
@@ -7094,12 +7094,12 @@ Domyślnie zostaną one umieszczone tak, aby ich prawy koniec znajdował się na
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="239"/>
         <source>Velocity change speed</source>
-        <translation>Głośność zmiany szybkości</translation>
+        <translation>Prędkość zmiany głośności</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="242"/>
         <source>Change speed:</source>
-        <translation>Zmiana szybkości:</translation>
+        <translation>Zmiana prędkości:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="256"/>
@@ -30702,7 +30702,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="312"/>
         <location filename="../../libmscore/drumset.cpp" line="259"/>
         <source>Low Tom</source>
-        <translation>Niski tom</translation>
+        <translation>Niski tom-tom</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="313"/>
@@ -30714,13 +30714,13 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="314"/>
         <location filename="../../libmscore/drumset.cpp" line="261"/>
         <source>Low-Mid Tom</source>
-        <translation>Niski-średni tom</translation>
+        <translation>Niski-średni tom-tom</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="315"/>
         <location filename="../../libmscore/drumset.cpp" line="262"/>
         <source>Hi-Mid Tom</source>
-        <translation>Wysoki-średni tom</translation>
+        <translation>Wysoki-średni tom-tom</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="316"/>
@@ -30732,7 +30732,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="317"/>
         <location filename="../../libmscore/drumset.cpp" line="264"/>
         <source>High Tom</source>
-        <translation>Wysoki tom</translation>
+        <translation>Wysoki tom-tom</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="318"/>
@@ -30750,7 +30750,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="320"/>
         <location filename="../../libmscore/drumset.cpp" line="267"/>
         <source>Ride Bell</source>
-        <translation>Dzwon ride</translation>
+        <translation>Talerz ride</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="321"/>
