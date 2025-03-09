@@ -278,6 +278,8 @@ Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     m_activeSoundProfileName = rootObj.value("activeSoundProfile").toString();
     if (m_activeSoundProfileName.empty()) {
         m_activeSoundProfileName = playbackConfig()->defaultProfileForNewProjects();
+    } else if (m_activeSoundProfileName == playbackConfig()->compatMuseSoundsProfileName()) {
+        m_activeSoundProfileName = playbackConfig()->museSoundsProfileName();
     }
 
     return make_ret(Ret::Code::Ok);

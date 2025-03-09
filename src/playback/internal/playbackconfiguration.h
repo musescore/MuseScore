@@ -76,7 +76,9 @@ public:
     muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
 
     const SoundProfileName& basicSoundProfileName() const override;
-    const SoundProfileName& museSoundProfileName() const override;
+    const SoundProfileName& museSoundsProfileName() const override;
+    const SoundProfileName& compatMuseSoundsProfileName() const override;
+
     SoundProfileName defaultProfileForNewProjects() const override;
     void setDefaultProfileForNewProjects(const SoundProfileName& name) override;
 

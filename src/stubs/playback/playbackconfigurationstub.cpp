@@ -156,10 +156,16 @@ const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const
     return basic;
 }
 
-const SoundProfileName& PlaybackConfigurationStub::museSoundProfileName() const
+const SoundProfileName& PlaybackConfigurationStub::museSoundsProfileName() const
 {
     static const SoundProfileName museSounds;
     return museSounds;
+}
+
+const SoundProfileName& PlaybackConfigurationStub::compatMuseSoundsProfileName() const
+{
+    static const SoundProfileName compatMuseSounds;
+    return compatMuseSounds;
 }
 
 SoundProfileName PlaybackConfigurationStub::defaultProfileForNewProjects() const

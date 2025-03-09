@@ -73,7 +73,8 @@ public:
     virtual muse::async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;
 
     virtual const SoundProfileName& basicSoundProfileName() const = 0;
-    virtual const SoundProfileName& museSoundProfileName() const = 0;
+    virtual const SoundProfileName& museSoundsProfileName() const = 0;
+    virtual const SoundProfileName& compatMuseSoundsProfileName() const = 0;
 
     virtual SoundProfileName defaultProfileForNewProjects() const = 0;
     virtual void setDefaultProfileForNewProjects(const SoundProfileName& name) = 0;
