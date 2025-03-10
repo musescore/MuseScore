@@ -1549,7 +1549,12 @@ void GPConverter::addInstrumentChanges()
             auto it = track.second->sounds().find(soundAutomation.second.value);
             if (it == track.second->sounds().end()) {
                 midiProgramm = track.second->programm();
-                instrName = soundAutomation.second.value;
+                engraving::StringList list = soundAutomation.second.value.split(';');
+                if (list.size() != 1) {
+                    instrName = list[0].split('/')[2]; // Always looks like 'Main Group/Instrument Group/Instrument'
+                } else {
+                    instrName = soundAutomation.second.value;
+                }
             } else {
                 midiProgramm = it->second.programm;
                 instrName = it->second.label;
