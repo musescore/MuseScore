@@ -189,11 +189,13 @@ void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
         stavesIds.push_back(childAtRow(i)->id());
     }
 
+    // Remove the children first, then remove the staves
+    // so we don't try to remove them twice when notified by removeStaves()
+    AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
+
     if (deleteChild) {
         masterNotation()->parts()->removeStaves(stavesIds);
     }
-
-    AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
 }
 
 bool PartTreeItem::canAcceptDrop(const QVariant& obj) const

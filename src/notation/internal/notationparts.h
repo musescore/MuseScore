@@ -101,7 +101,7 @@ private:
     friend class MasterNotationParts;
 
     void listenUndoStackChanges();
-    void updatePartsAndSystemObjectStaves();
+    void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChangesRange& range = {});
 
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
@@ -137,7 +137,7 @@ private:
     void notifyAboutPartRemoved(const Part* part) const;
     void notifyAboutPartReplaced(const Part* oldPart, const Part* newPart) const;
     void notifyAboutStaffChanged(const Staff* staff) const;
-    void notifyAboutStaffAdded(const Staff* staff, const muse::ID& partId) const;
+    void notifyAboutStaffAdded(const Staff* staff) const;
     void notifyAboutStaffRemoved(const Staff* staff) const;
 
     IGetScore* m_getScore = nullptr;
@@ -147,7 +147,6 @@ private:
     muse::async::Notification m_scoreOrderChanged;
 
     std::vector<Part*> m_parts;
-
     std::vector<Staff*> m_systemObjectStaves;
     muse::async::Notification m_systemObjectStavesChanged;
 
