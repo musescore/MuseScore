@@ -31,6 +31,10 @@ QtPlatform.FileDialog {
     signal opened()
     signal closed()
 
+    function hasFileExtension(filePath) {
+        return filePath.indexOf('.', filePath.lastIndexOf('/')) !== -1
+    }
+
     onVisibleChanged: {
         if (visible) {
             root.opened()
@@ -38,7 +42,13 @@ QtPlatform.FileDialog {
     }
 
     onAccepted: {
-        root.ret = { "errcode": 0, "value":  root.currentFile.toString() }
+        var filename = root.currentFile.toString();
+        if (root.defaultSuffix && !hasFileExtension(filename))
+        {
+            filename += "." + root.defaultSuffix;
+        }
+
+        root.ret = { "errcode": 0, "value":  filename }
         root.close()
         root.closed()
     }
