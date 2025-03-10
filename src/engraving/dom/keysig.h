@@ -91,6 +91,9 @@ public:
     void setForInstrumentChange(bool forInstrumentChange) { m_sig.setForInstrumentChange(forInstrumentChange); }
     bool forInstrumentChange() const { return m_sig.forInstrumentChange(); }
 
+    void setForSectionBreak(bool forSectionBreak) { m_sig.setForSectionBreak(forSectionBreak); }
+    bool forSectionBreak() const { return m_sig.forSectionBreak(); }
+
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
