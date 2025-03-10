@@ -267,6 +267,10 @@ bool StaffType::isSimpleTabStaff() const
     case StaffTypes::TAB_4SIMPLE:
     case StaffTypes::TAB_5SIMPLE:
     case StaffTypes::TAB_6SIMPLE:
+    case StaffTypes::TAB_7SIMPLE:
+    case StaffTypes::TAB_8SIMPLE:
+    case StaffTypes::TAB_9SIMPLE:
+    case StaffTypes::TAB_10SIMPLE:
     case StaffTypes::TAB_ITALIAN:
     case StaffTypes::TAB_FRENCH:
         return true;
