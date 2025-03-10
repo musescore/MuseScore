@@ -44,7 +44,7 @@ using namespace muse::audio::synth;
 
 static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = muse::qtrc("playback", "SoundFonts");
-static const QString MUSE_MENU_ITEM_ID("Muse Sounds");
+static const QString MUSE_MENU_ITEM_ID("MuseSounds");
 static const QString GET_MORE_SOUNDS_ID("getMoreSounds");
 
 static const muse::String MS_BASIC_SOUNDFONT_NAME(u"MS Basic");
