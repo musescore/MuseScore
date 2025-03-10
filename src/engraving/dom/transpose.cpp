@@ -807,7 +807,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
     }
 
     // now transpose notes and chord symbols
-    for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+    for (Segment* s = firstSegment(Segment::CHORD_REST_OR_TIME_TICK_TYPE); s; s = s->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
         if (s->tick() < tickStart) {
             continue;
         }
