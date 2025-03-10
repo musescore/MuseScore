@@ -6153,13 +6153,13 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             MeasureBase* m = lb->measure();
 
             // add Key Signature on Section Break
-            // TODO: special case for instrument change
             Fraction tick = m->endTick();
             int ticks = tick.ticks();
             for (Staff* staff : score()->staves()) {
                 KeyList* kl = staff->keyList();
-                if (kl->currentKeyTick(ticks) != ticks) {
-                    KeySigEvent ks = kl->key(ticks);
+                KeySigEvent ks = kl->key(ticks);
+                if (kl->currentKeyTick(ticks) != ticks || ks.forInstrumentChange()) {
+                    ks.setForInstrumentChange(false);
                     ks.setForSectionBreak(true);
                     undoChangeKeySig(staff, tick, ks);
                 }
@@ -6998,7 +6998,23 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             for (staff_idx_t i = 0; i <= nstaves(); i++) {
                 KeySig* ks = toKeySig(keySeg->element(i * VOICES));
                 if (ks && ks->forSectionBreak()) {
-                    if (ks->tick().isZero()) { // this should never happen, but to be sure
+                    Staff* staff = ks->staff();
+                    Fraction tick = ks->tick();
+                    KeySigEvent actualKey = ks->keySigEvent();
+                    KeySigEvent prevKey = staff->prevKey(tick);
+
+                    // do not remove keysig on first measure, or if signatures differ
+                    bool isFirst = ks->tick().isZero(); // this should never happen, but to be sure
+
+                    // if previous signature is "forInstrumentChange",
+                    // comparation returns false, even if they are otherwise identical
+                    // (because one is forInstrumentChange and second not)
+                    // so we need to remove "forInstrumentChange" flag first
+                    if (prevKey.forInstrumentChange()) {
+                        prevKey.setForInstrumentChange(false);
+                    }
+
+                    if (isFirst || actualKey != prevKey) {
                         ks->setForSectionBreak(false);
                     } else {
                         deleteItem(ks);
