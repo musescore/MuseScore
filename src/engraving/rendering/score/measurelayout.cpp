@@ -1984,7 +1984,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     }
 }
 
-void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackIdx, LayoutContext& ctx)
+void MeasureLayout::placeParentheses(Segment* segment, track_idx_t trackIdx, LayoutContext& ctx)
 {
     const EngravingItem* segItem = segment->elementAt(trackIdx);
     const std::vector<EngravingItem*> parens = segment->findAnnotations(ElementType::PARENTHESIS, trackIdx, trackIdx);
@@ -2014,6 +2014,7 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
                                                                                 paren->pos()), dummySegShape, paren->spatium());
             paren->mutldata()->moveX(-minDist);
         }
+        segment->createShape(track2staff(trackIdx));
         return;
     }
 
@@ -2053,6 +2054,7 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
     const double parenPadding = segment->score()->paddingTable().at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
 
     if (itemWidth >= parenPadding) {
+        segment->createShape(track2staff(trackIdx));
         return;
     }
 
@@ -2067,6 +2069,8 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
 
     leftParen->mutldata()->moveX(-(parenToItemDist - leftParenToItem));
     rightParen->mutldata()->moveX(-(itemToRightParen - parenToItemDist));
+
+    segment->createShape(track2staff(trackIdx));
 }
 
 Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)
