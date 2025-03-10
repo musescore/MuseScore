@@ -1641,7 +1641,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
 
     std::vector<Measure*> measures;
 
-    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+    for (auto it = repeatList.begin() + 1; it != repeatList.end(); it++) {
         const RepeatSegment* rs = *it;
         const auto prevSegIt = std::prev(it);
         if (!rs->startsWithMeasure(masterMeasure) || prevSegIt == repeatList.end()) {
