@@ -2417,6 +2417,31 @@ void Score::cmdFlip()
                 DirectionV direction = bend->ldata()->up() ? DirectionV::DOWN : DirectionV::UP;
                 bend->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<DirectionV>(direction));
             });
+        } else if (e->isTrillSegment()) {
+            auto trillSegment = toTrillSegment(e);
+            auto trill = trillSegment->trill();
+            auto ornament = trill->ornament();
+
+            flipOnce(ornament, [ornament]() {
+                ArticulationAnchor articAnchor = ArticulationAnchor(ornament->getProperty(Pid::ARTICULATION_ANCHOR).toInt());
+
+                switch (articAnchor) {
+                    case ArticulationAnchor::TOP:
+                        articAnchor = ArticulationAnchor::BOTTOM;
+                        break;
+                    case ArticulationAnchor::BOTTOM:
+                        articAnchor = ArticulationAnchor::TOP;
+                        break;
+                    case ArticulationAnchor::AUTO:
+                        articAnchor = ornament->up() ? ArticulationAnchor::BOTTOM : ArticulationAnchor::TOP;
+                        break;
+                }
+                PropertyFlags pf = ornament->propertyFlags(Pid::ARTICULATION_ANCHOR);
+                if (pf == PropertyFlags::STYLED) {
+                    pf = PropertyFlags::UNSTYLED;
+                }
+                ornament->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor), pf);
+            });
         } else if (e->isStaffText()
                    || e->isSystemText()
                    || e->isTempoText()
@@ -2436,7 +2461,6 @@ void Score::cmdFlip()
                    || e->isOttava()
                    || e->isOttavaSegment()
                    || e->isTrill()
-                   || e->isTrillSegment()
                    || e->isTextLine()
                    || e->isTextLineSegment()
                    || e->isLetRing()
