@@ -117,6 +117,8 @@ FocusScope {
                 root.ensureActiveFocus()
             }
         }
+
+        onTriggered: root.ensureActiveFocus()
     }
 
     Rectangle {
@@ -189,6 +191,10 @@ FocusScope {
                         || event.key === Qt.Key_Escape) {
                     event.accepted = true
                     return
+                }
+
+                if (event.key === Qt.Key_Up || event.key === Qt.Key_Down) {
+                    return;
                 }
 
                 if (textInputModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
