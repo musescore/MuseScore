@@ -56,6 +56,12 @@ public:
     async::Notification outputDeviceSampleRateChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+    bool isPlaying() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
+
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
 
     void resume() override;
     void suspend() override;

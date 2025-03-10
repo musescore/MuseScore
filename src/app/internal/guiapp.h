@@ -16,6 +16,7 @@
 #include "appshell/iappshellconfiguration.h"
 #include "appshell/internal/istartupscenario.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
+#include "audio/iaudioconfiguration.h"
 
 namespace mu::app {
 class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
@@ -25,6 +26,7 @@ class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this
     muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::Inject<appshell::IStartupScenario> startupScenario;
     muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration;
 
 public:
     GuiApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);

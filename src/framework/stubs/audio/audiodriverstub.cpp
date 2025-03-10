@@ -83,6 +83,28 @@ async::Notification AudioDriverStub::availableOutputDevicesChanged() const
     return async::Notification();
 }
 
+int AudioDriverStub::audioDelayCompensate() const
+{
+    return 0;
+}
+
+void AudioDriverStub::setAudioDelayCompensate(const int)
+{
+}
+
+bool AudioDriverStub::isPlaying() const
+{
+    return false;
+}
+
+void AudioDriverStub::remotePlayOrStop([[maybe_unused]] bool ps) const
+{
+}
+
+void AudioDriverStub::remoteSeek([[maybe_unused]] msecs_t millis) const
+{
+}
+
 unsigned int AudioDriverStub::outputDeviceBufferSize() const
 {
     return 0;
