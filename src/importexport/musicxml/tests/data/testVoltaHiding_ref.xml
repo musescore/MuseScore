@@ -48,6 +48,7 @@
     </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -636,6 +637,7 @@
         </note>
       </measure>
     <measure number="32">
+      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>
@@ -669,6 +671,7 @@
     </part>
   <part id="P2">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -2308,6 +2311,7 @@
         </note>
       </measure>
     <measure number="32">
+      <print page-number="2"/>
       <note>
         <pitch>
           <step>B</step>
