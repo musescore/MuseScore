@@ -1669,10 +1669,7 @@ static void setChordRestDuration(ChordRest* cr, TDuration duration, const Fracti
 
 /**
  * Add a rest to the score
- * TODO: beam handling
  * TODO: display step handling
- * TODO: visible handling
- * TODO: whole measure rest handling
  */
 
 static Rest* addRest(Score*, Measure* m,
@@ -2404,7 +2401,8 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo, Color beamColor)
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam,
+                                 bool hasBeamingInfo, Color beamColor, const String fan)
 {
     if (!cr) {
         return;
@@ -2422,6 +2420,9 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         beam->setDirection(sd);
         if (beamColor.isValid()) {
             beam->setColor(beamColor);
+        }
+        if (!fan.empty() && fan != u"none") {
+            beam->setAsFeathered(fan == u"rit");
         }
     }
     // add ChordRest to beam
@@ -3066,8 +3067,8 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
     staff_idx_t staffIdx = m_score->staffIdx(part) + n;
 
     StringData stringData;
-    String visible = m_e.attribute("print-object");
-    String spacing = m_e.attribute("print-spacing");
+    AsciiStringView visible = m_e.asciiAttribute("print-object");
+    AsciiStringView spacing = m_e.asciiAttribute("print-spacing");
     if (visible == "no") {
         // EITHER:
         //  1) this indicates an empty staff that is hidden
@@ -3084,7 +3085,7 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
             // this doesn't apply to a measure, so we'll assume the entire staff has to be hidden.
             m_score->staff(staffIdx)->setVisible(false);
         }
-    } else if (visible == u"yes" || visible.empty()) {
+    } else if (visible == "yes" || visible.empty()) {
         if (measure) {
             m_score->staff(staffIdx)->setVisible(true);
             measure->setStaffVisible(staffIdx, true);
@@ -6699,6 +6700,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     bool isSingleDrumset = false;
     BeamMode bm;
     std::map<int, String> beamTypes;
+    String beamFan;
     String instrumentId;
     String tieType;
     MusicXmlParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
@@ -6715,6 +6717,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // element handled
         } else if (m_e.name() == "beam") {
             beamColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            beamFan = m_e.attribute("fan");
             beam(beamTypes);
         } else if (m_e.name() == "chord") {
             chord = true;
@@ -6986,7 +6989,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // regular note
             // handle beam
             if (!chord) {
-                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor);
+                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor, beamFan);
             }
 
             // append any grace chord after chord to the previous chord
