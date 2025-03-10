@@ -2797,7 +2797,7 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 
 bool TextBase::setProperty(Pid pid, const PropertyValue& v)
 {
-    if (m_textInvalid) {
+    if (m_textInvalid && ldata()->isValid()) {
         genText();
     }
 
