@@ -374,7 +374,7 @@ void DockWindow::loadPanels(const DockPageView* page)
             }
         }
 
-        addDock(panel, location);
+        addDock(panel, location, page->centralDock());
     };
 
     for (DockPanelView* panel : page->panels()) {
