@@ -3693,7 +3693,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
         SymId sid = a->symId();
         if (symIdToArtic(sid).empty()
-            && symIdToOrnam(sid) == ""
             && symIdToTechn(sid) == ""
             && !isLaissezVibrer(sid)) {
             LOGD("unknown chord attribute %d %s", static_cast<int>(sid), muPrintable(a->translatedTypeUserName()));
