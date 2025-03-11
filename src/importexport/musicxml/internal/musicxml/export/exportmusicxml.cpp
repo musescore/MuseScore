@@ -996,19 +996,21 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
 
 static void glissando(const Glissando* gli, int number, bool start, Notations& notations, XmlWriter& xml)
 {
-    GlissandoType st = gli->glissandoType();
     String tagName;
-    switch (st) {
-    case GlissandoType::STRAIGHT:
-        tagName = u"slide line-type=\"solid\"";
-        break;
-    case GlissandoType::WAVY:
+    if (gli->glissandoType() == GlissandoType::STRAIGHT) {
+        switch (gli->lineStyle()) {
+        case LineType::SOLID:
+            tagName = u"slide line-type=\"solid\"";
+            break;
+        case LineType::DASHED:
+            tagName = u"slide line-type=\"dashed\"";
+            break;
+        case LineType::DOTTED:
+            tagName = u"slide line-type=\"dotted\"";
+            break;
+        }
+    } else {
         tagName = u"glissando line-type=\"wavy\"";
-        break;
-    default:
-        LOGD("unknown glissando subtype %d", int(st));
-        return;
-        break;
     }
     tagName += String(u" number=\"%1\" type=\"%2\"").arg(number).arg(start ? u"start" : u"stop");
     if (start) {
