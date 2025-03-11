@@ -2735,7 +2735,7 @@ RectF Note::drag(EditData& ed)
     }
 
     bool isSingleNoteSelection = score()->getSelectedElement() == this;
-    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection) {
+    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection && !(ed.modifiers & ControlModifier)) {
         horizontalDrag(ed);
     } else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch) {
         verticalDrag(ed);
