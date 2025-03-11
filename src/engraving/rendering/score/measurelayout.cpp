@@ -815,15 +815,13 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
         // Removed linked clones that were created for the mmRest measure
         Measure* mmRestMeasure = firstMeasure->mmRest();
         for (EngravingItem* item : mmRestMeasure->el()) {
-            item->unlink();
-            mmRestMeasure->remove(item);
-            delete item;
+            item->undoUnlink();
+            mmRestMeasure->score()->doUndoRemoveElement(item);
         }
         for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
             for (EngravingItem* item : seg->annotations()) {
-                item->unlink();
-                seg->remove(item);
-                delete item;
+                item->undoUnlink();
+                mmRestMeasure->score()->doUndoRemoveElement(item);
             }
         }
 
