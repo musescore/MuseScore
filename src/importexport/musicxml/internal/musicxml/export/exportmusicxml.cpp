@@ -3274,8 +3274,6 @@ static String symIdToOrnam(const SymId sid)
         return String(u"other-ornament smufl=\"%1\"").arg(String::fromAscii(name.ascii()));
         break;
     }
-
-    return String();
 }
 
 //---------------------------------------------------------
