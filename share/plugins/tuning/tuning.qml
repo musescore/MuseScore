@@ -44,389 +44,458 @@ MuseScore {
      * Each row is ordered in the cycle of fifths, so C, G, D, A, E, B, F#, C#, G#/Ab, Eb, Bb, F;
      * and the values are offsets from the equal tempered value.
      *
-     * However for tunings who's default root note is not C, the values are pre-rotated so that applying the
-     * root note rotation will put the first value of the sequence at the root note.
+     * However for tunings who's default root/pure note is not C, the values are pre-rotated and adjusted accordingly. 
      */
     
-    property var westernTemperaments: [
+    property var defaultWesternTemperaments: [
         {
             'name': "Equal",
             'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Pythagorean",
-            'offsets': [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0],
+            'offsets': [-6, -4, -2, 0, 2, 4, -18, -16, -14, -12, -10, -8],
             'root': 9,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Aaron",
-            'offsets': [10.5, 7.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -21.0, -24.5, -28.0],
+            'offsets': [10.5, 7, 3.5, 0, -3.5, -7, 31.5, 28, 24.5, 21, 17.5, 14],
             'root': 9,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Silberman",
-            'offsets': [5.0, 3.3, 1.7, 0.0, -1.7, -3.3, -5.0, -6.7, -8.3, -10.0, -11.7, -13.3],
+            'offsets': [5, 3.3, 1.7, 0, -1.7, -3.3, 15, 13.3, 11.7, 10, 8.3, 6.7],
             'root': 9,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Salinas",
-            'offsets': [16.0, 10.7, 5.3, 0.0, -5.3, -10.7, -16.0, -21.3, -26.7, -32.0, -37.3, -42.7],
+            'offsets': [16, 10.7, 5.3, 0, -5.3, -10.7, 48, 42.7, 37.3, 32, 26.7, 21.3],
             'root': 9,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Kirnberger",
             'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -12.0, -10.0, -10.0, -8.0, -6.0, -4.0, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Vallotti",
             'offsets': [0.0, -2.0, -4.0, -6.0, -8.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Werkmeister",
             'offsets': [0.0, -4.0, -8.0, -12.0, -10.0, -8.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Marpurg",
             'offsets': [0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Just",
             'offsets': [0.0, 2.0, 4.0, -16.0, -14.0, -12.0, -10.0, -30.0, -28.0, 16.0, 18.0, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Mean Semitone",
             'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
             'root': 6,
-            'pure': 6
+            'pure': 6,
+            'tweak': 0
         },
         {
             'name': "Grammateus",
-            'offsets': [-2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 0.0, 2.0, 4.0, 6.0, 8.0],
+            'offsets': [-2, 0, 2, 4, 6, -4, -2, 0, 2, 4, -6, -4],
             'root': 11,
-            'pure': 1
+            'pure': 1,
+            'tweak': 0
         },
         {
             'name': "French",
             'offsets': [0.0, -2.5, -5.0, -7.5, -10.0, -12.5, -13.0, -13.0, -11.0, -6.0, -1.5, 2.5],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "French 2",
             'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Rameau",
             'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -15.5, -13.5, -11.5, -2.0, 7.0, 3.5],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Irr Fr 17e",
-            'offsets': [-8.0, -2.0, 3.0, 0.0, -3.0, -6.0, -9.0, -12.0, -15.0, -18.0, -21.0, -24.0],
+            'offsets': [9, 6, 3, 0, -3, -6, 10, 16, 21, 18, 15, 12],
             'root': 9,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Bach Lehman",
-            'offsets': [0.0, -2.0, -3.9, -5.9, -7.8, -5.9, -3.9, -2.0, -2.0, -2.0, -2.0, 2.0],
+            'offsets': [5.9, 3.9, 2, 0, -1.9, 0, 2, 3.9, 3.9, 3.9, 3.9, 7.9],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Meantone (1/4) 5 flats",
             'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, 30.8, 27.4, 24.0, 20.5, 17.1, 13.7],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Meantone 1/4-comma",
             'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Meantone (1/4) 5 sharps",
             'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, -20.5, -24.0, 13.7],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Meantone 1/5-comma",
             'offsets': [7.0, 4.7, 2.3, 0.0, -2.3, -4.7, -7.0, -9.4, -11.7, 14.1, 11.7, 9.4],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Meantone 1/6-comma",
             'offsets': [4.9, 3.3, 1.6, 0.0, -1.6, -3.3, -4.9, -6.5, -8.1, 9.8, 8.1, 6.5],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Werckmeister III",
             'offsets': [11.7, 7.8, 3.9, 0.0, 2.0, 3.9, 0.0, 2.0, 3.9, 5.9, 7.8, 9.8],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Kirnberger III",
             'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -1.5, 0.5, 0.5, 2.4, 4.4, 6.4, 8.3],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Vallotti",
             'offsets': [5.9, 3.9, 2.0, 0.0, -2.0, -3.9, -2.0, 0.0, 2.0, 3.9, 5.9, 7.8],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Young I",
             'offsets': [6.2, 4.2, 2.1, 0.0, -2.1, -1.9, -1.8, 0.1, 2.1, 4.1, -0.3, -0.1],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Kellner",
             'offsets': [8.2, 5.5, 2.7, 0.0, -2.7, -0.8, -3.5, -1.6, 0.4, 2.3, 4.3, 6.3],
             'root': 0,
-            'pure': 3
+            'pure': 3,
+            'tweak': 0
         },
         {
             'name': "Fernando A. Martin 1/45-comma",
             'offsets': [6.6, 3.9, 1.7, 0.0, -1.2, -1.8, -2.0, -1.6, -0.7, 0.8, 2.7, 4.7],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "C Cm Db Dm Eb Ebm Em F Fm Ab Am Bb",
             'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "C Cm C#m D Dm E Em F F#m A Am Bb",
             'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "C Cm Db D Dm Em F Fm Ab Am Bb Bbm",
             'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "C Cm Db Eb Em F Fm G Gm Ab Am Bm",
             'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "C Cm D Dm Eb Em F#m G Gm Ab Bb Bm",
             'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "C D Ebm E Em F# F#m G G#m Bbm B Bm",
             'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Simple Ratios",
             'offsets': [0.0, 2.0, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Alternate Ratios",
             'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         }
     ]
 
-    property var middleEasternTemperaments: [
+    property var defaultMiddleEasternTemperaments: [
         {
             'name': "Melodic 1# 2b",
             'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Harmonic 1# 2b",
             'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Rast, Sikah",
             'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Suznak, Huzam",
             'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Nayruz",
             'offsets': [0.0, 2.0, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Bayati, Kurd, Huseyni",
             'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Qarjighar",
             'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Saba, Basta Nikar, Zanjaran",
             'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Hijaz, Nikriz",
             'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Nawa'athar, Shad Araban",
             'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Shehnaz",
             'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Nahawand, Hijaz Kar",
             'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "hawand, Hijaz Kar Kurd",
             'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Iraq, Yekah, Nawa",
             'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Farahnak, Yekah, Nawa",
             'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Jiharkah",
             'offsets': [0.0, 2.0, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Ajam Ashyran, Shawq Afza",
             'offsets': [0.0, 2.0, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Hisar",
             'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Nishaburek (Rast in D & A)",
             'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Nishaburek (Rast in D, Bayati in A)",
             'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Saba Zamzam",
             'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Rakb",
             'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Ikah Baladi",
             'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         },
         {
             'name': "Iraq (Cadence)",
             'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2.0],
             'root': 0,
-            'pure': 0
+            'pure': 0,
+            'tweak': 0
         }
-    ]
+    ]    
 
-    property var westernTemperamentsLength: 36
-    property var middleEasternTemperamentsLength: 24
+    property var westernTemperaments: JSON.parse(JSON.stringify(defaultWesternTemperaments)) 
+    property var middleEasternTemperaments: JSON.parse(JSON.stringify(defaultMiddleEasternTemperaments))
 
-    property var currentTemperament: westernTemperaments[0];    
+    //property var currentTemperamentIndex: 0
+
+    property var currentDefaultTemperament: defaultWesternTemperaments[currentTemperamentIndex]
+    property var currentTemperament: westernTemperaments[currentTemperamentIndex]
+      
     property var currentRoot: 0;
     property var currentPureTone: 0;
     property var currentTweak: 0.0;
 
     onRun: {
-        var customArray= fileIO.read()
-        customArray = JSON.parse(customArray)
-        westernTemperaments = westernTemperaments.concat(customArray[0])
-        middleEasternTemperaments = middleEasternTemperaments.concat(customArray[1])
+        var savedArray= fileIO.read()
+        savedArray = JSON.parse(savedArray)
+        westernTemperaments = savedArray[0]
+        middleEasternTemperaments = savedArray[1]
+        // var userTemperaments = JSON.parse(JSON.stringify([
+        //     westernTemperaments.slice(defaultWesternTemperaments.length), 
+        //     middleEasternTemperaments.slice(defaultMiddleEasternTemperaments.length)
+        //     ]))
+        //defaultWesternTemperaments = defaultWesternTemperaments.concat(userTemperaments[0])
+        //defaultMiddleEasternTemperaments = defaultMiddleEasternTemperaments.concat(userTemperaments[1])
     }    
 
     function applyTemperament() {
@@ -544,16 +613,12 @@ MuseScore {
         errorDialog.open()
     }
 
-    function getTuning() {
-        return function(pitch, temp=currentTemperament) {
-            var i = (pitch - currentRoot + 12) % 12;
-            var offset = temp.offsets[i];
-            var j = (currentPureTone - currentRoot + 12) % 12;
-            var pureNoteAdjustment = temp.offsets[j];
-            var finalOffset = offset - pureNoteAdjustment;
-            var tweakFinalOffset = finalOffset + tweakValue.currentValue
-            return tweakFinalOffset
-        }
+    function getTuning(temp=currentTemperament) {
+        var dRoot = currentRoot - temp.root
+        var rotatedOffsets = temp.offsets.slice((12-dRoot)%12, 12).concat(temp.offsets.slice(0, (12-dRoot)%12)) 
+        var pureToneOffset = rotatedOffsets[currentPureTone]                    
+        var newOffsets = rotatedOffsets.map(x => x - pureToneOffset + currentTweak)
+        return newOffsets
     }
 
     function getFinalTuning() {
@@ -563,23 +628,23 @@ MuseScore {
         }
     }
     
-    function recalculate(tuning) {        
+    function recalculate(tuning=getTuning()) {        
         for (var i=0; i<12; i++) {
-            finalOffsets.itemAt(i).children[1].currentText = tuning(i).toFixed(1)
+            finalOffsets.itemAt(i).children[1].currentText = tuning[i].toFixed(1)
         }           
     }    
 
-    function temperamentClicked(temperament) {        
-        currentTemperament = temperament
+    function temperamentClicked(temperament) {
         currentRoot = temperament.root            
         currentPureTone = temperament.pure         
-        currentTweak = 0.0
+        currentTweak = temperament.tweak
 
         rootNotes.itemAt(currentRoot).checked=true 
         pureTones.itemAt(currentPureTone).checked=true
         tweakValue.currentValue = currentTweak
         
-        recalculate(getTuning())      
+        recalculate() 
+        checkIfEdited()     
     }
 
     function rootNoteClicked(note) {        
@@ -590,21 +655,61 @@ MuseScore {
         pureTones.itemAt(currentPureTone).checked=true
         tweakValue.currentValue = currentTweak
         
-        recalculate(getTuning())       
+        recalculate() 
+        updateCurrentTemperament()    
     }
 
     function pureToneClicked(note) {        
         currentPureTone = note
         currentTweak = 0.0
         tweakValue.currentValue = currentTweak
-        recalculate(getTuning())       
+        recalculate()  
+        updateCurrentTemperament()    
     }
 
     function tweaked() {  
-        currentTweak = tweakValue.currentValue
-        tweakValue.currentValue = currentTweak 
-        recalculate(getTuning())        
+        currentTweak = tweakValue.currentValue         
+        recalculate() 
+        updateCurrentTemperament()      
     }    
+
+    function updateCurrentTemperament() {
+        currentTemperament.root = currentRoot
+        currentTemperament.pure = currentPureTone 
+        currentTemperament.tweak = currentTweak       
+        for (var i=0; i<12; i++) {
+             currentTemperament.offsets[i] = parseFloat(finalOffsets.itemAt(i).children[1].currentText)
+        }
+        checkIfEdited()
+    }
+    
+    function checkIfEdited() {  
+        if (currentDefaultTemperament.root !== currentTemperament.root ||
+            currentDefaultTemperament.pure !== currentTemperament.pure ||
+            currentDefaultTemperament.tweak !== currentTemperament.tweak) {
+            resetButton.enabled = true 
+            return
+        } 
+        else {
+            //var newOffsets = getTuning(currentDefaultTemperament)  
+            for (var i=0; i<12; i++) {
+                if (currentDefaultTemperament.offsets[i] !== currentTemperament.offsets[i]) {
+                    resetButton.enabled = true
+                    return
+                }
+                ////Rotate the offsets array so the current root is at the start
+                //// var offset = temp.offsets[(i - currentRoot + 12) % 12]            
+                //// var pureNoteAdjustment = temp.offsets[(currentPureTone - currentRoot + 12) % 12]
+                //// var newOffset = offset - pureNoteAdjustment + tweakValue.currentValue      
+
+                // if (newOffsets[i] !== parseFloat(finalOffsets.itemAt(i).children[1].currentText)) { //currentTemperament.offsets[i]) {
+                //     resetButton.enabled = true
+                //     return
+                // }
+            }
+            resetButton.enabled = false
+        }
+    }
 
     StyledTabBar {
         id:tabBar
@@ -674,14 +779,14 @@ MuseScore {
                 enabled: {
                     switch (tabBar.currentIndex) {
                     case 0:
-                        if (westernTemperaments.indexOf(currentTemperament) < westernTemperamentsLength)  {
+                        if (westernTemperaments.indexOf(currentTemperament) <  defaultWesternTemperaments.length)  {
                             return false
                         }
                         else {
                             return true
                         }
                     case 1:
-                        if (middleEasternTemperaments.indexOf(currentTemperament) < middleEasternTemperamentsLength)  {
+                        if (middleEasternTemperaments.indexOf(currentTemperament) < defaultMiddleEasternTemperaments.length)  {
                             return false
                         }
                         else {
@@ -712,12 +817,19 @@ MuseScore {
                     height: 30
                     ButtonGroup.group: tempGroup
                     orientation: Qt.Horizontal
-                    leftPadding: 5
-                    checked: index == 0 ? true : false
+                    leftPadding: 5                    
                     title: modelData.name
+                    checked: index==0
                     onClicked: {
-                        temperamentClicked(westernTemperaments[index]);
-                    }
+                        //currentTemperamentIndex = index
+                        currentDefaultTemperament = defaultWesternTemperaments[index]
+                        currentTemperament = westernTemperaments[index]
+                        temperamentClicked(currentTemperament)
+                    }                    
+                }                
+                Component.onCompleted: {
+                    //westernListView.itemAtIndex(0).checked = true 
+                    westernListView.itemAtIndex(0).clicked()
                 }
             }
 
@@ -736,7 +848,10 @@ MuseScore {
                     leftPadding: 5
                     title: modelData.name
                     onClicked: {
-                        temperamentClicked(middleEasternTemperaments[index]);
+                        //currentTemperamentIndex = index
+                        currentDefaultTemperament = defaultMiddleEasternTemperaments[index]
+                        currentTemperament = middleEasternTemperaments[index]
+                        temperamentClicked(currentTemperament)
                     }
                 }
             }
@@ -744,6 +859,7 @@ MuseScore {
     }
 
     ColumnLayout {
+        id: rightColumn
         anchors.top: parent.top
         anchors.topMargin: 60
         anchors.margins: 20
@@ -839,7 +955,11 @@ MuseScore {
                                                                 }
                                                                 else { 
                                                                     currentText = "0.0"
-                                                                }                                                                
+                                                                } 
+                                                                updateCurrentTemperament()
+                                                                recalculate()
+                                                                updateCurrentTemperament()
+                                                                checkIfEdited()                                                               
                                                             }                                    
                                 }
                             }
@@ -858,6 +978,25 @@ MuseScore {
         }        
     }
 
+    FlatButton{
+        id: resetButton
+        icon: IconCode.UNDO
+        anchors.top: rightColumn.top
+        anchors.right: rightColumn.right
+        anchors.margins: 12 
+        onClicked: {
+            currentTemperament.root  = currentDefaultTemperament.root
+            currentTemperament.pure  = currentDefaultTemperament.pure
+            currentTemperament.tweak = currentDefaultTemperament.tweak
+
+            for (var i=0; i<12; i++) {
+                currentTemperament.offsets[i] = currentDefaultTemperament.offsets[i]
+            }   
+            temperamentClicked(currentTemperament)
+            updateCurrentTemperament()
+        }
+    }
+
     ButtonBox {
         id: buttonBox                
         anchors.bottom: window.bottom
@@ -870,7 +1009,8 @@ MuseScore {
                 quit()                            
             } 
             else if (buttonId === ButtonBoxModel.Apply) {
-                if (applyTemperament()) {                    
+                if (applyTemperament()) { 
+                    saveCustomTemperaments()                   
                     quit()                                
                 }
             }
@@ -896,7 +1036,8 @@ MuseScore {
                         "name": customTempName.currentText,
                         "offsets": [],
                         "root": currentRoot,
-                        "pure": currentPureTone                        
+                        "pure": currentPureTone, 
+                        "tweak": currentTweak                       
                     } 
         for (var i=0; i<12; i++) {
             entry.offsets.push( finalOffsets.itemAt(i).children[1].currentText )
@@ -940,8 +1081,8 @@ MuseScore {
         fileIO.write(
             JSON.stringify(
                 [
-                    westernTemperaments.slice(westernTemperamentsLength), 
-                    middleEasternTemperaments.slice(middleEasternTemperamentsLength)
+                    westernTemperaments, 
+                    middleEasternTemperaments
                 ]
             )
         ) 
