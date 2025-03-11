@@ -437,7 +437,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             museSamplerItems << makeMenuItem("musesampler-reload");
         }
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&MuseSampler"), museSamplerItems, "menu-musesampler");
     }
 #endif
 
