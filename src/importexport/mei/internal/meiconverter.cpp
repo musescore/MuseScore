@@ -1901,6 +1901,9 @@ void Convert::jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRe
         }
     }
 
+    // @color
+    Convert::colorFromMEI(jump, meiRepeatMark);
+
     jump->setJumpType(jumpType);
 }
 
@@ -1943,6 +1946,9 @@ libmei::RepeatMark Convert::jumpToMEI(const engraving::Jump* jump, String& text)
     default:
         text = jump->plainText();
     }
+
+    // @color
+    Convert::colorToMEI(jump, meiRepeatMark);
 
     return meiRepeatMark;
 }
