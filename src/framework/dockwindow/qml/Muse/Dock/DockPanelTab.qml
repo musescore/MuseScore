@@ -47,6 +47,16 @@ StyledTabButton {
 
     clip: true
 
+    function closeMenu() {
+        contextMenuButton.closeMenu()
+    }
+
+    Component.onDestruction: {
+        if (Boolean(contextMenuButton.menuModel)) {
+            contextMenuButton.menuModel.onMenuCloseRequested.disconnect(root.closeMenu)
+        }
+    }
+
     contentItem: Row {
         spacing: root.buttonPadding
 
@@ -67,6 +77,12 @@ StyledTabButton {
 
             anchors.verticalCenter: parent.verticalCenter
             visible: root.isCurrent
+
+            onMenuModelChanged: {
+                if (Boolean(menuModel)) {
+                    menuModel.onMenuCloseRequested.connect(root.closeMenu)
+                }
+            }
 
             Connections {
                 target: root

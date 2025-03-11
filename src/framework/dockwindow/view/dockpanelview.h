@@ -34,6 +34,7 @@ class AbstractMenuModel;
 }
 
 namespace muse::dock {
+class DockPanelMenuModel;
 class DockPanelView : public DockBase
 {
     Q_OBJECT
@@ -48,6 +49,9 @@ class DockPanelView : public DockBase
 public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
     ~DockPanelView() override;
+
+    Q_INVOKABLE void close() override;
+    void resetToDefault() override;
 
     QString groupName() const;
     uicomponents::AbstractMenuModel* contextMenuModel() const;
@@ -81,9 +85,37 @@ private:
     QString m_groupName;
 
     class DockPanelMenuModel;
-    DockPanelMenuModel* m_menuModel = nullptr;
+    dock::DockPanelMenuModel* m_menuModel = nullptr;
     QQmlComponent* m_titleBar = nullptr;
     QQmlComponent* m_toolbarComponent = nullptr;
+};
+
+class DockPanelMenuModel : public muse::uicomponents::AbstractMenuModel
+{
+    Q_OBJECT
+
+public:
+    DockPanelMenuModel(DockPanelView* panel);
+
+    void load() override;
+
+    AbstractMenuModel* customMenuModel() const;
+    void setCustomMenuModel(AbstractMenuModel* model);
+
+signals:
+    void menuCloseRequested();
+
+private:
+    uicomponents::MenuItem* makeMenuItem(const QString& actionCode, const TranslatableString& title);
+
+    TranslatableString toggleFloatingActionTitle() const;
+
+    void listenFloatingChanged();
+
+    void updateItem(muse::uicomponents::MenuItem* newItem);
+
+    AbstractMenuModel* m_customMenuModel = nullptr;
+    DockPanelView* m_panel = nullptr;
 };
 }
 

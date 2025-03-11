@@ -41,116 +41,108 @@ using namespace muse::actions;
 static const QString SET_DOCK_OPEN_ACTION_CODE = "dock-set-open";
 static const QString TOGGLE_FLOATING_ACTION_CODE = "dock-toggle-floating";
 
-class DockPanelView::DockPanelMenuModel : public muse::uicomponents::AbstractMenuModel
+DockPanelMenuModel::DockPanelMenuModel(DockPanelView* panel)
+    : AbstractMenuModel(panel), m_panel(panel)
 {
-public:
-    DockPanelMenuModel(DockPanelView* panel)
-        : AbstractMenuModel(panel), m_panel(panel)
-    {
-        listenFloatingChanged();
+    listenFloatingChanged();
+}
+
+void DockPanelMenuModel::load()
+{
+    TRACEFUNC;
+
+    MenuItemList items;
+
+    if (m_customMenuModel && m_customMenuModel->rowCount() > 0) {
+        items << m_customMenuModel->items();
+        items << makeSeparator();
     }
 
-    void load() override
-    {
-        TRACEFUNC;
+    MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, TranslatableString("appshell/dock", "Close"));
+    closeDockItem->setArgs(ActionData::make_arg2<QString, bool>(m_panel->objectName(), false));
+    items << closeDockItem;
 
-        MenuItemList items;
+    MenuItem* toggleFloatingItem = makeMenuItem(TOGGLE_FLOATING_ACTION_CODE, toggleFloatingActionTitle());
+    toggleFloatingItem->setArgs(ActionData::make_arg1<QString>(m_panel->objectName()));
+    items << toggleFloatingItem;
 
-        if (m_customMenuModel && m_customMenuModel->rowCount() > 0) {
-            items << m_customMenuModel->items();
-            items << makeSeparator();
-        }
+    setItems(items);
+}
 
-        MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, TranslatableString("appshell/dock", "Close"));
-        closeDockItem->setArgs(ActionData::make_arg2<QString, bool>(m_panel->objectName(), false));
-        items << closeDockItem;
+AbstractMenuModel* DockPanelMenuModel::customMenuModel() const
+{
+    return m_customMenuModel;
+}
 
-        MenuItem* toggleFloatingItem = makeMenuItem(TOGGLE_FLOATING_ACTION_CODE, toggleFloatingActionTitle());
-        toggleFloatingItem->setArgs(ActionData::make_arg1<QString>(m_panel->objectName()));
-        items << toggleFloatingItem;
+void DockPanelMenuModel::setCustomMenuModel(AbstractMenuModel* model)
+{
+    m_customMenuModel = model;
 
-        setItems(items);
+    if (!model) {
+        return;
     }
 
-    AbstractMenuModel* customMenuModel() const
-    {
-        return m_customMenuModel;
-    }
+    connect(model, &AbstractMenuModel::itemsChanged, this, [this]() {
+        load();
+    });
 
-    void setCustomMenuModel(AbstractMenuModel* model)
-    {
-        m_customMenuModel = model;
+    connect(model, &AbstractMenuModel::itemChanged, this, [this](MenuItem* item) {
+        updateItem(item);
+    });
+}
 
-        if (!model) {
-            return;
-        }
+MenuItem* DockPanelMenuModel::makeMenuItem(const QString& actionCode, const TranslatableString& title)
+{
+    MenuItem* item = new MenuItem(this);
+    item->setId(actionCode);
 
-        connect(model, &AbstractMenuModel::itemsChanged, this, [this]() {
-            load();
-        });
+    UiAction action;
+    action.code = codeFromQString(actionCode);
+    action.title = title;
+    item->setAction(action);
 
-        connect(model, &AbstractMenuModel::itemChanged, this, [this](MenuItem* item) {
-            updateItem(item);
-        });
-    }
+    UiActionState state;
+    state.enabled = true;
+    item->setState(state);
 
-private:
-    uicomponents::MenuItem* makeMenuItem(const QString& actionCode, const TranslatableString& title)
-    {
-        MenuItem* item = new MenuItem(this);
-        item->setId(actionCode);
+    return item;
+}
 
-        UiAction action;
-        action.code = codeFromQString(actionCode);
-        action.title = title;
-        item->setAction(action);
+TranslatableString DockPanelMenuModel::toggleFloatingActionTitle() const
+{
+    return m_panel->floating() ? TranslatableString("appshell/dock", "Dock") : TranslatableString("appshell/dock", "Undock");
+}
 
-        UiActionState state;
-        state.enabled = true;
-        item->setState(state);
-
-        return item;
-    }
-
-    TranslatableString toggleFloatingActionTitle() const
-    {
-        return m_panel->floating() ? TranslatableString("appshell/dock", "Dock") : TranslatableString("appshell/dock", "Undock");
-    }
-
-    void listenFloatingChanged()
-    {
-        connect(m_panel, &DockPanelView::floatingChanged, this, [this]() {
-            int index = itemIndex(TOGGLE_FLOATING_ACTION_CODE);
-
-            if (index == INVALID_ITEM_INDEX) {
-                return;
-            }
-
-            MenuItem& item = this->item(index);
-
-            UiAction action = item.action();
-            action.title = toggleFloatingActionTitle();
-            item.setAction(action);
-        });
-    }
-
-    void updateItem(MenuItem* newItem)
-    {
-        int index = itemIndex(newItem->id());
+void DockPanelMenuModel::listenFloatingChanged()
+{
+    connect(m_panel, &DockPanelView::floatingChanged, this, [this]() {
+        int index = itemIndex(TOGGLE_FLOATING_ACTION_CODE);
 
         if (index == INVALID_ITEM_INDEX) {
             return;
         }
 
-        setItem(index, newItem);
+        MenuItem& item = this->item(index);
+
+        UiAction action = item.action();
+        action.title = toggleFloatingActionTitle();
+        item.setAction(action);
+    });
+}
+
+void DockPanelMenuModel::updateItem(MenuItem* newItem)
+{
+    int index = itemIndex(newItem->id());
+
+    if (index == INVALID_ITEM_INDEX) {
+        return;
     }
 
-    AbstractMenuModel* m_customMenuModel = nullptr;
-    DockPanelView* m_panel = nullptr;
-};
+    setItem(index, newItem);
+}
 
 DockPanelView::DockPanelView(QQuickItem* parent)
-    : DockBase(DockType::Panel, parent), m_menuModel(new DockPanelMenuModel(this))
+    : DockBase(DockType::Panel, parent), m_menuModel(new dock::DockPanelMenuModel(this))
 {
     setLocation(Location::Left);
 }
@@ -166,6 +158,24 @@ DockPanelView::~DockPanelView()
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
     dockWidget->setProperty(TITLEBAR_PROPERTY, QVariant::fromValue(nullptr));
     dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(nullptr));
+}
+
+void DockPanelView::close()
+{
+    if (m_menuModel) {
+        emit m_menuModel->menuCloseRequested();
+    }
+
+    DockBase::close();
+}
+
+void DockPanelView::resetToDefault()
+{
+    if (m_menuModel) {
+        emit m_menuModel->menuCloseRequested();
+    }
+
+    DockBase::resetToDefault();
 }
 
 QString DockPanelView::groupName() const
