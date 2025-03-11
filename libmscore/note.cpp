@@ -2559,7 +2559,8 @@ QRectF Note::drag(EditData& ed)
             noteEditData->mode = NoteEditData::editModeByDragDirection(delta.x(), delta.y());
             }
 
-      if (noteEditData->mode == NoteEditData::EditMode_AddSpacing)
+      bool isSingleNoteSelection = score()->getSelectedElement() == this;
+      if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection && !(ed.modifiers & Qt::ControlModifier))
             horizontalDrag(ed);
       else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch)
             verticalDrag(ed);
