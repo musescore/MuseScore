@@ -468,6 +468,7 @@ private:
     int m_tenths = 0;
     bool m_tboxesAboveWritten = false;
     bool m_tboxesBelowWritten = false;
+    std::vector<size_t> m_hiddenStaves;
     TrillHash m_trillStart;
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
@@ -7444,6 +7445,10 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                 if (prevStaffNr == muse::nidx) {
                     continue;
                 }
+                if (!system->staff(staffNr)->show()) {
+                    m_hiddenStaves.push_back(staffIdx);
+                    continue;
+                }
                 const RectF& prevBbox = system->staff(prevStaffNr)->bbox();
                 const double staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
 
@@ -7451,6 +7456,8 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                     m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
                     m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
                     m_xml.endElement();
+                } else {
+                    m_hiddenStaves.push_back(staffIdx);
                 }
             }
 
@@ -7909,29 +7916,41 @@ static void clampMusicXmlOctave(int& octave)
  Write the staff details for \a part to \a xml.
  */
 
-static void writeStaffDetails(XmlWriter& xml, const Part* part)
+static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vector<size_t> hiddenStaves)
 {
     const Instrument* instrument = part->instrument();
-    size_t staves = part->nstaves();
+    const size_t staves = part->nstaves();
 
     // staff details
-    // TODO: decide how to handle linked regular / TAB staff
-    //       currently exported as a two staff part ...
     for (size_t i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
         const double mag = st->staffMag(Fraction(0, 1));
+        bool hidden = false;
+        if (!st->show()) {
+            hidden = true;
+        } else {
+            for (size_t staffIdx : hiddenStaves) {
+                if (i == staffIdx) {
+                    hidden = true;
+                }
+            }
+        }
         const Color lineColor = st->color(Fraction(0, 1));
         const bool invis = st->isLinesInvisible(Fraction(0, 1));
         const bool needsLineDetails = invis || lineColor != engravingConfiguration()->defaultColor();
         if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0)
-            || !st->show() || needsLineDetails) {
+            || hidden || needsLineDetails) {
             XmlWriter::Attributes attributes;
             if (staves > 1) {
-                attributes.push_back({ "number", i + 1 });
+                attributes.emplace_back(std::make_pair("number", i + 1));
             }
-            if (!st->show()) {
-                attributes.push_back({ "print-object", "no" });
+            if (hidden) {
+                attributes.emplace_back(std::make_pair("print-object", "no"));
+                if (st->cutaway()) {
+                    attributes.emplace_back(std::make_pair("print-spacing", "yes"));
+                }
             }
+
             xml.startElement("staff-details", attributes);
 
             if (i > 0 && st->links() && st->links()->contains(part->staff(i - 1))) {
@@ -8494,9 +8513,24 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 
     // output attributes with the first actual measure (pickup or regular) only
     if (isFirstActualMeasure) {
-        writeStaffDetails(m_xml, part);
+        writeStaffDetails(m_xml, part, m_hiddenStaves);
         writeInstrumentDetails(part->instrument(), m_score->style().styleB(Sid::concertPitch));
+    } else {
+        for (size_t staffIdx : m_hiddenStaves) {
+            m_attr.doAttr(m_xml, true);
+            XmlWriter::Attributes attributes;
+            if (staves > 1) {
+                attributes.emplace_back(std::make_pair("number", staffIdx + 1));
+            }
+            attributes.emplace_back(std::make_pair("print-object", "no"));
+            if (part->staff(staffIdx)->cutaway()) {
+                attributes.emplace_back(std::make_pair("print-spacing", "yes"));
+            }
+            m_xml.tag("staff-details", attributes);
+            m_attr.doAttr(m_xml, false);
+        }
     }
+    m_hiddenStaves.clear();
 
     // output attribute at start of measure: measure-style
     measureStyle(m_xml, m_attr, m, partIndex);
