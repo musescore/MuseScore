@@ -8318,6 +8318,11 @@ void MusicXmlParserNotations::technical()
             harmonMute();
         } else if (m_e.name() == "hole") {
             hole();
+        } else if (m_e.name() == "tap") {
+            id = (m_e.attribute("hand") == u"left") ? SymId::guitarLeftHandTapping : SymId::guitarRightHandTapping;
+            m_notations.push_back(Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                                   m_e.attributes(), u"technical", id));
+            m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "other-technical") {
             otherTechnical();
         } else {
