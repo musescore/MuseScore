@@ -1699,6 +1699,10 @@ EngravingItem* Segment::firstInNextSegments(staff_idx_t activeStaff) const
 
 EngravingItem* Segment::firstElementOfSegment(staff_idx_t activeStaff) const
 {
+    if (isTimeTickType()) {
+        return nullptr;
+    }
+
     for (auto i: m_elist) {
         if (i && i->staffIdx() == activeStaff) {
             if (i->isDurationElement()) {
@@ -1853,6 +1857,10 @@ EngravingItem* Segment::prevElementOfSegment(EngravingItem* e, staff_idx_t activ
 
 EngravingItem* Segment::lastElementOfSegment(staff_idx_t activeStaff) const
 {
+    if (isTimeTickType()) {
+        return nullptr;
+    }
+
     const std::vector<EngravingItem*>& elements = m_elist;
     for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
         EngravingItem* item = *it;
@@ -2172,6 +2180,10 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             if (lastEl) {
                 return lastEl;
             }
+        }
+        if (isTimeTickType()) {
+            Segment* prevSeg = prev1MMenabled();
+            return prevSeg ? prevSeg->lastElementOfSegment(activeStaff) : nullptr;
         }
         track_idx_t track = score()->nstaves() * VOICES - 1;
         Segment* s = this;
