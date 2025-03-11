@@ -246,7 +246,7 @@ FocusableControl {
             visible: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
             Layout.alignment: Qt.AlignCenter
             iconCode: IconCode.MINUS
-            enabled: model && model.itemRole.isVisible
+            opacity: model && model.itemRole.isVisible ? 1 : 0.75
         }
 
         Item {
