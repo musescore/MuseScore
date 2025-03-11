@@ -4871,8 +4871,9 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
                                       std::vector<MusicXmlSpannerDesc>& starts,
                                       std::vector<MusicXmlSpannerDesc>& stops)
 {
-    AsciiStringView lineEnd = m_e.asciiAttribute("line-end");
-    AsciiStringView lineType = m_e.asciiAttribute("line-type");
+    const AsciiStringView lineEnd = m_e.asciiAttribute("line-end");
+    const AsciiStringView lineType = m_e.asciiAttribute("line-type");
+    const AsciiStringView endLength = m_e.asciiAttribute("end-length");
     const bool isWavy = lineType == "wavy";
     const ElementType elementType = isWavy ? ElementType::TRILL : ElementType::TEXTLINE;
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ elementType, number });
@@ -4896,9 +4897,21 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             TextLine* textLine = toTextLine(sline);
             // if (placement.empty()) placement = "above";  // TODO ? set default
 
-            textLine->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
+            if (!endLength.empty()) {
+                double length = endLength.toDouble();
+                textLine->setBeginHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+            }
             if (lineEnd == "up") {
+                textLine->setBeginHookType(HookType::HOOK_90);
                 textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
+            } else if (lineEnd == "down") {
+                textLine->setBeginHookType(HookType::HOOK_90);
+            } else if (lineEnd == "both") {
+                textLine->setBeginHookType(HookType::HOOK_90T);
+            } else if (lineEnd == "arrow") {
+                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+            } else if (lineEnd == "none") {
+                textLine->setBeginHookType(HookType::NONE);
             }
 
             // hack: combine with a previous words element
@@ -4938,9 +4951,22 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
                 sline = new TextLine(m_score->dummy());
             }
             TextLine* textLine = toTextLine(sline);
-            textLine->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
+
+            if (!endLength.empty()) {
+                double length = endLength.toDouble();
+                textLine->setEndHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+            }
             if (lineEnd == "up") {
+                textLine->setEndHookType(HookType::HOOK_90);
                 textLine->setEndHookHeight(-1 * textLine->endHookHeight());
+            } else if (lineEnd == "down") {
+                textLine->setEndHookType(HookType::HOOK_90);
+            } else if (lineEnd == "both") {
+                textLine->setEndHookType(HookType::HOOK_90T);
+            } else if (lineEnd == "arrow") {
+                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+            } else if (lineEnd == "none") {
+                textLine->setEndHookType(HookType::NONE);
             }
         }
 

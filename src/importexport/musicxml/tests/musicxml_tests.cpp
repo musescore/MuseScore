@@ -843,7 +843,7 @@ TEST_F(MusicXml_Tests, lines3) {
     musicXmlIoTest("testLines3");
 }
 TEST_F(MusicXml_Tests, lines4) {
-    musicXmlMscxExportTestRef("testLines4");
+    musicXmlIoTest("testLines4");
 }
 TEST_F(MusicXml_Tests, lineDetails) {
     musicXmlIoTest("testLineDetails");
