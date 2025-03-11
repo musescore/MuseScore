@@ -3209,8 +3209,6 @@ static String symIdToOrnam(const SymId sid)
 {
     switch (sid) {
     case SymId::ornamentTrill:
-    case SymId::ornamentShake3:
-    case SymId::ornamentShakeMuffat1:
         return u"trill-mark";
         break;
     case SymId::ornamentTurn:
@@ -3268,15 +3266,11 @@ static String symIdToOrnam(const SymId sid)
     case SymId::ornamentPrecompSlide:
         return u"schleifer";
         break;
-    case SymId::ornamentTremblementCouperin:
-        return u"other-ornament smufl=\"ornamentTremblementCouperin\"";
-        break;
-    case SymId::ornamentPinceCouperin:
-        return u"other-ornament smufl=\"ornamentPinceCouperin\"";
-        break;
 
     default:
-        ;           // nothing
+        // use other-ornament
+        const AsciiStringView name = SymNames::nameForSymId(sid);
+        return String(u"other-ornament smufl=\"%1\"").arg(String::fromAscii(name.ascii()));
         break;
     }
 
@@ -3574,37 +3568,33 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
     // then the attributes whose elements are children of <ornaments>
     Ornaments ornaments;
-    for (const Articulation* a : na) {
-        if (!ExportMusicXml::canWrite(a)) {
+    for (const Articulation* art : na) {
+        if (!ExportMusicXml::canWrite(art)) {
             continue;
         }
-
-        SymId sid = a->symId();
+        if (!art->isOrnament()) {
+            continue;
+        }
+        const Ornament* ornam = toOrnament(art);
+        const SymId sid = ornam->symId();
         String mxmlOrnam = symIdToOrnam(sid);
 
-        if (!mxmlOrnam.empty()) {
-            String placement;
+        String placement;
+        if (!ornam->isStyled(Pid::ARTICULATION_ANCHOR) && ornam->anchor() != ArticulationAnchor::AUTO) {
+            placement = (ornam->anchor() == ArticulationAnchor::BOTTOM ? u"below" : u"above");
+        }
+        if (!placement.empty()) {
+            mxmlOrnam += String(u" placement=\"%1\"").arg(placement);
+        }
+        mxmlOrnam += color2xml(ornam);
 
-            if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::AUTO) {
-                placement = (a->anchor() == ArticulationAnchor::BOTTOM ? u"below" : u"above");
-            }
-            if (!placement.empty()) {
-                mxmlOrnam += String(u" placement=\"%1\"").arg(placement);
-            }
-            mxmlOrnam += color2xml(a);
-
-            notations.tag(m_xml, a);
-            ornaments.tag(m_xml);
-            m_xml.tagRaw(mxmlOrnam);
-            if (a->isOrnament()) {
-                const Ornament* ornam = toOrnament(a);
-                for (const Accidental* accidental : ornam->accidentalsAboveAndBelow()) {
-                    writeAccidental(m_xml, u"accidental-mark", accidental);
-                }
-            }
+        notations.tag(m_xml, ornam);
+        ornaments.tag(m_xml);
+        m_xml.tagRaw(mxmlOrnam);
+        for (const Accidental* accidental : ornam->accidentalsAboveAndBelow()) {
+            writeAccidental(m_xml, u"accidental-mark", accidental);
         }
     }
-
     tremoloSingleStartStop(chord, notations, ornaments, m_xml);
     wavyLineStartStop(chord, notations, ornaments, trillStart, trillStop);
     ornaments.etag(m_xml);
@@ -3704,7 +3694,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
         SymId sid = a->symId();
         if (symIdToArtic(sid).empty()
-            && symIdToOrnam(sid) == ""
             && symIdToTechn(sid) == ""
             && !isLaissezVibrer(sid)) {
             LOGD("unknown chord attribute %d %s", static_cast<int>(sid), muPrintable(a->translatedTypeUserName()));
