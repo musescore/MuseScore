@@ -390,7 +390,7 @@ Ret ProjectActionsController::doFinishOpenProject()
 {
     extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
 
-    //! Show Tours & Muse Sounds update if need
+    //! Show Tours & MuseSounds update if need
     auto showToursAndMuseSoundsUpdate = [=](){
         QTimer::singleShot(1000, [this]() {
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
