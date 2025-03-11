@@ -123,6 +123,55 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
     }
 
     removeReduntantChords(bendDataCtx, m_score);
+
+    for (const auto& [track, trackInfo] : bendDataCtx.graceAfterBendData) {
+        for (const auto& [tick, tickInfo] : trackInfo) {
+            Fraction tickFr = Fraction::fromTicks(tick);
+            for (const auto& [noteInChordIdx, graceVector] : tickInfo) {
+                const Measure* measure = m_score->tick2measure(tickFr);
+                if (!measure) {
+                    LOGE() << "bend import error (grace after): no valid measure for track " << track << ", tick " << tick;
+                    continue;
+                }
+
+                Chord* chord = measure->findChord(tickFr, track);
+                if (!chord) {
+                    LOGE() << "bend import error (grace after): no valid chord for track " << track << ", tick " << tick;
+                    continue;
+                }
+
+                if (noteInChordIdx >= chord->notes().size()) {
+                    LOGE() << "bend import error (grace after): note index invalid for track " << track << ", tick " << tick;
+                    continue;
+                }
+
+                Note* note = chord->notes()[noteInChordIdx];
+
+                // TODO: fix for chords with several notes with bends
+                Note* startNote = note;
+                for (const auto& graceInfo : graceVector) {
+                    Chord* graceChord = Factory::createChord(m_score->dummy()->segment());
+                    graceChord->setTrack(chord->track());
+                    graceChord->setNoteType(NoteType::GRACE8_AFTER);
+
+                    Note* graceNote = Factory::createNote(graceChord);
+                    graceNote->setPitch(startNote->pitch() + graceInfo.quarterTones / 2);
+                    graceNote->setTpcFromPitch();
+                    graceChord->add(graceNote);
+                    chord->add(graceChord);
+
+                    GuitarBend* bend = m_score->addGuitarBend(GuitarBendType::BEND, startNote, graceNote);
+
+                    QuarterOffset quarterOff = graceInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                    bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + graceInfo.quarterTones / 2, quarterOff);
+                    bend->setStartTimeFactor(graceInfo.startFactor);
+                    bend->setEndTimeFactor(graceInfo.endFactor);
+
+                    startNote = graceNote;
+                }
+            }
+        }
+    }
 }
 
 static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord)
