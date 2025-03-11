@@ -50,8 +50,15 @@ StyledPopupView {
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        var popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
-        root.y = -popupHeight
+        let popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
+        let yUp = -popupHeight
+
+        let globPos = root.parent.mapToItem(ui.rootItem, Qt.point(root.x, yUp))
+        if (globPos.y < 0) {
+            yUp = yUp + (0 - globPos.y)
+        }
+
+        root.y = yUp
         root.x = (root.parent.width / 2) - (root.width / 2) + root.margins
 
         root.setOpensUpward(true)
