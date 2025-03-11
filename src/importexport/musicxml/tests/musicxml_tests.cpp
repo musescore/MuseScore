@@ -966,7 +966,7 @@ TEST_F(MusicXml_Tests, noteColor) {
     musicXmlIoTest("testNoteColor");
 }
 TEST_F(MusicXml_Tests, noteheadNames) {
-    musicXmlMscxExportTestRef("testNoteheadNames");
+    musicXmlIoTest("testNoteheadNames");
 }
 TEST_F(MusicXml_Tests, noteheadParentheses) {
     musicXmlIoTest("testNoteheadParentheses");
