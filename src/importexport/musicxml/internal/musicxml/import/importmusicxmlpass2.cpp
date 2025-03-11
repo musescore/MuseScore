@@ -8562,8 +8562,8 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
         glissandoNumber--;
     }
     const String glissandoType = notation.attribute(u"type");
-    int glissandoTag = notation.name() == u"slide" ? 0 : 1;
-    //                  String lineType  = ee.attribute(String("line-type"), "solid");
+    const bool glissandoTag = notation.name() != u"slide";
+    const String lineType  = notation.attribute(u"line-type");
     Glissando*& gliss = glissandi[glissandoNumber][glissandoTag];
 
     const Fraction tick = note->tick();
@@ -8586,8 +8586,15 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             if (glissandoColor.isValid()) {
                 gliss->setLineColor(glissandoColor);
             }
+            if (lineType == u"dashed") {
+                gliss->setLineStyle(LineType::DASHED);
+            } else if (lineType == u"dotted") {
+                gliss->setLineStyle(LineType::DOTTED);
+            } else if (lineType == u"solid" || lineType.empty()) {
+                gliss->setLineStyle(LineType::SOLID);
+            }
             gliss->setText(glissandoText);
-            gliss->setGlissandoType(glissandoTag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
+            gliss->setGlissandoType(glissandoTag || (lineType == u"wavy") ? GlissandoType::WAVY : GlissandoType::STRAIGHT);
             spanners[gliss] = std::pair<int, int>(tick.ticks(), -1);
             // LOGD("glissando/slide=%p inserted at first tick %d", gliss, tick);
         }
