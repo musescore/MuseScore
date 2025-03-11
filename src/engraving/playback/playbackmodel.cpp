@@ -558,9 +558,12 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
 
     if (changesRange.isValidBoundary()) {
         const Measure* measureTo = m_score->tick2measure(Fraction::fromTicks(changesRange.tickTo));
-
         if (!measureTo) {
             return false;
+        }
+
+        if (measureTo->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo)) {
+            return true;
         }
 
         const Measure* nextMeasure = measureTo->nextMeasure();
