@@ -1220,6 +1220,9 @@ TEST_F(MusicXml_Tests, importTie4) {
     // Dolet8 ties to different voices & staves
     musicXmlImportTestRef("importTie4");
 }
+TEST_F(MusicXml_Tests, importTie5) {
+    musicXmlIoTest("importTie5");
+}
 TEST_F(MusicXml_Tests, timesig1) {
     musicXmlIoTest("testTimesig1");
 }
