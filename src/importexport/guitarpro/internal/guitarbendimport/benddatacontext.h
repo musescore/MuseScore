@@ -31,12 +31,6 @@ class Chord;
 
 namespace mu::iex::guitarpro {
 struct BendDataContext {
-    enum class BendAlgorithm {
-        DONT_SPLIT_NOTES,
-        SPLIT_ONLY_TIED_NOTES,
-        SPLIT_ALL_NOTES
-    };
-
     struct BendNoteData {
         double startFactor = 0.0;
         double endFactor = 1.0;

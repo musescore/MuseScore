@@ -42,19 +42,5 @@ void GuitarBendImporter::collectBend(mu::engraving::Note* note, const mu::engrav
 void GuitarBendImporter::applyBendsToChords()
 {
     m_dataProcessor->processBends(m_dataCollector->collectBendDataContext());
-    // BendDataContext ctx;
-    // {
-    //     BendDataContext::GraceAfterBendData data;
-    //     data.quarterTones = 4;
-    //     ctx.graceAfterBendData[0][0][0].push_back(data);
-    // }
-
-    // {
-    //     BendDataContext::GraceAfterBendData data;
-    //     data.quarterTones = -4;
-    //     ctx.graceAfterBendData[0][0][0].push_back(data);
-    // }
-
-    // m_dataProcessor->processBends(ctx);
 }
 } // namespace mu::iex::guitarpro
