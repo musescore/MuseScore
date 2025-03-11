@@ -44,6 +44,12 @@ Item {
 
     visible: Boolean(titleBarCpp)
 
+    function closeContextMenu() {
+        if (Boolean(titleBarLoader.item)) {
+            titleBarLoader.item.closeContextMenu()
+        }
+    }
+
     Loader {
         id: titleBarLoader
         anchors.fill: parent
@@ -74,6 +80,10 @@ Item {
             property NavigationPanel navigationPanel
             property int navigationOrder
             property var contextMenuModel
+
+            function closeContextMenu() {
+                contextMenuButton.closeMenu()
+            }
 
             MouseArea {
                 anchors.fill: parent

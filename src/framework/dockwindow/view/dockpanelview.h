@@ -49,6 +49,9 @@ public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
     ~DockPanelView() override;
 
+    Q_INVOKABLE void close() override;
+    void resetToDefault() override;
+
     QString groupName() const;
     uicomponents::AbstractMenuModel* contextMenuModel() const;
     QQmlComponent* titleBar() const;
@@ -69,9 +72,11 @@ public slots:
 
 signals:
     void groupNameChanged();
-    void contextMenuModelChanged();
     void titleBarChanged();
     void toolbarComponentChanged();
+
+    void contextMenuModelChanged();
+    void closeContextMenuRequested();
 
     void panelShown();
 

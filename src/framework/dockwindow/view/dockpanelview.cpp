@@ -168,6 +168,20 @@ DockPanelView::~DockPanelView()
     dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(nullptr));
 }
 
+void DockPanelView::close()
+{
+    emit closeContextMenuRequested();
+
+    DockBase::close();
+}
+
+void DockPanelView::resetToDefault()
+{
+    emit closeContextMenuRequested();
+
+    DockBase::resetToDefault();
+}
+
 QString DockPanelView::groupName() const
 {
     return m_groupName;

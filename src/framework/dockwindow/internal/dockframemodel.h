@@ -48,6 +48,7 @@ class DockFrameModel : public QObject, public muse::Injectable
     Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockChanged)
     Q_PROPERTY(QVariant currentDockContextMenuModel READ currentDockContextMenuModel NOTIFY currentDockChanged)
     Q_PROPERTY(QVariant currentDockToolbarComponent READ currentDockToolbarComponent NOTIFY currentDockChanged)
+    Q_PROPERTY(QVariant currentDockPanel READ currentDockPanel NOTIFY currentDockChanged)
 
     Q_PROPERTY(bool highlightingVisible READ highlightingVisible NOTIFY highlightingVisibleChanged)
     Q_PROPERTY(QRect highlightingRect READ highlightingRect NOTIFY highlightingVisibleChanged)
@@ -65,6 +66,7 @@ public:
     bool isHorizontalPanel() const;
     QObject* navigationSection() const;
     QString currentDockUniqueName() const;
+    QVariant currentDockPanel() const;
     QVariant currentDockContextMenuModel() const;
     QVariant currentDockToolbarComponent() const;
 
@@ -84,6 +86,7 @@ signals:
     void isHorizontalPanelChanged();
     void navigationSectionChanged();
     void currentDockChanged();
+    void currentDockAboutToBeChange();
     void highlightingVisibleChanged();
 
 private:

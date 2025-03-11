@@ -117,7 +117,7 @@ public:
 
     Q_INVOKABLE bool isOpen() const;
     Q_INVOKABLE void open();
-    Q_INVOKABLE void close();
+    Q_INVOKABLE virtual void close();
     Q_INVOKABLE void resize(int width, int height);
 
     ui::NavigationSection* navigationSection() const;
