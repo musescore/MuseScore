@@ -40,6 +40,7 @@
 #include "exportmusicxml.h"
 
 #include <math.h>
+#include <set>
 
 #include "containers.h"
 #include "realfn.h"
@@ -5926,7 +5927,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 template<typename T>
 inline std::set<String>& operator<<(std::set<String>& s, const T& v)
 {
-    s.insert(v);
+    s.emplace(v);
     return s;
 }
 
@@ -6479,8 +6480,8 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t str
 
 void ExportMusicXml::work(const MeasureBase* /*measure*/)
 {
-    String workTitle  = m_score->metaTag(u"workTitle");
-    String workNumber = m_score->metaTag(u"workNumber");
+    const String workTitle  = m_score->metaTag(u"workTitle");
+    const String workNumber = m_score->metaTag(u"workNumber");
     if (!(workTitle.isEmpty() && workNumber.isEmpty())) {
         m_xml.startElement("work");
         if (!workNumber.isEmpty()) {
@@ -7150,8 +7151,8 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
     xml.startElement("identification");
 
     // the creator types commonly found in MusicXML
-    std::vector<String> creators = { u"arranger", u"composer", u"lyricist", u"poet", u"translator" };
-    for (const String& type : creators) {
+    std::set<String> metaTagNames = { u"arranger", u"composer", u"lyricist", u"poet", u"translator" };
+    for (const String& type : metaTagNames) {
         String creator = score->metaTag(type);
         if (!creator.isEmpty()) {
             xml.tag("creator", { { "type", type } }, creator);
@@ -7160,6 +7161,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 
     if (!score->metaTag(u"copyright").isEmpty()) {
         xml.tag("rights", score->metaTag(u"copyright"));
+        metaTagNames.emplace(u"copyright");
     }
 
     xml.startElement("encoding");
@@ -7168,7 +7170,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
         xml.tag("software", String(u"MuseScore 0.7.0"));
         xml.tag("encoding-date", String(u"2007-09-10"));
     } else {
-        xml.tag("software", String(u"MuseScore ") + application()->version().toString());
+        xml.tag("software", String(u"MuseScore Studio ") + application()->version().toString());
         xml.tag("encoding-date", muse::Date::currentDate().toString(muse::DateFormat::ISODate));
     }
 
@@ -7191,6 +7193,22 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 
     if (!score->metaTag(u"source").isEmpty()) {
         xml.tag("source", score->metaTag(u"source"));
+        metaTagNames.emplace(u"source");
+    }
+
+    if (!MScore::debugMode) {
+        // do not write miscellaneous in debug mode
+        metaTagNames.insert({ u"workTitle", u"workNumber", u"movementTitle", u"movementNumber", u"originalFormat" });
+        xml.startElement("miscellaneous");
+        for (const auto& metaTag : score->metaTags()) {
+            auto search = metaTagNames.find(metaTag.first);
+            if (search != metaTagNames.end()) {
+                continue;
+            } else if (!metaTag.second.isEmpty()) {
+                xml.tag("miscellaneous-field", { { "name", metaTag.first } }, metaTag.second);
+            }
+        }
+        xml.endElement();
     }
 
     xml.endElement();
@@ -7619,7 +7637,7 @@ static void addChordPitchesToSet(const Chord* c, pitchSet& set)
 {
     for (const Note* note : c->notes()) {
         LOGD("chord %p note %p pitch %d", c, note, note->pitch() + 1);
-        set.insert(note->pitch());
+        set.emplace(note->pitch());
     }
 }
 
