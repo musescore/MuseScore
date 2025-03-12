@@ -6153,19 +6153,21 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             MeasureBase* m = lb->measure();
 
             // add Key Signature on Section Break
+            // operate on master score to be sure all staves are included
             Fraction tick = m->endTick();
             int ticks = tick.ticks();
-            for (Staff* staff : score()->staves()) {
+            for (Staff* staff : masterScore()->staves()) {
                 KeyList* kl = staff->keyList();
                 KeySigEvent ks = kl->key(ticks);
                 if (kl->currentKeyTick(ticks) != ticks || ks.forInstrumentChange()) {
                     ks.setForInstrumentChange(false);
                     ks.setForSectionBreak(true);
-                    undoChangeKeySig(staff, tick, ks);
+                    masterScore()->undoChangeKeySig(staff, tick, ks);
                 }
             }
+
+            // for frames, use linked frames
             if (m->isBox()) {
-                // for frames, use linked frames
                 LinkedObjects* links = m->links();
                 if (links) {
                     for (EngravingObject* lo : *links) {
@@ -6956,8 +6958,12 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
         return;
     }
     std::list<Segment*> segments;
+    EngravingItem* masterElement = element;
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
+        if (ee->score()->isMaster()) {
+            masterElement = e;
+        }
         if (e == element || removeLinked) {
             doUndoRemoveElement(e);
 
@@ -6987,15 +6993,16 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
     }
 
     // remove section break key signatures
-    if (element->isLayoutBreak() && toLayoutBreak(element)->isSectionBreak()) {
-        MeasureBase* mb = element->findMeasureBase();
+    // operate on master score, to be sure, all signatures are included
+    if (masterElement->isLayoutBreak() && toLayoutBreak(masterElement)->isSectionBreak()) {
+        MeasureBase* mb = masterElement->findMeasureBase();
         Measure* nextMeasure = mb ? mb->nextMeasure() : nullptr;
         if (nextMeasure && nextMeasure->isMMRest()) {
             nextMeasure = nextMeasure->mmRestFirst();
         }
         Segment* keySeg = nextMeasure ? nextMeasure->findFirstR(SegmentType::KeySig, Fraction(0, 1)) : nullptr;
         if (keySeg) {
-            for (staff_idx_t i = 0; i <= nstaves(); i++) {
+            for (staff_idx_t i = 0; i <= masterScore()->nstaves(); i++) {
                 KeySig* ks = toKeySig(keySeg->element(i * VOICES));
                 if (ks && ks->forSectionBreak()) {
                     Staff* staff = ks->staff();
@@ -7017,7 +7024,7 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
                     if (isFirst || actualKey != prevKey) {
                         ks->setForSectionBreak(false);
                     } else {
-                        deleteItem(ks);
+                        masterScore()->deleteItem(ks);
                     }
                 }
             }
