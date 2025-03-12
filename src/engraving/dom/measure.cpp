@@ -947,6 +947,7 @@ void Measure::remove(EngravingItem* e)
         if (e->isJump() || (e->isMarker() && toMarker(e)->isRightMarker())) {
             setProperty(Pid::REPEAT_JUMP, false);
         }
+    // FALLTHROUGH
     case ElementType::HBOX:
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
