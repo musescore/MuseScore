@@ -2360,7 +2360,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         } else {
             dist += staffDistance;
         }
-        dist += staff2->userDist();
+        dist += staff2->absoluteUserDist();
         bool fixedSpace = false;
         for (const MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
@@ -2767,7 +2767,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     }
 
     const Staff* staff = dom.staff(firstStaff);
-    double userDist = staff ? staff->userDist() : 0.0;
+    double userDist = staff ? staff->absoluteUserDist() : 0.0;
     dist = std::max(dist, userDist);
     top->setFixedDownDistance(false);
 
