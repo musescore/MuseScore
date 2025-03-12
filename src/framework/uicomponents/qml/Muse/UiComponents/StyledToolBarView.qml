@@ -31,7 +31,12 @@ Rectangle {
     property alias model: repeater.model
 
     property alias spacing: content.spacing
-    property int padding: 4
+
+    property int leftPadding: 0
+    property int rightPadding: 0
+    property int topPadding: 0
+    property int bottomPadding: 0
+
     property int rowHeight: 32
     property int separatorHeight: rowHeight
 
@@ -47,8 +52,8 @@ Rectangle {
 
     property var sourceComponentCallback
 
-    width: content.width + padding * 2
-    height: content.height + padding * 2
+    width: content.width + leftPadding + rightPadding
+    height: content.height + topPadding + bottomPadding
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -59,9 +64,10 @@ Rectangle {
     Flow {
         id: content
 
-        anchors.verticalCenter: parent.verticalCenter
         anchors.left: root.left
-        anchors.leftMargin: root.padding
+        anchors.leftMargin: root.leftPadding
+        anchors.top: root.top
+        anchors.topMargin: root.topPadding
 
         width: {
             var result = 0
