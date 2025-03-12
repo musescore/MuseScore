@@ -132,6 +132,9 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
+    - name: Register msvc problem matcher
+      run: echo "::add-matcher::.github/problem_matchers/msvc.json"
+
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
