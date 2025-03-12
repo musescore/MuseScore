@@ -5364,7 +5364,49 @@ void TLayout::layoutSlur(Slur* item, LayoutContext& ctx)
 void TLayout::layoutSpacer(Spacer* item, LayoutContext&)
 {
     LAYOUT_CALL_ITEM(item);
-    item->layout0();
+    Spacer::LayoutData* ldata = item->mutldata();
+
+    double spatium = item->spatium();
+
+    PainterPath path = PainterPath();
+    double w = spatium;
+    double b = w * .5;
+    double h = item->explicitParent() ? item->absoluteGap() : std::min(item->gap(), Spatium(4.0)).toMM(spatium).val();       // limit length for palette
+
+    switch (item->spacerType()) {
+    case SpacerType::DOWN:
+        path.lineTo(w, 0.0);
+        path.moveTo(b, 0.0);
+        path.lineTo(b, h);
+        path.lineTo(0.0, h - b);
+        path.moveTo(b, h);
+        path.lineTo(w, h - b);
+        break;
+    case SpacerType::UP:
+        path.moveTo(b, 0.0);
+        path.lineTo(0.0, b);
+        path.moveTo(b, 0.0);
+        path.lineTo(w, b);
+        path.moveTo(b, 0.0);
+        path.lineTo(b, h);
+        path.moveTo(0.0, h);
+        path.lineTo(w, h);
+        break;
+    case SpacerType::FIXED:
+        path.lineTo(w, 0.0);
+        path.moveTo(b, 0.0);
+        path.lineTo(b, h);
+        path.moveTo(0.0, h);
+        path.lineTo(w, h);
+        break;
+    }
+    ldata->path = path;
+    double lw = spatium * 0.4;
+    RectF bb(0, 0, w, h);
+    bb.adjust(-lw, -lw, lw, lw);
+    ldata->setBbox(bb);
+
+    item->setZ(0.0);
 }
 
 void TLayout::layoutSpanner(Spanner* item, LayoutContext& ctx)

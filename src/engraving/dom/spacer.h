@@ -68,8 +68,6 @@ public:
 
     double absoluteGap() const { return m_gap.toMM(spatium()).val(); }
 
-    const muse::draw::PainterPath& path() const { return m_path; }
-
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
@@ -80,7 +78,10 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    void layout0();
+    struct LayoutData : public EngravingItem::LayoutData {
+        PainterPath path;
+    };
+    DECLARE_LAYOUTDATA_METHODS(Spacer)
 
 private:
 
@@ -90,7 +91,6 @@ private:
 
     SpacerType m_spacerType = SpacerType::UP;
     Spatium m_gap;
-    muse::draw::PainterPath m_path;
 };
 } // namespace mu::engraving
 #endif

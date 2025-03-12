@@ -4133,7 +4133,6 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    s->layout0();
 }
 
 void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
