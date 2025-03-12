@@ -34,12 +34,14 @@ namespace mu::engraving::rendering::score {
 class TupletLayout
 {
 public:
-
     static void layout(Tuplet* item, LayoutContext& ctx);
 
     static void layoutTupletAndNestedTuplets(Tuplet* t, LayoutContext& ctx);
     static bool isTopTuplet(ChordRest* cr);
     static bool notTopTuplet(ChordRest* cr);
+
+private:
+    static void extendToEndOfDuration(Tuplet* item, const ChordRest* endCR);
 };
 }
 
