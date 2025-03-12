@@ -65,7 +65,7 @@ public:
     void setGap(Spatium sp);
     Spatium gap() const { return m_gap; }
 
-    double absoluteGap() const { return m_gap.toMM(spatium()).val(); }
+    double absoluteGap() const { return absoluteFromSpatium(m_gap); }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }

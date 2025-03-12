@@ -1519,9 +1519,9 @@ void Chord::resizeLedgerLinesTo(size_t newSize)
 void Chord::setBeamExtension(double extension)
 {
     if (m_stem) {
-        double baseLength = m_stem->baseLength().toMM(spatium()).val();
+        double baseLength = m_stem->absoluteFromSpatium(m_stem->baseLength());
         m_stem->setBaseLength(std::max(Spatium::fromMM(baseLength + extension, spatium()), Spatium(0.0)));
-        m_defaultStemLength = std::max(m_defaultStemLength + extension, m_stem->baseLength().toMM(spatium()).val());
+        m_defaultStemLength = std::max(m_defaultStemLength + extension, m_stem->absoluteFromSpatium(m_stem->baseLength()));
     }
 }
 

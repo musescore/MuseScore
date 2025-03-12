@@ -1117,11 +1117,6 @@ bool Staff::isPrimaryStaff() const
     return linkedStavesInThisScore.front() == this;
 }
 
-double Staff::absoluteUserDist() const
-{
-    return m_userDist.toMM(style().spatium()).val();
-}
-
 //---------------------------------------------------------
 //   staffType
 //---------------------------------------------------------

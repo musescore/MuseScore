@@ -217,7 +217,6 @@ public:
     bool isPrimaryStaff() const;
 
     Spatium userDist() const { return m_userDist; }
-    double absoluteUserDist() const;
     void setUserDist(Spatium val) { m_userDist = val; }
 
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);

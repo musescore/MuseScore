@@ -71,7 +71,7 @@ public:
     void setLineWidth(Spatium lineWidth) { m_lineWidth = lineWidth; }
 
     PointF flagPosition() const;
-    double length() const { return (m_baseLength + m_userLength).toMM(spatium()); }
+    double length() const { return absoluteFromSpatium(m_baseLength + m_userLength); }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
