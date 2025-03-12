@@ -140,6 +140,8 @@ public:
 
     void findAdjacentHairpins();
 
+    Shape symShapeWithCutouts(SymId id) const override;
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
