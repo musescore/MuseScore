@@ -4128,7 +4128,7 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
         if (tag == "subtype") {
             s->setSpacerType(SpacerType(e.readInt()));
         } else if (tag == "space") {
-            s->setGap(Millimetre(e.readDouble() * s->spatium()));
+            s->setGap(Spatium(e.readDouble()));
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }

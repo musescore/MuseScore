@@ -2370,16 +2370,16 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             Spacer* sp = m->vspacerDown(si1);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->staffHeight() + sp->gap();
+                    dist = staff->staffHeight() + sp->absoluteGap();
                     fixedSpace = true;
                     break;
                 } else {
-                    dist = std::max(dist, staff->staffHeight() + sp->gap());
+                    dist = std::max(dist, staff->staffHeight() + sp->absoluteGap());
                 }
             }
             sp = m->vspacerUp(si2);
             if (sp) {
-                dist = std::max(dist, sp->gap() + staff->staffHeight());
+                dist = std::max(dist, sp->absoluteGap() + staff->staffHeight());
             }
         }
         if (!fixedSpace) {
@@ -2786,11 +2786,11 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
             const Spacer* sp = m->vspacerDown(lastStaff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = sp->gap();
+                    dist = sp->absoluteGap();
                     top->setFixedDownDistance(true);
                     break;
                 } else {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }
@@ -2801,7 +2801,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
                 const Measure* m = toMeasure(mb2);
                 const Spacer* sp = m->vspacerUp(firstStaff);
                 if (sp) {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }

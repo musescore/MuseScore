@@ -2656,7 +2656,7 @@ void TWrite::write(const Spacer* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     xml.tag("subtype", int(item->spacerType()));
     writeItemProperties(item, xml, ctx);
-    xml.tag("space", item->gap().val() / item->spatium());
+    xml.tag("space", item->gap().val());
     xml.endElement();
 }
 

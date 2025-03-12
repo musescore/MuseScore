@@ -42,7 +42,7 @@ Spacer::Spacer(Measure* parent)
     : EngravingItem(ElementType::SPACER, parent)
 {
     m_spacerType = SpacerType::UP;
-    m_gap = 0.0;
+    m_gap = Spatium(0.0);
     m_z = -10; // Ensure behind notation
 }
 
@@ -65,7 +65,7 @@ void Spacer::layout0()
     m_path    = PainterPath();
     double w = _spatium;
     double b = w * .5;
-    double h = explicitParent() ? m_gap : std::min(m_gap.val(), spatium() * 4.0);      // limit length for palette
+    double h = (explicitParent() ? m_gap.toMM(spatium()) : std::min(m_gap, Spatium(4.0)).toMM(spatium())).val();       // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:
@@ -106,7 +106,7 @@ void Spacer::layout0()
 //   setGap
 //---------------------------------------------------------
 
-void Spacer::setGap(Millimetre sp)
+void Spacer::setGap(Spatium sp)
 {
     m_gap = sp;
     layout0();
@@ -143,15 +143,13 @@ void Spacer::editDrag(EditData& ed)
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        m_gap += s;
+        m_gap += Spatium::fromMM(s, spatium());
         break;
     case SpacerType::UP:
-        m_gap -= s;
+        m_gap -= Spatium::fromMM(s, spatium());
         break;
     }
-    if (m_gap.val() < spatium() * 2.0) {
-        m_gap = Millimetre(spatium() * 2);
-    }
+    m_gap = std::max(m_gap, Spatium(2.0));
     layout0();
     triggerLayout();
 }
@@ -167,7 +165,7 @@ std::vector<PointF> Spacer::gripsPositions(const EditData&) const
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        p = PointF(_spatium * .5, m_gap);
+        p = PointF(_spatium * .5, m_gap.toMM(_spatium).val());
         break;
     case SpacerType::UP:
         p = PointF(_spatium * .5, 0.0);
@@ -198,7 +196,7 @@ bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPACE:
-        setGap(v.value<Millimetre>());
+        setGap(v.value<Spatium>());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -220,7 +218,7 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SPACE:
-        return Millimetre(0.0);
+        return Spatium(0.0);
     default:
         return EngravingItem::propertyDefault(id);
     }

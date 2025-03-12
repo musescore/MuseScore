@@ -96,7 +96,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
         if (sp) {
             TLayout::layoutSpacer(sp, ctx);
             double y = item->system()->staff(staffIdx)->y();
-            sp->setPos(_spatium * .5, y - sp->gap());
+            sp->setPos(_spatium * .5, y - sp->absoluteGap());
         }
     }
 

@@ -63,8 +63,10 @@ public:
     void editDrag(EditData&) override;
     void spatiumChanged(double, double) override;
 
-    void setGap(Millimetre sp);
-    Millimetre gap() const { return m_gap; }
+    void setGap(Spatium sp);
+    Spatium gap() const { return m_gap; }
+
+    double absoluteGap() const { return m_gap.toMM(spatium()).val(); }
 
     const muse::draw::PainterPath& path() const { return m_path; }
 
@@ -87,7 +89,7 @@ private:
     Spacer(const Spacer&);
 
     SpacerType m_spacerType = SpacerType::UP;
-    Millimetre m_gap;
+    Spatium m_gap;
     muse::draw::PainterPath m_path;
 };
 } // namespace mu::engraving
