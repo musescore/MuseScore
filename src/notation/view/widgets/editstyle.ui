@@ -995,7 +995,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>414</width>
+                <width>406</width>
                 <height>374</height>
                </rect>
               </property>
@@ -5780,7 +5780,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>401</width>
+             <width>393</width>
              <height>585</height>
             </rect>
            </property>
@@ -6682,8 +6682,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>367</width>
-                <height>386</height>
+                <width>608</width>
+                <height>447</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -7037,14 +7037,23 @@
                  <property name="title">
                   <string>Brackets</string>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout_21" rowstretch="0,0,1">
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_6">
-                    <property name="text">
-                     <string comment="Tuplet bracket">Bracket thickness:</string>
+                 <layout class="QGridLayout" name="gridLayout_21" rowstretch="0,0,0">
+                  <item row="0" column="2">
+                   <widget class="QToolButton" name="resetTupletBracketWidth">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
                     </property>
-                    <property name="buddy">
-                     <cstring>tupletBracketWidth</cstring>
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Bracket hook height' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
@@ -7080,22 +7089,13 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2">
-                   <widget class="QToolButton" name="resetTupletBracketWidth">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Bracket hook height' value</string>
-                    </property>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_6">
                     <property name="text">
-                     <string notr="true"/>
+                     <string comment="Tuplet bracket">Bracket thickness:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>tupletBracketWidth</cstring>
                     </property>
                    </widget>
                   </item>
@@ -7153,18 +7153,12 @@
                     </property>
                    </spacer>
                   </item>
-                  <item row="2" column="0">
-                   <spacer name="verticalSpacer_35">
-                    <property name="orientation">
-                     <enum>Qt::Orientation::Vertical</enum>
+                  <item row="2" column="0" colspan="4">
+                   <widget class="QCheckBox" name="tupletExtendBracketToEndOfDuration">
+                    <property name="text">
+                     <string>Extend bracket to end of duration</string>
                     </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </spacer>
+                   </widget>
                   </item>
                  </layout>
                 </widget>
