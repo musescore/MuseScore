@@ -64,16 +64,6 @@ void Spacer::setGap(Spatium sp)
 }
 
 //---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void Spacer::spatiumChanged(double ov, double nv)
-{
-    m_gap = (m_gap / ov) * nv;
-    renderer()->layoutItem(this);
-}
-
-//---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------
 

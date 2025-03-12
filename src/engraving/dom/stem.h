@@ -40,7 +40,6 @@ public:
 
     Stem* clone() const override { return new Stem(*this); }
 
-    void spatiumChanged(double oldValue, double newValue) override;
     EngravingItem* elementBase() const override;
 
     bool isEditable() const override { return true; }

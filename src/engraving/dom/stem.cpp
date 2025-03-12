@@ -70,14 +70,6 @@ double Stem::lineWidthMag() const
     return absoluteFromSpatium(m_lineWidth) * chord()->intrinsicMag();
 }
 
-void Stem::spatiumChanged(double oldValue, double newValue)
-{
-    m_userLength = (m_userLength / oldValue) * newValue;
-    m_baseLength = (m_baseLength / oldValue) * newValue;
-    m_lineWidth = (m_lineWidth / oldValue) * newValue;
-    renderer()->layoutItem(this);
-}
-
 //! In chord coordinates
 PointF Stem::flagPosition() const
 {

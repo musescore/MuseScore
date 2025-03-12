@@ -61,7 +61,6 @@ public:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
-    void spatiumChanged(double, double) override;
 
     void setGap(Spatium sp);
     Spatium gap() const { return m_gap; }
