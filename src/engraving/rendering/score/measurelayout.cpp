@@ -544,7 +544,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             if (!e->staff()->show() || !e->visible()) {
                 continue;
             }
-            if (!muse::contains(BREAK_TYPES, e->type())) {
+            if (muse::contains(BREAK_TYPES, e->type()) && !s->rtick().isZero()) {
                 return false;
             }
         }
@@ -811,10 +811,25 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
             firstMeasure->setMMRestCount(0);
             ctx.mutState().setMeasureNo(mno);
         }
-    } else if (firstMeasure->isMMRest()) {
-        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
-        int measureNo = ctx.state().measureNo() + firstMeasure->mmRestCount() - 1;
-        ctx.mutState().setMeasureNo(measureNo);
+    } else if (firstMeasure->mmRest()) {
+        // Removed linked clones that were created for the mmRest measure
+        Measure* mmRestMeasure = firstMeasure->mmRest();
+        for (EngravingItem* item : mmRestMeasure->el()) {
+            item->undoUnlink();
+            mmRestMeasure->score()->doUndoRemoveElement(item);
+        }
+        for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
+            for (EngravingItem* item : seg->annotations()) {
+                item->undoUnlink();
+                mmRestMeasure->score()->doUndoRemoveElement(item);
+            }
+        }
+
+        if (firstMeasure->mmRestCount() > 0) {
+            LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
+            int measureNo = ctx.state().measureNo() + firstMeasure->mmRestCount() - 1;
+            ctx.mutState().setMeasureNo(measureNo);
+        }
     }
 }
 

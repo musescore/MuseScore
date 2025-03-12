@@ -470,8 +470,12 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(score->excerpts().size() == 1);
 }
 
-TEST_F(Engraving_LinksTests, testMMRestLink)
+TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
 {
+    // NOTE: Temporarily disabling this test because it assumes that the loaded score has multiMeasureRests active,
+    // but that is not the case because the mscx file *doesn't contain the style information*, so this
+    // score gets actually loaded *without* mmRest, making the test invalid. [M.S.]
+
     MasterScore* score = ScoreRW::readScore(LINKS_DATA_DIR + u"testMMRestLink.mscx");
     ASSERT_TRUE(score);
 
