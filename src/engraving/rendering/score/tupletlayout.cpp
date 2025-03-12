@@ -410,6 +410,10 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         item->p2().rx() = shEl->translated(cr2->pagePos()).right() + noteRight;
     }
 
+    if (style.styleB(Sid::tupletExtendToEndOfDuration)) {
+        extendToEndOfDuration(item, toChordRest(cr2));
+    }
+
     item->setPos(0.0, 0.0);
     PointF mp(item->parentItem()->pagePos());
     if (item->explicitParent()->isMeasure()) {
@@ -600,4 +604,28 @@ bool TupletLayout::notTopTuplet(ChordRest* cr)
 
     // no tuplet or not first element
     return false;
+}
+
+void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
+{
+    Fraction baseDuration = item->baseLen().ticks();
+    if (endCR->ticks() <= baseDuration) {
+        return;
+    }
+
+    Fraction lastTupletSubdivision = endCR->endTick() - baseDuration / item->ratio();
+    Segment* refSegment = endCR->segment();
+    while (refSegment) {
+        Segment* nextCRSeg = refSegment->next1(SegmentType::ChordRest);
+        if (!nextCRSeg || nextCRSeg->tick() > lastTupletSubdivision) {
+            break;
+        }
+        refSegment = nextCRSeg;
+    }
+
+    Fraction tickRatio = (lastTupletSubdivision - refSegment->tick()) / refSegment->ticks();
+
+    double xResult = refSegment->pagePos().x() + refSegment->width() * tickRatio.toDouble() + item->score()->noteHeadWidth();
+
+    item->p2().rx() = xResult;
 }
