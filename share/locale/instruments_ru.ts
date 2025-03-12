@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Группа духовых инструментов, нотируемая на большом нотоносце.</translation>
+        <translation>Группа духовых инструментов, нотируемая на фортепианной системе.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
