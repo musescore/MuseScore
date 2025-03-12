@@ -17,28 +17,22 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-
+import Muse.UiComponents 
+import Muse.Ui
 import MuseScore 3.0
-import FileIO 3.0
+import FileIO 
 
 MuseScore {
-    version: "3.0.5"
-    title: "Tuning"
+    id: window
+    version: "4"
+    title: "Temperaments"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
     categoryCode: "playback"
     thumbnailName: "modal_tuning.png"
-
-    width: 790
-    height: 644
-
-    property var offsetTextWidth: 40;
-    property var offsetLabelAlignment: 0x02 | 0x80;
-
-    property var history: 0;
-
-    // set true if customisations are made to the tuning
-    property var modified: false;
+    
+    width: 800
+    height: 640    
 
     /**
      * See http://leware.net/temper/temper.htm and specifically http://leware.net/temper/cents.htm
@@ -50,150 +44,476 @@ MuseScore {
      * Each row is ordered in the cycle of fifths, so C, G, D, A, E, B, F#, C#, G#/Ab, Eb, Bb, F;
      * and the values are offsets from the equal tempered value.
      *
-     * However for tunings who's default root note is not C, the values are pre-rotated so that applying the
-     * root note rotation will put the first value of the sequence at the root note.
+     * However for tunings who's default root/pure note is not C, the values are pre-rotated and adjusted accordingly. 
      */
-    property var equal: {
-        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-        'root': 0,
-        'pure': 0,
-        'name': "equal"
-    }
-    property var pythagorean: {
-        'offsets': [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0],
-        'root': 9,
-        'pure': 3,
-        'name': "pythagorean"
-    }
-    property var aaron: {
-        'offsets': [10.5, 7.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -21.0, -24.5, -28.0],
-        'root': 9,
-        'pure': 3,
-        'name': "aaron"
-    }
-    property var silberman: {
-        'offsets': [5.0, 3.3, 1.7, 0.0, -1.7, -3.3, -5.0, -6.7, -8.3, -10.0, -11.7, -13.3],
-        'root': 9,
-        'pure': 3,
-        'name': "silberman"
-    }
-    property var salinas: {
-        'offsets': [16.0, 10.7, 5.3, 0.0, -5.3, -10.7, -16.0, -21.3, -26.7, -32.0, -37.3, -42.7],
-        'root': 9,
-        'pure': 3,
-        'name': "salinas"
-    }
-    property var kirnberger: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -12.0, -10.0, -10.0, -8.0, -6.0, -4.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "kirnberger"
-    }
-    property var vallotti: {
-        'offsets': [0.0, -2.0, -4.0, -6.0, -8.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "vallotti"
-    }
-    property var werkmeister: {
-        'offsets': [0.0, -4.0, -8.0, -12.0, -10.0, -8.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "werkmeister"
-    }
-    property var marpurg: {
-        'offsets': [0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0],
-        'root': 0,
-        'pure': 0,
-        'name': "marpurg"
-    }
-    property var just: {
-        'offsets': [0.0, 2.0, 4.0, -16.0, -14.0, -12.0, -10.0, -30.0, -28.0, 16.0, 18.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "just"
-    }
-    property var meanSemitone: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
-        'root': 6,
-        'pure': 6,
-        'name': "meanSemitone"
-    }
-    property var grammateus: {
-        'offsets': [-2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 0.0, 2.0, 4.0, 6.0, 8.0],
-        'root': 11,
-        'pure': 1,
-        'name': "grammateus"
-    }
-    property var french: {
-        'offsets': [0.0, -2.5, -5.0, -7.5, -10.0, -12.5, -13.0, -13.0, -11.0, -6.0, -1.5, 2.5],
-        'root': 0,
-        'pure': 0,
-        'name': "french"
-    }
-    property var french2: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
-        'root': 0,
-        'pure': 0,
-        'name': "french2"
-    }
-    property var rameau: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -15.5, -13.5, -11.5, -2.0, 7.0, 3.5],
-        'root': 0,
-        'pure': 0,
-        'name': "rameau"
-    }
-    property var irrFr17e: {
-        'offsets': [-8.0, -2.0, 3.0, 0.0, -3.0, -6.0, -9.0, -12.0, -15.0, -18.0, -21.0, -24.0],
-        'root': 9,
-        'pure': 3,
-        'name': "irrFr17e"
-    }
-    property var bachLehman: {
-        'offsets': [0.0, -2.0, -3.9, -5.9, -7.8, -5.9, -3.9, -2.0, -2.0, -2.0, -2.0, 2.0],
-        'root': 0,
-        'pure': 3,
-        'name': "bachLehman"
-    }
+    
+    property var defaultWesternTemperaments: [
+        {
+            'name': "Equal",
+            'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Pythagorean",
+            'offsets': [-6, -4, -2, 0, 2, 4, -18, -16, -14, -12, -10, -8],
+            'root': 9,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Aaron",
+            'offsets': [10.5, 7, 3.5, 0, -3.5, -7, 31.5, 28, 24.5, 21, 17.5, 14],
+            'root': 9,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Silberman",
+            'offsets': [5, 3.3, 1.7, 0, -1.7, -3.3, 15, 13.3, 11.7, 10, 8.3, 6.7],
+            'root': 9,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Salinas",
+            'offsets': [16, 10.7, 5.3, 0, -5.3, -10.7, 48, 42.7, 37.3, 32, 26.7, 21.3],
+            'root': 9,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Kirnberger",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -12.0, -10.0, -10.0, -8.0, -6.0, -4.0, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Vallotti",
+            'offsets': [0.0, -2.0, -4.0, -6.0, -8.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Werkmeister",
+            'offsets': [0.0, -4.0, -8.0, -12.0, -10.0, -8.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Marpurg",
+            'offsets': [0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Just",
+            'offsets': [0.0, 2.0, 4.0, -16.0, -14.0, -12.0, -10.0, -30.0, -28.0, 16.0, 18.0, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Mean Semitone",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
+            'root': 6,
+            'pure': 6,
+            'tweak': 0
+        },
+        {
+            'name': "Grammateus",
+            'offsets': [-2, 0, 2, 4, 6, -4, -2, 0, 2, 4, -6, -4],
+            'root': 11,
+            'pure': 1,
+            'tweak': 0
+        },
+        {
+            'name': "French",
+            'offsets': [0.0, -2.5, -5.0, -7.5, -10.0, -12.5, -13.0, -13.0, -11.0, -6.0, -1.5, 2.5],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "French 2",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Rameau",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -15.5, -13.5, -11.5, -2.0, 7.0, 3.5],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Irr Fr 17e",
+            'offsets': [9, 6, 3, 0, -3, -6, 10, 16, 21, 18, 15, 12],
+            'root': 9,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Bach Lehman",
+            'offsets': [5.9, 3.9, 2, 0, -1.9, 0, 2, 3.9, 3.9, 3.9, 3.9, 7.9],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Meantone (1/4) 5 flats",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, 30.8, 27.4, 24.0, 20.5, 17.1, 13.7],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Meantone 1/4-comma",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Meantone (1/4) 5 sharps",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, -20.5, -24.0, 13.7],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Meantone 1/5-comma",
+            'offsets': [7.0, 4.7, 2.3, 0.0, -2.3, -4.7, -7.0, -9.4, -11.7, 14.1, 11.7, 9.4],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Meantone 1/6-comma",
+            'offsets': [4.9, 3.3, 1.6, 0.0, -1.6, -3.3, -4.9, -6.5, -8.1, 9.8, 8.1, 6.5],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Werckmeister III",
+            'offsets': [11.7, 7.8, 3.9, 0.0, 2.0, 3.9, 0.0, 2.0, 3.9, 5.9, 7.8, 9.8],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Kirnberger III",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -1.5, 0.5, 0.5, 2.4, 4.4, 6.4, 8.3],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Vallotti",
+            'offsets': [5.9, 3.9, 2.0, 0.0, -2.0, -3.9, -2.0, 0.0, 2.0, 3.9, 5.9, 7.8],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Young I",
+            'offsets': [6.2, 4.2, 2.1, 0.0, -2.1, -1.9, -1.8, 0.1, 2.1, 4.1, -0.3, -0.1],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Kellner",
+            'offsets': [8.2, 5.5, 2.7, 0.0, -2.7, -0.8, -3.5, -1.6, 0.4, 2.3, 4.3, 6.3],
+            'root': 0,
+            'pure': 3,
+            'tweak': 0
+        },
+        {
+            'name': "Fernando A. Martin 1/45-comma",
+            'offsets': [6.6, 3.9, 1.7, 0.0, -1.2, -1.8, -2.0, -1.6, -0.7, 0.8, 2.7, 4.7],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "C Cm Db Dm Eb Ebm Em F Fm Ab Am Bb",
+            'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "C Cm C#m D Dm E Em F F#m A Am Bb",
+            'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "C Cm Db D Dm Em F Fm Ab Am Bb Bbm",
+            'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "C Cm Db Eb Em F Fm G Gm Ab Am Bm",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "C Cm D Dm Eb Em F#m G Gm Ab Bb Bm",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "C D Ebm E Em F# F#m G G#m Bbm B Bm",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Simple Ratios",
+            'offsets': [0.0, 2.0, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Alternate Ratios",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        }
+    ]
 
-    property var currentTemperament: equal;
+    property var defaultMiddleEasternTemperaments: [
+        {
+            'name': "Melodic 1# 2b",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Harmonic 1# 2b",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Rast, Sikah",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Suznak, Huzam",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Nayruz",
+            'offsets': [0.0, 2.0, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Bayati, Kurd, Huseyni",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Qarjighar",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Saba, Basta Nikar, Zanjaran",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Hijaz, Nikriz",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Nawa'athar, Shad Araban",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Shehnaz",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Nahawand, Hijaz Kar",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "hawand, Hijaz Kar Kurd",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Iraq, Yekah, Nawa",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Farahnak, Yekah, Nawa",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Jiharkah",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Ajam Ashyran, Shawq Afza",
+            'offsets': [0.0, 2.0, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Hisar",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Nishaburek (Rast in D & A)",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Nishaburek (Rast in D, Bayati in A)",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Saba Zamzam",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Rakb",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Ikah Baladi",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        },
+        {
+            'name': "Iraq (Cadence)",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2.0],
+            'root': 0,
+            'pure': 0,
+            'tweak': 0
+        }
+    ]    
+
+    property var westernTemperaments: JSON.parse(JSON.stringify(defaultWesternTemperaments)) 
+    property var middleEasternTemperaments: JSON.parse(JSON.stringify(defaultMiddleEasternTemperaments))
+
+    //property var currentTemperamentIndex: 0
+
+    property var currentDefaultTemperament: defaultWesternTemperaments[currentTemperamentIndex]
+    property var currentTemperament: westernTemperaments[currentTemperamentIndex]
+      
     property var currentRoot: 0;
     property var currentPureTone: 0;
     property var currentTweak: 0.0;
 
     onRun: {
-        if (!curScore) {
-            error("No score open.\nThis plugin requires an open score to run.\n")
-            quit()
-        }
-    }
+        var savedArray= fileIO.read()
+        savedArray = JSON.parse(savedArray)
+        westernTemperaments = savedArray[0]
+        middleEasternTemperaments = savedArray[1]
+        // var userTemperaments = JSON.parse(JSON.stringify([
+        //     westernTemperaments.slice(defaultWesternTemperaments.length), 
+        //     middleEasternTemperaments.slice(defaultMiddleEasternTemperaments.length)
+        //     ]))
+        //defaultWesternTemperaments = defaultWesternTemperaments.concat(userTemperaments[0])
+        //defaultMiddleEasternTemperaments = defaultMiddleEasternTemperaments.concat(userTemperaments[1])
+    }    
 
-    function getHistory() {
-        if (history == 0) {
-            history = new commandHistory()
-        }
-        return history
-    }
-
-    function applyTemperament()
-    {
+    function applyTemperament() {
         var selection = new scoreSelection()
         curScore.startCmd()
         selection.map(filterNotes, reTune(getFinalTuning()))
-        if (annotateValue.checkedState == Qt.Checked) {
+        if (annotateValue.checked == true) {
             selection.map(filterNotes, annotate)
         }
         curScore.endCmd()
         return true
     }
 
-    function filterNotes(element)
-    {
+    function filterNotes(element) {
         return element.type == Element.CHORD
     }
 
-    function annotate(chord, cursor)
-    {
+    function annotate(chord, cursor) {
         function addText(noteIndex, placement) {
             var note = chord.notes[noteIndex]
             var text = newElement(Element.STAFF_TEXT);
@@ -293,991 +613,405 @@ MuseScore {
         errorDialog.open()
     }
 
-    /**
-     * map a note (pitch modulo 12) to a value in one of the above tables
-     * then adjust for the choice of pure note and tweak.
-     */
-    function lookUp(note, table) {
-        var i = ((note * 7) - currentRoot + 12) % 12;
-        var offset = table.offsets[i];
-        var j = (currentPureTone - currentRoot + 12) % 12;
-        var pureNoteAdjustment = table.offsets[j];
-        var finalOffset = offset - pureNoteAdjustment;
-        var tweakFinalOffset = finalOffset + parseFloat(tweakValue.text);
-        return tweakFinalOffset
-    }
-
-    /**
-     * returns a function for use by recalculate()
-     *
-     * We use an abstract function here because recalculate can be passed
-     * a different function, i.e. when restoring from a save file.
-     */
-    function getTuning() {
-        return function(pitch) {
-            return lookUp(pitch, currentTemperament);
-        }
+    function getTuning(temp=currentTemperament) {
+        var dRoot = currentRoot - temp.root
+        var rotatedOffsets = temp.offsets.slice((12-dRoot)%12, 12).concat(temp.offsets.slice(0, (12-dRoot)%12)) 
+        var pureToneOffset = rotatedOffsets[currentPureTone]                    
+        var newOffsets = rotatedOffsets.map(x => x - pureToneOffset + currentTweak)
+        return newOffsets
     }
 
     function getFinalTuning() {
         return function(pitch) {
             pitch = pitch % 12
-            switch (pitch) {
-                case 0:
-                    return getFinalOffset(final_c)
-                case 1:
-                    return getFinalOffset(final_c_sharp)
-                case 2:
-                    return getFinalOffset(final_d)
-                case 3:
-                    return getFinalOffset(final_e_flat)
-                case 4:
-                    return getFinalOffset(final_e)
-                case 5:
-                    return getFinalOffset(final_f)
-                case 6:
-                    return getFinalOffset(final_f_sharp)
-                case 7:
-                    return getFinalOffset(final_g)
-                case 8:
-                    return getFinalOffset(final_g_sharp)
-                case 9:
-                    return getFinalOffset(final_a)
-                case 10:
-                    return getFinalOffset(final_b_flat)
-                case 11:
-                    return getFinalOffset(final_b)
-                default:
-                    error("unrecognised pitch: " + pitch)
-            }
+            return parseFloat(finalOffsets.itemAt(pitch*7 % 12).children[1].currentText )             
         }
     }
-
-    function getFinalOffset(textField) {
-        return parseFloat(textField.text)
-    }
-
-    function recalculate(tuning) {
-        var old_final_c       = final_c.text
-        var old_final_c_sharp = final_c_sharp.text
-        var old_final_d       = final_d.text
-        var old_final_e_flat  = final_e_flat.text
-        var old_final_e       = final_e.text
-        var old_final_f       = final_f.text
-        var old_final_f_sharp = final_f_sharp.text
-        var old_final_g       = final_g.text
-        var old_final_g_sharp = final_g_sharp.text
-        var old_final_a       = final_a.text
-        var old_final_b_flat  = final_b_flat.text
-        var old_final_b       = final_b.text
-        getHistory().add(
-            function () {
-                final_c.text               = old_final_c
-                final_c.previousText       = old_final_c
-                final_c_sharp.text         = old_final_c_sharp
-                final_c_sharp.previousText = old_final_c_sharp
-                final_d.text               = old_final_d
-                final_d.previousText       = old_final_d
-                final_e_flat.text          = old_final_e_flat
-                final_e_flat.previousText  = old_final_e_flat
-                final_e.text               = old_final_e
-                final_e.previousText       = old_final_e
-                final_f.text               = old_final_f
-                final_f.previousText       = old_final_f
-                final_f_sharp.text         = old_final_f_sharp
-                final_f_sharp.previousText = old_final_f_sharp
-                final_g.text               = old_final_g
-                final_g.previousText       = old_final_g
-                final_g_sharp.text         = old_final_g_sharp
-                final_g_sharp.previousText = old_final_g_sharp
-                final_a.text               = old_final_a
-                final_a.previousText       = old_final_a
-                final_b_flat.text          = old_final_b_flat
-                final_b_flat.previousText  = old_final_b_flat
-                final_b.text               = old_final_b
-                final_b.previousText       = old_final_b
-            },
-            function() {
-                final_c.text               = tuning(0).toFixed(1)
-                final_c.previousText       = final_c.text
-                final_c_sharp.text         = tuning(1).toFixed(1)
-                final_c_sharp.previousText = final_c_sharp.text
-                final_d.text               = tuning(2).toFixed(1)
-                final_d.previousText       = final_d.text
-                final_e_flat.text          = tuning(3).toFixed(1)
-                final_e_flat.previousText  = final_e_flat.text
-                final_e.text               = tuning(4).toFixed(1)
-                final_e.previousText       = final_e.text
-                final_f.text               = tuning(5).toFixed(1)
-                final_f.previousText       = final_f.text
-                final_f_sharp.text         = tuning(6).toFixed(1)
-                final_f_sharp.previousText = final_f_sharp.text
-                final_g.text               = tuning(7).toFixed(1)
-                final_g.previousText       = final_g.text
-                final_g_sharp.text         = tuning(8).toFixed(1)
-                final_g_sharp.previousText = final_g_sharp.text
-                final_a.text               = tuning(9).toFixed(1)
-                final_a.previousText       = final_a.text
-                final_b_flat.text          = tuning(10).toFixed(1)
-                final_b_flat.previousText  = final_b_flat.text
-                final_b.text               = tuning(11).toFixed(1)
-                final_b.previousText       = final_b.text
-            },
-            "final offsets"
-        )
-    }
-
-    function setCurrentTemperament(temperament) {
-        var oldTemperament = currentTemperament
-        getHistory().add(
-            function() {
-                currentTemperament = oldTemperament
-                checkCurrentTemperament()
-            },
-            function() {
-                currentTemperament = temperament
-                checkCurrentTemperament()
-            },
-            "current temperament"
-        )
-    }
-
-    function checkCurrentTemperament() {
-        switch (currentTemperament.name) {
-            case "equal":
-                equal_button.checked = true
-                return
-            case "pythagorean":
-                pythagorean_button.checked = true
-                return
-            case "aaron":
-                aaron_button.checked = true
-                return
-            case "silberman":
-                silberman_button.checked = true
-                return
-            case "salinas":
-                salinas_button.checked = true
-                return
-            case "kirnberger":
-                kirnberger_button.checked = true
-                return
-            case "vallotti":
-                vallotti_button.checked = true
-                return
-            case "werkmeister":
-                werkmeister_button.checked = true
-                return
-            case "marpurg":
-                marpurg_button.checked = true
-                return
-            case "just":
-                just_button.checked = true
-                return
-            case "meanSemitone":
-                meanSemitone_button.checked = true
-                return
-            case "grammateus":
-                grammateus_button.checked = true
-                return
-            case "french":
-                french_button.checked = true
-                return
-            case "french2":
-                french2_button.checked = true
-                return
-            case "rameau":
-                rameau_button.checked = true
-                return
-            case "irrFr17e":
-                irrFr17e_button.checked = true
-                return
-            case "bachLehman":
-                bachLehman_button.checked = true
-                return
-        }
-    }
-
-    function lookupTemperament(temperamentName) {
-        switch (temperamentName) {
-            case "equal":
-                return equal
-            case "pythagorean":
-                return pythagorean
-            case "aaron":
-                return aaron
-            case "silberman":
-                return silberman
-            case "salinas":
-                return salinas
-            case "kirnberger":
-                return kirnberger
-            case "vallotti":
-                return vallotti
-            case "werkmeister":
-                return werkmeister
-            case "marpurg":
-                return marpurg
-            case "just":
-                return just
-            case "meanSemitone":
-                return meanSemitone
-            case "grammateus":
-                return grammateus
-            case "french":
-                return french
-            case "french2":
-                return french2
-            case "rameau":
-                return rameau
-            case "irrFr17e":
-                return irrFr17e
-            case "bachLehman":
-                return bachLehman
-        }
-    }
-
-    function setCurrentRoot(root) {
-        var oldRoot = currentRoot
-        getHistory().add(
-            function () {
-                currentRoot = oldRoot
-                checkCurrentRoot()
-            },
-            function() {
-                currentRoot = root
-                checkCurrentRoot()
-            },
-            "current root"
-        )
-    }
-
-    function checkCurrentRoot() {
-        switch (currentRoot) {
-            case 0:
-                root_c.checked = true
-                break
-            case 1:
-                root_g.checked = true
-                break
-            case 2:
-                root_d.checked = true
-                break
-            case 3:
-                root_a.checked = true
-                break
-            case 4:
-                root_e.checked = true
-                break
-            case 5:
-                root_b.checked = true
-                break
-            case 6:
-                root_f_sharp.checked = true
-                break
-            case 7:
-                root_c_sharp.checked = true
-                break
-            case 8:
-                root_g_sharp.checked = true
-                break
-            case 9:
-                root_e_flat.checked = true
-                break
-            case 10:
-                root_b_flat.checked = true
-                break
-            case 11:
-                root_f.checked = true
-                break
-        }
-    }
-
-    function setCurrentPureTone(pureTone) {
-        var oldPureTone = currentPureTone
-        getHistory().add(
-            function () {
-                currentPureTone = oldPureTone
-                checkCurrentPureTone()
-            },
-            function() {
-                currentPureTone = pureTone
-                checkCurrentPureTone()
-            },
-            "current pure tone"
-        )
-    }
-
-    function setCurrentTweak(tweak) {
-        var oldTweak = currentTweak
-        getHistory().add(
-            function () {
-                currentTweak = oldTweak
-                checkCurrentTweak()
-            },
-            function () {
-                currentTweak = tweak
-                checkCurrentTweak()
-            },
-            "current tweak"
-        )
-    }
-
-    function checkCurrentTweak() {
-        tweakValue.text = currentTweak.toFixed(1)
-    }
-
-    function checkCurrentPureTone() {
-        switch (currentPureTone) {
-            case 0:
-                pure_c.checked = true
-                break
-            case 1:
-                pure_g.checked = true
-                break
-            case 2:
-                pure_d.checked = true
-                break
-            case 3:
-                pure_a.checked = true
-                break
-            case 4:
-                pure_e.checked = true
-                break
-            case 5:
-                pure_b.checked = true
-                break
-            case 6:
-                pure_f_sharp.checked = true
-                break
-            case 7:
-                pure_c_sharp.checked = true
-                break
-            case 8:
-                pure_g_sharp.checked = true
-                break
-            case 9:
-                pure_e_flat.checked = true
-                break
-            case 10:
-                pure_b_flat.checked = true
-                break
-            case 11:
-                pure_f.checked = true
-                break
-        }
-    }
-
-    function setModified(state) {
-        var oldModified = modified
-        getHistory().add(
-            function () {
-                modified = oldModified
-            },
-            function () {
-                modified = state
-            },
-            "modified"
-        )
-    }
+    
+    function recalculate(tuning=getTuning()) {        
+        for (var i=0; i<12; i++) {
+            finalOffsets.itemAt(i).children[1].currentText = tuning[i].toFixed(1)
+        }           
+    }    
 
     function temperamentClicked(temperament) {
-        getHistory().begin()
-        setCurrentTemperament(temperament)
-        setCurrentRoot(currentTemperament.root)
-        setCurrentPureTone(currentTemperament.pure)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
+        currentRoot = temperament.root            
+        currentPureTone = temperament.pure         
+        currentTweak = temperament.tweak
+
+        rootNotes.itemAt(currentRoot).checked=true 
+        pureTones.itemAt(currentPureTone).checked=true
+        tweakValue.currentValue = currentTweak
+        
+        recalculate() 
+        checkIfEdited()     
     }
 
-    function rootNoteClicked(note) {
-        getHistory().begin()
-        setModified(true)
-        setCurrentRoot(note)
-        setCurrentPureTone(note)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
+    function rootNoteClicked(note) {        
+        currentRoot = note        
+        currentPureTone = note
+        currentTweak = 0.0
+
+        pureTones.itemAt(currentPureTone).checked=true
+        tweakValue.currentValue = currentTweak
+        
+        recalculate() 
+        updateCurrentTemperament()    
     }
 
-    function pureToneClicked(note) {
-        getHistory().begin()
-        setModified(true)
-        setCurrentPureTone(note)
-        setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
+    function pureToneClicked(note) {        
+        currentPureTone = note
+        currentTweak = 0.0
+        tweakValue.currentValue = currentTweak
+        recalculate()  
+        updateCurrentTemperament()    
     }
 
-    function tweaked() {
-        getHistory().begin()
-        setModified(true)
-        setCurrentTweak(parseFloat(tweakValue.text))
-        recalculate(getTuning())
-        getHistory().end()
-    }
+    function tweaked() {  
+        currentTweak = tweakValue.currentValue         
+        recalculate() 
+        updateCurrentTemperament()      
+    }    
 
-    function editingFinishedFor(textField) {
-        var oldText = textField.previousText
-        var newText = textField.text
-        getHistory().begin()
-        setModified(true)
-        getHistory().add(
-            function () {
-                textField.text = oldText
-            },
-            function () {
-                textField.text = newText
-            },
-            "edit ".concat(textField.name)
-        )
-        getHistory().end()
-        textField.previousText = newText
-    }
-
-    Item {
-        anchors.fill: parent
-
-        ButtonGroup { id: temperamentTypeGroup }
-
-        component TuningItem: RadioButton {
-            padding: 4
-            ButtonGroup.group: temperamentTypeGroup
+    function updateCurrentTemperament() {
+        currentTemperament.root = currentRoot
+        currentTemperament.pure = currentPureTone 
+        currentTemperament.tweak = currentTweak       
+        for (var i=0; i<12; i++) {
+             currentTemperament.offsets[i] = parseFloat(finalOffsets.itemAt(i).children[1].currentText)
         }
+        checkIfEdited()
+    }
+    
+    function checkIfEdited() {  
+        if (currentDefaultTemperament.root !== currentTemperament.root ||
+            currentDefaultTemperament.pure !== currentTemperament.pure ||
+            currentDefaultTemperament.tweak !== currentTemperament.tweak) {
+            resetButton.enabled = true 
+            return
+        } 
+        else {
+            //var newOffsets = getTuning(currentDefaultTemperament)  
+            for (var i=0; i<12; i++) {
+                if (currentDefaultTemperament.offsets[i] !== currentTemperament.offsets[i]) {
+                    resetButton.enabled = true
+                    return
+                }
+                ////Rotate the offsets array so the current root is at the start
+                //// var offset = temp.offsets[(i - currentRoot + 12) % 12]            
+                //// var pureNoteAdjustment = temp.offsets[(currentPureTone - currentRoot + 12) % 12]
+                //// var newOffset = offset - pureNoteAdjustment + tweakValue.currentValue      
 
-        GridLayout {
-            columns: 2
-            anchors.fill: parent
-            anchors.margins: 10
-            GroupBox {
-                title: "Temperament"
-                ColumnLayout {
-                    TuningItem {
-                        id: equal_button
-                        text: "Equal"
-                        checked: true
-                        onClicked: { temperamentClicked(equal) }
+                // if (newOffsets[i] !== parseFloat(finalOffsets.itemAt(i).children[1].currentText)) { //currentTemperament.offsets[i]) {
+                //     resetButton.enabled = true
+                //     return
+                // }
+            }
+            resetButton.enabled = false
+        }
+    }
+
+    StyledTabBar {
+        id:tabBar
+        width: 400               
+        height: 40
+        x: 30
+        y: 10
+        
+        currentIndex: 0 
+
+        StyledTabButton {
+            id: westernTab 
+            text: "Western temperaments" 
+        }
+        StyledTabButton {
+            id: middleEasternTab
+            text: "Middle Eastern temperaments" 
+        }
+    }    
+
+    Column {
+        anchors.left: window.left
+        anchors.top: window.top
+        anchors.leftMargin:20
+        anchors.topMargin: 60
+        spacing: 12
+        RowLayout {
+            width: parent.width
+            FlatButton {
+                id: addButton
+                text: "Add"  
+                Layout.fillWidth: true               
+                onClicked: addDialog.open() 
+
+                StyledPopupView {        
+                    id: addDialog                                                                  
+                    contentWidth:  addButton.width //c1.childrenRect.width
+                    contentHeight: c1.childrenRect.height 
+                    Column {
+                        width: parent.width 
+                        id: c1                            
+                        spacing: 12
+                        TextInputField {                                            
+                            id: customTempName                            
+                            hint: "Temperament name"  
+                            focus: true 
+                            onTextEditingFinished: function (newText) { currentText = newText }                                  
+                        }
+                        FlatButton {
+                            width: parent.width 
+                            text: "Ok"
+                            accentButton: true
+                            onClicked: {                   
+                                addTemperament()
+                                addDialog.close()
+                                saveCustomTemperaments()
+                                customTempName.currentText = ""                                       
+                            }   
+                        } 
+                    }  
+                }
+            }
+            
+            FlatButton {
+                id: removeButton
+                icon: IconCode.DELETE_TANK              
+                enabled: {
+                    switch (tabBar.currentIndex) {
+                    case 0:
+                        if (westernTemperaments.indexOf(currentTemperament) <  defaultWesternTemperaments.length)  {
+                            return false
+                        }
+                        else {
+                            return true
+                        }
+                    case 1:
+                        if (middleEasternTemperaments.indexOf(currentTemperament) < defaultMiddleEasternTemperaments.length)  {
+                            return false
+                        }
+                        else {
+                            return true
+                        }
                     }
-                    TuningItem {
-                        id: pythagorean_button
-                        text: "Pythagorean"
-                        onClicked: { temperamentClicked(pythagorean) }
-                    }
-                    TuningItem {
-                        id: aaron_button
-                        text: "Aaron"
-                        onClicked: { temperamentClicked(aaron) }
-                    }
-                    TuningItem {
-                        id: silberman_button
-                        text: "Silberman"
-                        onClicked: { temperamentClicked(silberman) }
-                    }
-                    TuningItem {
-                        id: salinas_button
-                        text: "Salinas"
-                        onClicked: { temperamentClicked(salinas) }
-                    }
-                    TuningItem {
-                        id: kirnberger_button
-                        text: "Kirnberger"
-                        onClicked: { temperamentClicked(kirnberger) }
-                    }
-                    TuningItem {
-                        id: vallotti_button
-                        text: "Vallotti"
-                        onClicked: { temperamentClicked(vallotti) }
-                    }
-                    TuningItem {
-                        id: werkmeister_button
-                        text: "Werkmeister"
-                        onClicked: { temperamentClicked(werkmeister) }
-                    }
-                    TuningItem {
-                        id: marpurg_button
-                        text: "Marpurg"
-                        onClicked: { temperamentClicked(marpurg) }
-                    }
-                    TuningItem {
-                        id: just_button
-                        text: "Just"
-                        onClicked: { temperamentClicked(just) }
-                    }
-                    TuningItem {
-                        id: meanSemitone_button
-                        text: "Mean Semitone"
-                        onClicked: { temperamentClicked(meanSemitone) }
-                    }
-                    TuningItem {
-                        id: grammateus_button
-                        text: "Grammateus"
-                        onClicked: { temperamentClicked(grammateus) }
-                    }
-                    TuningItem {
-                        id: french_button
-                        text: "French"
-                        onClicked: { temperamentClicked(french) }
-                    }
-                    TuningItem {
-                        id: french2_button
-                        text: "Tempérament Ordinaire"
-                        onClicked: { temperamentClicked(french2) }
-                    }
-                    TuningItem {
-                        id: rameau_button
-                        text: "Rameau"
-                        onClicked: { temperamentClicked(rameau) }
-                    }
-                    TuningItem {
-                        id: irrFr17e_button
-                        text: "Irr Fr 17e"
-                        onClicked: { temperamentClicked(irrFr17e) }
-                    }
-                    TuningItem {
-                        id: bachLehman_button
-                        text: "Bach/Lehman"
-                        onClicked: { temperamentClicked(bachLehman) }
-                    }
+                }                               
+                onClicked: {
+                    removeTemperament()
+                    saveCustomTemperaments()
+                }
+            }                    
+        }
+        GroupBox {                            
+            width:260
+            height: 500
+            ButtonGroup { id: tempGroup }   
+
+            StyledListView {
+                id: westernListView
+                width: parent.width
+                height: parent.height-10                      
+                visible: westernTab.checked  
+                model: westernTemperaments
+
+                delegate: PageTabButton {
+                    width: 280
+                    height: 30
+                    ButtonGroup.group: tempGroup
+                    orientation: Qt.Horizontal
+                    leftPadding: 5                    
+                    title: modelData.name
+                    checked: index==0
+                    onClicked: {
+                        //currentTemperamentIndex = index
+                        currentDefaultTemperament = defaultWesternTemperaments[index]
+                        currentTemperament = westernTemperaments[index]
+                        temperamentClicked(currentTemperament)
+                    }                    
+                }                
+                Component.onCompleted: {
+                    //westernListView.itemAtIndex(0).checked = true 
+                    westernListView.itemAtIndex(0).clicked()
                 }
             }
 
+            StyledListView {
+                id: middleEasternListView
+                width: parent.width
+                height: parent.height-10                   
+                visible: middleEasternTab.checked 
+                model: middleEasternTemperaments
+
+                delegate: PageTabButton {
+                    width: 280
+                    height: 30
+                    ButtonGroup.group: tempGroup
+                    orientation: Qt.Horizontal
+                    leftPadding: 5
+                    title: modelData.name
+                    onClicked: {
+                        //currentTemperamentIndex = index
+                        currentDefaultTemperament = defaultMiddleEasternTemperaments[index]
+                        currentTemperament = middleEasternTemperaments[index]
+                        temperamentClicked(currentTemperament)
+                    }
+                }
+            }
+        }
+    }
+
+    ColumnLayout {
+        id: rightColumn
+        anchors.top: parent.top
+        anchors.topMargin: 60
+        anchors.margins: 20
+        spacing: 12
+        x: 310
+        GroupBox {            
             ColumnLayout {
+                spacing: 10
                 GroupBox {
-                    title: "Advanced"
-                    ColumnLayout {
-                        GroupBox {
-                            title: "Root Note"
-                            GridLayout {
-                                columns: 4
-                                anchors.margins: 10
-                                ButtonGroup { id: rootNoteGroup }
-                                RadioButton {
-                                    text: "C"
-                                    checked: true
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_c
-                                    onClicked: { rootNoteClicked(0) }
-                                }
-                                RadioButton {
-                                    text: "G"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_g
-                                    onClicked: { rootNoteClicked(1) }
-                                }
-                                RadioButton {
-                                    text: "D"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_d
-                                    onClicked: { rootNoteClicked(2) }
-                                }
-                                RadioButton {
-                                    text: "A"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_a
-                                    onClicked: { rootNoteClicked(3) }
-                                }
-                                RadioButton {
-                                    text: "E"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_e
-                                    onClicked: { rootNoteClicked(4) }
-                                }
-                                RadioButton {
-                                    text: "B"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_b
-                                    onClicked: { rootNoteClicked(5) }
-                                }
-                                RadioButton {
-                                    text: "F#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_f_sharp
-                                    onClicked: { rootNoteClicked(6) }
-                                }
-                                RadioButton {
-                                    text: "C#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_c_sharp
-                                    onClicked: { rootNoteClicked(7) }
-                                }
-                                RadioButton {
-                                    text: "G#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_g_sharp
-                                    onClicked: { rootNoteClicked(8) }
-                                }
-                                RadioButton {
-                                    text: "Eb"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_e_flat
-                                    onClicked: { rootNoteClicked(9) }
-                                }
-                                RadioButton {
-                                    text: "Bb"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_b_flat
-                                    onClicked: { rootNoteClicked(10) }
-                                }
-                                RadioButton {
-                                    text: "F"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_f
-                                    onClicked: { rootNoteClicked(11) }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Pure Tone"
-                            GridLayout {
-                                columns: 4
-                                anchors.margins: 10
-                                ButtonGroup { id: pureToneGroup }
-                                RadioButton {
-                                    text: "C"
-                                    checked: true
-                                    id: pure_c
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(0) }
-                                }
-                                RadioButton {
-                                    text: "G"
-                                    id: pure_g
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(1) }
-                                }
-                                RadioButton {
-                                    text: "D"
-                                    id: pure_d
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(2) }
-                                }
-                                RadioButton {
-                                    text: "A"
-                                    id: pure_a
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(3) }
-                                }
-                                RadioButton {
-                                    text: "E"
-                                    id: pure_e
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(4) }
-                                }
-                                RadioButton {
-                                    text: "B"
-                                    id: pure_b
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(5) }
-                                }
-                                RadioButton {
-                                    text: "F#"
-                                    id: pure_f_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(6) }
-                                }
-                                RadioButton {
-                                    text: "C#"
-                                    id: pure_c_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(7) }
-                                }
-                                RadioButton {
-                                    text: "G#"
-                                    id: pure_g_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(8) }
-                                }
-                                RadioButton {
-                                    text: "Eb"
-                                    id: pure_e_flat
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(9) }
-                                }
-                                RadioButton {
-                                    text: "Bb"
-                                    id: pure_b_flat
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(10) }
-                                }
-                                RadioButton {
-                                    text: "F"
-                                    id: pure_f
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(11) }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Tweak"
-                            RowLayout {
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: tweakValue
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "tweak"
-                                    onEditingFinished: { tweaked() }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Final Offsets"
-                            GridLayout {
-                                columns: 8
-                                anchors.margins: 0
-
-                                Label {
-                                    text: "C"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_c
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final C"
-                                    onEditingFinished: { editingFinishedFor(final_c) }
-                                }
-
-                                Label {
-                                    text: "G"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_g
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final G"
-                                    onEditingFinished: { editingFinishedFor(final_g) }
-                                }
-
-                                Label {
-                                    text: "D"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_d
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final D"
-                                    onEditingFinished: { editingFinishedFor(final_d) }
-                                }
-
-                                Label {
-                                    text: "A"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_a
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final A"
-                                    onEditingFinished: { editingFinishedFor(final_a) }
-                                }
-
-                                Label {
-                                    text: "E"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_e
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final E"
-                                    onEditingFinished: { editingFinishedFor(final_e) }
-                                }
-
-                                Label {
-                                    text: "B"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_b
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final B"
-                                    onEditingFinished: { editingFinishedFor(final_b) }
-                                }
-
-                                Label {
-                                    text: "F#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_f_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final F#"
-                                    onEditingFinished: { editingFinishedFor(final_f_sharp) }
-                                }
-
-                                Label {
-                                    text: "C#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_c_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final C#"
-                                    onEditingFinished: { editingFinishedFor(final_c_sharp) }
-                                }
-
-                                Label {
-                                    text: "G#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_g_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final G#"
-                                    onEditingFinished: { editingFinishedFor(final_g_sharp) }
-                                }
-
-                                Label {
-                                    text: "Eb"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_e_flat
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final Eb"
-                                    onEditingFinished: { editingFinishedFor(final_e_flat) }
-                                }
-
-                                Label {
-                                    text: "Bb"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_b_flat
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final Bb"
-                                    onEditingFinished: { editingFinishedFor(final_b_flat) }
-                                }
-
-                                Label {
-                                    text: "F"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_f
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final F"
-                                    onEditingFinished: { editingFinishedFor(final_f) }
-                                }
-                            }
-                        }
-                        RowLayout {
-                            Button {
-                                id: saveButton
-                                text: qsTranslate("PrefsDialogBase", "Save")
-                                onClicked: {
-                                    saveDialog.folder = filePath
-                                    saveDialog.visible = true
-                                }
-                            }
-                            Button {
-                                id: loadButton
-                                text: qsTranslate("PrefsDialogBase", "Load")
-                                onClicked: {
-                                    loadDialog.folder = filePath
-                                    loadDialog.visible = true
-                                }
-                            }
-                            Button {
-                                id: undoButton
-                                text: qsTranslate("PrefsDialogBase", "Undo")
-                                onClicked: {
-                                    getHistory().undo()
-                                }
-                            }
-                            Button {
-                                id: redoButton
-                                text: qsTranslate("PrefsDialogBase", "Redo")
-                                onClicked: {
-                                    getHistory().redo()
-                                }
+                    title: "Root note"
+                    GridLayout {
+                        columns: 6
+                        anchors.margins: 10
+                        ButtonGroup { id: rootNoteGroup }
+                        Repeater {
+                            id: rootNotes
+                            model: ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "Eb", "Bb", "F"]
+                            delegate: FlatRadioButton {
+                                ButtonGroup.group: rootNoteGroup
+                                text: modelData
+                                checked: index==0? true : false
+                                onClicked: { rootNoteClicked(index) }
                             }
                         }
                     }
                 }
 
-                RowLayout {
-                    Button {
-                        id: applyButton
-                        text: qsTranslate("PrefsDialogBase", "Apply")
-                        onClicked: {
-                            if (applyTemperament()) {
-                                if (modified) {
-                                    quitDialog.open()
-                                } else {
-                                    quit()
+                GroupBox {
+                    title: "Pure tone"
+                    GridLayout {
+                        columns: 6
+                        anchors.margins: 10
+                        ButtonGroup { id: pureToneGroup }
+                        Repeater {
+                            id: pureTones
+                            model: ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "Eb", "Bb", "F"]
+                            delegate: FlatRadioButton {
+                                ButtonGroup.group: pureToneGroup
+                                text: modelData
+                                checked: index==0? true : false
+                                onClicked: { pureToneClicked(index) }
+                            }
+                        }
+                    }
+                }
+
+                GroupBox {
+                    title: "Pure tone offset"                    
+                    IncrementalPropertyControl {
+                        id: tweakValue
+                        width: 80
+                        maxValue: 99.9                           
+                        minValue: -99.9
+                        step: 0.1
+                        decimals: 1 
+                        currentValue: 0.0
+
+                        onValueEdited:  function (newValue) {
+                            currentValue = newValue                            
+                            tweaked() 
+                        }
+
+                        StyledTextLabel {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 30
+                            text: "ℂ"                                
+                        }  
+                    }                      
+                }
+
+                GroupBox {
+                    title: "Final offsets"
+                    GridLayout {
+                        columns: 6
+                        anchors.margins: 0
+                        Repeater {
+                            id: finalOffsets
+                            model: ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "Eb", "Bb", "F"]
+                            delegate: Row {
+                                StyledTextLabel {
+                                    width:20
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: modelData
+                                }
+                                TextInputField{
+                                    width: 50   
+                                    currentText: "0.0"                                    
+                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }                                                                    
+                                    onTextEditingFinished: function (newText) {
+                                                                if ( newText != "" ) {
+                                                                    currentText = newText
+                                                                }
+                                                                else { 
+                                                                    currentText = "0.0"
+                                                                } 
+                                                                updateCurrentTemperament()
+                                                                recalculate()
+                                                                updateCurrentTemperament()
+                                                                checkIfEdited()                                                               
+                                                            }                                    
                                 }
                             }
                         }
                     }
-                    Button {
-                        id: cancelButton
-                        text: qsTranslate("PrefsDialogBase", "Cancel")
-                        onClicked: {
-                            if (modified) {
-                                quitDialog.open()
-                            } else {
-                                quit()
-                            }
-                        }
-                    }
-                    CheckBox {
-                        id: annotateValue
-                        text: qsTr("Annotate")
-                        checked: false
-                    }
+                }
+            }
+        }
+
+        CheckBox {
+            anchors.topMargin: 12
+            id: annotateValue
+            text: qsTr("Show tuning offset values above notes")
+            checked: false
+            onClicked: checked = !checked 
+        }        
+    }
+
+    FlatButton{
+        id: resetButton
+        icon: IconCode.UNDO
+        anchors.top: rightColumn.top
+        anchors.right: rightColumn.right
+        anchors.margins: 12 
+        onClicked: {
+            currentTemperament.root  = currentDefaultTemperament.root
+            currentTemperament.pure  = currentDefaultTemperament.pure
+            currentTemperament.tweak = currentDefaultTemperament.tweak
+
+            for (var i=0; i<12; i++) {
+                currentTemperament.offsets[i] = currentDefaultTemperament.offsets[i]
+            }   
+            temperamentClicked(currentTemperament)
+            updateCurrentTemperament()
+        }
+    }
+
+    ButtonBox {
+        id: buttonBox                
+        anchors.bottom: window.bottom
+        anchors.right: window.right
+        anchors.margins: 20
+        buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Apply ]                   
+
+        onStandardButtonClicked: function(buttonId) {
+            if (buttonId === ButtonBoxModel.Cancel) {                
+                quit()                            
+            } 
+            else if (buttonId === ButtonBoxModel.Apply) {
+                if (applyTemperament()) { 
+                    saveCustomTemperaments()                   
+                    quit()                                
                 }
             }
         }
@@ -1290,183 +1024,68 @@ MuseScore {
         onAccepted: {
             errorDialog.close()
         }
-    }
-
-    MessageDialog {
-        id: quitDialog
-        title: "Quit?"
-        text: "Do you want to quit the plugin?"
-        detailedText: "It looks like you have made customisations to this tuning, you could save them to a file before quitting if you like."
-        standardButtons: [StandardButton.Ok, StandardButton.Cancel]
-        onAccepted: {
-            quit()
-        }
-        onRejected: {
-            quitDialog.close()
-        }
-    }
+    }    
 
     FileIO {
-        id: saveFile
-        source: ""
+        id: fileIO
+        source: fileIO.homePath()+"/Documents/MuseScore4/Plugins/tuningPluginData.json" //Qt.resolvedUrl("tuningPluginData.json").toString().replace("file:///", ""); 
+    }   
+
+    function addTemperament() {
+        var entry= {
+                        "name": customTempName.currentText,
+                        "offsets": [],
+                        "root": currentRoot,
+                        "pure": currentPureTone, 
+                        "tweak": currentTweak                       
+                    } 
+        for (var i=0; i<12; i++) {
+            entry.offsets.push( finalOffsets.itemAt(i).children[1].currentText )
+        }
+
+        switch (tabBar.currentIndex) {
+            case 0:
+                westernTemperaments = westernTemperaments.concat(entry) //adds new entry and updates buttons 
+                westernListView.positionViewAtEnd()
+                westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
+                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true
+                break
+            case 1:
+                middleEasternTemperaments = middleEasternTemperaments.concat(entry) //adds new entry and updates buttons 
+                middleEasternListView.positionViewAtEnd()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true
+                break
+        }                        
     }
 
-    FileIO {
-        id: loadFile
-        source: ""
-    }
+    function removeTemperament() {
+        switch (tabBar.currentIndex) {
+            case 0:                
+                westernTemperaments = westernTemperaments.filter(x => x !== currentTemperament)
+                westernListView.positionViewAtEnd()
+                westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
+                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true                 
+                break
 
-    function getFile(dialog) {
-        var source = dialog.filePath
-        return source
-    }
-
-    function formatCurrentValues() {
-        var data = {
-            offsets: [
-                parseFloat(final_c.text),
-                parseFloat(final_c_sharp.text),
-                parseFloat(final_d.text),
-                parseFloat(final_e_flat.text),
-                parseFloat(final_e.text),
-                parseFloat(final_f.text),
-                parseFloat(final_f_sharp.text),
-                parseFloat(final_g.text),
-                parseFloat(final_g_sharp.text),
-                parseFloat(final_a.text),
-                parseFloat(final_b_flat.text),
-                parseFloat(final_b.text)
-            ],
-            temperament: currentTemperament.name,
-            root: currentRoot,
-            pure: currentPureTone,
-            tweak: currentTweak
-        };
-        return(JSON.stringify(data))
-    }
-
-    function restoreSavedValues(data) {
-        getHistory().begin()
-        setCurrentTemperament(lookupTemperament(data.temperament))
-        setCurrentRoot(data.root)
-        setCurrentPureTone(data.pure)
-        // support older save files
-        if (data.hasOwnProperty('tweak')) {
-            setCurrentTweak(data.tweak)
-        } else {
-            setCurrentTweak(0.0)
-        }
-        recalculate(
-            function(pitch) {
-                return data.offsets[pitch % 12]
-            }
-        )
-        getHistory().end()
-    }
-
-    FileDialog {
-        id: loadDialog
-        type: FileDialog.Load
-        title: "Please choose a file"
-        //sidebarVisible: true
-        onAccepted: {
-            loadFile.source = getFile(loadDialog)
-            var data = JSON.parse(loadFile.read())
-            restoreSavedValues(data)
-            loadDialog.visible = false
-        }
-        onRejected: {
-            loadDialog.visible = false
-        }
-        visible: false
-    }
-
-    FileDialog {
-        id: saveDialog
-        type: FileDialog.Save
-        title: "Please name a file"
-        //sidebarVisible: true
-        //selectExisting: false
-        onAccepted: {
-            saveFile.source = getFile(saveDialog)
-            saveFile.write(formatCurrentValues())
-            saveDialog.visible = false
-        }
-        onRejected: {
-            saveDialog.visible = false
-        }
-        visible: false
-    }
-
-    // Command pattern for undo/redo
-    function commandHistory() {
-        function Command(undo_fn, redo_fn, label) {
-            this.undo = undo_fn
-            this.redo = redo_fn
-            this.label = label // for debugging
-        }
-
-        var history = []
-        var index = -1
-        var transaction = 0
-        var maxHistory = 30
-
-        function newHistory(commands) {
-            if (index < maxHistory) {
-                index++
-                history = history.slice(0, index)
-            } else {
-                history = history.slice(1, index)
-            }
-            history.push(commands)
-        }
-
-        this.add = function(undo, redo, label) {
-            var command = new Command(undo, redo, label)
-            command.redo()
-            if (transaction) {
-                history[index].push(command)
-            } else {
-                newHistory([command])
-            }
-        }
-
-        this.undo = function() {
-            if (index != -1) {
-                history[index].slice().reverse().forEach(
-                    function(command) {
-                        command.undo()
-                    }
-                )
-                index--
-            }
-        }
-
-        this.redo = function() {
-            if ((index + 1) < history.length) {
-                index++
-                history[index].forEach(
-                    function(command) {
-                        command.redo()
-                    }
-                )
-            }
-        }
-
-        this.begin = function() {
-            if (transaction) {
-                throw new Error("already in transaction")
-            }
-            newHistory([])
-            transaction = 1
-        }
-
-        this.end = function() {
-            if (!transaction) {
-                throw new Error("not in transaction")
-            }
-            transaction = 0
+            case 1:                
+                middleEasternTemperaments = middleEasternTemperaments.filter(x => x !== currentTemperament)
+                middleEasternListView.positionViewAtEnd()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true                
+                break
         }
     }
+
+    function saveCustomTemperaments() {
+        fileIO.write(
+            JSON.stringify(
+                [
+                    westernTemperaments, 
+                    middleEasternTemperaments
+                ]
+            )
+        ) 
+    }    
 }
-// vim: ft=javascript
+
