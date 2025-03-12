@@ -60,9 +60,9 @@ bool Stem::up() const
     return chord() ? chord()->up() : true;
 }
 
-void Stem::setBaseLength(Millimetre baseLength)
+void Stem::setBaseLength(Spatium baseLength)
 {
-    m_baseLength = Millimetre(std::abs(baseLength.val()));
+    m_baseLength = Spatium(std::abs(baseLength.val()));
 }
 
 double Stem::lineWidthMag() const
@@ -73,6 +73,8 @@ double Stem::lineWidthMag() const
 void Stem::spatiumChanged(double oldValue, double newValue)
 {
     m_userLength = (m_userLength / oldValue) * newValue;
+    m_baseLength = (m_baseLength / oldValue) * newValue;
+    m_lineWidth = (m_lineWidth / oldValue) * newValue;
     renderer()->layoutItem(this);
 }
 
@@ -114,7 +116,7 @@ void Stem::editDrag(EditData& ed)
 
 void Stem::reset()
 {
-    undoChangeProperty(Pid::USER_LEN, Millimetre(0.0));
+    undoChangeProperty(Pid::USER_LEN, Spatium(0.0));
     EngravingItem::reset();
 }
 
