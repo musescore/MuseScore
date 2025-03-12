@@ -743,6 +743,12 @@ void Score::dragPosition(const PointF& p, staff_idx_t* rst, Segment** seg, doubl
     SegmentType st = allowTimeAnchor ? Segment::CHORD_REST_OR_TIME_TICK_TYPE : SegmentType::ChordRest;
     Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
     if (segment) {
+        if (segment->isTimeTickType()) {
+            if (Segment* crAtSamePos = m->findSegmentR(SegmentType::ChordRest, segment->rtick())) {
+                // If TimeTick and ChordRest at same position, prefer ChordRest
+                segment = crAtSamePos;
+            }
+        }
         *rst = i;
         *seg = segment;
         return;
