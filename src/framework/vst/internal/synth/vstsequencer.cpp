@@ -106,8 +106,8 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
 {
     SostenutoTimeAndDurations sostenutoTimeAndDurations;
 
-    for (const auto& pair : events) {
-        for (const mpe::PlaybackEvent& event : pair.second) {
+    for (const auto& evPair : events) {
+        for (const mpe::PlaybackEvent& event : evPair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
             }
@@ -124,8 +124,8 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
             destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
 
-            for (const auto& pair : noteEvent.expressionCtx().articulations) {
-                const mpe::ArticulationMeta& meta = pair.second.meta;
+            for (const auto& articPair : noteEvent.expressionCtx().articulations) {
+                const mpe::ArticulationMeta& meta = articPair.second.meta;
 
                 if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
                     appendPitchBend(destination, noteEvent, meta);
