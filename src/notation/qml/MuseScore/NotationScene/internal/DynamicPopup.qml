@@ -29,7 +29,7 @@ StyledPopupView {
 
     function updatePosition() {
         root.x = root.parent.width / 2 - root.contentWidth / 2
-        root.y = root.parent.height
+        root.y = root.parent.height - root.padding + root.margins
     }
 
     RowLayout {
@@ -223,6 +223,12 @@ StyledPopupView {
                             ctx.lineWidth = 1;
                             ctx.stroke();
                         }
+                    }
+                }
+
+                mouseArea.onContainsMouseChanged: {
+                    if (modelData.type === DynamicPopupModel.Dynamic) {
+                        mouseArea.containsMouse ? dynamicModel.showPreview(currentPage, index) : dynamicModel.hidePreview()
                     }
                 }
 

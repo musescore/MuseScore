@@ -99,8 +99,8 @@ void SoundFlagSettingsModel::init()
 {
     TRACEFUNC;
 
-    connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRect&) {
-        QRect rect = iconRect();
+    connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRectF&) {
+        QRectF rect = iconRect();
         if (rect.isValid()) {
             emit iconRectChanged(rect);
         }
@@ -439,9 +439,9 @@ void SoundFlagSettingsModel::setTitle(const QString& title)
     emit titleChanged();
 }
 
-QRect SoundFlagSettingsModel::iconRect() const
+QRectF SoundFlagSettingsModel::iconRect() const
 {
-    return m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
+    return m_item ? fromLogical(m_item->canvasBoundingRect()).toQRectF() : QRectF();
 }
 
 QVariantList SoundFlagSettingsModel::availablePresets() const

@@ -1892,10 +1892,9 @@ void TextBase::createBlocks(LayoutData* ldata) const
                     SymId id = SymNames::symIdByName(sym);
                     if (id != SymId::noSym) {
                         CharFormat fmt = *cursor.format(); // save format
-
-                        //char32_t code = score()->scoreFont()->symCode(id);
-                        char32_t code = id
-                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
+                        char32_t code = id == SymId::space
+                                        ? static_cast<char32_t>(' ')
+                                        : score()->engravingFonts()->fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code, ldata);
                         cursor.setFormat(fmt); // restore format
@@ -3622,8 +3621,14 @@ void TextBase::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
     p->setPen(Pen(configuration()->frameColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
-    double m = spatium();
-    RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
+    RectF r;
+
+    if (ed.element->isDynamic()) {
+        r = toDynamic(ed.element)->adjustedBoundingRect();
+    } else {
+        double m = spatium();
+        r = canvasBoundingRect().adjusted(-m, -m, m, m);
+    }
 
     p->drawRect(r);
     pen = Pen(configuration()->defaultColor(), 0.0);
