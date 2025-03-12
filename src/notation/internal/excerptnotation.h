@@ -55,7 +55,6 @@ public:
     IExcerptNotationPtr clone() const override;
 
 private:
-    void fillWithDefaultInfo();
 
     mu::engraving::Excerpt* m_excerpt = nullptr;
     bool m_inited = false;
