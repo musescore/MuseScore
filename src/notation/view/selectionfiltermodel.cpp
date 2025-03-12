@@ -57,6 +57,13 @@ void SelectionFilterModel::load()
     });
 }
 
+QSortFilterProxyModel* SelectionFilterModel::proxyModelForSection(const SelectionFilterSection::Section& section)
+{
+    SelectionFilterProxyModel* proxyModel = new SelectionFilterProxyModel(section, this);
+    proxyModel->setSourceModel(this);
+    return proxyModel;
+}
+
 QVariant SelectionFilterModel::data(const QModelIndex& index, int role) const
 {
     int row = index.row();
@@ -64,7 +71,7 @@ QVariant SelectionFilterModel::data(const QModelIndex& index, int role) const
         return {};
     }
 
-    auto type = m_types[row];
+    const SelectionFilterType type = m_types.at(row);
 
     switch (role) {
     case TitleRole:
@@ -99,7 +106,7 @@ bool SelectionFilterModel::setData(const QModelIndex& index, const QVariant& dat
         return false;
     }
 
-    auto type = m_types[row];
+    const SelectionFilterType type = m_types.at(row);
     const bool filtered = data.toBool();
 
     setFiltered(type, filtered);
@@ -130,6 +137,14 @@ QHash<int, QByteArray> SelectionFilterModel::roleNames() const
 bool SelectionFilterModel::enabled() const
 {
     return currentNotation() != nullptr;
+}
+
+SelectionFilterType SelectionFilterModel::typeForRow(int row) const
+{
+    IF_ASSERT_FAILED(row >= 0 && row < rowCount()) {
+        return SelectionFilterType::ALL;
+    }
+    return m_types.at(row);
 }
 
 INotationPtr SelectionFilterModel::currentNotation() const
@@ -210,4 +225,30 @@ QString SelectionFilterModel::titleForType(SelectionFilterType type) const
     }
 
     return {};
+}
+
+SelectionFilterProxyModel::SelectionFilterProxyModel(const SelectionFilterSection::Section& section, QObject* parent)
+    : QSortFilterProxyModel(parent), m_section(section)
+{
+}
+
+bool SelectionFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
+{
+    const SelectionFilterModel* source = dynamic_cast<const SelectionFilterModel*>(parent());
+    if (!source || sourceRow < 0 || sourceRow >= source->rowCount()) {
+        return false;
+    }
+
+    const SelectionFilterType type = source->typeForRow(sourceRow);
+    switch (type) {
+    case SelectionFilterType::FIRST_VOICE:
+    case SelectionFilterType::SECOND_VOICE:
+    case SelectionFilterType::THIRD_VOICE:
+    case SelectionFilterType::FOURTH_VOICE:
+        return m_section == SelectionFilterSection::Section::VOICES;
+    default: return m_section == SelectionFilterSection::Section::NOTATION_ELEMENTS;
+    }
+
+    UNREACHABLE;
+    return false;
 }
