@@ -30654,7 +30654,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="303"/>
         <location filename="../../libmscore/drumset.cpp" line="251"/>
         <source>Bass Drum 1</source>
-        <translation>Bęben basowy 1</translation>
+        <translation>Bęben basowy elektryczny</translation>
     </message>
     <message>
         <location filename="../../importexport/guitarpro/importgtp.cpp" line="304"/>
