@@ -15140,14 +15140,14 @@
         <source>Alto Guitar</source>
         <comment>alto-guitar trackName</comment>
         <extracomment>trackName for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto</translation>
+        <translation>Chitară alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5107"/>
         <source>Alto Guitar</source>
         <comment>alto-guitar longName</comment>
         <extracomment>longName for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto</translation>
+        <translation>Chitară alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5109"/>
@@ -15882,14 +15882,14 @@
         <source>Baritone Guitar</source>
         <comment>baritone-guitar trackName</comment>
         <extracomment>trackName for Baritone Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Bariton</translation>
+        <translation>Chitară bariton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5236"/>
         <source>Baritone Guitar</source>
         <comment>baritone-guitar longName</comment>
         <extracomment>longName for Baritone Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Bariton</translation>
+        <translation>Chitară bariton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5238"/>
@@ -15910,14 +15910,14 @@
         <source>Contra Guitar</source>
         <comment>contra-guitar trackName</comment>
         <extracomment>trackName for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Contra</translation>
+        <translation>Contrachitară</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5245"/>
         <source>Contra Guitar</source>
         <comment>contra-guitar longName</comment>
         <extracomment>longName for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Contra</translation>
+        <translation>Contrachitară</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5247"/>
@@ -16001,14 +16001,14 @@
         <source>11-string Alto Guitar</source>
         <comment>11-string-alto-guitar trackName</comment>
         <extracomment>trackName for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto cu 11 coarde</translation>
+        <translation>Chitară alto cu 11 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5274"/>
         <source>11-string Alto Guitar</source>
         <comment>11-string-alto-guitar longName</comment>
         <extracomment>longName for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto cu 11 coarde</translation>
+        <translation>Chitară alto cu 11 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5276"/>

@@ -6639,7 +6639,7 @@ x-magasságának %-a)</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2052"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2053"/>
         <source>Note input</source>
         <translation>Hangjegybevitel</translation>
     </message>
@@ -7021,35 +7021,35 @@ x-magasságának %-a)</translation>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2421"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
         <source>Cross-staff beaming</source>
         <translation>Soron átnyúló gerendák</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2427"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
         <source>Tuplet</source>
         <translation>N-ola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1111"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1117"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2318"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1118"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2319"/>
         <source>Rest</source>
         <translation>Szünet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1112"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1118"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1119"/>
         <source>Enter rest</source>
         <translation>Szünet írása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2414"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2415"/>
         <source>Staccato</source>
         <translation>Staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2407"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
         <source>Tenuto</source>
         <translation>Tenuto</translation>
     </message>
@@ -7074,133 +7074,133 @@ x-magasságának %-a)</translation>
         <translation>%1 beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1447"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1448"/>
         <source>Reset all text style overrides to default</source>
         <translation>Minden módosított szövegstílus alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1592"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1593"/>
         <source>Page: Top of first</source>
         <translation>Oldal: Az első teteje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1598"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1599"/>
         <source>Page: Bottom of last</source>
         <translation>Oldal: az utolsó alja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1604"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1605"/>
         <source>Context sensitive help</source>
         <translation>Környezetfüggő súgó</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1655"/>
         <source>Concert pitch</source>
         <translation>Hangzó magasság</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1668"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1669"/>
         <source>Next text element</source>
         <translation>Következő szöveges elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1674"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1675"/>
         <source>Previous text element</source>
         <translation>Előző szöveges elem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1746"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
         <source>Next lyric verse</source>
         <translation>Következő versszak</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1752"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
         <source>Previous lyric verse</source>
         <translation>Előző versszak</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1830"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1831"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1832"/>
         <source>Go to top staff</source>
         <translation>Ugrás a legfelső kottasorhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1836"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1837"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1838"/>
         <source>Go to first empty trailing measure</source>
         <translation>Ugrás az első üres záróütemhez</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1986"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
         <source>Diatonic pitch up (keep degree alterations)</source>
         <translation>Diatonikus hangmagasság föl (fok alterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1992"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1993"/>
         <source>Diatonic pitch down (keep degree alterations)</source>
         <translation>Diatonikus hangmagasság le (fok alterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2080"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2081"/>
         <source>Rhythm only (not pitch)</source>
         <translation>Csak ritmus (hangmagasság nélkül)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2087"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2088"/>
         <source>Re-pitch existing notes</source>
         <translation>Meglévő hangoknak új hangmagasság</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2094"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2095"/>
         <source>Real-time (metronome)</source>
         <translation>Valósidejű (metronóm)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2101"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2102"/>
         <source>Real-time (foot pedal)</source>
         <translation>Valósidejű (pedál)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2192"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2269"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2193"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2270"/>
         <source>256th note</source>
         <translation>256-od hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2199"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2276"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2200"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2277"/>
         <source>512th note</source>
         <translation>512-ed hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2206"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2283"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2207"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2284"/>
         <source>1024th note</source>
         <translation>1024-ed hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1866"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1867"/>
         <source>Toggle trill</source>
         <translation>Trilla ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2393"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
         <source>Marcato</source>
         <translation>Marcato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1914"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1915"/>
         <source>Toggle up bow</source>
         <translation>Felfelé vonás ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1920"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1921"/>
         <source>Toggle down bow</source>
         <translation>Lefelé vonás ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1643"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1644"/>
         <source>Flip direction</source>
         <translation>Kottaszár megfordítása</translation>
     </message>
@@ -7210,7 +7210,7 @@ x-magasságának %-a)</translation>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1818"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1819"/>
         <source>Diatonic pitch up</source>
         <translation>Magasabb hang diatonikusan</translation>
     </message>
@@ -7220,17 +7220,17 @@ x-magasságának %-a)</translation>
         <translation>Le</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1824"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1825"/>
         <source>Diatonic pitch down</source>
         <translation>Mélyebb hang diatonikusan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2325"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2326"/>
         <source>Accessibility: Next segment element</source>
         <translation>Akadálymentesítés: A szegmens következő eleme</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2331"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2332"/>
         <source>Accessibility: Previous segment element</source>
         <translation>Akadálymentesítés: A szegmens előző eleme</translation>
     </message>
@@ -7293,8 +7293,8 @@ x-magasságának %-a)</translation>
         <translation>Előző akkord kijelöléshez adása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1520"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1521"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1522"/>
         <source>Select to beginning of measure</source>
         <translation>Kijelölés az ütem kezdetéig</translation>
     </message>
@@ -7876,925 +7876,925 @@ x-magasságának %-a)</translation>
         <translation>Hangöz bevitele: alsó nóna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1233"/>
         <source>Add hairpin: crescendo</source>
         <translation>Vonal hozzáadása: crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1238"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1239"/>
         <source>Add hairpin: decrescendo</source>
         <translation>Vonal hozzáadása: decrescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1243"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
         <source>&amp;Note-anchored line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1245"/>
         <source>Add note-anchored line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1255"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1256"/>
         <source>Image</source>
         <translation>Kép</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1261"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1262"/>
         <source>Add text: title</source>
         <translation>Szöveg hozzáadása: cím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1267"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1268"/>
         <source>Add text: subtitle</source>
         <translation>Szöveg hozzáadása: alcím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1273"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1274"/>
         <source>Add text: composer</source>
         <translation>Szöveg hozzáadása: zeneszerző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1279"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1280"/>
         <source>Add text: lyricist</source>
         <translation>Szöveg hozzáadása: szövegíró</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1285"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1286"/>
         <source>Add text: part name</source>
         <translation>Szöveg hozzáadása: szólamkotta neve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1290"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1291"/>
         <source>Text</source>
         <translation>Szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1291"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1292"/>
         <source>Add frame text</source>
         <translation>Dobozkeret hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1298"/>
         <source>Add text: system text</source>
         <translation>Szöveg hozzáadása: sorcsoportszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1303"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1304"/>
         <source>Add text: staff text</source>
         <translation>Szöveg hozzáadása: kottasorszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1225"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
         <source>&amp;Dynamic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1310"/>
         <source>Add text: expression text</source>
         <translation>Szöveg hozzáadása: előadási jel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1315"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1316"/>
         <source>Add text: rehearsal mark</source>
         <translation>Szöveg hozzáadása: ciffer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1321"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1322"/>
         <source>Add text: instrument change</source>
         <translation>Szöveg hozzáadása: hangszerváltás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1327"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1328"/>
         <source>Add text: fingering</source>
         <translation>Szöveg hozzáadása: ujjrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1333"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1334"/>
         <source>Add text: sticking</source>
         <translation>Szöveg hozzáadása: kézrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1338"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1339"/>
         <source>C&amp;hord symbol</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1339"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1340"/>
         <source>Add text: chord symbol</source>
         <translation>Szöveg hozzáadása: akkordjelzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1345"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1346"/>
         <source>Add text: Roman numeral analysis</source>
         <translation>Szöveg hozzáadása: összhangzattani elemzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1351"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1352"/>
         <source>Add text: Nashville number</source>
         <translation>Szöveg hozzáadása: Nashville-szám</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1357"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1358"/>
         <source>Add text: lyrics</source>
         <translation>Szöveg hozzáadása: énekszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1363"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1364"/>
         <source>Add text: figured bass</source>
         <translation>Szöveg hozzáadása: számozott basszus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1369"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1370"/>
         <source>Add text: tempo marking</source>
         <translation>Szöveg hozzáadása: tempójelzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1375"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1376"/>
         <source>Enter tuplet: duplet</source>
         <translation>N-ola bevitele: duola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1381"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1382"/>
         <source>Enter tuplet: triplet</source>
         <translation>N-ola bevitele: triola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1388"/>
         <source>Enter tuplet: quadruplet</source>
         <translation>N-ola bevitele: kvartola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1394"/>
         <source>Enter tuplet: quintuplet</source>
         <translation>N-ola bevitele: kvintola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1399"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1400"/>
         <source>Enter tuplet: sextuplet</source>
         <translation>N-ola bevitele: szextola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1406"/>
         <source>Enter tuplet: septuplet</source>
         <translation>N-ola bevitele: szeptola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1412"/>
         <source>Enter tuplet: octuplet</source>
         <translation>N-ola bevitele: oktola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1416"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1417"/>
         <source>&amp;Nonuplet</source>
         <translation>9-ola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1417"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1418"/>
         <source>Enter tuplet: nonuplet</source>
         <translation>N-ola bevitele: novemola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1423"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1424"/>
         <source>Enter tuplet: other…</source>
         <translation>N-ola bevitele: egyéb...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1430"/>
         <source>Decrease layout stretch</source>
         <translation>Nyújtás csökkentése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1435"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1436"/>
         <source>Increase layout stretch</source>
         <translation>Nyújtás növelése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1441"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1442"/>
         <source>Reset layout stretch</source>
         <translation>Nyújtás alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1453"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1454"/>
         <source>Reset beams to default grouping</source>
         <translation>Gerendák csoportosítása alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1459"/>
         <source>Reset s&amp;hapes and positions</source>
         <translation>Alak és pozíció alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1459"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1460"/>
         <source>Reset shapes and positions</source>
         <translation>Alak és pozíció alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1464"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1465"/>
         <source>Reset entire score to &amp;default layout</source>
         <translation>Az egész kotta visszaállítása az eredeti elrendezésre.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1465"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1466"/>
         <source>Reset entire score to default layout</source>
         <translation>Az egész kottát állítsa vissza az alapértelmezett elrendezésre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1490"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1491"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1492"/>
         <source>Zoom to page width</source>
         <translation>Nagyítás az oldal szélességére</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1496"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1497"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1498"/>
         <source>Zoom to whole page</source>
         <translation>Egész oldalra nagyítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1502"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1504"/>
         <source>Zoom to two pages</source>
         <translation>Két oldalas nézet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1509"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1510"/>
         <source>Accessibility: get location</source>
         <translation>Akadálymentesítés: helyzet lekérése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1526"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1527"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1528"/>
         <source>Select to end of measure</source>
         <translation>Kijelölés az ütem végéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1532"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1533"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1534"/>
         <source>Select to beginning of line</source>
         <translation>kijelölés a sor kezdetéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1538"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1539"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1540"/>
         <source>Select to end of line</source>
         <translation>kijelölés a sor végéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1544"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1545"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1546"/>
         <source>Select to beginning of score</source>
         <translation>kijelölés a kotta kezdetéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1550"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1551"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1552"/>
         <source>Select to end of score</source>
         <translation>kijelölés a kotta végéig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1556"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1557"/>
         <source>Add staff above to selection</source>
         <translation>Kottasor hozzáadása a kijelölés fölé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1557"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1558"/>
         <source>Add to selection: staff above</source>
         <translation>Kijelölés bővítése: előző kottasor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1562"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1563"/>
         <source>Add staff below to selection</source>
         <translation>Kottasor hozzáadása a kijelölés alá</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1563"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1564"/>
         <source>Add to selection: staff below</source>
         <translation>Kijelölés bővítése: következő kottasor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1580"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1581"/>
         <source>Page: Previous</source>
         <translation>Oldal: Előző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1586"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1587"/>
         <source>Page: Next</source>
         <translation>Oldal: Következő</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1593"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1594"/>
         <source>Jump to top of first page</source>
         <translation>Ugrás az első oldal tetejére</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1599"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1600"/>
         <source>Jump to bottom of last page</source>
         <translation>Ugrás az utolsó oldal aljára</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
         <source>Change enharmonic spelling (concert and written pitch)</source>
         <translation>Enharmonikus átírás megváltoztatása (hangzó és írott magasság)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1637"/>
         <source>Change enharmonic spelling (current mode only)</source>
         <translation>Enharmonikus átírás megváltoztatása (csak a jelenlegi mód)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1655"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1656"/>
         <source>Toggle concert pitch</source>
         <translation>Hangzó magasság ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1682"/>
         <source>Advance cursor: next beat (chord symbols)</source>
         <translation>Kurzor léptetése: következő ütés (akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1692"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
         <source>Advance longa (F.B./Chord symbol)</source>
         <translation>Longa léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1694"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: longa (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1698"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1699"/>
         <source>Advance breve (F.B./Chord symbol)</source>
         <translation>Breve léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1699"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1700"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: breve (számozott basszus/akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1704"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1705"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
         <translation>Egész érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1705"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1706"/>
         <source>Advance cursor: whole note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: egész érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1710"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1711"/>
         <source>Advance half note (F.B./Chord symbol)</source>
         <translation>Fél érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1711"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1712"/>
         <source>Advance cursor: half note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: fél érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1716"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1717"/>
         <source>Advance quarter note (F.B./Chord symbol)</source>
         <translation>Negyed érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1717"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1718"/>
         <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: negyed érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1722"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
         <source>Advance eighth note (F.B./Chord symbol)</source>
         <translation>Nyolcad érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1724"/>
         <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: nyolcad érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1728"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
         <source>Advance 16th note (F.B./Chord symbol)</source>
         <translation>16-od érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
         <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: 16-od érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1734"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
         <translation>32-ed érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: 32-ed érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1740"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
         <translation>64-ed érték léptetés (sz.b./akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
         <translation>Kurzor léptetése: 64-ed érték (számozott basszus/akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
         <source>Move text/go to next lyric verse</source>
         <translation>Szöveg mozgatása/ugrás a következő versszakra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1754"/>
         <source>Move text/go to previous lyric verse</source>
         <translation>Szöveg mozgatása/ugrás az előző versszakra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1764"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
         <source>Add extension line</source>
         <translation>Pótvonal hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1766"/>
         <source>Lyrics: enter extension line</source>
         <translation>Énekszöveg: hosszabbító vonal beírása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1770"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1772"/>
         <source>Add lyrics verse</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1778"/>
         <source>Format text: bold</source>
         <translation>Szöveg formázása: kövér</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1784"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1785"/>
         <source>Format text: italic</source>
         <translation>Szöveg formázása: dőlt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1791"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1792"/>
         <source>Format text: underline</source>
         <translation>Szöveg formázása: aláhúzás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1797"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
         <source>Strikethrough</source>
         <translation>Áthúzott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1799"/>
         <source>Format text: strikethrough</source>
         <translation>Szöveg formázása: áthúzott</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
         <source>Subscript</source>
         <translation>Alsó index</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1806"/>
         <source>Format text: subscript</source>
         <translation>Szöveg formázása: alsó index</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1811"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1812"/>
         <source>Superscript</source>
         <translation>Felső index</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1812"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1813"/>
         <source>Format text: superscript</source>
         <translation>Szöveg formázása: feljegyzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1819"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1820"/>
         <source>Move pitch up diatonically</source>
         <translation>Hangmagasság emelése diatonikusan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1825"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1826"/>
         <source>Move pitch down diatonically</source>
         <translation>Hangmagasság süllyesztése diatonikusan</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1933"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1934"/>
         <source>Add clef: treble</source>
         <translation>Kulcs hozzáadása: violinkulcs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1940"/>
         <source>Add clef: bass</source>
         <translation>Kulcs hozzáadása: basszuskulcs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1951"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1952"/>
         <source>Add accidental: sharp</source>
         <translation>Módosítójel hozzáadása: kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1988"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
         <translation>Hangmagasság emelése diatonikusan (a fokalterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1993"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1994"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
         <translation>A hangmagasság leszállítása diatonikusan (a fokalterációk megtartásával)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1999"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2000"/>
         <source>Insert full measure rest</source>
         <translation>Egész ütemes szünet beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2011"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2012"/>
         <source>Show/hide empty staves</source>
         <translation>Üres sorok megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2017"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2018"/>
         <source>Make selected element(s) visible</source>
         <translation>A kijelölt elem(ek) láthatóvá tétele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2024"/>
         <source>Make selected element(s) invisible</source>
         <translation>A kijelölt elem(ek) láthatatlanná tétele</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2028"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2030"/>
         <source>Toggle automatic placement for selected elements</source>
         <translation>A kijelölt elemek automatikus elhelyezése ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2040"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2041"/>
         <source>String above (TAB)</source>
         <translation>Feljebbi húr (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2041"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2042"/>
         <source>Go to string above (TAB)</source>
         <translation>Ugrás a feljebbi húrra (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2046"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2047"/>
         <source>String below (TAB)</source>
         <translation>Lejjebbi húr (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2047"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2048"/>
         <source>Go to string below (TAB)</source>
         <translation>Ugrás a lejjebbi húrra (TAB)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2123"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2124"/>
         <source>Set duration: longa</source>
         <translation>Ritmusérték legyen longa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2130"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2131"/>
         <source>Set duration: double whole note</source>
         <translation>Ritmusérték legyen kettős egész</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2137"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2214"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2138"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2215"/>
         <source>Set duration: whole note</source>
         <translation>Ritmusérték legyen egész érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2144"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2221"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2145"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2222"/>
         <source>Set duration: half note</source>
         <translation>Ritmusérték legyen fél érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2151"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2228"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2152"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2229"/>
         <source>Set duration: quarter note</source>
         <translation>Ritmusérték legyen negyed érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2157"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2234"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2158"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2235"/>
         <source>Eighth note</source>
         <translation>Nyolcad hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2158"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2235"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2159"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2236"/>
         <source>Set duration: eighth note</source>
         <translation>Ritmusérték legyen nyolcad érték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2165"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2242"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2166"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2243"/>
         <source>Set duration: 16th note</source>
         <translation>Ritmusérték legyen 16-od</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2172"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2249"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2173"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2250"/>
         <source>Set duration: 32nd note</source>
         <translation>Ritmusérték legyen 32-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2179"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2256"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2180"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2257"/>
         <source>Set duration: 64th note</source>
         <translation>Ritmusérték legyen 64-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2186"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2263"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2187"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2264"/>
         <source>Set duration: 128th note</source>
         <translation>Ritmusérték legyen 128-ad</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2193"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2270"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2194"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2271"/>
         <source>Set duration: 256th note</source>
         <translation>Ritmusérték legyen 256-od</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2200"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2277"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2201"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2278"/>
         <source>Set duration: 512th note</source>
         <translation>Ritmusérték legyen 512-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2207"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2208"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
         <source>Set duration: 1024th note</source>
         <translation>Ritmusérték legyen 1024-ed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2291"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
         <source>Toggle duration dot</source>
         <translation>Ritmusérték pont ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
         <source>Toggle duration dot: double</source>
         <translation>Ritmusérték pont ki/be: két pont</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
         <source>Toggle duration dot: triple</source>
         <translation>Ritmusérték pont ki/be: három pont</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2312"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2313"/>
         <source>Toggle duration dot: quadruple</source>
         <translation>Ritmusérték pont ki/be: négy pont</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2319"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2320"/>
         <source>Toggle rest</source>
         <translation>Szünet ki-/bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2326"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2327"/>
         <source>Select next in-staff element</source>
         <translation>Következő elem kijelölése a soron belül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2332"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2333"/>
         <source>Select previous in-staff element</source>
         <translation>Előző elem kijelölése a soron belül</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2338"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2339"/>
         <source>Toggle accidental: flat</source>
         <translation>Módosítójel ki/be: bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2352"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2353"/>
         <source>Toggle accidental: natural</source>
         <translation>Módosítójel ki/be: feloldójel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2360"/>
         <source>Toggle accidental: sharp</source>
         <translation>Módosítójel ki/be: kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2373"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2374"/>
         <source>Add tied note</source>
         <translation>Átkötött hang hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
         <source>Laissez vibrer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
         <source>Add laissez vibrer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2386"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
         <source>Slur</source>
         <translation>Legato-ív</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2477"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2478"/>
         <source>Staff type change</source>
         <translation>Kottasor módosítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2478"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2479"/>
         <source>Insert staff type change</source>
         <translation>Kottasor típusváltás beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2489"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2490"/>
         <source>Standard bend</source>
         <translation>Szokásos bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2495"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2496"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2497"/>
         <source>Pre-bend</source>
         <translation>Pre-bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2502"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2503"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2504"/>
         <source>Grace note bend</source>
         <translation>Díszhang húzás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2509"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2510"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2511"/>
         <source>Slight bend</source>
         <translation>Könnyű húzás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2520"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2521"/>
         <source>Show/hide invisible elements</source>
         <translation>Láthatatlan elemek megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2534"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2535"/>
         <source>Show/hide frames</source>
         <translation>Keretek megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2542"/>
         <source>Show/hide page margins</source>
         <translation>Oldalmargók megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2564"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2565"/>
         <source>Show element bounding rectangles</source>
         <translation>Elemeket határoló téglalapok megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2565"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2566"/>
         <source>Show/hide element bounding rectangles</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2571"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
         <source>Color element shapes</source>
         <translation>Színes elem alakzatok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2577"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2578"/>
         <source>Show segment shapes</source>
         <translation>Szegmens alakzatok megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2578"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2579"/>
         <source>Show/hide segment shapes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2584"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2585"/>
         <source>Color segment shapes</source>
         <translation>Színes elem alakzatok</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2590"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2591"/>
         <source>Show skylines</source>
         <translation>Légvonalak megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2591"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2592"/>
         <source>Show/hide skylines</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2597"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2598"/>
         <source>Show system bounding rectangles</source>
         <translation>Sorcsoport-határoló téglalapok megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2598"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2599"/>
         <source>Show/hide system bounding rectangles</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2604"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2605"/>
         <source>Show element masks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2605"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2606"/>
         <source>Show/hide element masks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1998"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1999"/>
         <source>Full measure rest</source>
         <translation>Egész ütemes szünet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2122"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2123"/>
         <source>Longa</source>
         <translation>Longa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2129"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2130"/>
         <source>Double whole note</source>
         <translation>Kétszeres egész hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2136"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2213"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2137"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2214"/>
         <source>Whole note</source>
         <translation>Egész hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2143"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2220"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2144"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2221"/>
         <source>Half note</source>
         <translation>Fél hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2150"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2227"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2151"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2228"/>
         <source>Quarter note</source>
         <translation>Negyed hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2164"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2241"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2165"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2242"/>
         <source>16th note</source>
         <translation>1/16 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2171"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2248"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2172"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2249"/>
         <source>32nd note</source>
         <translation>1/32 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2178"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2255"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2179"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2256"/>
         <source>64th note</source>
         <translation>1/64 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2185"/>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2262"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2186"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2263"/>
         <source>128th note</source>
         <translation>1/128 hang</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2290"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2291"/>
         <source>Augmentation dot</source>
         <translation>Hangjegy pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2297"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2298"/>
         <source>Double augmentation dot</source>
         <translation>Hangjegy kétszeres pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2304"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2305"/>
         <source>Triple augmentation dot</source>
         <translation>Háromszoros pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2311"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2312"/>
         <source>Quadruple augmentation dot</source>
         <translation>Négyszeres pontozás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2372"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2373"/>
         <source>Tie</source>
         <translation>Átkötőív</translation>
     </message>
@@ -8834,92 +8834,92 @@ x-magasságának %-a)</translation>
         <translation>Utóka: 1/32</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2066"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
         <source>Input by note name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2068"/>
         <source>Toggle note input mode: input by note name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2073"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
         <source>Input by duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2075"/>
         <source>Toggle note input mode: input by duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
         <source>Add articulation: marcato</source>
         <translation>Artikulációs jel hozzáadása: marcato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2401"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2402"/>
         <source>Add articulation: accent</source>
         <translation>Artikulációs jel hozzáadása: hangsúly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
         <source>Add articulation: tenuto</source>
         <translation>Artikulációs jel hozzáadása: tenuto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2415"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2416"/>
         <source>Add articulation: staccato</source>
         <translation>Artikulációs jel hozzáadása: staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2433"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
         <source>Voice 1</source>
         <translation>1. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2435"/>
         <source>Use voice 1</source>
         <translation>Használja az első szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2440"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2441"/>
         <source>Voice 2</source>
         <translation>2. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2441"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2442"/>
         <source>Use voice 2</source>
         <translation>Használja a második szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2447"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2448"/>
         <source>Voice 3</source>
         <translation>3. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2448"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2449"/>
         <source>Use voice 3</source>
         <translation>Használja a harmadik szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2454"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2455"/>
         <source>Voice 4</source>
         <translation>4. szólam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2556"/>
         <source>Mark irregular measures</source>
         <translation>Szabálytalan ütemek megjelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1628"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
         <source>Change enharmonic spelling (both modes)</source>
         <translation>Enharmonikus átírás megváltoztatása (mindkét mód)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
         <source>Change enharmonic spelling (current mode)</source>
         <translation>Enharmonikus átírás megváltoztatása (jelenlegi mód)</translation>
     </message>
@@ -8947,42 +8947,42 @@ x-magasságának %-a)</translation>
         <translation>Irányított beillesztés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2108"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2109"/>
         <source>Insert</source>
         <translation>Beszúrás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1250"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1251"/>
         <source>Add tied note to chord</source>
         <translation>Átkötött hang hozzáadása az akkordhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2400"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2401"/>
         <source>Accent</source>
         <translation>Hangsúly</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1926"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1927"/>
         <source>Reset style</source>
         <translation>Stílus alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1927"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1928"/>
         <source>Reset all style values to default</source>
         <translation>Minden stílusérték alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1508"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1509"/>
         <source>Accessibility: Get location</source>
         <translation>Akadálymentesítés: Helyzet lekérése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1568"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1569"/>
         <source>Screen: Previous</source>
         <translation>Képernyő: Előző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1574"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1575"/>
         <source>Screen: Next</source>
         <translation>Képernyő: Következő</translation>
     </message>
@@ -9356,12 +9356,12 @@ x-magasságának %-a)</translation>
         <translation>&amp;Transzponálás…</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1933"/>
         <source>Add treble clef</source>
         <translation>Violinkulcs hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1938"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
         <source>Add bass clef</source>
         <translation>Basszuskulcs hozzáadása</translation>
     </message>
@@ -9398,38 +9398,38 @@ x-magasságának %-a)</translation>
         <translation>3-4 szólamok cseréje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1514"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1515"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1516"/>
         <source>Edit element</source>
         <translation>Elem szerkesztése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2455"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2456"/>
         <source>Use voice 4</source>
         <translation>Használja a 4. szólamot</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2519"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2520"/>
         <source>Show &amp;invisible</source>
         <translation>Láthatatlanok megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2526"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2527"/>
         <source>Show f&amp;ormatting</source>
         <translation>Formázás megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2527"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2528"/>
         <source>Show/hide formatting</source>
         <translation>Formázás megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2533"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2534"/>
         <source>Show &amp;frames</source>
         <translation>Keretek megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2540"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
         <source>Show page &amp;margins</source>
         <translation>Oldalmargók megjelenítése</translation>
     </message>
@@ -9439,26 +9439,26 @@ x-magasságának %-a)</translation>
         <translation>Speciális karakterek beszúrása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1470"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1471"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1472"/>
         <source>Zoom in</source>
         <translation>Nagyítás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1477"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1478"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1479"/>
         <source>Zoom out</source>
         <translation>Kicsinyítés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1484"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1486"/>
         <source>Zoom to 100%</source>
         <translation>Nagyítás 100%-ra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1842"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1843"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1844"/>
         <source>Mirror notehead</source>
         <translation>Kottafej tükrözése</translation>
     </message>
@@ -9468,8 +9468,8 @@ x-magasságának %-a)</translation>
         <translation>Kétszeres ritmusérték</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1609"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1610"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1611"/>
         <source>Repeat selection</source>
         <translation>Kijelölés ismétlése</translation>
     </message>
@@ -9479,27 +9479,27 @@ x-magasságának %-a)</translation>
         <translation>Metronóm</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1975"/>
         <source>Transpose up</source>
         <translation>Transzponálás felfelé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1980"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
         <source>Transpose down</source>
         <translation>Transzponálás lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1758"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
         <source>Next syllable</source>
         <translation>Következő szótag</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2017"/>
         <source>Set visible</source>
         <translation>Legyen látható</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
         <source>Set invisible</source>
         <translation>Legyen láthatatlan</translation>
     </message>
@@ -9745,599 +9745,599 @@ x-magasságának %-a)</translation>
         <translation>Alsó nóna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1213"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
         <source>Ottava 8va &amp;alta</source>
         <translation>Ottava 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1215"/>
         <source>Add ottava 8va alta</source>
         <translation>Ottava 8va alta hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1219"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1220"/>
         <source>Ottava 8va &amp;bassa</source>
         <translation>Ottava 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1220"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1221"/>
         <source>Add ottava 8va bassa</source>
         <translation>Ottava 8va bassa hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1227"/>
         <source>Add dynamic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1231"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
         <source>&amp;Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1237"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1238"/>
         <source>&amp;Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1260"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1261"/>
         <source>&amp;Title</source>
         <translation>Cím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1266"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1267"/>
         <source>&amp;Subtitle</source>
         <translation>Alcím</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1272"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1273"/>
         <source>&amp;Composer</source>
         <translation>Zeneszerző</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1278"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1279"/>
         <source>&amp;Lyricist</source>
         <translation>Szövegíró</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1284"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1285"/>
         <source>&amp;Part name</source>
         <translation>Szólam neve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1296"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
         <source>Syst&amp;em text</source>
         <translation>Sorcsoport szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1302"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1303"/>
         <source>St&amp;aff text</source>
         <translation>Kottasor szöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1308"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
         <source>E&amp;xpression text</source>
         <translation>Szöveges előadási jel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1314"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1315"/>
         <source>&amp;Rehearsal mark</source>
         <translation>Ciffer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1320"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1321"/>
         <source>&amp;Instrument change</source>
         <translation>Hangszerváltás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1326"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1327"/>
         <source>&amp;Fingering</source>
         <translation>Ujjrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1332"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1333"/>
         <source>Stic&amp;king</source>
         <translation>Kézrend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1344"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1345"/>
         <source>R&amp;oman numeral analysis</source>
         <translation>Összhangzattani elemzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1350"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1351"/>
         <source>&amp;Nashville number</source>
         <translation>Nashville szám</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1356"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1357"/>
         <source>L&amp;yrics</source>
         <translation>Énekszöveg</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1362"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1363"/>
         <source>Figured &amp;bass</source>
         <translation>Számozott basszus</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1368"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1369"/>
         <source>Tempo &amp;marking</source>
         <translation>Tempójelzés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1374"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1375"/>
         <source>&amp;Duplet</source>
         <translation>Duola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1380"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1381"/>
         <source>&amp;Triplet</source>
         <translation>Triola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1386"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
         <source>&amp;Quadruplet</source>
         <translation>Kvartola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1392"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
         <source>Q&amp;uintuplet</source>
         <translation>Kvintola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1398"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1399"/>
         <source>Se&amp;xtuplet</source>
         <translation>Szextola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1404"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
         <source>Se&amp;ptuplet</source>
         <translation>Szeptola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1410"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
         <source>&amp;Octuplet</source>
         <translation>Oktola</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1422"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1423"/>
         <source>Othe&amp;r…</source>
         <translation>Egyéb...</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1428"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
         <source>&amp;Decrease layout stretch</source>
         <translation>Nyújtás csökkentése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1435"/>
         <source>&amp;Increase layout stretch</source>
         <translation>Nyújtás növelése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1440"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1441"/>
         <source>&amp;Reset layout stretch</source>
         <translation>Nyújtás alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1446"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1447"/>
         <source>Reset &amp;text style overrides</source>
         <translation>A módosított szövegstílusok alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1453"/>
         <source>Reset &amp;beams</source>
         <translation>Gerendák alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1569"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1570"/>
         <source>Jump to previous screen</source>
         <translation>Ugrás az előző képernyőre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1575"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
         <source>Jump to next screen</source>
         <translation>Ugrás a következő képernyőre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1581"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1582"/>
         <source>Jump to previous page</source>
         <translation>Ugrás az előző oldalra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1587"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1588"/>
         <source>Jump to next page</source>
         <translation>Ugrás a következő oldalra</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1615"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1617"/>
         <source>Lock/unlock all systems</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1621"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1622"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1623"/>
         <source>Lock/unlock selected system(s)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1650"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1651"/>
         <source>Flip horizontally</source>
         <translation>Megfordítás vízszintesen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1662"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1663"/>
         <source>Next word</source>
         <translation>Következő szó</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1663"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1664"/>
         <source>Go to next word</source>
         <translation>Ugrás a következő szóhoz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1669"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1670"/>
         <source>Go to next text element</source>
         <translation>Ugrás a következő szöveges elemre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1675"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1676"/>
         <source>Go to previous text element</source>
         <translation>Ugrás az előző szöveges elemre</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1687"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1688"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
         <translation>Kurzor léptetése: előző ütés (akkordjelzések)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1760"/>
         <source>Lyrics: enter hyphen</source>
         <translation>Énekszöveg: kötőjel beírása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1848"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1849"/>
         <source>Toggle turn</source>
         <translation>Kettős ékesítés ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1849"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1850"/>
         <source>Add ornament: turn</source>
         <translation>Díszítés: kettős ékesítés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1854"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1855"/>
         <source>Toggle inverted turn</source>
         <translation>Fordított kettős ékesítés ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1855"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1856"/>
         <source>Add ornament: inverted turn</source>
         <translation>Díszítés: fordított kettős ékesítés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1860"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1861"/>
         <source>Toggle turn with slash</source>
         <translation>Kettős ékesítés vonással ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1861"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1862"/>
         <source>Add ornament: turn with slash</source>
         <translation>Díszítés: kettős ékesítés vonással</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1867"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1868"/>
         <source>Add ornament: trill</source>
         <translation>Díszítés: trilla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1872"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1873"/>
         <source>Toggle short trill</source>
         <translation>Rövid trilla ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1873"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1874"/>
         <source>Add ornament: short trill</source>
         <translation>Díszítés: rövid trilla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1878"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1879"/>
         <source>Toggle mordent</source>
         <translation>Mordent ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1879"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1880"/>
         <source>Add ornament: mordent</source>
         <translation>Díszítés: mordent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1884"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1885"/>
         <source>Toggle tremblement</source>
         <translation>Trembement ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1885"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1886"/>
         <source>Add ornament: tremblement</source>
         <translation>Díszítés: tremblement</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1890"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1891"/>
         <source>Toggle prall mordent</source>
         <translation>Prall mordent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1891"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1892"/>
         <source>Add ornament: prall mordent</source>
         <translation>Díszítés: prall mordent</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1896"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1897"/>
         <source>Toggle shake</source>
         <translation>Shake ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1897"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1898"/>
         <source>Add ornament: shake</source>
         <translation>Díszítés: shake</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1902"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1903"/>
         <source>Toggle shake (Muffat)</source>
         <translation>Shake (Muffat) ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1903"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1904"/>
         <source>Add ornament: shake (Muffat)</source>
         <translation>Díszítés: shake  (Muffat)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1908"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1909"/>
         <source>Toggle tremblement appuyé (Couperin)</source>
         <translation>Trembelement appuyé (Couperin) ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1909"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1910"/>
         <source>Add ornament: tremblement appuyé (Couperin)</source>
         <translation>Díszítés: tremblement appuyé (Couprerin)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1915"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1916"/>
         <source>Add bowing: up bow</source>
         <translation>Vonásjel hozzáadás: felfelé vonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1921"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1922"/>
         <source>Add bowing: down bow</source>
         <translation>Vonásjel hozzáadása: lefelé vonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1944"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1945"/>
         <source>Add double-sharp</source>
         <translation>Kettős kereszt hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1945"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1946"/>
         <source>Add accidental: double-sharp</source>
         <translation>Módosítójel hozzáadása: kettős kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1950"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1951"/>
         <source>Add sharp</source>
         <translation>Kereszt hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1956"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1957"/>
         <source>Add natural</source>
         <translation>Feloldójel hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1957"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1958"/>
         <source>Add accidental: natural</source>
         <translation>Módosítójel hozzáadása: feloldójel</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1962"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1963"/>
         <source>Add flat</source>
         <translation>Bé hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1963"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1964"/>
         <source>Add accidental: flat</source>
         <translation>Módosítójel hozzáadása: bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1968"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1969"/>
         <source>Add double-flat</source>
         <translation>Kettős bé hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1969"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1970"/>
         <source>Add accidental: double-flat</source>
         <translation>Módosítójel hozzáadása: kettős bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1975"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1976"/>
         <source>Transpose up a semitone</source>
         <translation>Transzponálás felfelé félhanggal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1982"/>
         <source>Transpose down a semitone</source>
         <translation>Transzponálás félhanggal lejjebb</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2004"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2005"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2006"/>
         <source>Toggle multimeasure rests</source>
         <translation>Többsoros szünetek ki-/bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2010"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2011"/>
         <source>Toggle empty staves</source>
         <translation>Üres kottasorok ki-/bekapcsolása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2034"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2035"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2036"/>
         <source>Toggle automatic placement for entire score</source>
         <translation>Automatikus elhelyezés ki-/bekapcsolása az egész kottához</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2053"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2054"/>
         <source>Toggle note input mode</source>
         <translation>Hangjegybeviteli mód váltása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2060"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2061"/>
         <source>Insert/overwrite</source>
         <translation>Beszúrás/felülírás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2061"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2062"/>
         <source>Toggle note input mode: insert/overwrite</source>
         <translation>Hangjegybeviteli mód váltása: beszúrás/felülírás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2081"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2082"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
         <translation>Hangbeviteli mód váltása: csak ritmus (nem magasság)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2088"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2089"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
         <translation>Hangbeviteli mód váltása: meglévő hangok átírása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2095"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2096"/>
         <source>Toggle note input mode: real-time (metronome)</source>
         <translation>Hangjegybeviteli mód váltása: valós idő (metronóm)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2102"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2103"/>
         <source>Toggle note input mode: real-time (foot pedal)</source>
         <translation>Hangjegybeviteli mód váltása: valós idő (lábpedál)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2109"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2110"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
         <translation>Hangjegybeviteli mód váltása: beszúrás (növeli a kottasor ritmusértékét)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2115"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2116"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2117"/>
         <source>Real-time advance</source>
         <translation>Valósidejű előrehaladás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2337"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2338"/>
         <source>Toggle flat</source>
         <translation>Bé ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2344"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2345"/>
         <source>Toggle double-flat</source>
         <translation>Kettős bé ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2345"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2346"/>
         <source>Toggle accidental: double-flat</source>
         <translation>Módosítójel ki/be: kettős bé</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2351"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2352"/>
         <source>Toggle natural</source>
         <translation>Feloldójel ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2358"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
         <source>Toggle sharp</source>
         <translation>Kereszt ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2365"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
         <source>Toggle double-sharp</source>
         <translation>Kettős kereszt ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2366"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2367"/>
         <source>Toggle accidental: double-sharp</source>
         <translation>Módosítójel ki/be: kettős kereszt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
         <source>Add slur</source>
         <translation>Legato-ív hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2462"/>
         <source>All voices on instrument</source>
         <translation>Minden szólam a hangszeren</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2462"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2463"/>
         <source>Use all voices on instrument</source>
         <translation>Minden szólam használata a hangszeren</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2467"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2468"/>
         <source>All voices on staff</source>
         <translation>Minden szólam a kottasoron</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2468"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2469"/>
         <source>Use all voices on staff</source>
         <translation>Minden szólam használata a kottasoron</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2547"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2548"/>
         <source>Show sound flags</source>
         <translation>Hangszínjelölők megjelenítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2548"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2549"/>
         <source>Show/hide sound flags</source>
         <translation>Hangszínjelölők megjelenítése/elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2554"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
         <source>Mark i&amp;rregular measures</source>
         <translation>Szabálytalan ütemek megjelölése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2611"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2613"/>
         <source>Mark corrupted measures</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2618"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="2619"/>
         <source>Check for score corruptions</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1686"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1687"/>
         <source>Previous beat (Chord symbol)</source>
         <translation>Előző ütés (akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1680"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
         <source>Next beat (Chord symbol)</source>
         <translation>Következő ütés (akkordjelzés)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1776"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
         <source>Bold face</source>
         <translation>Félkövér</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1783"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1784"/>
         <source>Italic</source>
         <translation>Kurzív</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1790"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1791"/>
         <source>Underline</source>
         <translation>Aláhúzott</translation>
     </message>
@@ -10470,16 +10470,6 @@ x-magasságának %-a)</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
-        <source>Check Muse Sampler</source>
-        <translation>Nézze meg a Muse Samplert</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
-        <source>Reload Muse Sampler</source>
-        <translation>Muse Sampler újratöltése</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
         <source>Use old view</source>
         <translation type="unfinished"/>
@@ -10487,6 +10477,16 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="44"/>
         <source>Use new view</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
+        <source>Check MuseSampler</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
+        <source>Reload MuseSampler</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10512,8 +10512,8 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="90"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="86"/>
-        <source>Muse Sounds</source>
-        <translation>Muse hangok</translation>
+        <source>MuseSounds</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="91"/>
@@ -10906,7 +10906,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 (Az oktatóvideókhoz internetkapcsolatra van szükség)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
+        <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="80"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
         <translation>Az adatvédelme érdekében a MuseScore Studio semmilyen személyes információt nem tárol. További információkért lásd az &lt;a href=&quot;%1&quot;&gt;adatvédelmi nyilatkozatunkat&lt;/a&gt;.</translation>
     </message>
@@ -10978,8 +10978,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="440"/>
-        <source>&amp;Muse Sampler</source>
-        <translation>Muse Sampler</translation>
+        <source>&amp;MuseSampler</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="485"/>
@@ -12443,7 +12443,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1; Ritmusérték: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2416"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2428"/>
         <source>Annotations:</source>
         <translation>Jegyzetek:</translation>
     </message>
@@ -12453,7 +12453,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3410"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3422"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2442"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2454"/>
         <source>Start of %1</source>
         <translation>%1 kezdete</translation>
     </message>
@@ -12463,7 +12463,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3414"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3430"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2457"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2469"/>
         <source>End of %1</source>
         <translation>%1 vége</translation>
     </message>
@@ -18834,7 +18834,13 @@ Fret %1 on strings %2</source>
         <translation>%1 bővítmény futtatása (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="108"/>
+        <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="105"/>
+        <source>Not specified</source>
+        <extracomment>No version is specified for this plugin.</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="121"/>
         <source>Not defined</source>
         <extracomment>No keyboard shortcut is assigned to this plugin.</extracomment>
         <translation>Nincs definiálva</translation>
@@ -19451,7 +19457,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="106"/>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="77"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="88"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="127"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
@@ -19460,7 +19466,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="108"/>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="78"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="89"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="127"/>
         <source>Off</source>
         <extracomment>as opposed to On</extracomment>
@@ -19515,6 +19521,26 @@ Fret %1 on strings %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
         <translation>Bármikor megváltoztathatja ezt a beállítást a Szerkesztői beállításokban.</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="56"/>
+        <source>Hours</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="83"/>
+        <source>Minutes</source>
+        <translation>percben</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="110"/>
+        <source>Seconds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="139"/>
+        <source>Milliseconds</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -22841,24 +22867,24 @@ felismerése</translation>
         <translation>Az összes hangszer összecsukása</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="965"/>
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="990"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
         <translation><numerusform>Biztosan törölni szeretné a kijelölt hangszert?</numerusform><numerusform>Biztosan törölni szeretné a kijelölt hangszereket?</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="970"/>
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="995"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
         <translation><numerusform>Ez eltávolítja a hangszert a partitúrából és a szólamkottákból is.</numerusform><numerusform>Ez eltávolítja a hangszereket a partitúrából és a szólamkottákból is.</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="240"/>
+        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="242"/>
         <source>Are you sure you want to reset all formatting?</source>
         <translation>Biztos, hogy alaphelyzetbe állítja az összes formázást?</translation>
     </message>
     <message>
-        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="241"/>
+        <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="243"/>
         <source>This action can not be undone</source>
         <translation>Ezt a műveletet nem lehet visszavonni</translation>
     </message>
@@ -22973,13 +22999,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <name>musesampler</name>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="43"/>
-        <source>Muse Sampler library is not found</source>
-        <translation>A Muse Sampler nem található</translation>
+        <source>MuseSampler library is not found</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="45"/>
-        <source>Muse Sampler library is detected, version %1</source>
-        <translation>Muse Sampler megtalálható, %1. verzió</translation>
+        <source>MuseSampler library is detected, version %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -24494,7 +24520,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="250"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="261"/>
         <source>Smooth panning</source>
         <translation>Simított görgetés</translation>
     </message>
@@ -24584,11 +24610,6 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Igazítsa a módosítójeleket eltolt oktáv esetén</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
-        <source>Input pitch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
         <source>Extensions toolbar</source>
         <translation type="unfinished"/>
@@ -24614,13 +24635,18 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="57"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/DynamicPopup.qml" line="59"/>
         <source>Dynamics Popup</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="699"/>
         <source>Small parentheses</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
+        <source>MIDI input pitch</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -26515,73 +26541,73 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>Ütemmutató létrehozása</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="99"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="104"/>
         <source>The palette was hidden or changed</source>
         <translation>A paletta elrejtésre került vagy módosult</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="337"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="348"/>
         <source>Hide</source>
         <translation>Elrejtés</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="338"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="349"/>
         <source>Delete permanently</source>
         <translation>Végleges törlés</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="375"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="386"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
         <translation>Elrejti vagy véglegesen törli ezt az egyéni palettacellát?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="376"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="387"/>
         <source>Do you want to hide these custom palette cells or permanently delete them?</source>
         <translation>Elrejti vagy véglegesen törli ezeket az egyéni palettacellákat?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="382"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="393"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
         <translation>Véglegesen törli ezt az egyéni palettacellát?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="383"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="394"/>
         <source>Do you want to permanently delete these custom palette cells?</source>
         <translation>Véglegesen törli ezeket az egyéni palettacellákat?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="399"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="410"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
         <translation>Elrejti vagy véglegesen törli ezt az egyéni palettát?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="400"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="411"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
         <translation>Elrejti vagy véglegesen törli ezeket az egyéni palettákat?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="835"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="846"/>
         <source>Do you want to permanently delete this custom palette?</source>
         <translation>Véglegesen törli ezt az egyéni palettát?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="856"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="867"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
         <translation>Visszaállítja a palettát alapállapotra? Ha igen, a palettán végrehajtott valamennyi módosítás elvész.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="918"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="929"/>
         <source>Load palette</source>
         <translation>Paletta betöltése</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="919"/>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="922"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="930"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="933"/>
         <source>MuseScore Studio palette</source>
         <translation>MuseScore Studio paletta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="921"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="932"/>
         <source>Save palette</source>
         <translation>Paletta mentése</translation>
     </message>
@@ -28427,11 +28453,6 @@ palettafájl írása sikertelen:</translation>
         <translation>A hangszer hangszínjelölői alaphelyzetbe állíthatók, de a kottaszöveg megmarad. Ez a művelet nem vonható vissza.</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
-        <source>Tempo</source>
-        <translation>Tempó</translation>
-    </message>
-    <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
         <source>Playback setup</source>
         <translation>Lejátszás beállításai</translation>
@@ -28512,12 +28533,12 @@ palettafájl írása sikertelen:</translation>
         <translation>szokásos</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="97"/>
         <source>Sound flag settings</source>
         <translation>Hangszínjelölő-beállítások</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="143"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="150"/>
         <source>Sound flag menu</source>
         <translation>Hangszínjelölő menü</translation>
     </message>
@@ -28535,6 +28556,32 @@ palettafájl írása sikertelen:</translation>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="166"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
         <translation>A hangra vonatkozó jelöléseket alaphelyzetbe kerülhetnek, de a kottasor szöveg megmarad. Ezt a műveletet nem lehet visszavonni.</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml" line="76"/>
+        <source>Measure</source>
+        <comment>Measure number</comment>
+        <translation>Ütem</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml" line="109"/>
+        <source>Beat</source>
+        <comment>Beat number</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackSpeedPopup.qml" line="43"/>
+        <source>Playback speed popup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackSpeedPopup.qml" line="52"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackSpeedPopup.qml" line="70"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackSpeedSlider.qml" line="44"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackSpeedSlider.qml" line="61"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="220"/>
+        <source>Speed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -28810,82 +28857,82 @@ palettafájl írása sikertelen:</translation>
         <translation>Hiba történt a fájl beolvasása közben.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1850"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
         <source>All supported files</source>
         <translation>Minden támogatott fájl</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1851"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1854"/>
         <source>MuseScore files</source>
         <translation>MuseScore fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1852"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1855"/>
         <source>MusicXML files</source>
         <translation>MusicXML fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1856"/>
         <source>MIDI files</source>
         <translation>MIDI fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1854"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1857"/>
         <source>MuseData files</source>
         <translation>MuseData fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1855"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1858"/>
         <source>Capella files</source>
         <translation>Capella fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1856"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1859"/>
         <source>BB files (experimental)</source>
         <translation>BB fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1857"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1860"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Overture / Score Writer fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1858"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1861"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Bagpipe Music Writer fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1859"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1862"/>
         <source>Guitar Pro files</source>
         <translation>Guitar Pro fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1860"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1863"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Power Tab Editor fájlok (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1861"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1864"/>
         <source>MEI files</source>
         <translation>MEI fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1862"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1865"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>Tömörítetlen MuseScore mappák (kísérleti)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1863"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1866"/>
         <source>MuseScore developer files</source>
         <translation>MuseScore fejlesztői fájlok</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1864"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1867"/>
         <source>MuseScore backup files</source>
         <translation>MuseScore biztonsági mentések</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1876"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1879"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
@@ -30522,7 +30569,7 @@ palettafájl írása sikertelen:</translation>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/view/mididevicemappingmodel.cpp" line="101"/>
+        <location filename="../../src/framework/shortcuts/view/mididevicemappingmodel.cpp" line="102"/>
         <source>Inactive</source>
         <translation>Inaktív</translation>
     </message>
@@ -31091,7 +31138,7 @@ palettafájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5522"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5546"/>
         <source>Change voice</source>
         <translation type="unfinished"/>
     </message>
@@ -31154,55 +31201,55 @@ palettafájl írása sikertelen:</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="105"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="875"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="885"/>
         <source>Remove instruments</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="120"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="999"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1009"/>
         <source>Remove staves</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="139"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="565"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="579"/>
         <source>Add staff</source>
         <translation>Kottasor hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="167"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="588"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="600"/>
         <source>Add linked staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="191"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="649"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="659"/>
         <source>Replace instrument</source>
         <translation>Hangszer kicserélése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="226"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="695"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="705"/>
         <source>Edit drumset</source>
         <translation>Dobkészlet szerkesztése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="264"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="736"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="746"/>
         <source>Add system markings</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="277"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="770"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="780"/>
         <source>Remove system markings</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="286"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="805"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="815"/>
         <source>Move system markings</source>
         <translation type="unfinished"/>
     </message>
@@ -31312,440 +31359,440 @@ palettafájl írása sikertelen:</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4416"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4418"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4517"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4519"/>
         <source>Split measure</source>
         <translation>Ütem felbontása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4532"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4534"/>
         <source>Join measures</source>
         <translation>Ütemek egyesítése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4684"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4686"/>
         <source>Add horizontal frame</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4685"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4687"/>
         <source>Add vertical frame</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4686"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4688"/>
         <source>Add text frame</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4687"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4689"/>
         <source>Add %n measure(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4752"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4786"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4754"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4788"/>
         <source>Repeat selection</source>
         <translation>Kijelölés ismétlése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4806"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4808"/>
         <source>Paste</source>
         <translation>Beillesztés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4903"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4915"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4929"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4941"/>
         <source>Flip direction</source>
         <translation>Kottaszár megfordítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4989"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5001"/>
         <source>Add ottava</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4996"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5032"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="200"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5008"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5044"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="199"/>
         <source>Add hairpin</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5118"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5142"/>
         <source>Toggle accidental</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5178"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5202"/>
         <source>Toggle augmentation dots</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5407"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5431"/>
         <source>Lock/unlock selected system(s)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5414"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5438"/>
         <source>Lock/unlock all systems</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5421"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5445"/>
         <source>Create system from selection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5544"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5568"/>
         <source>Add note-anchored line</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5820"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5844"/>
         <source>Delete %n measure(s)</source>
         <translation><numerusform>%n ütem törlése</numerusform><numerusform>%n ütem törlése</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7556"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7580"/>
         <source>Add accidental</source>
         <translation>Módosítójel hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5081"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5105"/>
         <source>Add brackets</source>
         <translation>Klammer hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4940"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4952"/>
         <source>Flip horizontally</source>
         <translation>Megfordítás vízszintesen</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5086"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5110"/>
         <source>Add braces</source>
         <translation>Gömbölyű klammer hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5091"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5115"/>
         <source>Add parentheses</source>
         <translation>Zárójel hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5161"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7530"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5185"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7554"/>
         <source>Toggle articulation</source>
         <translation>Artikuláció ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5212"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5236"/>
         <source>Add grace note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5239"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5263"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="684"/>
         <source>Add tuplet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5260"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5284"/>
         <source>Set beam type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5273"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5297"/>
         <source>Increase duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5272"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5296"/>
         <source>Decrease duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5290"/>
-        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5314"/>
+        <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="192"/>
         <source>Change hairpin type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5333"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5357"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5386"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5410"/>
         <source>Toggle layout break</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5393"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5417"/>
         <source>Move measure to previous system</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5400"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5424"/>
         <source>Move measure to next system</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5428"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5452"/>
         <source>Apply system lock to selection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5438"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5462"/>
         <source>Measures per system</source>
         <translation>Ütemek száma sorcsoportonként</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5445"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5469"/>
         <source>Transposition</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5469"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5493"/>
         <source>Swap voices</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5500"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5524"/>
         <source>Add interval</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5507"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5531"/>
         <source>Enter note at fret %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5533"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5557"/>
         <source>Change voice assignment</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5615"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5639"/>
         <source>Add text</source>
         <translation>Szöveg hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5683"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5707"/>
         <source>Add image</source>
         <translation>Kép hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5702"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5726"/>
         <source>Add figured bass</source>
         <translation>Számozott basszus hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5717"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5741"/>
         <source>Increase layout stretch</source>
         <translation>Nyújtás növelése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5718"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5742"/>
         <source>Decrease layout stretch</source>
         <translation>Nyújtás csökkentése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5741"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5765"/>
         <source>Add time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5752"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5776"/>
         <source>Explode</source>
         <translation>Szétbontás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5763"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5787"/>
         <source>Implode</source>
         <translation>Összevonás</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5774"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5798"/>
         <source>Realize chord symbols</source>
         <translation>Akkordjelzések realizálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5831"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5855"/>
         <source>Delete range</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5838"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5862"/>
         <source>Remove empty trailing measures</source>
         <translation>Üres záróütemek törlése</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5849"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5873"/>
         <source>Fill with slashes</source>
         <translation>Kitöltés vonásokkal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5860"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5884"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>Ritmusjelölés vonásokkal ki/be</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5867"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5891"/>
         <source>Change enharmonic spelling</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5874"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5898"/>
         <source>Respell pitches</source>
         <translation>Módosítójelek újragenerálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5881"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5905"/>
         <source>Regroup rhythms</source>
         <translation>Ritmusok újracsoportosítása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5888"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5912"/>
         <source>Resequence rehearsal marks</source>
         <translation>Cifferek újragenerálása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5895"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5919"/>
         <source>Reset layout stretch</source>
         <translation>Nyújtás alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5902"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5926"/>
         <source>Reset text style overrides</source>
         <translation>A módosított szövegstílusok alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5909"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5933"/>
         <source>Reset beams</source>
         <translation>Kottaszárak alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5926"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5950"/>
         <source>Reset shapes and positions</source>
         <translation>Alak és pozíció alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5946"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5970"/>
         <source>Reset to default layout</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5972"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5996"/>
         <source>Set score view settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6150"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6174"/>
         <source>Navigate to lyrics</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6278"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6340"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6302"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6364"/>
         <source>Navigate to next syllable</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6522"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6546"/>
         <source>Navigate to verse</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6613"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6667"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6637"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6691"/>
         <source>Navigate to next chord symbol</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6704"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6728"/>
         <source>Navigate to chord symbol</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6759"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6803"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6783"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6827"/>
         <source>Navigate to next figured bass</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6851"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6875"/>
         <source>Navigate to figured bass</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7148"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7155"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7215"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7172"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7179"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7239"/>
         <source>Enter lyrics extension line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7296"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7320"/>
         <source>Add lyrics verse</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7344"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7368"/>
         <source>Enter guitar bend</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7454"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7478"/>
         <source>Format text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7474"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7498"/>
         <source>Toggle subscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7476"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7500"/>
         <source>Toggle superscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7478"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7502"/>
         <source>Toggle subscript/superscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7535"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7559"/>
         <source>Toggle ornament</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7540"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7564"/>
         <source>Toggle automatic placement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7551"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7575"/>
         <source>Add clef</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7561"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7585"/>
         <source>Transpose semitone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7567"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7591"/>
         <source>Transpose diatonically</source>
         <translation>Diatonikus transzpozíció</translation>
     </message>
@@ -31772,12 +31819,12 @@ palettafájl írása sikertelen:</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="887"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="894"/>
         <source>Double note input duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="900"/>
+        <location filename="../../src/notation/internal/notationnoteinput.cpp" line="907"/>
         <source>Halve note input duration</source>
         <translation type="unfinished"/>
     </message>
@@ -31824,62 +31871,62 @@ palettafájl írása sikertelen:</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="409"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="423"/>
         <source>Set instrument name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="436"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="450"/>
         <source>Set abbreviated instrument name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="463"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="477"/>
         <source>Show voice %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="464"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="478"/>
         <source>Hide voice %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="493"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="507"/>
         <source>Show staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="494"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="508"/>
         <source>Hide staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="521"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="535"/>
         <source>Set staff type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="543"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="557"/>
         <source>Edit staff properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="611"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="621"/>
         <source>Add instrument</source>
         <translation>Hangszer hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="629"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="639"/>
         <source>Reset instrument formatting</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1054"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1060"/>
         <source>Move instruments</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1083"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1089"/>
         <source>Move staves</source>
         <translation type="unfinished"/>
     </message>
