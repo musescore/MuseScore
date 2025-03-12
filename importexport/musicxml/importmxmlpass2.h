@@ -421,7 +421,6 @@ private:
       QString _metroText;
       QString _rehearsalText;
       QString _dynaVelocity;
-      QString _tempo;
       QString _sndCoda;
       QString _sndDacapo;
       QString _sndDalsegno;
@@ -429,6 +428,7 @@ private:
       QString _sndSegno;
       QString _sndToCoda;
       QString _placement;
+      QString _play;
       bool _hasDefaultY;
       qreal _defaultY;
       bool _hasRelativeY;
@@ -438,6 +438,7 @@ private:
       double _tpoMetro;                 // tempo according to metronome
       double _tpoSound;                 // tempo according to sound
       bool _systemDirection = false;
+      QPair<int, int> _swing = { 0, 0 };
       bool _visible = true;
       QList<Element*> _elems;
       Fraction _offset;
@@ -450,6 +451,8 @@ private:
       void wedge(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
       QString metronome(double& r);
       void sound();
+      void play();
+      void swing();
       void dynamics();
       void otherDirection();
       void handleRepeats(Measure* measure, const int track, const Fraction tick);

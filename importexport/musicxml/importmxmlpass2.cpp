@@ -3469,6 +3469,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
                   t->setVisible(_visible);
 
+                  if (_swing.second != 0) {
+                      toStaffTextBase(t)->setSwing(true);
+                      toStaffTextBase(t)->setSwingParameters(_swing.first,
+                                                             _swing.first ? _swing.second : toStaffTextBase(t)->score()->styleI(Sid::swingRatio));
+                      _swing.second = 0;
+                  }
+
                   QString wordsPlacement = placement();
                   // Case-based defaults
                   if (wordsPlacement.isEmpty()) {
@@ -3749,7 +3756,79 @@ void MusicXMLParserDirection::sound()
       _tpoSound = _e.attributes().value("tempo").toDouble();
       _dynaVelocity = _e.attributes().value("dynamics").toString();
 
-      _e.skipCurrentElement();
+      const QString pizz = _e.attributes().value("pizzicato").toString();
+      if (pizz == "yes")
+            _play = "pizzicato";
+      else if (pizz == "no")
+            _play = "natural";
+
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "play")
+                  play();
+            else if (_e.name() == "swing")
+                  swing();
+            else
+                  skipLogCurrElem();
+            }
+      }
+
+//---------------------------------------------------------
+//   play
+//---------------------------------------------------------
+/**
+       Parse the /score-partwise/part/measure/direction/sound/play node.
+       */
+void MusicXMLParserDirection::play()
+      {
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "mute") {
+                  const QString muted = _e.readElementText();
+                  _play = (muted == "off") ? "open" : "mute";
+                  }
+            else if (_e.name() == "other-play") {
+                  _play = _e.attributes().value("type").toString();
+                  _e.skipCurrentElement();
+                  }
+            else {
+                  skipLogCurrElem();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   swing
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/direction/sound/swing node.
+ */
+
+void MusicXMLParserDirection::swing()
+      {
+      int swingNumerator = 1;
+      int swingDenominator = 1;
+      int swingUnit = 0;
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "straight") // unused
+                  _e.skipCurrentElement();
+            else if (_e.name() == "first")
+                  swingDenominator = _e.readElementText().toInt();
+            else if (_e.name() == "second")
+                  swingNumerator = _e.readElementText().toInt();
+            else if (_e.name() == "swing-type") {
+                  const QString swingType = _e.readElementText();
+                  if (swingType == "eighth")
+                        swingUnit = MScore::division / 2;
+                  else if (swingType == "16th")
+                        swingUnit = MScore::division / 4;
+                  }
+            else if (_e.name() == "swing-style") // unused
+                  _e.skipCurrentElement();
+            else
+                  skipLogCurrElem();
+            }
+      _swing.first = swingUnit;
+      _swing.second = (swingNumerator * 100) / swingDenominator;
       }
 
 //---------------------------------------------------------
@@ -4065,7 +4144,9 @@ bool MusicXMLParserDirection::isLikelyTempoText(const int track) const
           || _wordsText.contains("“")
           || _wordsText.contains("”")
           || placement() == "below"
-          || track2staff(track) != 0) {
+          || track2staff(track)
+          || _wordsText.isEmpty()
+          || _swing.second) {
             return false;
             }
 
