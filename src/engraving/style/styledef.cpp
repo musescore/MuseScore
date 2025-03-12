@@ -707,6 +707,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(tupletFrameRound,                           0),
     styleDef(tupletFrameFgColor,                         PropertyValue::fromValue(Color::BLACK)),
     styleDef(tupletFrameBgColor,                         PropertyValue::fromValue(Color::transparent)),
+    styleDef(tupletExtendToEndOfDuration,                false),
 
     styleDef(scaleBarlines,                              false),
     styleDef(barGraceDistance,                           Spatium(1.0)),
