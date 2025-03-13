@@ -320,6 +320,8 @@ public:
     double xPosInSystemCoords() const;
     void setXPosInSystemCoords(double x);
 
+    bool isInsideTuplet() const;
+
 private:
 
     friend class Factory;
