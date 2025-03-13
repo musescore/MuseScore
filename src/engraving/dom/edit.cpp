@@ -4598,9 +4598,9 @@ void Score::cmdTimeDelete()
     }
 
     if (!isMaster() && masterScore()) {
-        Measure* masterStartMeas = masterScore()->tick2measure(startSegment->tick());
-        Measure* masterEndMeas = masterScore()->tick2measure(endSegment->tick());
-        if (endSegment->isEndBarLineType()) {
+        Measure* masterStartMeas = masterScore()->tick2measure(selection().tickStart());
+        Measure* masterEndMeas = endSegment ? masterScore()->tick2measure(selection().tickEnd()) : nullptr;
+        if (endSegment && endSegment->isEndBarLineType()) {
             Measure* prevEndMeasure = masterEndMeas->prevMeasure();
             masterEndMeas = prevEndMeasure ? prevEndMeasure : masterEndMeas;
         }
