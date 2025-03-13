@@ -2860,8 +2860,6 @@ static std::vector<QString> symIdToArtics(const SymId sid)
             case SymId::articAccentAbove:
             case SymId::articAccentBelow:
                   return { "accent" };
-                  break;
-
             case SymId::articStaccatoAbove:
             case SymId::articStaccatoBelow:
             case SymId::tremoloDivisiDots2:
@@ -2869,91 +2867,57 @@ static std::vector<QString> symIdToArtics(const SymId sid)
             case SymId::tremoloDivisiDots4:
             case SymId::tremoloDivisiDots6:
                   return { "staccato" };
-                  break;
-
             case SymId::articStaccatissimoAbove:
             case SymId::articStaccatissimoBelow:
             case SymId::articStaccatissimoWedgeAbove:
             case SymId::articStaccatissimoWedgeBelow:
                   return { "staccatissimo" };
-                  break;
-
             case SymId::articTenutoAbove:
             case SymId::articTenutoBelow:
                   return { "tenuto" };
-                  break;
-
             case SymId::articMarcatoAbove:
             case SymId::articMarcatoBelow:
                   return { "strong-accent" };
-                  break;
-
             case SymId::articTenutoStaccatoAbove:
             case SymId::articTenutoStaccatoBelow:
                   return { "detached-legato" };
-                  break;
-
             case SymId::articSoftAccentAbove:
             case SymId::articSoftAccentBelow:
                   return { "soft-accent" };
-                  break;
-
             case SymId::articSoftAccentStaccatoAbove:
             case SymId::articSoftAccentStaccatoBelow:
                   return { "soft-accent", "staccato" };
-                  break;
-
             case SymId::articSoftAccentTenutoAbove:
             case SymId::articSoftAccentTenutoBelow:
                   return { "soft-accent", "tenuto" };
-                  break;
 
             case SymId::articSoftAccentTenutoStaccatoAbove:
             case SymId::articSoftAccentTenutoStaccatoBelow:
                   return { "soft-accent", "detached-legato" };
-                  break;
-
             case SymId::articStressAbove:
             case SymId::articStressBelow:
                   return { "stress" };
-                  break;
-
             case SymId::articUnstressAbove:
             case SymId::articUnstressBelow:
                   return { "unstress" };
-                  break;
-
             case SymId::articAccentStaccatoAbove:
             case SymId::articAccentStaccatoBelow:
                   return { "accent", "staccato" };
-                  break;
-
             case SymId::articMarcatoStaccatoAbove:
             case SymId::articMarcatoStaccatoBelow:
                   return { "strong-accent", "staccato" };
-                  break;
-
             case SymId::articMarcatoTenutoAbove:
             case SymId::articMarcatoTenutoBelow:
                   return { "strong-accent", "tenuto" };
-                  break;
-
             case SymId::articTenutoAccentAbove:
             case SymId::articTenutoAccentBelow:
                   return { "tenuto", "accent" };
-                  break;
-
             case SymId::articStaccatissimoStrokeAbove:
             case SymId::articStaccatissimoStrokeBelow:
                   return { "spiccato" };
-                  break;
-
             default:
-                  ;       // nothing
-                  break;
+                  return {}; // nothing
             }
-
-      return {};
       }
 
 //---------------------------------------------------------
@@ -2965,71 +2929,48 @@ static QString symIdToOrnam(const SymId sid)
       switch (sid) {
             case SymId::ornamentTrill:
                   return "trill-mark";
-                  break;
             case SymId::ornamentTurn:
                   return "turn";
-                  break;
             case SymId::ornamentTurnInverted:
                   return "inverted-turn";
-                  break;
             case SymId::ornamentTurnSlash:
                   return "turn slash=\"yes\"";
-                  break;
             case SymId::ornamentTurnUp:
                   return "vertical-turn";
-                  break;
             case SymId::ornamentTurnUpS:
                   return "inverted-vertical-turn";
-                  break;
             case SymId::ornamentMordent:
                   return "mordent";
-                  break;
             case SymId::ornamentShortTrill:
                   return "inverted-mordent";
-                  break;
             case SymId::ornamentTremblement:
                   return "inverted-mordent long=\"yes\"";
-                  break;
             case SymId::ornamentPrallMordent:
                   return "mordent long=\"yes\"";
-                  break;
             case SymId::ornamentUpPrall:
                   return "inverted-mordent long=\"yes\" approach=\"below\"";
-                  break;
             case SymId::ornamentPrecompMordentUpperPrefix:
                   return "inverted-mordent long=\"yes\" approach=\"above\"";
-                  break;
             case SymId::ornamentUpMordent:
                   return "mordent long=\"yes\" approach=\"below\"";
-                  break;
             case SymId::ornamentDownMordent:
                   return "mordent long=\"yes\" approach=\"above\"";
-                  break;
             case SymId::ornamentPrallDown:
                   return "inverted-mordent long=\"yes\" departure=\"below\"";
-                  break;
             case SymId::ornamentPrallUp:
                   return "inverted-mordent long=\"yes\" departure=\"above\"";
-                  break;
             case SymId::ornamentLinePrall:
-                  // MusicXML 3.0 does not distinguish between downprall and lineprall
+                  // MusicXML 3.0 did not distinguish between downprall and lineprall
                   return "inverted-mordent long=\"yes\" approach=\"above\"";
-                  break;
             case SymId::ornamentHaydn:
                   return "haydn";
-                  break;
             case SymId::ornamentPrecompSlide:
                   return "schleifer";
-                  break;
-
             default:
                   // use other-ornament
                   const char* name = Sym::id2name(sid);
                   return QString("other-ornament smufl=\"%1\"").arg(name);
-                  break;
             }
-
-      return QString();
       }
 
 //---------------------------------------------------------
@@ -3041,123 +2982,88 @@ static QString symIdToTechn(const SymId sid)
       switch (sid) {
             case SymId::stringsUpBow:
                   return "up-bow";
-                  break;
             case SymId::stringsDownBow:
                   return "down-bow";
-                  break;
             case SymId::stringsHarmonic:
                   return "harmonic";
-                  break;
             case SymId::stringsThumbPosition:
             case SymId::stringsThumbPositionTurned:
                   return "thumb-position";
-                  break;
             case SymId::doubleTongueAbove:
             case SymId::doubleTongueBelow:
                   return "double-tongue";
-                  break;
             case SymId::tripleTongueAbove:
             case SymId::tripleTongueBelow:
                   return "triple-tongue";
-                  break;
             case SymId::brassMuteClosed:
                   return "stopped";
-                  break;
             case SymId::pluckedSnapPizzicatoAbove:
             case SymId::pluckedSnapPizzicatoBelow:
                   return "snap-pizzicato";
-                  break;
             case SymId::guitarLeftHandTapping:
                   return "tap hand=\"left\"";
-                  break;
             case SymId::guitarRightHandTapping:
                   return "tap hand=\"right\"";
-                  break;
             case SymId::keyboardPedalHeel1:
             case SymId::keyboardPedalHeel2:
             case SymId::keyboardPedalHeel3:
                   return "heel";
-                  break;
             case SymId::keyboardPedalToe1:
             case SymId::keyboardPedalToe2:
                   return "toe";
-                  break;
             case SymId::pluckedWithFingernails:
                   return "fingernails";
-                  break;
             case SymId::brassBend:
                   return "brass-bend";
-                  break;
             case SymId::brassFlip:
                   return "brass-flip";
-                  break;
             case SymId::brassSmear:
                   return "smear";
-                  break;
             case SymId::brassMuteOpen:
                   //return "open-string";
                   return "open";
-                  break;
             case SymId::brassMuteHalfClosed:
                   return "half-muted";
-                  break;
             case SymId::brassHarmonMuteClosed:
             case SymId::brassHarmonMuteStemHalfLeft:
             case SymId::brassHarmonMuteStemHalfRight:
             case SymId::brassHarmonMuteStemOpen:
                   return "harmon-mute";
-                  break;
             case SymId::windClosedHole:
             case SymId::windHalfClosedHole1:
             case SymId::windHalfClosedHole2:
             case SymId::windHalfClosedHole3:
             case SymId::windOpenHole:
-                return "hole";
+                  return "hole";
             case SymId::guitarGolpe:
                   return "golpe";
-                  break;
             case SymId::handbellsBelltree:
                   return "belltree";
-                  break;
             case SymId::handbellsDamp3:
                   return "damp";
-                  break;
             case SymId::handbellsEcho1:
                   return "echo";
-                  break;
             case SymId::handbellsGyro:
                   return "gyro";
-                  break;
             case SymId::handbellsHandMartellato:
                   return "hand martellato";
-                  break;
             case SymId::handbellsMalletLft:
                   return "mallet lift";
-                  break;
             case SymId::handbellsMalletBellOnTable:
                   return "mallet table";
-                  break;
             case SymId::handbellsMartellato:
                   return "martellato";
-                  break;
             case SymId::handbellsMartellatoLift:
                   return "martellato lift";
-                  break;
             case SymId::handbellsMutedMartellato:
                   return "muted martellato";
-                  break;
             case SymId::handbellsPluckLift:
                   return "pluck lift";
-                  break;
             case SymId::handbellsSwing:
                   return "swing";
-                  break;
             default:
-                  ; // nothing
-                  break;
+                  return QString(); // nothing
             }
-
-      return QString();
       }
 
 //---------------------------------------------------------
