@@ -1971,6 +1971,16 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
         return false;
     }
 
+    if (segment->isInsideTuplet()) {
+        notifyAboutDropChanged();
+        endDrop();
+        //MScore::setError(MsError::DEST_TUPLET);
+        //MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        // NOTE: if we show the error popup here it seems that the mouse-release event is missed
+        // so the dragged region stays sticked to the mouse and move around. Don't know how to fix it. [M.S.]
+        return false;
+    }
+
     rdd.targetSegment = segment;
     rdd.targetStaffIdx = staffIdx;
 
