@@ -623,5 +623,12 @@ void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
 
     double xResult = refSegment->pagePos().x() + refSegment->width() * tickRatio.toDouble() + item->score()->noteHeadWidth();
 
-    item->p2().rx() = xResult;
+    Segment* nextSeg = refSegment->next1WithElemsOnStaff(endCR->vStaffIdx(), ~SegmentType::TimeTick);
+    double leftEdgeOfNextSeg = -nextSeg->staffShape(endCR->vStaffIdx()).left() + nextSeg->pagePos().x();
+
+    const double padding = 1.0 * item->spatium();
+    xResult = std::min(xResult, leftEdgeOfNextSeg - padding);
+
+    double curPos = item->p2().x();
+    item->p2().rx() = std::max(curPos, xResult);
 }
