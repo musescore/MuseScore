@@ -152,6 +152,7 @@ private:
     void openStaffProperties();
     void openEditStringsDialog();
     void openBreaksDialog();
+    void openPageBreaksDialog();
     void openTransposeDialog();
     void openPartsDialog();
     void openTupletOtherDialog();

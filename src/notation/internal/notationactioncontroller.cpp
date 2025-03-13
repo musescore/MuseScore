@@ -304,6 +304,7 @@ void NotationActionController::init()
     registerAction("staff-properties", &Controller::openStaffProperties);
     registerAction("edit-strings", &Controller::openEditStringsDialog);
     registerAction("measures-per-system", &Controller::openBreaksDialog);
+    registerAction("add-remove-page-breaks", &Controller::openPageBreaksDialog);
     registerAction("transpose", &Controller::openTransposeDialog);
     registerAction("parts", &Controller::openPartsDialog);
     registerAction("staff-text-properties", &Controller::openStaffTextPropertiesDialog);
@@ -1808,6 +1809,11 @@ void NotationActionController::openEditStringsDialog()
 void NotationActionController::openBreaksDialog()
 {
     interactive()->open("musescore://notation/breaks");
+}
+
+void NotationActionController::openPageBreaksDialog()
+{
+    interactive()->open("musescore://notation/pagebreaks");
 }
 
 void NotationActionController::openTransposeDialog()
