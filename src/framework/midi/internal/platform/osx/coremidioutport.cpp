@@ -287,7 +287,7 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    OSStatus result;
+    OSStatus result = noErr;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
     // Note: there could be three cases: MIDI2+MIDIEventList, MIDI1+MIDIEventList, MIDI1+MIDIPacketList.
