@@ -1971,6 +1971,16 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
         return false;
     }
 
+    if (segment->isInsideTuplet()) {
+        endDrop();
+        notifyAboutDropChanged();
+        //MScore::setError(MsError::DEST_TUPLET);
+        //MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        // NOTE: if we show the error popup here it seems that the mouse-release event is missed
+        // so the dragged region stays sticked to the mouse and move around. Don't know how to fix it. [M.S.]
+        return false;
+    }
+
     rdd.targetSegment = segment;
     rdd.targetStaffIdx = staffIdx;
 
@@ -2005,8 +2015,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
 
-    apply();
     endDrop();
+    apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
@@ -7289,7 +7299,8 @@ void NotationInteraction::addMelisma()
 
         score()->undoAddElement(melisma);
     } else if (prevPartialLyricsLine) {
-        const Fraction tickDiff = nextCR->tick() - prevPartialLyricsLine->tick2();
+        const Fraction segEndTick = segment->tick() + segment->ticks();
+        const Fraction tickDiff = segEndTick - prevPartialLyricsLine->tick2();
         prevPartialLyricsLine->undoMoveEnd(tickDiff);
         prevPartialLyricsLine->triggerLayout();
     }

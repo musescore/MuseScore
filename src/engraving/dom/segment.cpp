@@ -1095,6 +1095,25 @@ void Segment::setXPosInSystemCoords(double x)
     mutldata()->setPosX(x - measure()->x());
 }
 
+bool Segment::isInsideTuplet() const
+{
+    if (!isChordRestType()) {
+        return false;
+    }
+
+    for (EngravingItem* item : m_elist) {
+        if (!item) {
+            continue;
+        }
+        ChordRest* chordRest = toChordRest(item);
+        if (chordRest->tuplet() && chordRest->tick() != chordRest->topTuplet()->tick()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   swapElements
 //---------------------------------------------------------
