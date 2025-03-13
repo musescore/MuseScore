@@ -491,7 +491,7 @@ void Drumset::initDrumset()
     smDrumset->drum(41) = DrumInstrument(
         TConv::userName(DrumNum(41)),
         NoteHeadGroup::HEAD_NORMAL,
-        /*line*/ 5,
+        /*line*/ 6,
         DirectionV::UP,
         /*panelRow*/ 1,
         /*panelColumn*/ 6,
@@ -513,7 +513,7 @@ void Drumset::initDrumset()
     smDrumset->drum(43) = DrumInstrument(
         TConv::userName(DrumNum(43)),
         NoteHeadGroup::HEAD_NORMAL,
-        /*line*/ 6,
+        /*line*/ 5,
         DirectionV::UP,
         /*panelRow*/ 2,
         /*panelColumn*/ 0,
