@@ -8380,7 +8380,7 @@
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Avoid barlines' setting</string>
+                  <string>Reset 'Avoid barlines' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -12661,7 +12661,7 @@ first note of the system</string>
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Snap to dynamics' setting</string>
+              <string>Reset 'Snap to dynamics' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
