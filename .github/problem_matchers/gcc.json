@@ -1,7 +1,9 @@
 {
   "problemMatcher": [
     {
+      "name": "gcc",
       "owner": "gcc",
+      "source": "gcc",
       "fileLocation": [
         "relative"
       ],
