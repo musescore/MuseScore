@@ -3110,96 +3110,59 @@ static std::vector<String> symIdToArtic(const SymId sid)
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
         return { u"accent" };
-        break;
-
     case SymId::articStaccatoAbove:
     case SymId::articStaccatoBelow:
         return { u"staccato" };
-        break;
-
     case SymId::articStaccatissimoAbove:
     case SymId::articStaccatissimoBelow:
     case SymId::articStaccatissimoWedgeAbove:
     case SymId::articStaccatissimoWedgeBelow:
         return { u"staccatissimo" };
-        break;
-
     case SymId::articTenutoAbove:
     case SymId::articTenutoBelow:
         return { u"tenuto" };
-        break;
-
     case SymId::articMarcatoAbove:
     case SymId::articMarcatoBelow:
         return { u"strong-accent" };
-        break;
-
     case SymId::articTenutoStaccatoAbove:
     case SymId::articTenutoStaccatoBelow:
         return { u"detached-legato" };
-        break;
-
     case SymId::articSoftAccentAbove:
     case SymId::articSoftAccentBelow:
         return { u"soft-accent" };
-        break;
-
     case SymId::articSoftAccentStaccatoAbove:
     case SymId::articSoftAccentStaccatoBelow:
         return { u"soft-accent", u"staccato" };
-        break;
-
     case SymId::articSoftAccentTenutoAbove:
     case SymId::articSoftAccentTenutoBelow:
         return { u"soft-accent", u"tenuto" };
-        break;
-
     case SymId::articSoftAccentTenutoStaccatoAbove:
     case SymId::articSoftAccentTenutoStaccatoBelow:
         return { u"soft-accent", u"detached-legato" };
-        break;
-
     case SymId::articStressAbove:
     case SymId::articStressBelow:
         return { u"stress" };
-        break;
-
     case SymId::articUnstressAbove:
     case SymId::articUnstressBelow:
         return { u"unstress" };
-        break;
-
     case SymId::articAccentStaccatoAbove:
     case SymId::articAccentStaccatoBelow:
         return { u"accent", u"staccato" };
-        break;
-
     case SymId::articMarcatoStaccatoAbove:
     case SymId::articMarcatoStaccatoBelow:
         return { u"strong-accent", u"staccato" };
-        break;
-
     case SymId::articMarcatoTenutoAbove:
     case SymId::articMarcatoTenutoBelow:
         return { u"strong-accent", u"tenuto" };
-        break;
-
     case SymId::articTenutoAccentAbove:
     case SymId::articTenutoAccentBelow:
         return { u"tenuto", u"accent" };
-        break;
-
     case SymId::articStaccatissimoStrokeAbove:
     case SymId::articStaccatissimoStrokeBelow:
         return { u"spiccato" };
-        break;
-
     default:
-        ;                 // nothing
-        break;
+        return {}; // nothing
     }
-
-    return {};
 }
 
 //---------------------------------------------------------
@@ -3211,71 +3174,48 @@ static String symIdToOrnam(const SymId sid)
     switch (sid) {
     case SymId::ornamentTrill:
         return u"trill-mark";
-        break;
     case SymId::ornamentTurn:
         return u"turn";
-        break;
     case SymId::ornamentTurnInverted:
         return u"inverted-turn";
-        break;
     case SymId::ornamentTurnSlash:
         return u"turn slash=\"yes\"";
-        break;
     case SymId::ornamentTurnUp:
         return u"vertical-turn";
-        break;
     case SymId::ornamentTurnUpS:
         return u"inverted-vertical-turn";
-        break;
     case SymId::ornamentMordent:
         return u"mordent";
-        break;
     case SymId::ornamentShortTrill:
         return u"inverted-mordent";
-        break;
     case SymId::ornamentTremblement:
         return u"inverted-mordent long=\"yes\"";
-        break;
     case SymId::ornamentPrallMordent:
         return u"mordent long=\"yes\"";
-        break;
     case SymId::ornamentUpPrall:
         return u"inverted-mordent long=\"yes\" approach=\"below\"";
-        break;
     case SymId::ornamentPrecompMordentUpperPrefix:
         return u"inverted-mordent long=\"yes\" approach=\"above\"";
-        break;
     case SymId::ornamentUpMordent:
         return u"mordent long=\"yes\" approach=\"below\"";
-        break;
     case SymId::ornamentDownMordent:
         return u"mordent long=\"yes\" approach=\"above\"";
-        break;
     case SymId::ornamentPrallDown:
         return u"inverted-mordent long=\"yes\" departure=\"below\"";
-        break;
     case SymId::ornamentPrallUp:
         return u"inverted-mordent long=\"yes\" departure=\"above\"";
-        break;
     case SymId::ornamentLinePrall:
-        // MusicXML 3.0 does not distinguish between downprall and lineprall
+        // MusicXML 3.0 did not distinguish between downprall and lineprall
         return u"inverted-mordent long=\"yes\" approach=\"above\"";
-        break;
     case SymId::ornamentHaydn:
         return u"haydn";
-        break;
     case SymId::ornamentPrecompSlide:
         return u"schleifer";
-        break;
-
     default:
         // use other-ornament
         const AsciiStringView name = SymNames::nameForSymId(sid);
         return String(u"other-ornament smufl=\"%1\"").arg(String::fromAscii(name.ascii()));
-        break;
     }
-
-    return String();
 }
 
 //---------------------------------------------------------
@@ -3287,72 +3227,53 @@ static String symIdToTechn(const SymId sid)
     switch (sid) {
     case SymId::stringsUpBow:
         return u"up-bow";
-        break;
     case SymId::stringsDownBow:
         return u"down-bow";
-        break;
     case SymId::stringsHarmonic:
         return u"harmonic";
-        break;
     case SymId::stringsThumbPosition:
     case SymId::stringsThumbPositionTurned:
         return u"thumb-position";
-        break;
     case SymId::doubleTongueAbove:
     case SymId::doubleTongueBelow:
         return u"double-tongue";
-        break;
     case SymId::tripleTongueAbove:
     case SymId::tripleTongueBelow:
         return u"triple-tongue";
-        break;
     case SymId::brassMuteClosed:
         return u"stopped";
-        break;
     case SymId::pluckedSnapPizzicatoAbove:
     case SymId::pluckedSnapPizzicatoBelow:
         return u"snap-pizzicato";
-        break;
     case SymId::guitarLeftHandTapping:
         return u"tap hand=\"left\"";
-        break;
     case SymId::guitarRightHandTapping:
         return u"tap hand=\"right\"";
-        break;
     case SymId::keyboardPedalHeel1:
     case SymId::keyboardPedalHeel2:
     case SymId::keyboardPedalHeel3:
         return u"heel";
-        break;
     case SymId::keyboardPedalToe1:
     case SymId::keyboardPedalToe2:
         return u"toe";
-        break;
     case SymId::pluckedWithFingernails:
         return u"fingernails";
-        break;
     case SymId::brassBend:
         return u"brass-bend";
-        break;
     case SymId::brassFlip:
         return u"brass-flip";
-        break;
     case SymId::brassSmear:
         return u"smear";
-        break;
     case SymId::brassMuteOpen:
         // return u"open-string";
         return u"open";
-        break;
     case SymId::brassMuteHalfClosed:
         return u"half-muted";
-        break;
     case SymId::brassHarmonMuteClosed:
     case SymId::brassHarmonMuteStemHalfLeft:
     case SymId::brassHarmonMuteStemHalfRight:
     case SymId::brassHarmonMuteStemOpen:
         return u"harmon-mute";
-        break;
     case SymId::windClosedHole:
     case SymId::windHalfClosedHole1:
     case SymId::windHalfClosedHole2:
@@ -3361,49 +3282,33 @@ static String symIdToTechn(const SymId sid)
         return u"hole";
     case SymId::guitarGolpe:
         return u"golpe";
-        break;
     case SymId::handbellsBelltree:
         return u"belltree";
-        break;
     case SymId::handbellsDamp3:
         return u"damp";
-        break;
     case SymId::handbellsEcho1:
         return u"echo";
-        break;
     case SymId::handbellsGyro:
         return u"gyro";
-        break;
     case SymId::handbellsHandMartellato:
         return u"hand martellato";
-        break;
     case SymId::handbellsMalletLft:
         return u"mallet lift";
-        break;
     case SymId::handbellsMalletBellOnTable:
         return u"mallet table";
-        break;
     case SymId::handbellsMartellato:
         return u"martellato";
-        break;
     case SymId::handbellsMartellatoLift:
         return u"martellato lift";
-        break;
     case SymId::handbellsMutedMartellato:
         return u"muted martellato";
-        break;
     case SymId::handbellsPluckLift:
         return u"pluck lift";
-        break;
     case SymId::handbellsSwing:
         return u"swing";
-        break;
     default:
-        ;           // nothing
-        break;
+        return String(); // nothing
     }
-
-    return String();
 }
 
 //---------------------------------------------------------
