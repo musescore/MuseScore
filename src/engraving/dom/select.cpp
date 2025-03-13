@@ -120,66 +120,59 @@ void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
 
 bool SelectionFilter::canSelect(const EngravingItem* e) const
 {
-    if (e->isDynamic()) {
+    switch (e->type()) {
+    case ElementType::DYNAMIC:
         return isFiltered(SelectionFilterType::DYNAMIC);
-    }
-    if (e->isHairpin()) {
+    case ElementType::HAIRPIN:
         return isFiltered(SelectionFilterType::HAIRPIN);
-    }
-    if ((e->isArticulationFamily() && !toArticulation(e)->isOrnament()) || e->isVibrato() || e->isFermata()) {
+    case ElementType::ARTICULATION:
+    case ElementType::VIBRATO:
+    case ElementType::FERMATA:
         return isFiltered(SelectionFilterType::ARTICULATION);
-    }
-    if ((e->isArticulationFamily() && toArticulation(e)->isOrnament()) || e->isTrill()) {
+    case ElementType::ORNAMENT:
+    case ElementType::TRILL:
         return isFiltered(SelectionFilterType::ORNAMENT);
-    }
-    if (e->type() == ElementType::LYRICS) {
+    case ElementType::LYRICS:
         return isFiltered(SelectionFilterType::LYRICS);
-    }
-    if (e->type() == ElementType::FINGERING) {
+    case ElementType::FINGERING:
         return isFiltered(SelectionFilterType::FINGERING);
-    }
-    if (e->type() == ElementType::HARMONY) {
+    case ElementType::HARMONY:
         return isFiltered(SelectionFilterType::CHORD_SYMBOL);
-    }
-    if (e->type() == ElementType::SLUR) {
+    case ElementType::SLUR:
         return isFiltered(SelectionFilterType::SLUR);
-    }
-    if (e->type() == ElementType::FIGURED_BASS) {
+    case ElementType::FIGURED_BASS:
         return isFiltered(SelectionFilterType::FIGURED_BASS);
-    }
-    if (e->type() == ElementType::OTTAVA) {
+    case ElementType::OTTAVA:
         return isFiltered(SelectionFilterType::OTTAVA);
-    }
-    if (e->type() == ElementType::PEDAL) {
+    case ElementType::PEDAL:
         return isFiltered(SelectionFilterType::PEDAL_LINE);
-    }
-    if (e->type() == ElementType::ARPEGGIO) {
+    case ElementType::ARPEGGIO:
         return isFiltered(SelectionFilterType::ARPEGGIO);
-    }
-    if (e->type() == ElementType::GLISSANDO) {
+    case ElementType::GLISSANDO:
         return isFiltered(SelectionFilterType::GLISSANDO);
-    }
-    if (e->type() == ElementType::FRET_DIAGRAM) {
+    case ElementType::FRET_DIAGRAM:
         return isFiltered(SelectionFilterType::FRET_DIAGRAM);
-    }
-    if (e->type() == ElementType::BREATH) {
+    case ElementType::BREATH:
         return isFiltered(SelectionFilterType::BREATH);
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
+        return isFiltered(SelectionFilterType::TREMOLO);
+    default: break;
     }
+
+    // Special cases...
     if (e->isTextBase()) { // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
         return isFiltered(SelectionFilterType::OTHER_TEXT);
     }
+
     if (e->isSLine()) { // NoteLine, Volta
         return isFiltered(SelectionFilterType::OTHER_LINE);
     }
-    if (e->type() == ElementType::TREMOLO_TWOCHORD) {
-        return isFiltered(SelectionFilterType::TREMOLO);
-    }
-    if (e->type() == ElementType::TREMOLO_SINGLECHORD) {
-        return isFiltered(SelectionFilterType::TREMOLO);
-    }
+
     if (e->isChord() && toChord(e)->isGrace()) {
         return isFiltered(SelectionFilterType::GRACE_NOTE);
     }
+
     return true;
 }
 
