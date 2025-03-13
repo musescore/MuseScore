@@ -6590,6 +6590,8 @@ static void addTremolo(ChordRest* cr,
         TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(mu::engraving::toChord(cr));
         tremolo->setTremoloType(TremoloType::BUZZ_ROLL);
         cr->add(tremolo);
+    } else if (!tremoloSmufl.empty() && tremoloSmufl != u"buzzRoll") {
+        logger->logError(String(u"MusicXml::import: only buzzRoll glyph is supported for unmeasured tremolos"), xmlreader);
     }
 }
 
