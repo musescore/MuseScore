@@ -124,31 +124,42 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     case ElementType::DYNAMIC:
         return isFiltered(SelectionFilterType::DYNAMIC);
     case ElementType::HAIRPIN:
+    case ElementType::HAIRPIN_SEGMENT:
         return isFiltered(SelectionFilterType::HAIRPIN);
     case ElementType::ARTICULATION:
     case ElementType::VIBRATO:
+    case ElementType::VIBRATO_SEGMENT:
     case ElementType::FERMATA:
         return isFiltered(SelectionFilterType::ARTICULATION);
     case ElementType::ORNAMENT:
     case ElementType::TRILL:
+    case ElementType::TRILL_SEGMENT:
         return isFiltered(SelectionFilterType::ORNAMENT);
     case ElementType::LYRICS:
+    case ElementType::LYRICSLINE:
+    case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
         return isFiltered(SelectionFilterType::LYRICS);
     case ElementType::FINGERING:
         return isFiltered(SelectionFilterType::FINGERING);
     case ElementType::HARMONY:
         return isFiltered(SelectionFilterType::CHORD_SYMBOL);
     case ElementType::SLUR:
+    case ElementType::SLUR_SEGMENT:
         return isFiltered(SelectionFilterType::SLUR);
     case ElementType::FIGURED_BASS:
         return isFiltered(SelectionFilterType::FIGURED_BASS);
     case ElementType::OTTAVA:
+    case ElementType::OTTAVA_SEGMENT:
         return isFiltered(SelectionFilterType::OTTAVA);
     case ElementType::PEDAL:
+    case ElementType::PEDAL_SEGMENT:
         return isFiltered(SelectionFilterType::PEDAL_LINE);
     case ElementType::ARPEGGIO:
         return isFiltered(SelectionFilterType::ARPEGGIO);
     case ElementType::GLISSANDO:
+    case ElementType::GLISSANDO_SEGMENT:
         return isFiltered(SelectionFilterType::GLISSANDO);
     case ElementType::FRET_DIAGRAM:
         return isFiltered(SelectionFilterType::FRET_DIAGRAM);
