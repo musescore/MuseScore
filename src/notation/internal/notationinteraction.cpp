@@ -1972,8 +1972,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     }
 
     if (segment->isInsideTuplet()) {
-        notifyAboutDropChanged();
         endDrop();
+        notifyAboutDropChanged();
         //MScore::setError(MsError::DEST_TUPLET);
         //MScoreErrorsController(iocContext()).checkAndShowMScoreError();
         // NOTE: if we show the error popup here it seems that the mouse-release event is missed
@@ -2015,8 +2015,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
 
-    apply();
     endDrop();
+    apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
