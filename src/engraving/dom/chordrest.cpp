@@ -207,7 +207,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         return 0;
 
     case ElementType::CLEF:
-        score()->cmdInsertClef(toClef(e), this);
+        score()->cmdInsertClef(toClef(e), this, data.modifiers & ControlModifier);
         break;
 
     case ElementType::TIMESIG:
