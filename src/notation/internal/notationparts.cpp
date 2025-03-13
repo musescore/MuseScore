@@ -824,8 +824,14 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
             item->triggerLayout();
             continue;
         }
+
         if (item->staff() == srcStaff) {
-            item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
+            const track_idx_t trackIdx = staff2track(dstStaffIdx, item->voice());
+
+            item->undoChangeProperty(Pid::TRACK, trackIdx);
+            if (item->isSpanner()) {
+                item->undoChangeProperty(Pid::SPANNER_TRACK2, trackIdx);
+            }
         } else {
             item->undoUnlink();
             score()->undoRemoveElement(item, false /*removeLinked*/);
