@@ -40,7 +40,7 @@ void SelectionFilterModel::load()
     beginResetModel();
 
     m_types.clear();
-    m_types << SelectionFilterType::ALL;
+    m_types << SelectionFilterType::ALL_NOTATION_ELEMENTS;
 
     for (size_t i = 0; i < mu::engraving::NUMBER_OF_SELECTION_FILTER_TYPES; i++) {
         m_types << static_cast<SelectionFilterType>(1 << i);
@@ -81,8 +81,12 @@ QVariant SelectionFilterModel::data(const QModelIndex& index, int role) const
         return isFiltered(type);
 
     case IsIndeterminateRole:
-        if (type == SelectionFilterType::ALL) {
-            return !isFiltered(SelectionFilterType::ALL) && !isFiltered(SelectionFilterType::NONE);
+        if (type == SelectionFilterType::ALL_NOTATION_ELEMENTS) {
+            const unsigned int masked = filteredTypes() & static_cast<int>(SelectionFilterType::ALL_NOTATION_ELEMENTS);
+            const bool hasNonZeroNotationElements = masked != static_cast<int>(SelectionFilterType::NONE);
+
+            // Indeterminate if some notation elements types are selected, but not all...
+            return hasNonZeroNotationElements && !isFiltered(SelectionFilterType::ALL_NOTATION_ELEMENTS);
         }
 
         return false;
@@ -110,7 +114,7 @@ bool SelectionFilterModel::setData(const QModelIndex& index, const QVariant& dat
     const bool filtered = data.toBool();
 
     setFiltered(type, filtered);
-    if (type == SelectionFilterType::ALL) {
+    if (type == SelectionFilterType::ALL_NOTATION_ELEMENTS) {
         emit dataChanged(this->index(0), this->index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });
     } else {
         emit dataChanged(this->index(0), this->index(0), { IsSelectedRole, IsIndeterminateRole });
@@ -157,6 +161,11 @@ INotationInteractionPtr SelectionFilterModel::currentNotationInteraction() const
     return currentNotation() ? currentNotation()->interaction() : nullptr;
 }
 
+unsigned int SelectionFilterModel::filteredTypes() const
+{
+    return currentNotationInteraction() ? currentNotationInteraction()->currentSelectionFilter() : 0;
+}
+
 bool SelectionFilterModel::isFiltered(SelectionFilterType type) const
 {
     return currentNotationInteraction() ? currentNotationInteraction()->isSelectionTypeFiltered(type) : false;
@@ -172,7 +181,7 @@ void SelectionFilterModel::setFiltered(SelectionFilterType type, bool filtered)
 QString SelectionFilterModel::titleForType(SelectionFilterType type) const
 {
     switch (type) {
-    case SelectionFilterType::ALL:
+    case SelectionFilterType::ALL_NOTATION_ELEMENTS:
         return muse::qtrc("notation", "All");
     case SelectionFilterType::FIRST_VOICE:
         return muse::qtrc("notation", "Voice %1").arg(1);
@@ -220,8 +229,7 @@ QString SelectionFilterModel::titleForType(SelectionFilterType type) const
         return muse::qtrc("notation", "Tremolos");
     case SelectionFilterType::GRACE_NOTE:
         return muse::qtrc("notation", "Grace notes");
-    case SelectionFilterType::NONE:
-        break;
+    default: break;
     }
 
     return {};

@@ -57,6 +57,7 @@ public:
     MOCK_METHOD(muse::async::Notification, selectionChanged, (), (const, override));
     MOCK_METHOD(void, selectTopOrBottomOfChord, (MoveDirection), (override));
 
+    MOCK_METHOD(unsigned int, currentSelectionFilter, (), (const, override));
     MOCK_METHOD(bool, isSelectionTypeFiltered, (SelectionFilterType), (const, override));
     MOCK_METHOD(void, setSelectionTypeFiltered, (SelectionFilterType, bool), (override));
 

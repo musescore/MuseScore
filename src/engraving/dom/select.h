@@ -92,11 +92,13 @@ enum class SelState : char {
 static constexpr size_t NUMBER_OF_SELECTION_FILTER_TYPES = 23;
 
 enum class SelectionFilterType : unsigned int {
-    NONE                    = 0,
+    // Voices...
     FIRST_VOICE             = 1 << 0,
     SECOND_VOICE            = 1 << 1,
     THIRD_VOICE             = 1 << 2,
     FOURTH_VOICE            = 1 << 3,
+
+    // Notation elements...
     DYNAMIC                 = 1 << 4,
     HAIRPIN                 = 1 << 5,
     FINGERING               = 1 << 6,
@@ -116,7 +118,12 @@ enum class SelectionFilterType : unsigned int {
     BREATH                  = 1 << 20,
     TREMOLO                 = 1 << 21,
     GRACE_NOTE              = 1 << 22,
-    ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES)
+
+    // Masks...
+    NONE                    = 0,
+    ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES),
+    ALL_VOICES              = FIRST_VOICE | SECOND_VOICE | THIRD_VOICE | FOURTH_VOICE,
+    ALL_NOTATION_ELEMENTS   = ALL & ~ALL_VOICES
 };
 
 //---------------------------------------------------------

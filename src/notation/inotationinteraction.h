@@ -84,6 +84,7 @@ public:
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
     // SelectionFilter
+    virtual unsigned int currentSelectionFilter() const = 0;
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
     virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
 

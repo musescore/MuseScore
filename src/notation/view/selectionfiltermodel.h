@@ -79,6 +79,7 @@ private:
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
 
+    unsigned int filteredTypes() const;
     bool isFiltered(SelectionFilterType type) const;
     void setFiltered(SelectionFilterType type, bool filtered);
 

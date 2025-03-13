@@ -97,11 +97,20 @@ int SelectionFilter::filteredTypes() const
 
 bool SelectionFilter::isFiltered(SelectionFilterType type) const
 {
-    if (type == SelectionFilterType::NONE || type == SelectionFilterType::ALL) {
-        return m_filteredTypes == static_cast<unsigned int>(type);
+    switch (type) {
+    case SelectionFilterType::NONE:
+    case SelectionFilterType::ALL:
+    case SelectionFilterType::ALL_VOICES:
+    case SelectionFilterType::ALL_NOTATION_ELEMENTS: {
+        const unsigned int masked = m_filteredTypes & static_cast<unsigned int>(type);
+        return masked == static_cast<unsigned int>(type);
+    }
+    default:
+        return m_filteredTypes & static_cast<unsigned int>(type);
     }
 
-    return m_filteredTypes & static_cast<unsigned int>(type);
+    UNREACHABLE;
+    return false;
 }
 
 void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
