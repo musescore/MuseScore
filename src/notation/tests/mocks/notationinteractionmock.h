@@ -182,6 +182,7 @@ public:
     MOCK_METHOD(void, applySystemLock, (), (override));
 
     MOCK_METHOD(void, addRemoveSystemLocks, (AddRemoveSystemLockType, int), (override));
+    MOCK_METHOD(void, addRemovePageBreaks, (AddRemovePageBreaksType, int), (override));
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));
     MOCK_METHOD(void, swapVoices, (voice_idx_t, voice_idx_t), (override));
     MOCK_METHOD(void, addIntervalToSelectedNotes, (int), (override));

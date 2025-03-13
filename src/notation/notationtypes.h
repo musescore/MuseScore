@@ -197,6 +197,13 @@ enum class AddRemoveSystemLockType : signed char
     MeasuresInterval
 };
 
+enum class AddRemovePageBreaksType : signed char
+{
+    AfterEachPage = -1,
+    None = 0,
+    SystemsInterval
+};
+
 enum class BoxType : unsigned char
 {
     Unknown,

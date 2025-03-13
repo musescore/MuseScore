@@ -224,6 +224,7 @@ public:
     void applySystemLock() override;
 
     void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) override;
+    void addRemovePageBreaks(AddRemovePageBreaksType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
     void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;

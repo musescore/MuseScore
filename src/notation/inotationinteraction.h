@@ -219,6 +219,7 @@ public:
     virtual void applySystemLock() = 0;
 
     virtual void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) = 0;
+    virtual void addRemovePageBreaks(AddRemovePageBreaksType intervalType, int interval = 0) = 0;
     virtual bool transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;

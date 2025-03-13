@@ -4407,6 +4407,78 @@ void Score::addRemoveSystemLocks(int interval, bool lock)
     }
 }
 
+void Score::addRemovePageBreaks(int interval, bool afterEachPage)
+{
+    Segment* startSegment = selection().startSegment();
+    if (!startSegment) { // empty score?
+        return;
+    }
+    Segment* endSegment = selection().endSegment();
+    Measure* startMeasure = startSegment->measure();
+    Measure* endMeasure = endSegment ? endSegment->measure() : lastMeasureMM();
+    Measure* lastMeasure = lastMeasureMM();
+
+    // loop through measures in selection
+    // First system
+    int sCount = 1;
+    for (Measure* mm = startMeasure; mm; mm = mm->nextMeasureMM()) {
+        // even though we are counting mmrests as a single measure,
+        // we need to find last real measure within mmrest for the actual break
+        Measure* m = mm->isMMRest() ? mm->mmRestLast() : mm;
+
+        if (afterEachPage) {
+            // skip last measure of score
+            if (mm == lastMeasure) {
+                break;
+            }
+            // skip if it already has a page break
+            if (m->pageBreak()) {
+                continue;
+            }
+            // add break if last measure of the last system of the page
+            if (mm->system() && mm->system()->lastMeasure() == mm && mm->nextMeasureMM() && mm->nextMeasureMM()->system()
+                && mm->system()->page() != mm->nextMeasureMM()->system()->page()) {
+                m->undoSetPageBreak(true);
+            }
+        } else {
+            if (interval == 0) {
+                // remove page break if present
+                if (m->pageBreak()) {
+                    m->undoSetPageBreak(false);
+                }
+            } else {
+                if (sCount == interval) {
+                    // skip last measure of score and measures that aren't the last of the System
+                    if (mm == lastMeasure) {
+                        break;
+                    }
+
+                    // found place for break
+                    if (mm->system()->lastMeasure() == mm) {
+                        // add if not already one present
+                        if (!m->pageBreak()) {
+                            m->undoSetPageBreak(true);
+                        }
+                        // reset count
+                        sCount = 1;
+                    }
+                } else if (m->pageBreak()) {
+                    // remove page break if present in wrong place
+                    m->undoSetPageBreak(false);
+                }
+                // count if the last Measure of the system
+                if (!m->pageBreak() && mm->system() && mm->system()->lastMeasure() == mm) {
+                    ++sCount;
+                }
+            }
+        }
+
+        if (mm == endMeasure) {
+            break;
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   cmdRemoveEmptyTrailingMeasures
 //---------------------------------------------------------
