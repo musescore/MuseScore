@@ -183,6 +183,7 @@ void NotationMidiInput::addNoteEventsToInputState()
 
     if (!notes.empty()) {
         INotationNoteInputPtr noteInput = m_notationInteraction->noteInput();
+        noteInput->setRestMode(false);
         noteInput->setInputNotes(notes);
 
         if (configuration()->isPlayPreviewNotesInInputByDuration()) {
