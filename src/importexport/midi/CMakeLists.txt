@@ -52,3 +52,4 @@ if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)
 endif()
 
+#target_no_warning(${MODULE} -Wno-float-equal) # to avoid a single such warning from thirdparty/beatroot, but also hide 2 legitimate others

@@ -59,6 +59,7 @@ add_subdirectory(${local_path}/harfbuzz harfbuzz)
 target_no_warning(harfbuzz -Wno-conversion)
 target_no_warning(harfbuzz -Wno-unused-parameter)
 target_no_warning(harfbuzz -Wno-unused-variable)
+target_no_warning(harfbuzz -Wno-float-equal)
 target_no_warning(harfbuzz -WMSVC-no-hides-previous)
 target_no_warning(harfbuzz -WMSVC-no-unreachable)
 

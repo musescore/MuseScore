@@ -41,7 +41,7 @@ public:
     void setBaseDelay(float samples, float maxModulationOffset)
     {
         int allocSize = int(samples + maxModulationOffset + 16.f); // some extra space for interpolation
-        if (samples != m_baseDelay || allocSize > m_buffer.getAllocatedSize()) {
+        if (!RealIsEqual(samples, m_baseDelay) || allocSize > m_buffer.getAllocatedSize()) {
             allocateForMaxDelaySamples(allocSize);
             m_baseDelay = samples;
             setModOffset(0.f);
