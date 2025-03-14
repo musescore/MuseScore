@@ -283,6 +283,14 @@ void Tie::addTiesToJumpPoints()
         }
         jumpPoints->undoAddTieToScore(jumpPoint);
     }
+
+    // Update jump points for linked ties
+    for (EngravingObject* linkedTie : linkList()) {
+        if (!linkedTie || !linkedTie->isTie() || linkedTie == this) {
+            continue;
+        }
+        toTie(linkedTie)->updatePossibleJumpPoints();
+    }
 }
 
 void Tie::undoRemoveTiesFromJumpPoints()
