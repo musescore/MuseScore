@@ -426,12 +426,14 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         mu::engraving::Fraction ts(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
-        double bpm = scoreOptions.tempo.valueBpm;
+        const double bpm = scoreOptions.tempo.valueBpm;
+        double tempo = bpm; // initial value for tempo, which internally is always expressed in quarter notes
 
         bool withDot = scoreOptions.tempo.withDot;
         switch (scoreOptions.tempo.duration) {
         case DurationType::V_WHOLE:
             text = "<sym>metNoteWhole</sym> = %1";
+            tempo *= 4.0;
             break;
         case DurationType::V_HALF:
             if (withDot) {
@@ -439,6 +441,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             } else {
                 text = "<sym>metNoteHalfUp</sym> = %1";
             }
+            tempo *= 2.0;
             break;
         case DurationType::V_QUARTER:
             if (withDot) {
@@ -453,6 +456,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             } else {
                 text = "<sym>metNote8thUp</sym> = %1";
             }
+            tempo *= 0.5;
             break;
         case DurationType::V_16TH:
             if (withDot) {
@@ -460,17 +464,21 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             } else {
                 text = "<sym>metNote16thUp</sym> = %1";
             }
+            tempo *= 0.25;
             break;
         default:
             break;
+        }
+
+        if (withDot) {
+            tempo *= 1.5;
         }
 
         mu::engraving::Segment* seg = score->firstMeasure()->first(mu::engraving::SegmentType::ChordRest);
         mu::engraving::TempoText* tt = new mu::engraving::TempoText(seg);
         tt->setXmlText(text.arg(bpm));
 
-        double tempo = scoreOptions.tempo.valueBpm;
-        tempo /= 60; // bpm -> bps
+        tempo /= 60; // qpm -> qps
 
         tt->setTempo(tempo);
         tt->setFollowText(true);
