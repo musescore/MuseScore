@@ -726,12 +726,13 @@ int ZipContainer::count() const
 bool ZipContainer::fileExists(const std::string& fileName) const
 {
     p->scanFiles();
-    ByteArray fileNameBa = ByteArray::fromRawData(fileName.c_str(), fileName.size());
-    for (size_t i = 0; i < p->fileHeaders.size(); ++i) {
-        if (p->fileHeaders.at(i).file_name == fileNameBa) {
+
+    for (const ZipContainer::FileInfo& info : fileInfoList()) {
+        if (info.filePath == fileName) {
             return true;
         }
     }
+
     return false;
 }
 
@@ -741,11 +742,12 @@ ByteArray ZipContainer::fileData(const std::string& fileName) const
 
     ByteArray fileNameBa = ByteArray::fromRawData(fileName.c_str(), fileName.size());
 
-    size_t i;
-    for (i = 0; i < p->fileHeaders.size(); ++i) {
-        if (p->fileHeaders.at(i).file_name == fileNameBa) {
+    size_t i = 0;
+    for (const ZipContainer::FileInfo& info : fileInfoList()) {
+        if (info.filePath == fileName) {
             break;
         }
+        ++i;
     }
 
     if (i == p->fileHeaders.size()) {
