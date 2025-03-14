@@ -344,6 +344,11 @@ int ThemeApi::flickableMaxVelocity() const
     return configuration()->flickableMaxVelocity();
 }
 
+int ThemeApi::flickableDeceleration() const
+{
+    return configuration()->flickableDeceleration();
+}
+
 int ThemeApi::tooltipDelay() const
 {
     return configuration()->tooltipDelay();

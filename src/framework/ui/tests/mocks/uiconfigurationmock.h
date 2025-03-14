@@ -101,6 +101,7 @@ public:
     MOCK_METHOD(async::Notification, toolConfigChanged, (const QString&), (const, override));
 
     MOCK_METHOD(int, flickableMaxVelocity, (), (const, override));
+    MOCK_METHOD(int, flickableDeceleration, (), (const, override));
 
     MOCK_METHOD(int, tooltipDelay, (), (const, override));
 };

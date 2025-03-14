@@ -26,6 +26,7 @@ Flickable {
     clip: true
     boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: ui.theme.flickableMaxVelocity
+    flickDeceleration: ui.theme.flickableDeceleration
 
     ScrollBar.vertical: StyledScrollBar {}
     ScrollBar.horizontal: StyledScrollBar {}
