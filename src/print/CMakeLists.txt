@@ -29,5 +29,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/printprovider.h
     )
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::PrintSupport)
+endif()
+
 setup_module()
 

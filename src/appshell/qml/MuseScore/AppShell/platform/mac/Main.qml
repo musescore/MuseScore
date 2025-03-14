@@ -19,18 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Controls
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import MuseScore.AppShell
 
-import MuseScore.AppShell 1.0
+import "../"
+import "../../"
 
-StyledToolBarView {
-    navigationPanel.name: "PublishToolBar"
-    navigationPanel.accessible.name: qsTrc("publish", "Publish toolbar")
+AppWindow {
+    id: root
 
-    spacing: 8
+    PlatformMenuBar {
+        id: menuBar
+    }
 
-    model: PublishToolBarModel { }
+    Component.onCompleted: {
+        menuBar.load();
+        window.init()
+    }
+
+    WindowContent {
+        id: window
+
+        anchors.fill: parent
+    }
 }
