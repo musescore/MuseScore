@@ -357,27 +357,6 @@ void Dynamic::manageBarlineCollisions()
 
     const double minBarLineDistance = 0.25 * spatium();
 
-    // Check barlines to the left
-    Segment* leftBarLineSegment = nullptr;
-    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->prev1enabled()) {
-        if (segment->segmentType() & SegmentType::BarLineType) {
-            leftBarLineSegment = segment;
-            break;
-        }
-    }
-    if (leftBarLineSegment) {
-        EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
-        if (e) {
-            double leftMargin = ldata()->bbox().translated(pagePos() - offset()).left()
-                                - e->ldata()->bbox().translated(e->pagePos()).right()
-                                - minBarLineDistance;
-            if (leftMargin < 0) {
-                mutldata()->moveX(-leftMargin);
-                return;
-            }
-        }
-    }
-
     // Check barlines to the right
     Segment* rightBarLineSegment = nullptr;
     for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->next1enabled()) {
@@ -395,7 +374,26 @@ void Dynamic::manageBarlineCollisions()
                                  - minBarLineDistance;
             if (rightMargin < 0) {
                 mutldata()->moveX(rightMargin);
-                return;
+            }
+        }
+    }
+
+    // Check barlines to the left
+    Segment* leftBarLineSegment = nullptr;
+    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->prev1enabled()) {
+        if (segment->segmentType() & SegmentType::BarLineType) {
+            leftBarLineSegment = segment;
+            break;
+        }
+    }
+    if (leftBarLineSegment) {
+        EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
+        if (e) {
+            double leftMargin = ldata()->bbox().translated(pagePos() - offset()).left()
+                                - e->ldata()->bbox().translated(e->pagePos()).right()
+                                - minBarLineDistance;
+            if (leftMargin < 0) {
+                mutldata()->moveX(-leftMargin);
             }
         }
     }
