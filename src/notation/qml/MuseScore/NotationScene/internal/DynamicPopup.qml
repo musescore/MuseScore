@@ -56,7 +56,7 @@ StyledPopupView {
             direction: NavigationPanel.Horizontal
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
-            accessible.name: qsTrc("notation", "Dynamics Popup")
+            accessible.name: qsTrc("notation", "Dynamics popup")
 
             onNavigationEvent: function(event) {
                 if (event.type === NavigationEvent.Escape) {
