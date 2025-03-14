@@ -95,6 +95,7 @@ public:
     void moveSegmentSelection(MoveDirection d) override;
 
     // SelectionFilter
+    unsigned int currentSelectionFilter() const override;
     bool isSelectionTypeFiltered(SelectionFilterType type) const override;
     void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) override;
 
