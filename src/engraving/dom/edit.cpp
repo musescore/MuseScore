@@ -1155,7 +1155,10 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     if (!range.write(masterScore(), fm->tick())) {
         return false;
     }
-    connectTies(true);
+
+    for (Score* s : scoreList()) {
+        s->connectTies(true);
+    }
 
     // reset start and end elements for slurs that overlap the rewritten measures
     for (auto spanner : m_spanner.findOverlapping(fm->tick().ticks(), lm->tick().ticks())) {
