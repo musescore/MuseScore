@@ -40,7 +40,7 @@ void DynamicsLayout::layoutDynamic(Dynamic* item, TextBase::LayoutData* ldata, c
     ldata->moveX(-customTextOffset);
 
     if (item->autoplace() && item->avoidBarLines()) {
-        manageBarlineCollisions(item, ldata);
+        manageBarlineCollisions(item, ldata, conf);
     }
 }
 
@@ -149,7 +149,7 @@ void DynamicsLayout::layoutDynamicToEndOfPrevious(const Dynamic* item, TextBase:
     ldata->setPosX(-xDiff - ldata->bbox().right() - 0.50 * item->spatium());
 }
 
-void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::LayoutData* ldata)
+void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     if (item->score()->nstaves() <= 1 || item->anchorToEndOfPrevious() || !item->isStyled(Pid::OFFSET)) {
         return;
@@ -193,6 +193,17 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
 
     const double minBarLineDistance = 0.25 * item->spatium();
 
+    RectF referenceBBox;
+    String referenceString = String::fromUtf8(Dynamic::dynInfo(item->dynamicType()).text);
+    if (item->xmlText() != referenceString) {
+        Dynamic referenceDynamic(*item);
+        referenceDynamic.setXmlText(referenceString);
+        doLayoutDynamic(&referenceDynamic, referenceDynamic.mutldata(), conf);
+        referenceBBox = referenceDynamic.ldata()->bbox().translated(referenceDynamic.pos() - item->pos());
+    } else {
+        referenceBBox = ldata->bbox();
+    }
+
     // Check barlines to the right
     Segment* rightBarLineSegment = nullptr;
     for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->next1enabled()) {
@@ -206,7 +217,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
         EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
             double rightMargin = e->ldata()->bbox().translated(e->pagePos()).left()
-                                 - ldata->bbox().translated(item->pagePos() - item->offset()).right()
+                                 - referenceBBox.translated(item->pagePos() - item->offset()).right()
                                  - minBarLineDistance;
             if (rightMargin < 0) {
                 ldata->moveX(rightMargin);
@@ -225,7 +236,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
     if (leftBarLineSegment) {
         EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
-            double leftMargin = ldata->bbox().translated(item->pagePos() - item->offset()).left()
+            double leftMargin = referenceBBox.translated(item->pagePos() - item->offset()).left()
                                 - e->ldata()->bbox().translated(e->pagePos()).right()
                                 - minBarLineDistance;
             if (leftMargin < 0) {
