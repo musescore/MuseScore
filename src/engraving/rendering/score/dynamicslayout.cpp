@@ -33,6 +33,19 @@ using namespace mu::engraving::rendering::score;
 
 void DynamicsLayout::layoutDynamic(Dynamic* item, TextBase::LayoutData* ldata, const LayoutConfiguration& conf)
 {
+    doLayoutDynamic(item, ldata, conf);
+
+    // If the dynamic contains custom text, keep it aligned
+    double customTextOffset = computeCustomTextOffset(item, ldata, conf);
+    ldata->moveX(-customTextOffset);
+
+    if (item->autoplace() && item->avoidBarLines()) {
+        manageBarlineCollisions(item, ldata);
+    }
+}
+
+void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
+{
     ldata->disconnectSnappedItems();
 
     HairpinSegment* snapBeforeHairpinAcrossSysBreak = item->findSnapBeforeHairpinAcrossSystemBreak();
@@ -80,14 +93,6 @@ void DynamicsLayout::layoutDynamic(Dynamic* item, TextBase::LayoutData* ldata, c
         offset *= spatiumScaling;
         ldata->moveX(offset);
     }
-
-    // If the dynamic contains custom text, keep it aligned
-    double customTextOffset = computeCustomTextOffset(item, ldata, conf);
-    ldata->moveX(-customTextOffset);
-
-    if (item->autoplace() && item->avoidBarLines()) {
-        manageBarlineCollisions(item, ldata);
-    }
 }
 
 double DynamicsLayout::computeCustomTextOffset(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -103,7 +108,7 @@ double DynamicsLayout::computeCustomTextOffset(Dynamic* item, Dynamic::LayoutDat
 
     Dynamic referenceDynamic(*item);
     referenceDynamic.setXmlText(referenceString);
-    layoutDynamic(&referenceDynamic, referenceDynamic.mutldata(), conf);
+    doLayoutDynamic(&referenceDynamic, referenceDynamic.mutldata(), conf);
 
     TextFragment referenceFragment;
     if (!referenceDynamic.ldata()->blocks.empty()) {
