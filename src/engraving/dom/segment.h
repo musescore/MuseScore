@@ -320,7 +320,8 @@ public:
     double xPosInSystemCoords() const;
     void setXPosInSystemCoords(double x);
 
-    bool isInsideTuplet() const;
+    bool isTupletSubdivision() const;
+    bool isInsideTupletOnStaff(staff_idx_t staffIdx) const;
 
 private:
 
