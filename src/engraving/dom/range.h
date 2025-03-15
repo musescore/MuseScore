@@ -40,6 +40,7 @@ class Spanner;
 class ScoreRange;
 class ChordRest;
 class Score;
+class BarLine;
 
 //---------------------------------------------------------
 //   TrackList
@@ -109,12 +110,31 @@ protected:
     std::list<Annotation> m_annotations;
 
 private:
+    struct BarLinesBackup
+    {
+        Fraction sPosition;
+        bool formerMeasureStartOrEnd;
+        BarLine* bl = nullptr;
+    };
+    void backupBarLines(Segment* first, Segment* last);
+    bool insertBarLine(Measure* m, const BarLinesBackup& barLine) const;
+    void restoreBarLines(Score* score, const Fraction& tick) const;
+    void deleteBarLines();
 
+    void backupBreaks(Segment* first, Segment* last);
+    void restoreBreaks(Score* score, const Fraction& tick) const;
     friend class TrackList;
 
+    struct BreaksBackup
+    {
+        Fraction sPosition;
+        LayoutBreakType lBreakType;
+    };
     std::list<TrackList*> m_tracks;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
+    std::list<BarLinesBackup> m_barLines;
+    std::list<BreaksBackup> m_breaks;
 };
 } // namespace mu::engraving
 #endif
