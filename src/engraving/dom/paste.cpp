@@ -397,6 +397,11 @@ static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target
         EngravingItem* copy = obj->linkedClone();
         copy->setVisible(visible);
         copy->setStaffIdx(staffIdx);
+
+        if (copy->isSpanner()) {
+            toSpanner(copy)->setTrack2(staff2track(staffIdx, copy->voice()));
+        }
+
         targetScore->undoAddElement(copy, false /*addToLinkedStaves*/);
 
         if (visible) {

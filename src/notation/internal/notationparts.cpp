@@ -758,8 +758,14 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
                 obj->triggerLayout();
                 continue;
             }
+
             EngravingItem* copy = obj->linkedClone();
             copy->setStaffIdx(staffIdx);
+
+            if (copy->isSpanner()) {
+                toSpanner(copy)->setTrack2(staff2track(staffIdx, copy->voice()));
+            }
+
             score->undoAddElement(copy, false /*addToLinkedStaves*/);
         }
     }

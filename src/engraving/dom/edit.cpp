@@ -6063,6 +6063,9 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 Spanner* nsp = toSpanner(ne);
                 Spanner* sp = toSpanner(element);
                 long long diff = sp->track2() - sp->track();
+                IF_ASSERT_FAILED(diff >= 0) {
+                    diff = 0;
+                }
                 nsp->setTrack2(nsp->track() + diff);
                 nsp->computeStartElement();
                 nsp->computeEndElement();
