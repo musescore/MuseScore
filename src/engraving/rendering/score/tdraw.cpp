@@ -2665,7 +2665,7 @@ void TDraw::draw(const Spacer* item, Painter* painter)
 
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path);
 }
 
 void TDraw::draw(const StaffLines* item, Painter* painter)

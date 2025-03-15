@@ -69,7 +69,6 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         return;
     }
 
-    double _spatium = measure->spatium();
     ctx.setCurrentMeasure(measure);
     int nextTrack = staffIdx * VOICES;
     ctx.setTrack(nextTrack);
@@ -140,7 +139,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Millimetre(e.readDouble() * _spatium));
+            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacerFixed") {
             if (!measure->m_mstaves[staffIdx]->vspacerDown()) {
                 Spacer* spacer = Factory::createSpacer(measure);
@@ -148,7 +147,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Millimetre(e.readDouble() * _spatium));
+            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacerUp") {
             if (!measure->m_mstaves[staffIdx]->vspacerUp()) {
                 Spacer* spacer = Factory::createSpacer(measure);
@@ -156,7 +155,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerUp()->setGap(Millimetre(e.readDouble() * _spatium));
+            measure->m_mstaves[staffIdx]->vspacerUp()->setGap(Spatium(e.readDouble()));
         } else if (tag == "visible") {
             measure->m_mstaves[staffIdx]->setVisible(e.readInt());
         } else if ((tag == "slashStyle") || (tag == "stemless")) {
