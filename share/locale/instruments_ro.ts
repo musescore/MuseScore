@@ -12970,7 +12970,7 @@
         <source>Hand clap.</source>
         <comment>hand-clap description</comment>
         <extracomment>description for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Lovitură între palme.</translation>
+        <translation>Bătaie din palme.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4405"/>
@@ -13005,14 +13005,14 @@
         <source>Slap</source>
         <comment>slap trackName</comment>
         <extracomment>trackName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>Lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4416"/>
         <source>Slap</source>
         <comment>slap longName</comment>
         <extracomment>longName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>Lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4418"/>
@@ -15140,14 +15140,14 @@
         <source>Alto Guitar</source>
         <comment>alto-guitar trackName</comment>
         <extracomment>trackName for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto</translation>
+        <translation>Chitară alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5107"/>
         <source>Alto Guitar</source>
         <comment>alto-guitar longName</comment>
         <extracomment>longName for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto</translation>
+        <translation>Chitară alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5109"/>
@@ -15602,7 +15602,7 @@
         <source>Mixed Percussion</source>
         <comment>percussion trackName</comment>
         <extracomment>trackName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Percuție mixtă</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
@@ -15882,14 +15882,14 @@
         <source>Baritone Guitar</source>
         <comment>baritone-guitar trackName</comment>
         <extracomment>trackName for Baritone Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Bariton</translation>
+        <translation>Chitară bariton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5236"/>
         <source>Baritone Guitar</source>
         <comment>baritone-guitar longName</comment>
         <extracomment>longName for Baritone Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Bariton</translation>
+        <translation>Chitară bariton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5238"/>
@@ -15910,14 +15910,14 @@
         <source>Contra Guitar</source>
         <comment>contra-guitar trackName</comment>
         <extracomment>trackName for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Contra</translation>
+        <translation>Contrachitară</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5245"/>
         <source>Contra Guitar</source>
         <comment>contra-guitar longName</comment>
         <extracomment>longName for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Contra</translation>
+        <translation>Contrachitară</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5247"/>
@@ -16001,14 +16001,14 @@
         <source>11-string Alto Guitar</source>
         <comment>11-string-alto-guitar trackName</comment>
         <extracomment>trackName for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto cu 11 coarde</translation>
+        <translation>Chitară alto cu 11 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5274"/>
         <source>11-string Alto Guitar</source>
         <comment>11-string-alto-guitar longName</comment>
         <extracomment>longName for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chitară Alto cu 11 coarde</translation>
+        <translation>Chitară alto cu 11 coarde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5276"/>
@@ -16113,7 +16113,7 @@
         <source>slap</source>
         <comment>5-string-electric-bass channel</comment>
         <extracomment>channel for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5308"/>
@@ -16155,7 +16155,7 @@
         <source>slap</source>
         <comment>5-string-electric-bass-high-c channel</comment>
         <extracomment>channel for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5321"/>
@@ -16239,7 +16239,7 @@
         <source>slap</source>
         <comment>6-string-electric-bass channel</comment>
         <extracomment>channel for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5348"/>
@@ -16302,7 +16302,7 @@
         <source>slap</source>
         <comment>bass-guitar channel</comment>
         <extracomment>channel for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5368"/>
@@ -16344,7 +16344,7 @@
         <source>slap</source>
         <comment>electric-bass channel</comment>
         <extracomment>channel for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5381"/>
@@ -16386,7 +16386,7 @@
         <source>slap</source>
         <comment>fretless-electric-bass channel</comment>
         <extracomment>channel for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5394"/>
@@ -16428,7 +16428,7 @@
         <source>slap</source>
         <comment>acoustic-bass channel</comment>
         <extracomment>channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5407"/>
@@ -19370,7 +19370,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="161"/>
         <source>Glass Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Percuție de sticlă</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="162"/>

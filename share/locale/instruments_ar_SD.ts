@@ -15581,14 +15581,14 @@
         <source>Percussion</source>
         <comment>percussion-synthesizer longName</comment>
         <extracomment>longName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Percussion</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4340"/>
         <source>Perc.</source>
         <comment>percussion-synthesizer shortName</comment>
         <extracomment>shortName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Perc.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4343"/>
