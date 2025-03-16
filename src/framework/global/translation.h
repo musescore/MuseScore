@@ -24,6 +24,8 @@
 #include <string>
 
 #ifndef NO_QT_SUPPORT
+#include <QtGlobal>
+
 class QString;
 #endif
 
