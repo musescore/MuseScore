@@ -22,9 +22,11 @@
 
 #include "percussionpanelmodel.h"
 
+#include <QCoreApplication>
+#include <QKeyEvent>
+
 #include "notation/utilities/percussionutilities.h"
 
-#include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 
 #include "engraving/dom/factory.h"
