@@ -950,6 +950,7 @@ void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "play") {
             b->setPlay(e.readInt());
         } else if (TRead::readProperty(b, tag, e, ctx, Pid::LINE_WIDTH)) {
+        } else if (readItemProperties(b, e, ctx)) {
         } else {
             e.unknown();
         }
