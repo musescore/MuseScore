@@ -395,8 +395,8 @@ bool TextBase::isTextualEditAllowed(EditData& ed) const
         }
 
 #if defined(Q_OS_WIN)
-        // Allow accented characters to be input with AltGr and Ctrl+Alt (both are treated the same in Windows)
-        if (ed.key >= Key_nobreakspace && ed.key <= Key_ydiaeresis) {
+        // Allow special characters to be typed with AltGr / Ctrl+Alt (they are the same in Windows)
+        if (!ed.s.empty() && (ed.key < Key_A || ed.key > Key_Z) && (ed.key < Key_0 || ed.key > Key_9)) {
             return true;
         }
 #endif
