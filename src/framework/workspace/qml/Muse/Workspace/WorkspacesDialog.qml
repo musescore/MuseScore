@@ -65,6 +65,8 @@ StyledDialogView {
             firstWorkspaceTitle: view.firstWorkspaceTitle
             canRemove: Boolean(workspacesModel.selectedWorkspace) && !workspacesModel.selectedWorkspace.isBuiltin
 
+            appTitle: workspacesModel.appTitle
+
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 3
 
