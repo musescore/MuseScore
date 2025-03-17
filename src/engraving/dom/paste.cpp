@@ -508,20 +508,18 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             }
         }
     } else if (ms->hasFormat(mimeStaffListFormat)) {
-        ChordRest* cr = 0;
+        ChordRest* cr = nullptr;
         if (m_selection.isRange()) {
             cr = m_selection.firstChordRest();
         } else if (m_selection.isSingle()) {
             EngravingItem* e = m_selection.element();
-            if (!e->isNote() && !e->isChordRest()) {
+            Measure* measure = e->findMeasure();
+            cr = measure ? measure->findChordRest(e->tick(), e->track()) : nullptr;
+            if (!cr) {
                 LOGE() << "Cannot paste staff list onto " << e->typeName();
                 MScore::setError(MsError::DEST_NO_CR);
                 return {};
             }
-            if (e->isNote()) {
-                e = toNote(e)->chord();
-            }
-            cr  = toChordRest(e);
         }
 
         if (!cr) {
@@ -543,27 +541,26 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             return {};
         }
 
-        XmlReader e(data);
-        if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale)) {
+        XmlReader xmlReader(data);
+        if (!pasteStaff(xmlReader, cr->segment(), cr->staffIdx(), scale)) {
             return {};
         }
     } else if (ms->hasFormat(mimeSymbolListFormat)) {
-        ChordRest* cr = 0;
+        ChordRest* cr = nullptr;
         if (m_selection.isRange()) {
             cr = m_selection.firstChordRest();
         } else if (m_selection.isSingle()) {
             EngravingItem* e = m_selection.element();
-            if (!e->isNote() && !e->isRest() && !e->isChord()) {
+            Measure* measure = e->findMeasure();
+            cr = measure ? measure->findChordRest(e->tick(), e->track()) : nullptr;
+            if (!cr) {
                 LOGE() << "Cannot paste element list onto " << e->typeName();
                 MScore::setError(MsError::DEST_NO_CR);
                 return {};
             }
-            if (e->isNote()) {
-                e = toNote(e)->chord();
-            }
-            cr  = toChordRest(e);
         }
-        if (cr == 0) {
+
+        if (!cr) {
             MScore::setError(MsError::NO_DEST);
             return {};
         }
@@ -573,8 +570,8 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             LOGD() << "Pasting element list: " << data.data();
         }
 
-        XmlReader e(data);
-        pasteSymbols(e, cr);
+        XmlReader xmlReader(data);
+        pasteSymbols(xmlReader, cr);
     } else if (ms->hasImage()) {
         muse::ByteArray ba;
         Buffer buffer(&ba);
