@@ -65,7 +65,11 @@ ZipReader::~ZipReader()
 
 bool ZipReader::exists() const
 {
-    return File::exists(m_filePath);
+    if (!m_filePath.empty()) {
+        return File::exists(m_filePath);
+    }
+
+    return true;
 }
 
 void ZipReader::close()
