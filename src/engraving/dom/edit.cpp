@@ -1638,10 +1638,14 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool al
     return n;
 }
 
-NoteVal Score::noteVal(int pitch, bool allowTransposition) const
+NoteVal Score::noteVal(int pitch, staff_idx_t staffIdx, bool allowTransposition) const
 {
     NoteVal nval(pitch);
-    Staff* st = staff(inputState().track() / VOICES);
+
+    const Staff* st = staff(staffIdx);
+    if (!st) {
+        return nval;
+    }
 
     // if transposing, interpret MIDI pitch as representing desired written pitch
     // set pitch based on corresponding sounding pitch
@@ -1661,7 +1665,7 @@ NoteVal Score::noteVal(int pitch, bool allowTransposition) const
 
 Note* Score::addMidiPitch(int pitch, bool addFlag, bool allowTransposition)
 {
-    NoteVal nval = noteVal(pitch, allowTransposition);
+    NoteVal nval = noteVal(pitch, m_is.staffIdx(), allowTransposition);
     return addPitch(nval, addFlag);
 }
 
