@@ -187,10 +187,12 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
 
     if (Hairpin* existingHairpin = dynamic->rightHairpin()) {
         if (existingHairpin->hairpinType() == hairpinType) {
-            return;
+            beginCommand(TranslatableString("undoableAction", "Remove hairpin"));
+            m_item->score()->undoRemoveElement(existingHairpin);
+        } else {
+            beginCommand(TranslatableString("undoableAction", "Change hairpin type"));
+            existingHairpin->undoChangeProperty(Pid::HAIRPIN_TYPE, int(hairpinType));
         }
-        beginCommand(TranslatableString("undoableAction", "Change hairpin type"));
-        existingHairpin->undoChangeProperty(Pid::HAIRPIN_TYPE, int(hairpinType));
         endCommand();
         updateNotation();
         return;
