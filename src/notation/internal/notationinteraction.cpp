@@ -1087,7 +1087,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
         }
     }
 
-    startEdit(TranslatableString("undoableAction", "Drag element"));
+    startEdit(TranslatableString("undoableAction", "Drag element(s)", nullptr, int(m_dragData.elements.size())));
 
     qreal scaling = m_notation->viewState()->matrix().m11();
     qreal proximity = configuration()->selectionProximity() * 0.5f / scaling;
@@ -1729,7 +1729,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     bool systemStavesOnly = false;
     bool applyUserOffset = false;
 
-    startEdit(TranslatableString("undoableAction", "Drop element"));
+    startEdit(TranslatableString("undoableAction", "Drop element: %1").arg(edd.ed.dropElement->typeUserName()));
     score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
     ElementType et = edd.ed.dropElement->type();
     switch (et) {
@@ -2088,7 +2088,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         return false;
     }
 
-    startEdit(TranslatableString("undoableAction", "Apply palette element"));
+    startEdit(TranslatableString("undoableAction", "Apply palette element: %1").arg(element->typeUserName()));
 
     const bool isMeasureAnchoredElement = element->type() == ElementType::MARKER
                                           || element->type() == ElementType::JUMP
@@ -3843,11 +3843,11 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Change pitch"));
-
     if (score()->selection().element() && score()->selection().element()->isRest()) {
+        startEdit(TranslatableString("undoableAction", "Change vertical position"));
         score()->cmdMoveRest(toRest(score()->selection().element()), toDirection(d));
     } else {
+        startEdit(TranslatableString("undoableAction", "Change pitch"));
         score()->upDown(MoveDirection::Up == d, mode);
     }
 

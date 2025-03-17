@@ -421,10 +421,16 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
 {
     TRACEFUNC;
 
-    startEdit(TranslatableString("undoableAction", "Enter note"));
-
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
+
+    if (addToUpOnCurrentChord) {
+        startEdit(TranslatableString("undoableAction", "Add note to chord"));
+    } else if (insertNewChord) {
+        startEdit(TranslatableString("undoableAction", "Insert note"));
+    } else {
+        startEdit(TranslatableString("undoableAction", "Enter note"));
+    }
     score()->cmdAddPitch(params, addToUpOnCurrentChord, insertNewChord);
 
     apply();
