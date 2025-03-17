@@ -228,8 +228,11 @@ void Tie::updatePossibleJumpPoints()
     tieJumpPoints()->clear();
 
     const Note* note = toNote(parentItem());
-    const Chord* chord = note->chord();
-    const Measure* measure = chord->measure();
+    const Chord* chord = note ? note->chord() : nullptr;
+    const Measure* measure = chord ? chord->measure() : nullptr;
+    if (!measure) {
+        return;
+    }
 
     if (!chord->hasFollowingJumpItem()) {
         return;
@@ -341,6 +344,15 @@ Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
     setAnchor(Anchor::NOTE);
+}
+
+Tie::Tie(const Tie& t)
+    : SlurTie(t)
+{
+    m_isInside = t.m_isInside;
+    m_tiePlacement = t.m_tiePlacement;
+    // Jump points must be recalculated for this tie
+    m_jumpPoint = nullptr;
 }
 
 PropertyValue Tie::getProperty(Pid propertyId) const
