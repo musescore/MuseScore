@@ -42,13 +42,23 @@ elseif(OS_IS_WIN)
 
 elseif(OS_IS_LIN)
     foreach(SIZE 16 24 32 48 64 96 128 512)
-        install(FILES AppIcon/MS4_AppIcon_${SIZE}x${SIZE}.png RENAME mscore${MUSE_APP_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/${SIZE}x${SIZE}/apps)
+        install(FILES AppIcon/MS4_AppIcon_${SIZE}x${SIZE}.png 
+                RENAME mscore${MUSE_APP_INSTALL_SUFFIX}.png 
+                DESTINATION share/icons/hicolor/${SIZE}x${SIZE}/apps)
     endforeach()
 
-    install(FILES MsczIcon/MS4_MsczIcon.png RENAME application-x-musescore${MUSE_APP_INSTALL_SUFFIX}.png
+    install(FILES MsczIcon/MS4_MsczIcon_512x512.png 
+            RENAME application-x-musescore${MUSE_APP_INSTALL_SUFFIX}.png
             DESTINATION share/icons/hicolor/512x512/mimetypes)
-    install(FILES MscxIcon/MS4_MscxIcon.png RENAME application-x-musescore${MUSE_APP_INSTALL_SUFFIX}+xml.png
+    install(FILES MscxIcon/MS4_MscxIcon_512x512.png 
+            RENAME application-x-musescore${MUSE_APP_INSTALL_SUFFIX}+xml.png
             DESTINATION share/icons/hicolor/512x512/mimetypes)
-    # Note: Must now run "gtk-update-icon-cache" to set the new icons.
+    install(FILES MsczIcon/MS4_MsczIcon.svg 
+            RENAME application-x-musescore${MUSE_APP_INSTALL_SUFFIX}.svg
+            DESTINATION share/icons/hicolor/scalable/mimetypes)
+    install(FILES MscxIcon/MS4_MscxIcon.svg 
+            RENAME application-x-musescore${MUSE_APP_INSTALL_SUFFIX}+xml.svg
+            DESTINATION share/icons/hicolor/scalable/mimetypes)
 
+    # Note: Must now run "gtk-update-icon-cache" to set the new icons.
 endif()
