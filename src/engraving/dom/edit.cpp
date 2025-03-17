@@ -7377,7 +7377,13 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
         oldTies.push_back(jumpPoint->endTie());
     }
 
-    tie->updatePossibleJumpPoints();
+    // Update jump points for linked ties
+    for (EngravingObject* linkedTie : tie->linkList()) {
+        if (!linkedTie || !linkedTie->isTie()) {
+            continue;
+        }
+        toTie(linkedTie)->updatePossibleJumpPoints();
+    }
 
     for (Tie* oldTie : oldTies) {
         auto findEndTie = [&oldTie](const TieJumpPoint* jumpPoint) {
