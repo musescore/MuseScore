@@ -61,6 +61,12 @@ ListView {
         onCloseOpenedMenuRequested: {
             menuLoader.close()
         }
+
+        onNavigateWithSymbolRequested: function(symbol) {
+            if (menuLoader.isMenuOpened) {
+                menuLoader.menu.navigateWithSymbolRequested(symbol, appMenuModel)
+            }
+        }
     }
 
     AccessibleItem {
