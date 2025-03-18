@@ -1191,7 +1191,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
             // TODO: refactor all code that works with Grips, so that this is not necessary
             Dynamic* dynamic = toDynamic(m_editData.element);
             bool isLeftGrip = dynamic->hasLeftGrip() ? m_editData.curGrip == Grip::LEFT : false;
-            addHairpinOnGripDrag(toDynamic(m_editData.element), isLeftGrip);
+            addHairpinOnGripDrag(m_editData, isLeftGrip);
         }
     } else {
         if (m_editData.element) {
@@ -5015,9 +5015,11 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     apply();
 }
 
-void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic, bool isLeftGrip)
+void NotationInteraction::addHairpinOnGripDrag(EditData& ed, bool isLeftGrip)
 {
     startEdit(TranslatableString("undoableAction", "Add hairpin"));
+
+    Dynamic* dynamic = toDynamic(ed.element);
 
     const PointF pos = m_dragData.ed.pos;
     Hairpin* hairpin = score()->addHairpinToDynamicOnGripDrag(dynamic, isLeftGrip, pos);
@@ -5045,6 +5047,8 @@ void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic, bool isLeftGrip
         select({ segment });
         startEditGrip(segment, Grip::END);
     }
+
+    ed.isHairpinDragCreatedFromDynamic = true;
 }
 
 void NotationInteraction::addHairpinsToSelection(HairpinType type)
