@@ -459,7 +459,7 @@ static size_t nextVisibleSpannedStaff(const BarLine* bl)
 }
 
 //---------------------------------------------------------
-//   getY
+//   calcY
 //---------------------------------------------------------
 
 void BarLine::calcY()
@@ -517,6 +517,9 @@ void BarLine::calcY()
 
     if (staffIdx2 != staffIdx1) {
         y2 = measure->staffLines(staffIdx2)->y1() - startStaffY - to * lineDistance * 0.5;
+        if (score()->staff(staffIdx2)->staffType(tick)->lines() <= 1) {
+            y2 += BARLINE_SPAN_1LINESTAFF_FROM * lineDistance * 0.5;
+        }
     } else {
         y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
     }
