@@ -2283,11 +2283,11 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         write(item->laissezVib(), xml, ctx);
     }
 
-    if (item->incomingPartialTie() && !ctx.clipboardmode()) {
+    if (item->incomingPartialTie()) {
         write(item->incomingPartialTie(), xml, ctx);
     }
 
-    if (item->outgoingPartialTie() && !ctx.clipboardmode()) {
+    if (item->outgoingPartialTie()) {
         write(item->outgoingPartialTie(), xml, ctx);
     }
 

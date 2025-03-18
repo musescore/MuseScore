@@ -7407,6 +7407,13 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
         // These changes should be merged with the change in repeat structure which caused the ties to become invalid
         undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
     }
+
+    if (tie->isPartialTie() && tie->allJumpPointsInactive()) {
+        startCmd(TranslatableString("engraving", "Remove stale partial tie"));
+        undoRemoveElement(tie);
+        endCmd();
+        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    }
 }
 
 void Score::doUndoResetPartialSlur(Slur* slur)
@@ -7445,6 +7452,7 @@ void Score::undoRemoveStaleTieJumpPoints()
         doUndoResetPartialSlur(toSlur(sp));
     }
 
+    std::set<PartialTie*> incomingPartialTies;
     SegmentType st = SegmentType::ChordRest;
     for (Segment* s = m->first(st); s; s = s->next1(st)) {
         for (track_idx_t i = 0; i < tracks; ++i) {
@@ -7470,6 +7478,9 @@ void Score::undoRemoveStaleTieJumpPoints()
 
             Chord* c = toChord(e);
             for (Note* n : c->notes()) {
+                if (n->incomingPartialTie()) {
+                    incomingPartialTies.emplace(n->incomingPartialTie());
+                }
                 if (!n->tieFor()) {
                     continue;
                 }
@@ -7477,6 +7488,16 @@ void Score::undoRemoveStaleTieJumpPoints()
                 doUndoRemoveStaleTieJumpPoints(n->tieFor());
             }
         }
+    }
+
+    for (PartialTie* incomingPT : incomingPartialTies) {
+        if (incomingPT->jumpPoint()) {
+            continue;
+        }
+        startCmd(TranslatableString("engraving", "Remove stale partial tie"));
+        undoRemoveElement(incomingPT);
+        endCmd();
+        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
     }
 }
 }
