@@ -90,6 +90,7 @@ class Tie : public SlurTie
 
 public:
     Tie(EngravingItem* parent = 0);
+    Tie(const Tie& t);
 
     Tie* clone() const override { return new Tie(*this); }
 
@@ -121,6 +122,9 @@ public:
 
     double scalingFactor() const override;
 
+    const TiePlacement& tiePlacement() const { return m_tiePlacement; }
+    void setTiePlacement(const TiePlacement& val) { m_tiePlacement = val; }
+
     // Outgoing ties before repeats
     void updatePossibleJumpPoints();
     void addTiesToJumpPoints();
@@ -141,7 +145,7 @@ protected:
     Tie(const ElementType& type, EngravingItem* parent = nullptr);
 
     bool m_isInside = false;
-    M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
+    TiePlacement m_tiePlacement = TiePlacement::AUTO;
 
     // Jump point information for incoming ties after repeats
     TieJumpPoint* m_jumpPoint = nullptr;
