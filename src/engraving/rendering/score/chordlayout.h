@@ -77,7 +77,7 @@ public:
     static void resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff, Segment* segment, LayoutContext& ctx,
                                   bool considerBeams = false);
     static void layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx);
-
+    static void layoutStretchedBends(Chord* chord, LayoutContext& ctx);
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
 
     static void checkStartEndSlurs(Chord* chord, LayoutContext& ctx);

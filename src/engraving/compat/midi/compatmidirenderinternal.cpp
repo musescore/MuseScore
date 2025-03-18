@@ -770,7 +770,12 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     }
 
     // Bends
-    if (bendFor) {
+    if (note->configuration()->experimentalGuitarBendImport()) {
+        if (const StretchedBend* stretchedBend = note->stretchedBend()) {
+            collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
+                            note).ticks(), pitchWheelRenderer, noteEffect);
+        }
+    } else if (bendFor) {
         collectGuitarBend(note, noteChannel, tick1, noteParams.graceOffsetOn, noteParams.previousChordTicks, pitchWheelRenderer,
                           noteEffect);
     } else {

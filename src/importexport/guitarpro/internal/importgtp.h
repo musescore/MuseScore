@@ -58,6 +58,7 @@ class MasterScore;
 class Ottava;
 class Hairpin;
 class Bend;
+class StretchedBend;
 class Slur;
 } // namespace mu::engraving
 
@@ -267,6 +268,7 @@ protected:
     int slide = 0;
     int voltaSequence = 0;
     mu::engraving::Slur** slurs = nullptr;
+    std::vector<mu::engraving::StretchedBend*> m_stretchedBends;
 
     void skip(int64_t len);
     void read(void* p, int64_t len);
@@ -324,7 +326,7 @@ public:
     size_t measures = 0;
     std::vector<GpBar> bars;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
-    std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
+    // std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
 
     enum class GuitarProError : char {
         GP_NO_ERROR, GP_UNKNOWN_FORMAT,

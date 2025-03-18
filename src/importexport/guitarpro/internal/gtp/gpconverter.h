@@ -9,7 +9,7 @@
 #include "gpdrumsetresolver.h"
 #include "gpmastertracks.h"
 #include "../continiouselementsbuilder.h"
-#include "../guitarbendimport/guitarbendimporter.h"
+// #include "../guitarbendimport/guitarbendimporter.h"
 #include "types/fraction.h"
 
 #include "iengravingconfiguration.h"
@@ -192,6 +192,7 @@ private:
     std::vector<int> m_sharpsToKeyConverter{ 0, 1, 2, 3, 4, 5, 6, 7, -4, -3, -2, -1 };
     // Index is the number of sharps. Using sharp keysigs for signatures with double flats
     std::vector<int> m_sharpsToFlatKeysConverter{ 0, 1, 2, 3, 4, -7, -6, -5, -4, -3, -2, -1 };
+    std::vector<mu::engraving::StretchedBend*> m_stretchedBends;
 
     static constexpr mu::engraving::voice_idx_t VOICES = 4;
 
@@ -204,7 +205,7 @@ private:
 
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
-    std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
+    // std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
 };
 } // namespace mu::iex::guitarpro
 #endif // MU_IMPORTEXPORT_GPCONVERTER_H
