@@ -6589,10 +6589,14 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             Note* nn1 = c1->findNote(n1->pitch(), n1->unisonIndex());
             Note* nn2 = c2 ? c2->findNote(n2->pitch(), n2->unisonIndex()) : 0;
 
+            const track_idx_t track1 = c1->track();
+            const track_idx_t track2 = c2 ? c2->track() : track1;
+
             // create tie
             Tie* ntie = toTie(ne);
             ntie->eraseSpannerSegments();
-            ntie->setTrack(c1->track());
+            ntie->setTrack(track1);
+            ntie->setTrack2(track2);
             ntie->setStartNote(nn1);
             ntie->setEndNote(nn2);
             doUndoAddElement(ntie);
