@@ -173,6 +173,7 @@
               <string>1</string>
               <Spanner type="Glissando">
                 <Glissando>
+                  <text></text>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
