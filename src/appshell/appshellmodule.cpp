@@ -62,6 +62,9 @@
 #include "view/framelesswindow/framelesswindowmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
 #include "view/internal/maintoolbarmodel.h"
+#include "view/repair/repairmodel.h"
+#include "view/repair/autorepairmodel.h"
+#include "view/repair/manualrepairmodel.h"
 
 #ifdef Q_OS_MAC
 #include "view/appmenumodel.h"
@@ -128,6 +131,7 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://firstLaunchSetup"),
                         ContainerMeta(ContainerType::QmlDialog, "FirstLaunchSetup/FirstLaunchSetupDialog.qml"));
         ir->registerUri(Uri("muse://preferences"), ContainerMeta(ContainerType::QmlDialog, "Preferences/PreferencesDialog.qml"));
+        ir->registerUri(Uri("muse://repairtool"), ContainerMeta(ContainerType::QmlDialog, "Repair/RepairDialog.qml"));
     }
 }
 
@@ -174,6 +178,10 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");
     qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
     qmlRegisterType<MainToolBarModel>("MuseScore.AppShell", 1, 0, "MainToolBarModel");
+
+    qmlRegisterType<AutoRepairModel>("MuseScore.Repair", 1, 0, "AutoRepairModel");
+    qmlRegisterType<ManualRepairModel>("MuseScore.Repair", 1, 0, "ManualRepairModel");
+    qmlRegisterType<RepairModel>("MuseScore.Repair", 1, 0, "RepairModel");
 }
 
 void AppShellModule::onPreInit(const IApplication::RunMode& mode)

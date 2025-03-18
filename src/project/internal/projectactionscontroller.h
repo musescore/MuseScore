@@ -90,6 +90,7 @@ public:
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const muse::io::path_t& path) const override;
     muse::Ret openProject(const ProjectFile& file) override;
+    muse::Ret repairProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
     bool saveProjectLocally(
@@ -118,6 +119,12 @@ private:
     void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
     muse::Ret openMuseScoreUrl(const QUrl& url);
     muse::Ret openScoreFromMuseScoreCom(const QUrl& url);
+
+    // Action for repairing a score
+    void repairProject(const muse::actions::ActionData& args);
+    muse::Ret repairProject(const muse::io::path_t& path, const QString& displayNameOverride = QString());
+    void openRepairDialog();
+    void doOpenRepairDialog();
 
     bool checkCanIgnoreError(const muse::Ret& ret, const muse::io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);

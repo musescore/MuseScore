@@ -64,7 +64,7 @@ static constexpr int SAVE_AS_BTN_ID    = RETRY_SAVE_BTN_ID + 1;
 void ProjectActionsController::init()
 {
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
-    dispatcher()->reg(this, "file-repair", this, &ProjectActionsController::openProject);
+    dispatcher()->reg(this, "file-repair", this, &ProjectActionsController::repairProject);
     dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
 
     dispatcher()->reg(this, "file-close", [this]() {
@@ -579,6 +579,141 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     downloadAndOpenCloudProject(scoreId, hash, secret, isOwner);
 
     return muse::make_ok();
+}
+
+void ProjectActionsController::repairProject(const ActionData& args)
+{
+    QUrl url = !args.empty() ? args.arg<QUrl>(0) : QUrl();
+    QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
+
+    repairProject(ProjectFile(url, displayNameOverride));
+}
+
+Ret ProjectActionsController::repairProject(const ProjectFile& file)
+{
+    LOGI() << "Try open project for repair: url = " << file.url.toString() << ", displayNameOverride = " << file.displayNameOverride;
+
+    // Allow the user to select their repair mode.
+    openRepairDialog();
+
+    // # BGL TODO : selectScoreOpeningFile() causes the file selection prompt to come up. Perhaps this should be embedded in the dialogue?
+    if (file.isNull()) {
+        muse::io::path_t askedPath = selectScoreOpeningFile();
+
+        if (askedPath.empty()) {
+            return make_ret(Ret::Code::Cancel);
+        }
+
+        return repairProject(askedPath);
+    }
+
+    if (file.url.isLocalFile()) {
+        return repairProject(file.path(), file.displayNameOverride);
+    }
+
+    // In general, we shouldn't expect somebody to need to repair a broken score to musescore.com
+    // As a result, we simply exit as unsupported.
+
+    return make_ret(Err::UnsupportedUrl);
+}
+
+Ret ProjectActionsController::repairProject(const muse::io::path_t& givenPath, const QString& displayNameOverride)
+{
+    //! NOTE This method is synchronous,
+    //! but inside `multiInstancesProvider` there can be an event loop
+    //! to wait for the responses from other instances, accordingly,
+    //! the events (like user click) can be executed and this method can be called several times,
+    //! before the end of the current call.
+    //! So we ignore all subsequent calls until the current one completes.
+    if (m_isProjectProcessing || m_isProjectDownloading) {
+        return make_ret(Ret::Code::InternalError);
+    }
+    m_isProjectProcessing = true;
+
+    DEFER {
+        m_isProjectProcessing = false;
+    };
+
+    //! Step 1. Take absolute path
+    muse::io::path_t actualPath = fileSystem()->absoluteFilePath(givenPath);
+    if (actualPath.empty()) {
+        // We assume that a valid path has been specified to this method
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    //! Step 2. If the project is already open in the current window, then just switch to showing the notation
+    if (isProjectOpened(actualPath)) {
+        return doFinishOpenProject();
+    }
+
+    //! Step 3. Check, if the project already opened in another window, then activate the window with the project
+    if (multiInstancesProvider()->isProjectAlreadyOpened(actualPath)) {
+        multiInstancesProvider()->activateWindowWithProject(actualPath);
+        return make_ret(Ret::Code::Ok);
+    }
+
+    //! Step 4. Check, if a any project is already open in the current window,
+    //! then create a new instance
+    if (globalContext()->currentProject()) {
+        QStringList args;
+        args << actualPath.toQString();
+
+        if (!displayNameOverride.isEmpty()) {
+            args << "--score-display-name-override" << displayNameOverride;
+        }
+
+        multiInstancesProvider()->openNewAppInstance(args);
+        return make_ret(Ret::Code::Ok);
+    }
+
+    //! Step 5. If it's a cloud project, download the latest version
+    if (configuration()->isCloudProject(actualPath) && !configuration()->isLegacyCloudProject(actualPath)) {
+        bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
+        if (isCloudAvailable) {
+            downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
+            return make_ret(Ret::Code::Ok);
+        }
+
+        if (fileSystem()->exists(actualPath)) {
+            return doOpenCloudProjectOffline(actualPath, displayNameOverride);
+        }
+
+        Ret ret = make_ret(cloud::Err::NetworkError);
+        openSaveProjectScenario()->showCloudOpenError(ret);
+        return ret;
+    }
+
+    //! Step 6. Open project in the current window
+    return doOpenProject(actualPath);
+}
+
+void ProjectActionsController::openRepairDialog()
+{
+    const context::IPlaybackStatePtr state = globalContext()->playbackState();
+    if (state->playbackStatus() == audio::PlaybackStatus::Running) {
+        dispatcher()->dispatch("stop");
+
+        async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
+        statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {
+            auto statusChangedMut = statusChanged;
+            statusChangedMut.resetOnReceive(this);
+            doOpenRepairDialog();
+        });
+
+        return;
+    }
+
+    doOpenRepairDialog();
+}
+
+void ProjectActionsController::doOpenRepairDialog()
+{
+    if (multiInstancesProvider()->isPreferencesAlreadyOpened()) {
+        multiInstancesProvider()->activateWindowWithOpenedPreferences();
+        return;
+    }
+
+    interactive()->open("muse://repairtool");
 }
 
 const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const
