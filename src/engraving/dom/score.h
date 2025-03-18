@@ -520,7 +520,7 @@ public:
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);
 
-    NoteVal noteVal(int pitch, bool allowTransposition) const;
+    NoteVal noteVal(int pitch, staff_idx_t staffIdx, bool allowTransposition) const;
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
