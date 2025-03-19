@@ -23,8 +23,14 @@
 
 #include <QQmlEngine>
 
+#include "modularity/ioc.h"
+#include "framework/ui/iinteractiveuriregister.h"
+
 #include "internal/musesoundsconfiguration.h"
 #include "internal/musesoundsrepository.h"
+
+#include "internal/musesoundscheckupdatescenario.h"
+#include "internal/musesoundscheckupdateservice.h"
 
 #include "view/musesoundslistmodel.h"
 
@@ -46,12 +52,22 @@ void MuseSoundsModule::registerExports()
     m_configuration = std::make_shared<MuseSoundsConfiguration>(iocContext());
     m_repository = std::make_shared<MuseSoundsRepository>(iocContext());
 
+    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>(iocContext());
+    m_museSamplerUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(iocContext());
+
     ioc()->registerExport<IMuseSoundsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IMuseSoundsRepository>(moduleName(), m_repository);
+
+    ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), m_museSoundsCheckUpdateScenario);
+    ioc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), m_museSamplerUpdateService);
 }
 
 void MuseSoundsModule::resolveImports()
 {
+    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerQmlUri(Uri("musescore://musesounds/musesoundsreleaseinfo"), "Muse/MuseSounds/MuseSoundsReleaseInfoDialog.qml");
+    }
 }
 
 void MuseSoundsModule::registerResources()
@@ -72,4 +88,9 @@ void MuseSoundsModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
     m_repository->init();
+}
+
+void MuseSoundsModule::onDelayedInit()
+{
+    m_museSoundsCheckUpdateScenario->delayedInit();
 }

@@ -29,6 +29,7 @@ using namespace muse::network;
 
 static const std::string module_name("musesounds");
 static const Settings::Key GET_SOUNDS_TESTING_MODE_KEY(module_name, "musesounds/getSoundsTestingMode");
+static const Settings::Key LAST_MUSESOUNDS_SHOWN_VERSION_KEY(module_name, "application/lastShownMuseSoundsReleaseVersion");
 
 static const muse::String OPEN_SOUND_URL("https://www.musehub.com/muse-sounds/");
 
@@ -54,6 +55,23 @@ UriQuery MuseSoundsConfiguration::soundPageUri(const muse::String& soundCode) co
 {
     String utm = String("?utm_source=mss-app&utm_medium=mh-cta&utm_campaign=mss-app-home-mh-%1").arg(soundCode);
     return UriQuery(OPEN_SOUND_URL + soundCode + utm);
+}
+
+UriQuery MuseSoundsConfiguration::checkForMuseSoundsUpdateUrl()
+{
+    return !isTestingMode()
+           ? UriQuery("https://updates.musescore.org/feed/musesounds.latest.xml")
+           : UriQuery("https://updates.musescore.org/feed/musesounds.latest.test.xml");
+}
+
+std::string MuseSoundsConfiguration::lastShownMuseSoundsReleaseVersion() const
+{
+    return settings()->value(LAST_MUSESOUNDS_SHOWN_VERSION_KEY).toString();
+}
+
+void MuseSoundsConfiguration::setLastShownMuseSoundsReleaseVersion(const std::string& version)
+{
+    settings()->setSharedValue(LAST_MUSESOUNDS_SHOWN_VERSION_KEY, Val(version));
 }
 
 bool MuseSoundsConfiguration::isTestingMode() const

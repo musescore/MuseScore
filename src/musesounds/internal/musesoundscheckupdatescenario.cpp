@@ -29,17 +29,19 @@
 #include "global/types/val.h"
 #include "global/types/translatablestring.h"
 
-#include "updateerrors.h"
+#include "update/updateerrors.h"
 
 #include "log.h"
 
 using namespace muse;
+
+using namespace mu::musesounds;
 using namespace muse::update;
 using namespace muse::actions;
 
-static const char* DEFAULT_IMAGE_URL = "qrc:/qml/Muse/Update/resources/muse_sounds_promo.png";
-static const TranslatableString DEFAULT_ACTION_TITLE("update", "Take me to MuseHub");
-static const TranslatableString DEFAULT_CANCEL_TITLE("update", "No thanks");
+static const char* DEFAULT_IMAGE_URL = "qrc:/qml/MuseScore/MuseSounds/resources/muse_sounds_promo.png";
+static const TranslatableString DEFAULT_ACTION_TITLE("musesounds", "Take me to MuseHub");
+static const TranslatableString DEFAULT_CANCEL_TITLE("musesounds", "No thanks");
 
 void MuseSoundsCheckUpdateScenario::delayedInit()
 {
@@ -147,7 +149,7 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
         setIgnoredUpdate(info.version);
     };
 
-    UriQuery query("muse://update/musesoundsreleaseinfo");
+    UriQuery query("musescore://musesounds/musesoundsreleaseinfo");
     query.addParam("notes", Val(info.notes));
     query.addParam("features", Val(info.additionInfo.at("features")));
 

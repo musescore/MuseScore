@@ -61,26 +61,12 @@ void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&)
 {
 }
 
-std::string UpdateConfigurationStub::lastShownMuseSoundsReleaseVersion() const
-{
-    return "";
-}
-
-void UpdateConfigurationStub::setLastShownMuseSoundsReleaseVersion(const std::string&)
-{
-}
-
 std::string UpdateConfigurationStub::checkForAppUpdateUrl() const
 {
     return "";
 }
 
 std::string UpdateConfigurationStub::previousAppReleasesNotesUrl() const
-{
-    return "";
-}
-
-std::string UpdateConfigurationStub::checkForMuseSamplerUpdateUrl() const
 {
     return "";
 }

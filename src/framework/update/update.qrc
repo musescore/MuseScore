@@ -4,8 +4,5 @@
         <file>qml/Muse/Update/UpdateProgressDialog.qml</file>
         <file>qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml</file>
         <file>qml/Muse/Update/internal/ReleaseNotesView.qml</file>
-        <file>qml/Muse/Update/MuseSoundsReleaseInfoDialog.qml</file>
-        <file>qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml</file>
-        <file>qml/Muse/Update/resources/muse_sounds_promo.png</file>
     </qresource>
 </RCC>

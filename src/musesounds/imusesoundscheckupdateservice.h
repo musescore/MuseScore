@@ -19,22 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESCENARIO_H
-#define MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESCENARIO_H
+#pragma once
+
+#include "types/retval.h"
+#include "progress.h"
+
+#include "update/updatetypes.h"
 
 #include "modularity/imoduleinterface.h"
 
-namespace muse::update {
-class IMuseSoundsCheckUpdateScenario : MODULE_EXPORT_INTERFACE
+namespace mu::musesounds {
+class IMuseSoundsCheckUpdateService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IMuseSoundsCheckUpdateScenario)
+    INTERFACE_ID(IMuseSamplerUpdateService)
 
 public:
-    virtual ~IMuseSoundsCheckUpdateScenario() = default;
+    virtual ~IMuseSoundsCheckUpdateService() = default;
 
-    virtual bool hasUpdate() const = 0;
-    virtual void showUpdate() = 0;
+    virtual muse::Ret needCheckForUpdate() const = 0;
+
+    virtual muse::RetVal<muse::update::ReleaseInfo> checkForUpdate() = 0;
+    virtual muse::RetVal<muse::update::ReleaseInfo> lastCheckResult() = 0;
+
+    virtual muse::Progress updateProgress() = 0;
 };
 }
-
-#endif // MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESCENARIO_H

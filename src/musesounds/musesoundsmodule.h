@@ -29,6 +29,8 @@
 namespace mu::musesounds {
 class MuseSoundsConfiguration;
 class MuseSoundsRepository;
+class MuseSoundsCheckUpdateScenario;
+class MuseSoundsCheckUpdateService;
 class MuseSoundsModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -39,9 +41,12 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
+    void onDelayedInit() override;
 
 private:
     std::shared_ptr<MuseSoundsConfiguration> m_configuration;
     std::shared_ptr<MuseSoundsRepository> m_repository;
+    std::shared_ptr<MuseSoundsCheckUpdateScenario> m_museSoundsCheckUpdateScenario;
+    std::shared_ptr<MuseSoundsCheckUpdateService> m_museSamplerUpdateService;
 };
 }

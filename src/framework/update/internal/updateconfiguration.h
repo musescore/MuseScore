@@ -53,12 +53,8 @@ public:
     std::string skippedReleaseVersion() const override;
     void setSkippedReleaseVersion(const std::string& version) override;
 
-    std::string lastShownMuseSoundsReleaseVersion() const override;
-    void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
-
     std::string checkForAppUpdateUrl() const override;
     std::string previousAppReleasesNotesUrl() const override;
-    std::string checkForMuseSamplerUpdateUrl() const override;
 
     muse::network::RequestHeaders updateHeaders() const override;
 
