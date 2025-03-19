@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "musesoundscheckupdatescenariostub.h"
+#pragma once
 
-using namespace muse::update;
+#include "musesounds/imusesoundscheckupdatescenario.h"
 
-bool MuseSoundsCheckUpdateScenarioStub::hasUpdate() const
+namespace mu::musesounds {
+class MuseSoundsCheckUpdateScenarioStub : public IMuseSoundsCheckUpdateScenario
 {
-    return false;
-}
-
-void MuseSoundsCheckUpdateScenarioStub::showUpdate()
-{
+public:
+    bool hasUpdate() const override;
+    muse::Ret showUpdate() override;
+};
 }

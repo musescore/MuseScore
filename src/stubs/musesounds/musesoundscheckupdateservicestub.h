@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,19 +21,17 @@
  */
 #pragma once
 
-#include "types/ret.h"
-
-#include "modularity/imoduleinterface.h"
+#include "musesounds/imusesoundscheckupdateservice.h"
 
 namespace mu::musesounds {
-class IMuseSoundsCheckUpdateScenario : MODULE_EXPORT_INTERFACE
+class MuseSoundsCheckUpdateServiceStub : public IMuseSoundsCheckUpdateService
 {
-    INTERFACE_ID(IMuseSoundsCheckUpdateScenario)
-
 public:
-    virtual ~IMuseSoundsCheckUpdateScenario() = default;
+    muse::Ret needCheckForUpdate() const override;
 
-    virtual bool hasUpdate() const = 0;
-    virtual muse::Ret showUpdate() = 0;
+    muse::RetVal<muse::update::ReleaseInfo> checkForUpdate() override;
+    muse::RetVal<muse::update::ReleaseInfo> lastCheckResult() override;
+
+    muse::Progress updateProgress() override;
 };
 }

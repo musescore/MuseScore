@@ -19,18 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_MUSESOUNDSUPDATESCENARIOSTUB_H
-#define MUSE_UPDATE_MUSESOUNDSUPDATESCENARIOSTUB_H
+#include "musesoundscheckupdateservicestub.h"
 
-#include "update/imusesoundscheckupdatescenario.h"
+using namespace mu::musesounds;
+using namespace muse;
 
-namespace muse::update {
-class MuseSoundsCheckUpdateScenarioStub : public IMuseSoundsCheckUpdateScenario
+Ret MuseSoundsCheckUpdateServiceStub::needCheckForUpdate() const
 {
-public:
-    bool hasUpdate() const override;
-    void showUpdate() override;
-};
+    return make_ret(Ret::Code::NotSupported);
 }
 
-#endif // MUSE_UPDATE_MUSESOUNDSUPDATESCENARIOSTUB_H
+RetVal<update::ReleaseInfo> MuseSoundsCheckUpdateServiceStub::checkForUpdate()
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
+RetVal<update::ReleaseInfo> MuseSoundsCheckUpdateServiceStub::lastCheckResult()
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
+Progress MuseSoundsCheckUpdateServiceStub::updateProgress()
+{
+    return Progress();
+}
