@@ -178,21 +178,32 @@ void NotationMidiInput::startNoteInputIfNeed()
 
 void NotationMidiInput::addNoteEventsToInputState()
 {
-    NoteValList notes;
-
     INotationNoteInputPtr noteInput = m_notationInteraction->noteInput();
     const NoteInputState& state = noteInput->state();
     const staff_idx_t staffIdx = state.staffIdx();
     const bool useWrittenPitch = configuration()->midiUseWrittenPitch().val;
 
+    NoteValList notes;
+    if (m_holdingNotes) {
+        notes = state.notes();
+    }
+
     for (const muse::midi::Event& event : m_eventsQueue) {
         if (event.opcode() == muse::midi::Event::Opcode::NoteOn) {
             notes.push_back(score()->noteVal(event.note(), staffIdx, useWrittenPitch));
+            m_holdingNotes = true;
+        } else if (event.opcode() == muse::midi::Event::Opcode::NoteOff) {
+            m_holdingNotes = false;
         }
     }
 
     if (!notes.empty()) {
         noteInput->setRestMode(false);
+
+        if (!m_holdingNotes && notes == state.notes()) {
+            return;
+        }
+
         noteInput->setInputNotes(notes);
 
         if (configuration()->isPlayPreviewNotesInInputByDuration()) {
