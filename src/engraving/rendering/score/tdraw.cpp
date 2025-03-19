@@ -2443,6 +2443,14 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
+    Segment* seg = item->segment();
+    EngravingItem* segItem = seg ? seg->element(item->track()) : nullptr;
+    TimeSig* segTs = segItem && segItem->isTimeSig() ? toTimeSig(segItem) : nullptr;
+
+    if (segTs && !segTs->showOnThisStaff()) {
+        return;
+    }
+
     Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>());
 
     Pen pen(penColor);

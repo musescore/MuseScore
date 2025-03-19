@@ -200,8 +200,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::MEASURE_NUMBER_MODE,     false, "measureNumberMode",     P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "measure number mode") },
 
     { Pid::GLISS_TYPE,              false, "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
-    { Pid::GLISS_TEXT,              false, 0,                       P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "text") },
-    { Pid::GLISS_SHOW_TEXT,         false, 0,                       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "showing text") },
+    { Pid::GLISS_TEXT,              false, "text",                  P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "text") },
+    { Pid::GLISS_SHOW_TEXT,         false, "glissandoShowText",     P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "showing text") },
     { Pid::GLISS_STYLE,             true,  "glissandoStyle",        P_TYPE::GLISS_STYLE,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "glissando style") },
     { Pid::GLISS_SHIFT,             false, "glissandoShift",        P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "glissando shift") },
     { Pid::GLISS_EASEIN,            false, "easeInSpin",            P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName","ease in") },

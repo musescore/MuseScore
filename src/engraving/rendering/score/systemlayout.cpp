@@ -2981,8 +2981,8 @@ bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element,
         if (!intersectHorizontally) {
             continue;
         }
-        bool skylineElementIsStackedOnIt = skylineLine.isNorth() ? skylineElement.top() < elemShapeBottom : skylineElement.bottom()
-                                           > elemShapeTop;
+        bool skylineElementIsStackedOnIt = skylineLine.isNorth() ? skylineElement.top() < elemShapeTop
+                                           : skylineElement.bottom() > elemShapeBottom;
         if (skylineElementIsStackedOnIt) {
             return true;
         }
