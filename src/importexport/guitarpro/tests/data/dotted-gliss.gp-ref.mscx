@@ -113,6 +113,7 @@ Innuendo</text>
               <string>1</string>
               <Spanner type="Glissando">
                 <Glissando>
+                  <text></text>
                   <glissandoShift>1</glissandoShift>
                   <diagonal>1</diagonal>
                   </Glissando>
