@@ -26,6 +26,7 @@
 #include "dom/staff.h"
 #include "dom/swing.h"
 #include "dom/repeatlist.h"
+#include "dom/partialtie.h"
 
 #include "glissandosrenderer.h"
 
@@ -63,6 +64,82 @@ static bool notesInSameRepeat(const Score* score, const Note* note1, const Note*
     return false;
 }
 
+static bool isIncomingNotePlayable(const Note* incomingNote, const RenderingContext& ctx)
+{
+    const RepeatList& repeats = ctx.score->repeatList();
+
+    for (size_t i = 1; i < repeats.size(); ++i) {
+        const RepeatSegment* repeat = repeats.at(i);
+        const int offset = repeat->utick - repeat->tick;
+        if (offset != ctx.positionTickOffset) {
+            continue;
+        }
+
+        const RepeatSegment* prevRepeat = repeats.at(i - 1);
+        const Measure* lastMeasure = prevRepeat->lastMeasure();
+        if (!lastMeasure) {
+            return true;
+        }
+
+        const ChordRest* lastChordRest = lastMeasure->lastChordRest(incomingNote->track());
+        if (!lastChordRest || !lastChordRest->isChord()) {
+            return true;
+        }
+
+        const Note* outgoingNote = toChord(lastChordRest)->findNote(incomingNote->pitch());
+        const PartialTie* partialTie = outgoingNote ? outgoingNote->outgoingPartialTie() : nullptr;
+        if (partialTie && partialTie->playSpanner()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    return true;
+}
+
+struct IncomingNoteInfo {
+    const RepeatSegment* repeat = nullptr;
+    const Note* note = nullptr;
+};
+
+static IncomingNoteInfo findIncomingNote(const Note* outgoingNote, const RenderingContext& ctx)
+{
+    const RepeatList& repeats = ctx.score->repeatList();
+    if (repeats.empty()) {
+        return IncomingNoteInfo();
+    }
+
+    for (size_t i = 0; i < repeats.size() - 1; ++i) {
+        const RepeatSegment* repeat = repeats.at(i);
+        const int offset = repeat->utick - repeat->tick;
+        if (offset != ctx.positionTickOffset) {
+            continue;
+        }
+
+        const RepeatSegment* nextRepeat = repeats.at(i + 1);
+        const Measure* firstMeasure = nextRepeat->firstMeasure();
+        if (!firstMeasure) {
+            return IncomingNoteInfo();
+        }
+
+        const ChordRest* firstChordRest = firstMeasure->firstChordRest(outgoingNote->track());
+        if (!firstChordRest || !firstChordRest->isChord()) {
+            return IncomingNoteInfo();
+        }
+
+        const Note* incomingNote = toChord(firstChordRest)->findNote(outgoingNote->pitch());
+        const PartialTie* partialTie = incomingNote ? incomingNote->incomingPartialTie() : nullptr;
+        if (partialTie && partialTie->playSpanner()) {
+            return { nextRepeat, incomingNote };
+        }
+
+        return IncomingNoteInfo();
+    }
+
+    return IncomingNoteInfo();
+}
+
 void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result)
 {
     IF_ASSERT_FAILED(note) {
@@ -71,12 +148,19 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
 
     NominalNoteCtx noteCtx = buildNominalNoteCtx(note, ctx);
 
-    if (!isNotePlayable(note, noteCtx.articulations)) {
+    if (note->incomingPartialTie()) {
+        if (!isIncomingNotePlayable(note, ctx)) {
+            return;
+        }
+    } else if (!isNotePlayable(note, noteCtx.articulations)) {
         return;
     }
 
-    if (const Tie* tieFor = note->tieFor()) {
-        if (tieFor->playSpanner() && !tieFor->isLaissezVib()) {
+    const Tie* tieFor = note->tieFor();
+    if (tieFor && tieFor->playSpanner()) {
+        if (tieFor->isPartialTie()) {
+            renderPartialTie(note, noteCtx);
+        } else if (!tieFor->isLaissezVib()) {
             renderTiedNotes(note, noteCtx);
         }
     }
@@ -107,6 +191,32 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
 
         result.emplace_back(mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(expCtx)));
     }
+}
+
+void NoteRenderer::renderPartialTie(const Note* outgoingNote, NominalNoteCtx& outgoingNoteCtx)
+{
+    const RenderingContext& outgoingChordCtx = outgoingNoteCtx.chordCtx;
+    const IncomingNoteInfo incomingNoteInfo = findIncomingNote(outgoingNote, outgoingNoteCtx.chordCtx);
+    if (!incomingNoteInfo.repeat || !incomingNoteInfo.note) {
+        return;
+    }
+
+    const int incomingNotePositionTickOffset = incomingNoteInfo.repeat->utick - incomingNoteInfo.repeat->tick;
+    RenderingContext incomingChordCtx = buildRenderingCtx(incomingNoteInfo.note->chord(), incomingNotePositionTickOffset,
+                                                          outgoingChordCtx.profile, outgoingChordCtx.playbackCtx);
+
+    ChordArticulationsParser::buildChordArticulationMap(incomingNoteInfo.note->chord(), incomingChordCtx,
+                                                        incomingChordCtx.commonArticulations);
+
+    NominalNoteCtx incomingNoteCtx = buildNominalNoteCtx(incomingNoteInfo.note, incomingChordCtx);
+
+    const Tie* tieFor = incomingNoteInfo.note->tieFor();
+    if (tieFor && tieFor->playSpanner() && !tieFor->isLaissezVib()) {
+        renderTiedNotes(incomingNoteInfo.note, incomingNoteCtx);
+    }
+
+    addTiedNote(incomingNoteCtx, outgoingNoteCtx);
+    updateArticulationBoundaries(outgoingNoteCtx.timestamp, outgoingNoteCtx.duration, outgoingNoteCtx.articulations);
 }
 
 void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstNoteCtx)
