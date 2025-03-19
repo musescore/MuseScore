@@ -1095,18 +1095,26 @@ void Segment::setXPosInSystemCoords(double x)
     mutldata()->setPosX(x - measure()->x());
 }
 
-bool Segment::isInsideTuplet() const
+bool Segment::isTupletSubdivision() const
 {
-    if (!isChordRestType()) {
+    int denom = tick().reduced().denominator();
+    bool denomIsPowOfTwo = (denom & (denom - 1)) == 0;
+    // A non-power-of-two denominator is possible only with tuplets
+    return !denomIsPowOfTwo;
+}
+
+bool Segment::isInsideTupletOnStaff(staff_idx_t staffIdx) const
+{
+    const Segment* refCRSeg = isChordRestType() && hasElements(staffIdx) ? this : prev1WithElemsOnStaff(staffIdx, SegmentType::ChordRest);
+    if (refCRSeg->measure() != measure()) {
         return false;
     }
 
-    for (EngravingItem* item : m_elist) {
-        if (!item) {
-            continue;
-        }
-        ChordRest* chordRest = toChordRest(item);
-        if (chordRest->tuplet() && chordRest->tick() != chordRest->topTuplet()->tick()) {
+    track_idx_t startTrack = staff2track(staffIdx);
+    track_idx_t endTrack = startTrack + VOICES;
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        ChordRest* chordRest = toChordRest(refCRSeg->elementAt(track));
+        if (chordRest && chordRest->tuplet() && tick() != chordRest->topTuplet()->tick()) {
             return true;
         }
     }

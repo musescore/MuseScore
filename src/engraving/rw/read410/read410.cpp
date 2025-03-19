@@ -375,6 +375,10 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 done = true;
                 break;
             }
+            if (dst->isInsideTupletOnStaff(dstStaffIdx)) {
+                done = true;
+                break;
+            }
 
             while (e.readNextStartElement()) {
                 pasted = true;
