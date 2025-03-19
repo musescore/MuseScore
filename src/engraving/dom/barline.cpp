@@ -516,9 +516,17 @@ void BarLine::calcY()
     double y2;
 
     if (staffIdx2 != staffIdx1) {
-        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY - to * lineDistance * 0.5;
-        if (score()->staff(staffIdx2)->staffType(tick)->lines() <= 1) {
-            y2 += BARLINE_SPAN_1LINESTAFF_FROM * lineDistance * 0.5;
+        // we need spatium and line distance of bottom staff
+        // as it may be scalled diferently
+        const Staff* staff2 = score()->staff(staffIdx2);
+        const StaffType* staffType2 = staff2 ? staff2->staffType(tick) : staffType1;
+        double spatium2 = staffType2->spatium(style());
+        double lineDistance2 = staffType2->lineDistance().val() * spatium2;
+
+        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY - to * lineDistance2 * 0.5;
+
+        if (staffType2->lines() <= 1) {
+            y2 += BARLINE_SPAN_1LINESTAFF_FROM * lineDistance2 * 0.5;
         }
     } else {
         y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
