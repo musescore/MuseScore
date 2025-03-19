@@ -1028,9 +1028,15 @@ void TWrite::writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext
             continue;
         }
 
-        if (s->startElement() == item) {
+        const bool isPartialSlur = toSlur(s)->partialSpannerDirection() != PartialSpannerDirection::NONE;
+        const bool writeStart = s->startElement() == item && (s->endElement() != item || isPartialSlur);
+        const bool writeEnd = s->endElement() == item && (s->startElement() != item || isPartialSlur);
+
+        if (writeStart) {
             writeSpannerStart(s, xml, ctx, item, item->track());
-        } else if (s->endElement() == item) {
+        }
+
+        if (writeEnd) {
             writeSpannerEnd(s, xml, ctx, item, item->track());
         }
     }
@@ -2294,11 +2300,11 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         write(item->laissezVib(), xml, ctx);
     }
 
-    if (item->incomingPartialTie() && !ctx.clipboardmode()) {
+    if (item->incomingPartialTie()) {
         write(item->incomingPartialTie(), xml, ctx);
     }
 
-    if (item->outgoingPartialTie() && !ctx.clipboardmode()) {
+    if (item->outgoingPartialTie()) {
         write(item->outgoingPartialTie(), xml, ctx);
     }
 
@@ -2599,10 +2605,8 @@ void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
     }
 
-    // We don't know if the paste destination has the correct repeat structure for partial slurs to be permitted
-    if (!ctx.clipboardmode()) {
-        writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
-    }
+    writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }

@@ -22,10 +22,12 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <QMimeData>
 
 #include "dom/note.h"
 #include "dom/chord.h"
 
+#include "internal/qmimedataadapter.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -414,4 +416,68 @@ TEST_F(Engraving_PartialTieTests, segnoAfter)
     openScore(test, startPointTick, jumpPoints);
 
     testSegnoPartialTieAfter(Fraction(3, 4));
+}
+
+TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
+{
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + u"copyPastePartials.mscx");
+    EXPECT_TRUE(score);
+    Measure* m1 = score->firstMeasure()->nextMeasure();
+    Measure* m2 = m1->nextMeasure();
+    Measure* m3 = m2->nextMeasure();
+    Measure* m4 = m3->nextMeasure();
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+    EXPECT_TRUE(m3);
+    EXPECT_TRUE(m4);
+    // Copy staff 0, m1
+
+    score->select(m1, SelectType::SINGLE, 0);
+    EXPECT_TRUE(score->selection().canCopy());
+    String mimeType = score->selection().mimeType();
+    EXPECT_TRUE(!mimeType.isEmpty());
+    QMimeData* mimeData = new QMimeData;
+    QByteArray ba = score->selection().mimeData().toQByteArray();
+    mimeData->setData(mimeType, ba);
+
+    // Paste staff 1, m1
+    EXPECT_TRUE(m1->first(SegmentType::ChordRest)->element(4));
+    score->select(m1->first(SegmentType::ChordRest)->element(4));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials01.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials01-ref.mscx")));
+
+    // Paste staff 0, m3
+    EXPECT_TRUE(m3->first(SegmentType::ChordRest)->element(0));
+    score->select(m3->first(SegmentType::ChordRest)->element(0));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials02.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials02-ref.mscx")));
+
+    // Paste staff 0, m4
+    EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
+    score->select(m4->first(SegmentType::ChordRest)->element(0));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials03.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials03-ref.mscx")));
+
+    // Paste staff 1, m4
+    EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(4));
+    score->select(m4->first(SegmentType::ChordRest)->element(4));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials04.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials04-ref.mscx")));
 }
