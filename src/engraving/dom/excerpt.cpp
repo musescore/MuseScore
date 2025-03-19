@@ -1501,6 +1501,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             if (oldEl->systemFlag() && dstStaffIdx != 0) {
                 continue;
             }
+            bool alreadyCloned = oldEl->systemFlag() && oldEl->findLinkedInScore(score);
+            if (alreadyCloned) {
+                continue;
+            }
             EngravingItem* newEl = oldEl->linkedClone();
             newEl->setParent(nm);
             newEl->setTrack(0);
