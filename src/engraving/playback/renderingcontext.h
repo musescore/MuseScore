@@ -174,10 +174,6 @@ inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& a
     const Tie* tie = note->tieBack();
 
     if (tie && tie->playSpanner()) {
-        if (!tie->startNote() || !tie->endNote()) {
-            return false;
-        }
-
         //!Note Checking whether the tied note has any multi-note articulation attached
         //!     If so, we can't ignore such note
         for (const auto& pair : articualtionMap) {
@@ -186,23 +182,36 @@ inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& a
             }
         }
 
-        const Chord* firstChord = tie->startNote()->chord();
-        const Chord* lastChord = tie->endNote()->chord();
-        if (!firstChord || !lastChord) {
-            return false;
+        const Note* startNote = tie->startNote();
+        const Chord* startChord = startNote ? startNote->chord() : nullptr;
+        if (startChord) {
+            if (startChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+                return true;
+            }
         }
 
-        if (firstChord->tremoloType() != TremoloType::INVALID_TREMOLO
-            || lastChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+        const Note* endNote = tie->endNote();
+        const Chord* endChord = endNote ? endNote->chord() : nullptr;
+        if (endChord) {
+            if (endChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+                return true;
+            }
+        }
+
+        if (tie->isPartialTie()) {
             return true;
         }
 
-        auto intervals = firstChord->score()->spannerMap().findOverlapping(firstChord->tick().ticks(),
-                                                                           firstChord->endTick().ticks(),
-                                                                           /*excludeCollisions*/ true);
-        for (auto interval : intervals) {
+        if (!startChord || !endChord) {
+            return false;
+        }
+
+        const auto& intervals = startChord->score()->spannerMap().findOverlapping(startChord->tick().ticks(),
+                                                                                  startChord->endTick().ticks(),
+                                                                                  /*excludeCollisions*/ true);
+        for (const auto& interval : intervals) {
             const Spanner* sp = interval.value;
-            if (sp->isTrill() && sp->playSpanner() && sp->endElement() == firstChord) {
+            if (sp->isTrill() && sp->playSpanner() && sp->endElement() == startChord) {
                 return true;
             }
         }

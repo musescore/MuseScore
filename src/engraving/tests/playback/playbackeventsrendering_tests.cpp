@@ -2803,6 +2803,115 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_PartialTie
+ * @details Checks whether we correctly calculate the duration of partially tied notes
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, PartialTie)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "partial_tie.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+
+        for (const Measure* m : repeatSegment->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    // [THEN] Expected pitch, time and duration of each event
+    std::vector<pitch_level_t> expectedPitchList {
+        // 1st measure
+        pitchLevel(PitchClass::A, 4),
+
+        // 2nd measure: no notes
+
+        // 3rd measure
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::A, 4), // partial tie to a whole note, also tied to a quarter note in the 4th measure
+
+        // 1st measure (repeated)
+        // 2nd measure (repeated)
+
+        // 3rd measure (repeated)
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::A, 4),
+
+        // 4th measure (2nd repeat segment): 1 tied quarter A4 note, skip
+    };
+
+    timestamp_t thirdMeasureTime = WHOLE_NOTE_DURATION * 2;
+    timestamp_t thirdMeasureRepeatedTime = WHOLE_NOTE_DURATION * 3 + WHOLE_NOTE_DURATION * 2;
+
+    std::vector<TimestampAndDuration> expectedTnDList {
+        // 1st measure
+        { 0, WHOLE_NOTE_DURATION },
+
+        // 2nd measure: no notes
+
+        // 3rd measure
+        { thirdMeasureTime, QUARTER_NOTE_DURATION },
+        { thirdMeasureTime + QUARTER_NOTE_DURATION, QUARTER_NOTE_DURATION },
+        { thirdMeasureTime + QUARTER_NOTE_DURATION * 2, QUARTER_NOTE_DURATION },
+        { thirdMeasureTime + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION + WHOLE_NOTE_DURATION }, // partial tie to a whole A4 note
+
+        // 1st measure (repeated): skip the whole A4 note
+        // 2nd measure (repeated): no notes
+
+        // 3rd measure (repeated)
+        { thirdMeasureRepeatedTime,  QUARTER_NOTE_DURATION },
+        { thirdMeasureRepeatedTime + QUARTER_NOTE_DURATION, QUARTER_NOTE_DURATION },
+        { thirdMeasureRepeatedTime + QUARTER_NOTE_DURATION * 2, QUARTER_NOTE_DURATION },
+        { thirdMeasureRepeatedTime + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION* 2 }, // also tied to a quarter note in the 4th measure
+
+        // 4th measure (2nd repeat segment): 1 tied quarter A4 note, skip
+    };
+
+    ASSERT_EQ(expectedPitchList.size(), expectedTnDList.size());
+    EXPECT_FALSE(result.empty());
+
+    int eventNum = 0;
+    for (const auto& pair : result) {
+        for (const mpe::PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const TimestampAndDuration& expectedTnD = expectedTnDList.at(eventNum);
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            EXPECT_EQ(pair.first, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedTnD.duration);
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchList.at(eventNum));
+
+            ++eventNum;
+        }
+    }
+
+    EXPECT_EQ(eventNum, expectedTnDList.size());
+
+    delete score;
+}
+
+/**
  * @brief PlaybackEventsRendererTests_TrillLine_TiedNotes
  * Checks that we can render the trill line if it doesn't last the full duration of the tied notes
  * See: https://github.com/musescore/MuseScore/issues/18676
