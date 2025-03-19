@@ -27,7 +27,9 @@
 #include "igetscore.h"
 
 namespace mu::engraving {
+class MeasureBase;
 class Score;
+class System;
 }
 
 namespace mu::notation {
@@ -55,6 +57,10 @@ public:
     EngravingItem* lastElementHit() const override;
 
     void onElementHit(EngravingItem*);
+
+    mu::engraving::MeasureBase* startMeasureBase() const override;
+    mu::engraving::MeasureBase* endMeasureBase() const override;
+    std::vector<mu::engraving::System*> selectedSystems() const override;
 
 private:
     mu::engraving::Score* score() const;
