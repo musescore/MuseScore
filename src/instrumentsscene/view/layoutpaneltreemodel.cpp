@@ -305,7 +305,7 @@ void LayoutPanelTreeModel::setupNotationConnections()
 
     m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
         if (!m_layoutPanelVisible) {
-            m_scoreChangesCache.combine(changes);
+            m_shouldUpdateSystemObjectLayers = true;
             return;
         }
 
@@ -454,11 +454,7 @@ void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
 
     if (visible) {
         updateSelectedRows();
-
-        if (m_scoreChangesCache.isValid()) {
-            onScoreChanged(m_scoreChangesCache);
-            m_scoreChangesCache.clear();
-        }
+        updateSystemObjectLayers();
     }
 }
 
@@ -1050,11 +1046,11 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::modelIndexToItem(const QModel
 
 void LayoutPanelTreeModel::updateSystemObjectLayers()
 {
-    TRACEFUNC;
-
     if (!m_masterNotation || !m_rootItem || !m_shouldUpdateSystemObjectLayers) {
         return;
     }
+
+    TRACEFUNC;
 
     m_shouldUpdateSystemObjectLayers = false;
 
