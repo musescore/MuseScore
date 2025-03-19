@@ -1859,8 +1859,15 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
         return;
     }
 
+    auto shouldSkipSegment = [](const Segment* adjSeg, staff_idx_t staff) {
+        bool inactiveOrInvisible = !adjSeg->isActive() || !adjSeg->enabled() || adjSeg->allElementsInvisible()
+                                   || !adjSeg->hasElements(staff);
+        bool isAboveStaff = adjSeg->isBreathType() || adjSeg->hasTimeSigAboveStaves();
+        return inactiveOrInvisible || isAboveStaff;
+    };
+
     const Segment* adjSeg = outgoing ? seg->next1() : seg->prev1();
-    while (adjSeg && (!adjSeg->isActive() || !adjSeg->enabled() || adjSeg->allElementsInvisible())) {
+    while (adjSeg && shouldSkipSegment(adjSeg, item->vStaffIdx())) {
         adjSeg = outgoing ? adjSeg->next1() : adjSeg->prev1();
     }
 

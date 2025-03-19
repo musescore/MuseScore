@@ -2688,26 +2688,12 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     if (firstItem && secondItem && (firstItem->isBarLine() != secondItem->isBarLine())) {
         const bool outgoing = firstItem->isChordRest();
         const BarLine* bl = outgoing ? toBarLine(secondItem) : toBarLine(firstItem);
-        const ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
+        ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
 
-        // Check the barline is the start of a repeat section
-        const Segment* adjacentCrSeg
-            = outgoing ? bl->segment()->prev1(SegmentType::ChordRest) : bl->segment()->next1(SegmentType::ChordRest);
-        EngravingItem* adjacentItem = adjacentCrSeg->element(cr->track());
-        ChordRest* adjacentCr = adjacentItem ? toChordRest(adjacentItem) : nullptr;
+        const bool hasAdjacentJump = (outgoing && cr->hasFollowingJumpItem()) || (!outgoing && cr->hasPrecedingJumpItem());
+        const bool isNextToBarline = cr->tick() + cr->actualTicks() == bl->tick();
 
-        if (!adjacentCr) {
-            for (track_idx_t track = cr->vStaffIdx() * VOICES; track < (cr->vStaffIdx() + 1) * VOICES; track++) {
-                adjacentItem = adjacentCrSeg->element(track);
-                if (!adjacentItem || !adjacentItem->isChordRest()) {
-                    continue;
-                }
-                adjacentCr = toChordRest(adjacentItem);
-                break;
-            }
-        }
-
-        if (!adjacentCr || (outgoing && !adjacentCr->hasFollowingJumpItem()) || (!outgoing && !adjacentCr->hasPrecedingJumpItem())) {
+        if (!cr || !isNextToBarline || !hasAdjacentJump) {
             return;
         }
 
@@ -2715,10 +2701,10 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         if (outgoing) {
             partialSlur->undoSetOutgoing(true);
             firstChordRest = toChordRest(firstItem);
-            secondChordRest = toChordRest(adjacentCr);
+            secondChordRest = toChordRest(cr);
         } else {
             partialSlur->undoSetIncoming(true);
-            firstChordRest = toChordRest(adjacentCr);
+            firstChordRest = toChordRest(cr);
             secondChordRest = toChordRest(secondItem);
         }
         slurTemplate = partialSlur;
