@@ -21,8 +21,6 @@
  */
 #include "updateconfiguration.h"
 
-#include "modularity/ioc.h"
-#include "global/iapplication.h"
 #include "global/configreader.h"
 
 #include "settings.h"
@@ -37,26 +35,6 @@ static const Settings::Key ALLOW_UPDATE_ON_PRERELEASE(module_name, "application/
 static const Settings::Key SKIPPED_VERSION_KEY(module_name, "application/skippedVersion");
 
 static const std::string PRIVACY_POLICY_URL_PATH("/about/desktop-privacy-policy");
-
-static QString userAgent()
-{
-    QString osName;
-#if defined(Q_OS_WIN)
-    osName = "Windows";
-#elif defined (Q_OS_MACOS)
-    osName = "Mac";
-#else
-    osName = "Linux";
-#endif
-
-    static muse::GlobalInject<muse::IApplication> app;
-
-    QString osVersion = QSysInfo::productVersion();
-    QString cpuArchitecture = QSysInfo::currentCpuArchitecture();
-
-    return QString("Musescore/%1 (%2 %3; %4)")
-           .arg(app()->version().toString(), osName, osVersion, cpuArchitecture);
-}
 
 void UpdateConfiguration::init()
 {
@@ -132,10 +110,7 @@ std::string UpdateConfiguration::previousAppReleasesNotesUrl() const
 
 muse::network::RequestHeaders UpdateConfiguration::updateHeaders() const
 {
-    muse::network::RequestHeaders headers;
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
-
-    return headers;
+    return networkConfiguration()->defaultHeaders();
 }
 
 std::string UpdateConfiguration::museScoreUrl() const

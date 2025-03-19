@@ -73,8 +73,7 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
     std::string url = configuration()->checkForMuseSoundsUpdateUrl().toString();
     m_networkManager = networkManagerCreator()->makeNetworkManager();
 
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff,
-                                              configuration()->headers());
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff);
 
     if (!getUpdateInfo) {
         LOGE() << getUpdateInfo.toString();

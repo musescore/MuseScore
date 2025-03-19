@@ -33,6 +33,11 @@ struct RequestHeaders
 {
     QMap<QNetworkRequest::KnownHeaders, QVariant> knownHeaders;
     QMap<QByteArray, QByteArray> rawHeaders;
+
+    bool isEmpty() const
+    {
+        return knownHeaders.isEmpty() && rawHeaders.isEmpty();
+    }
 };
 
 using IncomingDevice = QIODevice;

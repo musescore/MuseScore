@@ -120,11 +120,10 @@ AbstractCloudService::ServerConfig AudioComService::serverConfig() const
 
 RequestHeaders AudioComService::headers(const QString& token) const
 {
-    RequestHeaders headers;
+    RequestHeaders headers = defaultHeaders();
     headers.rawHeaders["Accept"] = "application/json";
     headers.rawHeaders["Content-Type"] = "application/json";
     headers.rawHeaders["Authorization"] = QString("Bearer " + (!token.isEmpty() ? token : accessToken())).toUtf8();
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
     return headers;
 }
@@ -276,8 +275,7 @@ Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QI
         token = extra.value("token").toString();
     }
 
-    RequestHeaders headers;
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
+    RequestHeaders headers = defaultHeaders();
     headers.knownHeaders[QNetworkRequest::ContentTypeHeader] = audioMime(audioFormat);
 
     Ret ret(true);

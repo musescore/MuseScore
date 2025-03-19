@@ -71,11 +71,6 @@ std::string UpdateConfigurationStub::previousAppReleasesNotesUrl() const
     return "";
 }
 
-muse::network::RequestHeaders UpdateConfigurationStub::updateHeaders() const
-{
-    return muse::network::RequestHeaders();
-}
-
 std::string UpdateConfigurationStub::museScoreUrl() const
 {
     return "";

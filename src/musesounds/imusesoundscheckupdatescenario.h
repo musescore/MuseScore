@@ -32,6 +32,6 @@ public:
     virtual ~IMuseSoundsCheckUpdateScenario() = default;
 
     virtual bool hasUpdate() const = 0;
-    virtual void showUpdate() = 0;
+    virtual muse::Ret showUpdate() = 0;
 };
 }

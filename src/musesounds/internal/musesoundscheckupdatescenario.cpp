@@ -69,14 +69,14 @@ bool MuseSoundsCheckUpdateScenario::hasUpdate() const
     return !shouldIgnoreUpdate(lastCheckResult.val);
 }
 
-void MuseSoundsCheckUpdateScenario::showUpdate()
+muse::Ret MuseSoundsCheckUpdateScenario::showUpdate()
 {
     RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
     if (!lastCheckResult.ret) {
-        return;
+        return lastCheckResult.ret;
     }
 
-    showReleaseInfo(lastCheckResult.val);
+    return showReleaseInfo(lastCheckResult.val);
 }
 
 bool MuseSoundsCheckUpdateScenario::isCheckStarted() const
@@ -143,10 +143,14 @@ void MuseSoundsCheckUpdateScenario::th_checkForUpdate()
     m_checkProgressChannel->finish(result);
 }
 
-void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
+muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
+    Ret ret = make_ok();
+
     DEFER {
-        setIgnoredUpdate(info.version);
+        if (ret) {
+            setIgnoredUpdate(info.version);
+        }
     };
 
     UriQuery query("musescore://musesounds/musesoundsreleaseinfo");
@@ -174,7 +178,8 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
-        return;
+        ret = rv.ret;
+        return ret;
     }
 
     QString actionCode = rv.val.toQString();
@@ -182,6 +187,8 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     if (actionCode == "openMuseHub") {
         tryOpenMuseHub(info.actions);
     }
+
+    return ret;
 }
 
 void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const

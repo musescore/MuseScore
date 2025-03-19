@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+#include "network/inetworkconfiguration.h"
 
 #include "global/types/config.h"
 
@@ -34,6 +35,7 @@ namespace muse::update {
 class UpdateConfiguration : public IUpdateConfiguration, public Injectable, public async::Asyncable
 {
     Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<network::INetworkConfiguration> networkConfiguration = { this };
 
 public:
     UpdateConfiguration(const modularity::ContextPtr& iocCtx)

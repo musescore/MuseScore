@@ -50,7 +50,7 @@ public:
     void delayedInit();
 
     bool hasUpdate() const override;
-    void showUpdate() override;
+    muse::Ret showUpdate() override;
 
 private:
     bool isCheckStarted() const;
@@ -61,7 +61,7 @@ private:
     void doCheckForUpdate(bool manual);
     void th_checkForUpdate();
 
-    void showReleaseInfo(const muse::update::ReleaseInfo& info);
+    muse::Ret showReleaseInfo(const muse::update::ReleaseInfo& info);
     void tryOpenMuseHub(muse::ValList actions) const;
 
     bool m_checkProgress = false;
