@@ -28,6 +28,8 @@
 #include "infrastructure/mscreader.h"
 #include "infrastructure/mscwriter.h"
 #include "infrastructure/ifileinfoprovider.h"
+#include "project/inotationwritersregister.h"
+#include "context/iglobalcontext.h"
 #include "types/types.h"
 
 #include "modularity/ioc.h"
@@ -51,6 +53,8 @@ class EngravingProject : public std::enable_shared_from_this<EngravingProject>, 
 {
 public:
     Inject<IEngravingElementsProvider> engravingElementsProvider = { this };
+    Inject<context::IGlobalContext> globalContext = { this };
+    Inject<project::INotationWritersRegister> writers = { this };
 
 public:
     ~EngravingProject();

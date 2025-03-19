@@ -28,6 +28,8 @@
 #include "rw/mscsaver.h"
 #include "dom/masterscore.h"
 #include "dom/part.h"
+#include "io/buffer.h"
+#include "io/iodevice.h"
 
 #include "log.h"
 
@@ -154,7 +156,23 @@ bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool cre
     TRACEFUNC;
 
     MscSaver saver(iocContext());
-    return saver.writeMscz(m_masterScore, writer, onlySelection, createThumbnail);
+    bool ret1 = saver.writeMscz(m_masterScore, writer, onlySelection, createThumbnail);
+    if (!ret1) {
+        LOGE() << "Failed to write mscz";
+        return false;
+    }
+
+    // write pdf
+    ByteArray pdfData;
+    io::Buffer pdfBuf(&pdfData);
+    pdfBuf.open(io::IODevice::WriteOnly);
+    Ret ret2 = writers()->writer("pdf")->write(globalContext()->currentNotation(), pdfBuf);
+    if (!ret2) {
+        LOGE() << "Failed to write pdf";
+        return false;
+    }
+    writer.writePdfFile(pdfData);
+    return true;
 }
 
 bool EngravingProject::isCorruptedUponLoading() const
