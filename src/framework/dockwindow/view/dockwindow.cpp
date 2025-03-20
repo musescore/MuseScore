@@ -173,7 +173,14 @@ void DockWindow::init()
 {
     clearRegistry();
 
+#ifdef Q_OS_MACOS
+    /*! TODO: restoring of the window geometry is temporarily disabled for macOS
+     * because it has a problem with saving a normal geometry of main window on KDDockWidgets
+     * see https://github.com/KDAB/KDDockWidgets/pull/273
+    */
+#else
     restoreGeometry();
+#endif
 
     dockWindowProvider()->init(this);
 
