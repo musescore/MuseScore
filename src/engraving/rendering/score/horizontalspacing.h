@@ -78,8 +78,9 @@ private:
     struct SegmentPosition {
         Segment* segment;
         double xPosInSystemCoords;
-        SegmentPosition(Segment* s, double x)
-            : segment(s), xPosInSystemCoords(x) {}
+        bool ignoreForSpacing;
+        SegmentPosition(Segment* s, double x, bool ignoreForSpacing = false)
+            : segment(s), xPosInSystemCoords(x), ignoreForSpacing(ignoreForSpacing) {}
     };
 
     struct CrossBeamSpacing
