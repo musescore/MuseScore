@@ -215,18 +215,22 @@ AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
 
     result.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
-    // Get the string identifier of the audio renderer
-    hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
-
-    winrt::Windows::Foundation::IAsyncOperation<DeviceInformationCollection> deviceRequest
-        = DeviceInformation::FindAllAsync(AudioSelector, {});
-
     DeviceInformationCollection devices = nullptr;
 
     try {
+        // Get the string identifier of the audio renderer
+        hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
+
+        winrt::Windows::Foundation::IAsyncOperation<DeviceInformationCollection> deviceRequest
+            = DeviceInformation::FindAllAsync(AudioSelector, {});
+
         devices = deviceRequest.get();
     } catch (...) {
         LOGE() << to_string(hresult_error(to_hresult()).message());
+    }
+
+    if (!devices) {
+        return result;
     }
 
     for (const auto& deviceInfo : devices) {
