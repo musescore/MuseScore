@@ -1248,15 +1248,15 @@ void NotationInteraction::endDrag()
 {
     doEndDrag();
     apply();
+
+    if (m_editData.isHairpinDragCreatedFromDynamic) {
+        // Merge the two actions of hairpin creation + hairpin drag
+        m_undoStack->mergeCommands(m_undoStack->currentStateIndex() - 2);
+    }
+
     notifyAboutDragChanged();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
-
-    //    updateGrips();
-    //    if (editData.element->normalModeEditBehavior() == EngravingItem::EditBehavior::Edit
-    //        && score()->selection().element() == editData.element) {
-    //        startEdit(/* editMode */ false);
-    //    }
 }
 
 muse::async::Notification NotationInteraction::dragChanged() const
