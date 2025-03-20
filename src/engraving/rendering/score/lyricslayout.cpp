@@ -224,7 +224,16 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
         Fraction endTick = item->tick();
         const Measure* lyricsMeasure = item->lyrics()->segment()->measure();
         const Segment* endCRSeg = lyricsMeasure ? lyricsMeasure->last(SegmentType::ChordRest) : nullptr;
-        const ChordRest* endCR = endCRSeg && !endCRSeg->empty() ? toChordRest(endCRSeg->elist().front()) : nullptr;
+
+        const ChordRest* endCR = nullptr;
+        if (endCRSeg && !endCRSeg->empty()) {
+            for (EngravingItem* cr : endCRSeg->elist()) {
+                if (cr && cr->isChordRest()) {
+                    endCR = toChordRest(cr);
+                    break;
+                }
+            }
+        }
 
         if (item->nextLyrics()) {
             endTick = item->nextLyrics()->tick();
