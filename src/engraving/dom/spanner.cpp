@@ -143,6 +143,9 @@ EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
+    case Pid::SPANNER_TICK:
+    case Pid::SPANNER_TICKS:
+    case Pid::SPANNER_TRACK2:
         return spanner();
     default: break;
     }
