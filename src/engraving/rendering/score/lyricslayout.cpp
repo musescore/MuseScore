@@ -311,8 +311,8 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     const bool isPartialLyricsLine = item->isPartialLyricsLineSegment();
     LyricsLine* lyricsLine = item->lyricsLine();
 
-    ChordRest* endCR = lyricsLine->endElement() &&
-                               lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement()) : nullptr;
+    ChordRest* endCR = lyricsLine->endElement()
+                       && lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement()) : nullptr;
     Lyrics* endLyrics = nullptr;
     if (endCR) {
         for (Lyrics* lyr : endCR->lyrics()) {
@@ -324,8 +324,8 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     }
 
     // When the end element is a timetick segment rather than a chordrest, the start element should be a chord with a following repeat
-    ChordRest* startCR = lyricsLine->startElement() &&
-                                lyricsLine->startElement()->isChordRest() ? toChordRest(lyricsLine->startElement()) : nullptr;
+    ChordRest* startCR = lyricsLine->startElement()
+                         && lyricsLine->startElement()->isChordRest() ? toChordRest(lyricsLine->startElement()) : nullptr;
     bool hasFollowingJump = endCR ? endCR->hasFollowingJumpItem() : (startCR ? startCR->hasFollowingJumpItem() : false);
 
     if (!endLyrics && !isPartialLyricsLine && !hasFollowingJump) {
@@ -875,8 +875,8 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
 void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics* endLyrics)
 {
     const LyricsLine* lyricsLine = item->lyricsLine();
-    ChordRest* endChordRest = lyricsLine->endElement() &&
-                                        lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement()) : nullptr;
+    ChordRest* endChordRest = lyricsLine->endElement()
+                              && lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement()) : nullptr;
     const Lyrics* startLyrics = lyricsLine->lyrics();
     const bool melisma = lyricsLine->isEndMelisma();
 
