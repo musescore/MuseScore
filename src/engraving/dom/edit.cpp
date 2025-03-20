@@ -2418,9 +2418,9 @@ void Score::cmdFlip()
                 bend->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<DirectionV>(direction));
             });
         } else if (e->isTrillSegment()) {
-            auto trillSegment = toTrillSegment(e);
-            auto trill = trillSegment->trill();
-            auto ornament = trill->ornament();
+            TrillSegment* trillSegment = toTrillSegment(e);
+            Trill* trill = trillSegment->trill();
+            Ornament* ornament = trill->ornament();
 
             flipOnce(ornament, [ornament]() {
                 ArticulationAnchor articAnchor = ArticulationAnchor(ornament->getProperty(Pid::ARTICULATION_ANCHOR).toInt());
@@ -2460,7 +2460,6 @@ void Score::cmdFlip()
                    || e->isFretDiagram()
                    || e->isOttava()
                    || e->isOttavaSegment()
-                   || e->isTrill()
                    || e->isTextLine()
                    || e->isTextLineSegment()
                    || e->isLetRing()
