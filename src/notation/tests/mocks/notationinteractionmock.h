@@ -154,7 +154,7 @@ public:
     MOCK_METHOD(void, addTiedNoteToChord, (), (override));
     MOCK_METHOD(void, addSlurToSelection, (), (override));
     MOCK_METHOD(void, addOttavaToSelection, (OttavaType), (override));
-    MOCK_METHOD(void, addHairpinOnGripDrag, (engraving::Dynamic*, bool), (override));
+    MOCK_METHOD(void, addHairpinOnGripDrag, (engraving::EditData&, bool), (override));
     MOCK_METHOD(void, addHairpinsToSelection, (HairpinType), (override));
     MOCK_METHOD(void, putRestToSelection, (), (override));
     MOCK_METHOD(void, putRest, (Duration), (override));

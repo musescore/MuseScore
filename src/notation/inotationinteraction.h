@@ -191,7 +191,7 @@ public:
     virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
-    virtual void addHairpinOnGripDrag(engraving::Dynamic* dynamic, bool isLeftGrip) = 0;
+    virtual void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;
     virtual void putRestToSelection() = 0;
     virtual void putRest(Duration duration) = 0;

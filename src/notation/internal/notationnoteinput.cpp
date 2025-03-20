@@ -611,6 +611,17 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
     setInputNotes(notes);
 }
 
+void NotationNoteInput::setRestMode(bool rest)
+{
+    mu::engraving::InputState& is = score()->inputState();
+    if (is.rest() == rest) {
+        return;
+    }
+
+    is.setRest(rest);
+    notifyAboutStateChanged();
+}
+
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     TRACEFUNC;

@@ -95,6 +95,7 @@ private:
     bool m_allowRealtimeRests = false;
 
     bool m_shouldDisableMetronome = false;
+    bool m_holdingNotes = false;
 };
 }
 

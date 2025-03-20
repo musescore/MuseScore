@@ -393,14 +393,15 @@ void FloatingWindow::updateTitleBarVisibility()
 
     bool visible = true;
 
-    for (Frame *frame : frames())
+    const Frame::List frames = this->frames();
+    for (Frame *frame : frames)
         frame->updateTitleBarVisibility();
 
     if (KDDockWidgets::usesClientTitleBar()) {
         const auto flags = Config::self().flags();
         if ((flags & Config::Flag_HideTitleBarWhenTabsVisible) && !(flags & Config::Flag_AlwaysTitleBarWhenFloating)) {
-            if (hasSingleFrame()) {
-                visible = !frames().first()->hasTabsVisible();
+            if (!frames.isEmpty() && hasSingleFrame()) {
+                visible = !frames.first()->hasTabsVisible();
             }
         }
 
@@ -422,8 +423,10 @@ void FloatingWindow::updateTitleAndIcon()
 {
     QString title;
     QIcon icon;
-    if (hasSingleFrame()) {
-        const Frame *frame = frames().constFirst();
+
+    const Frame::List frames = this->frames();
+    if (!frames.isEmpty() && hasSingleFrame()) {
+        const Frame *frame = frames.constFirst();
         title = frame->title();
         icon = frame->icon();
     } else {
@@ -498,11 +501,12 @@ LayoutSaver::FloatingWindow FloatingWindow::serialize() const
 QRect FloatingWindow::dragRect() const
 {
     QRect rect;
+    const Frame::List frames = this->frames();
     if (m_titleBar->isVisible()) {
         rect = m_titleBar->rect();
         rect.moveTopLeft(m_titleBar->mapToGlobal(QPoint(0, 0)));
-    } else if (hasSingleFrame()) {
-        rect = frames().constFirst()->dragRect();
+    } else if (!frames.isEmpty() && hasSingleFrame()) {
+        rect = frames.constFirst()->dragRect();
     } else {
         qWarning() << Q_FUNC_INFO << "Expected a title bar";
     }
