@@ -6,393 +6,187 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>517</height>
+    <width>480</width>
+    <height>536</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Transpose</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <widget class="QWidget" name="widget" native="true">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+    <widget class="muse::uicomponents::RadioButtonGroupBox" name="chromaticBox">
+     <property name="title">
+      <string>Transpose chromatically</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="muse::uicomponents::RadioButtonGroupBox" name="chromaticBox">
+       <widget class="muse::uicomponents::RadioButtonGroupBox" name="transposeByKey">
+        <property name="toolTip">
+         <string>Transpose to key (specified at concert pitch)</string>
+        </property>
         <property name="title">
-         <string>Transpose chromatically</string>
+         <string>To Key</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="muse::uicomponents::RadioButtonGroupBox" name="transposeByKey">
-           <property name="toolTip">
-            <string>Transpose to key (specified at concert pitch)</string>
-           </property>
-           <property name="title">
-            <string>To Key</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <layout class="QGridLayout" name="gridLayout">
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>4</number>
-            </property>
-            <property name="verticalSpacing">
-             <number>0</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="keyList">
-              <property name="currentIndex">
-               <number>0</number>
-              </property>
-              <item>
-               <property name="text">
-                <string>C♭ major / A♭ minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>G♭ major / E♭ minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>D♭ major / B♭ minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>A♭ major / F minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>E♭ major / C minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>B♭ major / G minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>F major / D minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>C major / A minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>G major / E minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>D major / B minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>A major / F♯ minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>E major / C♯ minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>B major / G♯ minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>F♯ major / D♯ minor</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>C♯ major / A♯ minor</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="upKey">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="accessibleName">
-               <string>Up</string>
-              </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QComboBox" name="keyList">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <item>
               <property name="text">
-               <string>Up</string>
+               <string>C♭ major / A♭ minor</string>
               </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QRadioButton" name="downKey">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>32</height>
-               </size>
-              </property>
-              <property name="accessibleName">
-               <string>Down</string>
-              </property>
+             </item>
+             <item>
               <property name="text">
-               <string>Down</string>
+               <string>G♭ major / E♭ minor</string>
               </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="closestKey">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="accessibleName">
-               <string>Closest</string>
-              </property>
+             </item>
+             <item>
               <property name="text">
-               <string>Closest</string>
+               <string>D♭ major / B♭ minor</string>
               </property>
-              <property name="checked">
-               <bool>true</bool>
+             </item>
+             <item>
+              <property name="text">
+               <string>A♭ major / F minor</string>
               </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
+             </item>
+             <item>
+              <property name="text">
+               <string>E♭ major / C minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B♭ major / G minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>F major / D minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C major / A minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>G major / E minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>D major / B minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A major / F♯ minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>E major / C♯ minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>B major / G♯ minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>F♯ major / D♯ minor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>C♯ major / A♯ minor</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="muse::uicomponents::RadioButtonGroupBox" name="transposeByInterval">
-           <property name="toolTip">
-            <string>Transpose by interval</string>
-           </property>
-           <property name="title">
-            <string>By interval</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_2">
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>4</number>
-            </property>
-            <property name="verticalSpacing">
-             <number>0</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="upInterval">
-              <property name="accessibleName">
-               <string>Up</string>
-              </property>
-              <property name="text">
-               <string>Up</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="intervalList">
-              <property name="accessibleName">
-               <string>Interval type</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>Perfect unison</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Augmented unison</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Diminished second</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Minor second</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Major second</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Augmented second</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Diminished third</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Minor third</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Major third</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Augmented third</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Diminished fourth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Perfect fourth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Augmented fourth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Diminished fifth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Perfect fifth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Augmented fifth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Diminished sixth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Minor sixth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Major sixth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Augmented sixth</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Diminished seventh</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Minor seventh</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Major seventh</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Augmented seventh</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Diminished octave</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Perfect octave</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="downInterval">
-              <property name="accessibleName">
-               <string>Down</string>
-              </property>
-              <property name="text">
-               <string>Down</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="transposeKeys">
-           <property name="text">
-            <string>Transpose key signatures</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QRadioButton" name="closestKey">
+             <property name="accessibleName">
+              <string>Closest</string>
+             </property>
+             <property name="text">
+              <string>Closest</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="upKey">
+             <property name="accessibleName">
+              <string>Up</string>
+             </property>
+             <property name="text">
+              <string>Up</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="downKey">
+             <property name="accessibleName">
+              <string>Down</string>
+             </property>
+             <property name="text">
+              <string>Down</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
       </item>
       <item>
-       <widget class="muse::uicomponents::RadioButtonGroupBox" name="diatonicBox">
+       <widget class="muse::uicomponents::RadioButtonGroupBox" name="transposeByInterval">
+        <property name="toolTip">
+         <string>Transpose by interval</string>
+        </property>
         <property name="title">
-         <string>Transpose diatonically</string>
+         <string>By interval</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -400,163 +194,367 @@
         <property name="checked">
          <bool>false</bool>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <property name="topMargin">
-          <number>2</number>
-         </property>
-         <property name="bottomMargin">
-          <number>4</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="upDiatonic">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="accessibleName">
-            <string>Up</string>
-           </property>
-           <property name="text">
-            <string>Up</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QComboBox" name="intervalList">
+             <property name="accessibleName">
+              <string>Interval type</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Perfect unison</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Augmented unison</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diminished second</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Minor second</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Major second</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Augmented second</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diminished third</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Minor third</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Major third</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Augmented third</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diminished fourth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Perfect fourth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Augmented fourth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diminished fifth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Perfect fifth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Augmented fifth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diminished sixth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Minor sixth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Major sixth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Augmented sixth</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diminished seventh</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Minor seventh</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Major seventh</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Augmented seventh</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diminished octave</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Perfect octave</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="degreeList">
-           <property name="accessibleName">
-            <string>Degree type</string>
-           </property>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <property name="text">
-             <string>Second</string>
-            </property>
+            <widget class="QRadioButton" name="upInterval">
+             <property name="accessibleName">
+              <string>Up</string>
+             </property>
+             <property name="text">
+              <string>Up</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item>
-            <property name="text">
-             <string>Third</string>
-            </property>
+            <widget class="QRadioButton" name="downInterval">
+             <property name="accessibleName">
+              <string>Down</string>
+             </property>
+             <property name="text">
+              <string>Down</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <property name="text">
-             <string>Fourth</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Fifth</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Sixth</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Seventh</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QRadioButton" name="downDiatonic">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="accessibleName">
-            <string>Down</string>
-           </property>
-           <property name="text">
-            <string>Down</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="keepDegreeAlterations">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="accessibleName">
-            <string>Keep degree alterations</string>
-           </property>
-           <property name="text">
-            <string>Keep degree alterations</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
+          </layout>
          </item>
         </layout>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_3">
-        <property name="title">
-         <string>Options</string>
+       <widget class="QCheckBox" name="transposeKeys">
+        <property name="text">
+         <string>Transpose key signatures</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="spacing">
-          <number>5</number>
-         </property>
-         <property name="topMargin">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QCheckBox" name="transposeChordNames">
-           <property name="text">
-            <string>Transpose chord symbols</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="accidentalOptions">
-           <property name="currentIndex">
-            <number>1</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>Single ♯ and ♭ only</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Use double ♯ and ♭</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDialogButtonBox" name="buttonBox">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="standardButtons">
-         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="muse::uicomponents::RadioButtonGroupBox" name="diatonicBox">
+     <property name="title">
+      <string>Transpose diatonically</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <widget class="QComboBox" name="degreeList">
+          <property name="accessibleName">
+           <string>Degree type</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>Second</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Third</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Fourth</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Fifth</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Sixth</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Seventh</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QVBoxLayout" name="verticalLayout_11">
+        <item>
+         <widget class="QRadioButton" name="upDiatonic">
+          <property name="accessibleName">
+           <string>Up</string>
+          </property>
+          <property name="text">
+           <string>Up</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="downDiatonic">
+          <property name="accessibleName">
+           <string>Down</string>
+          </property>
+          <property name="text">
+           <string>Down</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="keepDegreeAlterations">
+        <property name="accessibleName">
+         <string>Keep degree alterations</string>
+        </property>
+        <property name="text">
+         <string>Keep degree alterations</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Options</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0" colspan="2">
+       <widget class="QCheckBox" name="transposeChordNames">
+        <property name="text">
+         <string>Transpose chord symbols</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Accidentals:</string>
+        </property>
+        <property name="buddy">
+         <cstring>accidentalOptions</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="accidentalOptions">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>Single ♯ and ♭ only</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Use double ♯ and ♭</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>
@@ -572,18 +570,18 @@
  <tabstops>
   <tabstop>chromaticBox</tabstop>
   <tabstop>transposeByKey</tabstop>
-  <tabstop>closestKey</tabstop>
   <tabstop>keyList</tabstop>
+  <tabstop>closestKey</tabstop>
   <tabstop>upKey</tabstop>
   <tabstop>downKey</tabstop>
   <tabstop>transposeByInterval</tabstop>
-  <tabstop>upInterval</tabstop>
   <tabstop>intervalList</tabstop>
+  <tabstop>upInterval</tabstop>
   <tabstop>downInterval</tabstop>
   <tabstop>transposeKeys</tabstop>
   <tabstop>diatonicBox</tabstop>
-  <tabstop>upDiatonic</tabstop>
   <tabstop>degreeList</tabstop>
+  <tabstop>upDiatonic</tabstop>
   <tabstop>downDiatonic</tabstop>
   <tabstop>keepDegreeAlterations</tabstop>
   <tabstop>transposeChordNames</tabstop>
@@ -598,8 +596,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>386</x>
-     <y>419</y>
+     <x>398</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -614,8 +612,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>450</x>
-     <y>419</y>
+     <x>462</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
