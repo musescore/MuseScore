@@ -25,6 +25,8 @@
 #include "pitchspelling.h"
 #include "../types/types.h"
 
+#include <array>
+
 namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
