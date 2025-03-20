@@ -302,7 +302,12 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     const bool isPartialLyricsLine = item->isPartialLyricsLineSegment();
     LyricsLine* lyricsLine = item->lyricsLine();
 
-    ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    EngravingItem* endElement = lyricsLine->endElement();
+    IF_ASSERT_FAILED(endElement && endElement->isChordRest()) {
+        return;
+    }
+
+    ChordRest* endChordRest = toChordRest(endElement);
     Lyrics* endLyrics = nullptr;
     for (Lyrics* lyr : endChordRest->lyrics()) {
         if (lyr->no() == item->no()) {
