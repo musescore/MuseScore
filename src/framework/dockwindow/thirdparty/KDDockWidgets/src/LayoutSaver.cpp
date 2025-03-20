@@ -834,6 +834,14 @@ void LayoutSaver::FloatingWindow::fromVariantMap(const QVariantMap &map)
 
 bool LayoutSaver::MainWindow::isValid() const
 {
+    if (!geometry.isValid() || geometry.isNull()) {
+        return false;
+    }
+
+    if (!normalGeometry.isValid() || normalGeometry.isNull()) {
+        return false;
+    }
+
     if (!multiSplitterLayout.isValid())
         return false;
 
