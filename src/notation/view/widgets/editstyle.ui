@@ -5766,13 +5766,13 @@
             <item>
              <widget class="QGroupBox" name="groupBox_rests">
               <property name="title">
-               <string>Rests (multiple voices)</string>
+               <string>Rests</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_36">
                <item>
                 <widget class="QLabel" name="label_46">
                  <property name="text">
-                  <string>Default vertical offset:</string>
+                  <string>Default vertical offset for multiple voices:</string>
                  </property>
                 </widget>
                </item>
