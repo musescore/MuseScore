@@ -24,6 +24,7 @@
 
 #include "internal/workspaceutils.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace muse::workspace;
@@ -73,6 +74,11 @@ QVariant WorkspaceListModel::selectedWorkspace() const
     }
 
     return obj;
+}
+
+QString WorkspaceListModel::appTitle() const
+{
+    return application()->title();
 }
 
 QVariant WorkspaceListModel::data(const QModelIndex& index, int role) const

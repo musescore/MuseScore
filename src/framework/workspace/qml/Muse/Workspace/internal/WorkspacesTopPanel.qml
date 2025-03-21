@@ -31,6 +31,8 @@ Column {
     property string firstWorkspaceTitle: ""
     property alias canRemove: deleteButton.enabled
 
+    property string appTitle: ""
+
     spacing: 24
 
     property NavigationPanel navigationPanel: NavigationPanel {
@@ -110,8 +112,13 @@ Column {
     StyledTextLabel {
         id: descriptionLabel
 
-        text: qsTrc("workspace", "Use workspaces to save different arrangements of the MuseScore Studio interface")
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        text: qsTrc("workspace", "Workspaces allow you to choose different configurations of the %1 interface. You can also save your own unique configurations as new workspaces.")
+        .arg(root.appTitle)
 
         horizontalAlignment: Qt.AlignLeft
+        wrapMode: Text.WordWrap
     }
 }
