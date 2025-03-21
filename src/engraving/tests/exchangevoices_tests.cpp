@@ -79,6 +79,33 @@ TEST_F(Engraving_ExchangevoicesTests, glissandi)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-gliss-ref.mscx"));
 }
 
+TEST_F(Engraving_ExchangevoicesTests, partialTies)
+{
+    Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-partialTies.mscx");
+    EXPECT_TRUE(score);
+    score->doLayout();
+
+    // select all
+    score->startCmd(TranslatableString::untranslatable("Exchange voices select all"));
+    score->cmdSelectAll();
+    score->endCmd();
+
+    // do
+    score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
+    score->cmdExchangeVoice(0, 1);
+    score->endCmd();
+
+    // compare
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-partialTies.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-partialTies-ref.mscx"));
+
+    // undo
+    EditData ed;
+    score->undoStack()->undo(&ed);
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-partialTies.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-partialTies.mscx"));
+
+}
+
 TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
 {
     String readFile(EXCHVOICES_DATA_DIR + u"undoChangeVoice.mscx");
