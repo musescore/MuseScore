@@ -73,6 +73,7 @@
 #include "page.h"
 #include "palmmute.h"
 #include "part.h"
+#include "partialtie.h"
 #include "pitchspelling.h"
 #include "rehearsalmark.h"
 #include "repeatlist.h"
@@ -5497,7 +5498,8 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 // reconnect the tie to this note, if any
                 Tie* tie = linkedNote->tieBack();
                 if (tie) {
-                    score->undoChangeSpannerElements(tie, tie->startNote(), linkedNewNote);
+                    Note* startNote = tie->isPartialTie() && !toPartialTie(tie)->isOutgoing() ? nullptr : tie->startNote();
+                    score->undoChangeSpannerElements(tie, startNote, linkedNewNote);
                 }
                 // reconnect the tie from this note, if any
                 tie = linkedNote->tieFor();

@@ -7073,6 +7073,10 @@ void Score::undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElem
             newEndElement = endElement;
         }
         sp->score()->undo(new ChangeSpannerElements(sp, newStartElement, newEndElement));
+
+        if (sp->isTie()) {
+            toTie(sp)->updatePossibleJumpPoints();
+        }
     }
 }
 
@@ -7404,6 +7408,9 @@ void Score::undoChangeMeasureRepeatCount(Measure* m, int newCount, staff_idx_t s
 void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
 {
     std::vector<Tie*> oldTies;
+    if (!tie->tieJumpPoints()) {
+        return;
+    }
     for (TieJumpPoint* jumpPoint : *tie->tieJumpPoints()) {
         if (jumpPoint->followingNote()) {
             continue;
@@ -7423,6 +7430,9 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
         auto findEndTie = [&oldTie](const TieJumpPoint* jumpPoint) {
             return jumpPoint->endTie() == oldTie;
         };
+        if (!oldTie) {
+            continue;
+        }
 
         if (std::find_if((*tie->tieJumpPoints()).begin(), (*tie->tieJumpPoints()).end(),
                          findEndTie) != (*tie->tieJumpPoints()).end()) {
