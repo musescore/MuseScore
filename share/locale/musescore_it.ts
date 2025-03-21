@@ -1372,7 +1372,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="924"/>
         <source>Flats</source>
-        <translation>Bemolle</translation>
+        <translation>Bemolle1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="973"/>
@@ -1969,7 +1969,7 @@
         <extracomment>spatium unit
 ----------
 space unit</extracomment>
-        <translation>sp2</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="458"/>
@@ -3002,7 +3002,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation>Voci 1 e 3 sopra il rigo, voci 2 e 4 sotto il rigo</translation>
+        <translation>Voci 1 &amp; 3 sopra il rigo, voci 2 &amp; 4 sotto il rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
@@ -3127,7 +3127,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>Glissando e linee ancorate alla nota</translation>
+        <translation>Glissando &amp; linee ancorate alla nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
@@ -3659,7 +3659,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Header &amp; footer</source>
-        <translation>Intestazione e piè di pagina</translation>
+        <translation>Intestazione &amp; piè di pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="104"/>
@@ -3670,7 +3670,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
         <source>Slurs &amp; ties</source>
-        <translation>Legature di portamento e di valore</translation>
+        <translation>Legature di portamento &amp; di valore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
@@ -4200,7 +4200,7 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10841"/>
         <source>sp</source>
         <comment>space unit</comment>
-        <translation>sp3</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10786"/>
@@ -5462,7 +5462,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="40"/>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="65"/>
         <source>sp</source>
-        <translation>sp4</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="62"/>
@@ -7056,7 +7056,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="66"/>
         <source>Enter note %1</source>
-        <translation>Inserire la nota %1</translation>
+        <translation>Inserisci la nota %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="67"/>
@@ -9676,22 +9676,22 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="908"/>
         <source>Fou&amp;rth above</source>
-        <translation>Quarta sopra</translation>
+        <translation>Qua&amp;rta sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="914"/>
         <source>Fift&amp;h above</source>
-        <translation>Quinta sopra</translation>
+        <translation>Quint&amp;a sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="920"/>
         <source>Si&amp;xth above</source>
-        <translation>Sesta sopra</translation>
+        <translation>Se&amp;sta sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="926"/>
         <source>Seve&amp;nth above</source>
-        <translation>Settima sopra</translation>
+        <translation>Sett&amp;ima sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="932"/>
@@ -9701,7 +9701,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="938"/>
         <source>Ninth abov&amp;e</source>
-        <translation>Nona sopra</translation>
+        <translation>Nona sopr&amp;a</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="944"/>
@@ -9716,7 +9716,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="956"/>
         <source>F&amp;ourth below</source>
-        <translation>Quarta sotto</translation>
+        <translation>Q&amp;uarta sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="962"/>
@@ -9726,12 +9726,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="968"/>
         <source>S&amp;ixth below</source>
-        <translation>Sesta sotto</translation>
+        <translation>S&amp;esta sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="974"/>
         <source>Se&amp;venth below</source>
-        <translation>Settima sotto</translation>
+        <translation>Se&amp;ttima sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="980"/>
@@ -9741,7 +9741,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="986"/>
         <source>Ninth belo&amp;w</source>
-        <translation>Nona sotto</translation>
+        <translation>Nona sott&amp;o</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
@@ -9801,22 +9801,22 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1285"/>
         <source>&amp;Part name</source>
-        <translation>Nome &amp;parte</translation>
+        <translation>Nome della &amp;parte</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
         <source>Syst&amp;em text</source>
-        <translation>Testo di sistema</translation>
+        <translation>Testo di sist&amp;ema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1303"/>
         <source>St&amp;aff text</source>
-        <translation>Testo di rigo</translation>
+        <translation>Testo di ri&amp;go</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
         <source>E&amp;xpression text</source>
-        <translation>Testo di espressione</translation>
+        <translation>Testo di e&amp;spressione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1315"/>
@@ -9836,12 +9836,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1333"/>
         <source>Stic&amp;king</source>
-        <translation>Sticking</translation>
+        <translation>Stic&amp;king</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1345"/>
         <source>R&amp;oman numeral analysis</source>
-        <translation>Analisi numeri romani</translation>
+        <translation>Analisi numeri r&amp;omani</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1351"/>
@@ -9851,7 +9851,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1357"/>
         <source>L&amp;yrics</source>
-        <translation>Parole</translation>
+        <translation>P&amp;arole</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1363"/>
@@ -9881,17 +9881,17 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
         <source>Q&amp;uintuplet</source>
-        <translation>Quintina</translation>
+        <translation>Q&amp;uintina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1399"/>
         <source>Se&amp;xtuplet</source>
-        <translation>Sestina</translation>
+        <translation>Se&amp;stina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
         <source>Se&amp;ptuplet</source>
-        <translation>Settimina</translation>
+        <translation>Se&amp;ttimina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
@@ -9901,7 +9901,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1423"/>
         <source>Othe&amp;r…</source>
-        <translation>Altro...</translation>
+        <translation>Altr&amp;o...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
@@ -10302,7 +10302,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation>Marcatore battute irregolari</translation>
+        <translation>Marcatore battute i&amp;rregolari</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
@@ -10396,12 +10396,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
         <source>Show p&amp;aths…</source>
-        <translation>Mostra percorsi</translation>
+        <translation>Mostra p&amp;ercorsi</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="47"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation>Mostra profiler</translation>
+        <translation>Mostra pr&amp;ofiler</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
@@ -10550,7 +10550,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="164"/>
         <source>Extensions toolbar</source>
-        <translation>Barra degli strumenti estensioni</translation>
+        <translation>Barra strumenti delle estensioni</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="220"/>
@@ -10690,7 +10690,7 @@ Questa azione non eliminerà nessuna delle tue partiture.</translation>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="95"/>
         <source>DevTools</source>
-        <translation>Strumenti di sviluppo</translation>
+        <translation>Attrezzi di sviluppo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="79"/>
@@ -10790,7 +10790,7 @@ Questa azione non può essere annullata.</translation>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="131"/>
         <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
-        <translation>Per informazioni sulla riservatezza, consulta la nostra &lt;a href=&quot;%1&quot;&gt;politica sulla riservatezza&lt;/a&gt;.</translation>
+        <translation>Per informazioni sulla privacy, consulta la nostra &lt;a href=&quot;%1&quot;&gt;normativa sulla privacy&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
@@ -10910,7 +10910,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="80"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>Per proteggere la tua privacy, MuseScore Studio non raccoglie alcuna informazione personale. Per maggiori informazioni, consulta la nostra &lt;a href=&quot;%1&quot;&gt;Informativa sulla privacy &lt;/a&gt;.</translation>
+        <translation>Per proteggere la tua privacy, MuseScore Studio non raccoglie alcuna informazione personale. Consulta la nostra &lt;a href=&quot;%1&quot;&gt;normativa sulla privacy&lt;/a&gt; per ulteriori informazioni.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -11188,7 +11188,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>Il controllo degli aggiornamenti richiede l&apos;accesso alla rete. Per proteggere la tua privacy, MuseScore Studio non memorizza alcuna informazione personale. Consulta la nostra &lt;a href=&quot;%1&quot;&gt;politica sulla privacy&lt;/a&gt; per ulteriori informazioni.</translation>
+        <translation>Il controllo degli aggiornamenti richiede l&apos;accesso alla rete. Per proteggere la tua privacy, MuseScore Studio non memorizza alcuna informazione personale. Consulta la nostra &lt;a href=&quot;%1&quot;&gt;normativa sulla privacy&lt;/a&gt; per ulteriori informazioni.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -12319,77 +12319,77 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3317"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3355"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3318"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3356"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="739"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="751"/>
         <source>Voice: %1</source>
         <translation>Voce: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3325"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3326"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(attivo %1‰ disattivo %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3331"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3360"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3361"/>
         <source>Beat slash</source>
         <translation>Battito barra ritmica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3331"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3360"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3361"/>
         <source>Rhythm slash</source>
         <translation>Ritmo barra ritmica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3335"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3364"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Corda %2; Tasto: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3341"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Tono: %2; Durata: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3370"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3371"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 testa %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3372"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3373"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="754"/>
         <source>Cross-staff above</source>
         <translation>Tra righi in alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3374"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="756"/>
         <source>Cross-staff below</source>
         <translation>Tra righi in basso</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3378"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
         <source>too low</source>
         <translation>troppo basso</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3380"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3381"/>
         <source>too high</source>
         <translation>troppo alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3382"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3383"/>
         <source>too low for amateurs</source>
         <translation>troppo basso per dilettanti</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3384"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
         <source>too high for amateurs</source>
         <translation>troppo alto per dilettanti</translation>
     </message>
@@ -12453,8 +12453,8 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3410"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3422"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3411"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3423"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2454"/>
         <source>Start of %1</source>
         <translation>Inizio di %1</translation>
@@ -12463,8 +12463,8 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3414"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3430"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3415"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3431"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2469"/>
         <source>End of %1</source>
         <translation>Fine di %1</translation>
@@ -14289,7 +14289,7 @@ Tasto %1 sulle corde %2</translation>
         <source>start repeat</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>Inizio ritornello</translation>
+        <translation>inizio ritornello</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="142"/>
@@ -16583,7 +16583,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1622"/>
         <source>Jazz tone</source>
-        <translation>tono jazzistico</translation>
+        <translation>Tono jazzistico</translation>
     </message>
 </context>
 <context>
@@ -19324,7 +19324,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2802"/>
         <source>sp</source>
         <extracomment>Abbreviation of &quot;spatium&quot;</extracomment>
-        <translation>sp5</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml" line="53"/>
@@ -19531,7 +19531,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="83"/>
         <source>Minutes</source>
-        <translation>minuti</translation>
+        <translation>Minuti</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="110"/>
@@ -22823,7 +22823,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>Nascondi tutte le battute che non contengono notazioni (cutaway)</translation>
+        <translation>Nascondi tutte le battute che non contengono notazione (cutaway)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
@@ -23167,13 +23167,13 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="48"/>
         <source>Line type:</source>
-        <translation>Tipo di linee:</translation>
+        <translation>Tipo di linea:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="51"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="43"/>
         <source>Straight</source>
-        <translation>Diritto</translation>
+        <translation>Dritta</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="52"/>
@@ -23503,7 +23503,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="258"/>
         <source>To next system</source>
-        <translation>Al sistema successivo</translation>
+        <translation>Al sistema seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -24619,7 +24619,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
         <source>Extensions toolbar</source>
-        <translation>Barra degli strumenti estensioni</translation>
+        <translation>Barra strumenti delle estensioni</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="375"/>
@@ -24647,7 +24647,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <translation>Popup dinamiche</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="699"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="706"/>
         <source>Small parentheses</source>
         <translation>Parentesi piccole</translation>
     </message>
@@ -24724,7 +24724,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="777"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1302"/>
         <source>Right</source>
-        <translation>Destra:</translation>
+        <translation>Destra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="781"/>
@@ -24824,7 +24824,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="193"/>
         <source>Continuous</source>
         <extracomment>line style</extracomment>
-        <translation>Continue</translation>
+        <translation>Continua</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="195"/>
@@ -25208,64 +25208,64 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <translation>Usa parentesi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="560"/>
-        <source>Place all changes before the barline</source>
-        <translation>Colloca tutte le modifiche prima della stanghetta</translation>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="562"/>
+        <source>Changes that apply to both the repeat/jump and the subsequent bar</source>
+        <translation>Modifiche che si applicano sia al ritornello/salto che alla battuta successiva</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="564"/>
-        <source>At repeats</source>
-        <translation>Alle ripetizioni</translation>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="569"/>
+        <source>At repeats, only show changes before the barline</source>
+        <translation>In caso di ritornelli, mostra solo le modifiche prima della stanghetta</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="570"/>
-        <source>At all other jumps</source>
-        <translation>A tutti gli altri salti</translation>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="575"/>
+        <source>At all other jumps, only show changes before the barline</source>
+        <translation>In tutti gli altri salti, mostra solo le modifiche prima della stanghetta </translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="578"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="689"/>
+        <source>Show when cancelling a courtesy before repeats</source>
+        <translation>Mostra quando si annulla una cortesia prima dei ritornelli</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="700"/>
+        <source>Show when cancelling a courtesy before all other jumps</source>
+        <translation>Mostra quando si annulla una cortesia prima di tutti gli altri salti</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="585"/>
         <source>Changes that apply only after repeats and jumps</source>
         <translation>Modifiche che si applicano solo dopo ripetizioni e salti</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="588"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="595"/>
         <source>Place clefs before repeats</source>
         <translation>Posiziona le chiavi prima delle ripetizioni</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="597"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="604"/>
         <source>Place clefs after repeats</source>
         <translation>Posiziona le chiavi dopo le ripetizioni</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="619"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="626"/>
         <source>Allow changes between end-start repeats</source>
         <translation>Consenti le modifiche tra fine-inizio ritornelli</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="645"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="652"/>
         <source>Courtesies</source>
         <translation>Cortesie</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="660"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="667"/>
         <source>Show at repeats</source>
         <translation>Mostra ai ritornelli</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="671"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="678"/>
         <source>Show at all other jumps</source>
         <translation>Mostra in tutti gli altri salti</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="682"/>
-        <source>Show when cancelling a change before repeats</source>
-        <translation>Mostra quando si annulla una modifica prima dei ritornelli</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="693"/>
-        <source>Show when cancelling a change before all other jumps</source>
-        <translation>Mostra quando si annulla una modifica prima di tutti gli altri salti</translation>
     </message>
 </context>
 <context>
@@ -26077,7 +26077,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1010"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation>Arpeggi e glissando</translation>
+        <translation>Arpeggi &amp; glissando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1312"/>
@@ -26655,7 +26655,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <source>Opening file
 %1
 failed: %2</source>
-        <translation>Apertura File
+        <translation>Apertura file
 %1
 fallita: %2</translation>
     </message>
@@ -26753,7 +26753,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="132"/>
         <source>Allow reordering palettes</source>
-        <translation>Permetti di riordinare le tavolozze</translation>
+        <translation>Consenti di riordinare le tavolozze</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="164"/>
@@ -29597,7 +29597,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="45"/>
         <source>Use MuseScore element IDs</source>
-        <translation>Usa l&apos;ID Musescore dell&apos;elemento </translation>
+        <translation>Usa gli ID Musescore dell&apos;elemento </translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
@@ -30133,7 +30133,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation>Sostituisci &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt; esistente</translation>
+        <translation>Sostituisci la &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt; esistente</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
@@ -30144,7 +30144,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation>Sostituisci &lt;a href=&quot;%1&quot;&gt;audio esistente&lt;/a&gt;</translation>
+        <translation>Sostituisci l&apos;&lt;a href=&quot;%1&quot;&gt;audio esistente&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>

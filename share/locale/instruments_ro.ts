@@ -12970,7 +12970,7 @@
         <source>Hand clap.</source>
         <comment>hand-clap description</comment>
         <extracomment>description for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Lovitură între palme.</translation>
+        <translation>Bătaie din palme.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4405"/>
@@ -13005,14 +13005,14 @@
         <source>Slap</source>
         <comment>slap trackName</comment>
         <extracomment>trackName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>Lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4416"/>
         <source>Slap</source>
         <comment>slap longName</comment>
         <extracomment>longName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Slap</translation>
+        <translation>Lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4418"/>
@@ -15602,7 +15602,7 @@
         <source>Mixed Percussion</source>
         <comment>percussion trackName</comment>
         <extracomment>trackName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Percuție mixtă</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
@@ -16113,7 +16113,7 @@
         <source>slap</source>
         <comment>5-string-electric-bass channel</comment>
         <extracomment>channel for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5308"/>
@@ -16155,7 +16155,7 @@
         <source>slap</source>
         <comment>5-string-electric-bass-high-c channel</comment>
         <extracomment>channel for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5321"/>
@@ -16239,7 +16239,7 @@
         <source>slap</source>
         <comment>6-string-electric-bass channel</comment>
         <extracomment>channel for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5348"/>
@@ -16302,7 +16302,7 @@
         <source>slap</source>
         <comment>bass-guitar channel</comment>
         <extracomment>channel for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5368"/>
@@ -16344,7 +16344,7 @@
         <source>slap</source>
         <comment>electric-bass channel</comment>
         <extracomment>channel for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5381"/>
@@ -16386,7 +16386,7 @@
         <source>slap</source>
         <comment>fretless-electric-bass channel</comment>
         <extracomment>channel for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5394"/>
@@ -16428,7 +16428,7 @@
         <source>slap</source>
         <comment>acoustic-bass channel</comment>
         <extracomment>channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>lovire</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5407"/>
@@ -19370,7 +19370,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="161"/>
         <source>Glass Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Percuție de sticlă</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="162"/>
