@@ -49,6 +49,7 @@ namespace muse::dock {
 class DockToolBarView;
 class DockingHolderView;
 class DockPageView;
+class DockPanelView;
 class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectable, public async::Asyncable
 {
     Q_OBJECT
@@ -117,6 +118,7 @@ private:
     void alignTopLevelToolBars(const DockPageView* page);
 
     void addDock(DockBase* dock, Location location = Location::Left, const DockBase* relativeTo = nullptr);
+    void addPanel(const DockPageView* page, DockPanelView* panel, Location location, const DockBase* relativeTo = nullptr);
     void registerDock(DockBase* dock);
 
     void saveGeometry();
@@ -125,7 +127,7 @@ private:
     QByteArray windowState() const;
 
     void savePageState(const QString& pageName);
-    void restorePageState(const QString& pageName);
+    void restorePageState(const DockPageView* page);
 
     void reloadCurrentPage();
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
