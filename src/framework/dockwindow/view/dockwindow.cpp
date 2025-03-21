@@ -30,7 +30,6 @@
 
 #include "dockcentralview.h"
 #include "dockpageview.h"
-#include "dockpanelview.h"
 #include "dockstatusbarview.h"
 #include "docktoolbarview.h"
 #include "dockingholderview.h"
@@ -362,25 +361,10 @@ void DockWindow::loadPanels(const DockPageView* page)
 {
     TRACEFUNC;
 
-    auto addPanel = [this, page](DockPanelView* panel, Location location) {
-        for (DockPanelView* destinationPanel : page->panels()) {
-            if (panel->isVisible() && destinationPanel->isTabAllowed(panel)) {
-                registerDock(panel);
-
-                destinationPanel->addPanelAsTab(panel);
-                destinationPanel->setCurrentTabIndex(0);
-
-                return;
-            }
-        }
-
-        bool isSideLocation = location == Location::Left || location == Location::Right;
-
-        addDock(panel, location, isSideLocation ? page->centralDock() : nullptr);
-    };
-
     for (DockPanelView* panel : page->panels()) {
-        addPanel(panel, panel->location());
+        const Location location = panel->location();
+        const bool isSideLocation = location == Location::Left || location == Location::Right;
+        addPanel(page, panel, location, isSideLocation ? page->centralDock() : nullptr);
     }
 
     for (Location location : POSSIBLE_LOCATIONS) {
@@ -460,6 +444,22 @@ void DockWindow::addDock(DockBase* dock, Location location, const DockBase* rela
     m_mainWindow->addDockWidget(dock->dockWidget(), locationToKLocation(location), relativeDock, options);
 }
 
+void DockWindow::addPanel(const DockPageView* page, DockPanelView* panel, Location location, const DockBase* relativeTo)
+{
+    for (DockPanelView* destinationPanel : page->panels()) {
+        if (panel->isVisible() && destinationPanel->isTabAllowed(panel)) {
+            registerDock(panel);
+
+            destinationPanel->addPanelAsTab(panel);
+            destinationPanel->setCurrentTabIndex(0);
+
+            return;
+        }
+    }
+
+    addDock(panel, location, relativeTo);
+}
+
 void DockWindow::registerDock(DockBase* dock)
 {
     TRACEFUNC;
@@ -495,7 +495,7 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
     }
 
     loadPageContent(newPage);
-    restorePageState(newPage->objectName());
+    restorePageState(newPage);
     initDocks(newPage);
 
     newPage->setParams(params);
@@ -544,16 +544,39 @@ void DockWindow::savePageState(const QString& pageName)
     m_reloadCurrentPageAllowed = true;
 }
 
-void DockWindow::restorePageState(const QString& pageName)
+void DockWindow::restorePageState(const DockPageView* page)
 {
     TRACEFUNC;
 
+    const QString& pageName = page->objectName();
+
     ValNt<QByteArray> pageStateValNt = uiConfiguration()->pageState(pageName);
+    const bool layoutIsEmpty = pageStateValNt.val.isEmpty();
+
+    QSet<DockBase*> unknownDocks;
+    if (!layoutIsEmpty) {
+        for (DockBase* dock : page->allDocks()) {
+            const KDDockWidgets::DockWidgetBase* dockWidget = dock->dockWidget();
+            if (!pageStateValNt.val.contains(dockWidget->uniqueName().toLocal8Bit())) {
+                unknownDocks.insert(dock);
+            }
+        }
+    }
 
     /// NOTE: Do not restore geometry
     bool ok = restoreLayout(pageStateValNt.val, true /*restoreRelativeToMainWindow*/);
     if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
+    }
+
+    if (!layoutIsEmpty) {
+        for (DockBase* dock : unknownDocks) {
+            if (DockPanelView* panel = dynamic_cast<DockPanelView*>(dock)) {
+                addPanel(page, panel, panel->location(), page->centralDock());
+                continue;
+            }
+            addDock(dock, dock->location(), page->centralDock());
+        }
     }
 
     if (!pageStateValNt.notification.isConnected()) {
