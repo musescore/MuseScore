@@ -718,10 +718,6 @@ static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfigur
 //   color2xml
 //---------------------------------------------------------
 
-/**
- Return \a el color.
- */
-
 static String color2xml(const EngravingItem* el)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
@@ -737,6 +733,23 @@ static void addColorAttr(const EngravingItem* el, XmlWriter::Attributes& attrs)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
         attrs.emplace_back(std::make_pair("color", String::fromStdString(el->color().toString())));
+    }
+}
+
+//---------------------------------------------------------
+//   frame2xml
+//---------------------------------------------------------
+
+static String frame2xml(const TextBase* el)
+{
+    if (el->hasFrame()) {
+        if (el->circle()) {
+            return String(u" enclosure=\"circle\"");
+        } else if (el->square()) {
+            return String(u" enclosure=\"rectangle\"");
+        } else {
+            return String();
+        }
     }
 }
 
@@ -2883,6 +2896,7 @@ static void writeAccidental(XmlWriter& xml, const String& tagName, const Acciden
 
 static void writeDisplayName(XmlWriter& xml, const String& partName)
 {
+    // TODO: add text style attributes
     String displayText;
     for (size_t i = 0; i < partName.size(); ++i) {
         Char ch = partName.at(i);
@@ -4999,13 +5013,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     } else {
         xml.startElement("direction-type");
         String attr;
-        if (text->hasFrame()) {
-            if (text->circle()) {
-                attr = u" enclosure=\"circle\"";
-            } else {
-                attr = u" enclosure=\"rectangle\"";
-            }
-        }
+        attr += frame2xml(text);
         attr += color2xml(text);
         attr += ExportMusicXml::positioningAttributes(text);
         MScoreTextToMusicXml mttm(u"words", attr, defFmt, mtf);
@@ -5201,13 +5209,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
     m_xml.startElement("direction", { { "placement", (relativePosition.y() < 0) ? "above" : "below" } });
     m_xml.startElement("direction-type");
     String attr;
-    if (text->hasFrame()) {
-        if (text->circle()) {
-            attr = u" enclosure=\"circle\"";
-        } else {
-            attr = u" enclosure=\"rectangle\"";
-        }
-    }
+    attr += frame2xml(text);
     attr += ExportMusicXml::positioningAttributesForTboxText(relativePosition, text->spatium());
     attr += u" valign=\"top\"";
     MScoreTextToMusicXml mttm(u"words", attr, defFmt, mtf);
@@ -5234,6 +5236,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     if (rmk->circle()) {
         attr = u" enclosure=\"circle\"";
     } else if (!rmk->hasFrame()) {
+        // special default case
         attr = u" enclosure=\"none\"";
     }
     attr += color2xml(rmk);
@@ -5842,6 +5845,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     m_xml.startElement("direction-type");
 
     String tagName = u"dynamics";
+    tagName += frame2xml(dyn);
     tagName += color2xml(dyn);
     tagName += positioningAttributes(dyn);
     m_xml.startElementRaw(tagName);
