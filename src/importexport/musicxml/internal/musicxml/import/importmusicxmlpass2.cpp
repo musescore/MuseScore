@@ -3664,10 +3664,17 @@ void MusicXmlParserDirection::direction(const String& partId,
     // do dynamics
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     for (StringList::iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
-        Dynamic* dyn = Factory::createDynamic(m_score->dummy()->segment());
+        Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(*it);
-        if (m_dynamicsColor.isValid()) {
-            dynamic->setColor(m_dynamicsColor);
+        colorItem(dynamic, m_dynamicsColor);
+
+        if (m_enclosure == "circle") {
+            dynamic->setFrameType(FrameType::CIRCLE);
+        } else if (m_enclosure == "none") {
+            dynamic->setFrameType(FrameType::NO_FRAME);
+        } else if (m_enclosure == "rectangle") {
+            dynamic->setFrameType(FrameType::SQUARE);
+            dynamic->setFrameRound(0);
         }
 
         if (isDynamicRange) {
@@ -3688,10 +3695,10 @@ void MusicXmlParserDirection::direction(const String& partId,
             } else if (dynaValue < 0) {
                 dynaValue = 0;
             }
-            dyn->setVelocity(dynaValue);
+            dynamic->setVelocity(dynaValue);
         }
 
-        dyn->setVisible(m_visible);
+        dynamic->setVisible(m_visible);
 
         String dynamicsPlacement = placement();
         // Case-based defaults
@@ -3705,7 +3712,7 @@ void MusicXmlParserDirection::direction(const String& partId,
         // Add element to score later, after collecting all the others and sorting by default-y
         // This allows default-y to be at least respected by the order of elements
         MusicXmlDelayedDirectionElement* delayedDirection = new MusicXmlDelayedDirectionElement(
-            hasTotalY() ? totalY() : 100, dyn, m_track, dynamicsPlacement, measure, tick + m_offset);
+            hasTotalY() ? totalY() : 100, dynamic, m_track, dynamicsPlacement, measure, tick + m_offset);
         delayedDirections.push_back(delayedDirection);
     }
 
@@ -4148,6 +4155,7 @@ void MusicXmlParserDirection::swing()
 void MusicXmlParserDirection::dynamics()
 {
     m_dynamicsColor = Color::fromString(m_e.attribute("color"));
+    m_enclosure = m_e.attribute("enclosure");
     m_dynamicsPlacement = m_e.attribute("placement");
 
     while (m_e.readNextStartElement()) {
@@ -9274,10 +9282,8 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     for (const String& d : std::as_const(m_dynamicsList)) {
         Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(d);
-        if (m_dynamicsColor.isValid()) {
-            dynamic->setColor(m_dynamicsColor);
-        }
-        m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick), m_pass2);
+        colorItem(dynamic, m_dynamicsColor);
+        m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
     }
 }
 
