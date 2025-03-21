@@ -12942,35 +12942,35 @@
         <source>Finger snap.</source>
         <comment>finger-snap description</comment>
         <extracomment>description for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mit den Fingern schnalzen (Orff-Schulwerk Klanggeste).</translation>
+        <translation>Mit den Fingern schnalzen/schnipsen (Orff-Schulwerk Klanggeste).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4396"/>
         <source>Finger Snap</source>
         <comment>finger-snap trackName</comment>
         <extracomment>trackName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Schnalzen</translation>
+        <translation>Schnipsen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4398"/>
         <source>Finger Snap</source>
         <comment>finger-snap longName</comment>
         <extracomment>longName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Schnalzen</translation>
+        <translation>Schnipsen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4400"/>
         <source>Fi. Sna.</source>
         <comment>finger-snap shortName</comment>
         <extracomment>shortName for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Schna.</translation>
+        <translation>Schnips.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4403"/>
         <source>Hand clap.</source>
         <comment>hand-clap description</comment>
         <extracomment>description for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mit den Händen klatschen (Orff-Schulwerk Klanggeste).</translation>
+        <translation>In die Hände klatschen (Orff-Schulwerk Klanggeste).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4405"/>
@@ -12998,7 +12998,7 @@
         <source>Hand slap.</source>
         <comment>slap description</comment>
         <extracomment>description for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mit den Händen patschen (Orff-Schulwerk Klanggeste).</translation>
+        <translation>Mit den Händen auf den Körper patschen (Orff-Schulwerk Klanggeste).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4414"/>
@@ -13026,7 +13026,7 @@
         <source>Foot stamp.</source>
         <comment>stamp description</comment>
         <extracomment>description for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>(Fuß-)Stampfen (Orff-Schulwerk Klanggeste)</translation>
+        <translation>Mit den Füßen stampfen (Orff-Schulwerk Klanggeste)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4423"/>

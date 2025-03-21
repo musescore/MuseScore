@@ -13082,7 +13082,7 @@
         <source>Soprano voice.</source>
         <comment>soprano description</comment>
         <extracomment>description for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Сопрано (голос).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4444"/>
@@ -13138,7 +13138,7 @@
         <source>Mezzo-soprano voice.</source>
         <comment>mezzo-soprano description</comment>
         <extracomment>description for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Мецо-сопрано (голос).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4462"/>
@@ -13222,7 +13222,7 @@
         <source>Alto voice.</source>
         <comment>alto description</comment>
         <extracomment>description for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Альт (голос).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4489"/>
@@ -13278,7 +13278,7 @@
         <source>Female alto voice.</source>
         <comment>contralto description</comment>
         <extracomment>description for Contralto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Жіночий альт.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4507"/>
@@ -13306,7 +13306,7 @@
         <source>Tenor voice.</source>
         <comment>tenor description</comment>
         <extracomment>description for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тенор (голос).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4516"/>
@@ -13362,7 +13362,7 @@
         <source>Baritone voice.</source>
         <comment>baritone description</comment>
         <extracomment>description for Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Баритон (голос).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4534"/>
@@ -13418,7 +13418,7 @@
         <source>Voice (unspecified type).</source>
         <comment>voice description</comment>
         <extracomment>description for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Голос (не вказано тип).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4552"/>
@@ -13446,7 +13446,7 @@
         <source>Bass voice.</source>
         <comment>bass description</comment>
         <extracomment>description for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Бас (голос).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4561"/>
@@ -13474,21 +13474,21 @@
         <source>Women’s voices.</source>
         <comment>women description</comment>
         <extracomment>description for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Жіночі голоси.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4570"/>
         <source>Women</source>
         <comment>women trackName</comment>
         <extracomment>trackName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Жіночий</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4572"/>
         <source>Women</source>
         <comment>women longName</comment>
         <extracomment>longName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Жіночий</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4574"/>
@@ -13516,21 +13516,21 @@
         <source>Men’s voices.</source>
         <comment>men description</comment>
         <extracomment>description for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Чоловічі голоси.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4583"/>
         <source>Men</source>
         <comment>men trackName</comment>
         <extracomment>trackName for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Чоловічий</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4585"/>
         <source>Men</source>
         <comment>men longName</comment>
         <extracomment>longName for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Чоловічий</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4587"/>
@@ -19421,7 +19421,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="171"/>
         <source>Voice Groups</source>
-        <translation type="unfinished"/>
+        <translation> Групи голосів</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="172"/>
