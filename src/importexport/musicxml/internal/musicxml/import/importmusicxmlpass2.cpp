@@ -3665,18 +3665,18 @@ void MusicXmlParserDirection::direction(const String& partId,
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     for (StringList::iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
         Dynamic* dyn = Factory::createDynamic(m_score->dummy()->segment());
-        dyn->setDynamicType(*it);
+        dynamic->setDynamicType(*it);
         if (m_dynamicsColor.isValid()) {
             dynamic->setColor(m_dynamicsColor);
         }
 
         if (isDynamicRange) {
             if (it == m_dynamicsList.begin()) {
-                firstDyn = dyn;
+                firstDyn = dynamic;
             } else if (it == m_dynamicsList.end() - 1 && firstDyn) {
                 // append hyphen and this dynamic to first
-                firstDyn->setXmlText(firstDyn->xmlText() + u"<sym>dynamicCombinedSeparatorHyphen</sym>" + dyn->xmlText());
-                delete dyn;
+                firstDyn->setXmlText(firstDyn->xmlText() + u"<sym>dynamicCombinedSeparatorHyphen</sym>" + dynamic->xmlText());
+                delete dynamic;
                 continue;
             }
         }
@@ -9277,7 +9277,7 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
         if (m_dynamicsColor.isValid()) {
             dynamic->setColor(m_dynamicsColor);
         }
-        addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick), m_pass2);
+        m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick), m_pass2);
     }
 }
 
