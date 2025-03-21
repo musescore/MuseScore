@@ -19,18 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_MUSESOUNDSUPDATESCENARIOSTUB_H
-#define MUSE_UPDATE_MUSESOUNDSUPDATESCENARIOSTUB_H
+#pragma once
 
-#include "update/imusesoundscheckupdatescenario.h"
+#include "types/ret.h"
 
-namespace muse::update {
-class MuseSoundsCheckUpdateScenarioStub : public IMuseSoundsCheckUpdateScenario
+#include "modularity/imoduleinterface.h"
+
+namespace mu::musesounds {
+class IMuseSoundsCheckUpdateScenario : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IMuseSoundsCheckUpdateScenario)
+
 public:
-    bool hasUpdate() const override;
-    void showUpdate() override;
+    virtual ~IMuseSoundsCheckUpdateScenario() = default;
+
+    virtual bool hasUpdate() const = 0;
+    virtual muse::Ret showUpdate() = 0;
 };
 }
-
-#endif // MUSE_UPDATE_MUSESOUNDSUPDATESCENARIOSTUB_H

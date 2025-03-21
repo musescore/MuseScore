@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_NETWORK_NETWORKMODULE_H
-#define MUSE_NETWORK_NETWORKMODULE_H
+#pragma once
 
-#include "modularity/imodulesetup.h"
+#include "global/types/config.h"
+
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+#include "iapplication.h"
+
+#include "inetworkconfiguration.h"
 
 namespace muse::network {
-class NetworkConfiguration;
-class NetworkModule : public modularity::IModuleSetup
+class NetworkConfiguration : public INetworkConfiguration, public Injectable
 {
-public:
-    std::string moduleName() const override;
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<IApplication> application = { this };
 
-    void registerExports() override;
-    void registerApi() override;
-    void onInit(const IApplication::RunMode& mode) override;
+public:
+    NetworkConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
+    void init();
+
+    RequestHeaders defaultHeaders(const std::string& userAgentName = {}) const override;
 
 private:
-    std::shared_ptr<NetworkConfiguration> m_configuration;
+    QString makeUserAgent(const std::string& tplName) const;
+
+    Config m_userAgentConfig;
 };
 }
-
-#endif // MUSE_NETWORK_NETWORKMODULE_H

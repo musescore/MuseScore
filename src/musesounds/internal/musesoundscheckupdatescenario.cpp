@@ -29,17 +29,19 @@
 #include "global/types/val.h"
 #include "global/types/translatablestring.h"
 
-#include "updateerrors.h"
+#include "update/updateerrors.h"
 
 #include "log.h"
 
 using namespace muse;
+
+using namespace mu::musesounds;
 using namespace muse::update;
 using namespace muse::actions;
 
-static const char* DEFAULT_IMAGE_URL = "qrc:/qml/Muse/Update/resources/muse_sounds_promo.png";
-static const TranslatableString DEFAULT_ACTION_TITLE("update", "Take me to MuseHub");
-static const TranslatableString DEFAULT_CANCEL_TITLE("update", "No thanks");
+static const char* DEFAULT_IMAGE_URL = "qrc:/qml/MuseScore/MuseSounds/resources/muse_sounds_promo.png";
+static const TranslatableString DEFAULT_ACTION_TITLE("musesounds", "Take me to MuseHub");
+static const TranslatableString DEFAULT_CANCEL_TITLE("musesounds", "No thanks");
 
 void MuseSoundsCheckUpdateScenario::delayedInit()
 {
@@ -67,14 +69,14 @@ bool MuseSoundsCheckUpdateScenario::hasUpdate() const
     return !shouldIgnoreUpdate(lastCheckResult.val);
 }
 
-void MuseSoundsCheckUpdateScenario::showUpdate()
+muse::Ret MuseSoundsCheckUpdateScenario::showUpdate()
 {
     RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
     if (!lastCheckResult.ret) {
-        return;
+        return lastCheckResult.ret;
     }
 
-    showReleaseInfo(lastCheckResult.val);
+    return showReleaseInfo(lastCheckResult.val);
 }
 
 bool MuseSoundsCheckUpdateScenario::isCheckStarted() const
@@ -141,13 +143,17 @@ void MuseSoundsCheckUpdateScenario::th_checkForUpdate()
     m_checkProgressChannel->finish(result);
 }
 
-void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
+muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
+    Ret ret = make_ok();
+
     DEFER {
-        setIgnoredUpdate(info.version);
+        if (ret) {
+            setIgnoredUpdate(info.version);
+        }
     };
 
-    UriQuery query("muse://update/musesoundsreleaseinfo");
+    UriQuery query("musescore://musesounds/musesoundsreleaseinfo");
     query.addParam("notes", Val(info.notes));
     query.addParam("features", Val(info.additionInfo.at("features")));
 
@@ -172,7 +178,8 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
-        return;
+        ret = rv.ret;
+        return ret;
     }
 
     QString actionCode = rv.val.toQString();
@@ -180,6 +187,8 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     if (actionCode == "openMuseHub") {
         tryOpenMuseHub(info.actions);
     }
+
+    return ret;
 }
 
 void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const

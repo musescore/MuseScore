@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "musesoundscheckupdateservicestub.h"
+import QtQuick 2.15
 
-using namespace muse;
-using namespace muse::update;
+import Muse.Ui
+import Muse.UiComponents
 
-Ret muse::update::MuseSoundsCheckUpdateServiceStub::needCheckForUpdate() const
-{
-    return make_ret(Ret::Code::NotSupported);
-}
+Rectangle {
+    color: ui.theme.backgroundPrimaryColor
 
-RetVal<ReleaseInfo> MuseSoundsCheckUpdateServiceStub::checkForUpdate()
-{
-    return make_ret(Ret::Code::NotSupported);
-}
+    property NavigationSection section
 
-RetVal<ReleaseInfo> MuseSoundsCheckUpdateServiceStub::lastCheckResult()
-{
-    return make_ret(Ret::Code::NotSupported);
-}
-
-Progress MuseSoundsCheckUpdateServiceStub::updateProgress()
-{
-    return Progress();
+    StyledTextLabel {
+        anchors.centerIn: parent
+        text: "MuseSounds Page Stub"
+    }
 }

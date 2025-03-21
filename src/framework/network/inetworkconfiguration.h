@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,31 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
-#define MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
-
-#include "types/retval.h"
-#include "progress.h"
-
-#include "updatetypes.h"
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
-namespace muse::update {
-class IMuseSoundsCheckUpdateService : MODULE_EXPORT_INTERFACE
+#include "networktypes.h"
+
+namespace muse::network {
+class INetworkConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IMuseSamplerUpdateService)
+    INTERFACE_ID(INetworkConfiguration)
 
 public:
-    virtual ~IMuseSoundsCheckUpdateService() = default;
+    virtual ~INetworkConfiguration() = default;
 
-    virtual Ret needCheckForUpdate() const = 0;
-
-    virtual RetVal<ReleaseInfo> checkForUpdate() = 0;
-    virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
-
-    virtual Progress updateProgress() = 0;
+    virtual RequestHeaders defaultHeaders(const std::string& userAgentName = {}) const = 0;
 };
 }
-
-#endif // MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H

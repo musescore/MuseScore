@@ -49,3 +49,7 @@ endif()
 if (NOT MUSE_MODULE_WORKSPACE)
     add_subdirectory(workspacescene)
 endif()
+
+if (NOT MUE_BUILD_MUSESOUNDS_MODULE)
+    add_subdirectory(musesounds)
+endif()

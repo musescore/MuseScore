@@ -29,15 +29,15 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "global/types/version.h"
-
-#include "../updateerrors.h"
+#include "update/updateerrors.h"
 
 #include "log.h"
 
 static const muse::Uri MUSEHUB_APP_URI("musehub://?from=musescore");
 static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://?from=musescore");
 
+using namespace mu::musesounds;
+using namespace muse;
 using namespace muse::update;
 using namespace muse::network;
 
@@ -70,11 +70,10 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
     clear();
 
     QBuffer buff;
-    std::string url = configuration()->checkForMuseSamplerUpdateUrl();
+    std::string url = configuration()->checkForMuseSoundsUpdateUrl().toString();
     m_networkManager = networkManagerCreator()->makeNetworkManager();
 
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff,
-                                              configuration()->updateHeaders());
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff);
 
     if (!getUpdateInfo) {
         LOGE() << getUpdateInfo.toString();
@@ -89,15 +88,6 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
     }
 
     if (!releaseInfoRetVal.val.isValid()) {
-        return result;
-    }
-
-    Version update(releaseInfoRetVal.val.version);
-
-    bool allowUpdateOnPreRelease = configuration()->allowUpdateOnPreRelease();
-    bool isPreRelease = update.preRelease();
-
-    if (!allowUpdateOnPreRelease && isPreRelease) {
         return result;
     }
 

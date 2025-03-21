@@ -29,11 +29,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imusesoundsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/imusesoundsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/musesoundstypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdatescenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdateservice.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsconfiguration.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdatescenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdatescenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdateservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdateservice.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.h

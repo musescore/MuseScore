@@ -14,5 +14,6 @@
         <file>configs/workspaces.cfg</file>
         <file>configs/ui.cfg</file>
         <file alias="resources/appIcon.png">../../share/icons/AppIcon/MS4_AppIcon_96x96.png</file>
+        <file>configs/user_agent.cfg</file>
     </qresource>
 </RCC>

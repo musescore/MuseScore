@@ -42,6 +42,11 @@ public:
     muse::UriQuery soundsUri() const override;
     muse::UriQuery soundPageUri(const muse::String& soundCode) const override;
 
+    muse::UriQuery checkForMuseSoundsUpdateUrl() override;
+
+    std::string lastShownMuseSoundsReleaseVersion() const override;
+    void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
+
 private:
     bool isTestingMode() const;
 };

@@ -115,10 +115,9 @@ AbstractCloudService::ServerConfig MuseScoreComService::serverConfig() const
 
 RequestHeaders MuseScoreComService::headers() const
 {
-    RequestHeaders headers;
+    RequestHeaders headers = defaultHeaders();
     headers.rawHeaders["Accept"] = "application/json";
     headers.rawHeaders["X-MS-CLIENT-ID"] = QByteArray::fromStdString(configuration()->clientId());
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
     return headers;
 }

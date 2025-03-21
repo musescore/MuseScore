@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_NETWORK_NETWORKMODULE_H
-#define MUSE_NETWORK_NETWORKMODULE_H
+#include "musesoundscheckupdateservicestub.h"
 
-#include "modularity/imodulesetup.h"
+using namespace mu::musesounds;
+using namespace muse;
 
-namespace muse::network {
-class NetworkConfiguration;
-class NetworkModule : public modularity::IModuleSetup
+Ret MuseSoundsCheckUpdateServiceStub::needCheckForUpdate() const
 {
-public:
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerApi() override;
-    void onInit(const IApplication::RunMode& mode) override;
-
-private:
-    std::shared_ptr<NetworkConfiguration> m_configuration;
-};
+    return make_ret(Ret::Code::NotSupported);
 }
 
-#endif // MUSE_NETWORK_NETWORKMODULE_H
+RetVal<update::ReleaseInfo> MuseSoundsCheckUpdateServiceStub::checkForUpdate()
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
+RetVal<update::ReleaseInfo> MuseSoundsCheckUpdateServiceStub::lastCheckResult()
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
+Progress MuseSoundsCheckUpdateServiceStub::updateProgress()
+{
+    return Progress();
+}

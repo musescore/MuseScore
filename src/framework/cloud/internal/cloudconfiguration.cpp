@@ -78,3 +78,9 @@ io::path_t CloudConfiguration::tokensFilePath(const std::string& cloudName) cons
 {
     return globalConfiguration()->userAppDataPath() + "/" + cloudName + "_cred.dat";
 }
+
+RequestHeaders CloudConfiguration::headers() const
+{
+    static const std::string CLOUD_USER_AGENT = "cloud";
+    return networkConfiguration()->defaultHeaders(CLOUD_USER_AGENT);
+}

@@ -31,8 +31,6 @@ class UpdateScenario;
 class UpdateConfiguration;
 class UpdateActionController;
 class AppUpdateService;
-class MuseSoundsCheckUpdateScenario;
-class MuseSoundsCheckUpdateService;
 class UpdateModule : public modularity::IModuleSetup
 {
 public:
@@ -47,8 +45,6 @@ public:
 private:
     std::shared_ptr<UpdateScenario> m_scenario;
     std::shared_ptr<AppUpdateService> m_appUpdateService;
-    std::shared_ptr<MuseSoundsCheckUpdateScenario> m_museSoundsCheckUpdateScenario;
-    std::shared_ptr<MuseSoundsCheckUpdateService> m_museSamplerUpdateService;
     std::shared_ptr<UpdateConfiguration> m_configuration;
     std::shared_ptr<UpdateActionController> m_actionController;
 };

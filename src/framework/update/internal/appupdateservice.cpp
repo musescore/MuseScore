@@ -332,8 +332,7 @@ PrevReleasesNotesList AppUpdateService::previousReleasesNotes(const Version& upd
     PrevReleasesNotesList result;
 
     QBuffer buff;
-    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff,
-                                                        configuration()->updateHeaders());
+    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff);
     if (!getPreviousReleaseNotes) {
         LOGE() << "failed to get previous release notes: " << getPreviousReleaseNotes.toString();
         return result;

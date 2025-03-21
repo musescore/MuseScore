@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_NETWORK_NETWORKMODULE_H
-#define MUSE_NETWORK_NETWORKMODULE_H
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
-namespace muse::network {
-class NetworkConfiguration;
-class NetworkModule : public modularity::IModuleSetup
+namespace mu::musesounds {
+class MuseSoundsModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
 
     void registerExports() override;
-    void registerApi() override;
-    void onInit(const IApplication::RunMode& mode) override;
-
-private:
-    std::shared_ptr<NetworkConfiguration> m_configuration;
+    void registerResources() override;
 };
 }
-
-#endif // MUSE_NETWORK_NETWORKMODULE_H
