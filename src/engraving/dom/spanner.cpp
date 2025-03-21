@@ -949,14 +949,21 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
         return;
     }
 
-    setScore(startNote->score());
-    setParent(startNote);
+    Score* score = startNote ? startNote->score() : endNote->score();
+    Note* parent = startNote ? startNote : endNote;
+    Fraction tick = startNote ? startNote->tick() : endNote->tick();
+    Fraction endTick = endNote ? endNote->tick() : startNote->tick();
+    track_idx_t track = startNote ? startNote->track() : endNote->track();
+    track_idx_t endTrack = endNote ? endNote->track() : startNote->track();
+
+    setScore(score);
+    setParent(parent);
     setStartElement(startNote);
     setEndElement(endNote);
-    setTick(startNote->chord()->tick());
-    setTick2(endNote->chord()->tick());
-    setTrack(startNote->track());
-    setTrack2(endNote->track());
+    setTick(tick);
+    setTick2(endTick);
+    setTrack(track);
+    setTrack2(endTrack);
 }
 
 //---------------------------------------------------------
