@@ -3666,6 +3666,9 @@ void MusicXmlParserDirection::direction(const String& partId,
     for (StringList::iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
         Dynamic* dyn = Factory::createDynamic(m_score->dummy()->segment());
         dyn->setDynamicType(*it);
+        if (m_dynamicsColor.isValid()) {
+            dynamic->setColor(m_dynamicsColor);
+        }
 
         if (isDynamicRange) {
             if (it == m_dynamicsList.begin()) {
@@ -4144,6 +4147,9 @@ void MusicXmlParserDirection::swing()
 
 void MusicXmlParserDirection::dynamics()
 {
+    m_dynamicsColor = Color::fromString(m_e.attribute("color"));
+    m_dynamicsPlacement = m_e.attribute("placement");
+
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "other-dynamics") {
             m_dynamicsList.push_back(m_e.readText());
@@ -9264,7 +9270,7 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
 
     // more than one dynamic ???
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
-    // TODO remove duplicate code (see MusicXml::direction)
+    // TODO: remove duplicate code (see MusicXml::direction)
     for (const String& d : std::as_const(m_dynamicsList)) {
         Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(d);
