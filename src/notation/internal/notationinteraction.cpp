@@ -1025,6 +1025,11 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
+unsigned int NotationInteraction::currentSelectionFilter() const
+{
+    return score()->selectionFilter().filteredTypes();
+}
+
 bool NotationInteraction::isSelectionTypeFiltered(SelectionFilterType type) const
 {
     return score()->selectionFilter().isFiltered(type);
