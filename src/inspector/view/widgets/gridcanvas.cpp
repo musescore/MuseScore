@@ -30,6 +30,7 @@
 #include "draw/types/pen.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::inspector;
 using namespace muse::ui;
@@ -215,7 +216,7 @@ void GridCanvas::paint(QPainter* painter)
     for (const mu::engraving::PitchValue& v : m_points) {
         QPointF currentPoint = getPosition(v);
         // draw line only if there is a point before the current one
-        if (lastPoint.x()) {
+        if (!muse::RealIsNull(lastPoint.x())) {
             painter->drawLine(lastPoint, currentPoint);
         }
         lastPoint = currentPoint;
@@ -281,8 +282,8 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
             found = true;
             break;
         }
-        if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) == column) {
-            if (round(qreal(m_points[i].pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1)) == row
+        if (muse::RealIsEqual(round(qreal(m_points[i].time) / 60 * (m_columns - 1)), column)) {
+            if (muse::RealIsEqual(round(qreal(m_points[i].pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1)), row)
                 && i > 0 && i < (numberOfPoints - 1)) {
                 m_points.erase(m_points.begin() + i);
             } else {

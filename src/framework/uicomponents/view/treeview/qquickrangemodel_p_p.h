@@ -51,6 +51,7 @@
 // We mean it.
 //
 
+#include "realfn.h"
 #include "qquickrangemodel_p.h"
 
 QT_BEGIN_NAMESPACE
@@ -85,7 +86,7 @@ public:
     inline qreal equivalentPosition(qreal aValue) const {
         // Return absolute position from absolute value
         const qreal valueRange = maximum - minimum;
-        if (valueRange == 0)
+        if (muse::RealIsNull(valueRange))
             return effectivePosAtMin();
 
         const qreal scale = (effectivePosAtMax() - effectivePosAtMin()) / valueRange;
@@ -95,7 +96,7 @@ public:
     inline qreal equivalentValue(qreal aPos) const {
         // Return absolute value from absolute position
         const qreal posRange = effectivePosAtMax() - effectivePosAtMin();
-        if (posRange == 0)
+        if (muse::RealIsNull(posRange))
             return minimum;
 
         const qreal scale = (maximum - minimum) / posRange;

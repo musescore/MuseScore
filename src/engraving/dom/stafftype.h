@@ -208,7 +208,7 @@ public:
 
     StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
               bool stemless, bool genTimesig, bool invisible, const Color& color, const String& durFontName, double durFontSize,
-              double durFontUserY, double genDur, const String& fretFontName, double fretFontSize, double fretFontUserY,
+              double durFontUserY, bool genDur, const String& fretFontName, double fretFontSize, double fretFontUserY,
               TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
               bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
