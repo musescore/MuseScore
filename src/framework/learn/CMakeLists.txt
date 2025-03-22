@@ -39,5 +39,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.h
     )
 
-setup_module()
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Concurrent Qt::Network Qt::Qml)
+endif()
 
+setup_module()
