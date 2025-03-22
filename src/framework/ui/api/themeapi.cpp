@@ -381,7 +381,7 @@ void ThemeApi::initMusicalFont()
 
 void ThemeApi::setupUiFonts()
 {
-    QMap<QFont*, FontConfig> fonts {
+    const std::vector<std::pair<QFont*, FontConfig> > fonts {
         { &m_bodyFont, { QFont::Normal, FontSizeType::BODY } },
         { &m_bodyBoldFont, { QFont::DemiBold, FontSizeType::BODY } },
         { &m_largeBodyFont, { QFont::Normal, FontSizeType::BODY_LARGE } },
@@ -393,14 +393,13 @@ void ThemeApi::setupUiFonts()
         { &m_titleBoldFont, { QFont::DemiBold, FontSizeType::TITLE } },
     };
 
-    for (QFont* font : fonts.keys()) {
+    for (const auto& [font, fontConfig] : fonts) {
         std::string family = configuration()->fontFamily();
-        int size = configuration()->fontSize(fonts[font].sizeType);
-        QFont::Weight weight = fonts[font].weight;
+        int size = configuration()->fontSize(fontConfig.sizeType);
 
         font->setPixelSize(size);
         font->setFamily(QString::fromStdString(family));
-        font->setWeight(weight);
+        font->setWeight(fontConfig.weight);
     }
 
     m_defaultFont.setFamily(QString::fromStdString(configuration()->defaultFontFamily()));
@@ -626,7 +625,7 @@ void ProxyStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOpt
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush("#03000000"),
+        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush(0x03000000),
                         QPen(m_theme->strokeColor(), fmax(m_theme->borderWidth(), 1.0)));
     } break;
 

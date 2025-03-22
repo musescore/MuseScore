@@ -24,11 +24,6 @@
 
 #include "containers.h"
 
-#include "engraving/dom/part.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/drumset.h"
-#include "engraving/dom/utils.h"
-
 #include "log.h"
 
 using namespace mu::engraving;
@@ -184,7 +179,7 @@ bool MidiFile::writeTrack(const MidiTrack& t)
 
     status   = -1;
     int tick = 0;
-    for (auto i : t.events()) {
+    for (const auto& i : t.events()) {
         int ntick = i.first;
         putvl(ntick - tick);        // write tick delta
         //
