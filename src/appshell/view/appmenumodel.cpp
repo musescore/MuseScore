@@ -193,6 +193,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-share-audio"),
         makeSeparator(),
         makeMenuItem("project-properties"),
+        makeMenuItem("parts", TranslatableString("action", "Parts…")),
         makeSeparator(),
         makeMenuItem("print"),
         makeSeparator(),
