@@ -318,7 +318,7 @@ FocusScope {
                 return
             }
 
-            if (mouseArea.containsMouse) {
+            if (mouseArea.containsMouse && root.enabled) {
                 ui.tooltip.show(root, root.toolTipTitle, root.toolTipDescription, root.toolTipShortcut)
             } else {
                 ui.tooltip.hide(root)
