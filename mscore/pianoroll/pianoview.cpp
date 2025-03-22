@@ -484,7 +484,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       //      _noteList[i]->paint(p);
 
       p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
-      for (PianoItem* block : _noteList) {
+      for (PianoItem*& block : _noteList) {
             drawNoteBlock(p, block);
             }
 
@@ -727,7 +727,7 @@ void PianoView::wheelEvent(QWheelEvent* event)
       else if (event->modifiers() == Qt::ShiftModifier) {
             //Horizontal scroll
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-            QWheelEvent we(event->position(), event->globalPosition(), event->pixelDelta(), event->angleDelta(),
+            QWheelEvent we(event->position(), event->globalPosition(), event->pixelDelta().transposed(), event->angleDelta().transposed(),
                            event->buttons(), Qt::NoModifier, Qt::ScrollPhase::NoScrollPhase, false);
 #else
             QWheelEvent we(event->pos(), event->delta(), event->buttons(), 0, Qt::Horizontal);
@@ -1985,7 +1985,7 @@ void PianoView::setStaff(Staff* s, Pos* l)
 
 void PianoView::addChord(Chord* chrd, int voice)
       {
-      for (Chord* c : chrd->graceNotes())
+      for (Chord*& c : chrd->graceNotes())
             addChord(c, voice);
       for (Note* note : chrd->notes()) {
             if (note->tieBack())
@@ -2486,7 +2486,7 @@ void PianoView::finishNoteGroupDrag(QMouseEvent* event) {
       //Select just pasted notes
       Selection& selection = score->selection();
       selection.deselectAll();
-      for (Note* note : notes) {
+      for (Note*& note : notes) {
             selection.add(note);
             note->setSelected(true);
             }

@@ -399,7 +399,7 @@ void ChordView::wheelEvent(QWheelEvent* event)
             }
       else if (event->modifiers() == Qt::ShiftModifier) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-            QWheelEvent we(event->position(), event->globalPosition(), event->pixelDelta(), event->angleDelta(),
+            QWheelEvent we(event->position(), event->globalPosition(), event->pixelDelta().transposed(), event->angleDelta().transposed(),
                            event->buttons(), Qt::NoModifier, Qt::ScrollPhase::NoScrollPhase, false);
 #else
             QWheelEvent we(event->pos(), event->delta(), event->buttons(), 0, Qt::Horizontal);
@@ -494,10 +494,8 @@ void ChordView::mouseMoveEvent(QMouseEvent* event)
       int pitch = y2pitch(int(p.y()));
       emit pitchChanged(pitch);
       int tick = int(p.x()) - CHORD_MAP_OFFSET;
-      if (tick < 0) {
-            tick = 0;
+      if (tick < 0)
             _pos = -1;
-            }
       else
             _pos = tick;
       emit posChanged(_pos);
