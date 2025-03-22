@@ -107,7 +107,6 @@ FocusScope {
         id: mouseArea
         anchors.fill: expandSectionRow
 
-        enabled: root.enabled
         hoverEnabled: true
 
         onClicked: {
@@ -120,7 +119,7 @@ FocusScope {
     Loader {
         id: menuLoader
 
-        property bool isMenuButtonVisible: root.isExpanded || mouseArea.containsMouse
+        property bool isMenuButtonVisible: root.isExpanded || (mouseArea.containsMouse && root.enabled)
 
         anchors {
             right: root.right
