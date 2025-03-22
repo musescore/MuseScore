@@ -190,7 +190,7 @@ ListView {
         }
 
         mouseArea.onHoveredChanged: {
-            if (!mouseArea.containsMouse) {
+            if (!mouseArea.containsMouse || !radioButtonDelegate.enabled) {
                 return
             }
 

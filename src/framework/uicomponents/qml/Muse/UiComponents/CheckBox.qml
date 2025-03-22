@@ -28,8 +28,8 @@ FocusScope {
     id: root
 
     property bool checked: false
-    property alias pressed: clickableArea.containsPress
-    property alias hovered: clickableArea.containsMouse
+    readonly property bool pressed: clickableArea.containsPress && root.enabled
+    readonly property bool hovered: clickableArea.containsMouse && root.enabled
     property bool isIndeterminate: false
 
     property alias text: label.text
@@ -131,7 +131,7 @@ FocusScope {
     states: [
         State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !clickableArea.pressed
+            when: clickableArea.containsMouse && !clickableArea.pressed && root.enabled
 
             PropertyChanges {
                 target: box
@@ -141,7 +141,7 @@ FocusScope {
 
         State {
             name: "PRESSED"
-            when: clickableArea.containsMouse && clickableArea.pressed
+            when: clickableArea.containsMouse && clickableArea.pressed && root.enabled
 
             PropertyChanges {
                 target: box

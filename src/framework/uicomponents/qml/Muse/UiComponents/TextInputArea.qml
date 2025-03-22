@@ -42,7 +42,7 @@ FocusScope {
     readonly property alias background: background
 
     readonly property alias mouseArea: clickableArea
-    property bool containsMouse: clickableArea.containsMouse
+    property bool containsMouse: clickableArea.containsMouse && root.enabled
 
     readonly property alias navigation: navCtrl
     readonly property alias accessible: navCtrl.accessible
@@ -228,7 +228,6 @@ FocusScope {
         id: clickableArea
         anchors.fill: parent
 
-        enabled: root.enabled
         propagateComposedEvents: true
         hoverEnabled: true
         cursorShape: Qt.IBeamCursor

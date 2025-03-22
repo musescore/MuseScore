@@ -95,7 +95,7 @@ Item {
 
         State {
             name: "pressed"
-            when: mouseArea.pressed
+            when: mouseArea.pressed && root.enabled
 
             PropertyChanges {
                 target: foreground
@@ -107,7 +107,7 @@ Item {
 
         State {
             name: "hovered"
-            when: mouseArea.containsMouse && !mouseArea.pressed
+            when: mouseArea.containsMouse && !mouseArea.pressed && root.enabled
 
             PropertyChanges {
                 target: foreground
@@ -154,7 +154,6 @@ Item {
         id: mouseArea
         anchors.fill: root
 
-        enabled: root.enabled
         hoverEnabled: true
 
         onContainsMouseChanged: {

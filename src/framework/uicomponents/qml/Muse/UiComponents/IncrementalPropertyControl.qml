@@ -176,7 +176,7 @@ Item {
 
         validator: !prv.isCustom ? (root.decimals > 0 ? doubleInputValidator : intInputValidator) : null
 
-        containsMouse: mouseArea.containsMouse || valueAdjustControl.containsMouse
+        containsMouse: (mouseArea.containsMouse && textInputField.enabled) || valueAdjustControl.containsMouse
 
         ValueAdjustControl {
             id: valueAdjustControl

@@ -110,7 +110,7 @@ TabButton {
     states: [
         State {
             name: "HOVERED"
-            when: root.hovered && !root.isCurrent
+            when: root.hovered && root.enabled && !root.isCurrent
 
             PropertyChanges {
                 target: contentItem

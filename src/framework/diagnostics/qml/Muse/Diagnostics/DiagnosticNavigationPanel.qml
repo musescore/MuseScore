@@ -210,8 +210,8 @@ Rectangle {
                             MouseArea {
                                 anchors.fill: parent
 
-                                enabled: gridItem.enabled
                                 hoverEnabled: true
+
                                 onContainsMouseChanged: {
                                     if (containsMouse) {
                                         var info = control.name + "\n"
