@@ -4055,6 +4055,25 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
             xml.endElement();
         }
     }
+    for (EngravingItem* e : note->chord()->segment()->annotations()) {
+        if (e->isTremoloBar() && e->track() == note->track()) {
+            const TremoloBar* bend = toTremoloBar(e);
+            notations.tag(xml, note);
+            technical.tag(xml);
+            XmlWriter::Attributes bendAttrs;
+            bendAttrs.push_back({ "first-beat", 0 });
+            bendAttrs.push_back({ "last-beat", 100 });
+            int max_pitch = 0;
+            for (const PitchValue& v : bend->points()) {
+                max_pitch = v.pitch < 0 ? std::min(max_pitch, v.pitch) : std::max(max_pitch, v.pitch);
+            }
+            addColorAttr(bend, bendAttrs);
+            xml.startElement("bend", bendAttrs);
+            xml.tag("bend-alter", String::number(max_pitch / PitchValue::PITCH_FOR_SEMITONE, 2));
+            xml.tag("with-bar", bend->getProperty(Pid::TREMOLOBAR_TYPE).value<String>());
+            xml.endElement();
+        }
+    }
 }
 
 //---------------------------------------------------------
