@@ -5466,6 +5466,16 @@ void NotationInteraction::addRemoveSystemLocks(AddRemoveSystemLockType intervalT
     apply();
 }
 
+void NotationInteraction::addRemovePageBreaks(AddRemovePageBreaksType intervalType, int interval)
+{
+    interval = intervalType == AddRemovePageBreaksType::SystemsInterval ? interval : 0;
+    bool afterEachPage = intervalType == AddRemovePageBreaksType::AfterEachPage;
+
+    startEdit(TranslatableString("undoableAction", "Add / remove page breaks"));
+    score()->addRemovePageBreaks(interval, afterEachPage);
+    apply();
+}
+
 bool NotationInteraction::transpose(const TransposeOptions& options)
 {
     startEdit(TranslatableString("undoableAction", "Transposition"));
