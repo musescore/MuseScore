@@ -47,6 +47,10 @@ StyledTabButton {
 
     clip: true
 
+    function closeContextMenu() {
+        contextMenuButton.closeMenu()
+    }
+
     contentItem: Row {
         spacing: root.buttonPadding
 

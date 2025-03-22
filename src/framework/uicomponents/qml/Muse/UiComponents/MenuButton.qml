@@ -41,6 +41,10 @@ FlatButton {
         menuLoader.toggleOpened(menuModel, x, y)
     }
 
+    function closeMenu() {
+        menuLoader.close()
+    }
+
     enabled: visible
 
     icon: IconCode.MENU_THREE_DOTS

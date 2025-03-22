@@ -60,6 +60,13 @@ Rectangle {
         tabs.model = 0
     }
 
+    function closeContextMenu() {
+        let tab = tabs.itemAtIndex(root.currentIndex)
+        if (Boolean(tab)) {
+            tab.closeContextMenu()
+        }
+    }
+
     ListView {
         id: tabs
 

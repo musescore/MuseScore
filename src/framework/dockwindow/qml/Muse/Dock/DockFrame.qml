@@ -61,6 +61,35 @@ Rectangle {
         id: frameModel
 
         frame: root.frameCpp
+
+        onTabsChanged: {
+            closeContextMenu()
+        }
+
+        onCurrentDockChanged: {
+            if (Boolean(currentDockPanel)) {
+                currentDockPanel.onCloseContextMenuRequested.connect(closeContextMenu)
+            }
+        }
+
+        Component.onDestruction: {
+            if (Boolean(currentDockPanel)) {
+                currentDockPanel.onCloseContextMenuRequested.connect(closeContextMenu)
+            }
+        }
+
+        function closeContextMenu() {
+            if (!Boolean(root)) {
+                return
+            }
+
+            if (root.hasTitleBar) {
+                titleBar.closeContextMenu()
+            }
+            if (root.hasTabBar) {
+                tabBar.closeContextMenu()
+            }
+        }
     }
 
     NavigationPanel {

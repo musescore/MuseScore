@@ -223,6 +223,11 @@ QString DockFrameModel::currentDockUniqueName() const
     return dock ? dock->uniqueName() : QString();
 }
 
+QVariant muse::dock::DockFrameModel::currentDockPanel() const
+{
+    return currentDockProperty(DOCK_PANEL_PROPERTY);
+}
+
 QVariant DockFrameModel::currentDockContextMenuModel() const
 {
     return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY);
