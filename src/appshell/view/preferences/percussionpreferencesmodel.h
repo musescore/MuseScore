@@ -33,7 +33,8 @@ class PercussionPreferencesModel : public QObject, public muse::Injectable, publ
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariantList autoShowModes READ autoShowModes NOTIFY percussionPanelAutoShowModeChanged)
+    Q_PROPERTY(QVariantList autoShowModes READ autoShowModes CONSTANT)
+    Q_PROPERTY(int autoShowMode READ autoShowMode WRITE setAutoShowMode NOTIFY percussionPanelAutoShowModeChanged)
     Q_PROPERTY(bool neverAutoShow READ neverAutoShow NOTIFY percussionPanelAutoShowModeChanged)
 
     Q_PROPERTY(bool autoClosePercussionPanel READ autoClosePercussionPanel
@@ -55,7 +56,8 @@ public:
     Q_INVOKABLE void init();
 
     QVariantList autoShowModes() const;
-    Q_INVOKABLE void setAutoShowMode(int modeIndex);
+    int autoShowMode() const;
+    void setAutoShowMode(int mode);
 
     bool neverAutoShow() const;
 
