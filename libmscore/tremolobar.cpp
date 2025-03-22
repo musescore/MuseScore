@@ -10,12 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "tremolobar.h"
-#include "score.h"
-#include "undo.h"
-#include "staff.h"
-#include "chord.h"
 #include "note.h"
+#include "score.h"
+#include "staff.h"
+#include "tremolobar.h"
+#include "undo.h"
 #include "xml.h"
 
 namespace Ms {
@@ -94,6 +93,7 @@ void TremoloBar::write(XmlWriter& xml) const
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
+      Element::writeProperties(xml);
       xml.etag();
       }
 
@@ -121,7 +121,7 @@ void TremoloBar::read(XmlReader& e)
                   setPlay(e.readInt());
             else if (readProperty(tag, e, Pid::LINE_WIDTH))
                   ;
-            else
+            else if (!Element::readProperties(e))
                   e.unknown();
             }
       }
