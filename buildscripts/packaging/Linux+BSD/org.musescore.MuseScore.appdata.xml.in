@@ -47,9 +47,9 @@
     <!-- <categories> in .desktop file -->
     <!-- <keywords> in .desktop file -->
     <url type="homepage">https://musescore.org</url>
-    <url type="bugtracker">https://musescore.org/en/project/issues/musescore</url>
+    <url type="bugtracker">https://github.com/musescore/MuseScore/issues</url>
     <url type="faq">https://musescore.org/en/faq</url>
-    <url type="help">https://musescore.org/en/handbook</url>
+    <url type="help">https://handbook.musescore.org</url>
     <url type="donation">https://musescore.org/en/donate</url>
     <url type="translate">https://github.com/musescore/MuseScore/wiki/Help-translate-MuseScore</url>
     <url type="contact">https://musescore.org/en/forum/6</url>

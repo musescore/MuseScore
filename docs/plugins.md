@@ -34,7 +34,7 @@ console.log("the created element:", e, e.name);
 Alternatively, you can edit your plugin's code with your favourite text editor
 and test it by launching it from MuseScore as long as the plugin is properly
 installed. See [this Handbook
-page](https://musescore.org/en/handbook/plugins#installation)
+page](https://handbook.musescore.org/customization/plugins)
 for the reference on plugins installation.
 
 ## Hello World plugin
