@@ -136,7 +136,7 @@ void PopupView::init()
     m_window->init(engine, isDialog(), frameless());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_component, m_contentItem);
-    m_window->setTakeFocusOnClick(m_takeFocusOnClick);
+    m_window->setTakeFocusOnClick(m_focusPolicies & FocusPolicy::ClickFocus);
 
     // TODO: Can't use new `connect` syntax because the IPopupWindow::aboutToClose
     // has a parameter of type QQuickCloseEvent, which is not public, so we
@@ -152,6 +152,10 @@ void PopupView::init()
     });
 
     navigationController()->navigationChanged().onNotify(this, [this]() {
+        if (!(m_focusPolicies & FocusPolicy::TabFocus)) {
+            return;
+        }
+
         ui::INavigationPanel* navigationPanel = navigationController()->activePanel();
         if (!navigationPanel) {
             return;
@@ -356,9 +360,9 @@ bool PopupView::activateParentOnClose() const
     return m_activateParentOnClose;
 }
 
-bool PopupView::takeFocusOnClick() const
+PopupView::FocusPolicies PopupView::focusPolicies() const
 {
-    return m_takeFocusOnClick;
+    return m_focusPolicies;
 }
 
 muse::ui::INavigationControl* PopupView::navigationParentControl() const
@@ -683,13 +687,14 @@ void PopupView::setActivateParentOnClose(bool activateParentOnClose)
     emit activateParentOnCloseChanged(m_activateParentOnClose);
 }
 
-void PopupView::setTakeFocusOnClick(bool takeFocusOnClick)
+void PopupView::setFocusPolicies(const FocusPolicies& policies)
 {
-    if (m_takeFocusOnClick == takeFocusOnClick) {
+    if (m_focusPolicies == policies) {
         return;
     }
-    m_takeFocusOnClick = takeFocusOnClick;
-    emit takeFocusOnClickChanged(takeFocusOnClick);
+
+    m_focusPolicies = policies;
+    emit focusPoliciesChanged();
 }
 
 QVariantMap PopupView::ret() const
