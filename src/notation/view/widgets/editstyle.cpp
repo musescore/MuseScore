@@ -976,8 +976,8 @@ EditStyle::EditStyle(QWidget* parent)
     setHeaderFooterToolTip();
 
     connect(buttonBox,             &QDialogButtonBox::clicked,  this, &EditStyle::buttonClicked);
-    connect(enableVerticalSpread,  &QGroupBox::toggled,         this, &EditStyle::enableVerticalSpreadClicked);
-    connect(disableVerticalSpread, &QGroupBox::toggled,         this, &EditStyle::disableVerticalSpreadClicked);
+    connect(enableVerticalSpread,  &QGroupBox::clicked,         this, &EditStyle::enableVerticalSpreadClicked);
+    connect(disableVerticalSpread, &QGroupBox::clicked,         this, &EditStyle::disableVerticalSpreadClicked);
     connect(headerOddEven,         &QCheckBox::toggled,         this, &EditStyle::toggleHeaderOddEven);
     connect(footerOddEven,         &QCheckBox::toggled,         this, &EditStyle::toggleFooterOddEven);
     connect(chordDescriptionFileButton, &QToolButton::clicked,  this, &EditStyle::selectChordDescriptionFile);
@@ -2578,7 +2578,15 @@ void EditStyle::enableStyleWidget(const StyleId idx, bool enable)
 
 void EditStyle::enableVerticalSpreadClicked(bool checked)
 {
-    disableVerticalSpread->setChecked(!checked);
+    if (checked) {
+        setStyleValue(StyleId::enableVerticalSpread, true);
+        disableVerticalSpread->setChecked(false);
+    } else {
+        if (!disableVerticalSpread->isChecked()) {
+            setStyleValue(StyleId::enableVerticalSpread, true);
+            enableVerticalSpread->setChecked(true);
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -2587,8 +2595,15 @@ void EditStyle::enableVerticalSpreadClicked(bool checked)
 
 void EditStyle::disableVerticalSpreadClicked(bool checked)
 {
-    setStyleValue(StyleId::enableVerticalSpread, !checked);
-    enableVerticalSpread->setChecked(!checked);
+    if (checked) {
+        setStyleValue(StyleId::enableVerticalSpread, false);
+        enableVerticalSpread->setChecked(false);
+    } else {
+        if (!enableVerticalSpread->isChecked()) {
+            setStyleValue(StyleId::enableVerticalSpread, false);
+            disableVerticalSpread->setChecked(true);
+        }
+    }
 }
 
 //---------------------------------------------------------

@@ -75,22 +75,46 @@ TransposeDialog::TransposeDialog(QWidget* parent)
 
 void TransposeDialog::transposeByKeyToggled(bool val)
 {
-    transposeByInterval->setChecked(!val);
+    if (val) {
+        transposeByInterval->setChecked(false);
+    } else {
+        if (!transposeByInterval->isChecked()) {
+            transposeByKey->setChecked(true);
+        }
+    }
 }
 
 void TransposeDialog::transposeByIntervalToggled(bool val)
 {
-    transposeByKey->setChecked(!val);
+    if (val) {
+        transposeByKey->setChecked(false);
+    } else {
+        if (!transposeByKey->isChecked()) {
+            transposeByInterval->setChecked(true);
+        }
+    }
 }
 
 void TransposeDialog::chromaticBoxToggled(bool val)
 {
-    diatonicBox->setChecked(!val);
+    if (val) {
+        diatonicBox->setChecked(false);
+    } else {
+        if (!diatonicBox->isChecked()) {
+            chromaticBox->setChecked(true);
+        }
+    }
 }
 
 void TransposeDialog::diatonicBoxToggled(bool val)
 {
-    chromaticBox->setChecked(!val);
+    if (val) {
+        chromaticBox->setChecked(false);
+    } else {
+        if (!chromaticBox->isChecked()) {
+            diatonicBox->setChecked(true);
+        }
+    }
 }
 
 //---------------------------------------------------------

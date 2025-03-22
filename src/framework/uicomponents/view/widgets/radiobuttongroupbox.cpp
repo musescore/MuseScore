@@ -47,11 +47,8 @@ void RadioButtonGroupBox::paintEvent(QPaintEvent*)
     // Paint the default QGroupBox-style control, which includes an unwanted checkbox that we'll cover up afterwards.
     painter.drawComplexControl(QStyle::CC_GroupBox, styleOption);
 
-    // Calculate the background color the same way Qt does in QFusionStylePrivate::tabFrameColor().
-    const QColor& buttonColor = styleOption.palette.button().color();
-    QColor bgColor = buttonColor.lighter(100 + std::max(1, (180 - qGray(buttonColor.rgb())) / 6));
-    bgColor.setHsv(bgColor.hue(), 3 * bgColor.saturation() / 4, bgColor.value());
-    bgColor = bgColor.lighter(104);
+    // Calculate the background color that is the same to the background window color.
+    QColor bgColor = styleOption.palette.window().color();
 
     // Adjust the style options to use the checkbox's rectangle.
     styleOption.rect = style()->subControlRect(QStyle::CC_GroupBox, &styleOption, QStyle::SC_GroupBoxCheckBox, this);
