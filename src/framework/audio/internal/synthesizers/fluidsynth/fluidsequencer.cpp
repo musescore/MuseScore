@@ -131,7 +131,7 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
             midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
             noteOn.setChannel(channelIdx);
             noteOn.setNote(noteIdx);
-            noteOn.setVelocity(velocity);
+            noteOn.setVelocity16(velocity);
             noteOn.setPitchNote(noteIdx, tuning);
 
             destination[timestampFrom].emplace(std::move(noteOn));
