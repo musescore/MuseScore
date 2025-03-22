@@ -247,20 +247,7 @@ void PopupView::doOpen()
         }
 
         qWindow->setTitle(m_title);
-
-        if (m_alwaysOnTop) {
-#ifdef Q_OS_MAC
-            auto updateStayOnTopHint = [this]() {
-                bool stay = qApp->applicationState() == Qt::ApplicationActive;
-                m_window->qWindow()->setFlag(Qt::WindowStaysOnTopHint, stay);
-            };
-            updateStayOnTopHint();
-            connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
-#endif
-        } else {
-            qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
-        }
-
+        setupAlwaysOnTop();
         qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
 #ifdef MUSE_MODULE_UI_DISABLE_MODALITY
         qWindow->setModality(Qt::NonModal);
@@ -603,6 +590,13 @@ bool PopupView::alwaysOnTop() const
     return m_alwaysOnTop;
 }
 
+void PopupView::setupAlwaysOnTop()
+{
+    if (isDialog()) {
+        m_window->setAlwaysOnTop(m_alwaysOnTop);
+    }
+}
+
 void PopupView::setAlwaysOnTop(bool alwaysOnTop)
 {
     if (m_alwaysOnTop == alwaysOnTop) {
@@ -610,6 +604,7 @@ void PopupView::setAlwaysOnTop(bool alwaysOnTop)
     }
 
     m_alwaysOnTop = alwaysOnTop;
+    setupAlwaysOnTop();
     emit alwaysOnTopChanged();
 }
 
