@@ -742,14 +742,13 @@ static void addColorAttr(const EngravingItem* el, XmlWriter::Attributes& attrs)
 
 static String frame2xml(const TextBase* el)
 {
-    if (el->hasFrame()) {
-        if (el->circle()) {
-            return String(u" enclosure=\"circle\"");
-        } else if (el->square()) {
-            return String(u" enclosure=\"rectangle\"");
-        } else {
-            return String();
-        }
+    switch (el->frameType()) {
+    case FrameType::CIRCLE:
+        return u" enclosure=\"circle\"";
+    case FrameType::SQUARE:
+        return u" enclosure=\"rectangle\"";
+    default:
+        return String();
     }
 }
 
