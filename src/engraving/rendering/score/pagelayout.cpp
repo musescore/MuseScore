@@ -178,11 +178,11 @@ void PageLayout::collectPage(LayoutContext& ctx)
                         Spacer* sp = m->vspacerUp(0);
                         if (sp) {
                             if (sp->spacerType() == SpacerType::FIXED) {
-                                distance = sp->gap();
+                                distance = sp->absoluteGap();
                                 fixedDistance = true;
                                 break;
                             } else {
-                                distance = std::max(distance, sp->gap().val());
+                                distance = std::max(distance, sp->absoluteGap());
                             }
                         }
                     }
@@ -746,7 +746,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     double spaceRemaining{ std::min(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
 
     if (nextSpacer) {
-        spaceRemaining -= std::max(0.0, nextSpacer->gap() - spacerOffset - staffLowerBorder);
+        spaceRemaining -= std::max(0.0, nextSpacer->absoluteGap() - spacerOffset - staffLowerBorder);
     }
     if (spaceRemaining <= 0.0) {
         return;
