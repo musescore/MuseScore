@@ -42,7 +42,7 @@ RadioDelegate {
 
     font: ui.theme.bodyFont
 
-    hoverEnabled: root.enabled
+    hoverEnabled: true
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -137,7 +137,7 @@ RadioDelegate {
     states: [
         State {
             name: "PRESSED"
-            when: root.pressed
+            when: root.pressed && root.enabled
 
             PropertyChanges {
                 target: backgroundRect
@@ -152,7 +152,7 @@ RadioDelegate {
 
         State {
             name: "SELECTED"
-            when: root.checked && !root.hovered
+            when: root.checked && (!root.hovered || !root.enabled)
 
             PropertyChanges {
                 target: backgroundRect
@@ -167,7 +167,7 @@ RadioDelegate {
 
         State {
             name: "HOVERED"
-            when: root.hovered && !root.checked && !root.pressed
+            when: root.hovered && !root.checked && !root.pressed && root.enabled
 
             PropertyChanges {
                 target: backgroundRect
@@ -177,7 +177,7 @@ RadioDelegate {
 
         State {
             name: "SELECTED_HOVERED"
-            when: root.hovered && root.checked
+            when: root.hovered && root.checked && root.enabled
 
             PropertyChanges {
                 target: backgroundRect

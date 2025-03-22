@@ -45,7 +45,7 @@ Item {
 
     property bool resourcePickingActive: false
 
-    readonly property bool showAdditionalButtons: rootMouseArea.containsMouse || (navigationPanel ? navigationPanel.highlight : false) || resourcePickingActive
+    readonly property bool showAdditionalButtons: (rootMouseArea.containsMouse && root.enabled) || (navigationPanel ? navigationPanel.highlight : false) || resourcePickingActive
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
@@ -68,9 +68,9 @@ Item {
 
         // We can't just check the containsMouse property of the mouseAreas of the buttons themselves,
         // because that property will always be false because this MouseArea is (and must be) on top
-        readonly property bool isActivityButtonHovered: rootMouseArea.containsMouse && activityLoader.visible && rootMouseArea.mouseX < root.height // activityLoader.visible && activityLoader.contains(rootMouseArea.mapToItem(activityLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
-        readonly property bool isTitleButtonHovered: rootMouseArea.containsMouse && titleLoader.visible && titleLoader.contains(rootMouseArea.mapToItem(titleLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
-        readonly property bool isSelectorButtonHovered: rootMouseArea.containsMouse && selectorLoader.visible && selectorLoader.contains(rootMouseArea.mapToItem(selectorLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
+        readonly property bool isActivityButtonHovered: rootMouseArea.containsMouse && root.enabled && activityLoader.visible && rootMouseArea.mouseX < root.height // activityLoader.visible && activityLoader.contains(rootMouseArea.mapToItem(activityLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
+        readonly property bool isTitleButtonHovered: rootMouseArea.containsMouse && root.enabled && titleLoader.visible && titleLoader.contains(rootMouseArea.mapToItem(titleLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
+        readonly property bool isSelectorButtonHovered: rootMouseArea.containsMouse && root.enabled && selectorLoader.visible && selectorLoader.contains(rootMouseArea.mapToItem(selectorLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
     }
 
     RowLayout {
@@ -121,7 +121,7 @@ Item {
                     states: [
                         State {
                             name: "PRESSED"
-                            when: activityButton.mouseArea.pressed
+                            when: activityButton.mouseArea.pressed && activityButton.enabled
 
                             PropertyChanges {
                                 target: activityButtonBackground
@@ -131,7 +131,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: !activityButton.mouseArea.pressed && prv.isActivityButtonHovered
+                            when: !activityButton.mouseArea.pressed && activityButton.enabled && prv.isActivityButtonHovered
 
                             PropertyChanges {
                                 target: activityButtonBackground
@@ -208,7 +208,7 @@ Item {
 
                         State {
                             name: "PRESSED"
-                            when: titleButton.mouseArea.pressed
+                            when: titleButton.mouseArea.pressed && titleButton.enabled
 
                             PropertyChanges {
                                 target: titleButtonBackground
@@ -218,7 +218,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: !titleButton.mouseArea.pressed && prv.isTitleButtonHovered
+                            when: !titleButton.mouseArea.pressed && titleButton.enabled && prv.isTitleButtonHovered
 
                             PropertyChanges {
                                 target: titleButtonBackground
@@ -295,7 +295,7 @@ Item {
                     states: [
                         State {
                             name: "PRESSED"
-                            when: menuButton.mouseArea.pressed || menuLoader.isMenuOpened
+                            when: (menuButton.mouseArea.pressed && menuButton.enabled) || menuLoader.isMenuOpened
 
                             PropertyChanges {
                                 target: menuButtonBackground
@@ -305,7 +305,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: !menuButton.mouseArea.pressed && prv.isSelectorButtonHovered
+                            when: !menuButton.mouseArea.pressed && menuButton.enabled && prv.isSelectorButtonHovered
 
                             PropertyChanges {
                                 target: menuButtonBackground
@@ -368,7 +368,6 @@ Item {
         id: rootMouseArea
         anchors.fill: parent
 
-        enabled: parent.enabled
         acceptedButtons: Qt.NoButton
         hoverEnabled: true
     }

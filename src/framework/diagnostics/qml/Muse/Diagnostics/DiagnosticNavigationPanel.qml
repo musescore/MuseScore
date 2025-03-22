@@ -209,9 +209,9 @@ Rectangle {
                             MouseArea {
                                 anchors.fill: parent
 
-                                enabled: gridItem.enabled
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 hoverEnabled: true
+
                                 onContainsMouseChanged: {
                                     if (containsMouse) {
                                         var info = control.name + "\n"

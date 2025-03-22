@@ -53,7 +53,7 @@ Rectangle {
     states: [
         State {
             name: "PRESSED"
-            when: root.mouseArea.pressed
+            when: root.mouseArea.pressed && root.enabled
 
             PropertyChanges {
                 target: root
@@ -64,7 +64,7 @@ Rectangle {
 
         State {
             name: "HOVERED"
-            when: root.mouseArea.containsMouse && !root.mouseArea.pressed
+            when: root.mouseArea.containsMouse && !root.mouseArea.pressed && root.enabled
 
             PropertyChanges {
                 target: root

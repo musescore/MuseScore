@@ -200,7 +200,7 @@ FocusScope {
     states: [
         State {
             name: "HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed && !textField.activeFocus
+            when: mouseArea.containsMouse && !mouseArea.pressed && root.enabled && !textField.activeFocus
 
             PropertyChanges {
                 target: textFieldBackground
@@ -211,7 +211,7 @@ FocusScope {
 
         State {
             name: "PRESSED"
-            when: mouseArea.pressed && !textField.activeFocus
+            when: mouseArea.pressed && root.enabled && !textField.activeFocus
 
             PropertyChanges {
                 target: textFieldBackground

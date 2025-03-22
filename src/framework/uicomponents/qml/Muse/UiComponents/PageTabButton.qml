@@ -173,7 +173,7 @@ RadioDelegate {
     states: [
         State {
             name: "HOVERED"
-            when: root.hovered && !root.checked && !root.pressed
+            when: root.hovered && root.enabled && !root.checked && !root.pressed
 
             PropertyChanges {
                 target: backgroundRect
@@ -184,7 +184,7 @@ RadioDelegate {
 
         State {
             name: "PRESSED"
-            when: root.pressed && !root.checked
+            when: root.pressed && root.enabled && !root.checked
 
             PropertyChanges {
                 target: backgroundRect

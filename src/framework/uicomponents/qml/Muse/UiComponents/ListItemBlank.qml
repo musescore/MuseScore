@@ -62,9 +62,8 @@ FocusableControl {
 
     focusBorder.drawOutsideParent: false
 
-    mouseArea.enabled: root.visible && root.enabled
-    mouseArea.hoverEnabled: true
-    mouseArea.onHoveredChanged: root.hovered(mouseArea.containsMouse, mouseArea.mouseX, mouseArea.mouseY)
+    mouseArea.hoverEnabled: root.visible
+    mouseArea.onHoveredChanged: root.hovered(mouseArea.containsMouse && root.enabled, mouseArea.mouseX, mouseArea.mouseY)
 
     mouseArea.onClicked: function(mouse) {
         navigation.requestActiveByInteraction()
@@ -106,7 +105,7 @@ FocusableControl {
     states: [
         State {
             name: "HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed && !root.isSelected
+            when: mouseArea.containsMouse && !mouseArea.pressed && root.enabled && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -117,7 +116,7 @@ FocusableControl {
 
         State {
             name: "PRESSED"
-            when: mouseArea.pressed && !root.isSelected
+            when: mouseArea.pressed && root.enabled && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -128,7 +127,7 @@ FocusableControl {
 
         State {
             name: "SELECTED"
-            when: !mouseArea.containsMouse && !mouseArea.pressed && root.isSelected
+            when: ((!mouseArea.containsMouse && !mouseArea.pressed) || !root.enabled) && root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -139,7 +138,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed && root.isSelected
+            when: mouseArea.containsMouse && !mouseArea.pressed && root.enabled && root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -150,7 +149,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_PRESSED"
-            when: mouseArea.pressed && root.isSelected
+            when: mouseArea.pressed && root.enabled && root.isSelected
 
             PropertyChanges {
                 target: root.background

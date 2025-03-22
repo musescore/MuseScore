@@ -103,7 +103,6 @@ Item {
         id: mouseArea
         anchors.fill: parent
 
-        enabled: root.enabled
         hoverEnabled: true
 
         onClicked: {
@@ -114,7 +113,7 @@ Item {
     states: [
         State {
             name: "HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed
+            when: mouseArea.containsMouse && !mouseArea.pressed && root.enabled
 
             PropertyChanges {
                 target: titleLabel

@@ -84,7 +84,6 @@ ListView {
                     anchors.fill: label
 
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    enabled: label.enabled
                     hoverEnabled: true
 
                     onClicked: function(mouse) {
@@ -142,7 +141,7 @@ ListView {
 
             State {
                 name: "HOVERED"
-                when: (mouseArea.containsMouse || checkBox.hovered) && !modelData.isSelected && !mouseArea.containsPress
+                when: (mouseArea.containsMouse || checkBox.hovered) && !modelData.isSelected && !mouseArea.containsPress && label.enabled
 
                 PropertyChanges {
                     target: backgroundRect
@@ -153,7 +152,7 @@ ListView {
 
             State {
                 name: "PRESSED"
-                when: (mouseArea.containsPress || checkBox.pressed) && !modelData.isSelected
+                when: (mouseArea.containsPress || checkBox.pressed) && !modelData.isSelected && label.enabled
 
                 PropertyChanges {
                     target: backgroundRect

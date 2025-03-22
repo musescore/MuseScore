@@ -632,7 +632,7 @@ StyledListView {
                     width: parent.width
                     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
                     expanded: control.expanded
-                    hovered: control.hovered
+                    hovered: control.hovered && control.enabled
                     text: model.display
 
                     isInVisibleArea: control.y >= paletteTree.contentY && control.y < (paletteTree.contentY + paletteTree.height)
