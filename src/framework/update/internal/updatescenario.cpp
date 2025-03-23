@@ -73,18 +73,18 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             m_checkProgress = false;
         };
 
-        if (!res.ret) {
+        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        if (!noUpdate && !res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
             if (manual) {
-                processUpdateResult(res.ret.code());
+                showServerErrorMsg();
             }
 
             return;
         }
 
         ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (!manual) {
             bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
             if (noUpdate || shouldIgnoreUpdate) {
