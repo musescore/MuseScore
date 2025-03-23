@@ -3264,7 +3264,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         else
                               mxmlArtic += " type=\"down\"";
                         }
-                  else if (a->anchor() != ArticulationAnchor::CHORD) {
+                  else if (/*!a->isStyled(Pid::ARTICULATION_ANCHOR) && */a->anchor() != ArticulationAnchor::CHORD) {
                         if (a->anchor() == ArticulationAnchor::TOP_CHORD
                            || a->anchor() == ArticulationAnchor::TOP_STAFF)
                               mxmlArtic += " placement=\"above\"";
@@ -3404,16 +3404,30 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   }
             }
 
-      // check if all articulations were handled
+      // write all remaining articulations as other-articulation
       for (const Articulation* a : na) {
-            if (!ExportMusicXml::canWrite(a))
+            if (a->isOrnament())
                   continue;
 
             SymId sid = a->symId();
             if (symIdToArtics(sid).empty()
                 && symIdToTechn(sid).isEmpty()
                 && !isLaissezVibrer(sid)) {
-                  qDebug("unknown chord attribute %d %s", int(sid), qPrintable(a->userName()));
+                  QString otherArtic = "other-articulation";
+                  otherArtic += color2xml(a);
+                  otherArtic += positioningAttributes(a);
+                  if (/*!a->isStyled(Pid::ARTICULATION_ANCHOR) && */a->anchor() != ArticulationAnchor::CHORD) {
+                        if (a->anchor() == ArticulationAnchor::TOP_CHORD
+                           || a->anchor() == ArticulationAnchor::TOP_STAFF)
+                              otherArtic += " placement=\"above\"";
+                        else
+                              otherArtic += " placement=\"below\"";
+                        }
+                  notations.tag(_xml);
+                  articulations.tag(_xml);
+                  const char* noteheadName = Sym::id2name(sid);
+                  otherArtic += QString(" smufl=\"%1\"").arg(noteheadName);
+                  _xml.tagE(otherArtic);
                   }
             }
       }
