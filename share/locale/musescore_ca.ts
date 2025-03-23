@@ -1826,7 +1826,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="365"/>
         <source>Automatically load style settings based on font</source>
-        <translation>Carrega automàticament la configuració d&apos;estil segons el tipus de lletra</translation>
+        <translation>Carrega la configuració d&apos;estil segons el tipus de lletra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="388"/>
