@@ -392,7 +392,6 @@ public:
     void playText(PlayTechAnnotation const* const annot, staff_idx_t staff);
     void textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick);
     void dynamic(Dynamic const* const dyn, staff_idx_t staff);
-    void symbol(Symbol const* const sym, staff_idx_t staff);
     void systemText(StaffTextBase const* const text, staff_idx_t staff);
     void tempoText(TempoText const* const text, staff_idx_t staff);
     void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
@@ -5932,37 +5931,6 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 }
 
 //---------------------------------------------------------
-//   symbol
-//---------------------------------------------------------
-
-// TODO: remove dependency on symbol name and replace by a more stable interface
-// changes in sym.cpp r2494 broke MusicXML export of pedals (again)
-
-void ExportMusicXml::symbol(Symbol const* const sym, staff_idx_t staff)
-{
-    AsciiStringView name = SymNames::nameForSymId(sym->sym());
-    String mxmlName;
-    if (name == "keyboardPedalPed") {
-        mxmlName = u"pedal type=\"start\"";
-    } else if (name == "keyboardPedalUp") {
-        mxmlName = u"pedal type=\"stop\"";
-    } else {
-        mxmlName = String(u"other-direction smufl=\"%1\"").arg(String::fromAscii(name.ascii()));
-    }
-    directionTag(m_xml, m_attr, sym);
-    mxmlName += color2xml(sym);
-    mxmlName += positioningAttributes(sym);
-    m_xml.startElement("direction-type");
-    m_xml.tagRaw(mxmlName);
-    m_xml.endElement();
-    const int offset = calculateTimeDeltaInDivisions(sym->tick(), tick(), m_div);
-    if (offset) {
-        m_xml.tag("offset", offset);
-    }
-    directionETag(m_xml, staff);
-}
-
-//---------------------------------------------------------
 //   lyrics
 //---------------------------------------------------------
 
@@ -6485,9 +6453,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
 
     // note: the instrument change details are handled in ExportMusicXml::writeMeasureTracks,
     // optionally writing the associated staff text is done below
-    if (e->isSymbol()) {
-        exp->symbol(toSymbol(e), sstaff);
-    } else if (e->isTempoText()) {
+    if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
     } else if (e->isPlayTechAnnotation()) {
         exp->playText(toPlayTechAnnotation(e), sstaff);
