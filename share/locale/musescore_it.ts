@@ -1407,7 +1407,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="504"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="784"/>
         <source>sp</source>
-        <translation>sp1</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="188"/>
@@ -3002,7 +3002,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation>Voci 1 e 3 sopra il rigo, voci 2 e 4 sotto il rigo</translation>
+        <translation>Voci 1 &amp; 3 sopra il rigo, voci 2 &amp; 4 sotto il rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
@@ -3057,7 +3057,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11972"/>
         <source>Line height (% of text size):</source>
-        <translation>Altezza della linea (% della dimensione del testo):</translation>
+        <translation>Altezza della linea (% di dimensione del testo):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
@@ -3077,7 +3077,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12370"/>
         <source>Omit dash when space is limited</source>
-        <translation>Ometti l trattino quando lo spazio è limitato</translation>
+        <translation>Ometti il trattino quando lo spazio è limitato</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
@@ -3127,7 +3127,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>Glissando e linee ancorate alla nota</translation>
+        <translation>Glissando &amp; linee ancorate alla nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
@@ -3659,7 +3659,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Header &amp; footer</source>
-        <translation>Intestazione e piè di pagina</translation>
+        <translation>Intestazione &amp; piè di pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="104"/>
@@ -3670,7 +3670,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
         <source>Slurs &amp; ties</source>
-        <translation>Legature di portamento e di valore</translation>
+        <translation>Legature di portamento &amp; di valore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
@@ -4456,7 +4456,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12574"/>
         <source>Omit extension line when space is limited</source>
-        <translation>Ometti l&apos;estensione della linea quando lo spazio è limitato</translation>
+        <translation>Ometti la linea d&apos;estensione quando lo spazio è limitato</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12584"/>
@@ -6674,7 +6674,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="101"/>
         <source>Next element</source>
-        <translation>Elemento successivo</translation>
+        <translation>Elemento seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="107"/>
@@ -6684,12 +6684,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="113"/>
         <source>Next chord / Shift text right</source>
-        <translation>Accordo successivo / Spostare il testo a destra</translation>
+        <translation>Accordo seguente / Spostare il testo a destra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="119"/>
         <source>Previous chord / Shift text left</source>
-        <translation>Vai all&apos;accordo precedente / sposta il testo a sinistra</translation>
+        <translation>Accordo precedente / Sposta il testo a sinistra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="125"/>
@@ -6754,7 +6754,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="197"/>
         <source>Next frame</source>
-        <translation>Cornice successiva</translation>
+        <translation>Cornice seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="203"/>
@@ -6764,7 +6764,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="209"/>
         <source>Next system</source>
-        <translation>Sistema successivo</translation>
+        <translation>Sistema seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="215"/>
@@ -7056,7 +7056,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="66"/>
         <source>Enter note %1</source>
-        <translation>Inserire la nota %1</translation>
+        <translation>Inserisci la nota %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="67"/>
@@ -7101,7 +7101,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1669"/>
         <source>Next text element</source>
-        <translation>Elemento di testo successivo</translation>
+        <translation>Elemento di testo seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1675"/>
@@ -7111,7 +7111,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1747"/>
         <source>Next lyric verse</source>
-        <translation>Strofa successiva delle parole</translation>
+        <translation>Strofa seguente delle parole</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
@@ -7227,7 +7227,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2326"/>
         <source>Accessibility: Next segment element</source>
-        <translation>Accessibilità: Elemento del segmento successivo</translation>
+        <translation>Accessibilità: Elemento del segmento seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2332"/>
@@ -7285,7 +7285,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="185"/>
         <source>Next staff or voice</source>
-        <translation>Successivo rigo o voce</translation>
+        <translation>Rigo o voce seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="227"/>
@@ -7301,7 +7301,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="221"/>
         <source>Add next chord to selection</source>
-        <translation>Aggiungi alla selezione l&apos;accordo successivo</translation>
+        <translation>Aggiungi alla selezione l&apos;accordo seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="239"/>
@@ -7334,12 +7334,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="102"/>
         <source>Select next element in score</source>
-        <translation>Seleziona l&apos;elemento successivo nella partitura</translation>
+        <translation>Seleziona l&apos;elemento seleziona in partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="114"/>
         <source>Select next chord / move text right</source>
-        <translation>Seleziona accordo successivo / sposta testo a destra</translation>
+        <translation>Seleziona accordo seguente / sposta testo a destra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="120"/>
@@ -7349,7 +7349,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="126"/>
         <source>Go to next measure / move text right quickly</source>
-        <translation>Vai alla battuta successiva / sposta rapidamente il testo a destra</translation>
+        <translation>Vai alla battuta seguente / sposta rapidamente il testo a destra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="138"/>
@@ -7384,7 +7384,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="186"/>
         <source>Go to next staff or voice</source>
-        <translation>Vai al rigo o alla voce successiva</translation>
+        <translation>Vai al rigo o alla voce seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="192"/>
@@ -7394,7 +7394,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="198"/>
         <source>Go to next frame</source>
-        <translation>Vai alla cornice successiva</translation>
+        <translation>Vai alla cornice seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="204"/>
@@ -7404,7 +7404,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="210"/>
         <source>Go to next system</source>
-        <translation>Vai al successivo sistema</translation>
+        <translation>Vai al sistema seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="216"/>
@@ -7414,7 +7414,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="222"/>
         <source>Add to selection: next note/rest</source>
-        <translation>Aggiungi alla selezione: nota/pausa successiva</translation>
+        <translation>Aggiungi alla selezione: nota/pausa seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="228"/>
@@ -7434,12 +7434,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="252"/>
         <source>Snap to &amp;next</source>
-        <translation>Aggancia a &amp;successivo</translation>
+        <translation>Aggancia al &amp;seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="253"/>
         <source>Snap to next</source>
-        <translation>Aggancia al successivo</translation>
+        <translation>Aggancia al seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="260"/>
@@ -8180,7 +8180,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1587"/>
         <source>Page: Next</source>
-        <translation>Pagina: Successiva</translation>
+        <translation>Pagina: Seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1594"/>
@@ -8210,7 +8210,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1682"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation>Avanza cursore: tempo successivo (sigla accordale)</translation>
+        <translation>Avanza cursore: tempo seguente (sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
@@ -8305,7 +8305,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
         <source>Move text/go to next lyric verse</source>
-        <translation>Sposta il testo/vai alla strofa successiva del testo cantato</translation>
+        <translation>Sposta il testo/vai alla strofa seguente del testo cantato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1754"/>
@@ -8564,7 +8564,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2327"/>
         <source>Select next in-staff element</source>
-        <translation>Seleziona elemento successivo nel rigo</translation>
+        <translation>Seleziona elemento seguente nel rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2333"/>
@@ -8983,7 +8983,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1575"/>
         <source>Screen: Next</source>
-        <translation>Schermo: Successivo</translation>
+        <translation>Schermo: Seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="820"/>
@@ -9490,7 +9490,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
         <source>Next syllable</source>
-        <translation>Sillaba successiva</translation>
+        <translation>Sillaba seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2017"/>
@@ -9676,22 +9676,22 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="908"/>
         <source>Fou&amp;rth above</source>
-        <translation>Quarta sopra</translation>
+        <translation>Qua&amp;rta sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="914"/>
         <source>Fift&amp;h above</source>
-        <translation>Quinta sopra</translation>
+        <translation>Quint&amp;a sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="920"/>
         <source>Si&amp;xth above</source>
-        <translation>Sesta sopra</translation>
+        <translation>Se&amp;sta sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="926"/>
         <source>Seve&amp;nth above</source>
-        <translation>Settima sopra</translation>
+        <translation>Sett&amp;ima sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="932"/>
@@ -9701,7 +9701,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="938"/>
         <source>Ninth abov&amp;e</source>
-        <translation>Nona sopra</translation>
+        <translation>Nona sopr&amp;a</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="944"/>
@@ -9716,7 +9716,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="956"/>
         <source>F&amp;ourth below</source>
-        <translation>Quarta sotto</translation>
+        <translation>Q&amp;uarta sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="962"/>
@@ -9726,12 +9726,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="968"/>
         <source>S&amp;ixth below</source>
-        <translation>Sesta sotto</translation>
+        <translation>S&amp;esta sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="974"/>
         <source>Se&amp;venth below</source>
-        <translation>Settima sotto</translation>
+        <translation>Se&amp;ttima sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="980"/>
@@ -9741,7 +9741,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="986"/>
         <source>Ninth belo&amp;w</source>
-        <translation>Nona sotto</translation>
+        <translation>Nona sott&amp;o</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
@@ -9801,22 +9801,22 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1285"/>
         <source>&amp;Part name</source>
-        <translation>Nome &amp;parte</translation>
+        <translation>Nome della &amp;parte</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
         <source>Syst&amp;em text</source>
-        <translation>Testo di sistema</translation>
+        <translation>Testo di sist&amp;ema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1303"/>
         <source>St&amp;aff text</source>
-        <translation>Testo di rigo</translation>
+        <translation>Testo di ri&amp;go</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
         <source>E&amp;xpression text</source>
-        <translation>Testo di espressione</translation>
+        <translation>Testo di e&amp;spressione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1315"/>
@@ -9836,12 +9836,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1333"/>
         <source>Stic&amp;king</source>
-        <translation>Sticking</translation>
+        <translation>Stic&amp;king</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1345"/>
         <source>R&amp;oman numeral analysis</source>
-        <translation>Analisi numeri romani</translation>
+        <translation>Analisi numeri r&amp;omani</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1351"/>
@@ -9851,7 +9851,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1357"/>
         <source>L&amp;yrics</source>
-        <translation>Parole</translation>
+        <translation>P&amp;arole</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1363"/>
@@ -9881,17 +9881,17 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
         <source>Q&amp;uintuplet</source>
-        <translation>Quintina</translation>
+        <translation>Q&amp;uintina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1399"/>
         <source>Se&amp;xtuplet</source>
-        <translation>Sestina</translation>
+        <translation>Se&amp;stina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
         <source>Se&amp;ptuplet</source>
-        <translation>Settimina</translation>
+        <translation>Se&amp;ttimina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
@@ -9901,7 +9901,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1423"/>
         <source>Othe&amp;r…</source>
-        <translation>Altro...</translation>
+        <translation>Altr&amp;o...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
@@ -9936,7 +9936,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
         <source>Jump to next screen</source>
-        <translation>Passa alla schermata successiva</translation>
+        <translation>Passa alla schermata seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1582"/>
@@ -9946,7 +9946,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1588"/>
         <source>Jump to next page</source>
-        <translation>Vai alla pagina successiva</translation>
+        <translation>Passa alla pagina seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
@@ -9969,17 +9969,17 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1663"/>
         <source>Next word</source>
-        <translation>Parola successiva</translation>
+        <translation>Parola seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1664"/>
         <source>Go to next word</source>
-        <translation>Vai alla parola successiva</translation>
+        <translation>Vai alla parola seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1670"/>
         <source>Go to next text element</source>
-        <translation>Vai all&apos;elemento di testo successivo</translation>
+        <translation>Vai all&apos;elemento di testo seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1676"/>
@@ -10302,7 +10302,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation>Marcatore battute irregolari</translation>
+        <translation>Marcatore battute i&amp;rregolari</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
@@ -10323,7 +10323,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
         <source>Next beat (Chord symbol)</source>
-        <translation>Battere successivo (simbolo accordo)</translation>
+        <translation>Battere seguente (simbolo accordo)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
@@ -10396,12 +10396,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
         <source>Show p&amp;aths…</source>
-        <translation>Mostra percorsi</translation>
+        <translation>Mostra p&amp;ercorsi</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="47"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation>Mostra profiler</translation>
+        <translation>Mostra pr&amp;ofiler</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
@@ -10690,7 +10690,7 @@ Questa azione non eliminerà nessuna delle tue partiture.</translation>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="95"/>
         <source>DevTools</source>
-        <translation>Strumenti di sviluppo</translation>
+        <translation>Attrezzi di sviluppo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="79"/>
@@ -10790,7 +10790,7 @@ Questa azione non può essere annullata.</translation>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="131"/>
         <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
-        <translation>Per informazioni sulla riservatezza, consulta la nostra &lt;a href=&quot;%1&quot;&gt;politica sulla riservatezza&lt;/a&gt;.</translation>
+        <translation>Per informazioni sulla privacy, consulta la nostra &lt;a href=&quot;%1&quot;&gt;normativa sulla privacy&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
@@ -10910,7 +10910,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="80"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>Per proteggere la tua privacy, MuseScore Studio non raccoglie alcuna informazione personale. Per maggiori informazioni, consulta la nostra &lt;a href=&quot;%1&quot;&gt;Informativa sulla privacy &lt;/a&gt;.</translation>
+        <translation>Per proteggere la tua privacy, MuseScore Studio non raccoglie alcuna informazione personale. Consulta la nostra &lt;a href=&quot;%1&quot;&gt;normativa sulla privacy&lt;/a&gt; per ulteriori informazioni.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -11188,7 +11188,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>Il controllo degli aggiornamenti richiede l&apos;accesso alla rete. Per proteggere la tua privacy, MuseScore Studio non memorizza alcuna informazione personale. Consulta la nostra &lt;a href=&quot;%1&quot;&gt;politica sulla privacy&lt;/a&gt; per ulteriori informazioni.</translation>
+        <translation>Il controllo degli aggiornamenti richiede l&apos;accesso alla rete. Per proteggere la tua privacy, MuseScore Studio non memorizza alcuna informazione personale. Consulta la nostra &lt;a href=&quot;%1&quot;&gt;normativa sulla privacy&lt;/a&gt; per ulteriori informazioni.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -11396,7 +11396,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
         <source>To next note entered</source>
-        <translation>Alla nota successiva inserita</translation>
+        <translation>Alla nota inserita seguente</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="70"/>
@@ -19406,7 +19406,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
         <source>Apply</source>
-        <translation>Applica</translation>
+        <translation>applica</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
@@ -19531,7 +19531,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="83"/>
         <source>Minutes</source>
-        <translation>minuti</translation>
+        <translation>Minuti</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="110"/>
@@ -20311,7 +20311,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation>Mantieni unite le battute sul(i) sistema(i) selezionato(i) e impedisce che vengano trasferite al sistema successivo.</translation>
+        <translation>Mantieni unite le battute sul(i) sistema(i) selezionato(i) e impedisci che vengano trasferite al sistema seguente.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="187"/>
@@ -20456,7 +20456,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="95"/>
         <source>Span to next staff</source>
-        <translation>Estendi al rigo successivo</translation>
+        <translation>Estendi al rigo seguente</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="111"/>
@@ -20672,7 +20672,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="86"/>
         <source>Display brackets, clefs and key signatures in the next measure</source>
-        <translation>Visualizza le parentesi, le chiavi e le armature di chiave nella battuta successiva</translation>
+        <translation>Visualizza le parentesi, le chiavi e le armature di chiave nella battuta seguente</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="49"/>
@@ -22523,7 +22523,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="68"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="77"/>
         <source>Snap to next</source>
-        <translation>Scatta al successivo</translation>
+        <translation>Scatta al seguente</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="63"/>
@@ -23117,7 +23117,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="37"/>
         <source>Beam distance</source>
-        <translation>Distanza travatura</translation>
+        <translation>Distanza della travatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="45"/>
@@ -23127,12 +23127,12 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="46"/>
         <source>Wide</source>
-        <translation>Ampio</translation>
+        <translation>Ampia</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="80"/>
         <source>Beam thickness</source>
-        <translation>Spessore travatura</translation>
+        <translation>Spessore della travatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="100"/>
@@ -23147,7 +23147,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="132"/>
         <source>Beam style</source>
-        <translation>Stile travatura</translation>
+        <translation>Stile della travatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="145"/>
@@ -25396,7 +25396,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="150"/>
         <source>Edit layout</source>
-        <translation>Modifica impaginazione</translation>
+        <translation>Modifica layout</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="156"/>
@@ -25411,7 +25411,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="168"/>
         <source>Reset layout</source>
-        <translation>Ripristina impaginazione</translation>
+        <translation>Ripristina layout</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>
@@ -25879,7 +25879,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="530"/>
         <source>Layout</source>
         <extracomment>The name of a palette</extracomment>
-        <translation>Impaginazione</translation>
+        <translation>Layout</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="591"/>
@@ -26655,7 +26655,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <source>Opening file
 %1
 failed: %2</source>
-        <translation>Apertura File
+        <translation>Apertura file
 %1
 fallita: %2</translation>
     </message>
@@ -30133,7 +30133,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation>Sostituisci &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt; esistente</translation>
+        <translation>Sostituisci la &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt; esistente</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
@@ -30144,7 +30144,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation>Sostituisci &lt;a href=&quot;%1&quot;&gt;audio esistente&lt;/a&gt;</translation>
+        <translation>Sostituisci l&apos;&lt;a href=&quot;%1&quot;&gt;audio esistente&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>
@@ -30995,7 +30995,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="151"/>
         <source>Apply</source>
-        <translation>Applica</translation>
+        <translation>APplica</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="152"/>
@@ -31340,7 +31340,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3706"/>
         <source>Toggle snap to next</source>
-        <translation>Attiva/disattiva aggancia al successivo</translation>
+        <translation>Attiva/disattiva aggancia al seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3836"/>
@@ -31714,7 +31714,7 @@ non riuscita.</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6302"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6364"/>
         <source>Navigate to next syllable</source>
-        <translation>Vai alla sillaba successiva</translation>
+        <translation>Vai alla sillaba seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6546"/>
@@ -31725,7 +31725,7 @@ non riuscita.</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6637"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6691"/>
         <source>Navigate to next chord symbol</source>
-        <translation>Vai al simbolo di accordo successivo</translation>
+        <translation>Vai al simbolo di accordo seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6728"/>
@@ -31736,7 +31736,7 @@ non riuscita.</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6783"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6827"/>
         <source>Navigate to next figured bass</source>
-        <translation>Vai al basso continuo successivo</translation>
+        <translation>Vai al basso continuo seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6875"/>

@@ -2498,7 +2498,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2384"/>
         <source>Use odd/even page header</source>
-        <translation>Folosește antet impar/par pentru pagini</translation>
+        <translation>Folosește antet par/impar pentru pagini</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2387"/>
@@ -2518,7 +2518,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2533"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2824"/>
         <source>Even</source>
-        <translation>Impar</translation>
+        <translation>Pară</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2571"/>
@@ -2530,7 +2530,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2625"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2720"/>
         <source>Odd</source>
-        <translation>Par</translation>
+        <translation>Impară</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2638"/>
@@ -2548,7 +2548,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2687"/>
         <source>Use odd/even page footer</source>
-        <translation>Folosește antet impar/par pentru pagini </translation>
+        <translation>Folosește antet par/impar pentru pagini </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2989"/>
@@ -3129,7 +3129,7 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>Glissandi și linii ancorate pe note</translation>
+        <translation>Glissando și linii ancorate pe note</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
@@ -4502,7 +4502,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10172"/>
         <source>Glissandos</source>
-        <translation>Glissandi</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10180"/>
@@ -12869,7 +12869,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
         <source>System text</source>
-        <translation>Text pt. distem</translation>
+        <translation>Text sistem</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
@@ -23863,7 +23863,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="199"/>
         <source>Glissandos</source>
-        <translation>Glissandi</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="43"/>
@@ -24588,7 +24588,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="101"/>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Automat</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
@@ -24938,7 +24938,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1361"/>
         <source>Special symbols in header/footer</source>
-        <translation>Simboluri speciale in antet/subsol</translation>
+        <translation>Simboluri speciale în antet/subsol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1364"/>
@@ -26274,7 +26274,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1541"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1542"/>
         <source>System text</source>
-        <translation>Text pt. sistem</translation>
+        <translation>Text sistem</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1554"/>
