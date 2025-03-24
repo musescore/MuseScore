@@ -52,24 +52,233 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         return;
     }
 
-    const MStyle& style = ctx.conf().style();
-
-    createNumber(item, style, ctx);
+    createNumber(item, ctx);
 
     computeDirection(item);
-
-    double _spatium = item->spatium();
 
     const ChordRest* cr1 = nullptr;
     const ChordRest* cr2 = nullptr;
     computeStartEndCR(item, &cr1, &cr2);
 
-    item->setHasBracket(item->calcHasBracket(cr1, cr2));
-    ldata->setMag((cr1->mag() + cr2->mag()) / 2);
+    bool hasBracket = item->calcHasBracket(cr1, cr2);
+    item->setHasBracket(hasBracket);
 
-    //
-    //    calculate bracket start and end point p1 p2
-    //
+    double mag = (cr1->mag() + cr2->mag()) / 2;
+    ldata->setMag(mag);
+
+    item->setPos(0.0, 0.0);
+
+    layoutBracket(item, cr1, cr2, ctx);
+
+    // collect bounding box
+    RectF r;
+    if (item->number()) {
+        r |= item->number()->ldata()->bbox().translated(item->number()->pos());
+        if (item->hasBracket()) {
+            RectF b;
+            b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketR[2].x(), item->bracketR[2].y());
+            r |= b;
+        }
+    } else if (item->hasBracket()) {
+        RectF b;
+        b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketL[3].x(), item->bracketL[3].y());
+        r |= b;
+    }
+    item->setbbox(r);
+
+    if (!item->cross()) {
+        Autoplace::autoplaceMeasureElement(item, item->mutldata(), item->isUp(), /* add to skyline */ true);
+    }
+}
+
+/// <summary>
+/// Recursively calls layout() on any nested tuplets and then the tuplet itself
+/// </summary>
+/// <param name="de">Start element of the tuplet</param>
+void TupletLayout::layout(DurationElement* de, LayoutContext& ctx)
+{
+    Tuplet* t = reinterpret_cast<Tuplet*>(de);
+    if (!t) {
+        return;
+    }
+    // t is top level tuplet
+    // loop through elements of that tuplet
+    for (DurationElement* d : t->elements()) {
+        if (d == de) {
+            continue;
+        }
+        // if element is tuplet, layoutTuplet(that tuplet)
+        if (d->isTuplet()) {
+            layout(d, ctx);
+        }
+    }
+    // layout t
+    TLayout::layoutTuplet(t, ctx);
+}
+
+bool TupletLayout::isTopTuplet(ChordRest* cr)
+{
+    Tuplet* t = cr->tuplet();
+    if (t && t->elements().front() == cr) {
+        // find top level tuplet
+        while (t->tuplet()) {
+            t = t->tuplet();
+        }
+        // consider tuplet cross if anything moved within it
+        if (t->cross()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // no tuplet or not first element
+    return false;
+}
+
+bool TupletLayout::notTopTuplet(ChordRest* cr)
+{
+    Tuplet* t = cr->tuplet();
+    if (t && t->elements().front() == cr) {
+        // find top level tuplet
+        while (t->tuplet()) {
+            t = t->tuplet();
+        }
+        // consider tuplet cross if anything moved within it
+        if (t->cross()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // no tuplet or not first element
+    return false;
+}
+
+void TupletLayout::createNumber(Tuplet* item, LayoutContext& ctx)
+{
+    if (item->numberType() == TupletNumberType::NO_TEXT) {
+        if (item->number()) {
+            if (item->number()->selected()) {
+                ctx.deselect(item->number());
+            }
+            delete item->number();
+            item->setNumber(nullptr);
+        }
+
+        return;
+    }
+
+    if (!item->number()) {
+        Text* number = Factory::createText(item, TextStyleType::TUPLET);
+        number->setComposition(true);
+        number->setTrack(item->track());
+        number->setParent(item);
+        number->setVisible(item->visible());
+        number->setColor(item->color());
+        item->setNumber(number);
+        item->resetNumberProperty();
+    }
+
+    // tuplet properties are propagated to number automatically by setProperty()
+    // but we need to make sure flags are as well
+    item->number()->setPropertyFlags(Pid::FONT_FACE, item->propertyFlags(Pid::FONT_FACE));
+    item->number()->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
+    item->number()->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
+    item->number()->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
+
+    const MStyle& style = ctx.conf().style();
+
+    String numberString = (item->numberType() == TupletNumberType::SHOW_NUMBER)
+                          ? String(u"%1").arg(item->ratio().numerator())
+                          : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
+    if (style.styleB(Sid::tupletUseSymbols)) {
+        String smuflNum;
+        for (size_t i = 0; i < numberString.size(); ++i) {
+            smuflNum.append(u"<sym>tuplet");
+            smuflNum.append(numberString.at(i).unicode());
+            smuflNum.append(u"</sym>");
+        }
+        smuflNum.replace(String(u":"), String(u"Colon"));
+        item->number()->setXmlText(smuflNum);
+    } else {
+        item->number()->setXmlText(numberString);
+    }
+
+    item->setIsSmall(true);
+    for (const DurationElement* e : item->elements()) {
+        if ((e->isChordRest() && !toChordRest(e)->isSmall()) || (e->isTuplet() && !toTuplet(e)->isSmall())) {
+            item->setIsSmall(false);
+            break;
+        }
+    }
+
+    item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
+}
+
+void TupletLayout::computeDirection(Tuplet* item)
+{
+    if (item->direction() != DirectionV::AUTO) {
+        item->setIsUp(item->direction() == DirectionV::UP);
+        return;
+    }
+
+    int up = 0;
+    for (const DurationElement* e : item->elements()) {
+        if (e->isChord()) {
+            const Chord* c = toChord(e);
+            if (c->stemDirection() != DirectionV::AUTO) {
+                up += c->stemDirection() == DirectionV::UP ? 1000 : -1000;
+            } else {
+                up += c->up() ? 1 : -1;
+            }
+        }
+    }
+    if (up == 0) {
+        // this is a tuplet full of rests, default to up but also take voices into consideration
+        Measure* m = item->measure();
+        if (m && m->hasVoices(item->staffIdx())) {
+            up = item->voice() % 2 == 0 ? 1 : -1;
+        } else {
+            up = 1;             // default up
+        }
+    }
+
+    item->setIsUp(up > 0);
+}
+
+void TupletLayout::computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2)
+{
+    const DurationElement* startEl = item->elements().front();
+    while (startEl->isTuplet()) {
+        const Tuplet* t = toTuplet(startEl);
+        if (t->elements().empty()) {
+            break;
+        }
+        startEl = t->elements().front();
+    }
+    assert(startEl && startEl->isChordRest());
+
+    const DurationElement* endEl = item->elements().back();
+    while (endEl->isTuplet()) {
+        const Tuplet* t = toTuplet(endEl);
+        if (t->elements().empty()) {
+            break;
+        }
+        endEl = t->elements().back();
+    }
+    assert(endEl && endEl->isChordRest());
+
+    *cr1 = toChordRest(startEl);
+    *cr2 = toChordRest(endEl);
+}
+
+void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx)
+{
+    const MStyle& style = ctx.conf().style();
+    double spatium = item->spatium();
+
     double maxSlope      = style.styleD(Sid::tupletMaxSlope);
     bool outOfStaff      = style.styleB(Sid::tupletOutOfStaff);
     double vHeadDistance = style.styleMM(Sid::tupletVHeadDistance) * item->mag();
@@ -92,7 +301,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
     double l1  = style.styleMM(Sid::tupletBracketHookHeight) * item->mag();
     double l2l = vHeadDistance;      // left bracket vertical distance
-    double l2r = vHeadDistance;      // right bracket vertical distance right
+    double l2r = vHeadDistance;      // right bracket vertical distance
 
     if (item->isUp()) {
         vHeadDistance = -vHeadDistance;
@@ -321,7 +530,6 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         extendToEndOfDuration(item, toChordRest(cr2));
     }
 
-    item->setPos(0.0, 0.0);
     PointF mp(item->parentItem()->pagePos());
     if (item->explicitParent()->isMeasure()) {
         System* s = toMeasure(item->explicitParent())->system();
@@ -372,7 +580,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             x3 = item->p1().x() + deltax * .5;
         }
 
-        numLdata->setPos(PointF(x3, y3) - ldata->pos());
+        numLdata->setPos(PointF(x3, y3) - item->ldata()->pos());
     }
 
     if (item->hasBracket()) {
@@ -381,7 +589,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         if (item->isUp()) {
             if (item->number()) {
                 //set width of bracket hole
-                double x     = x3 - numberWidth * .5 - _spatium * .5;
+                double x     = x3 - numberWidth * .5 - spatium * .5;
                 item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
@@ -389,7 +597,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 item->bracketL[2] = PointF(x,   y - l1);
 
                 //set width of bracket hole
-                x           = x3 + numberWidth * .5 + _spatium * .5;
+                x           = x3 + numberWidth * .5 + spatium * .5;
                 item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1); // ensure enough space for the number
                 y           = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketR[0] = PointF(x,   y - l1);
@@ -404,7 +612,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         } else {
             if (item->number()) {
                 //set width of bracket hole
-                double x     = x3 - numberWidth * .5 - _spatium * .5;
+                double x     = x3 - numberWidth * .5 - spatium * .5;
                 item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
@@ -412,7 +620,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 item->bracketL[2] = PointF(x,   y + l1);
 
                 //set width of bracket hole
-                x           = x3 + numberWidth * .5 + _spatium * .5;
+                x           = x3 + numberWidth * .5 + spatium * .5;
                 item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1);
                 y           = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketR[0] = PointF(x,   y + l1);
@@ -426,203 +634,6 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             }
         }
     }
-
-    // collect bounding box
-    RectF r;
-    if (item->number()) {
-        r |= item->number()->ldata()->bbox().translated(item->number()->pos());
-        if (item->hasBracket()) {
-            RectF b;
-            b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketR[2].x(), item->bracketR[2].y());
-            r |= b;
-        }
-    } else if (item->hasBracket()) {
-        RectF b;
-        b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketL[3].x(), item->bracketL[3].y());
-        r |= b;
-    }
-    item->setbbox(r);
-
-    if (!item->cross()) {
-        Autoplace::autoplaceMeasureElement(item, item->mutldata(), item->isUp(), /* add to skyline */ true);
-    }
-}
-
-/// <summary>
-/// Recursively calls layout() on any nested tuplets and then the tuplet itself
-/// </summary>
-/// <param name="de">Start element of the tuplet</param>
-void TupletLayout::layoutTupletAndNestedTuplets(Tuplet* t, LayoutContext& ctx)
-{
-    // t is top level tuplet
-    // loop through elements of that tuplet
-    for (DurationElement* d : t->elements()) {
-        if (d == t) {
-            continue;
-        }
-        // if element is tuplet, layoutTuplet(that tuplet)
-        if (d->isTuplet()) {
-            layoutTupletAndNestedTuplets(toTuplet(d), ctx);
-        }
-    }
-    // layout t
-    TLayout::layoutTuplet(t, ctx);
-}
-
-bool TupletLayout::isTopTuplet(ChordRest* cr)
-{
-    Tuplet* t = cr->tuplet();
-    if (t && t->elements().front() == cr) {
-        // find top level tuplet
-        while (t->tuplet()) {
-            t = t->tuplet();
-        }
-        // consider tuplet cross if anything moved within it
-        if (t->cross()) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    // no tuplet or not first element
-    return false;
-}
-
-bool TupletLayout::notTopTuplet(ChordRest* cr)
-{
-    Tuplet* t = cr->tuplet();
-    if (t && t->elements().front() == cr) {
-        // find top level tuplet
-        while (t->tuplet()) {
-            t = t->tuplet();
-        }
-        // consider tuplet cross if anything moved within it
-        if (t->cross()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // no tuplet or not first element
-    return false;
-}
-
-void TupletLayout::createNumber(Tuplet* item, const MStyle& style, LayoutContext& ctx)
-{
-    if (item->numberType() == TupletNumberType::NO_TEXT) {
-        if (item->number()) {
-            if (item->number()->selected()) {
-                ctx.deselect(item->number());
-            }
-            delete item->number();
-            item->setNumber(nullptr);
-        }
-
-        return;
-    }
-
-    if (!item->number()) {
-        Text* number = Factory::createText(item, TextStyleType::TUPLET);
-        number->setComposition(true);
-        number->setTrack(item->track());
-        number->setParent(item);
-        number->setVisible(item->visible());
-        number->setColor(item->color());
-        item->setNumber(number);
-        item->resetNumberProperty();
-    }
-
-    // tuplet properties are propagated to number automatically by setProperty()
-    // but we need to make sure flags are as well
-    item->number()->setPropertyFlags(Pid::FONT_FACE, item->propertyFlags(Pid::FONT_FACE));
-    item->number()->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
-    item->number()->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
-    item->number()->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
-
-    String numberString = (item->numberType() == TupletNumberType::SHOW_NUMBER)
-                          ? String(u"%1").arg(item->ratio().numerator())
-                          : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
-    if (style.styleB(Sid::tupletUseSymbols)) {
-        String smuflNum;
-        for (size_t i = 0; i < numberString.size(); ++i) {
-            smuflNum.append(u"<sym>tuplet");
-            smuflNum.append(numberString.at(i).unicode());
-            smuflNum.append(u"</sym>");
-        }
-        smuflNum.replace(String(u":"), String(u"Colon"));
-        item->number()->setXmlText(smuflNum);
-    } else {
-        item->number()->setXmlText(numberString);
-    }
-
-    item->setIsSmall(true);
-    for (const DurationElement* e : item->elements()) {
-        if ((e->isChordRest() && !toChordRest(e)->isSmall()) || (e->isTuplet() && !toTuplet(e)->isSmall())) {
-            item->setIsSmall(false);
-            break;
-        }
-    }
-
-    item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
-}
-
-void TupletLayout::computeDirection(Tuplet* item)
-{
-    if (item->direction() != DirectionV::AUTO) {
-        item->setIsUp(item->direction() == DirectionV::UP);
-        return;
-    }
-
-    int up = 0;
-    for (const DurationElement* e : item->elements()) {
-        if (e->isChord()) {
-            const Chord* c = toChord(e);
-            if (c->stemDirection() != DirectionV::AUTO) {
-                up += c->stemDirection() == DirectionV::UP ? 1000 : -1000;
-            } else {
-                up += c->up() ? 1 : -1;
-            }
-        }
-    }
-    if (up == 0) {
-        // this is a tuplet full of rests, default to up but also take voices into consideration
-        Measure* m = item->measure();
-        if (m && m->hasVoices(item->staffIdx())) {
-            up = item->voice() % 2 == 0 ? 1 : -1;
-        } else {
-            up = 1;             // default up
-        }
-    }
-
-    item->setIsUp(up > 0);
-}
-
-void TupletLayout::computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2)
-{
-    const DurationElement* startEl = item->elements().front();
-    while (startEl->isTuplet()) {
-        const Tuplet* t = toTuplet(startEl);
-        if (t->elements().empty()) {
-            break;
-        }
-        startEl = t->elements().front();
-    }
-    assert(startEl && startEl->isChordRest());
-
-    const DurationElement* endEl = item->elements().back();
-    while (endEl->isTuplet()) {
-        const Tuplet* t = toTuplet(endEl);
-        if (t->elements().empty()) {
-            break;
-        }
-        endEl = t->elements().back();
-    }
-    assert(endEl && endEl->isChordRest());
-
-    *cr1 = toChordRest(startEl);
-    *cr2 = toChordRest(endEl);
 }
 
 void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
