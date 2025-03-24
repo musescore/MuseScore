@@ -234,12 +234,12 @@ void LayoutPanelTreeModel::setupPartsConnections()
     });
 }
 
-void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& stavesPartId)
+void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
 {
-    async::NotifyList<const Staff*> notationStaves = m_notation->parts()->staffList(stavesPartId);
+    async::NotifyList<const Staff*> notationStaves = m_notation->parts()->staffList(partId);
 
-    notationStaves.onItemChanged(m_partsNotifyReceiver.get(), [this, stavesPartId](const Staff* staff) {
-        auto partItem = m_rootItem->childAtId(stavesPartId, LayoutPanelItemType::PART);
+    notationStaves.onItemChanged(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
         if (!partItem) {
             return;
         }
@@ -252,17 +252,44 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& stavesPartId)
         staffItem->init(m_masterNotation->parts()->staff(staff->id()));
     });
 
-    notationStaves.onItemAdded(m_partsNotifyReceiver.get(), [this, stavesPartId](const Staff* staff) {
-        auto partItem = m_rootItem->childAtId(stavesPartId, LayoutPanelItemType::PART);
+    notationStaves.onItemRemoved(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
         if (!partItem) {
             return;
         }
 
-        const Staff* masterStaff = m_masterNotation->parts()->staff(staff->id());
-        auto staffItem = buildMasterStaffItem(masterStaff, partItem);
+        auto staffItem = partItem->childAtId(staff->id(), LayoutPanelItemType::STAFF);
+        if (!staffItem) {
+            return;
+        }
 
         QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
-        int dstRow = partItem->childCount() - 1;
+        int staffRow = staffItem->row();
+
+        beginRemoveRows(partIndex, staffRow, staffRow);
+        partItem->removeChildren(staffRow, 1, false);
+        endRemoveRows();
+    });
+
+    notationStaves.onItemAdded(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(partId, LayoutPanelItemType::PART);
+        if (!partItem) {
+            return;
+        }
+
+        if (partItem->childAtId(staff->id(), LayoutPanelItemType::STAFF)) {
+            return; // this staff item already exists in the part
+        }
+
+        const Staff* masterStaff = m_masterNotation->parts()->staff(staff->id());
+        size_t staffIdx = muse::indexOf(masterStaff->part()->staves(), const_cast<Staff*>(masterStaff));
+        if (staffIdx == muse::nidx) {
+            return;
+        }
+
+        auto staffItem = buildMasterStaffItem(masterStaff, partItem);
+        QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
+        int dstRow = static_cast<int>(staffIdx);
 
         beginInsertRows(partIndex, dstRow, dstRow);
         partItem->insertChild(staffItem, dstRow);
@@ -278,7 +305,7 @@ void LayoutPanelTreeModel::setupNotationConnections()
 
     m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
         if (!m_layoutPanelVisible) {
-            m_scoreChangesCache.combine(changes);
+            m_shouldUpdateSystemObjectLayers = true;
             return;
         }
 
@@ -427,11 +454,7 @@ void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
 
     if (visible) {
         updateSelectedRows();
-
-        if (m_scoreChangesCache.isValid()) {
-            onScoreChanged(m_scoreChangesCache);
-            m_scoreChangesCache.clear();
-        }
+        updateSystemObjectLayers();
     }
 }
 
@@ -957,17 +980,10 @@ bool LayoutPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
     }
 
     return interactive()->warning(
-        //: Please omit `%n` in the translation in this case; it's only there so that you
-        //: have the possibility to provide translations with the correct numerus form,
-        //: i.e. to show "instrument" or "instruments" as appropriate.
-        muse::trc("layoutpanel", "Are you sure you want to delete the selected %n instrument(s)?", nullptr, count),
-
-        //: Please omit `%n` in the translation in this case; it's only there so that you
-        //: have the possibility to provide translations with the correct numerus form,
-        //: i.e. to show "instrument" or "instruments" as appropriate.
-        muse::trc("layoutpanel", "This will remove the %n instrument(s) from the full score and all part scores.", nullptr, count),
-
-        { IInteractive::Button::No, IInteractive::Button::Yes })
+        muse::trc("layoutpanel", "Are you sure you want to delete the selected instrument(s)?", nullptr, count),
+        muse::trc("layoutpanel", "This will remove the instrument(s) from the full score and all part scores.", nullptr, count),
+        { IInteractive::Button::No, IInteractive::Button::Yes }
+        )
            .standardButton() == IInteractive::Button::Yes;
 }
 
@@ -1023,11 +1039,11 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::modelIndexToItem(const QModel
 
 void LayoutPanelTreeModel::updateSystemObjectLayers()
 {
-    TRACEFUNC;
-
     if (!m_masterNotation || !m_rootItem || !m_shouldUpdateSystemObjectLayers) {
         return;
     }
+
+    TRACEFUNC;
 
     m_shouldUpdateSystemObjectLayers = false;
 

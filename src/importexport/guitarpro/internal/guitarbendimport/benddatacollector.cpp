@@ -33,6 +33,7 @@ using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
 constexpr int BEND_DIVISIONS = 60;
+constexpr bool SPLIT_CHORD_DURATIONS = false;
 
 static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, Fraction totalDuration,
                                               const BendDataCollector::ImportedBendInfo& importedInfo);
@@ -324,7 +325,6 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
         ratio = tuplet->ratio();
     }
 
-    size_t currentIndex = startIndex;
     if (durations.find(chord->track()) == durations.end()) {
         LOGE() << "bend import error : no information about chord duration for track " << chord->track();
         return;
@@ -345,25 +345,46 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const BendDataColle
         return;
     }
 
-    Fraction currentTick = chordStartTick;
-    for (size_t i = 0; i < tickDurations.size() - 1; i++) {
-        if (currentIndex >= importedInfo.segments.size()) {
-            break;
+    if (tickDurations.size() == 1) {
+        for (size_t i = startIndex; i < importedInfo.segments.size(); i++) {
+            const auto& seg = importedInfo.segments[i];
+
+            if (seg.pitchDiff() != 0) {
+                BendDataContext::GraceAfterBendData data;
+                data.quarterTones = seg.endPitch / 25;
+                int startTime = (seg.middleTime == -1) ? seg.startTime : seg.middleTime;
+                int endTime = seg.endTime;
+
+                data.startFactor = (double)startTime / BEND_DIVISIONS;
+                data.endFactor = (double)(endTime + 1) / BEND_DIVISIONS;
+
+                bendDataCtx.graceAfterBendData[chord->track()][chord->tick().ticks()][muse::indexOf(note->chord()->notes(),
+                                                                                                    note)].push_back(data);
+            }
         }
+    } else {
+        Fraction currentTick = chordStartTick;
+        size_t currentIndex = startIndex;
+        for (size_t i = 0; i < tickDurations.size() - 1; i++) {
+            if (currentIndex >= importedInfo.segments.size()) {
+                break;
+            }
 
-        Fraction tickDuration = tickDurations[i] / ratio;
+            Fraction tickDuration = tickDurations[i] / ratio;
 
-        const auto& seg = importedInfo.segments[currentIndex];
+            const auto& seg = importedInfo.segments[currentIndex];
 
-        BendDataContext::BendChordData& bendChordData = bendDataCtx.bendDataByEndTick[note->track()][(currentTick + tickDuration).ticks()];
-        bendChordData.startTick = currentTick;
-        BendDataContext::BendNoteData bendNoteData;
-        bendNoteData.type = GuitarBendType::BEND;
-        bendNoteData.quarterTones = seg.endPitch / 25;
-        bendChordData.noteDataByIdx[noteIndexInChord] = std::move(bendNoteData);
+            BendDataContext::BendChordData& bendChordData
+                = bendDataCtx.bendDataByEndTick[note->track()][(currentTick + tickDuration).ticks()];
+            bendChordData.startTick = currentTick;
+            BendDataContext::BendNoteData bendNoteData;
+            bendNoteData.type = GuitarBendType::BEND;
+            bendNoteData.quarterTones = seg.endPitch / 25;
+            bendChordData.noteDataByIdx[noteIndexInChord] = std::move(bendNoteData);
 
-        currentTick += tickDuration;
-        currentIndex++;
+            currentTick += tickDuration;
+            currentIndex++;
+        }
     }
 }
 
@@ -459,7 +480,11 @@ static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, Frac
         }
     }
 
-    splitBendChordDurations(bendDataCtx, totalDuration, importedInfo, startIndex);
+    if (SPLIT_CHORD_DURATIONS) {
+        splitBendChordDurations(bendDataCtx, totalDuration, importedInfo, startIndex);
+    } else {
+        addFullChordDuration(bendDataCtx, importedInfo);
+    }
 }
 
 static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo, int noteIndexInChord)

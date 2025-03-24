@@ -326,6 +326,16 @@ EngravingItem* HairpinSegment::findElementToSnapAfter(bool ignoreInvisible) cons
     return findEndDynamicOrExpression(ignoreInvisible);
 }
 
+void HairpinSegment::endEditDrag(EditData& ed)
+{
+    if (ed.isHairpinDragCreatedFromDynamic) {
+        undoResetProperty(Pid::OFFSET);
+        undoResetProperty(Pid::OFFSET2);
+    }
+
+    LineSegment::endEditDrag(ed);
+}
+
 TextBase* HairpinSegment::findStartDynamicOrExpression(bool ignoreInvisible) const
 {
     Fraction refTick = hairpin()->tick();

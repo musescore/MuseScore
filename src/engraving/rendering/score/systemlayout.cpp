@@ -450,19 +450,16 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     const std::vector<SystemLockIndicator*> lockIndicators = system->lockIndicators();
     // In PAGE view, at most ONE lock indicator can exist per system.
     assert(lockIndicators.size() <= 1);
+    system->deleteLockIndicators();
 
     const SystemLock* lock = system->systemLock();
     if (!lock) {
-        system->deleteLockIndicators();
         return;
     }
 
-    SystemLockIndicator* lockIndicator = lockIndicators.empty() ? nullptr : lockIndicators.front();
-    if (!lockIndicator) {
-        lockIndicator = new SystemLockIndicator(system, lock);
-        lockIndicator->setParent(system);
-        system->addLockIndicator(lockIndicator);
-    }
+    SystemLockIndicator* lockIndicator = new SystemLockIndicator(system, lock);
+    lockIndicator->setParent(system);
+    system->addLockIndicator(lockIndicator);
 
     TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
 }
@@ -2986,8 +2983,8 @@ bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element,
         if (!intersectHorizontally) {
             continue;
         }
-        bool skylineElementIsStackedOnIt = skylineLine.isNorth() ? skylineElement.top() < elemShapeBottom : skylineElement.bottom()
-                                           > elemShapeTop;
+        bool skylineElementIsStackedOnIt = skylineLine.isNorth() ? skylineElement.top() < elemShapeTop
+                                           : skylineElement.bottom() > elemShapeBottom;
         if (skylineElementIsStackedOnIt) {
             return true;
         }

@@ -390,7 +390,7 @@ Ret ProjectActionsController::doFinishOpenProject()
 {
     extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
 
-    //! Show Tours & Muse Sounds update if need
+    //! Show Tours & MuseSounds update if need
     auto showToursAndMuseSoundsUpdate = [=](){
         QTimer::singleShot(1000, [this]() {
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
@@ -1615,7 +1615,7 @@ int ProjectActionsController::warnScoreHasBecomeCorruptedAfterSave(const Ret& re
 {
     const QString errDetailsMessage = QString::fromStdString(ret.toString()).toHtmlEscaped();
 
-    const QString supportForumLink = String("<a href=\"%1\" style=\"text-decoration: none\">musescore.org</a>")
+    const QString supportForumLink = String("<a href=\"%1\" style=\"text-decoration: none\">MuseScore.org</a>")
                                      .arg(configuration()->supportForumUrl().toString());
 
     const std::string title = muse::trc("project/save", "An error occurred while saving your score");
@@ -1741,8 +1741,9 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
 void ProjectActionsController::warnFileTooNew(const muse::io::path_t& filepath)
 {
     interactive()->error(muse::qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
-                         muse::trc("project", "This file was saved using a newer version of MuseScore Studio. "
-                                              "Please visit <a href=\"https://musescore.org\">MuseScore.org</a> to obtain the latest version."));
+                         muse::mtrc("project", "This file was saved using a newer version of MuseScore Studio. "
+                                               "Please visit <a href=\"%1\">MuseScore.org</a> to obtain the latest version.")
+                         .arg(u"https://musescore.org").toStdString());
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)

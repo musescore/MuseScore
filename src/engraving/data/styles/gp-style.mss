@@ -22,9 +22,9 @@
     <rasgueadoShowTabSimple>0</rasgueadoShowTabSimple>
     <rasgueadoShowTabCommon>1</rasgueadoShowTabCommon>
     <mordentShowTabSimple>0</mordentShowTabSimple>
-    <mordentShowTabCommon>0</mordentShowTabCommon>
+    <mordentShowTabCommon>1</mordentShowTabCommon>
     <turnShowTabSimple>0</turnShowTabSimple>
-    <turnShowTabCommon>0</turnShowTabCommon>
+    <turnShowTabCommon>1</turnShowTabCommon>
     <wahShowTabSimple>0</wahShowTabSimple>
     <wahShowTabCommon>1</wahShowTabCommon>
     <golpeShowTabSimple>0</golpeShowTabSimple>

@@ -68,6 +68,17 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
     return title;
 }
 
+static bool isLayerVisible(const SystemObjectGroups& groups)
+{
+    for (const SystemObjectsGroup& group : groups) {
+        if (isSystemObjectsGroupVisible(group)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractLayoutPanelTreeItem(LayoutPanelItemType::SYSTEM_OBJECTS_LAYER, masterNotation, notation, parent)
 {
@@ -142,6 +153,9 @@ void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChange
 
     for (const auto& pair : changes.changedItems) {
         EngravingItem* item = pair.first;
+        if (!item) {
+            continue;
+        }
 
         bool isSystemObj = item->systemFlag();
         if (!isSystemObj && item->isTimeSig()) {
@@ -217,4 +231,6 @@ void SystemObjectsLayerTreeItem::updateState()
 {
     setTitle(formatLayerTitle(m_systemObjectGroups));
     setSettingsEnabled(!m_systemObjectGroups.empty());
+
+    setIsVisible(isLayerVisible(m_systemObjectGroups));
 }

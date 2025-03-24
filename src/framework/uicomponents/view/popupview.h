@@ -81,7 +81,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
     Q_PROPERTY(
         bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
 
-    Q_PROPERTY(bool takeFocusOnClick READ takeFocusOnClick WRITE setTakeFocusOnClick NOTIFY takeFocusOnClickChanged)
+    Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
 
     //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
@@ -116,6 +116,15 @@ public:
     };
     Q_DECLARE_FLAGS(ClosePolicies, ClosePolicy)
     Q_FLAG(ClosePolicies)
+
+    enum class FocusPolicy {
+        TabFocus = 0x00000001,
+        ClickFocus = 0x00000002,
+        DefaultFocus = FocusPolicy::TabFocus | FocusPolicy::ClickFocus,
+        NoFocus = 0
+    };
+    Q_DECLARE_FLAGS(FocusPolicies, FocusPolicy)
+    Q_FLAG(FocusPolicies)
 
     enum class Placement {
         Default,
@@ -153,7 +162,7 @@ public:
     Placement placement() const;
 
     bool activateParentOnClose() const;
-    bool takeFocusOnClick() const;
+    FocusPolicies focusPolicies() const;
 
     ui::INavigationControl* navigationParentControl() const;
 
@@ -204,7 +213,7 @@ public slots:
     void setAnchorItem(QQuickItem* anchorItem);
 
     void setActivateParentOnClose(bool activateParentOnClose);
-    void setTakeFocusOnClick(bool takeFocusOnClick);
+    void setFocusPolicies(const FocusPolicies& policies);
 
 signals:
     void parentItemChanged();
@@ -238,7 +247,7 @@ signals:
     void anchorItemChanged(QQuickItem* anchorItem);
 
     void activateParentOnCloseChanged(bool activateParentOnClose);
-    void takeFocusOnClickChanged(bool takeFocusOnClick);
+    void focusPoliciesChanged();
 
     void isContentReadyChanged();
 
@@ -296,11 +305,11 @@ protected:
     bool m_isContentReady = false;
 
     ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
+    FocusPolicies m_focusPolicies = { FocusPolicy::DefaultFocus };
 
     Placement m_placement = { Placement::Default };
 
     bool m_activateParentOnClose = true;
-    bool m_takeFocusOnClick = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
     QString m_objectId;
     QString m_title;

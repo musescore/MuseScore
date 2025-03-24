@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
+#include "iapplication.h"
 #include "iworkspacemanager.h"
 
 namespace muse::workspace {
@@ -37,8 +38,11 @@ class WorkspaceListModel : public QAbstractListModel, public Injectable, public 
 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
 
-    Inject<IWorkspaceManager> workspacesManager = { this };
+    Q_PROPERTY(QString appTitle READ appTitle CONSTANT)
+
     Inject<IInteractive> interactive = { this };
+    Inject<IApplication> application = { this };
+    Inject<IWorkspaceManager> workspacesManager = { this };
 
 public:
     explicit WorkspaceListModel(QObject* parent = nullptr);
@@ -48,6 +52,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     QVariant selectedWorkspace() const;
+    QString appTitle() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();

@@ -2528,6 +2528,9 @@ PartialTie* Note::outgoingPartialTie() const
 void Note::setTieFor(Tie* t)
 {
     m_tieFor = t;
+    if (m_tieFor && !m_tieFor->isLaissezVib()) {
+        m_tieFor->updatePossibleJumpPoints();
+    }
 }
 
 void Note::setTieBack(Tie* t)
@@ -2734,7 +2737,8 @@ RectF Note::drag(EditData& ed)
         noteEditData->mode = NoteEditData::editModeByDragDirection(delta.x(), delta.y());
     }
 
-    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing) {
+    bool isSingleNoteSelection = score()->getSelectedElement() == this;
+    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection && !(ed.modifiers & ControlModifier)) {
         horizontalDrag(ed);
     } else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch) {
         verticalDrag(ed);

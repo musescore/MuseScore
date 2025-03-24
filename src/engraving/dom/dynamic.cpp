@@ -820,6 +820,18 @@ void Dynamic::findAdjacentHairpins()
     }
 }
 
+Shape Dynamic::symShapeWithCutouts(SymId id) const
+{
+    Staff* stf = staff();
+    double staffMag = stf ? stf->staffMag(tick()) : 1.0;
+    Shape shape = score()->engravingFont()->shapeWithCutouts(id, magS() * staffMag * dynamicsSize());
+    for (ShapeElement& element : shape.elements()) {
+        element.setItem(this);
+    }
+
+    return shape;
+}
+
 //---------------------------------------------------------
 //   gripsCount
 //---------------------------------------------------------

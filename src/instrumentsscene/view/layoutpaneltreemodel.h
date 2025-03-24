@@ -140,7 +140,7 @@ private:
     void sortParts(notation::PartList& parts);
 
     void setupPartsConnections();
-    void setupStavesConnections(const muse::ID& stavesPartId);
+    void setupStavesConnections(const muse::ID& partId);
     void setupNotationConnections();
 
     void updateSelectedRows();
@@ -187,8 +187,6 @@ private:
 
     using NotationKey = QString;
     QHash<NotationKey, QList<muse::ID> > m_sortedPartIdList;
-
-    mu::engraving::ScoreChangesRange m_scoreChangesCache;
 
     bool m_layoutPanelVisible = true;
     bool m_shouldUpdateSystemObjectLayers = false;

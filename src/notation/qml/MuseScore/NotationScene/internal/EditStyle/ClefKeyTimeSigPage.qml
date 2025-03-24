@@ -559,7 +559,7 @@ StyledFlickable {
                 StyledGroupBox {
                     Layout.fillWidth: true
 
-                    title: qsTrc("notation/editstyle/timesignatures", "Changes that apply to both the repeat/jump and the subsequent bar")
+                    title: qsTrc("notation/editstyle/timesignatures", "Changes that apply to both the repeat/jump and the subsequent measure")
 
                     ColumnLayout {
                         spacing: 8

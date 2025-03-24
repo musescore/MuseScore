@@ -143,6 +143,9 @@ EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
+    case Pid::SPANNER_TICK:
+    case Pid::SPANNER_TICKS:
+    case Pid::SPANNER_TRACK2:
         return spanner();
     default: break;
     }
@@ -846,6 +849,20 @@ void Spanner::doComputeEndElement()
     }
 }
 
+bool Spanner::canBeCrossStaff() const
+{
+    switch (type()) {
+    case ElementType::SLUR:
+    case ElementType::TIE:
+    case ElementType::ARPEGGIO:
+    case ElementType::GLISSANDO:
+    case ElementType::NOTELINE:
+        return true;
+    default:
+        return false;
+    }
+}
+
 //---------------------------------------------------------
 //   startElementFromSpanner
 //
@@ -1405,6 +1422,25 @@ bool Spanner::isVoiceSpecific() const
     };
 
     return VOICE_SPECIFIC_SPANNERS.find(type()) != VOICE_SPECIFIC_SPANNERS.end();
+}
+
+track_idx_t Spanner::track2() const
+{
+    return canBeCrossStaff() ? m_track2 : m_track;
+}
+
+void Spanner::setTrack2(track_idx_t v)
+{
+    if (!canBeCrossStaff()) {
+        return;
+    }
+
+    m_track2 = v;
+}
+
+track_idx_t Spanner::effectiveTrack2() const
+{
+    return canBeCrossStaff() && m_track2 != muse::nidx ? m_track2 : m_track;
 }
 
 //---------------------------------------------------------

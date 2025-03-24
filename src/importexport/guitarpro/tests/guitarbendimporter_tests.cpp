@@ -113,6 +113,7 @@ TEST_F(GuitarBendImporter_Tests, DISABLED_gpPrebendChord) {
     gpReadTest(u"prebend_chord", u"gp");
 }
 
+#ifdef SPLIT_BEND_CHORD_DURATION
 TEST_F(GuitarBendImporter_Tests, gpBend_1) {
     gpReadTest(u"bend_1", u"gp");
 }
@@ -172,4 +173,9 @@ TEST_F(GuitarBendImporter_Tests, gpTuplesTiedBends) {
 TEST_F(GuitarBendImporter_Tests, gpDottedDurations) {
     gpReadTest(u"dotted_durations", u"gp");
 }
+#else
+TEST_F(GuitarBendImporter_Tests, gpSimpleBend) {
+    gpReadTest(u"simple_bend", u"gp");
+}
+#endif
 }

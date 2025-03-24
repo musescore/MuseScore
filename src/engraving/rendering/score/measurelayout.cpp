@@ -544,7 +544,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             if (!e->staff()->show() || !e->visible()) {
                 continue;
             }
-            if (!muse::contains(BREAK_TYPES, e->type())) {
+            if (muse::contains(BREAK_TYPES, e->type()) && !s->rtick().isZero()) {
                 return false;
             }
         }
@@ -811,10 +811,25 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
             firstMeasure->setMMRestCount(0);
             ctx.mutState().setMeasureNo(mno);
         }
-    } else if (firstMeasure->isMMRest()) {
-        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
-        int measureNo = ctx.state().measureNo() + firstMeasure->mmRestCount() - 1;
-        ctx.mutState().setMeasureNo(measureNo);
+    } else if (firstMeasure->mmRest()) {
+        // Removed linked clones that were created for the mmRest measure
+        Measure* mmRestMeasure = firstMeasure->mmRest();
+        for (EngravingItem* item : mmRestMeasure->el()) {
+            item->undoUnlink();
+            mmRestMeasure->score()->doUndoRemoveElement(item);
+        }
+        for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
+            for (EngravingItem* item : seg->annotations()) {
+                item->undoUnlink();
+                mmRestMeasure->score()->doUndoRemoveElement(item);
+            }
+        }
+
+        if (firstMeasure->mmRestCount() > 0) {
+            LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
+            int measureNo = ctx.state().measureNo() + firstMeasure->mmRestCount() - 1;
+            ctx.mutState().setMeasureNo(measureNo);
+        }
     }
 }
 
@@ -1984,10 +1999,11 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     }
 }
 
-void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackIdx, LayoutContext& ctx)
+void MeasureLayout::placeParentheses(Segment* segment, track_idx_t trackIdx, LayoutContext& ctx)
 {
     const EngravingItem* segItem = segment->elementAt(trackIdx);
     const std::vector<EngravingItem*> parens = segment->findAnnotations(ElementType::PARENTHESIS, trackIdx, trackIdx);
+    bool itemAddToSkyline = segItem->addToSkyline();
     assert(parens.size() <= 2);
     if (parens.empty() || !segItem) {
         return;
@@ -2003,17 +2019,18 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
         Parenthesis* paren = toParenthesis(parens.front());
         const bool leftBracket = paren->direction() == DirectionH::LEFT;
         TLayout::layoutParenthesis(paren, ctx);
-        if (!leftBracket) {
+        if (!leftBracket && itemAddToSkyline) {
             // Space against existing segment shape
             const double minDist = HorizontalSpacing::minHorizontalDistance(dummySegShape, paren->shape().translated(
                                                                                 paren->pos()), paren->spatium());
             paren->mutldata()->moveX(minDist);
-        } else {
+        } else if (itemAddToSkyline) {
             // Space following segment shape against this
             const double minDist = HorizontalSpacing::minHorizontalDistance(paren->shape().translated(
                                                                                 paren->pos()), dummySegShape, paren->spatium());
             paren->mutldata()->moveX(-minDist);
         }
+        segment->createShape(track2staff(trackIdx));
         return;
     }
 
@@ -2034,6 +2051,10 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
     TLayout::layoutParenthesis(toParenthesis(leftParen), ctx);
     TLayout::layoutParenthesis(toParenthesis(rightParen), ctx);
 
+    if (!itemAddToSkyline) {
+        return;
+    }
+
     const double itemLeftX = segItem->pos().x();
     const double itemRightX = itemLeftX + segItem->width();
 
@@ -2053,6 +2074,7 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
     const double parenPadding = segment->score()->paddingTable().at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
 
     if (itemWidth >= parenPadding) {
+        segment->createShape(track2staff(trackIdx));
         return;
     }
 
@@ -2067,6 +2089,8 @@ void MeasureLayout::placeParentheses(const Segment* segment, track_idx_t trackId
 
     leftParen->mutldata()->moveX(-(parenToItemDist - leftParenToItem));
     rightParen->mutldata()->moveX(-(itemToRightParen - parenToItemDist));
+
+    segment->createShape(track2staff(trackIdx));
 }
 
 Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)

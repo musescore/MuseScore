@@ -1087,7 +1087,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
         }
     }
 
-    startEdit(TranslatableString("undoableAction", "Drag element"));
+    startEdit(TranslatableString("undoableAction", "Drag element(s)", nullptr, int(m_dragData.elements.size())));
 
     qreal scaling = m_notation->viewState()->matrix().m11();
     qreal proximity = configuration()->selectionProximity() * 0.5f / scaling;
@@ -1191,7 +1191,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
             // TODO: refactor all code that works with Grips, so that this is not necessary
             Dynamic* dynamic = toDynamic(m_editData.element);
             bool isLeftGrip = dynamic->hasLeftGrip() ? m_editData.curGrip == Grip::LEFT : false;
-            addHairpinOnGripDrag(toDynamic(m_editData.element), isLeftGrip);
+            addHairpinOnGripDrag(m_editData, isLeftGrip);
         }
     } else {
         if (m_editData.element) {
@@ -1248,15 +1248,15 @@ void NotationInteraction::endDrag()
 {
     doEndDrag();
     apply();
+
+    if (m_editData.isHairpinDragCreatedFromDynamic) {
+        // Merge the two actions of hairpin creation + hairpin drag
+        m_undoStack->mergeCommands(m_undoStack->currentStateIndex() - 2);
+    }
+
     notifyAboutDragChanged();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
-
-    //    updateGrips();
-    //    if (editData.element->normalModeEditBehavior() == EngravingItem::EditBehavior::Edit
-    //        && score()->selection().element() == editData.element) {
-    //        startEdit(/* editMode */ false);
-    //    }
 }
 
 muse::async::Notification NotationInteraction::dragChanged() const
@@ -1729,7 +1729,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     bool systemStavesOnly = false;
     bool applyUserOffset = false;
 
-    startEdit(TranslatableString("undoableAction", "Drop element"));
+    startEdit(TranslatableString("undoableAction", "Drop element: %1").arg(edd.ed.dropElement->typeUserName()));
     score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
     ElementType et = edd.ed.dropElement->type();
     switch (et) {
@@ -1971,6 +1971,16 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
         return false;
     }
 
+    if (segment->isTupletSubdivision() || segment->isInsideTupletOnStaff(staffIdx)) {
+        endDrop();
+        notifyAboutDropChanged();
+        //MScore::setError(MsError::DEST_TUPLET);
+        //MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        // NOTE: if we show the error popup here it seems that the mouse-release event is missed
+        // so the dragged region stays sticked to the mouse and move around. Don't know how to fix it. [M.S.]
+        return false;
+    }
+
     rdd.targetSegment = segment;
     rdd.targetStaffIdx = staffIdx;
 
@@ -2005,8 +2015,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
 
-    apply();
     endDrop();
+    apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
@@ -2078,7 +2088,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         return false;
     }
 
-    startEdit(TranslatableString("undoableAction", "Apply palette element"));
+    startEdit(TranslatableString("undoableAction", "Apply palette element: %1").arg(element->typeUserName()));
 
     const bool isMeasureAnchoredElement = element->type() == ElementType::MARKER
                                           || element->type() == ElementType::JUMP
@@ -2678,26 +2688,12 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     if (firstItem && secondItem && (firstItem->isBarLine() != secondItem->isBarLine())) {
         const bool outgoing = firstItem->isChordRest();
         const BarLine* bl = outgoing ? toBarLine(secondItem) : toBarLine(firstItem);
-        const ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
+        ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
 
-        // Check the barline is the start of a repeat section
-        const Segment* adjacentCrSeg
-            = outgoing ? bl->segment()->prev1(SegmentType::ChordRest) : bl->segment()->next1(SegmentType::ChordRest);
-        EngravingItem* adjacentItem = adjacentCrSeg->element(cr->track());
-        ChordRest* adjacentCr = adjacentItem ? toChordRest(adjacentItem) : nullptr;
+        const bool hasAdjacentJump = (outgoing && cr->hasFollowingJumpItem()) || (!outgoing && cr->hasPrecedingJumpItem());
+        const bool isNextToBarline = cr->tick() + cr->actualTicks() == bl->tick();
 
-        if (!adjacentCr) {
-            for (track_idx_t track = cr->vStaffIdx() * VOICES; track < (cr->vStaffIdx() + 1) * VOICES; track++) {
-                adjacentItem = adjacentCrSeg->element(track);
-                if (!adjacentItem || !adjacentItem->isChordRest()) {
-                    continue;
-                }
-                adjacentCr = toChordRest(adjacentItem);
-                break;
-            }
-        }
-
-        if (!adjacentCr || (outgoing && !adjacentCr->hasFollowingJumpItem()) || (!outgoing && !adjacentCr->hasPrecedingJumpItem())) {
+        if (!cr || !isNextToBarline || !hasAdjacentJump) {
             return;
         }
 
@@ -2705,10 +2701,10 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         if (outgoing) {
             partialSlur->undoSetOutgoing(true);
             firstChordRest = toChordRest(firstItem);
-            secondChordRest = toChordRest(adjacentCr);
+            secondChordRest = toChordRest(cr);
         } else {
             partialSlur->undoSetIncoming(true);
-            firstChordRest = toChordRest(adjacentCr);
+            firstChordRest = toChordRest(cr);
             secondChordRest = toChordRest(secondItem);
         }
         slurTemplate = partialSlur;
@@ -3833,11 +3829,11 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Change pitch"));
-
     if (score()->selection().element() && score()->selection().element()->isRest()) {
+        startEdit(TranslatableString("undoableAction", "Change vertical position"));
         score()->cmdMoveRest(toRest(score()->selection().element()), toDirection(d));
     } else {
+        startEdit(TranslatableString("undoableAction", "Change pitch"));
         score()->upDown(MoveDirection::Up == d, mode);
     }
 
@@ -4117,7 +4113,9 @@ void NotationInteraction::endEditText()
     if (editedElement) {
         notifyAboutTextEditingEnded(toTextBase(editedElement));
         // When textual edit is finished, non-textual edit can still happen, so we need to start the non-textual edit mode here
-        startEditElement(editedElement, false);
+        if (editedElement->isTextBase() && toTextBase(editedElement)->supportsNonTextualEdit()) {
+            startEditElement(editedElement, false);
+        }
     }
 
     notifyAboutTextEditingChanged();
@@ -5005,9 +5003,11 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     apply();
 }
 
-void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic, bool isLeftGrip)
+void NotationInteraction::addHairpinOnGripDrag(EditData& ed, bool isLeftGrip)
 {
     startEdit(TranslatableString("undoableAction", "Add hairpin"));
+
+    Dynamic* dynamic = toDynamic(ed.element);
 
     const PointF pos = m_dragData.ed.pos;
     Hairpin* hairpin = score()->addHairpinToDynamicOnGripDrag(dynamic, isLeftGrip, pos);
@@ -5035,6 +5035,8 @@ void NotationInteraction::addHairpinOnGripDrag(Dynamic* dynamic, bool isLeftGrip
         select({ segment });
         startEditGrip(segment, Grip::END);
     }
+
+    ed.isHairpinDragCreatedFromDynamic = true;
 }
 
 void NotationInteraction::addHairpinsToSelection(HairpinType type)
@@ -7291,7 +7293,8 @@ void NotationInteraction::addMelisma()
 
         score()->undoAddElement(melisma);
     } else if (prevPartialLyricsLine) {
-        const Fraction tickDiff = nextCR->tick() - prevPartialLyricsLine->tick2();
+        const Fraction segEndTick = segment->tick() + segment->ticks();
+        const Fraction tickDiff = segEndTick - prevPartialLyricsLine->tick2();
         prevPartialLyricsLine->undoMoveEnd(tickDiff);
         prevPartialLyricsLine->triggerLayout();
     }

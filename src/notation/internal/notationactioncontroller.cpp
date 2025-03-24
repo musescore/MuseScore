@@ -796,6 +796,7 @@ void NotationActionController::handleNoteAction(const muse::actions::ActionData&
 
     if (addingMode == NoteAddingMode::NextChord) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+            noteInput->setRestMode(false);
             noteInput->setInputNote(params);
 
             if (configuration()->isPlayPreviewNotesInInputByDuration()) {
@@ -1084,7 +1085,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
             interaction->nudgeAnchors(direction);
         } else if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
-            moveInputNotes(direction == MoveDirection::Up, quickly);
+            moveInputNotes(direction == MoveDirection::Up, quickly ? PitchMode::OCTAVE : PitchMode::DIATONIC);
             return;
         } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
@@ -1157,18 +1158,15 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     playSelectedElement(playChord);
 }
 
-void NotationActionController::moveInputNotes(bool up, bool quickly)
+void NotationActionController::moveInputNotes(bool up, PitchMode mode)
 {
     INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    if (quickly) {
-        interaction->noteInput()->moveInputNotes(up, PitchMode::OCTAVE);
-    } else {
-        interaction->noteInput()->moveInputNotes(up, PitchMode::DIATONIC);
-    }
+    interaction->noteInput()->setRestMode(false);
+    interaction->noteInput()->moveInputNotes(up, mode);
 
     if (configuration()->isPlayPreviewNotesInInputByDuration()) {
         const NoteInputState& state = interaction->noteInput()->state();
@@ -1184,11 +1182,9 @@ void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
     }
 
     INotationNoteInputPtr noteInput = interaction->noteInput();
-    if (noteInput->isNoteInputMode()) {
-        if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
-            noteInput->moveInputNotes(direction == MoveDirection::Up, PitchMode::DIATONIC);
-            return;
-        }
+    if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        moveInputNotes(direction == MoveDirection::Up, PitchMode::DIATONIC);
+        return;
     }
 
     interaction->movePitch(direction, PitchMode::DIATONIC);
@@ -2398,9 +2394,9 @@ void NotationActionController::registerAction(const ActionCode& code,
 {
     registerAction(code, [this, handler, playMode]()
     {
-        auto interaction = currentNotationInteraction().get();
-        if (interaction) {
-            (interaction->*handler)();
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            (notation->interaction().get()->*handler)();
             if (playMode != PlayMode::NoPlay) {
                 playSelectedElement(playMode == PlayMode::PlayChord);
             }
@@ -2428,9 +2424,9 @@ void NotationActionController::registerAction(const ActionCode& code, void (INot
 {
     registerAction(code, [this, handler, param1, playMode]()
     {
-        auto interaction = currentNotationInteraction().get();
-        if (interaction) {
-            (interaction->*handler)(param1);
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            (notation->interaction().get()->*handler)(param1);
             if (playMode != PlayMode::NoPlay) {
                 playSelectedElement(playMode == PlayMode::PlayChord);
             }
@@ -2452,9 +2448,9 @@ void NotationActionController::registerAction(const ActionCode& code, void (INot
 {
     registerAction(code, [this, handler, param1, param2, playMode]()
     {
-        auto interaction = currentNotationInteraction().get();
-        if (interaction) {
-            (interaction->*handler)(param1, param2);
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            (notation->interaction().get()->*handler)(param1, param2);
             if (playMode != PlayMode::NoPlay) {
                 playSelectedElement(playMode == PlayMode::PlayChord);
             }

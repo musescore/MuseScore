@@ -1,4 +1,4 @@
-FROM library/ubuntu:20.04
+FROM library/ubuntu:22.04
 ENV TZ=Etc/UTC DEBIAN_FRONTEND=noninteractive
 COPY setup.sh /setup.sh
 COPY install_mu.sh /install_mu.sh

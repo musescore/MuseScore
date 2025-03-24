@@ -1669,10 +1669,7 @@ static void setChordRestDuration(ChordRest* cr, TDuration duration, const Fracti
 
 /**
  * Add a rest to the score
- * TODO: beam handling
  * TODO: display step handling
- * TODO: visible handling
- * TODO: whole measure rest handling
  */
 
 static Rest* addRest(Score*, Measure* m,
@@ -2404,7 +2401,8 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo, Color beamColor)
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam,
+                                 bool hasBeamingInfo, Color beamColor, const String fan)
 {
     if (!cr) {
         return;
@@ -2422,6 +2420,9 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         beam->setDirection(sd);
         if (beamColor.isValid()) {
             beam->setColor(beamColor);
+        }
+        if (!fan.empty() && fan != u"none") {
+            beam->setAsFeathered(fan == u"rit");
         }
     }
     // add ChordRest to beam
@@ -3066,8 +3067,8 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
     staff_idx_t staffIdx = m_score->staffIdx(part) + n;
 
     StringData stringData;
-    String visible = m_e.attribute("print-object");
-    String spacing = m_e.attribute("print-spacing");
+    AsciiStringView visible = m_e.asciiAttribute("print-object");
+    AsciiStringView spacing = m_e.asciiAttribute("print-spacing");
     if (visible == "no") {
         // EITHER:
         //  1) this indicates an empty staff that is hidden
@@ -3084,7 +3085,7 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
             // this doesn't apply to a measure, so we'll assume the entire staff has to be hidden.
             m_score->staff(staffIdx)->setVisible(false);
         }
-    } else if (visible == u"yes" || visible.empty()) {
+    } else if (visible == "yes" || visible.empty()) {
         if (measure) {
             m_score->staff(staffIdx)->setVisible(true);
             measure->setStaffVisible(staffIdx, true);
@@ -4870,8 +4871,9 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
                                       std::vector<MusicXmlSpannerDesc>& starts,
                                       std::vector<MusicXmlSpannerDesc>& stops)
 {
-    AsciiStringView lineEnd = m_e.asciiAttribute("line-end");
-    AsciiStringView lineType = m_e.asciiAttribute("line-type");
+    const AsciiStringView lineEnd = m_e.asciiAttribute("line-end");
+    const AsciiStringView lineType = m_e.asciiAttribute("line-type");
+    const AsciiStringView endLength = m_e.asciiAttribute("end-length");
     const bool isWavy = lineType == "wavy";
     const ElementType elementType = isWavy ? ElementType::TRILL : ElementType::TEXTLINE;
     const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ elementType, number });
@@ -4895,9 +4897,21 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             TextLine* textLine = toTextLine(sline);
             // if (placement.empty()) placement = "above";  // TODO ? set default
 
-            textLine->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
+            if (!endLength.empty()) {
+                double length = endLength.toDouble();
+                textLine->setBeginHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+            }
             if (lineEnd == "up") {
+                textLine->setBeginHookType(HookType::HOOK_90);
                 textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
+            } else if (lineEnd == "down") {
+                textLine->setBeginHookType(HookType::HOOK_90);
+            } else if (lineEnd == "both") {
+                textLine->setBeginHookType(HookType::HOOK_90T);
+            } else if (lineEnd == "arrow") {
+                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+            } else if (lineEnd == "none") {
+                textLine->setBeginHookType(HookType::NONE);
             }
 
             // hack: combine with a previous words element
@@ -4937,9 +4951,22 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
                 sline = new TextLine(m_score->dummy());
             }
             TextLine* textLine = toTextLine(sline);
-            textLine->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
+
+            if (!endLength.empty()) {
+                double length = endLength.toDouble();
+                textLine->setEndHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+            }
             if (lineEnd == "up") {
+                textLine->setEndHookType(HookType::HOOK_90);
                 textLine->setEndHookHeight(-1 * textLine->endHookHeight());
+            } else if (lineEnd == "down") {
+                textLine->setEndHookType(HookType::HOOK_90);
+            } else if (lineEnd == "both") {
+                textLine->setEndHookType(HookType::HOOK_90T);
+            } else if (lineEnd == "arrow") {
+                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+            } else if (lineEnd == "none") {
+                textLine->setEndHookType(HookType::NONE);
             }
         }
 
@@ -6699,6 +6726,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     bool isSingleDrumset = false;
     BeamMode bm;
     std::map<int, String> beamTypes;
+    String beamFan;
     String instrumentId;
     String tieType;
     MusicXmlParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
@@ -6715,6 +6743,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // element handled
         } else if (m_e.name() == "beam") {
             beamColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            beamFan = m_e.attribute("fan");
             beam(beamTypes);
         } else if (m_e.name() == "chord") {
             chord = true;
@@ -6760,10 +6789,12 @@ Note* MusicXmlParserPass2::note(const String& partId,
                 }
             }
             if (noteheadText.size() == 1) {
-                headScheme = (noteheadText == u"H")
-                             ? NoteHeadScheme::HEAD_PITCHNAME_GERMAN : NoteHeadScheme::HEAD_PITCHNAME;
+                const bool isGerman = noteheadText == u"H" || (noteheadText == u"B" && mnp.alter());
+                headScheme = isGerman ? NoteHeadScheme::HEAD_PITCHNAME_GERMAN : NoteHeadScheme::HEAD_PITCHNAME;
             } else {
-                headScheme = NoteHeadScheme::HEAD_SOLFEGE_FIXED;
+                const std::vector<String> names = { u"Do", u"Re", u"Mi", u"Fa", u"Sol", u"La", u"Si" };
+                const bool isFixed = names.at(mnp.step()) == noteheadText;
+                headScheme = isFixed ? NoteHeadScheme::HEAD_SOLFEGE_FIXED : NoteHeadScheme::HEAD_SOLFEGE;
             }
         } else if (m_e.name() == "rest") {
             rest = true;
@@ -6986,7 +7017,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // regular note
             // handle beam
             if (!chord) {
-                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor);
+                handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor, beamFan);
             }
 
             // append any grace chord after chord to the previous chord
@@ -8315,6 +8346,11 @@ void MusicXmlParserNotations::technical()
             harmonMute();
         } else if (m_e.name() == "hole") {
             hole();
+        } else if (m_e.name() == "tap") {
+            id = (m_e.attribute("hand") == u"left") ? SymId::guitarLeftHandTapping : SymId::guitarRightHandTapping;
+            m_notations.push_back(Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                                   m_e.attributes(), u"technical", id));
+            m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "other-technical") {
             otherTechnical();
         } else {
@@ -8364,15 +8400,16 @@ void MusicXmlParserNotations::harmonic()
         if (name == "natural") {
             notation.setSubType(name);
             m_e.skipCurrentElement();  // skip but don't log
-        } else {   // TODO: add artificial harmonic when supported by musescore
+        } else if (name == "artificial") {   // TODO: add artificial harmonic when supported by MuseScore
             m_logger->logError(String(u"unsupported harmonic type/pitch '%1'").arg(name), &m_e);
+            notation.setSymId(SymId::noSym);
+            m_e.skipCurrentElement();
+        } else {
             m_e.skipCurrentElement();
         }
     }
 
-    if (notation.subType() != "") {
-        m_notations.push_back(notation);
-    }
+    m_notations.push_back(notation);
 }
 
 //---------------------------------------------------------
@@ -8552,8 +8589,8 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
         glissandoNumber--;
     }
     const String glissandoType = notation.attribute(u"type");
-    int glissandoTag = notation.name() == u"slide" ? 0 : 1;
-    //                  String lineType  = ee.attribute(String("line-type"), "solid");
+    const bool glissandoTag = notation.name() != u"slide";
+    const String lineType  = notation.attribute(u"line-type");
     Glissando*& gliss = glissandi[glissandoNumber][glissandoTag];
 
     const Fraction tick = note->tick();
@@ -8576,8 +8613,15 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             if (glissandoColor.isValid()) {
                 gliss->setLineColor(glissandoColor);
             }
+            if (lineType == u"dashed") {
+                gliss->setLineStyle(LineType::DASHED);
+            } else if (lineType == u"dotted") {
+                gliss->setLineStyle(LineType::DOTTED);
+            } else if (lineType == u"solid" || lineType.empty()) {
+                gliss->setLineStyle(LineType::SOLID);
+            }
             gliss->setText(glissandoText);
-            gliss->setGlissandoType(glissandoTag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
+            gliss->setGlissandoType(glissandoTag || (lineType == u"wavy") ? GlissandoType::WAVY : GlissandoType::STRAIGHT);
             spanners[gliss] = std::pair<int, int>(tick.ticks(), -1);
             // LOGD("glissando/slide=%p inserted at first tick %d", gliss, tick);
         }
@@ -8747,8 +8791,9 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
             const Chord* startChord = startNote ? startNote->chord() : nullptr;
             const Chord* endChord = note->chord();
             const Measure* startMeasure = startChord ? startChord->measure() : nullptr;
-            if (startMeasure == endChord->measure() || (startChord && startChord->tick() + startChord->actualTicks() == endChord->tick())) {
-                // only connect if they're in the same bar, or there are no notes/rests in the same voice between them
+            if (startMeasure == endChord->measure()
+                || (startChord && startChord->tick() + startChord->measure()->ticks() >= endChord->tick())) {
+                // only connect if they're in the same bar or no further than a full measure apart
                 currTie->setEndNote(note);
                 note->setTieBack(currTie);
             } else {

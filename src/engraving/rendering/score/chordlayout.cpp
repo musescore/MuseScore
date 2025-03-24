@@ -1275,10 +1275,8 @@ bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
     Note* baseNote = item->up() ? item->downNote() : item->upNote();
     double noteY = baseNote->pagePos().y();
 
-    ChordRest* startCR = beam->elements().front();
-    ChordRest* endCR = beam->elements().back();
-    PointF startAnchor = BeamLayout::chordBeamAnchor(beam, startCR, ChordBeamAnchorType::Start);
-    PointF endAnchor = BeamLayout::chordBeamAnchor(beam, endCR, ChordBeamAnchorType::End);
+    PointF startAnchor = beam->startAnchor();
+    PointF endAnchor = beam->endAnchor();
 
     if (item == beam->elements().front()) {
         return noteY > startAnchor.y();

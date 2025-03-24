@@ -374,7 +374,9 @@ void DockWindow::loadPanels(const DockPageView* page)
             }
         }
 
-        addDock(panel, location);
+        bool isSideLocation = location == Location::Left || location == Location::Right;
+
+        addDock(panel, location, isSideLocation ? page->centralDock() : nullptr);
     };
 
     for (DockPanelView* panel : page->panels()) {

@@ -23,11 +23,11 @@
           </StaffType>
         </Staff>
       <trackName>E. Guitar 2</trackName>
-      <Instrument id="grand-piano">
+      <Instrument id="piano">
         <longName>E. Guitar 2</longName>
         <shortName>pno.</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano.grand</instrumentId>
+        <instrumentId>keyboard.piano</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
@@ -39,7 +39,7 @@
           <string>64</string>
           </StringData>
         <Channel>
-          <program value="0"/>
+          <program value="1"/>
           <controller ctrl="7" value="74"/>
           </Channel>
         </Instrument>
@@ -173,6 +173,7 @@
               <string>1</string>
               <Spanner type="Glissando">
                 <Glissando>
+                  <text></text>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>

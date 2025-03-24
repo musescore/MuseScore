@@ -61,6 +61,7 @@ Loader {
         id: itemMenu
 
         openPolicies: PopupView.NoActivateFocus
+        focusPolicies: PopupView.NoFocus
 
         accessibleName: loader.accessibleName
 

@@ -381,6 +381,7 @@ DockPage {
             maximumWidth: root.verticalPanelDefaultWidth
 
             groupName: root.verticalPanelsGroup
+            location: Location.Right
 
             //! NOTE: hidden by default
             visible: false

@@ -76,6 +76,8 @@ public:
     EngravingItem* findElementToSnapBefore(bool ignoreInvisible = true) const;
     EngravingItem* findElementToSnapAfter(bool ignoreInvisible = true) const;
 
+    void endEditDrag(EditData& ed) override;
+
 private:
     TextBase* findStartDynamicOrExpression(bool ignoreInvisible = true) const;
     TextBase* findEndDynamicOrExpression(bool ignoreInvisible = true) const;

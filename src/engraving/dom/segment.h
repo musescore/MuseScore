@@ -320,6 +320,9 @@ public:
     double xPosInSystemCoords() const;
     void setXPosInSystemCoords(double x);
 
+    bool isTupletSubdivision() const;
+    bool isInsideTupletOnStaff(staff_idx_t staffIdx) const;
+
 private:
 
     friend class Factory;
