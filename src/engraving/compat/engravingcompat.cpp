@@ -37,10 +37,6 @@ using namespace mu::engraving;
 namespace mu::engraving::compat {
 void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 {
-    if (score->mscVersion() < 450) {
-        replaceEmptyCRSegmentsWithTimeTick(score);
-    }
-
     if (score->mscVersion() >= 440) {
         resetMarkerLeftFontSize(score);
         return;
@@ -176,42 +172,6 @@ void EngravingCompat::resetMarkerLeftFontSize(MasterScore* masterScore)
                     continue;
                 }
                 marker->setSize(CORRECT_DEFAULT_SIZE);
-            }
-        }
-    }
-}
-
-void EngravingCompat::replaceEmptyCRSegmentsWithTimeTick(MasterScore* masterScore)
-{
-    auto segmentHasNoChordRest = [](const Segment* segment) {
-        for (EngravingItem* item : segment->elist()) {
-            if (item && item->isChordRest()) {
-                return false;
-            }
-        }
-        return true;
-    };
-
-    for (Score* score : masterScore->scoreList()) {
-        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* measure = toMeasure(mb);
-            for (Segment* segment = measure->first(SegmentType::ChordRest); segment;) {
-                Segment* next = segment->next(SegmentType::ChordRest);
-                if (segmentHasNoChordRest(segment)) {
-                    measure->remove(segment);
-                    Segment* timeTickSegment = measure->getSegmentR(SegmentType::TimeTick, segment->rtick());
-                    std::vector<EngravingItem*> annotations = segment->annotations();
-                    for (EngravingItem* annotation : annotations) {
-                        segment->remove(annotation);
-                        annotation->setParent(timeTickSegment);
-                        timeTickSegment->add(annotation);
-                    }
-                    delete segment;
-                }
-                segment = next;
             }
         }
     }
