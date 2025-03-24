@@ -2651,7 +2651,11 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
             if (e->isNote()) {
                 e = toNote(e)->chord();
             }
-            if (!e->isChord() && !e->isBarLine()) {
+
+            Measure* meas = e->findMeasure();
+            bool header = meas && meas->header() && e->tick() == meas->tick();
+
+            if (!e->isChord() && !e->isBarLine() && !header) {
                 continue;
             }
 
@@ -2685,13 +2689,17 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     ChordRest* firstChordRest = nullptr;
     ChordRest* secondChordRest = nullptr;
 
-    if (firstItem && secondItem && (firstItem->isBarLine() != secondItem->isBarLine())) {
+    Measure* meas = firstItem ? firstItem->findMeasure() : nullptr;
+    bool header = meas && meas->header() && firstItem->tick() == meas->tick();
+
+    if (firstItem && secondItem
+        && ((firstItem->isBarLine() != secondItem->isBarLine()) || (header && secondItem->isChordRest()))) {
         const bool outgoing = firstItem->isChordRest();
-        const BarLine* bl = outgoing ? toBarLine(secondItem) : toBarLine(firstItem);
+        const EngravingItem* otherElement = outgoing ? secondItem : firstItem;
         ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
 
         const bool hasAdjacentJump = (outgoing && cr->hasFollowingJumpItem()) || (!outgoing && cr->hasPrecedingJumpItem());
-        const bool isNextToBarline = cr->tick() + cr->actualTicks() == bl->tick();
+        const bool isNextToBarline = (outgoing ? cr->tick() + cr->actualTicks() : cr->tick()) == otherElement->tick();
 
         if (!cr || !isNextToBarline || !hasAdjacentJump) {
             return;
