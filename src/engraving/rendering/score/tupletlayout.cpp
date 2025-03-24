@@ -45,68 +45,19 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         LOGD("Tuplet::layout(): tuplet is empty");
         return;
     }
-    // is in a TAB without stems, skip any format: tuplets are not shown
+
     const StaffType* stt = item->staffType();
     if (stt && stt->isTabStaff() && stt->stemless()) {
+        // is in a TAB without stems, skip any format: tuplets are not shown
         return;
     }
 
-    //
-    // create tuplet number if necessary
-    //
     const MStyle& style = ctx.conf().style();
+
+    createNumber(item, style, ctx);
+
     double _spatium = item->spatium();
-    if (item->numberType() != TupletNumberType::NO_TEXT) {
-        if (item->number() == nullptr) {
-            Text* number = Factory::createText(item, TextStyleType::TUPLET);
-            number->setComposition(true);
-            number->setTrack(item->track());
-            number->setParent(item);
-            number->setVisible(item->visible());
-            number->setColor(item->color());
-            item->setNumber(number);
-            item->resetNumberProperty();
-        }
-        // tuplet properties are propagated to number automatically by setProperty()
-        // but we need to make sure flags are as well
-        item->number()->setPropertyFlags(Pid::FONT_FACE, item->propertyFlags(Pid::FONT_FACE));
-        item->number()->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
-        item->number()->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
-        item->number()->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
 
-        String numberString = (item->numberType() == TupletNumberType::SHOW_NUMBER)
-                              ? String(u"%1").arg(item->ratio().numerator())
-                              : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
-        if (style.styleB(Sid::tupletUseSymbols)) {
-            String smuflNum;
-            for (size_t i = 0; i < numberString.size(); ++i) {
-                smuflNum.append(u"<sym>tuplet");
-                smuflNum.append(numberString.at(i).unicode());
-                smuflNum.append(u"</sym>");
-            }
-            smuflNum.replace(String(u":"), String(u"Colon"));
-            item->number()->setXmlText(smuflNum);
-        } else {
-            item->number()->setXmlText(numberString);
-        }
-
-        item->setIsSmall(true);
-        for (const DurationElement* e : item->elements()) {
-            if ((e->isChordRest() && !toChordRest(e)->isSmall()) || (e->isTuplet() && !toTuplet(e)->isSmall())) {
-                item->setIsSmall(false);
-                break;
-            }
-        }
-        item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
-    } else {
-        if (item->number()) {
-            if (item->number()->selected()) {
-                ctx.deselect(item->number());
-            }
-            delete item->number();
-            item->setNumber(nullptr);
-        }
-    }
     //
     // find out main direction
     //
@@ -600,6 +551,65 @@ bool TupletLayout::notTopTuplet(ChordRest* cr)
 
     // no tuplet or not first element
     return false;
+}
+
+void TupletLayout::createNumber(Tuplet* item, const MStyle& style, LayoutContext& ctx)
+{
+    if (item->numberType() == TupletNumberType::NO_TEXT) {
+        if (item->number()) {
+            if (item->number()->selected()) {
+                ctx.deselect(item->number());
+            }
+            delete item->number();
+            item->setNumber(nullptr);
+        }
+
+        return;
+    }
+
+    if (!item->number()) {
+        Text* number = Factory::createText(item, TextStyleType::TUPLET);
+        number->setComposition(true);
+        number->setTrack(item->track());
+        number->setParent(item);
+        number->setVisible(item->visible());
+        number->setColor(item->color());
+        item->setNumber(number);
+        item->resetNumberProperty();
+    }
+
+    // tuplet properties are propagated to number automatically by setProperty()
+    // but we need to make sure flags are as well
+    item->number()->setPropertyFlags(Pid::FONT_FACE, item->propertyFlags(Pid::FONT_FACE));
+    item->number()->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
+    item->number()->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
+    item->number()->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
+
+    String numberString = (item->numberType() == TupletNumberType::SHOW_NUMBER)
+                          ? String(u"%1").arg(item->ratio().numerator())
+                          : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
+    if (style.styleB(Sid::tupletUseSymbols)) {
+        String smuflNum;
+        for (size_t i = 0; i < numberString.size(); ++i) {
+            smuflNum.append(u"<sym>tuplet");
+            smuflNum.append(numberString.at(i).unicode());
+            smuflNum.append(u"</sym>");
+        }
+        smuflNum.replace(String(u":"), String(u"Colon"));
+        item->number()->setXmlText(smuflNum);
+    } else {
+        item->number()->setXmlText(numberString);
+    }
+
+    item->setIsSmall(true);
+    for (const DurationElement* e : item->elements()) {
+        if ((e->isChordRest() && !toChordRest(e)->isSmall()) || (e->isTuplet() && !toTuplet(e)->isSmall())) {
+            item->setIsSmall(false);
+            break;
+        }
+    }
+
+    item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
 }
 
 void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
