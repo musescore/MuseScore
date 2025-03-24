@@ -42,6 +42,7 @@ public:
 
 private:
     static void createNumber(Tuplet* item, const MStyle& style, LayoutContext& ctx);
+    static void computeDirection(Tuplet* item);
     static void extendToEndOfDuration(Tuplet* item, const ChordRest* endCR);
 };
 }
