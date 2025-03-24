@@ -45,6 +45,7 @@ private:
     static void computeDirection(Tuplet* item);
     static void computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2);
     static void layoutBracket(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx);
+    static double findRhythmicCenter(Tuplet* item, const ChordRest *cr2);
     static void extendToEndOfDuration(Tuplet* item, const ChordRest* endCR);
 };
 }
