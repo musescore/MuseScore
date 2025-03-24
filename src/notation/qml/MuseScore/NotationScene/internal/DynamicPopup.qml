@@ -23,7 +23,7 @@ StyledPopupView {
 
     showArrow: false
 
-    takeFocusOnClick: false
+    focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
 
     signal elementRectChanged(var elementRect)
 
