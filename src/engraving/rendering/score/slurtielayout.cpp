@@ -1743,6 +1743,7 @@ LaissezVibSegment* SlurTieLayout::createLaissezVibSegment(LaissezVib* item)
     item->fixupSegments(1);
     LaissezVibSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+    segment->setTrack(item->track());
     segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
     segment->resetAdjustmentOffset();
 
@@ -1802,6 +1803,7 @@ PartialTieSegment* SlurTieLayout::createPartialTieSegment(PartialTie* item)
     PartialTieSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     segment->setSystem(chord->segment()->measure()->system());
+    segment->setTrack(item->track());
     segment->resetAdjustmentOffset();
     segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();
 
