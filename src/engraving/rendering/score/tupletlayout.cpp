@@ -56,36 +56,9 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
     createNumber(item, style, ctx);
 
-    double _spatium = item->spatium();
+    computeDirection(item);
 
-    //
-    // find out main direction
-    //
-    if (item->direction() == DirectionV::AUTO) {
-        int up = 0;
-        for (const DurationElement* e : item->elements()) {
-            if (e->isChord()) {
-                const Chord* c = toChord(e);
-                if (c->stemDirection() != DirectionV::AUTO) {
-                    up += c->stemDirection() == DirectionV::UP ? 1000 : -1000;
-                } else {
-                    up += c->up() ? 1 : -1;
-                }
-            }
-        }
-        if (up == 0) {
-            // this is a tuplet full of rests, default to up but also take voices into consideration
-            Measure* m = item->measure();
-            if (m && m->hasVoices(item->staffIdx())) {
-                up = item->voice() % 2 == 0 ? 1 : -1;
-            } else {
-                up = 1;         // default up
-            }
-        }
-        item->setIsUp(up > 0);
-    } else {
-        item->setIsUp(item->direction() == DirectionV::UP);
-    }
+    double _spatium = item->spatium();
 
     //
     // find first and last chord of tuplet
@@ -614,6 +587,37 @@ void TupletLayout::createNumber(Tuplet* item, const MStyle& style, LayoutContext
     }
 
     item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
+}
+
+void TupletLayout::computeDirection(Tuplet* item)
+{
+    if (item->direction() != DirectionV::AUTO) {
+        item->setIsUp(item->direction() == DirectionV::UP);
+        return;
+    }
+
+    int up = 0;
+    for (const DurationElement* e : item->elements()) {
+        if (e->isChord()) {
+            const Chord* c = toChord(e);
+            if (c->stemDirection() != DirectionV::AUTO) {
+                up += c->stemDirection() == DirectionV::UP ? 1000 : -1000;
+            } else {
+                up += c->up() ? 1 : -1;
+            }
+        }
+    }
+    if (up == 0) {
+        // this is a tuplet full of rests, default to up but also take voices into consideration
+        Measure* m = item->measure();
+        if (m && m->hasVoices(item->staffIdx())) {
+            up = item->voice() % 2 == 0 ? 1 : -1;
+        } else {
+            up = 1;             // default up
+        }
+    }
+
+    item->setIsUp(up > 0);
 }
 
 void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
