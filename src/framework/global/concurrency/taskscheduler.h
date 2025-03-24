@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_GLOBAL_TASKCHEDULER_H
-#define MUSE_GLOBAL_TASKCHEDULER_H
+#pragma once
 
 #include <condition_variable>
 #include <functional>
@@ -199,5 +197,3 @@ private:
     std::unique_ptr<std::thread[]> m_threadPool = nullptr;
 };
 }
-
-#endif // MUSE_GLOBAL_TASKCHEDULER_H

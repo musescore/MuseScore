@@ -462,4 +462,4 @@ void Ornament::mapOldTrillAccidental(Note* note, const Note* mainNote)
         break;
     }
 }
-} // namespace mu::engraving
+}
