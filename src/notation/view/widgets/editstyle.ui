@@ -10164,31 +10164,74 @@
       <widget class="QWidget" name="PageGlissNoteLines">
        <layout class="QVBoxLayout" name="verticalLayout_691">
         <item>
-         <widget class="QGroupBox" name="groupBox_glissando">
-          <property name="accessibleName">
-           <string>Glissandos</string>
+         <widget class="QScrollArea" name="scrollArea_5">
+          <property name="widgetResizable">
+           <bool>true</bool>
           </property>
-          <property name="title">
-           <string>Glissandos</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout0_2"/>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_noteline">
-          <property name="accessibleName">
-           <string>Note-anchored lines</string>
-          </property>
-          <property name="title">
-           <string>Note-anchored lines</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout0_3"/>
+          <widget class="QWidget" name="scrollAreaWidgetContents_6">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>651</width>
+             <height>354</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_59">
+            <item>
+             <widget class="QGroupBox" name="groupBox_glissando">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>627</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="accessibleName">
+               <string>Glissandos</string>
+              </property>
+              <property name="title">
+               <string>Glissandos</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout0_2"/>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_noteline">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>627</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="accessibleName">
+               <string>Note-anchored lines</string>
+              </property>
+              <property name="title">
+               <string>Note-anchored lines</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout0_3"/>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
         <item>
          <spacer name="verticalSpacer_39">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -14155,18 +14198,24 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>651</width>
+             <height>744</height>
             </rect>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QVBoxLayout" name="verticalLayout_60">
             <item>
              <widget class="QWidget" name="fretboardsWidget" native="true">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>470</width>
+                <height>0</height>
+               </size>
               </property>
               <property name="palette">
                <palette>
