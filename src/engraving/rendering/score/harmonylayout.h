@@ -36,7 +36,7 @@ class HarmonyLayout
 {
 public:
 
-    static void layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx);
+    static void autoplaceHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx);
     static void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
                                const double maxShiftBelow);
 };

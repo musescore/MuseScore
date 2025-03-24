@@ -988,7 +988,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
             }
         } else if (segment.isChordRestType()) {
             for (EngravingItem* e : segment.annotations()) {
-                if (e->isSymbol()) {
+                if (e->isSymbol() || e->isHarmony() || e->isFretDiagram()) {
                     TLayout::layoutItem(e, ctx);
                 }
             }
