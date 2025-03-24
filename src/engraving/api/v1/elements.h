@@ -181,33 +181,42 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(int,    z,             Z)
     API_PROPERTY(small,                   SMALL)
     API_PROPERTY(showCourtesy,            SHOW_COURTESY)
+    ///\since MuseScore 4.6
+    API_PROPERTY(keysig_mode,             KEYSIG_MODE)
     API_PROPERTY(lineType,                SLUR_STYLE_TYPE)
+
     API_PROPERTY(line,                    LINE)
     API_PROPERTY(fixed,                   FIXED)
     API_PROPERTY(fixedLine,               FIXED_LINE)
     /** Notehead type, one of PluginAPI::PluginAPI::NoteHeadType values */
     API_PROPERTY(headType,                HEAD_TYPE)
-    /**
-     * Notehead scheme, one of PluginAPI::PluginAPI::NoteHeadScheme values.
-     * \since MuseScore 3.5
-     */
-    API_PROPERTY(headScheme,              HEAD_SCHEME)
     /** Notehead group, one of PluginAPI::PluginAPI::NoteHeadGroup values */
     API_PROPERTY(headGroup,               HEAD_GROUP)
     API_PROPERTY(articulationAnchor,      ARTICULATION_ANCHOR)
+
     API_PROPERTY(direction,               DIRECTION)
+    ///\since MuseScore 4.6
+    API_PROPERTY(horizontalDirection,     HORIZONTAL_DIRECTION)
     API_PROPERTY(stemDirection,           STEM_DIRECTION)
     API_PROPERTY(noStem,                  NO_STEM)
     API_PROPERTY(slurDirection,           SLUR_DIRECTION)
     API_PROPERTY(leadingSpace,            LEADING_SPACE)
     API_PROPERTY(mirrorHead,              MIRROR_HEAD)
+    ///\since MuseScore 4.6
+    API_PROPERTY(headHasParentheses,      HEAD_HAS_PARENTHESES)
     API_PROPERTY(dotPosition,             DOT_POSITION)
+    ///\since MuseScore 4.6
+    API_PROPERTY(combineVoice,            COMBINE_VOICE)
     API_PROPERTY(tuning,                  TUNING)
     API_PROPERTY(pause,                   PAUSE)
+
     API_PROPERTY(barlineType,             BARLINE_TYPE)
     API_PROPERTY(barlineSpan,             BARLINE_SPAN)
     API_PROPERTY(barlineSpanFrom,         BARLINE_SPAN_FROM)
     API_PROPERTY(barlineSpanTo,           BARLINE_SPAN_TO)
+    ///\since MuseScore 4.6
+    API_PROPERTY(barlineShowTips,         BARLINE_SHOW_TIPS)
+
     /**
      * Offset from a reference position in spatium units.
      * Use `Qt.point(x, y)` to create a point value which can be
@@ -219,13 +228,18 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(fret,                    FRET)
     API_PROPERTY(string,                  STRING)
     API_PROPERTY(ghost,                   GHOST)
+    ///\since MuseScore 4.6
+    API_PROPERTY(dead,                    DEAD)
     API_PROPERTY(play,                    PLAY)
     API_PROPERTY(timesigNominal,          TIMESIG_NOMINAL)
     API_PROPERTY(timesigActual,           TIMESIG_ACTUAL)
     API_PROPERTY(growLeft,                GROW_LEFT)
     API_PROPERTY(growRight,               GROW_RIGHT)
+
     API_PROPERTY(boxHeight,               BOX_HEIGHT)
     API_PROPERTY(boxWidth,                BOX_WIDTH)
+    ///\since MuseScore 4.6
+    API_PROPERTY(boxAutoSize,             BOX_AUTOSIZE)
     API_PROPERTY(topGap,                  TOP_GAP)
     API_PROPERTY(bottomGap,               BOTTOM_GAP)
     API_PROPERTY(leftMargin,              LEFT_MARGIN)
@@ -235,44 +249,99 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(layoutBreakType,         LAYOUT_BREAK)
     API_PROPERTY(autoscale,               AUTOSCALE)
     API_PROPERTY(size,                    SIZE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(imageHeight,             IMAGE_HEIGHT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(imageWidth,              IMAGE_WIDTH)
+    ///\since MuseScore 4.6
+    API_PROPERTY(imageFramed,             IMAGE_FRAMED)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretFrameTextScale,      FRET_FRAME_TEXT_SCALE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretFrameDiagramScale,   FRET_FRAME_DIAGRAM_SCALE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretFrameColumnGap,      FRET_FRAME_COLUMN_GAP)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretFrameRowGap,         FRET_FRAME_ROW_GAP)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretFrameChordPerRow,    FRET_FRAME_CHORDS_PER_ROW)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretFrameHAlign,         FRET_FRAME_H_ALIGN)
+
     API_PROPERTY(scale,                   SCALE)
     API_PROPERTY(lockAspectRatio,         LOCK_ASPECT_RATIO)
     API_PROPERTY(sizeIsSpatium,           SIZE_IS_SPATIUM)
     API_PROPERTY(text,                    TEXT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(htmlText,                HTML_TEXT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(userModified,            USER_MODIFIED)
     API_PROPERTY(beamPos,                 BEAM_POS)
     API_PROPERTY(beamMode,                BEAM_MODE)
     API_PROPERTY(beamNoSlope,             BEAM_NO_SLOPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(crossStaffMove,          BEAM_CROSS_STAFF_MOVE)
     API_PROPERTY(userLen,                 USER_LEN)
+    ///\since MuseScore 4.6
+    API_PROPERTY(showStemSlash,           SHOW_STEM_SLASH)
+
     /** For spacers: amount of space between staves. */
     API_PROPERTY(space,                   SPACE)
     API_PROPERTY(tempo,                   TEMPO)
     API_PROPERTY(tempoFollowText,         TEMPO_FOLLOW_TEXT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(tempoAlignRightOfRehearsalMark, TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK)
     API_PROPERTY(accidentalBracket,       ACCIDENTAL_BRACKET)
+    ///\since MuseScore 4.6
+    API_PROPERTY(accidentalType,          ACCIDENTAL_TYPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(stackingOrderOffset,     ACCIDENTAL_STACKING_ORDER_OFFSET)
     API_PROPERTY(numeratorString,         NUMERATOR_STRING)
     API_PROPERTY(denominatorString,       DENOMINATOR_STRING)
     API_PROPERTY(fbprefix,                FBPREFIX)
     API_PROPERTY(fbdigit,                 FBDIGIT)
     API_PROPERTY(fbsuffix,                FBSUFFIX)
     API_PROPERTY(fbcontinuationline,      FBCONTINUATIONLINE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(fbparenthesis1,          FBPARENTHESIS1)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fbparenthesis2,          FBPARENTHESIS2)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fbparenthesis3,          FBPARENTHESIS3)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fbparenthesis4,          FBPARENTHESIS4)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fbparenthesis5,          FBPARENTHESIS5)
+
     API_PROPERTY(ottavaType,              OTTAVA_TYPE)
     API_PROPERTY(numbersOnly,             NUMBERS_ONLY)
     API_PROPERTY(trillType,               TRILL_TYPE)
     API_PROPERTY(vibratoType,             VIBRATO_TYPE)
     API_PROPERTY(hairpinCircledTip,       HAIRPIN_CIRCLEDTIP)
+
     API_PROPERTY(hairpinType,             HAIRPIN_TYPE)
     API_PROPERTY(hairpinHeight,           HAIRPIN_HEIGHT)
     API_PROPERTY(hairpinContHeight,       HAIRPIN_CONT_HEIGHT)
     API_PROPERTY(veloChange,              VELO_CHANGE)
-    API_PROPERTY(singleNoteDynamics,      SINGLE_NOTE_DYNAMICS)
     API_PROPERTY(veloChangeMethod,        VELO_CHANGE_METHOD)
     API_PROPERTY(veloChangeSpeed,         VELO_CHANGE_SPEED)
-    API_PROPERTY(dynamicRange,            END) // obsolete
+    ///\since MuseScore 4.6
+    API_PROPERTY(dynamicType,             DYNAMIC_TYPE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(singleNoteDynamics,      SINGLE_NOTE_DYNAMICS)
     /**
      *    The way a ramp interpolates between values.
      *    \since MuseScore 3.5
      */
     API_PROPERTY(changeMethod,            CHANGE_METHOD)
     API_PROPERTY(placement,               PLACEMENT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(hPlacement,              HPLACEMENT)
+    API_PROPERTY(mmRestRangeBracketType,  MMREST_RANGE_BRACKET_TYPE)
     API_PROPERTY(velocity,                VELOCITY)
     API_PROPERTY(jumpTo,                  JUMP_TO)
     API_PROPERTY(playUntil,               PLAY_UNTIL)
@@ -281,7 +350,15 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(markerType,              MARKER_TYPE)
     API_PROPERTY(arpUserLen1,             ARP_USER_LEN1)
     API_PROPERTY(arpUserLen2,             ARP_USER_LEN2)
+    ///\since MuseScore 4.6
+    API_PROPERTY(repeatEnd,               REPEAT_END)
+    ///\since MuseScore 4.6
+    API_PROPERTY(repeatStart,             REPEAT_START)
+    ///\since MuseScore 4.6
+    API_PROPERTY(repeatJump,              REPEAT_JUMP)
+    ///\since MuseScore 4.6
     API_PROPERTY(measureNumberMode,       MEASURE_NUMBER_MODE)
+
     API_PROPERTY(glissType,               GLISS_TYPE)
     API_PROPERTY(glissText,               GLISS_TEXT)
     API_PROPERTY(glissShowText,           GLISS_SHOW_TEXT)
@@ -295,6 +372,17 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(lineWidth,               LINE_WIDTH)
     API_PROPERTY(timeStretch,             TIME_STRETCH)
     API_PROPERTY(ornamentStyle,           ORNAMENT_STYLE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(intervalAbove,           INTERVAL_ABOVE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(intervalBelow,           INTERVAL_BELOW)
+    ///\since MuseScore 4.6
+    API_PROPERTY(ornamentShowAccidental,  ORNAMENT_SHOW_ACCIDENTAL)
+    ///\since MuseScore 4.6
+    API_PROPERTY(ornamentShowCueNote,     ORNAMENT_SHOW_CUE_NOTE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(startOnUpperNote,        START_ON_UPPER_NOTE)
+
     API_PROPERTY(timesig,                 TIMESIG)
     API_PROPERTY(timesigGlobal,           TIMESIG_GLOBAL)
     API_PROPERTY(timesigStretch,          TIMESIG_STRETCH)
@@ -304,7 +392,17 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(spannerTrack2,           SPANNER_TRACK2)
     API_PROPERTY(userOff2,                OFFSET2)
     API_PROPERTY(breakMmr,                BREAK_MMR)
+    ///\since MuseScore 4.6
+    API_PROPERTY(mmRestNumberPos,         MMREST_NUMBER_POS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(mmRestNumberOffset,      MMREST_NUMBER_OFFSET)
+    ///\since MuseScore 4.6
+    API_PROPERTY(mmRestNumberVisible,     MMREST_NUMBER_VISIBLE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
     API_PROPERTY(repeatCount,             REPEAT_COUNT)
+
     API_PROPERTY(userStretch,             USER_STRETCH)
     API_PROPERTY(noOffset,                NO_OFFSET)
     API_PROPERTY(irregular,               IRREGULAR)
@@ -315,6 +413,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(slurUoff4,               SLUR_UOFF4)
     API_PROPERTY(staffMove,               STAFF_MOVE)
     API_PROPERTY(verse,                   VERSE)
+
     API_PROPERTY(syllabic,                SYLLABIC)
     API_PROPERTY(lyricTicks,              LYRIC_TICKS)
     API_PROPERTY(volta_ending,            VOLTA_ENDING)
@@ -324,11 +423,30 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(durationType,            DURATION_TYPE_WITH_DOTS)
     API_PROPERTY(role,                    ACCIDENTAL_ROLE)
     API_PROPERTY_T(int, track,            TRACK)
+
     API_PROPERTY(fretStrings,             FRET_STRINGS)
     API_PROPERTY(fretFrets,               FRET_FRETS)
     /*API_PROPERTY( fretBarre,               FRET_BARRE                )*/
+    ///\since MuseScore 4.6
+    API_PROPERTY(showNut,                 FRET_NUT)
     API_PROPERTY(fretOffset,              FRET_OFFSET)
     API_PROPERTY(fretNumPos,              FRET_NUM_POS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(orientation,             ORIENTATION)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretShowFingering,       FRET_SHOW_FINGERINGS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretFingering,           FRET_FINGERING)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(harmonyVoiceLiteral,     HARMONY_VOICE_LITERAL)
+    ///\since MuseScore 4.6
+    API_PROPERTY(harmonyVoicing,          HARMONY_VOICING)
+    ///\since MuseScore 4.6
+    API_PROPERTY(harmonyDuration,         HARMONY_DURATION)
+    ///\since MuseScore 4.6
+    API_PROPERTY(harmonyBassScale,        HARMONY_BASS_SCALE)
+
     API_PROPERTY(systemBracket,           SYSTEM_BRACKET)
     API_PROPERTY(gap,                     GAP)
     /** Whether this element participates in autoplacement */
@@ -349,17 +467,31 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(staffShowBarlines,       STAFF_SHOW_BARLINES)
     API_PROPERTY(staffShowLedgerlines,    STAFF_SHOW_LEDGERLINES)
     API_PROPERTY(staffStemless,           STAFF_STEMLESS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(staffInvisible,          STAFF_INVISIBLE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(staffColor,              STAFF_COLOR)
+
+    /**
+     * Notehead scheme, one of PluginAPI::PluginAPI::NoteHeadScheme values.
+     * \since MuseScore 3.5
+     */
+    API_PROPERTY(headScheme,              HEAD_SCHEME)
     API_PROPERTY(staffGenClef,            STAFF_GEN_CLEF)
     API_PROPERTY(staffGenTimesig,         STAFF_GEN_TIMESIG)
     API_PROPERTY(staffGenKeysig,          STAFF_GEN_KEYSIG)
     API_PROPERTY(staffYoffset,            STAFF_YOFFSET)
     API_PROPERTY(bracketSpan,             BRACKET_SPAN)
+
     API_PROPERTY(bracketColumn,           BRACKET_COLUMN)
     API_PROPERTY(inameLayoutPosition,     INAME_LAYOUT_POSITION)
     API_PROPERTY(subStyle,                TEXT_STYLE)
     API_PROPERTY(fontFace,                FONT_FACE)
     API_PROPERTY(fontSize,                FONT_SIZE)
     API_PROPERTY(fontStyle,               FONT_STYLE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(lineSpacing,             TEXT_LINE_SPACING)
+
     API_PROPERTY(frameType,               FRAME_TYPE)
     API_PROPERTY(frameWidth,              FRAME_WIDTH)
     API_PROPERTY(framePadding,            FRAME_PADDING)
@@ -367,8 +499,15 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(frameFgColor,            FRAME_FG_COLOR)
     API_PROPERTY(frameBgColor,            FRAME_BG_COLOR)
     API_PROPERTY(sizeSpatiumDependent,    SIZE_SPATIUM_DEPENDENT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(textSizeSpatiumDependent, TEXT_SIZE_SPATIUM_DEPENDENT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(musicalSymbolsScale,     MUSICAL_SYMBOLS_SCALE)
     API_PROPERTY(align,                   ALIGN)
+    ///\since MuseScore 4.6
+    API_PROPERTY(textScriptAlign,         TEXT_SCRIPT_ALIGN)
     API_PROPERTY(systemFlag,              SYSTEM_FLAG)
+
     API_PROPERTY(beginText,               BEGIN_TEXT)
     API_PROPERTY(beginTextAlign,          BEGIN_TEXT_ALIGN)
     API_PROPERTY(beginTextPlace,          BEGIN_TEXT_PLACE)
@@ -378,6 +517,9 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(beginFontSize,           BEGIN_FONT_SIZE)
     API_PROPERTY(beginFontStyle,          BEGIN_FONT_STYLE)
     API_PROPERTY(beginTextOffset,         BEGIN_TEXT_OFFSET)
+    ///\since MuseScore 4.6
+    API_PROPERTY(gapBetweenTextAndLine,   GAP_BETWEEN_TEXT_AND_LINE)
+
     API_PROPERTY(continueText,            CONTINUE_TEXT)
     API_PROPERTY(continueTextAlign,       CONTINUE_TEXT_ALIGN)
     API_PROPERTY(continueTextPlace,       CONTINUE_TEXT_PLACE)
@@ -385,6 +527,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(continueFontSize,        CONTINUE_FONT_SIZE)
     API_PROPERTY(continueFontStyle,       CONTINUE_FONT_STYLE)
     API_PROPERTY(continueTextOffset,      CONTINUE_TEXT_OFFSET)
+
     API_PROPERTY(endText,                 END_TEXT)
     API_PROPERTY(endTextAlign,            END_TEXT_ALIGN)
     API_PROPERTY(endTextPlace,            END_TEXT_PLACE)
@@ -394,15 +537,181 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(endFontSize,             END_FONT_SIZE)
     API_PROPERTY(endFontStyle,            END_FONT_STYLE)
     API_PROPERTY(endTextOffset,           END_TEXT_OFFSET)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(notelinePlacement,       NOTELINE_PLACEMENT)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(avoidBarLines,           AVOID_BARLINES)
+    ///\since MuseScore 4.6
+    API_PROPERTY(dynamicsSize,            DYNAMICS_SIZE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(centerOnNotehead,        CENTER_ON_NOTEHEAD)
+    ///\since MuseScore 4.6
+    API_PROPERTY(anchorToEndOfPrevious,   ANCHOR_TO_END_OF_PREVIOUS)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(snapToDynamics,          SNAP_TO_DYNAMICS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(snapBefore,              SNAP_BEFORE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(snapAfter,               SNAP_AFTER)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(voiceAssignment,         VOICE_ASSIGNMENT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(centerBetweenStaves,     CENTER_BETWEEN_STAVES)
+
     API_PROPERTY(posAbove,                POS_ABOVE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(locationStaves,          LOCATION_STAVES)
+    ///\since MuseScore 4.6
+    API_PROPERTY(locationVoices,          LOCATION_VOICES)
+    ///\since MuseScore 4.6
+    API_PROPERTY(locationMeasures,        LOCATION_MEASURES)
+    ///\since MuseScore 4.6
+    API_PROPERTY(locationFractions,       LOCATION_FRACTIONS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(locationGrace,           LOCATION_GRACE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(locationNote,            LOCATION_NOTE)
+
     API_PROPERTY_T(int, voice,            VOICE)
+
     API_PROPERTY(position,                POSITION)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(concertClefType,         CLEF_TYPE_CONCERT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(transposingClefType,     CLEF_TYPE_TRANSPOSING)
+    ///\since MuseScore 4.6
+    API_PROPERTY(clefToBarlinePos,        CLEF_TO_BARLINE_POS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(isHeader,                IS_HEADER)
+    ///\since MuseScore 4.6
+    API_PROPERTY(concertKey,              KEY_CONCERT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(actualKey,               KEY)
+    ///\since MuseScore 4.6
+    API_PROPERTY(action,                  ACTION)
+    ///\since MuseScore 4.6
+    API_PROPERTY(minDistance,             MIN_DISTANCE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(arpeggioType,            ARPEGGIO_TYPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(chordLineType,           CHORD_LINE_TYPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(chordLineStraight,       CHORD_LINE_STRAIGHT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(chordLineWavy,           CHORD_LINE_WAVY)
+    ///\since MuseScore 4.6
+    API_PROPERTY(tremoloType,             TREMOLO_TYPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(tremoloStrokeStyle,      TREMOLO_STYLE)
     /**
      * For chord symbols, chord symbol type, one of
      * PluginAPI::PluginAPI::HarmonyType values.
      * \since MuseScore 3.6
      */
     API_PROPERTY(harmonyType,             HARMONY_TYPE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(arpeggioSpan,            ARPEGGIO_SPAN)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(bendType,                BEND_TYPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(bendCurve,               BEND_CURVE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(bendVertexOffset,        BEND_VERTEX_OFF)
+    ///\since MuseScore 4.6
+    API_PROPERTY(bendShowHoldLine,        BEND_SHOW_HOLD_LINE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(bendStartTimeFactor,     BEND_START_TIME_FACTOR)
+    ///\since MuseScore 4.6
+    API_PROPERTY(bendEndTimeFactor,       BEND_END_TIME_FACTOR)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(tremoloBarType,          TREMOLOBAR_TYPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(tremoloBarCurve,         TREMOLOBAR_CURVE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(startWithLongNames,      START_WITH_LONG_NAMES)
+    ///\since MuseScore 4.6
+    API_PROPERTY(startWithMeasureOne,     START_WITH_MEASURE_ONE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(firstSystemIndentation,  FIRST_SYSTEM_INDENTATION)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(path,                    PATH)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(preferSharpFlat,         PREFER_SHARP_FLAT)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(playTechType,            PLAY_TECH_TYPE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(tempoChangeType,         TEMPO_CHANGE_TYPE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(tempoEasingMethod,       TEMPO_EASING_METHOD)
+    ///\since MuseScore 4.6
+    API_PROPERTY(tempoChangeFactor,       TEMPO_CHANGE_FACTOR)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(isDiagram,               HARP_IS_DIAGRAM)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(active,                  ACTIVE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(fretPosition,            CAPO_FRET_POSITION)
+    ///\since MuseScore 4.6
+    API_PROPERTY(ignoredStrings,          CAPO_IGNORED_STRINGS)
+    ///\since MuseScore 4.6
+    API_PROPERTY(generateText,            CAPO_GENERATE_TEXT)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(tiePlacement,            TIE_PLACEMENT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(minLength,               MIN_LENGTH)
+    ///\since MuseScore 4.6
+    API_PROPERTY(partialSpannerDirection, PARTIAL_SPANNER_DIRECTION)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(positionLinkedToMaster,  POSITION_LINKED_TO_MASTER)
+    ///\since MuseScore 4.6
+    API_PROPERTY(appearanceLinkedToMaster, APPEARANCE_LINKED_TO_MASTER)
+    ///\since MuseScore 4.6
+    API_PROPERTY(textLinkedToMaster,      TEXT_LINKED_TO_MASTER)
+    ///\since MuseScore 4.6
+    API_PROPERTY(excludeFromParts,        EXCLUDE_FROM_OTHER_PARTS)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(stringsCount,            STRINGTUNINGS_STRINGS_COUNT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(preset,                  STRINGTUNINGS_PRESET)
+    ///\since MuseScore 4.6
+    API_PROPERTY(visibleStrings,          STRINGTUNINGS_VISIBLE_STRINGS)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(scoreFont,               SCORE_FONT)
+    ///\since MuseScore 4.6
+    API_PROPERTY(symbolsSize,             SYMBOLS_SIZE)
+    ///\since MuseScore 4.6
+    API_PROPERTY(symbolAngle,             SYMBOL_ANGLE)
+
+    ///\since MuseScore 4.6
+    API_PROPERTY(applyToAllStaves,        APPLY_TO_ALL_STAVES)
+    ///\since MuseScore 4.6
+    API_PROPERTY(isCourtesy,              IS_COURTESY)
+    ///\since MuseScore 4.6
+    API_PROPERTY(verticalAlign,           VERTICAL_ALIGN)
+
+    //  API_PROPERTY(end,                     END)
 
     qreal offsetX() const { return element()->offset().x() / element()->spatium(); }
     qreal offsetY() const { return element()->offset().y() / element()->spatium(); }
@@ -496,7 +805,7 @@ class Note : public EngravingItem
      * MIDI pitch of this note
      * \see \ref pitch
      */
-    API_PROPERTY_T(int, pitch,                   PITCH)
+    API_PROPERTY_T(int, pitch,            PITCH)
     /**
      * Concert pitch of the note
      * \see \ref tpc
@@ -518,7 +827,7 @@ class Note : public EngravingItem
 //       Q_PROPERTY(mu::engraving::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
     /** See PluginAPI::PluginAPI::NoteValueType */
     API_PROPERTY(veloType,                VELO_TYPE)
-    API_PROPERTY_T(int, userVelocity,       USER_VELOCITY)
+    API_PROPERTY_T(int, userVelocity,     USER_VELOCITY)
 
 public:
     /// \cond MS_INTERNAL

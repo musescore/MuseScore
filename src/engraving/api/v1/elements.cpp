@@ -113,9 +113,13 @@ bool Note::isChildAllowed(mu::engraving::ElementType elementType)
     case ElementType::TEXT:
     case ElementType::BEND:
     case ElementType::TIE:
+    case ElementType::PARTIAL_TIE:
+    case ElementType::LAISSEZ_VIB:
     case ElementType::ACCIDENTAL:
     case ElementType::TEXTLINE:
+    case ElementType::NOTELINE:
     case ElementType::GLISSANDO:
+    case ElementType::HAMMER_ON_PULL_OFF:
         return true;
     default:
         return false;
