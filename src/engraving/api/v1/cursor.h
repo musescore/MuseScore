@@ -48,6 +48,7 @@ class EngravingItem;
 class Measure;
 class Segment;
 class Score;
+class Staff;
 
 //---------------------------------------------------------
 //   @@ Cursor
@@ -67,8 +68,13 @@ class Cursor : public QObject
     Q_OBJECT
     /** Current track */
     Q_PROPERTY(int track READ track WRITE setTrack)
-    /** Current staff (#track / 4) */
+    /** Current staff number (#track / 4) */
     Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx)
+    /**
+     * Current \ref Staff the cursor is on.
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(apiv1::Staff * staff READ staff WRITE setStaff)
     /** Current voice (#track % 4) */
     Q_PROPERTY(int voice READ voice WRITE setVoice)
     /**
@@ -95,7 +101,7 @@ class Cursor : public QObject
     Q_PROPERTY(apiv1::Score * score READ score WRITE setScore)
 
     /** Current element at track, read only */
-    Q_PROPERTY(apiv1::EngravingItem * element READ element)
+    Q_PROPERTY(apiv1::EngravingItem * element READ element) //todo set
     /** Current segment, read only */
     Q_PROPERTY(apiv1::Segment * segment READ qmlSegment)
     /** Current measure, read only */
@@ -132,11 +138,11 @@ private:
      */
     Q_PROPERTY(InputStateMode inputStateMode READ inputStateMode WRITE setInputStateMode)
 
-    mu::engraving::Score* _score = nullptr;
-//       bool _expandRepeats; // used?
-    engraving::SegmentType _filter;
+    mu::engraving::Score* m_score = nullptr;
+//       bool m_expandRepeats; // used?
+    engraving::SegmentType m_filter;
     std::unique_ptr<engraving::InputState> is;
-    InputStateMode _inputStateMode = INPUT_STATE_INDEPENDENT;
+    InputStateMode m_inputStateMode = INPUT_STATE_INDEPENDENT;
 
     // utility methods
     void prevInTrack();
@@ -167,13 +173,16 @@ public:
     int staffIdx() const;
     void setStaffIdx(int v);
 
+    Staff* staff() const;
+    void setStaff(Staff* s);
+
     int voice() const;
     void setVoice(int v);
 
-    int filter() const { return int(_filter); }
-    void setFilter(int f) { _filter = engraving::SegmentType(f); }
+    int filter() const { return int(m_filter); }
+    void setFilter(int f) { m_filter = engraving::SegmentType(f); }
 
-    InputStateMode inputStateMode() const { return _inputStateMode; }
+    InputStateMode inputStateMode() const { return m_inputStateMode; }
     void setInputStateMode(InputStateMode val);
 
     EngravingItem* element() const;
