@@ -100,10 +100,10 @@ public:
     Q_INVOKABLE int modifiedTime();
 
     /// \cond MS_INTERNAL
-    QString source() { return mSource; }
+    QString source() { return m_source; }
 
 public slots:
-    void setSource(const QString& source) { mSource = source; }
+    void setSource(const QString& source) { m_source = source; }
     /// \endcond
 
 signals:
@@ -115,7 +115,7 @@ signals:
     void error(const QString& msg);
 
 private:
-    QString mSource;
+    QString m_source;
 };
 
 //---------------------------------------------------------
@@ -169,11 +169,11 @@ class ScoreView : public uicomponents::QuickPaintedView, public engraving::MuseS
     Q_PROPERTY(qreal scale READ scale WRITE setScale)
 
     mu::engraving::Score* score;
-    int _currentPage;
-    QColor _color;
+    int m_currentPage;
+    QColor m_color;
     qreal mag;
     int playPos;
-    QRectF _boundingRect;
+    QRectF m_boundingRect;
 
     QNetworkAccessManager* networkManager;
 
@@ -184,7 +184,7 @@ class ScoreView : public uicomponents::QuickPaintedView, public engraving::MuseS
 
     virtual void paint(QPainter*) override;
 
-    virtual QRectF boundingRect() const override { return _boundingRect; }
+    virtual QRectF boundingRect() const override { return m_boundingRect; }
     virtual void drawBackground(muse::draw::Painter*, const RectF&) const override {}
 
 public slots:
@@ -201,8 +201,8 @@ public:
     /// \cond MS_INTERNAL
     ScoreView(QQuickItem* parent = 0);
     virtual ~ScoreView() {}
-    QColor color() const { return _color; }
-    void setColor(const QColor& c) { _color = c; }
+    QColor color() const { return m_color; }
+    void setColor(const QColor& c) { m_color = c; }
     qreal scale() const { return mag; }
     void setScale(qreal v) { mag = v; }
     virtual const muse::Rect geometry() const override { return muse::Rect(x(), y(), width(), height()); }

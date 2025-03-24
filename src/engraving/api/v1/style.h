@@ -50,15 +50,15 @@ class MStyle : public QObject
 {
     Q_OBJECT
 
-    mu::engraving::MStyle* _style;
-    mu::engraving::Score* _score;
+    mu::engraving::MStyle* m_style;
+    mu::engraving::Score* m_score;
 
     static engraving::Sid keyToSid(const QString& key);
 
 public:
     /// \cond MS_INTERNAL
     MStyle(mu::engraving::MStyle* style, mu::engraving::Score* score)
-        : QObject(), _style(style), _score(score) {}
+        : QObject(), m_style(style), m_score(score) {}
     /// \endcond
 
     Q_INVOKABLE QVariant value(const QString& key) const;

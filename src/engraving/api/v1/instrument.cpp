@@ -35,13 +35,13 @@ using namespace mu::engraving::apiv1;
 
 mu::engraving::InstrChannel* Channel::activeChannel()
 {
-    mu::engraving::Score* score = _part->score();
+    mu::engraving::Score* score = m_part->score();
     mu::engraving::MasterScore* masterScore = score->masterScore();
 
     if (masterScore->playbackScore() == score) {
-        return masterScore->playbackChannel(_channel);
+        return masterScore->playbackChannel(m_channel);
     }
-    return _channel;
+    return m_channel;
 }
 
 //---------------------------------------------------------
@@ -58,7 +58,7 @@ void Channel::setMidiBankAndProgram(int bank, int program, bool setUserBankContr
     patch.bank = bank;
     patch.prog = program;
 
-    mu::engraving::Score* score = _part->score();
+    mu::engraving::Score* score = m_part->score();
     score->undo(new ChangePatch(score, ch, patch));
 
     if (setUserBankController) {
@@ -93,7 +93,7 @@ void Channel::setMidiBank(int bank)
 QVariantList StringData::stringList() const
 {
     QVariantList pluginStringsList;
-    for (instrString str : _data.stringList()) {
+    for (instrString str : m_data.stringList()) {
         QVariantMap pluginStringData;
         pluginStringData["pitch"] = str.pitch;
         pluginStringData["open"] = str.open;
