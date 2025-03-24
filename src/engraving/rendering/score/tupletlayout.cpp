@@ -60,26 +60,9 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
     double _spatium = item->spatium();
 
-    //
-    // find first and last chord of tuplet
-    // (tuplets can be nested)
-    //
-    const DurationElement* cr1 = item->elements().front();
-    while (cr1->isTuplet()) {
-        const Tuplet* t = toTuplet(cr1);
-        if (t->elements().empty()) {
-            break;
-        }
-        cr1 = t->elements().front();
-    }
-    const DurationElement* cr2 = item->elements().back();
-    while (cr2->isTuplet()) {
-        const Tuplet* t = toTuplet(cr2);
-        if (t->elements().empty()) {
-            break;
-        }
-        cr2 = t->elements().back();
-    }
+    const ChordRest* cr1 = nullptr;
+    const ChordRest* cr2 = nullptr;
+    computeStartEndCR(item, &cr1, &cr2);
 
     item->setHasBracket(item->calcHasBracket(cr1, cr2));
     ldata->setMag((cr1->mag() + cr2->mag()) / 2);
@@ -614,6 +597,32 @@ void TupletLayout::computeDirection(Tuplet* item)
     }
 
     item->setIsUp(up > 0);
+}
+
+void TupletLayout::computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2)
+{
+    const DurationElement* startEl = item->elements().front();
+    while (startEl->isTuplet()) {
+        const Tuplet* t = toTuplet(startEl);
+        if (t->elements().empty()) {
+            break;
+        }
+        startEl = t->elements().front();
+    }
+    assert(startEl && startEl->isChordRest());
+
+    const DurationElement* endEl = item->elements().back();
+    while (endEl->isTuplet()) {
+        const Tuplet* t = toTuplet(endEl);
+        if (t->elements().empty()) {
+            break;
+        }
+        endEl = t->elements().back();
+    }
+    assert(endEl && endEl->isChordRest());
+
+    *cr1 = toChordRest(startEl);
+    *cr2 = toChordRest(endEl);
 }
 
 void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
