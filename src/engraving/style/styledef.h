@@ -747,6 +747,7 @@ enum class Sid {
     tupletFrameBgColor,
     tupletPosition,
     tupletExtendToEndOfDuration,
+    tupletNumberRythmicCenter,
 
     scaleBarlines,
     barGraceDistance,
