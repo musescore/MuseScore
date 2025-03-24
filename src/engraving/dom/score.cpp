@@ -5506,6 +5506,23 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 if (tie) {
                     score->undoChangeSpannerElements(tie, linkedNewNote, tie->endNote());
                 }
+
+                // Reconnect note anchored spanners
+                for (EngravingItem* item : linkedNote->spannerBack()) {
+                    if (!item || !item->isSpanner()) {
+                        continue;
+                    }
+                    Spanner* spanner = toSpanner(item);
+                    score->undoChangeSpannerElements(spanner, spanner->startElement(), linkedNewNote);
+                }
+
+                for (EngravingItem* item : linkedNote->spannerFor()) {
+                    if (!item || !item->isSpanner()) {
+                        continue;
+                    }
+                    Spanner* spanner = toSpanner(item);
+                    score->undoChangeSpannerElements(spanner, linkedNewNote, spanner->endElement());
+                }
             }
 
             // remove original note
@@ -5546,7 +5563,22 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 score->undoRemoveElement(chord);
                 score->undoAddCR(r, m, s->tick());
             }
-        } else if (e->hasVoiceAssignmentProperties()) {
+
+            // Move lyrics
+            for (Lyrics* lyric : chord->lyrics()) {
+                if (!lyric || dstChord->lyrics(lyric->no(), lyric->placement())) {
+                    continue;
+                }
+
+                Lyrics* newLyric = Factory::copyLyrics(*lyric);
+                newLyric->setParent(dstChord);
+                newLyric->setSelected(false);
+                score->undoAddElement(newLyric);
+                newElements.push_back(newLyric);
+
+                score->undoRemoveElement(lyric);
+            }
+        } else {
             if (e->isSpannerSegment()) {
                 e = toSpannerSegment(e)->spanner();
             }
@@ -5557,7 +5589,9 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
             }
 
             e->undoChangeProperty(Pid::VOICE, voice);
-            e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
+            if (e->hasVoiceAssignmentProperties()) {
+                e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
+            }
             newElements.push_back(e);
         }
     }

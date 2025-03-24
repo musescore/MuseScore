@@ -44,6 +44,13 @@ bool PartialTie::setProperty(Pid propertyId, const PropertyValue& v)
     return true;
 }
 
+SlurTieSegment* PartialTie::newSlurTieSegment(System* parent)
+{
+    PartialTieSegment* seg = new PartialTieSegment(parent);
+    seg->setTrack(track());
+    return seg;
+}
+
 void PartialTie::setStartNote(Note* note)
 {
     setPartialSpannerDirection(PartialSpannerDirection::OUTGOING);
