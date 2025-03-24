@@ -67,7 +67,7 @@ class ScoreElement : public QObject
      */
     Q_PROPERTY(QString name READ name)
 
-    Ownership _ownership;
+    Ownership m_ownership;
 
     qreal spatium() const;
 
@@ -78,14 +78,14 @@ protected:
 
 public:
     /// \cond MS_INTERNAL
-    ScoreElement(mu::engraving::EngravingObject* _e = nullptr, Ownership own = Ownership::PLUGIN)
-        : QObject(), _ownership(own), e(_e) {}
+    ScoreElement(mu::engraving::EngravingObject* m_e = nullptr, Ownership own = Ownership::PLUGIN)
+        : QObject(), m_ownership(own), e(m_e) {}
     ScoreElement(const ScoreElement&) = delete;
     ScoreElement& operator=(const ScoreElement&) = delete;
     virtual ~ScoreElement();
 
-    Ownership ownership() const { return _ownership; }
-    void setOwnership(Ownership o) { _ownership = o; }
+    Ownership ownership() const { return m_ownership; }
+    void setOwnership(Ownership o) { m_ownership = o; }
 
     mu::engraving::EngravingObject* element() { return e; }
     const mu::engraving::EngravingObject* element() const { return e; }

@@ -58,12 +58,12 @@ class FractionWrapper : public QObject
 
     /// \cond MS_INTERNAL
 public slots:
-    void setFraction(engraving::Fraction _f) { f = _f; }
+    void setFraction(engraving::Fraction m_f) { f = m_f; }
 
 public:
     FractionWrapper() = default;
-    FractionWrapper(const mu::engraving::Fraction& _f)
-        : f(_f) {}
+    FractionWrapper(const mu::engraving::Fraction& m_f)
+        : f(m_f) {}
 
     mu::engraving::Fraction fraction() const { return f; }
     int numerator() const { return f.numerator(); }

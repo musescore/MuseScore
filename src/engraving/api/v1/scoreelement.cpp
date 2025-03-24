@@ -36,7 +36,7 @@ using namespace mu::engraving::apiv1;
 
 ScoreElement::~ScoreElement()
 {
-    if (_ownership == Ownership::PLUGIN) {
+    if (m_ownership == Ownership::PLUGIN) {
         delete e;
     }
 }
@@ -168,7 +168,7 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
     const PropertyFlags f = e->propertyFlags(pid);
     const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
 
-    if (_ownership == Ownership::SCORE) {
+    if (m_ownership == Ownership::SCORE) {
         e->undoChangeProperty(pid, newValue, newFlags);
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
         e->setProperty(pid, newValue);
