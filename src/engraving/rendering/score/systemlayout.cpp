@@ -1256,7 +1256,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
 
     if (!hasFretDiagram) {
-        HarmonyLayout::layoutHarmonies(sl, ctx);
+        HarmonyLayout::autoplaceHarmonies(sl, ctx);
         HarmonyLayout::alignHarmonies(system, sl, true, ctx.conf().maxChordShiftAbove(), ctx.conf().maxChordShiftBelow());
     }
 
@@ -1304,7 +1304,12 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         for (const Segment* s : sl) {
             for (EngravingItem* e : s->annotations()) {
                 if (e->isFretDiagram()) {
-                    TLayout::layoutItem(e, ctx);
+                    Autoplace::autoplaceSegmentElement(e, e->mutldata());
+                    if (Harmony* harmony = toFretDiagram(e)->harmony()) {
+                        SkylineLine& skl = system->staff(e->staffIdx())->skyline().north();
+                        Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + e->pos() + s->pos() + s->measure()->pos());
+                        skl.add(harmShape);
+                    }
                 }
             }
         }
@@ -1313,7 +1318,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         // Harmony, 2nd place
         //-------------------------------------------------------------
 
-        HarmonyLayout::layoutHarmonies(sl, ctx);
+        HarmonyLayout::autoplaceHarmonies(sl, ctx);
         HarmonyLayout::alignHarmonies(system, sl, false, ctx.conf().maxFretShiftAbove(), ctx.conf().maxFretShiftBelow());
     }
 

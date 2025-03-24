@@ -453,6 +453,10 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return type2 != ElementType::KEYSIG;
     }
 
+    if (type1 == ElementType::FRET_DIAGRAM && type2 == ElementType::HARMONY) {
+        return true;
+    }
+
     if ((type1 == ElementType::DYNAMIC || type1 == ElementType::HAIRPIN_SEGMENT)
         && (type2 == ElementType::DYNAMIC || type2 == ElementType::HAIRPIN_SEGMENT)) {
         return true;
