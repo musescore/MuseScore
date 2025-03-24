@@ -124,16 +124,11 @@ else
     VERSION_LABEL="${label}"
 fi
 
-if ((PATCH == 0)); then
-    PRETTY_VERSION="${MAJOR}.${MINOR}"          # e.g. '4.0'
-else
-    PRETTY_VERSION="${MAJOR}.${MINOR}.${PATCH}" # e.g. '4.0.1'
-fi
-
-TAG_NAME="v${PRETTY_VERSION}"                   # e.g. 'v4.0'
+PRETTY_VERSION="${MAJOR}.${MINOR}.${PATCH}"     # e.g. '4.0.0'
+TAG_NAME="v${PRETTY_VERSION}"                   # e.g. 'v4.0.0'
 
 if [[ "${VERSION_LABEL}" ]]; then
-    TAG_NAME="${TAG_NAME}-${VERSION_LABEL}"     # e.g. 'v4.0-rc.2'
+    TAG_NAME="${TAG_NAME}-${VERSION_LABEL}"     # e.g. 'v4.0.0-rc.2'
 fi
 
 if tag_exists "${TAG_NAME}"; then
