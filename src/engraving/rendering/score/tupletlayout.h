@@ -41,9 +41,10 @@ public:
     static bool notTopTuplet(ChordRest* cr);
 
 private:
-    static void createNumber(Tuplet* item, const MStyle& style, LayoutContext& ctx);
+    static void createNumber(Tuplet* item, LayoutContext& ctx);
     static void computeDirection(Tuplet* item);
     static void computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2);
+    static void layoutBracket(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx);
     static void extendToEndOfDuration(Tuplet* item, const ChordRest* endCR);
 };
 }
