@@ -25,7 +25,12 @@
 #include <QObject>
 
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/mmrestrange.h"
+#include "engraving/dom/spacer.h"
+#include "engraving/dom/tripletfeel.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving::apiv1::enums {
@@ -219,17 +224,15 @@ enum class ElementType {
     PART                  = int(mu::engraving::ElementType::PART),
     STAFF                 = int(mu::engraving::ElementType::STAFF),
     SCORE                 = int(mu::engraving::ElementType::SCORE),
-    SYMBOL                = int(mu::engraving::ElementType::SYMBOL),
     TEXT                  = int(mu::engraving::ElementType::TEXT),
+    LAYOUT_BREAK          = int(mu::engraving::ElementType::LAYOUT_BREAK),
     MEASURE_NUMBER        = int(mu::engraving::ElementType::MEASURE_NUMBER),
     MMREST_RANGE          = int(mu::engraving::ElementType::MMREST_RANGE),
     INSTRUMENT_NAME       = int(mu::engraving::ElementType::INSTRUMENT_NAME),
     SLUR_SEGMENT          = int(mu::engraving::ElementType::SLUR_SEGMENT),
     TIE_SEGMENT           = int(mu::engraving::ElementType::TIE_SEGMENT),
     LAISSEZ_VIB_SEGMENT   = int(mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT),
-    LAISSEZ_VIB           = int(mu::engraving::ElementType::LAISSEZ_VIB),
     PARTIAL_TIE_SEGMENT   = int(mu::engraving::ElementType::PARTIAL_TIE_SEGMENT),
-    PARTIAL_TIE           = int(mu::engraving::ElementType::PARTIAL_TIE),
     BAR_LINE              = int(mu::engraving::ElementType::BAR_LINE),
     STAFF_LINES           = int(mu::engraving::ElementType::STAFF_LINES),
     SYSTEM_DIVIDER        = int(mu::engraving::ElementType::SYSTEM_DIVIDER),
@@ -238,24 +241,31 @@ enum class ElementType {
     ACCIDENTAL            = int(mu::engraving::ElementType::ACCIDENTAL),
     LEDGER_LINE           = int(mu::engraving::ElementType::LEDGER_LINE),
     STEM                  = int(mu::engraving::ElementType::STEM),
+    HOOK                  = int(mu::engraving::ElementType::HOOK),
     NOTE                  = int(mu::engraving::ElementType::NOTE),
+    SYMBOL                = int(mu::engraving::ElementType::SYMBOL),
     CLEF                  = int(mu::engraving::ElementType::CLEF),
     KEYSIG                = int(mu::engraving::ElementType::KEYSIG),
     AMBITUS               = int(mu::engraving::ElementType::AMBITUS),
     TIMESIG               = int(mu::engraving::ElementType::TIMESIG),
     REST                  = int(mu::engraving::ElementType::REST),
     MMREST                = int(mu::engraving::ElementType::MMREST),
+    DEAD_SLAPPED          = int(mu::engraving::ElementType::DEAD_SLAPPED),
     BREATH                = int(mu::engraving::ElementType::BREATH),
     MEASURE_REPEAT        = int(mu::engraving::ElementType::MEASURE_REPEAT),
     TIE                   = int(mu::engraving::ElementType::TIE),
+    LAISSEZ_VIB           = int(mu::engraving::ElementType::LAISSEZ_VIB),
+    PARTIAL_TIE           = int(mu::engraving::ElementType::PARTIAL_TIE),
     ARTICULATION          = int(mu::engraving::ElementType::ARTICULATION),
+    ORNAMENT              = int(mu::engraving::ElementType::ORNAMENT),
     FERMATA               = int(mu::engraving::ElementType::FERMATA),
     CHORDLINE             = int(mu::engraving::ElementType::CHORDLINE),
     DYNAMIC               = int(mu::engraving::ElementType::DYNAMIC),
+    EXPRESSION            = int(mu::engraving::ElementType::EXPRESSION),
     BEAM                  = int(mu::engraving::ElementType::BEAM),
-    HOOK                  = int(mu::engraving::ElementType::HOOK),
     LYRICS                = int(mu::engraving::ElementType::LYRICS),
     FIGURED_BASS          = int(mu::engraving::ElementType::FIGURED_BASS),
+    FIGURED_BASS_ITEM     = int(mu::engraving::ElementType::FIGURED_BASS_ITEM),
     MARKER                = int(mu::engraving::ElementType::MARKER),
     JUMP                  = int(mu::engraving::ElementType::JUMP),
     FINGERING             = int(mu::engraving::ElementType::FINGERING),
@@ -263,13 +273,17 @@ enum class ElementType {
     TEMPO_TEXT            = int(mu::engraving::ElementType::TEMPO_TEXT),
     STAFF_TEXT            = int(mu::engraving::ElementType::STAFF_TEXT),
     SYSTEM_TEXT           = int(mu::engraving::ElementType::SYSTEM_TEXT),
+    SOUND_FLAG            = int(mu::engraving::ElementType::SOUND_FLAG),
     PLAYTECH_ANNOTATION   = int(mu::engraving::ElementType::PLAYTECH_ANNOTATION),
+    CAPO                  = int(mu::engraving::ElementType::CAPO),
+    STRING_TUNINGS        = int(mu::engraving::ElementType::STRING_TUNINGS),
     TRIPLET_FEEL          = int(mu::engraving::ElementType::TRIPLET_FEEL),
     REHEARSAL_MARK        = int(mu::engraving::ElementType::REHEARSAL_MARK),
     INSTRUMENT_CHANGE     = int(mu::engraving::ElementType::INSTRUMENT_CHANGE),
     STAFFTYPE_CHANGE      = int(mu::engraving::ElementType::STAFFTYPE_CHANGE),
     HARMONY               = int(mu::engraving::ElementType::HARMONY),
     FRET_DIAGRAM          = int(mu::engraving::ElementType::FRET_DIAGRAM),
+    HARP_DIAGRAM          = int(mu::engraving::ElementType::HARP_DIAGRAM),
     BEND                  = int(mu::engraving::ElementType::BEND),
     TREMOLOBAR            = int(mu::engraving::ElementType::TREMOLOBAR),
     VOLTA                 = int(mu::engraving::ElementType::VOLTA),
@@ -283,20 +297,18 @@ enum class ElementType {
     WHAMMY_BAR_SEGMENT    = int(mu::engraving::ElementType::WHAMMY_BAR_SEGMENT),
     RASGUEADO_SEGMENT     = int(mu::engraving::ElementType::RASGUEADO_SEGMENT),
     HARMONIC_MARK_SEGMENT = int(mu::engraving::ElementType::HARMONIC_MARK_SEGMENT),
+    PICK_SCRAPE_SEGMENT   = int(mu::engraving::ElementType::PICK_SCRAPE_SEGMENT),
     TEXTLINE_SEGMENT      = int(mu::engraving::ElementType::TEXTLINE_SEGMENT),
     VOLTA_SEGMENT         = int(mu::engraving::ElementType::VOLTA_SEGMENT),
     PEDAL_SEGMENT         = int(mu::engraving::ElementType::PEDAL_SEGMENT),
     LYRICSLINE_SEGMENT    = int(mu::engraving::ElementType::LYRICSLINE_SEGMENT),
-    PARTIAL_LYRICSLINE_SEGMENT    = int(mu::engraving::ElementType::PARTIAL_LYRICSLINE_SEGMENT),
+    PARTIAL_LYRICSLINE_SEGMENT = int(mu::engraving::ElementType::PARTIAL_LYRICSLINE_SEGMENT),
     GLISSANDO_SEGMENT     = int(mu::engraving::ElementType::GLISSANDO_SEGMENT),
     NOTELINE_SEGMENT      = int(mu::engraving::ElementType::NOTELINE_SEGMENT),
-    LAYOUT_BREAK          = int(mu::engraving::ElementType::LAYOUT_BREAK),
     SPACER                = int(mu::engraving::ElementType::SPACER),
     STAFF_STATE           = int(mu::engraving::ElementType::STAFF_STATE),
     NOTEHEAD              = int(mu::engraving::ElementType::NOTEHEAD),
     NOTEDOT               = int(mu::engraving::ElementType::NOTEDOT),
-    TREMOLO_SINGLECHORD   = int(mu::engraving::ElementType::TREMOLO_SINGLECHORD),
-    TREMOLO_TWOCHORD      = int(mu::engraving::ElementType::TREMOLO_TWOCHORD),
     IMAGE                 = int(mu::engraving::ElementType::IMAGE),
     MEASURE               = int(mu::engraving::ElementType::MEASURE),
     SELECTION             = int(mu::engraving::ElementType::SELECTION),
@@ -335,6 +347,18 @@ enum class ElementType {
     BAGPIPE_EMBELLISHMENT = int(mu::engraving::ElementType::BAGPIPE_EMBELLISHMENT),
     STICKING              = int(mu::engraving::ElementType::STICKING),
     GRACE_NOTES_GROUP     = int(mu::engraving::ElementType::GRACE_NOTES_GROUP),
+    GUITAR_BEND           = int(mu::engraving::ElementType::GUITAR_BEND),
+    GUITAR_BEND_SEGMENT   = int(mu::engraving::ElementType::GUITAR_BEND_SEGMENT),
+    GUITAR_BEND_HOLD      = int(mu::engraving::ElementType::GUITAR_BEND_HOLD),
+    GUITAR_BEND_HOLD_SEGMENT = int(mu::engraving::ElementType::GUITAR_BEND_HOLD_SEGMENT),
+    GUITAR_BEND_TEXT      = int(mu::engraving::ElementType::GUITAR_BEND_TEXT),
+    TREMOLO_TWOCHORD      = int(mu::engraving::ElementType::TREMOLO_TWOCHORD),
+    TREMOLO_SINGLECHORD   = int(mu::engraving::ElementType::TREMOLO_SINGLECHORD),
+    TIME_TICK_ANCHOR      = int(mu::engraving::ElementType::TIME_TICK_ANCHOR),
+    PARENTHESIS           = int(mu::engraving::ElementType::PARENTHESIS),
+    HAMMER_ON_PULL_OFF    = int(mu::engraving::ElementType::HAMMER_ON_PULL_OFF),
+    HAMMER_ON_PULL_OFF_SEGMENT = int(mu::engraving::ElementType::HAMMER_ON_PULL_OFF_SEGMENT),
+    HAMMER_ON_PULL_OFF_TEXT = int(mu::engraving::ElementType::HAMMER_ON_PULL_OFF_TEXT),
 
     ROOT_ITEM             = int(mu::engraving::ElementType::ROOT_ITEM),
     DUMMY                 = int(mu::engraving::ElementType::DUMMY),
@@ -352,9 +376,9 @@ enum class ElementType {
 };
 Q_ENUM_NS(ElementType);
 
-enum class OrnamentStyle : char {
-    DEFAULT = char(mu::engraving::OrnamentStyle::DEFAULT),
-    BAROQUE = char(mu::engraving::OrnamentStyle::BAROQUE)
+enum class OrnamentStyle {
+    DEFAULT = int(mu::engraving::OrnamentStyle::DEFAULT),
+    BAROQUE = int(mu::engraving::OrnamentStyle::BAROQUE),
 };
 Q_ENUM_NS(OrnamentStyle);
 
@@ -384,6 +408,21 @@ enum class Placement {
 };
 Q_ENUM_NS(Placement);
 
+enum class PlacementH {
+    LEFT   = int(mu::engraving::PlacementH::LEFT),
+    CENTER = int(mu::engraving::PlacementH::CENTER),
+    RIGHT  = int(mu::engraving::PlacementH::RIGHT),
+};
+Q_ENUM_NS(PlacementH);
+
+enum class TextPlace {
+    AUTO  = int(mu::engraving::TextPlace::AUTO),
+    ABOVE = int(mu::engraving::TextPlace::ABOVE),
+    BELOW = int(mu::engraving::TextPlace::BELOW),
+    LEFT  = int(mu::engraving::TextPlace::LEFT),
+};
+Q_ENUM_NS(TextPlace);
+
 enum class Direction {
     AUTO = int(mu::engraving::DirectionV::AUTO),
     UP   = int(mu::engraving::DirectionV::UP),
@@ -398,6 +437,33 @@ enum class DirectionH {
 };
 Q_ENUM_NS(DirectionH);
 
+enum class Orientation {
+    VERTICAL   = int(mu::engraving::Orientation::VERTICAL),
+    HORIZONTAL = int(mu::engraving::Orientation::HORIZONTAL),
+};
+Q_ENUM_NS(Orientation);
+
+enum class AutoOnOff {
+    AUTO = int(mu::engraving::AutoOnOff::AUTO),
+    ON   = int(mu::engraving::AutoOnOff::ON),
+    OFF  = int(mu::engraving::AutoOnOff::OFF),
+};
+Q_ENUM_NS(AutoOnOff);
+
+enum class VoiceAssignment {
+    ALL_VOICE_IN_INSTRUMENT = int(mu::engraving::VoiceAssignment::ALL_VOICE_IN_INSTRUMENT),
+    ALL_VOICE_IN_STAFF      = int(mu::engraving::VoiceAssignment::ALL_VOICE_IN_STAFF),
+    CURRENT_VOICE_ONLY      = int(mu::engraving::VoiceAssignment::CURRENT_VOICE_ONLY),
+};
+Q_ENUM_NS(VoiceAssignment);
+
+enum class SpacerType {
+    UP    = int(mu::engraving::SpacerType::UP),
+    DOWN  = int(mu::engraving::SpacerType::DOWN),
+    FIXED = int(mu::engraving::SpacerType::FIXED),
+};
+Q_ENUM_NS(SpacerType);
+
 enum class LayoutBreakType {
     PAGE    = int(mu::engraving::LayoutBreakType::PAGE),
     LINE    = int(mu::engraving::LayoutBreakType::LINE),
@@ -405,6 +471,26 @@ enum class LayoutBreakType {
     NOBREAK = int(mu::engraving::LayoutBreakType::NOBREAK),
 };
 Q_ENUM_NS(LayoutBreakType);
+
+enum class DurationType {
+    V_LONG    = int(mu::engraving::DurationType::V_LONG),
+    V_BREVE   = int(mu::engraving::DurationType::V_BREVE),
+    V_WHOLE   = int(mu::engraving::DurationType::V_WHOLE),
+    V_HALF    = int(mu::engraving::DurationType::V_HALF),
+    V_QUARTER = int(mu::engraving::DurationType::V_QUARTER),
+    V_EIGHTH  = int(mu::engraving::DurationType::V_EIGHTH),
+    V_16TH    = int(mu::engraving::DurationType::V_16TH),
+    V_32ND    = int(mu::engraving::DurationType::V_32ND),
+    V_64TH    = int(mu::engraving::DurationType::V_64TH),
+    V_128TH   = int(mu::engraving::DurationType::V_128TH),
+    V_256TH   = int(mu::engraving::DurationType::V_256TH),
+    V_512TH   = int(mu::engraving::DurationType::V_512TH),
+    V_1024TH  = int(mu::engraving::DurationType::V_1024TH),
+    V_ZERO    = int(mu::engraving::DurationType::V_ZERO),
+    V_MEASURE = int(mu::engraving::DurationType::V_MEASURE),
+    V_INVALID = int(mu::engraving::DurationType::V_INVALID),
+};
+Q_ENUM_NS(DurationType);
 
 enum class VeloType {
     OFFSET_VAL = int(mu::engraving::VeloType::OFFSET_VAL),
@@ -424,9 +510,9 @@ enum class BeamMode {
 };
 Q_ENUM_NS(BeamMode);
 
-enum class GlissandoType : char {
-    STRAIGHT = char(mu::engraving::GlissandoType::STRAIGHT),
-    WAVY     = char(mu::engraving::GlissandoType::WAVY)
+enum class GlissandoType {
+    STRAIGHT = int(mu::engraving::GlissandoType::STRAIGHT),
+    WAVY     = int(mu::engraving::GlissandoType::WAVY)
 };
 Q_ENUM_NS(GlissandoType);
 
@@ -439,11 +525,11 @@ enum class GlissandoStyle {
 };
 Q_ENUM_NS(GlissandoStyle);
 
-enum class HarmonyType : char {
+enum class HarmonyType {
     ///.\{
-    STANDARD  = char(mu::engraving::HarmonyType::STANDARD),
-    ROMAN     = char(mu::engraving::HarmonyType::ROMAN),
-    NASHVILLE = char(mu::engraving::HarmonyType::NASHVILLE)
+    STANDARD  = int(mu::engraving::HarmonyType::STANDARD),
+    ROMAN     = int(mu::engraving::HarmonyType::ROMAN),
+    NASHVILLE = int(mu::engraving::HarmonyType::NASHVILLE)
                 ///\}
 };
 Q_ENUM_NS(HarmonyType);
@@ -489,8 +575,18 @@ enum class NoteHeadGroup {
     HEAD_CIRCLED_LARGE   = int(mu::engraving::NoteHeadGroup::HEAD_CIRCLED_LARGE),
     HEAD_LARGE_ARROW     = int(mu::engraving::NoteHeadGroup::HEAD_LARGE_ARROW),
     HEAD_BREVIS_ALT      = int(mu::engraving::NoteHeadGroup::HEAD_BREVIS_ALT),
+
     HEAD_SLASH           = int(mu::engraving::NoteHeadGroup::HEAD_SLASH),
     HEAD_LARGE_DIAMOND   = int(mu::engraving::NoteHeadGroup::HEAD_LARGE_DIAMOND),
+
+    HEAD_SOL             = int(mu::engraving::NoteHeadGroup::HEAD_SOL),
+    HEAD_LA              = int(mu::engraving::NoteHeadGroup::HEAD_LA),
+    HEAD_FA              = int(mu::engraving::NoteHeadGroup::HEAD_FA),
+    HEAD_MI              = int(mu::engraving::NoteHeadGroup::HEAD_MI),
+    HEAD_DO              = int(mu::engraving::NoteHeadGroup::HEAD_DO),
+    HEAD_RE              = int(mu::engraving::NoteHeadGroup::HEAD_RE),
+    HEAD_TI              = int(mu::engraving::NoteHeadGroup::HEAD_TI),
+
     HEAD_HEAVY_CROSS     = int(mu::engraving::NoteHeadGroup::HEAD_HEAVY_CROSS),
     HEAD_HEAVY_CROSS_HAT = int(mu::engraving::NoteHeadGroup::HEAD_HEAVY_CROSS_HAT)
 };
@@ -519,41 +615,80 @@ Q_ENUM_NS(NoteType);
 /// in the score file.
 //---------------------------------------------------------
 
-enum class PlayEventType : char {
+enum class PlayEventType {
     ///.\{
-    Auto = char(mu::engraving::PlayEventType::Auto), ///< Play events for all notes are calculated by MuseScore.
-    User = char(mu::engraving::PlayEventType::User), ///< Some play events are modified by user. Those events are written into the mscx file.
+    Auto = int(mu::engraving::PlayEventType::Auto), ///< Play events for all notes are calculated by MuseScore.
+    User = int(mu::engraving::PlayEventType::User), ///< Some play events are modified by user. Those events are written into the mscx file.
     ///.\}
 };
 Q_ENUM_NS(PlayEventType);
 
 enum class SegmentType {
     ///.\{
-    Invalid            = int(mu::engraving::SegmentType::Invalid),
-    BeginBarLine       = int(mu::engraving::SegmentType::BeginBarLine),
-    HeaderClef         = int(mu::engraving::SegmentType::HeaderClef),
-    KeySig             = int(mu::engraving::SegmentType::KeySig),
-    Ambitus            = int(mu::engraving::SegmentType::Ambitus),
-    TimeSig            = int(mu::engraving::SegmentType::TimeSig),
-    StartRepeatBarLine = int(mu::engraving::SegmentType::StartRepeatBarLine),
-    Clef               = int(mu::engraving::SegmentType::Clef),
-    BarLine            = int(mu::engraving::SegmentType::BarLine),
-    Breath             = int(mu::engraving::SegmentType::Breath),
+    Invalid                    = int(mu::engraving::SegmentType::Invalid),
+    BeginBarLine               = int(mu::engraving::SegmentType::BeginBarLine),
+    HeaderClef                 = int(mu::engraving::SegmentType::HeaderClef),
+    KeySig                     = int(mu::engraving::SegmentType::KeySig),
+    Ambitus                    = int(mu::engraving::SegmentType::Ambitus),
+    TimeSig                    = int(mu::engraving::SegmentType::TimeSig),
+    StartRepeatBarLine         = int(mu::engraving::SegmentType::StartRepeatBarLine),
+    ClefStartRepeatAnnounce    = int(mu::engraving::SegmentType::ClefStartRepeatAnnounce),
+    KeySigStartRepeatAnnounce  = int(mu::engraving::SegmentType::KeySigStartRepeatAnnounce),
+    TimeSigStartRepeatAnnounce = int(mu::engraving::SegmentType::TimeSigStartRepeatAnnounce),
+    Clef                       = int(mu::engraving::SegmentType::Clef),
+    BarLine                    = int(mu::engraving::SegmentType::BarLine),
+    Breath                     = int(mu::engraving::SegmentType::Breath),
     //--
-    ChordRest          = int(mu::engraving::SegmentType::ChordRest),
+    TimeTick                   = int(mu::engraving::SegmentType::TimeTick),
+    ChordRest                  = int(mu::engraving::SegmentType::ChordRest),
     //--
-    EndBarLine         = int(mu::engraving::SegmentType::EndBarLine),
-    KeySigAnnounce     = int(mu::engraving::SegmentType::KeySigAnnounce),
-    TimeSigAnnounce    = int(mu::engraving::SegmentType::TimeSigAnnounce),
-    All                = int(mu::engraving::SegmentType::All),
+    ClefRepeatAnnounce         = int(mu::engraving::SegmentType::ClefRepeatAnnounce),
+    KeySigRepeatAnnounce       = int(mu::engraving::SegmentType::KeySigRepeatAnnounce),
+    TimeSigRepeatAnnounce      = int(mu::engraving::SegmentType::TimeSigRepeatAnnounce),
+    //--
+    EndBarLine                 = int(mu::engraving::SegmentType::EndBarLine),
+    KeySigAnnounce             = int(mu::engraving::SegmentType::KeySigAnnounce),
+    TimeSigAnnounce            = int(mu::engraving::SegmentType::TimeSigAnnounce),
+    //--
+    All                        = int(mu::engraving::SegmentType::All),
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
-    BarLineType        = int(mu::engraving::SegmentType::BarLineType)
-                         ///\}
+    BarLineType                = int(mu::engraving::SegmentType::BarLineType),
+    CourtesyTimeSigType        = int(mu::engraving::SegmentType::CourtesyTimeSigType),
+    CourtesyKeySigType         = int(mu::engraving::SegmentType::CourtesyKeySigType),
+    CourtesyClefType           = int(mu::engraving::SegmentType::CourtesyClefType),
+    TimeSigType                = int(mu::engraving::SegmentType::TimeSigType),
+    KeySigType                 = int(mu::engraving::SegmentType::KeySigType),
+    ClefType                   = int(mu::engraving::SegmentType::ClefType),
+    ///\}
 };
-Q_ENUM_NS(SegmentType)
+Q_ENUM_NS(SegmentType);
+
+enum class BarLineType {
+    NORMAL            = int(mu::engraving::BarLineType::NORMAL),
+    SINGLE            = int(mu::engraving::BarLineType::SINGLE),
+    DOUBLE            = int(mu::engraving::BarLineType::DOUBLE),
+    START_REPEAT      = int(mu::engraving::BarLineType::START_REPEAT),
+    LEFT_REPEAT       = int(mu::engraving::BarLineType::LEFT_REPEAT),
+    END_REPEAT        = int(mu::engraving::BarLineType::END_REPEAT),
+    RIGHT_REPEAT      = int(mu::engraving::BarLineType::RIGHT_REPEAT),
+    BROKEN            = int(mu::engraving::BarLineType::BROKEN),
+    DASHED            = int(mu::engraving::BarLineType::DASHED),
+    END               = int(mu::engraving::BarLineType::END),
+    FINAL             = int(mu::engraving::BarLineType::FINAL),
+    END_START_REPEAT  = int(mu::engraving::BarLineType::END_START_REPEAT),
+    LEFT_RIGHT_REPEAT = int(mu::engraving::BarLineType::LEFT_RIGHT_REPEAT),
+    DOTTED            = int(mu::engraving::BarLineType::DOTTED),
+    REVERSE_END       = int(mu::engraving::BarLineType::REVERSE_END),
+    REVERSE_FINALE    = int(mu::engraving::BarLineType::REVERSE_FINALE),
+    HEAVY             = int(mu::engraving::BarLineType::HEAVY),
+    DOUBLE_HEAVY      = int(mu::engraving::BarLineType::DOUBLE_HEAVY),
+};
+Q_ENUM_NS(BarLineType);
 
 enum class Tid {
     DEFAULT            = int(mu::engraving::TextStyleType::DEFAULT),
+
+    /// Page-oriented styles
     TITLE              = int(mu::engraving::TextStyleType::TITLE),
     SUBTITLE           = int(mu::engraving::TextStyleType::SUBTITLE),
     COMPOSER           = int(mu::engraving::TextStyleType::COMPOSER),
@@ -567,19 +702,645 @@ enum class Tid {
     HEADER             = int(mu::engraving::TextStyleType::HEADER),
     FOOTER             = int(mu::engraving::TextStyleType::FOOTER),
     COPYRIGHT          = int(mu::engraving::TextStyleType::COPYRIGHT),
-    PAGE_NUMBER        = int(mu::engraving::TextStyleType::PAGE_NUMBER)
+    PAGE_NUMBER        = int(mu::engraving::TextStyleType::PAGE_NUMBER),
+
+    /// Measure-oriented styles
+    MEASURE_NUMBER = int(mu::engraving::TextStyleType::MEASURE_NUMBER),
+    MMREST_RANGE   = int(mu::engraving::TextStyleType::MMREST_RANGE),
+
+    /// System-level styles
+    TEMPO          = int(mu::engraving::TextStyleType::TEMPO),
+    TEMPO_CHANGE   = int(mu::engraving::TextStyleType::TEMPO_CHANGE),
+    METRONOME      = int(mu::engraving::TextStyleType::METRONOME),
+    REPEAT_LEFT    = int(mu::engraving::TextStyleType::REPEAT_LEFT),       // align to start of measure
+    REPEAT_RIGHT   = int(mu::engraving::TextStyleType::REPEAT_RIGHT),      // align to end of measure
+    REHEARSAL_MARK = int(mu::engraving::TextStyleType::REHEARSAL_MARK),
+    SYSTEM         = int(mu::engraving::TextStyleType::SYSTEM),
+
+    /// Staff oriented styles
+    STAFF             = int(mu::engraving::TextStyleType::STAFF),
+    EXPRESSION        = int(mu::engraving::TextStyleType::EXPRESSION),
+    DYNAMICS          = int(mu::engraving::TextStyleType::DYNAMICS),
+    HAIRPIN           = int(mu::engraving::TextStyleType::HAIRPIN),
+    LYRICS_ODD        = int(mu::engraving::TextStyleType::LYRICS_ODD),
+    LYRICS_EVEN       = int(mu::engraving::TextStyleType::LYRICS_EVEN),
+    HARMONY_A         = int(mu::engraving::TextStyleType::HARMONY_A),
+    HARMONY_B         = int(mu::engraving::TextStyleType::HARMONY_B),
+    HARMONY_ROMAN     = int(mu::engraving::TextStyleType::HARMONY_ROMAN),
+    HARMONY_NASHVILLE = int(mu::engraving::TextStyleType::HARMONY_NASHVILLE),
+
+    /// Note oriented styles
+    TUPLET                   = int(mu::engraving::TextStyleType::TUPLET),
+    STICKING                 = int(mu::engraving::TextStyleType::STICKING),
+    FINGERING                = int(mu::engraving::TextStyleType::FINGERING),
+    LH_GUITAR_FINGERING      = int(mu::engraving::TextStyleType::LH_GUITAR_FINGERING),
+    RH_GUITAR_FINGERING      = int(mu::engraving::TextStyleType::RH_GUITAR_FINGERING),
+    HAMMER_ON_PULL_OFF       = int(mu::engraving::TextStyleType::HAMMER_ON_PULL_OFF),
+    STRING_NUMBER            = int(mu::engraving::TextStyleType::STRING_NUMBER),
+    STRING_TUNINGS           = int(mu::engraving::TextStyleType::STRING_TUNINGS),
+    FRET_DIAGRAM_FINGERING   = int(mu::engraving::TextStyleType::FRET_DIAGRAM_FINGERING),
+    FRET_DIAGRAM_FRET_NUMBER = int(mu::engraving::TextStyleType::FRET_DIAGRAM_FRET_NUMBER),
+    HARP_PEDAL_DIAGRAM       = int(mu::engraving::TextStyleType::HARP_PEDAL_DIAGRAM),
+    HARP_PEDAL_TEXT_DIAGRAM  = int(mu::engraving::TextStyleType::HARP_PEDAL_TEXT_DIAGRAM),
+
+    /// Line-oriented styles
+    TEXTLINE  = int(mu::engraving::TextStyleType::TEXTLINE),
+    NOTELINE  = int(mu::engraving::TextStyleType::NOTELINE),
+    VOLTA     = int(mu::engraving::TextStyleType::VOLTA),
+    OTTAVA    = int(mu::engraving::TextStyleType::OTTAVA),
+    GLISSANDO = int(mu::engraving::TextStyleType::GLISSANDO),
+    PEDAL     = int(mu::engraving::TextStyleType::PEDAL),
+    BEND      = int(mu::engraving::TextStyleType::BEND),
+    LET_RING  = int(mu::engraving::TextStyleType::LET_RING),
+    PALM_MUTE = int(mu::engraving::TextStyleType::PALM_MUTE),
+
+    /// User styles
+    USER1  = int(mu::engraving::TextStyleType::USER1),
+    USER2  = int(mu::engraving::TextStyleType::USER2),
+    USER3  = int(mu::engraving::TextStyleType::USER3),
+    USER4  = int(mu::engraving::TextStyleType::USER4),
+    USER5  = int(mu::engraving::TextStyleType::USER5),
+    USER6  = int(mu::engraving::TextStyleType::USER6),
+    USER7  = int(mu::engraving::TextStyleType::USER7),
+    USER8  = int(mu::engraving::TextStyleType::USER8),
+    USER9  = int(mu::engraving::TextStyleType::USER9),
+    USER10 = int(mu::engraving::TextStyleType::USER10),
+    USER11 = int(mu::engraving::TextStyleType::USER11),
+    USER12 = int(mu::engraving::TextStyleType::USER12),
+
+    /// special, no-contents, styles used while importing older scores
+    TEXT_TYPES    = int(mu::engraving::TextStyleType::TEXT_TYPES),        // used for user-defined types
+    IGNORED_TYPES = int(mu::engraving::TextStyleType::IGNORED_TYPES),     // used for types no longer relevant (mainly Figured bass text type)
 };
 Q_ENUM_NS(Tid);
 
 enum class Syllabic {
-    SINGLE, BEGIN, END, MIDDLE
+    SINGLE = int(mu::engraving::LyricsSyllabic::SINGLE),
+    BEGIN  = int(mu::engraving::LyricsSyllabic::BEGIN),
+    END    = int(mu::engraving::LyricsSyllabic::END),
+    MIDDLE = int(mu::engraving::LyricsSyllabic::MIDDLE),
 };
 Q_ENUM_NS(Syllabic);
 
 enum class Anchor {
-    SEGMENT, MEASURE, CHORD, NOTE
+    SEGMENT = int(mu::engraving::Spanner::Anchor::SEGMENT),
+    MEASURE = int(mu::engraving::Spanner::Anchor::MEASURE),
+    CHORD   = int(mu::engraving::Spanner::Anchor::CHORD),
+    NOTE    = int(mu::engraving::Spanner::Anchor::NOTE),
 };
 Q_ENUM_NS(Anchor);
+
+enum class MMRestRangeBracketType {
+    BRACKETS    = int(mu::engraving::MMRestRangeBracketType::BRACKETS),
+    PARENTHESES = int(mu::engraving::MMRestRangeBracketType::PARENTHESES),
+    NONE        = int(mu::engraving::MMRestRangeBracketType::NONE),
+};
+Q_ENUM_NS(MMRestRangeBracketType);
+
+enum class TupletNumberType {
+    SHOW_NUMBER   = int(mu::engraving::TupletNumberType::SHOW_NUMBER),
+    SHOW_RELATION = int(mu::engraving::TupletNumberType::SHOW_RELATION),
+    NO_TEXT       = int(mu::engraving::TupletNumberType::NO_TEXT),
+};
+Q_ENUM_NS(TupletNumberType);
+
+enum class TupletBracketType {
+    AUTO_BRACKET    = int(mu::engraving::TupletBracketType::AUTO_BRACKET),
+    SHOW_BRACKET    = int(mu::engraving::TupletBracketType::SHOW_BRACKET),
+    SHOW_NO_BRACKET = int(mu::engraving::TupletBracketType::SHOW_NO_BRACKET),
+};
+Q_ENUM_NS(TupletBracketType);
+
+enum class TripletFeelType {
+    NONE          = int(mu::engraving::TripletFeelType::NONE),
+    TRIPLET_8TH   = int(mu::engraving::TripletFeelType::TRIPLET_8TH),
+    TRIPLET_16TH  = int(mu::engraving::TripletFeelType::TRIPLET_16TH),
+    DOTTED_8TH    = int(mu::engraving::TripletFeelType::DOTTED_8TH),
+    DOTTED_16TH   = int(mu::engraving::TripletFeelType::DOTTED_16TH),
+    SCOTTISH_8TH  = int(mu::engraving::TripletFeelType::SCOTTISH_8TH),
+    SCOTTISH_16TH = int(mu::engraving::TripletFeelType::SCOTTISH_16TH),
+};
+Q_ENUM_NS(TripletFeelType);
+
+enum class GuitarBendType {
+    BEND            = int(mu::engraving::GuitarBendType::BEND),
+    PRE_BEND        = int(mu::engraving::GuitarBendType::PRE_BEND),
+    GRACE_NOTE_BEND = int(mu::engraving::GuitarBendType::GRACE_NOTE_BEND),
+    SLIGHT_BEND     = int(mu::engraving::GuitarBendType::SLIGHT_BEND),
+};
+Q_ENUM_NS(GuitarBendType);
+
+enum class GuitarBendShowHoldLine {
+    AUTO = int(mu::engraving::GuitarBendShowHoldLine::AUTO),
+    SHOW = int(mu::engraving::GuitarBendShowHoldLine::SHOW),
+    HIDE = int(mu::engraving::GuitarBendShowHoldLine::HIDE),
+};
+Q_ENUM_NS(GuitarBendShowHoldLine);
+
+enum class ClefType {
+    INVALID    = int(mu::engraving::ClefType::INVALID),
+    G          = int(mu::engraving::ClefType::G),
+    G15_MB     = int(mu::engraving::ClefType::G15_MB),
+    G8_VB      = int(mu::engraving::ClefType::G8_VB),
+    G8_VA      = int(mu::engraving::ClefType::G8_VA),
+    G15_MA     = int(mu::engraving::ClefType::G15_MA),
+    G8_VB_O    = int(mu::engraving::ClefType::G8_VB_O),
+    G8_VB_P    = int(mu::engraving::ClefType::G8_VB_P),
+    G_1        = int(mu::engraving::ClefType::G_1),
+    C1         = int(mu::engraving::ClefType::C1),
+    C2         = int(mu::engraving::ClefType::C2),
+    C3         = int(mu::engraving::ClefType::C3),
+    C4         = int(mu::engraving::ClefType::C4),
+    C5         = int(mu::engraving::ClefType::C5),
+    C_19C      = int(mu::engraving::ClefType::C_19C),
+    C1_F18C    = int(mu::engraving::ClefType::C1_F18C),
+    C3_F18C    = int(mu::engraving::ClefType::C3_F18C),
+    C4_F18C    = int(mu::engraving::ClefType::C4_F18C),
+    C1_F20C    = int(mu::engraving::ClefType::C1_F20C),
+    C3_F20C    = int(mu::engraving::ClefType::C3_F20C),
+    C4_F20C    = int(mu::engraving::ClefType::C4_F20C),
+    F          = int(mu::engraving::ClefType::F),
+    F15_MB     = int(mu::engraving::ClefType::F15_MB),
+    F8_VB      = int(mu::engraving::ClefType::F8_VB),
+    F_8VA      = int(mu::engraving::ClefType::F_8VA),
+    F_15MA     = int(mu::engraving::ClefType::F_15MA),
+    F_B        = int(mu::engraving::ClefType::F_B),
+    F_C        = int(mu::engraving::ClefType::F_C),
+    F_F18C     = int(mu::engraving::ClefType::F_F18C),
+    F_19C      = int(mu::engraving::ClefType::F_19C),
+    PERC       = int(mu::engraving::ClefType::PERC),
+    PERC2      = int(mu::engraving::ClefType::PERC2),
+    TAB        = int(mu::engraving::ClefType::TAB),
+    TAB4       = int(mu::engraving::ClefType::TAB4),
+    TAB_SERIF  = int(mu::engraving::ClefType::TAB_SERIF),
+    TAB4_SERIF = int(mu::engraving::ClefType::TAB4_SERIF),
+    C4_8VB     = int(mu::engraving::ClefType::C4_8VB),
+    G8_VB_C    = int(mu::engraving::ClefType::G8_VB_C),
+    MAX        = int(mu::engraving::ClefType::MAX),
+};
+Q_ENUM_NS(ClefType);
+
+enum class ClefToBarlinePosition {
+    AUTO   = int(mu::engraving::ClefToBarlinePosition::AUTO),
+    BEFORE = int(mu::engraving::ClefToBarlinePosition::BEFORE),
+    AFTER  = int(mu::engraving::ClefToBarlinePosition::AFTER),
+};
+Q_ENUM_NS(ClefToBarlinePosition);
+
+enum class DynamicType {
+    OTHER  = int(mu::engraving::DynamicType::OTHER),
+    PPPPPP = int(mu::engraving::DynamicType::PPPPPP),
+    PPPPP  = int(mu::engraving::DynamicType::PPPPP),
+    PPPP   = int(mu::engraving::DynamicType::PPPP),
+    PPP    = int(mu::engraving::DynamicType::PPP),
+    PP     = int(mu::engraving::DynamicType::PP),
+    P      = int(mu::engraving::DynamicType::P),
+    MP     = int(mu::engraving::DynamicType::MP),
+    MF     = int(mu::engraving::DynamicType::MF),
+    F      = int(mu::engraving::DynamicType::F),
+    FF     = int(mu::engraving::DynamicType::FF),
+    FFF    = int(mu::engraving::DynamicType::FFF),
+    FFFF   = int(mu::engraving::DynamicType::FFFF),
+    FFFFF  = int(mu::engraving::DynamicType::FFFFF),
+    FFFFFF = int(mu::engraving::DynamicType::FFFFFF),
+    FP     = int(mu::engraving::DynamicType::FP),
+    PF     = int(mu::engraving::DynamicType::PF),
+    SF     = int(mu::engraving::DynamicType::SF),
+    SFZ    = int(mu::engraving::DynamicType::SFZ),
+    SFF    = int(mu::engraving::DynamicType::SFF),
+    SFFZ   = int(mu::engraving::DynamicType::SFFZ),
+    SFFF   = int(mu::engraving::DynamicType::SFFF),
+    SFFFZ  = int(mu::engraving::DynamicType::SFFFZ),
+    SFP    = int(mu::engraving::DynamicType::SFP),
+    SFPP   = int(mu::engraving::DynamicType::SFPP),
+    RFZ    = int(mu::engraving::DynamicType::RFZ),
+    RF     = int(mu::engraving::DynamicType::RF),
+    FZ     = int(mu::engraving::DynamicType::FZ),
+    M      = int(mu::engraving::DynamicType::M),
+    R      = int(mu::engraving::DynamicType::R),
+    S      = int(mu::engraving::DynamicType::S),
+    Z      = int(mu::engraving::DynamicType::Z),
+    N      = int(mu::engraving::DynamicType::N),
+    LAST   = int(mu::engraving::DynamicType::LAST),
+};
+Q_ENUM_NS(DynamicType);
+
+enum class DynamicSpeed {
+    SLOW   = int(mu::engraving::DynamicSpeed::SLOW),
+    NORMAL = int(mu::engraving::DynamicSpeed::NORMAL),
+    FAST   = int(mu::engraving::DynamicSpeed::FAST),
+};
+Q_ENUM_NS(DynamicSpeed);
+
+enum class LineType {
+    SOLID  = int(mu::engraving::LineType::SOLID),
+    DASHED = int(mu::engraving::LineType::DASHED),
+    DOTTED = int(mu::engraving::LineType::DOTTED),
+};
+Q_ENUM_NS(LineType);
+
+enum class HookType {
+    NONE     = int(mu::engraving::HookType::NONE),
+    HOOK_90  = int(mu::engraving::HookType::HOOK_90),
+    HOOK_45  = int(mu::engraving::HookType::HOOK_45),
+    HOOK_90T = int(mu::engraving::HookType::HOOK_90T),
+};
+Q_ENUM_NS(HookType);
+
+enum class KeyMode {
+    UNKNOWN    = int(mu::engraving::KeyMode::UNKNOWN),
+    NONE       = int(mu::engraving::KeyMode::NONE),
+    MAJOR      = int(mu::engraving::KeyMode::MAJOR),
+    MINOR      = int(mu::engraving::KeyMode::MINOR),
+    DORIAN     = int(mu::engraving::KeyMode::DORIAN),
+    PHRYGIAN   = int(mu::engraving::KeyMode::PHRYGIAN),
+    LYDIAN     = int(mu::engraving::KeyMode::LYDIAN),
+    MIXOLYDIAN = int(mu::engraving::KeyMode::MIXOLYDIAN),
+    AEOLIAN    = int(mu::engraving::KeyMode::AEOLIAN),
+    IONIAN     = int(mu::engraving::KeyMode::IONIAN),
+    LOCRIAN    = int(mu::engraving::KeyMode::LOCRIAN),
+};
+Q_ENUM_NS(KeyMode);
+
+enum class ArpeggioType {
+    NORMAL        = int(mu::engraving::ArpeggioType::NORMAL),
+    UP            = int(mu::engraving::ArpeggioType::UP),
+    DOWN          = int(mu::engraving::ArpeggioType::DOWN),
+    BRACKET       = int(mu::engraving::ArpeggioType::BRACKET),
+    UP_STRAIGHT   = int(mu::engraving::ArpeggioType::UP_STRAIGHT),
+    DOWN_STRAIGHT = int(mu::engraving::ArpeggioType::DOWN_STRAIGHT),
+};
+Q_ENUM_NS(ArpeggioType);
+
+enum class IntervalStep {
+    UNISON  = int(mu::engraving::IntervalStep::UNISON),
+    SECOND  = int(mu::engraving::IntervalStep::SECOND),
+    THIRD   = int(mu::engraving::IntervalStep::THIRD),
+    FOURTH  = int(mu::engraving::IntervalStep::FOURTH),
+    FIFTH   = int(mu::engraving::IntervalStep::FIFTH),
+    SIXTH   = int(mu::engraving::IntervalStep::SIXTH),
+    SEVENTH = int(mu::engraving::IntervalStep::SEVENTH),
+    OCTAVE  = int(mu::engraving::IntervalStep::OCTAVE),
+};
+Q_ENUM_NS(IntervalStep);
+
+enum class IntervalType {
+    AUTO       = int(mu::engraving::IntervalType::AUTO),
+    AUGMENTED  = int(mu::engraving::IntervalType::AUGMENTED),
+    MAJOR      = int(mu::engraving::IntervalType::MAJOR),
+    PERFECT    = int(mu::engraving::IntervalType::PERFECT),
+    MINOR      = int(mu::engraving::IntervalType::MINOR),
+    DIMINISHED = int(mu::engraving::IntervalType::DIMINISHED),
+};
+Q_ENUM_NS(IntervalType);
+
+enum class InstrumentLabelVisibility {
+    LONG  = int(mu::engraving::InstrumentLabelVisibility::LONG),
+    SHORT = int(mu::engraving::InstrumentLabelVisibility::SHORT),
+    HIDE  = int(mu::engraving::InstrumentLabelVisibility::HIDE),
+};
+Q_ENUM_NS(InstrumentLabelVisibility);
+
+enum class OrnamentShowAccidental {
+    DEFAULT        = int(mu::engraving::OrnamentShowAccidental::DEFAULT),
+    ANY_ALTERATION = int(mu::engraving::OrnamentShowAccidental::ANY_ALTERATION),
+    ALWAYS         = int(mu::engraving::OrnamentShowAccidental::ALWAYS),
+};
+Q_ENUM_NS(OrnamentShowAccidental);
+
+enum class PartialSpannerDirection {
+    NONE     = int(mu::engraving::PartialSpannerDirection::NONE),
+    INCOMING = int(mu::engraving::PartialSpannerDirection::INCOMING),
+    OUTGOING = int(mu::engraving::PartialSpannerDirection::OUTGOING),
+    BOTH     = int(mu::engraving::PartialSpannerDirection::BOTH),
+};
+Q_ENUM_NS(PartialSpannerDirection);
+
+enum class ChordStylePreset {
+    STANDARD = int(mu::engraving::ChordStylePreset::STANDARD),
+    JAZZ     = int(mu::engraving::ChordStylePreset::JAZZ),
+    LEGACY   = int(mu::engraving::ChordStylePreset::LEGACY),
+    CUSTOM   = int(mu::engraving::ChordStylePreset::CUSTOM),
+};
+Q_ENUM_NS(ChordStylePreset);
+
+enum class AnnotationCategory {
+    Undefined         = int(mu::engraving::AnnotationCategory::Undefined),
+    TempoAnnotation   = int(mu::engraving::AnnotationCategory::TempoAnnotation),
+    PlayingAnnotation = int(mu::engraving::AnnotationCategory::PlayingAnnotation),
+    Other             = int(mu::engraving::AnnotationCategory::Other),
+};
+Q_ENUM_NS(AnnotationCategory);
+
+enum class PlayingTechniqueType {
+    Undefined     = int(mu::engraving::PlayingTechniqueType::Undefined),
+    Natural       = int(mu::engraving::PlayingTechniqueType::Natural),
+    Pizzicato     = int(mu::engraving::PlayingTechniqueType::Pizzicato),
+    Open          = int(mu::engraving::PlayingTechniqueType::Open),
+    Mute          = int(mu::engraving::PlayingTechniqueType::Mute),
+    Tremolo       = int(mu::engraving::PlayingTechniqueType::Tremolo),
+    Detache       = int(mu::engraving::PlayingTechniqueType::Detache),
+    Martele       = int(mu::engraving::PlayingTechniqueType::Martele),
+    ColLegno      = int(mu::engraving::PlayingTechniqueType::ColLegno),
+    SulPonticello = int(mu::engraving::PlayingTechniqueType::SulPonticello),
+    SulTasto      = int(mu::engraving::PlayingTechniqueType::SulTasto),
+    Vibrato       = int(mu::engraving::PlayingTechniqueType::Vibrato),
+    Legato        = int(mu::engraving::PlayingTechniqueType::Legato),
+    Distortion    = int(mu::engraving::PlayingTechniqueType::Distortion),
+    Overdrive     = int(mu::engraving::PlayingTechniqueType::Overdrive),
+    Harmonics     = int(mu::engraving::PlayingTechniqueType::Harmonics),
+    JazzTone      = int(mu::engraving::PlayingTechniqueType::JazzTone),
+};
+Q_ENUM_NS(PlayingTechniqueType);
+
+enum class GradualTempoChangeType {
+    Undefined    = int(mu::engraving::GradualTempoChangeType::Undefined),
+    Accelerando  = int(mu::engraving::GradualTempoChangeType::Accelerando),
+    Allargando   = int(mu::engraving::GradualTempoChangeType::Allargando),
+    Calando      = int(mu::engraving::GradualTempoChangeType::Calando),
+    Lentando     = int(mu::engraving::GradualTempoChangeType::Lentando),
+    Morendo      = int(mu::engraving::GradualTempoChangeType::Morendo),
+    Precipitando = int(mu::engraving::GradualTempoChangeType::Precipitando),
+    Rallentando  = int(mu::engraving::GradualTempoChangeType::Rallentando),
+    Ritardando   = int(mu::engraving::GradualTempoChangeType::Ritardando),
+    Smorzando    = int(mu::engraving::GradualTempoChangeType::Smorzando),
+    Sostenuto    = int(mu::engraving::GradualTempoChangeType::Sostenuto),
+    Stringendo   = int(mu::engraving::GradualTempoChangeType::Stringendo),
+};
+Q_ENUM_NS(GradualTempoChangeType);
+
+enum class ChangeMethod {
+    NORMAL      = int(mu::engraving::ChangeMethod::NORMAL),
+    EXPONENTIAL = int(mu::engraving::ChangeMethod::EXPONENTIAL),
+    EASE_IN     = int(mu::engraving::ChangeMethod::EASE_IN),
+    EASE_OUT    = int(mu::engraving::ChangeMethod::EASE_OUT),
+    EASE_IN_OUT = int(mu::engraving::ChangeMethod::EASE_IN_OUT),
+};
+Q_ENUM_NS(ChangeMethod);
+
+enum class ChangeDirection {
+    INCREASING = int(mu::engraving::ChangeDirection::INCREASING),
+    DECREASING = int(mu::engraving::ChangeDirection::DECREASING),
+};
+Q_ENUM_NS(ChangeDirection);
+
+enum class AccidentalRole {
+    AUTO = int(mu::engraving::AccidentalRole::AUTO),
+    USER = int(mu::engraving::AccidentalRole::USER),
+};
+Q_ENUM_NS(AccidentalRole);
+
+enum class AccidentalVal {
+    SHARP3  = int(mu::engraving::AccidentalVal::SHARP3),
+    SHARP2  = int(mu::engraving::AccidentalVal::SHARP2),
+    SHARP   = int(mu::engraving::AccidentalVal::SHARP),
+    NATURAL = int(mu::engraving::AccidentalVal::NATURAL),
+    FLAT    = int(mu::engraving::AccidentalVal::FLAT),
+    FLAT2   = int(mu::engraving::AccidentalVal::FLAT2),
+    FLAT3   = int(mu::engraving::AccidentalVal::FLAT3),
+    MIN     = int(mu::engraving::AccidentalVal::MIN),
+    MAX     = int(mu::engraving::AccidentalVal::MAX),
+};
+Q_ENUM_NS(AccidentalVal);
+
+enum class FermataType {
+    Undefined  = int(mu::engraving::FermataType::Undefined),
+    VeryShort  = int(mu::engraving::FermataType::VeryShort),
+    Short      = int(mu::engraving::FermataType::Short),
+    ShortHenze = int(mu::engraving::FermataType::ShortHenze),
+    Normal     = int(mu::engraving::FermataType::Normal),
+    Long       = int(mu::engraving::FermataType::Long),
+    LongHenze  = int(mu::engraving::FermataType::LongHenze),
+    VeryLong   = int(mu::engraving::FermataType::VeryLong),
+};
+Q_ENUM_NS(FermataType);
+
+enum class ChordLineType {
+    NOTYPE = int(mu::engraving::ChordLineType::NOTYPE),
+    FALL   = int(mu::engraving::ChordLineType::FALL),
+    DOIT   = int(mu::engraving::ChordLineType::DOIT),
+    PLOP   = int(mu::engraving::ChordLineType::PLOP),
+    SCOOP  = int(mu::engraving::ChordLineType::SCOOP),
+};
+Q_ENUM_NS(ChordLineType);
+
+enum class SlurStyleType {
+    Undefined  = int(mu::engraving::SlurStyleType::Undefined),
+    Solid      = int(mu::engraving::SlurStyleType::Solid),
+    Dotted     = int(mu::engraving::SlurStyleType::Dotted),
+    Dashed     = int(mu::engraving::SlurStyleType::Dashed),
+    WideDashed = int(mu::engraving::SlurStyleType::WideDashed),
+};
+Q_ENUM_NS(SlurStyleType);
+
+enum class TremoloType {
+    INVALID_TREMOLO = int(mu::engraving::TremoloType::INVALID_TREMOLO),
+
+    /// single-chord tremolos
+    R8        = int(mu::engraving::TremoloType::R8),
+    R16       = int(mu::engraving::TremoloType::R16),
+    R32       = int(mu::engraving::TremoloType::R32),
+    R64       = int(mu::engraving::TremoloType::R64),
+    BUZZ_ROLL = int(mu::engraving::TremoloType::BUZZ_ROLL),
+
+    /// two-chord tremolos
+    C8  = int(mu::engraving::TremoloType::C8),
+    C16 = int(mu::engraving::TremoloType::C16),
+    C32 = int(mu::engraving::TremoloType::C32),
+    C64 = int(mu::engraving::TremoloType::C64),
+};
+Q_ENUM_NS(TremoloType);
+
+// only applicable to minim two-note tremolo in non-TAB staves
+enum class TremoloStyle {
+    DEFAULT               = int(mu::engraving::TremoloStyle::DEFAULT),
+    TRADITIONAL           = int(mu::engraving::TremoloStyle::TRADITIONAL),
+    TRADITIONAL_ALTERNATE = int(mu::engraving::TremoloStyle::TRADITIONAL_ALTERNATE),
+};
+Q_ENUM_NS(TremoloStyle);
+
+enum class TremoloChordType {
+    TremoloNone        = int(mu::engraving::TremoloChordType::TremoloNone),
+    TremoloSingle      = int(mu::engraving::TremoloChordType::TremoloSingle),
+    TremoloFirstChord  = int(mu::engraving::TremoloChordType::TremoloFirstChord),
+    TremoloSecondChord = int(mu::engraving::TremoloChordType::TremoloSecondChord),
+};
+Q_ENUM_NS(TremoloChordType);
+
+enum class BracketType {
+    NORMAL     = int(mu::engraving::BracketType::NORMAL),
+    BRACE      = int(mu::engraving::BracketType::BRACE),
+    SQUARE     = int(mu::engraving::BracketType::SQUARE),
+    LINE       = int(mu::engraving::BracketType::LINE),
+    NO_BRACKET = int(mu::engraving::BracketType::NO_BRACKET),
+};
+Q_ENUM_NS(BracketType);
+
+enum class JumpType {
+    DC             = int(mu::engraving::JumpType::DC),
+    DC_AL_FINE     = int(mu::engraving::JumpType::DC_AL_FINE),
+    DC_AL_CODA     = int(mu::engraving::JumpType::DC_AL_CODA),
+    DS_AL_CODA     = int(mu::engraving::JumpType::DS_AL_CODA),
+    DS_AL_FINE     = int(mu::engraving::JumpType::DS_AL_FINE),
+    DS             = int(mu::engraving::JumpType::DS),
+    DC_AL_DBLCODA  = int(mu::engraving::JumpType::DC_AL_DBLCODA),
+    DS_AL_DBLCODA  = int(mu::engraving::JumpType::DS_AL_DBLCODA),
+    DSS            = int(mu::engraving::JumpType::DSS),
+    DSS_AL_CODA    = int(mu::engraving::JumpType::DSS_AL_CODA),
+    DSS_AL_DBLCODA = int(mu::engraving::JumpType::DSS_AL_DBLCODA),
+    DSS_AL_FINE    = int(mu::engraving::JumpType::DSS_AL_FINE),
+    USER           = int(mu::engraving::JumpType::USER),
+};
+Q_ENUM_NS(JumpType);
+
+enum class MarkerType {
+    SEGNO      = int(mu::engraving::MarkerType::SEGNO),
+    VARSEGNO   = int(mu::engraving::MarkerType::VARSEGNO),
+    CODA       = int(mu::engraving::MarkerType::CODA),
+    VARCODA    = int(mu::engraving::MarkerType::VARCODA),
+    CODETTA    = int(mu::engraving::MarkerType::CODETTA),
+    FINE       = int(mu::engraving::MarkerType::FINE),
+    TOCODA     = int(mu::engraving::MarkerType::TOCODA),
+    TOCODASYM  = int(mu::engraving::MarkerType::TOCODASYM),
+    DA_CODA    = int(mu::engraving::MarkerType::DA_CODA),
+    DA_DBLCODA = int(mu::engraving::MarkerType::DA_DBLCODA),
+    USER       = int(mu::engraving::MarkerType::USER),
+};
+Q_ENUM_NS(MarkerType);
+
+enum class StaffGroup {
+    STANDARD   = int(mu::engraving::StaffGroup::STANDARD),
+    PERCUSSION = int(mu::engraving::StaffGroup::PERCUSSION),
+    TAB        = int(mu::engraving::StaffGroup::TAB),
+};
+Q_ENUM_NS(StaffGroup);
+
+enum class TrillType {
+    TRILL_LINE      = int(mu::engraving::TrillType::TRILL_LINE),
+    UPPRALL_LINE    = int(mu::engraving::TrillType::UPPRALL_LINE),
+    DOWNPRALL_LINE  = int(mu::engraving::TrillType::DOWNPRALL_LINE),
+    PRALLPRALL_LINE = int(mu::engraving::TrillType::PRALLPRALL_LINE),
+};
+Q_ENUM_NS(TrillType);
+
+enum class VibratoType {
+    GUITAR_VIBRATO        = int(mu::engraving::VibratoType::GUITAR_VIBRATO),
+    GUITAR_VIBRATO_WIDE   = int(mu::engraving::VibratoType::GUITAR_VIBRATO_WIDE),
+    VIBRATO_SAWTOOTH      = int(mu::engraving::VibratoType::VIBRATO_SAWTOOTH),
+    VIBRATO_SAWTOOTH_WIDE = int(mu::engraving::VibratoType::VIBRATO_SAWTOOTH_WIDE),
+};
+Q_ENUM_NS(VibratoType);
+
+enum class ArticulationTextType {
+    NO_TEXT = int(mu::engraving::ArticulationTextType::NO_TEXT),
+    SLAP    = int(mu::engraving::ArticulationTextType::SLAP),
+    POP     = int(mu::engraving::ArticulationTextType::POP),
+};
+Q_ENUM_NS(ArticulationTextType);
+
+enum class LyricsDashSystemStart {
+    STANDARD         = int(mu::engraving::LyricsDashSystemStart::STANDARD),
+    UNDER_HEADER     = int(mu::engraving::LyricsDashSystemStart::UNDER_HEADER),
+    UNDER_FIRST_NOTE = int(mu::engraving::LyricsDashSystemStart::UNDER_FIRST_NOTE),
+};
+Q_ENUM_NS(LyricsDashSystemStart);
+
+enum class NoteLineEndPlacement {
+    LEFT_EDGE   = int(mu::engraving::NoteLineEndPlacement::LEFT_EDGE),
+    OFFSET_ENDS = int(mu::engraving::NoteLineEndPlacement::OFFSET_ENDS),
+};
+Q_ENUM_NS(NoteLineEndPlacement);
+
+enum class SpannerSegmentType {
+    SINGLE = int(mu::engraving::SpannerSegmentType::SINGLE),
+    BEGIN  = int(mu::engraving::SpannerSegmentType::BEGIN),
+    MIDDLE = int(mu::engraving::SpannerSegmentType::MIDDLE),
+    END    = int(mu::engraving::SpannerSegmentType::END),
+};
+Q_ENUM_NS(SpannerSegmentType);
+
+enum class TiePlacement {
+    AUTO    = int(mu::engraving::TiePlacement::AUTO),
+    INSIDE  = int(mu::engraving::TiePlacement::INSIDE),
+    OUTSIDE = int(mu::engraving::TiePlacement::OUTSIDE),
+};
+Q_ENUM_NS(TiePlacement);
+
+enum class TieDotsPlacement {
+    AUTO        = int(mu::engraving::TieDotsPlacement::AUTO),
+    BEFORE_DOTS = int(mu::engraving::TieDotsPlacement::BEFORE_DOTS),
+    AFTER_DOTS  = int(mu::engraving::TieDotsPlacement::AFTER_DOTS),
+};
+Q_ENUM_NS(TieDotsPlacement);
+
+enum class TimeSigPlacement {
+    NORMAL        = int(mu::engraving::TimeSigPlacement::NORMAL),
+    ABOVE_STAVES  = int(mu::engraving::TimeSigPlacement::ABOVE_STAVES),
+    ACROSS_STAVES = int(mu::engraving::TimeSigPlacement::ACROSS_STAVES),
+};
+Q_ENUM_NS(TimeSigPlacement);
+
+enum class TimeSigStyle {
+    NORMAL = int(mu::engraving::TimeSigStyle::NORMAL),
+    NARROW = int(mu::engraving::TimeSigStyle::NARROW),
+    LARGE  = int(mu::engraving::TimeSigStyle::LARGE),
+};
+Q_ENUM_NS(TimeSigStyle);
+
+enum class TimeSigVSMargin {
+    HANG_INTO_MARGIN       = int(mu::engraving::TimeSigVSMargin::HANG_INTO_MARGIN),
+    RIGHT_ALIGN_TO_BARLINE = int(mu::engraving::TimeSigVSMargin::RIGHT_ALIGN_TO_BARLINE),
+    CREATE_SPACE           = int(mu::engraving::TimeSigVSMargin::CREATE_SPACE),
+};
+Q_ENUM_NS(TimeSigVSMargin);
+
+enum class NoteSpellingType {
+    STANDARD    = int(mu::engraving::NoteSpellingType::STANDARD),
+    GERMAN      = int(mu::engraving::NoteSpellingType::GERMAN),
+    GERMAN_PURE = int(mu::engraving::NoteSpellingType::GERMAN_PURE),
+    SOLFEGGIO   = int(mu::engraving::NoteSpellingType::SOLFEGGIO),
+    FRENCH      = int(mu::engraving::NoteSpellingType::FRENCH),
+};
+Q_ENUM_NS(NoteSpellingType);
+
+enum class Key {
+    C_B              = int(mu::engraving::Key::C_B),
+    G_B              = int(mu::engraving::Key::G_B),
+    D_B              = int(mu::engraving::Key::D_B),
+    A_B              = int(mu::engraving::Key::A_B),
+    E_B              = int(mu::engraving::Key::E_B),
+    B_B              = int(mu::engraving::Key::B_B),
+    F                = int(mu::engraving::Key::F),
+    C                = int(mu::engraving::Key::C),
+    G                = int(mu::engraving::Key::G),
+    D                = int(mu::engraving::Key::D),
+    A                = int(mu::engraving::Key::A),
+    E                = int(mu::engraving::Key::E),
+    B                = int(mu::engraving::Key::B),
+    F_S              = int(mu::engraving::Key::F_S),
+    C_S              = int(mu::engraving::Key::C_S),
+    MIN              = int(mu::engraving::Key::MIN),
+    MAX              = int(mu::engraving::Key::MAX),
+    INVALID          = int(mu::engraving::Key::INVALID),
+    NUM_OF           = int(mu::engraving::Key::NUM_OF),
+    DELTA_ENHARMONIC = int(mu::engraving::Key::DELTA_ENHARMONIC),
+};
+Q_ENUM_NS(Key);
+
+enum class UpdateMode {
+    DoNothing = int(mu::engraving::UpdateMode::DoNothing),
+    Update    = int(mu::engraving::UpdateMode::Update),
+    UpdateAll = int(mu::engraving::UpdateMode::UpdateAll),
+    Layout    = int(mu::engraving::UpdateMode::Layout),
+};
+Q_ENUM_NS(UpdateMode);
+
+enum class LayoutFlag {
+    NO_FLAGS             = int(mu::engraving::LayoutFlag::NO_FLAGS),
+    PLAY_EVENTS          = int(mu::engraving::LayoutFlag::PLAY_EVENTS),
+    REBUILD_MIDI_MAPPING = int(mu::engraving::LayoutFlag::REBUILD_MIDI_MAPPING),
+};
+Q_ENUM_NS(LayoutFlag);
 
 enum class SymId {
     noSym = int(mu::engraving::SymId::noSym),
@@ -3587,20 +4348,80 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ElementType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::OrnamentStyle);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Align);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Placement);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::PlacementH);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TextPlace);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Direction);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::DirectionH);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Orientation);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::AutoOnOff);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VoiceAssignment);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SpacerType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutBreakType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::DurationType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VeloType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::BeamMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GlissandoType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GlissandoStyle);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HarmonyType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteHeadType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteHeadScheme);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteHeadGroup);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::PlayEventType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SegmentType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::BarLineType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Tid);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Syllabic);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Anchor);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MMRestRangeBracketType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TupletNumberType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TupletBracketType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TripletFeelType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GuitarBendType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GuitarBendShowHoldLine);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ClefType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ClefToBarlinePosition);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::DynamicType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::DynamicSpeed);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LineType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HookType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::KeyMode);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ArpeggioType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::IntervalStep);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::IntervalType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::InstrumentLabelVisibility);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::OrnamentShowAccidental);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::PartialSpannerDirection);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ChordStylePreset);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::AnnotationCategory);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::PlayingTechniqueType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GradualTempoChangeType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ChangeMethod);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ChangeDirection);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::AccidentalRole);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::AccidentalVal);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::FermataType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ChordLineType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SlurStyleType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TremoloType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TremoloChordType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::BracketType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::JumpType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MarkerType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::StaffGroup);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TrillType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VibratoType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ArticulationTextType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LyricsDashSystemStart);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteLineEndPlacement);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SpannerSegmentType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TiePlacement);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TieDotsPlacement);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TimeSigPlacement);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TimeSigStyle);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TimeSigVSMargin);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteSpellingType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Key);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::UpdateMode);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutFlag);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SymId);
