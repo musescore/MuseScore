@@ -1685,68 +1685,68 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("next-beat-TEXT",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Next beat (Chord symbol)"),
+             TranslatableString("action", "Advance cursor: next beat (chord symbols)"),
              TranslatableString("action", "Advance cursor: next beat (chord symbols)")
              ),
     UiAction("prev-beat-TEXT",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Previous beat (Chord symbol)"),
+             TranslatableString("action", "Advance cursor: previous beat (chord symbols)"),
              TranslatableString("action", "Advance cursor: previous beat (chord symbols)")
              ),
     UiAction("advance-longa",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance longa (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: longa (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: longa (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: longa (chord symbols/figured bass)")
              ),
     UiAction("advance-breve",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance breve (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: breve (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: breve (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: breve (chord symbols/figured bass)")
              ),
     UiAction("advance-1",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance whole note (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: whole note (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: whole note (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: whole note (chord symbols/figured bass)")
              ),
     UiAction("advance-2",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance half note (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: half note (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: half note (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: half note (chord symbols/figured bass)")
              ),
     UiAction("advance-4",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance quarter note (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: quarter note (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: quarter note (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: quarter note (chord symbols/figured bass)")
              ),
     UiAction("advance-8",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance eighth note (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: eighth note (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: eighth note (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: eighth note (chord symbols/figured bass)")
              ),
     UiAction("advance-16",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance 16th note (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: 16th note (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: 16th note (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: 16th note (chord symbols/figured bass)")
              ),
     UiAction("advance-32",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance 32nd note (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: 32nd note (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: 32nd note (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: 32nd note (chord symbols/figured bass)")
              ),
     UiAction("advance-64",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Advance 64th note (F.B./Chord symbol)"),
-             TranslatableString("action", "Advance cursor: 64th note (figured bass/chord symbols)")
+             TranslatableString("action", "Advance cursor: 64th note (chord symbols/figured bass)"),
+             TranslatableString("action", "Advance cursor: 64th note (chord symbols/figured bass)")
              ),
     UiAction("next-lyric-verse",
              mu::context::UiCtxProjectOpened,
