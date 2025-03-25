@@ -6427,7 +6427,7 @@ static void identification(XmlWriter& xml, Score const* const score)
                   if (search != metaTagNames.end())
                         continue;
                   else if (!metaTag.value().isEmpty())
-                        xml.tagE(QString("miscellaneous-field name=\"%1\" %2").arg(metaTag.key(), metaTag.value()));
+                        xml.tag(QString("miscellaneous-field name=\"%1\"").arg(metaTag.key()), metaTag.value());
                   }
             xml.etag();
             }
