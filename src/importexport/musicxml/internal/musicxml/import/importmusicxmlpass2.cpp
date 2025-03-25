@@ -6741,6 +6741,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // element handled
         } else if (mnd.readProperties(m_e)) {
             // element handled
+        } else if (m_e.name() == "accidental") {
+            m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "beam") {
             beamColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             beamFan = m_e.attribute("fan");
