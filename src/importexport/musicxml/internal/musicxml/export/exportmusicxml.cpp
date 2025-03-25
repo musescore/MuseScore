@@ -2871,6 +2871,11 @@ static void writeAccidental(XmlWriter& xml, const String& tagName, const Acciden
                     attrs.emplace_back(std::make_pair("placement", "below"));
                 }
             }
+            if (acc->isSmall()) {
+                // only set if the accidental is smaller than the notehead
+                const bool tiny = acc->note()->isSmall() || acc->note()->chord()->isSmall();
+                attrs.emplace_back(std::make_pair("size", tiny ? "grace-cue" : "cue"));
+            }
             addColorAttr(acc, attrs);
             xml.tag(AsciiStringView(tag.toStdString()), attrs, s);
         }
