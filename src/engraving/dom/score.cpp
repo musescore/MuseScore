@@ -5537,7 +5537,10 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                         continue;
                     }
                     Slur* slur = toSlur(spanner);
-                    if (slur->startElement() == chord) {
+                    if (slur->startElement() == chord && slur->endElement() == chord) {
+                        score->undoChangeSpannerElements(slur, dstChord, dstChord);
+                        slur->undoChangeProperty(Pid::VOICE, voice);
+                    } else if (slur->startElement() == chord) {
                         score->undoChangeSpannerElements(slur, dstChord, slur->endElement());
                     } else if (slur->endElement() == chord) {
                         score->undoChangeSpannerElements(slur, slur->startElement(), dstChord);
@@ -5578,7 +5581,7 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
 
                 score->undoRemoveElement(lyric);
             }
-        } else {
+        } else if (e->hasVoiceAssignmentProperties()) {
             if (e->isSpannerSegment()) {
                 e = toSpannerSegment(e)->spanner();
             }
@@ -5589,9 +5592,7 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
             }
 
             e->undoChangeProperty(Pid::VOICE, voice);
-            if (e->hasVoiceAssignmentProperties()) {
-                e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
-            }
+            e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
             newElements.push_back(e);
         }
     }
