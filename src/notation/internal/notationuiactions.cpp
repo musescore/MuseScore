@@ -563,6 +563,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Measure properties…"),
              TranslatableString("action", "Measure properties…")
              ),
+    UiAction("add-remove-page-breaks",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Add / remove page breaks…"),
+             TranslatableString("action", "Add / remove page breaks…")
+             ),
     UiAction("measures-per-system",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

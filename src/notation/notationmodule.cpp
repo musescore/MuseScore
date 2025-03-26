@@ -62,6 +62,7 @@
 #include "view/widgets/editstaff.h"
 #include "view/widgets/editstringdata.h"
 #include "view/widgets/breaksdialog.h"
+#include "view/widgets/pagebreaksdialog.h"
 #include "view/widgets/pagesettings.h"
 #include "view/widgets/transposedialog.h"
 #include "view/widgets/selectnotedialog.h"
@@ -148,6 +149,7 @@ void NotationModule::resolveImports()
         ir->registerWidgetUri<PageSettings>(Uri("musescore://notation/pagesettings"));
         ir->registerWidgetUri<MeasurePropertiesDialog>(Uri("musescore://notation/measureproperties"));
         ir->registerWidgetUri<BreaksDialog>(Uri("musescore://notation/breaks"));
+        ir->registerWidgetUri<PageBreaksDialog>(Uri("musescore://notation/pagebreaks"));
         ir->registerWidgetUri<EditStaff>(Uri("musescore://notation/staffproperties"));
         ir->registerWidgetUri<EditStringData>(Uri("musescore://notation/editstrings"));
         ir->registerWidgetUri<TransposeDialog>(Uri("musescore://notation/transpose"));
