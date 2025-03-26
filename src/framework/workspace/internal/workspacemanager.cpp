@@ -113,11 +113,15 @@ IWorkspacePtr WorkspaceManager:: cloneWorkspace(const IWorkspacePtr& workspace, 
 
 void WorkspaceManager::changeCurrentWorkspace(const std::string& newWorkspaceName)
 {
+    prepareCurrentWorkspaceForChange();
+    doChangeCurrentWorkspace(newWorkspaceName);
+}
+
+void WorkspaceManager::doChangeCurrentWorkspace(const std::string& newWorkspaceName)
+{
     if (configuration()->currentWorkspaceName() == newWorkspaceName || newWorkspaceName.empty()) {
         return;
     }
-
-    prepareCurrentWorkspaceForChange();
 
     configuration()->setCurrentWorkspaceName(newWorkspaceName);
 }
@@ -170,7 +174,7 @@ void WorkspaceManager::openConfigureWorkspacesDialog()
     }
 
     std::string selectedWorkspace = result.val.toString();
-    changeCurrentWorkspace(selectedWorkspace);
+    doChangeCurrentWorkspace(selectedWorkspace);
 }
 
 WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) const
