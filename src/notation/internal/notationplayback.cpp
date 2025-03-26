@@ -144,9 +144,16 @@ void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingIt
     m_playbackModel.triggerEventsForItems(items);
 }
 
-void NotationPlayback::triggerMetronome(int tick)
+void NotationPlayback::triggerMetronome(muse::midi::tick_t tick)
 {
     m_playbackModel.triggerMetronome(tick);
+}
+
+void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration)
+{
+    muse::mpe::duration_t durationInMicrosecs = 0;
+    m_playbackModel.triggerCountIn(tick, durationInMicrosecs);
+    totalCountInDuration = audio::microsecsToSecs(durationInMicrosecs);
 }
 
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
