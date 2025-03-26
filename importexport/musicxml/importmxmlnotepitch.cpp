@@ -35,6 +35,7 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
       const bool noParentheses = e.attributes().value("parentheses") == "no";
       const bool brackets = e.attributes().value("bracket") == "yes";
       const bool noBrackets = e.attributes().value("bracket") == "no";
+      const bool smallAccid = e.attributes().value("size") == "cue" || e.attributes().value("size") == "grace-cue";
       const QColor accColor = e.attributes().value("color").toString();
       const QString smufl = e.attributes().value("smufl").toString();
 
@@ -55,6 +56,7 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
                   a->setBracket(AccidentalBracket(AccidentalBracket::BRACKET));
             if (accColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   a->setColor(accColor);
+            a->setSmall(smallAccid);
             return a;
             }
 

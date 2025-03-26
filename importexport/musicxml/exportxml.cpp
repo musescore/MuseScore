@@ -2636,6 +2636,11 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
                         else if (acc->placeBelow())
                              tag += " placement=\"below\"";
                         }
+                  if (acc->isSmall()) {
+                        // only set if the accidental is smaller than the notehead
+                        const bool tiny = acc->note()->isSmall() || acc->note()->chord()->isSmall();
+                        tag += QString(" size=\"%1\"").arg(tiny ? "grace-cue" : "cue");
+                        }
                   tag += color2xml(acc);
                   xml.tag(tag, s);
                   }
