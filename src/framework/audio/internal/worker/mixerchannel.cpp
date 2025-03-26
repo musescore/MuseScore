@@ -100,14 +100,14 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
 
     AudioOutputParams resultParams = requiredParams;
 
-    auto findFxProcessor = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) -> IFxProcessorPtr {
+    auto findFxProcessor = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) -> IFxProcessor* {
         for (IFxProcessorPtr& fx : m_fxProcessors) {
             if (fx->params().chainOrder != params.first) {
                 continue;
             }
 
             if (fx->params().resourceMeta == params.second.resourceMeta) {
-                return fx;
+                return fx.get();
             }
         }
 
@@ -115,7 +115,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
     };
 
     for (auto it = resultParams.fxChain.begin(); it != resultParams.fxChain.end();) {
-        if (IFxProcessorPtr fx = findFxProcessor(*it)) {
+        if (IFxProcessor* fx = findFxProcessor(*it)) {
             fx->setActive(it->second.active);
             ++it;
         } else {
@@ -167,7 +167,7 @@ void MixerChannel::setSampleRate(unsigned int sampleRate)
         m_audioSource->setSampleRate(sampleRate);
     }
 
-    for (const IFxProcessorPtr& fx : m_fxProcessors) {
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setSampleRate(sampleRate);
     }
 }
@@ -205,7 +205,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
         return processedSamplesCount;
     }
 
-    for (const IFxProcessorPtr& fx : m_fxProcessors) {
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
         if (!fx->active()) {
             continue;
         }
