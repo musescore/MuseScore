@@ -155,6 +155,16 @@ void PlaybackModel::setPlayChordSymbols(const bool isEnabled)
     m_playChordSymbols = isEnabled;
 }
 
+bool PlaybackModel::isMetronomeEnabled() const
+{
+    return m_metronomeEnabled;
+}
+
+void PlaybackModel::setIsMetronomeEnabled(const bool isEnabled)
+{
+    m_metronomeEnabled = isEnabled;
+}
+
 const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
 {
     return METRONOME_TRACK_ID;
@@ -524,9 +534,11 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                 processSegment(tickPositionOffset, segment, staffToProcessIdxSet, chordRestSegmentNum == 0, trackChanges);
             }
 
-            m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
-                                       metronomeProfile, m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
-            collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
+            if (m_metronomeEnabled) {
+                m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
+                                           metronomeProfile, m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
+                collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
+            }
         }
     }
 }
@@ -695,7 +707,9 @@ void mu::engraving::PlaybackModel::removeEventsFromRange(const track_idx_t track
         removeTrackEvents(chordSymbolsTrackId(part->id()), timestampFrom, timestampTo);
     }
 
-    removeTrackEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
+    if (m_metronomeEnabled) {
+        removeTrackEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
+    }
 }
 
 void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo)
