@@ -24,14 +24,13 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.Workspace 1.0
 
 import "internal"
 
 StyledDialogView {
     id: root
 
-    property alias notes: view.notes
+    property alias notes: notesLabel.text
     property alias features: featuresViewRepeater.model
     property alias imageUrl: image.source
     property alias actionTitle: buttons.defaultButtonName
@@ -60,7 +59,7 @@ StyledDialogView {
             visualItem: content
             role: MUAccessible.Button
 
-            name: "%1; %2; %3; %4; %5".arg(view.notes)
+            name: "%1; %2; %3; %4; %5".arg(root.notes)
                                       .arg(featuresViewRepeater.contentText())
                                       .arg(buttons.defaultButtonName)
 
@@ -88,13 +87,19 @@ StyledDialogView {
 
             Layout.margins: 24
 
-            ReleaseNotesView {
-                id: view
+            StyledTextLabel {
+                id: notesLabel
 
-                width: parent.width
+                anchors.left: parent.left
+                anchors.right: parent.right
 
-                anchors.top: parent.top
-                anchors.bottom: featuresFrame.top
+                text: root.notes
+
+                horizontalAlignment: Text.AlignLeft
+                font: ui.theme.largeBodyFont
+                wrapMode: Text.WordWrap
+                textFormat: Text.MarkdownText
+                lineHeight: 1.2
             }
 
             Item {

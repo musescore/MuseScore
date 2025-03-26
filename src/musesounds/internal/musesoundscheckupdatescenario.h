@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UPDATE_MUSESOUNDSCHECKUPDATESCENARIO_H
-#define MUSE_UPDATE_MUSESOUNDSCHECKUPDATESCENARIO_H
+#pragma once
 
 #include "async/asyncable.h"
 #include "progress.h"
@@ -29,45 +28,43 @@
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "../iupdateconfiguration.h"
+#include "../imusesoundsconfiguration.h"
 #include "../imusesoundscheckupdateservice.h"
 
 #include "../imusesoundscheckupdatescenario.h"
 
-namespace muse::update {
-class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public Injectable, public async::Asyncable
+namespace mu::musesounds {
+class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Injectable, public muse::async::Asyncable
 {
-    Inject<IInteractive> interactive = { this };
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
-    Inject<IUpdateConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::Inject<IMuseSoundsConfiguration> configuration = { this };
 
-    Inject<IMuseSoundsCheckUpdateService> service = { this };
+    muse::Inject<IMuseSoundsCheckUpdateService> service = { this };
 
 public:
-    MuseSoundsCheckUpdateScenario(const modularity::ContextPtr& iocCtx)
+    MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     void delayedInit();
 
     bool hasUpdate() const override;
-    void showUpdate() override;
+    muse::Ret showUpdate() override;
 
 private:
     bool isCheckStarted() const;
 
-    bool shouldIgnoreUpdate(const ReleaseInfo& info) const;
+    bool shouldIgnoreUpdate(const muse::update::ReleaseInfo& info) const;
     void setIgnoredUpdate(const std::string& version);
 
     void doCheckForUpdate(bool manual);
     void th_checkForUpdate();
 
-    void showReleaseInfo(const ReleaseInfo& info);
-    void tryOpenMuseHub(ValList actions) const;
+    muse::Ret showReleaseInfo(const muse::update::ReleaseInfo& info);
+    void tryOpenMuseHub(muse::ValList actions) const;
 
     bool m_checkProgress = false;
-    ProgressPtr m_checkProgressChannel = nullptr;
+    muse::ProgressPtr m_checkProgressChannel = nullptr;
 };
 }
-
-#endif // MUSE_UPDATE_MUSESOUNDSCHECKUPDATESCENARIO_H

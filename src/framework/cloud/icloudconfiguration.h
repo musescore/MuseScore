@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_CLOUD_ICLOUDCONFIGURATION_H
-#define MUSE_CLOUD_ICLOUDCONFIGURATION_H
+#pragma once
 
-#include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "network/networktypes.h"
+
+#include "modularity/imoduleinterface.h"
 
 namespace muse::cloud {
 class ICloudConfiguration : MODULE_EXPORT_INTERFACE
@@ -39,7 +39,7 @@ public:
     virtual QByteArray uploadingLicense() const = 0;
 
     virtual io::path_t tokensFilePath(const std::string& cloudName) const = 0;
+
+    virtual network::RequestHeaders headers() const = 0;
 };
 }
-
-#endif // MUSE_CLOUD_ICLOUDCONFIGURATION_H

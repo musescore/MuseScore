@@ -150,6 +150,7 @@ set(LINK_LIB
     instrumentsscene
     muse::vst
     muse::update
+    musesounds
     )
 
 if (MUSE_MODULE_UI)
@@ -172,10 +173,6 @@ endif()
 
 if (MUE_BUILD_APPSHELL_MODULE)
     list(APPEND LINK_LIB appshell)
-endif()
-
-if (MUE_BUILD_MUSESOUNDS_MODULE)
-    list(APPEND LINK_LIB musesounds)
 endif()
 
 if (NOT CC_IS_EMSCRIPTEN)

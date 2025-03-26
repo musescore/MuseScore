@@ -50,23 +50,6 @@ static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
 static const std::string STATUS_KEY("status");
 
-QString muse::cloud::userAgent()
-{
-    static const QStringList systemInfo {
-        QSysInfo::kernelType(),
-        QSysInfo::kernelVersion(),
-        QSysInfo::productType(),
-        QSysInfo::productVersion(),
-        QSysInfo::currentCpuArchitecture()
-    };
-
-    static GlobalInject<IApplication> app;
-
-    return QString("MS_EDITOR/%1.%2 (%3)")
-           .arg(app()->version().toString(), app()->build())
-           .arg(systemInfo.join(' ')).toLatin1();
-}
-
 int muse::cloud::generateFileNameNumber()
 {
     return QRandomGenerator::global()->generate() % 100000;
@@ -215,6 +198,11 @@ void AbstractCloudService::onUserAuthorized()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+RequestHeaders AbstractCloudService::defaultHeaders() const
+{
+    return configuration()->headers();
 }
 
 RetVal<QUrl> AbstractCloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
