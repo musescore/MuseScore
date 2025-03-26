@@ -6915,9 +6915,8 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
       const QColor color = _e.attributes().value("color").toString();
 
       fb->setVisible(printObject);
-      if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
+      if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
             fb->setColor(color);
-      }
 
       QString normalizedText;
       int idx = 0;
@@ -6976,6 +6975,12 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 FretDiagram* MusicXMLParserPass2::frame(qreal& defaultY, qreal& relativeY)
       {
       FretDiagram* fd = new FretDiagram(_score);
+
+      const QColor color = _e.attributes().value("color").toString();
+      if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
+            fd->setColor(color);
+            fd->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+            }
 
       int fretOffset = 0;
       defaultY += _e.attributes().value("default-y").toDouble() * -0.1;
