@@ -10,22 +10,22 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "range.h"
-#include "measure.h"
-#include "segment.h"
-#include "rest.h"
-#include "chord.h"
-#include "score.h"
-#include "slur.h"
-#include "tie.h"
-#include "note.h"
-#include "tuplet.h"
 #include "barline.h"
-#include "utils.h"
-#include "staff.h"
+#include "chord.h"
 #include "excerpt.h"
+#include "measure.h"
+#include "note.h"
+#include "range.h"
 #include "repeat.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "slur.h"
+#include "staff.h"
+#include "tie.h"
 #include "tremolo.h"
+#include "tuplet.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -276,6 +276,9 @@ void TrackList::read(const Segment* fs, const Segment* es)
             Element* e = s->element(_track);
             if (!e || e->generated()) {
                   for (Element* ee : s->annotations()) {
+                        if (ee->systemFlag() && ee->track() != 0) // Only process the top system object
+                              continue;
+
                         if (ee->track() == _track)
                               _range->annotations.push_back({ s->tick(), ee->clone() });
                         }
@@ -665,6 +668,9 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             Fraction etick = last->tick();
             for (auto i : first->score()->spanner()) {
                   Spanner* s = i.second;
+                  if (s->systemFlag() && s->track() != 0) // Only process the top system object
+                        continue;
+
                   if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                         Spanner* ns = toSpanner(s->clone());
                         ns->setParent(0);
