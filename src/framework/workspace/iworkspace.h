@@ -39,6 +39,7 @@ public:
 
     virtual bool isBuiltin() const = 0;
     virtual bool isEdited() const = 0;
+    virtual bool isNeedSave() const = 0;
 
     virtual RetVal<QByteArray> rawData(const DataKey& key) const = 0;
     virtual Ret setRawData(const DataKey& key, const QByteArray& data) = 0;

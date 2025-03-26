@@ -73,6 +73,8 @@ private:
     WorkspacePtr doNewWorkspace(const std::string& workspaceName) const;
     io::path_t makeNewWorkspacePath(const std::string& workspaceName) const;
 
+    void doChangeCurrentWorkspace(const std::string& newWorkspaceName);
+
     void appendNewWorkspace(WorkspacePtr workspace);
     void setupConnectionsToNewWorkspace(const IWorkspacePtr workspace);
 
