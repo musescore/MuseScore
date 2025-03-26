@@ -106,6 +106,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
+    ioc()->registerExport<mu::engraving::IEngraving>(moduleName(), m_actionsController);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());

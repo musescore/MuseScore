@@ -31,9 +31,6 @@
 #include "engraving/dom/interval.h"
 #include "engraving/types/types.h"
 
-#include "notation/inotation.h"
-#include "project/inotationwriter.h"
-
 // api
 #include "apitypes.h"
 #include "engravingapiv1.h"
@@ -280,44 +277,7 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
         LOGW("PluginAPI::writeScore: only writing the selected score is currently supported");
         return false;
     }
-
-    const notation::INotationPtr notation = context()->currentNotation();
-
-    if (!notation) {
-        LOGW("PluginAPI::writeScore: no notation found");
-        return false;
-    }
-
-    const auto unitType = determineWriterUnitType(ext.toStdString());
-
-    if (!unitType) {
-        LOGW("PluginAPI::writeScore: '%s' format is not supported", ext.toUtf8().constData());
-        return false;
-    }
-
-    const QString outPath = name.endsWith(ext) ? name : (name + '.' + ext);
-    return exportProjectScenario()->exportScores({ notation }, outPath, *unitType, /* openDestinationFolderOnExport */ false);
-}
-
-std::optional<project::INotationWriter::UnitType> PluginAPI::determineWriterUnitType(const std::string& ext) const
-{
-    const project::INotationWriterPtr writer = writers()->writer(ext);
-
-    if (!writer) {
-        return std::nullopt;
-    }
-
-    project::INotationWriter::UnitType unitType;
-
-    if (writer->supportsUnitType(project::INotationWriter::UnitType::PER_PAGE)) {
-        unitType = project::INotationWriter::UnitType::PER_PAGE;
-    } else if (writer->supportsUnitType(project::INotationWriter::UnitType::PER_PART)) {
-        unitType = project::INotationWriter::UnitType::PER_PART;
-    } else {
-        unitType = project::INotationWriter::UnitType::MULTI_PART;
-    }
-
-    return unitType;
+    return engravingInterface.get()->APIwriteScore(name, ext);
 }
 
 //---------------------------------------------------------
@@ -340,18 +300,23 @@ apiv1::Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 
     if (noninteractive) {
         LOGW("PluginAPI::readScore: noninteractive flag is not yet implemented");
+        return nullptr;
     }
 
-    const muse::io::path_t path(name);
-    const project::ProjectFile file(path);
-    const muse::Ret ret = projectFilesController()->openProject(file);
-
-    return (ret.success() && !hadScoreOpened) ? curScore() : nullptr;
+    mu::engraving::Score* score = engravingInterface.get()->APIreadScore(name);
+    if (score) {
+        return wrap<apiv1::Score>(score, Ownership::SCORE);
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------
 //   closeScore
 //---------------------------------------------------------
+void PluginAPI::closeScore()
+{
+    return closeScore(curScore());
+}
 
 void PluginAPI::closeScore(apiv1::Score* score)
 {
@@ -365,7 +330,7 @@ void PluginAPI::closeScore(apiv1::Score* score)
         return;
     }
 
-    projectFilesController()->closeOpenedProject();
+    engravingInterface.get()->APIcloseScore();
 }
 
 //---------------------------------------------------------
