@@ -150,6 +150,7 @@ public:
 
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled)  override;
+    muse::async::Notification isMetronomeEnabledChanged() const override;
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled)  override;

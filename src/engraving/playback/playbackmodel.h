@@ -68,6 +68,9 @@ public:
     bool isPlayChordSymbolsEnabled() const;
     void setPlayChordSymbols(const bool isEnabled);
 
+    bool isMetronomeEnabled() const;
+    void setIsMetronomeEnabled(const bool isEnabled);
+
     const InstrumentTrackId& metronomeTrackId() const;
     InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
     bool isChordSymbolsTrack(const InstrumentTrackId& trackId) const;
@@ -151,6 +154,7 @@ private:
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
     bool m_playChordSymbols = true;
+    bool m_metronomeEnabled = true;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;

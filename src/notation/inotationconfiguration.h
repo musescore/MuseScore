@@ -160,6 +160,7 @@ public:
 
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
+    virtual muse::async::Notification isMetronomeEnabledChanged() const = 0;
 
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;

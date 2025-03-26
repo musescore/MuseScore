@@ -1021,15 +1021,27 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_4_4)
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
-    // [WHEN] The playback model requested to be loaded
+    // [WHEN] The playback model requested to be loaded with Metronome enabled
     PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
+    model.setIsMetronomeEnabled(true);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
+    const PlaybackEventsMap& eventsWhenMetronomeEnabled = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
-    EXPECT_EQ(result.size(), expectedSize);
+    EXPECT_EQ(eventsWhenMetronomeEnabled.size(), expectedSize);
+
+    // [WHEN] The playback model requested to be loaded with Metronome disabled
+    model.setIsMetronomeEnabled(false);
+    model.reload();
+
+    const PlaybackEventsMap& eventsWhenMetronomeDisabled = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
+
+    // [THEN] No Metronome events
+    EXPECT_TRUE(eventsWhenMetronomeDisabled.empty());
+
+    delete score;
 }
 
 /**
@@ -1059,12 +1071,15 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
+    model.setIsMetronomeEnabled(true);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
+
+    delete score;
 }
 
 /**

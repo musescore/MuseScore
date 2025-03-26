@@ -76,6 +76,7 @@ void NotationPlayback::init()
 
     m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
     m_playbackModel.setPlayChordSymbols(configuration()->isPlayChordSymbolsEnabled());
+    m_playbackModel.setIsMetronomeEnabled(configuration()->isMetronomeEnabled());
 
     m_playbackModel.load(score());
 
@@ -96,6 +97,14 @@ void NotationPlayback::init()
         bool playChordSymbols = configuration()->isPlayChordSymbolsEnabled();
         if (playChordSymbols != m_playbackModel.isPlayChordSymbolsEnabled()) {
             m_playbackModel.setPlayChordSymbols(playChordSymbols);
+            m_playbackModel.reload();
+        }
+    });
+
+    configuration()->isMetronomeEnabledChanged().onNotify(this, [this]() {
+        bool metronomeEnabled = configuration()->isMetronomeEnabled();
+        if (metronomeEnabled != m_playbackModel.isMetronomeEnabled()) {
+            m_playbackModel.setIsMetronomeEnabled(metronomeEnabled);
             m_playbackModel.reload();
         }
     });
