@@ -387,7 +387,6 @@ public:
       void pedal(Pedal const* const pd, int staff, const Fraction& tick);
       void textLine(TextLineBase const* const tl, int staff, const Fraction& tick);
       void dynamic(Dynamic const* const dyn, int staff);
-      void symbol(Symbol const* const sym, int staff);
       void systemText(StaffTextBase const* const text, int staff);
       void tempoText(TempoText const* const text, int staff);
       void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
@@ -630,6 +629,23 @@ static QString color2xml(const Element* el)
             color = QString(" color=\"%1\"").arg(((SLine*)el)->lineColor().name().toUpper());
       return color;
       }
+
+//---------------------------------------------------------
+//   frame2xml
+//---------------------------------------------------------
+
+static QString frame2xml(const TextBase* el)
+      {
+      switch (el->frameType()) {
+            case FrameType::CIRCLE:
+                  return " enclosure=\"circle\"";
+            case FrameType::SQUARE:
+                  return " enclosure=\"rectangle\"";
+            default:
+                  return QString();
+            }
+      }
+
 
 //---------------------------------------------------------
 //   fontStyleToXML
@@ -2653,6 +2669,7 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
 
 static void writeDisplayName(XmlWriter& xml, const QString& partName)
       {
+      // TODO: add text style attributes
       QString displayText;
       for (int i = 0; i < partName.size(); ++i) {
             QChar ch = partName.at(i);
@@ -4577,12 +4594,7 @@ static void wordsMetronome(XmlWriter& xml, Score* s, TextBase const* const text,
       else {
             xml.stag("direction-type");
             QString attr;
-            if (text->hasFrame()) {
-                  if (text->circle())
-                        attr = " enclosure=\"circle\"";
-                  else
-                        attr = " enclosure=\"rectangle\"";
-                  }
+            attr += frame2xml(text);
             attr += color2xml(text);
             attr += positioningAttributes(text);
             MScoreTextToMXML mttm("words", attr, defFmt, mtf);
@@ -4730,12 +4742,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const int staff
       _xml.stag(tagname);
       _xml.stag("direction-type");
       QString attr;
-      if (text->hasFrame()) {
-            if (text->circle())
-                  attr = " enclosure=\"circle\"";
-            else
-                  attr = " enclosure=\"rectangle\"";
-            }
+      attr += frame2xml(text);
       attr += positioningAttributesForTboxText(relativePosition, text->spatium());
       attr += " valign=\"top\"";
       MScoreTextToMXML mttm("words", attr, defFmt, mtf);
@@ -4761,7 +4768,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       QString attr;
       if (rmk->circle())
             attr = " enclosure=\"circle\"";
-      else if (!rmk->hasFrame())
+      else if (!rmk->hasFrame()) // special default case
             attr = " enclosure=\"none\"";
       attr += color2xml(rmk);
       attr += positioningAttributes(rmk);
@@ -5278,6 +5285,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       _xml.stag("direction-type");
 
       QString tagName = "dynamics";
+      tagName += frame2xml(dyn);
       tagName += color2xml(dyn);
       tagName += positioningAttributes(dyn);
       _xml.stag(tagName);
@@ -5355,37 +5363,6 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             _xml.tagE(QString("sound dynamics=\"%1\"").arg(QString::number(dyn->velocity() * 100.0 / 90.0, 'f', 2)));
 
       _xml.etag();
-      }
-
-//---------------------------------------------------------
-//   symbol
-//---------------------------------------------------------
-
-// TODO: remove dependency on symbol name and replace by a more stable interface
-// changes in sym.cpp r2494 broke MusicXML export of pedals (again)
-
-void ExportMusicXml::symbol(Symbol const* const sym, int staff)
-      {
-      QString name = Sym::id2name(sym->sym());
-      QString mxmlName;
-      if (name == "keyboardPedalPed")
-            mxmlName = "pedal type=\"start\"";
-      else if (name == "keyboardPedalUp")
-            mxmlName = "pedal type=\"stop\"";
-      else {
-            qDebug("ExportMusicXml::symbol(): %s not supported", qPrintable(name));
-            return;
-            }
-      directionTag(_xml, _attr, sym);
-      mxmlName += color2xml(sym);
-      mxmlName += positioningAttributes(sym);
-      _xml.stag("direction-type");
-      _xml.tagE(mxmlName);
-      _xml.etag();
-      const int offset = calculateTimeDeltaInDivisions(sym->tick(), tick(), div);
-      if (offset)
-            _xml.tag("offset", offset);
-      directionETag(_xml, staff);
       }
 
 //---------------------------------------------------------
@@ -5840,9 +5817,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
 
       // note: the instrument change details are handled in ExportMusicXml::writeMeasureTracks,
       // optionally writing the associated staff text is done below
-      if (e->isSymbol())
-            exp->symbol(toSymbol(e), sstaff);
-      else if (e->isTempoText())
+      if (e->isTempoText())
             exp->tempoText(toTempoText(e), sstaff);
       else if (e->isStaffText()|| e->isText() || (e->isInstrumentChange() && e->visible()))
             exp->words(toTextBase(e), sstaff);
