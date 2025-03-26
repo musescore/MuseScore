@@ -168,9 +168,9 @@ private:
     void togglePlayChordSymbols();
     void toggleAutomaticallyPan();
     void toggleMetronome();
+    void toggleCountIn();
     void toggleMidiInput();
     void setMidiUseWrittenPitch(bool useWrittenPitch);
-    void toggleCountIn();
     void toggleLoopPlayback();
     void toggleHearPlaybackWhenEditing();
 
