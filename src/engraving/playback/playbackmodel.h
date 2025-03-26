@@ -82,6 +82,7 @@ public:
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
 
     void triggerMetronome(int tick);
+    void triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
