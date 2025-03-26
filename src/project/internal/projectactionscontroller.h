@@ -25,6 +25,7 @@
 #include "iprojectfilescontroller.h"
 
 #include <QObject>
+#include <QString>
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -39,16 +40,19 @@
 #include "print/iprintprovider.h"
 #include "iexportprojectscenario.h"
 #include "inotationreadersregister.h"
+#include "inotationwritersregister.h"
 #include "iopensaveprojectscenario.h"
 #include "imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "notation/inotationconfiguration.h"
+#include "engraving/iengraving.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
 #include "musesounds/imusesamplercheckupdatescenario.h"
 #include "extensions/iextensionsprovider.h"
 
 #include "async/asyncable.h"
 
+#include "inotationwriter.h"
 #include "iprojectconfiguration.h"
 #include "iprojectcreator.h"
 #include "irecentfilescontroller.h"
@@ -56,11 +60,13 @@
 
 namespace mu::project {
 class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider, public muse::Injectable,
-    public muse::actions::Actionable, public muse::async::Asyncable
+    public muse::actions::Actionable, public muse::async::Asyncable, virtual public engraving::IEngraving
 {
     muse::Inject<IProjectConfiguration> configuration = { this };
     muse::Inject<INotationReadersRegister> readers = { this };
+    muse::Inject<INotationWritersRegister> writers = { this };
     muse::Inject<IProjectCreator> projectCreator = { this };
+    muse::Inject<IProjectFilesController> projectFilesController = { this };
     muse::Inject<IRecentFilesController> recentFilesController = { this };
     muse::Inject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::Inject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };
@@ -103,6 +109,11 @@ public:
 
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     muse::async::Notification projectBeingDownloadedChanged() const override;
+
+    // IEngraving interface (for plugin API)
+    bool APIwriteScore(const QString& name, const QString& ext) override;
+    mu::engraving::Score* APIreadScore(const QString& name) override;
+    void APIcloseScore() override;
 
 private:
     void setupConnections();
@@ -217,6 +228,8 @@ private:
     bool hasSelection() const;
 
     QUrl scoreManagerUrl() const;
+
+    std::optional<INotationWriter::UnitType> determineWriterUnitType(const std::string& ext) const;
 
     bool m_isProjectSaving = false;
     bool m_isProjectClosing = false;
