@@ -32,6 +32,7 @@
 #include "modularity/ioc.h"
 #include "workspace/iworkspacemanager.h"
 #include "ui/iuiconfiguration.h"
+#include "ui/iinteractiveprovider.h"
 #include "idockwindowprovider.h"
 
 #include "idockwindow.h"
@@ -59,9 +60,10 @@ class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectabl
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
-    muse::Inject<ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<muse::workspace::IWorkspaceManager> workspaceManager = { this };
-    muse::Inject<IDockWindowProvider> dockWindowProvider = { this };
+    Inject<ui::IUiConfiguration> uiConfiguration = { this };
+    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    Inject<workspace::IWorkspaceManager> workspaceManager = { this };
+    Inject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
