@@ -44,8 +44,10 @@ public:
     explicit AbstractAudioResourceItem(QObject* parent);
     ~AbstractAudioResourceItem() override;
 
+    Q_INVOKABLE void requestToLaunchNativeEditorView();
+    void requestToCloseNativeEditorView();
+
     virtual Q_INVOKABLE void requestAvailableResources() {}
-    virtual Q_INVOKABLE void requestToLaunchNativeEditorView();
     virtual Q_INVOKABLE void handleMenuItem(const QString& menuItemId) { Q_UNUSED(menuItemId) }
 
     virtual QString title() const;
@@ -75,8 +77,6 @@ protected:
     QVariantMap buildExternalLinkMenuItem(const QString& menuId, const QString& title) const;
 
     void sortResourcesList(muse::audio::AudioResourceMetaList& list);
-
-    void updateNativeEditorView();
 
 private:
     void doRequestToLaunchNativeEditorView();

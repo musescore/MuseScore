@@ -20,9 +20,7 @@ AbstractAudioResourceItem::AbstractAudioResourceItem(QObject* parent)
 
 AbstractAudioResourceItem::~AbstractAudioResourceItem()
 {
-    if (m_editorAction.isValid()) {
-        emit nativeEditorViewCloseRequested();
-    }
+    requestToCloseNativeEditorView();
 }
 
 void AbstractAudioResourceItem::requestToLaunchNativeEditorView()
@@ -32,11 +30,9 @@ void AbstractAudioResourceItem::requestToLaunchNativeEditorView()
     }
 }
 
-void AbstractAudioResourceItem::updateNativeEditorView()
+void AbstractAudioResourceItem::requestToCloseNativeEditorView()
 {
-    if (hasNativeEditorSupport()) {
-        doRequestToLaunchNativeEditorView();
-    } else if (m_editorAction.isValid()) {
+    if (m_editorAction.isValid()) {
         emit nativeEditorViewCloseRequested();
     }
 }
