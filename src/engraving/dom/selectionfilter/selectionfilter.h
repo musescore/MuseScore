@@ -25,6 +25,8 @@
 #include "../mscore.h"
 #include "../chord.h"
 
+#include "abstractselectionfilter.h"
+
 namespace mu::engraving {
 static constexpr size_t NUMBER_OF_SELECTION_FILTER_TYPES = 23;
 
@@ -56,22 +58,18 @@ enum class SelectionFilterType : unsigned int {
     ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES)
 };
 
-class SelectionFilter
+class SelectionFilter : public AbstractSelectionFilter
 {
 public:
-    SelectionFilter() = default;
-    SelectionFilter(SelectionFilterType type);
+    SelectionFilter(SelectionFilterType type = SelectionFilterType::ALL);
 
-    inline bool operator==(const SelectionFilter& f) const { return m_filteredTypes == f.m_filteredTypes; }
-    inline bool operator!=(const SelectionFilter& f) const { return !this->operator==(f); }
+    unsigned int getAll() const override { return static_cast<unsigned int>(SelectionFilterType::ALL); }
+    unsigned int getNone() const override { return static_cast<unsigned int>(SelectionFilterType::NONE); }
 
-    bool isFiltered(SelectionFilterType type) const;
-    void setFiltered(SelectionFilterType type, bool filtered);
+    bool isFiltered(const SelectionFilterType& type) const;
+    void setFiltered(const SelectionFilterType& type, bool filtered);
 
     bool canSelect(const EngravingItem* element) const;
     bool canSelectVoice(track_idx_t track) const;
-
-private:
-    unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);
 };
 }

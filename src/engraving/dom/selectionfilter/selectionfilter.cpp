@@ -25,31 +25,19 @@
 using namespace mu::engraving;
 
 SelectionFilter::SelectionFilter(SelectionFilterType type)
-    : m_filteredTypes(static_cast<int>(type))
+    : AbstractSelectionFilter()
 {
+    m_filteredTypes = static_cast<int>(type);
 }
 
-bool SelectionFilter::isFiltered(SelectionFilterType type) const
+bool SelectionFilter::isFiltered(const SelectionFilterType& type) const
 {
-    if (type == SelectionFilterType::NONE || type == SelectionFilterType::ALL) {
-        return m_filteredTypes == static_cast<unsigned int>(type);
-    }
-
-    return m_filteredTypes & static_cast<unsigned int>(type);
+    return AbstractSelectionFilter::isFiltered(static_cast<unsigned int>(type));
 }
 
-void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
+void SelectionFilter::setFiltered(const SelectionFilterType& type, bool filtered)
 {
-    if (type == SelectionFilterType::NONE) {
-        setFiltered(SelectionFilterType::ALL, !filtered);
-        return;
-    }
-
-    if (filtered) {
-        m_filteredTypes |= static_cast<unsigned int>(type);
-    } else {
-        m_filteredTypes &= ~static_cast<unsigned int>(type);
-    }
+    AbstractSelectionFilter::setFiltered(static_cast<unsigned int>(type), filtered);
 }
 
 bool SelectionFilter::canSelect(const EngravingItem* e) const
