@@ -231,7 +231,6 @@ void PageSettings::updateValues()
       pageOffsetEntry->setValue(score->pageNumberOffset() + 1);
 
       blockSignals(false);
-      _changeFlag = true;
       }
 
 //---------------------------------------------------------
@@ -589,7 +588,7 @@ void PageSettings::pageWidthChanged(double val)
 
 void PageSettings::updatePreview()
       {
-      updateValues();
+      _changeFlag = true;
       preview->score()->doLayout();
       preview->layoutChanged();
       }
