@@ -643,7 +643,12 @@ void PlaybackController::play()
         seek(startSecs);
     }
 
-    currentPlayer()->play();
+    secs_t delay = 0.;
+    if (notationConfiguration()->isCountInEnabled()) {
+        delay = 2.0; // TODO
+    }
+
+    currentPlayer()->play(delay);
 }
 
 void PlaybackController::rewind(const ActionData& args)
@@ -680,7 +685,12 @@ void PlaybackController::resume()
         return;
     }
 
-    currentPlayer()->resume();
+    secs_t delay = 0.;
+    if (notationConfiguration()->isCountInEnabled()) {
+        delay = 2.0; // TODO
+    }
+
+    currentPlayer()->resume(delay);
 }
 
 secs_t PlaybackController::playbackStartSecs() const
