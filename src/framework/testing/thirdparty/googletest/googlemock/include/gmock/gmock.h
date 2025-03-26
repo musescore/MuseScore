@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This is the main header file a user should include.
@@ -54,14 +53,16 @@
 //
 // where all clauses are optional and WillOnce() can be repeated.
 
-#include "gmock/gmock-actions.h"
-#include "gmock/gmock-cardinalities.h"
-#include "gmock/gmock-function-mocker.h"
-#include "gmock/gmock-matchers.h"
-#include "gmock/gmock-more-actions.h"
-#include "gmock/gmock-more-matchers.h"
-#include "gmock/gmock-nice-strict.h"
+#include "gmock/gmock-actions.h"  // IWYU pragma: export
+#include "gmock/gmock-cardinalities.h"  // IWYU pragma: export
+#include "gmock/gmock-function-mocker.h"  // IWYU pragma: export
+#include "gmock/gmock-matchers.h"  // IWYU pragma: export
+#include "gmock/gmock-more-actions.h"  // IWYU pragma: export
+#include "gmock/gmock-more-matchers.h"  // IWYU pragma: export
+#include "gmock/gmock-nice-strict.h"  // IWYU pragma: export
+#include "gmock/gmock-spec-builders.h"  // IWYU pragma: export
 #include "gmock/internal/gmock-internal-utils.h"
+#include "gmock/internal/gmock-port.h"
 
 // Declares Google Mock flags that we want a user to use programmatically.
 GMOCK_DECLARE_bool_(catch_leaked_mocks);
