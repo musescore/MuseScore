@@ -2919,3 +2919,123 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
 
     delete score;
 }
+
+TEST_F(Engraving_PlaybackEventsRendererTests, CountIn)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "count_in.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+
+    // [GIVEN] The measure we want to render (4/4)
+    const Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    // [WHEN] Render Count In events starting from the beginning of the measure (4/4)
+    PlaybackEventsMap result;
+    duration_t totalCountInDuration = 0;
+    m_renderer.renderCountIn(score, firstMeasure->tick().ticks(), 0, m_defaultProfile, result, totalCountInDuration);
+
+    // [THEN] 4 quarter note events
+    EXPECT_EQ(result.size(), 4);
+    EXPECT_EQ(totalCountInDuration, QUARTER_NOTE_DURATION * 4);
+
+    timestamp_t expectedTimestamp = 0;
+
+    for (const auto& pair : result) {
+        EXPECT_EQ(pair.second.size(), 1);
+
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTimestamp);
+
+            expectedTimestamp += QUARTER_NOTE_DURATION;
+        }
+    }
+
+    // [WHEN] Render the same measure (4/4), but starting from the 3rd beat
+    result.clear();
+    totalCountInDuration = 0;
+    int thirdBeatTick = firstMeasure->tick().ticks() + 480 + 480;
+    m_renderer.renderCountIn(score, thirdBeatTick, 0, m_defaultProfile, result, totalCountInDuration);
+
+    // [THEN] 6 quarter note events
+    EXPECT_EQ(result.size(), 6);
+    EXPECT_EQ(totalCountInDuration, QUARTER_NOTE_DURATION * 6);
+
+    expectedTimestamp = 0;
+
+    for (const auto& pair : result) {
+        EXPECT_EQ(pair.second.size(), 1);
+
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTimestamp);
+
+            expectedTimestamp += QUARTER_NOTE_DURATION;
+        }
+    }
+
+    // [GIVEN] The next measure we want to render (3/8)
+    const Measure* secondMeasure = firstMeasure->nextMeasure();
+    ASSERT_TRUE(secondMeasure);
+
+    // [WHEN] Render the 2nd measure (3/8)
+    result.clear();
+    totalCountInDuration = 0;
+    m_renderer.renderCountIn(score, secondMeasure->tick().ticks(), 0, m_defaultProfile, result, totalCountInDuration);
+
+    // [THEN] 3 quaver note events
+    EXPECT_EQ(result.size(), 3);
+    EXPECT_EQ(totalCountInDuration, QUAVER_NOTE_DURATION * 3);
+
+    expectedTimestamp = 0;
+
+    for (const auto& pair : result) {
+        EXPECT_EQ(pair.second.size(), 1);
+
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, QUAVER_NOTE_DURATION);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTimestamp);
+
+            expectedTimestamp += QUAVER_NOTE_DURATION;
+        }
+    }
+
+    // [WHEN] Render the 2nd measure (3/8) from some random tick that is not equal to any beat position
+    result.clear();
+    totalCountInDuration = 0;
+    m_renderer.renderCountIn(score, secondMeasure->tick().ticks() + 333, 0, m_defaultProfile, result, totalCountInDuration); // tick: 240 + 93
+
+    // [THEN] 5 quaver note events (3 + 2)
+    EXPECT_EQ(result.size(), 5);
+    EXPECT_EQ(totalCountInDuration, QUAVER_NOTE_DURATION * 5);
+
+    expectedTimestamp = 0;
+
+    for (const auto& pair : result) {
+        EXPECT_EQ(pair.second.size(), 1);
+
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, QUAVER_NOTE_DURATION);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTimestamp);
+
+            expectedTimestamp += QUAVER_NOTE_DURATION;
+        }
+    }
+
+    delete score;
+}

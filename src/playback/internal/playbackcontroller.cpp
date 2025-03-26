@@ -645,7 +645,9 @@ void PlaybackController::play()
 
     secs_t delay = 0.;
     if (notationConfiguration()->isCountInEnabled()) {
-        delay = 2.0; // TODO
+        if (INotationPlaybackPtr notationPlay = notationPlayback()) {
+            notationPlay->triggerCountIn(m_currentTick, delay);
+        }
     }
 
     currentPlayer()->play(delay);
@@ -687,7 +689,9 @@ void PlaybackController::resume()
 
     secs_t delay = 0.;
     if (notationConfiguration()->isCountInEnabled()) {
-        delay = 2.0; // TODO
+        if (INotationPlaybackPtr notationPlay = notationPlayback()) {
+            notationPlay->triggerCountIn(m_currentTick, delay);
+        }
     }
 
     currentPlayer()->resume(delay);
