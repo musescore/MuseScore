@@ -260,7 +260,7 @@ private slots:
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
       void numerals() { mxmlIoTest("testNumerals"); }
-      void ornaments() { mxmlImportTestRef("testOrnaments"); }
+      void ornaments() { mxmlIoTest("testOrnaments"); }
       void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void partNames() { mxmlImportTestRef("testPartNames"); }
       void partNames2() { mxmlIoTest("testPartNames2"); }

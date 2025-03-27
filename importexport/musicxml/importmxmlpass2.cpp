@@ -1211,9 +1211,11 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
 
 static void addTurnToChord(const Notation& notation, ChordRest* cr)
       {
-      const SymId turnSym = notation.symId();
+      SymId turnSym = notation.symId();
       const QColor color = notation.attribute("color");
       const QString place = notation.attribute("placement");
+      if (notation.attribute("slash") == "yes") // TODO: currently this is the only available SMuFL turn with a slash
+            turnSym = SymId::ornamentTurnSlash;
       Articulation* turn =  new Articulation(cr->score());
       turn->setSymId(turnSym);
       if (place == "above")
@@ -8602,7 +8604,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                   addBreath(notation, cr);
             else if (notation.name() == "fermata")
                   addFermataToChord(notation, cr);
-            else if (notation.parent() == "ornament")
+            else if (notation.parent() == "ornaments")
                   addTurnToChord(notation, cr);
             else
                   addArticulationToChord(notation, cr);
