@@ -924,7 +924,7 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
         for (const auto& it : chordRest->score()->spanner()) {
             String tagName = u"slur";
             auto sp = it.second;
-            if (sp->generated() || !sp->isSlur() || !ExportMusicXml::canWrite(sp)) {
+            if (sp->generated() || !sp->isSlur()) {
                 continue;
             }
             if (sp->isHammerOnPullOff()) {
@@ -1206,7 +1206,7 @@ static void findTrills(const Measure* const measure, track_idx_t strack, track_i
          it != measure->score()->spanner().upper_bound(etick.ticks()); ++it) {
         EngravingItem* e = it->second;
         //LOGD("1 trill %p type %d track %d tick %s", e, e->type(), e->track(), muPrintable(e->tick().print()));
-        if (e->isTrill() && ExportMusicXml::canWrite(e) && strack <= e->track() && e->track() < etrack
+        if (e->isTrill() && strack <= e->track() && e->track() < etrack
             && e->tick() >= measure->tick() && e->tick() < (measure->tick() + measure->ticks())) {
             //LOGD("2 trill %p", e);
             // a trill is found starting in this segment, trill end time is known
@@ -3070,7 +3070,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
                               ? static_cast<const EngravingItem*>(chord->tremoloSingleChord())
                               : static_cast<const EngravingItem*>(chord->tremoloTwoChord());
 
-    if (st != TremoloType::INVALID_TREMOLO && ExportMusicXml::canWrite(tr)) {
+    if (st != TremoloType::INVALID_TREMOLO) {
         int count = 0;
         String type;
 
@@ -3144,7 +3144,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 static void fermatas(const std::vector<EngravingItem*>& cra, XmlWriter& xml, Notations& notations)
 {
     for (const EngravingItem* e : cra) {
-        if (!e->isFermata() || !ExportMusicXml::canWrite(e)) {
+        if (!e->isFermata()) {
             continue;
         }
         notations.tag(xml, e);
@@ -3399,8 +3399,8 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
             default:
                 LOGD("unknown ChordLine subtype %d", int(cl->chordLineType()));
             }
-            subtype += color2xml(cl);
             if (!subtype.empty()) {
+                subtype += color2xml(cl);
                 notations.tag(xml, cl);
                 articulations.tag(xml);
                 xml.tagRaw(subtype);
@@ -3415,7 +3415,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 
 static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notations& notations, Articulations& articulations)
 {
-    if (breath && ExportMusicXml::canWrite(breath)) {
+    if (breath) {
         String tagName;
         String type;
 
@@ -3498,10 +3498,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
     // first the attributes whose elements are children of <articulations>
     Articulations articulations;
     for (const Articulation* a : na) {
-        if (!ExportMusicXml::canWrite(a)) {
-            continue;
-        }
-
         SymId sid = a->symId();
         std::vector<String> mxmlArtics = symIdToArtic(sid);
 
@@ -3536,9 +3532,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
     // then the attributes whose elements are children of <ornaments>
     Ornaments ornaments;
     for (const Articulation* art : na) {
-        if (!ExportMusicXml::canWrite(art)) {
-            continue;
-        }
         if (!art->isOrnament()) {
             continue;
         }
@@ -3568,10 +3561,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
     // and finally the attributes whose elements are children of <technical>
     for (const Articulation* a : na) {
-        if (!ExportMusicXml::canWrite(a)) {
-            continue;
-        }
-
         SymId sid = a->symId();
         String placement;
         String direction;
@@ -3669,10 +3658,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
     // check if all articulations were handled
     for (const Articulation* a : na) {
-        if (!ExportMusicXml::canWrite(a)) {
-            continue;
-        }
-
         SymId sid = a->symId();
         if (symIdToArtic(sid).empty()
             && symIdToTechn(sid) == ""
@@ -3694,9 +3679,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Notations& notations, ArpeggioMap& arps,
                        bool spanArp = false)
 {
-    if (!ExportMusicXml::canWrite(arp)) {
-        return;
-    }
     bool found = false;
     int arpNo = 1;
 
@@ -4046,10 +4028,6 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
 static void writeFingering(XmlWriter& xml, Notations& notations, Technical& technical, const Note* const note)
 {
     for (const EngravingItem* e : note->el()) {
-        if (!ExportMusicXml::canWrite(e)) {
-            continue;
-        }
-
         if (e->type() == ElementType::FINGERING) {
             const TextBase* f = toTextBase(e);
             notations.tag(xml, e);
@@ -4113,7 +4091,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
 static void writeNotationSymbols(XmlWriter& xml, Notations& notations, const ElementList& elist, bool excludeParentheses)
 {
     for (const EngravingItem* e : elist) {
-        if (!e->isSymbol() || !ExportMusicXml::canWrite(e)) {
+        if (!e->isSymbol()) {
             continue;
         }
 
@@ -4470,20 +4448,20 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         Technical technical;
 
         const Tie* tieBack = note->tieBack();
-        if (tieBack && ExportMusicXml::canWrite(tieBack)) {
+        if (tieBack) {
             notations.tag(m_xml, tieBack);
             m_xml.tag("tied", { { "type", "stop" } });
         }
 
         const LaissezVib* laissezVib = note->laissezVib();
-        if (laissezVib && ExportMusicXml::canWrite(laissezVib)) {
+        if (laissezVib) {
             notations.tag(m_xml, laissezVib);
             String rest = slurTieLineStyle(laissezVib);
             m_xml.tagRaw(String(u"tied type=\"let-ring\"%1").arg(rest));
         }
 
         const Tie* tieFor = note->tieFor();
-        if (tieFor && !laissezVib && ExportMusicXml::canWrite(tieFor)) {
+        if (tieFor && !laissezVib) {
             notations.tag(m_xml, tieFor);
             String rest = slurTieLineStyle(tieFor);
             m_xml.tagRaw(String(u"tied type=\"start\"%1").arg(rest));
@@ -4521,12 +4499,12 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
             arpeggiate(chord->spanArpeggio(), note == nl.front(), note == nl.back(), m_xml, notations, m_measArpeggios, /*spanArp=*/ true);
         }
         for (Spanner* spanner : note->spannerFor()) {
-            if (spanner->type() == ElementType::GLISSANDO && ExportMusicXml::canWrite(spanner)) {
+            if (spanner->type() == ElementType::GLISSANDO) {
                 m_gh.doGlissandoStart(static_cast<Glissando*>(spanner), notations, m_xml);
             }
         }
         for (Spanner* spanner : note->spannerBack()) {
-            if (spanner->type() == ElementType::GLISSANDO && ExportMusicXml::canWrite(spanner)) {
+            if (spanner->type() == ElementType::GLISSANDO) {
                 m_gh.doGlissandoStop(static_cast<Glissando*>(spanner), notations, m_xml);
             }
         }
