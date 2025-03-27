@@ -84,8 +84,8 @@ public:
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
     // SelectionFilter
-    virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
-    virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
+    virtual bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const = 0;
+    virtual void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) = 0;
 
     // Drag
     using IsDraggable = std::function<bool (const EngravingItem*)>;

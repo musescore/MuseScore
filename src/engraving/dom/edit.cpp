@@ -3414,7 +3414,7 @@ void Score::reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbEnd)
 //---------------------------------------------------------
 
 void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t track1, track_idx_t track2,
-                                                const SelectionFilter& filter)
+                                                const SelectionFilters& filters)
 {
     static const std::set<ElementType> SPANNER_TYPES_TO_SHORTEN_OUT {
         ElementType::HAIRPIN,
@@ -3431,7 +3431,7 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
         if (sp->isVolta() || sp->systemFlag()) {
             continue;
         }
-        if (!filter.canSelectVoice(sp->track())) {
+        if (!filters.canSelectVoice(sp->track())) {
             continue;
         }
         if (sp->track() >= track1 && sp->track() < track2) {
@@ -3458,7 +3458,7 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
 }
 
 void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
-                                 const SelectionFilter& filter)
+                                 const SelectionFilters& filters)
 {
     auto spanners = m_spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
     for (auto i : spanners) {
@@ -3468,7 +3468,7 @@ void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_i
         if (!sp->isSlur()) {
             continue;
         }
-        if (!filter.canSelectVoice(sp->track())) {
+        if (!filters.canSelectVoice(sp->track())) {
             continue;
         }
 
@@ -3487,7 +3487,8 @@ void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_i
 ///   given selection filter.
 //---------------------------------------------------------
 
-void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2, const SelectionFilter& filter)
+void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2,
+                                       const SelectionFilters& filters)
 {
     if (!s1) {
         return;
@@ -3497,14 +3498,14 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
     }
 
     for (track_idx_t track = track1; track < track2; ++track) {
-        if (!filter.canSelectVoice(track)) {
+        if (!filters.canSelectVoice(track)) {
             continue;
         }
         for (Segment* s = s1; s && s != s2; s = s->next1()) {
             const auto annotations = s->annotations(); // make a copy since we alter the list
             for (EngravingItem* annotation : annotations) {
                 // skip if not included in selection (eg, filter)
-                if (!filter.canSelect(annotation)) {
+                if (!filters.canSelect(annotation)) {
                     continue;
                 }
                 if (!annotation->systemFlag() && annotation->track() == track) {
@@ -3524,7 +3525,8 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
 ///   deletion operation.
 //---------------------------------------------------------
 
-std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2, const SelectionFilter& filter)
+std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2,
+                                           const SelectionFilters& filters)
 {
     std::vector<ChordRest*> crs;
 
@@ -3549,11 +3551,11 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
 
         Fraction tick2 = s2 ? s2->tick() : Fraction::max();
 
-        deleteOrShortenOutSpannersFromRange(stick1, stick2, track1, track2, filter);
-        deleteAnnotationsFromRange(s1, s2, track1, track2, filter);
+        deleteOrShortenOutSpannersFromRange(stick1, stick2, track1, track2, filters);
+        deleteAnnotationsFromRange(s1, s2, track1, track2, filters);
 
         for (track_idx_t track = track1; track < track2; ++track) {
-            if (!filter.canSelectVoice(track)) {
+            if (!filters.canSelectVoice(track)) {
                 continue;
             }
             Fraction f;
@@ -3673,7 +3675,7 @@ void Score::cmdDeleteSelection()
     if (selection().isRange()) {
         crsSelectedAfterDeletion = deleteRange(selection().startSegment(), selection().endSegment(),
                                                staff2track(selection().staffStart()), staff2track(selection().staffEnd()),
-                                               selectionFilter());
+                                               selectionFilters());
     } else {
         // deleteItem modifies selection().elements() list,
         // so we need a local copy:
@@ -3881,7 +3883,7 @@ void Score::cmdFullMeasureRest()
     }
 
     for (track_idx_t track = track1; track < track2; ++track) {
-        if (selection().isRange() && !selectionFilter().canSelectVoice(track)) {
+        if (selection().isRange() && !selectionFilters().canSelectVoice(track)) {
             continue;
         }
         // first pass - remove non-initial rests from empty measures/voices

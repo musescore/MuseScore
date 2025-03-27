@@ -81,6 +81,33 @@ using namespace mu;
 using namespace muse::io;
 using namespace mu::engraving;
 
+bool SelectionFilters::isFiltered(const SelectionFilterTypesVariant& variant) const
+{
+    switch (variant.index()) {
+    case 0: return m_voicesFilter.isFiltered(std::get<VoicesSelectionFilterTypes>(variant));
+    case 1: return m_elementsFilter.isFiltered(std::get<ElementsSelectionFilterTypes>(variant));
+    default: break;
+    }
+
+    UNREACHABLE;
+    return true;
+}
+
+void SelectionFilters::setFiltered(const SelectionFilterTypesVariant& variant, bool filtered)
+{
+    switch (variant.index()) {
+    case 0:
+        m_voicesFilter.setFiltered(std::get<VoicesSelectionFilterTypes>(variant), filtered);
+        return;
+    case 1:
+        m_elementsFilter.setFiltered(std::get<ElementsSelectionFilterTypes>(variant), filtered);
+        return;
+    default: break;
+    }
+
+    UNREACHABLE;
+}
+
 // ====================================================
 // Selection
 // ====================================================
@@ -433,7 +460,7 @@ void Selection::appendFiltered(EngravingItem* e)
         LOGE() << "selection locked, reason: " << lockReason();
         return;
     }
-    if (selectionFilter().canSelect(e)) {
+    if (selectionFilters().canSelect(e)) {
         m_el.push_back(e);
     }
 }
@@ -901,7 +928,7 @@ muse::ByteArray Selection::staffMimeData() const
 
     xml.startDocument();
 
-    SelectionFilter filter = selectionFilter();
+    SelectionFilters& filters = selectionFilters();
     Fraction curTick;
 
     Fraction ticks  = tickEnd() - tickStart();
@@ -933,14 +960,15 @@ muse::ByteArray Selection::staffMimeData() const
         }
         xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
+            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filters.canSelectVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
                 xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
         xml.endElement();     // </voiceOffset>
 
-        rw::RWRegister::writer(m_score->iocContext())->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
+        rw::RWRegister::writer(m_score->iocContext())->writeSegments(xml, &filters, startTrack, endTrack, seg1, seg2, false, false,
+                                                                     curTick);
         xml.endElement();
     }
 
@@ -1460,7 +1488,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
     assert(!(m_endSegment && !m_startSegment));
 }
 
-SelectionFilter Selection::selectionFilter() const
+SelectionFilters& Selection::selectionFilters() const
 {
-    return m_score->selectionFilter();
+    return m_score->selectionFilters();
 }

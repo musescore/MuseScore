@@ -46,7 +46,7 @@ bool WriteContext::canWrite(const EngravingItem* e) const
     if (!_clipboardmode) {
         return true;
     }
-    return _filter.canSelect(e);
+    return _filters.canSelect(e);
 }
 
 bool WriteContext::canWriteVoice(track_idx_t track) const
@@ -54,5 +54,5 @@ bool WriteContext::canWriteVoice(track_idx_t track) const
     if (!_clipboardmode) {
         return true;
     }
-    return _filter.canSelectVoice(track);
+    return _filters.canSelectVoice(track);
 }
