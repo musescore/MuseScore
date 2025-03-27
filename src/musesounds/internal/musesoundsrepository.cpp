@@ -131,11 +131,16 @@ void MuseSoundsRepository::th_requestSounds(const UriQuery& soundsUri, std::func
         return;
     }
 
-    JsonDocument soundsInfoDoc = JsonDocument::fromJson(ByteArray::fromQByteArray(receivedData.data()));
-
     RetVal<SoundCatalogueInfoList> result;
-    result.ret = make_ret(Ret::Code::Ok);
-    result.val = parseSounds(soundsInfoDoc);
+
+    std::string err;
+    JsonDocument soundsInfoDoc = JsonDocument::fromJson(ByteArray::fromQByteArray(receivedData.data()), &err);
+    if (!err.empty()) {
+        result.ret = make_ret(static_cast<int>(Ret::Code::UnknownError), err);
+    } else {
+        result.ret = make_ret(Ret::Code::Ok);
+        result.val = parseSounds(soundsInfoDoc);
+    }
 
     callBack(result);
 }
