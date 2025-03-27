@@ -18,4 +18,5 @@ set(MODULE_USE_COVERAGE OFF)
 setup_module()
 
 target_no_warning(${MODULE} -Wno-conversion)
+target_no_warning(${MODULE} -Wno-float-equal)
 target_no_warning(${MODULE} -Wno-unused-but-set-variable)

@@ -21,6 +21,7 @@
  */
 
 #include "palettepropertiesmodel.h"
+#include "realfn.h"
 
 #include <QJsonDocument>
 
@@ -117,7 +118,7 @@ void PalettePropertiesModel::setCellHeight(int height)
 
 void PalettePropertiesModel::setElementOffset(double offset)
 {
-    if (qFuzzyCompare(elementOffset(), offset)) {
+    if (muse::RealIsEqual(elementOffset(), offset)) {
         return;
     }
 
@@ -127,7 +128,7 @@ void PalettePropertiesModel::setElementOffset(double offset)
 
 void PalettePropertiesModel::setScaleFactor(double scale)
 {
-    if (qFuzzyCompare(scaleFactor(), scale)) {
+    if (muse::RealIsEqual(scaleFactor(), scale)) {
         return;
     }
 

@@ -51,6 +51,7 @@
 #include "engraving/types/typesconv.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -1650,7 +1651,7 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
     QGraphicsItem* itemToAdd;
     if (graphicsPixmapItem) {
         // Exact values required for repeat pixmap to work visually
-        if (textWidth != 10) {
+        if (!muse::RealIsEqual(textWidth, 10)) {
             graphicsPixmapItem = new QGraphicsPixmapItem();
         }
         if (barLineType == BarLineType::START_REPEAT) {
@@ -1884,13 +1885,13 @@ void Timeline::changeSelection(SelState)
     }
 
     if (selectionExtendsDown
-        && _oldSelectionRect.bottom() != selectionRect.bottom()
+        && !muse::RealIsEqual(_oldSelectionRect.bottom(), selectionRect.bottom())
         && !_metaValue) {
         int newScrollbarValue = int(verticalScrollBar()->value() + selectionRect.bottom() - bottomBorder);
         verticalScrollBar()->setValue(newScrollbarValue);
     } else if (selectionExtendsUp
                && !selectionExtendsDown
-               && _oldSelectionRect.bottom() != selectionRect.bottom()
+               && !muse::RealIsEqual(_oldSelectionRect.bottom(), selectionRect.bottom())
                && !_metaValue
                && _oldSelectionRect.contains(selectionRect)) {
         int newScrollbarValue = int(verticalScrollBar()->value() + selectionRect.bottom() - bottomBorder);
@@ -1898,32 +1899,32 @@ void Timeline::changeSelection(SelState)
     }
 
     if (selectionExtendsRight
-        && _oldSelectionRect.right() != selectionRect.right()) {
+        && !muse::RealIsEqual(_oldSelectionRect.right(), selectionRect.right())) {
         int newScrollbarValue = int(horizontalScrollBar()->value() + selectionRect.right() - rightBorder);
         horizontalScrollBar()->setValue(newScrollbarValue);
     }
     if (selectionExtendsUp
-        && _oldSelectionRect.top() != selectionRect.top()
+        && !muse::RealIsEqual(_oldSelectionRect.top(), selectionRect.top())
         && !_metaValue) {
         int newScrollbarValue = int(selectionRect.top()) - nmeta * _gridHeight;
         verticalScrollBar()->setValue(newScrollbarValue);
     }
     if (selectionExtendsLeft
-        && _oldSelectionRect.left() != selectionRect.left()) {
+        && !muse::RealIsEqual(_oldSelectionRect.left(), selectionRect.left())) {
         int newScrollbarValue = int(selectionRect.left());
         horizontalScrollBar()->setValue(newScrollbarValue);
     }
 
     if (selectionExtendsLeft
         && !selectionExtendsRight
-        && _oldSelectionRect.right() != selectionRect.right()
+        && !muse::RealIsEqual(_oldSelectionRect.right(), selectionRect.right())
         && _oldSelectionRect.contains(selectionRect)) {
         int newScrollbarValue = int(horizontalScrollBar()->value() + selectionRect.right() - rightBorder);
         horizontalScrollBar()->setValue(newScrollbarValue);
     }
     if (selectionExtendsRight
         && !selectionExtendsLeft
-        && _oldSelectionRect.left() != selectionRect.left()
+        && !muse::RealIsEqual(_oldSelectionRect.left(), selectionRect.left())
         && _oldSelectionRect.contains(selectionRect)) {
         int newScrollbarValue = int(selectionRect.left());
         horizontalScrollBar()->setValue(newScrollbarValue);
@@ -1931,7 +1932,7 @@ void Timeline::changeSelection(SelState)
 
     if (selectionExtendsDown
         && !selectionExtendsUp
-        && _oldSelectionRect.top() != selectionRect.top()
+        && !muse::RealIsEqual(_oldSelectionRect.top(), selectionRect.top())
         && !_metaValue
         && _oldSelectionRect.contains(selectionRect)) {
         int newScrollbarValue = int(selectionRect.top()) - nmeta * _gridHeight;
@@ -2175,7 +2176,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                 for (QGraphicsItem* graphicsItem : gl) {
                     measure = static_cast<Measure*>(graphicsItem->data(2).value<void*>());
                     //-3 z value is the grid square values
-                    if (graphicsItem->zValue() == -3 && measure) {
+                    if (muse::RealIsEqual(graphicsItem->zValue(), -3) && measure) {
                         break;
                     }
                 }
