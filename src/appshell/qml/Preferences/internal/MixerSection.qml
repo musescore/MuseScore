@@ -38,7 +38,7 @@ BaseSection {
 
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Toggle track mute by showing/hiding instruments in the Instruments panel")
+        text: qsTrc("appshell/preferences", "Toggle track mute by showing/hiding instruments in the Layout panel")
 
         navigation.name: "MuteHiddenInstrumentsCheckbox"
         navigation.panel: root.navigation
