@@ -1316,9 +1316,13 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
 
 static void addTurnToChord(const Notation& notation, ChordRest* cr)
 {
-    const SymId turnSym = notation.symId();
+    SymId turnSym = notation.symId();
     const Color color = Color::fromString(notation.attribute(u"color"));
     const String place = notation.attribute(u"placement");
+    if (notation.attribute(u"slash") == "yes") {
+        // TODO: currently this is the only available SMuFL turn with a slash
+        turnSym = SymId::ornamentTurnSlash;
+    }
     Ornament* turn = Factory::createOrnament(cr);
     turn->setSymId(turnSym);
     if (place == u"above") {
