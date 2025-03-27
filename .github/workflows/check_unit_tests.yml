@@ -81,6 +81,9 @@ jobs:
 
         python3 buildscripts/ci/linux/tools/lcov_badger.py filtered_coverage.info coverage_badge.svg
 
+    - name: Push to S3
+      if: ( github.event_name == 'schedule' || inputs.code_coverage == 'true' ) && github.repository == 'musescore/MuseScore'
+      run: |
         S3_URL='s3://extensions.musescore.org/test/code_coverage/coverage_badge.svg'
 
         bash ./buildscripts/ci/tools/s3_push_file.sh \
