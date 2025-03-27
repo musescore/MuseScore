@@ -81,10 +81,10 @@ PreferencesPage {
                 model: percussionPreferencesModel.autoShowModes
 
                 delegate: RoundedRadioButton {
-                    width: parent.width
+                    width: ListView.view?.width ?? 0
 
-                    checked: modelData.checked
                     text: modelData.title
+                    checked: modelData.value === percussionPreferencesModel.autoShowMode
 
                     navigation.name: modelData.title
                     navigation.panel: autoShowSection.navigation
@@ -92,7 +92,7 @@ PreferencesPage {
                     navigation.column: 0
 
                     onToggled: {
-                        percussionPreferencesModel.setAutoShowMode(model.index)
+                        percussionPreferencesModel.autoShowMode = modelData.value
                     }
                 }
             }
