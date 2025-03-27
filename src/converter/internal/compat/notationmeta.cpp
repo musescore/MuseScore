@@ -22,6 +22,7 @@
 #include "notationmeta.h"
 
 #include <cmath>
+#include <climits>
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -39,6 +40,82 @@ using namespace mu::engraving;
 static QString boolToString(bool b)
 {
     return b ? "true" : "false";
+}
+
+static bool shouldTryRecognizeText(const Text* text)
+{
+    const TextStyleType type = text->textStyleType();
+    if (type == TextStyleType::DEFAULT || type == TextStyleType::FRAME) {
+        return true;
+    }
+
+    return (int)(type) >= (int)TextStyleType::USER1 && (int)(type) <= (int)TextStyleType::USER12;
+}
+
+static QString recognizeTitle(const mu::engraving::Score* score)
+{
+    const MeasureBase* mb = score->first();
+    if (!mb || !mb->isVBox()) {
+        return QString();
+    }
+
+    const Text* titleText = nullptr;
+    double maxFontSize = DBL_MIN;
+    double minY = DBL_MAX;
+
+    for (const EngravingItem* item : mb->el()) {
+        if (!item || !item->isText()) {
+            continue;
+        }
+
+        const Text* text = toText(item);
+        if (!shouldTryRecognizeText(text)) {
+            continue;
+        }
+
+        if (text->size() < maxFontSize) {
+            continue;
+        }
+
+        if (RealIsEqual(text->size(), maxFontSize) && text->y() > minY) {
+            continue;
+        }
+
+        titleText = text;
+        maxFontSize = text->size();
+        minY = text->y();
+    }
+
+    return titleText ? titleText->plainText().toQString() : QString();
+}
+
+static QString recognizeComposer(const mu::engraving::Score* score)
+{
+    const MeasureBase* mb = score->first();
+    if (!mb || !mb->isVBox()) {
+        return QString();
+    }
+
+    const Text* rightmostText = nullptr;
+    double rightmostTextX = mb->ldata()->bbox().center().x();
+
+    for (const EngravingItem* item : mb->el()) {
+        if (!item || !item->isText()) {
+            continue;
+        }
+
+        const Text* text = toText(item);
+        if (!shouldTryRecognizeText(text)) {
+            continue;
+        }
+
+        if (text->x() > rightmostTextX) {
+            rightmostText = text;
+            rightmostTextX = text->x();
+        }
+    }
+
+    return rightmostText ? rightmostText->plainText().toQString() : QString();
 }
 
 RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
@@ -99,6 +176,10 @@ QString NotationMeta::title(const mu::engraving::Score* score)
     }
 
     if (title.isEmpty()) {
+        title = recognizeTitle(score);
+    }
+
+    if (title.isEmpty()) {
         title = score->name();
     }
 
@@ -126,6 +207,10 @@ QString NotationMeta::composer(const mu::engraving::Score* score)
 
     if (composer.isEmpty()) {
         composer = score->metaTag(u"composer");
+    }
+
+    if (composer.isEmpty()) {
+        composer = recognizeComposer(score);
     }
 
     return composer;
