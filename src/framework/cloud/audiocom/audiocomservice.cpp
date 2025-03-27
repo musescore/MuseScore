@@ -141,8 +141,13 @@ Ret AudioComService::downloadAccountInfo()
         return ret;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject user = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject user = doc.object();
 
     AccountInfo info;
     info.id = user.value("id").toString();
@@ -357,7 +362,13 @@ Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QS
         return ret;
     }
 
-    m_currentUploadingAudioInfo = QJsonDocument::fromJson(receivedData.data()).object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    m_currentUploadingAudioInfo = doc.object();
 
     return ret;
 }
