@@ -48,7 +48,9 @@
 #include "view/internal/undohistorymodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
-#include "view/selectionfiltermodel.h"
+
+#include "view/selectionfilter/selectionfiltermodel.h"
+
 #include "view/editgridsizedialogmodel.h"
 #include "view/editpercussionshortcutmodel.h"
 #include "view/paintedengravingitem.h"
