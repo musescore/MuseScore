@@ -62,7 +62,7 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override { return new PartialTieSegment(parent); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override;
 
     Note* note() const { return isOutgoing() ? startNote() : endNote(); }
     void setStartNote(Note* note) override;
