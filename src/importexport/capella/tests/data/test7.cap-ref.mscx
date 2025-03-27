@@ -402,8 +402,11 @@
           <Chord>
             <durationType>eighth</durationType>
             <Note>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
+              <tpc>9</tpc>
               </Note>
             </Chord>
           </voice>
