@@ -691,6 +691,11 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
         Fraction etick = last->tick();
         for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
+            if (s->systemFlag() && s->track() != 0) {
+                // Only process the top system object
+                continue;
+            }
+
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
                 ns->resetExplicitParent();
