@@ -193,16 +193,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
 
     const double minBarLineDistance = 0.25 * item->spatium();
 
-    RectF referenceBBox;
-    String referenceString = String::fromUtf8(Dynamic::dynInfo(item->dynamicType()).text);
-    if (item->xmlText() != referenceString) {
-        Dynamic referenceDynamic(*item);
-        referenceDynamic.setXmlText(referenceString);
-        doLayoutDynamic(&referenceDynamic, referenceDynamic.mutldata(), conf);
-        referenceBBox = referenceDynamic.ldata()->bbox().translated(referenceDynamic.pos() - item->pos());
-    } else {
-        referenceBBox = ldata->bbox();
-    }
+    RectF referenceBBox = ldata->bbox();
 
     // Check barlines to the right
     Segment* rightBarLineSegment = nullptr;
