@@ -462,6 +462,28 @@ void DockWindow::addPanel(const DockPageView* page, DockPanelView* panel, Locati
     addDock(panel, location, relativeTo);
 }
 
+void DockWindow::addUnknownPanel(const DockPageView* page, DockPanelView* panel, Location location)
+{
+    for (const DockPanelView* destinationPanel : page->panels()) {
+        if (destinationPanel->isTabAllowed(panel)) {
+            // A destination already exists that is compatible with the unknown panel...
+            addPanel(page, panel, panel->location(), page->centralDock());
+            return;
+        }
+    }
+
+    registerDock(panel);
+
+    DockingHolderView* holder = page->holder(DockType::Panel, location);
+
+    holder->open(); // init the frame...
+
+    KDDockWidgets::Frame* frame = holder->dockWidget()->frame();
+    frame->addWidget(panel->dockWidget());
+
+    holder->close();
+}
+
 void DockWindow::registerDock(DockBase* dock)
 {
     TRACEFUNC;
@@ -574,7 +596,7 @@ void DockWindow::restorePageState(const DockPageView* page)
     if (!layoutIsEmpty) {
         for (DockBase* dock : unknownDocks) {
             if (DockPanelView* panel = dynamic_cast<DockPanelView*>(dock)) {
-                addPanel(page, panel, panel->location(), page->centralDock());
+                addUnknownPanel(page, panel, panel->location());
                 continue;
             }
             addDock(dock, dock->location(), page->centralDock());

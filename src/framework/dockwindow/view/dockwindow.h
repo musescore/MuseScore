@@ -119,6 +119,7 @@ private:
 
     void addDock(DockBase* dock, Location location = Location::Left, const DockBase* relativeTo = nullptr);
     void addPanel(const DockPageView* page, DockPanelView* panel, Location location, const DockBase* relativeTo = nullptr);
+    void addUnknownPanel(const DockPageView* page, DockPanelView* panel, Location location);
     void registerDock(DockBase* dock);
 
     void saveGeometry();
