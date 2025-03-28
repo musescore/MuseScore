@@ -25,13 +25,7 @@
 #include <cmath>
 
 #include "importptb.h"
-
-#include "realfn.h"
-
-#include "engraving/types/typesconv.h"
-#include "engraving/types/symid.h"
-
-#include "engraving/rw/xmlwriter.h"
+#include "internal/guitarprodrumset.h"
 
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
@@ -73,6 +67,8 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+#include "engraving/rw/xmlwriter.h"
+#include "engraving/types/symid.h"
 
 #include "log.h"
 

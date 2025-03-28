@@ -24,7 +24,7 @@
 
 #include <set>
 
-#include "types/types.h"
+#include "engraving/types/types.h"
 
 namespace mu::engraving {
 class Segment;

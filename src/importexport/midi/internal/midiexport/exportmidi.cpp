@@ -22,6 +22,7 @@
 
 #include "exportmidi.h"
 
+#include "engraving/dom/chordrest.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"

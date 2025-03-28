@@ -27,7 +27,7 @@
 
 #include "types/texttypes.h"
 
-#include "dom/tempotext.h"
+#include "engraving/dom/tempotext.h"
 
 #include "log.h"
 

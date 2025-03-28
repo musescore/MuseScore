@@ -194,7 +194,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    for (IClockPtr clock : m_clocks) {
+    for (const IClockPtr& clock : m_clocks) {
         clock->forward((samplesPerChannel * 1000000) / m_sampleRate);
     }
 
@@ -217,7 +217,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
             continue;
         }
 
-        const MixerChannelPtr channel = channelIt->second;
+        const MixerChannelPtr& channel = channelIt->second;
         if (!channel->isSilent()) {
             m_isSilence = false;
         } else if (m_isSilence) {

@@ -1,5 +1,4 @@
-#ifndef MU_APP_APPFACTORY_H
-#define MU_APP_APPFACTORY_H
+#pragma once
 
 #include "global/iapplication.h"
 
@@ -20,5 +19,3 @@ private:
     mutable int m_lastID = 0;
 };
 }
-
-#endif // MU_APP_APPFACTORY_H

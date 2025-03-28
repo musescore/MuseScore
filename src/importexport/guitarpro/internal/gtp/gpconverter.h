@@ -1,18 +1,18 @@
-#ifndef MU_IMPORTEXPORT_GPCONVERTER_H
-#define MU_IMPORTEXPORT_GPCONVERTER_H
+#pragma once
 
 #include <unordered_map>
 
-#include "gpmasterbar.h"
+#include "modularity/ioc.h"
+#include "engraving/iengravingconfiguration.h"
+#include "engraving/types/fraction.h"
+
+#include "../continiouselementsbuilder.h"
+#include "../guitarbendimport/guitarbendimporter.h"
 #include "gpbar.h"
 #include "gpbeat.h"
 #include "gpdrumsetresolver.h"
+#include "gpmasterbar.h"
 #include "gpmastertracks.h"
-#include "../continiouselementsbuilder.h"
-#include "../guitarbendimport/guitarbendimporter.h"
-#include "types/fraction.h"
-
-#include "iengravingconfiguration.h"
 
 namespace mu::iex::guitarpro {
 class GPScore;
@@ -206,5 +206,4 @@ private:
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
     std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
 };
-} // namespace mu::iex::guitarpro
-#endif // MU_IMPORTEXPORT_GPCONVERTER_H
+}

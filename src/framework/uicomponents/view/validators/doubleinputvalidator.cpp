@@ -84,7 +84,7 @@ void DoubleInputValidator::fixup(QString& string) const
         floatPart = floatPart.remove(m_decimal, floatPart.size() - m_decimal);
     }
 
-    string = QString("%1.%2").arg(intPart).arg(floatPart);
+    string = QString("%1.%2").arg(intPart, floatPart);
 
     if (string.toDouble() > m_top) {
         string = QString::number(m_top, 'f', m_decimal);

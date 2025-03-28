@@ -44,10 +44,21 @@ add_executable(${MODULE_TEST}
 target_include_directories(${MODULE_TEST} PRIVATE
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/src/framework
-    ${PROJECT_SOURCE_DIR}/src/framework/global
+
     ${PROJECT_SOURCE_DIR}/src
+
+    ${MUSE_FRAMEWORK_PATH}
+    ${MUSE_FRAMEWORK_PATH}/framework
+    ${MUSE_FRAMEWORK_PATH}/framework/global
+    ${MUSE_FRAMEWORK_PATH}/framework/testing/thirdparty/googletest/googletest/include
+
+    # compat
+    ${MUSE_FRAMEWORK_PATH}/src
+    ${MUSE_FRAMEWORK_PATH}/src/framework
+    ${MUSE_FRAMEWORK_PATH}/src/framework/global
+    ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
+    # end compat
+
     ${MODULE_TEST_INCLUDE}
 )
 

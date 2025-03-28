@@ -47,6 +47,8 @@
 #include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
 
+#include "engravingerrors.h"
+
 #include "staffrw.h"
 #include "tread.h"
 

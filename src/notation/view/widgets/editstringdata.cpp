@@ -29,9 +29,9 @@
 
 #include "editpitch.h"
 
-#include "dom/stringdata.h"
-#include "dom/stringtunings.h"
-#include "dom/undo.h"
+#include "engraving/dom/stringdata.h"
+#include "engraving/dom/stringtunings.h"
+#include "engraving/dom/undo.h"
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"
