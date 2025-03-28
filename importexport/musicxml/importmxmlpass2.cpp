@@ -1280,6 +1280,7 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       map["vertical-turn"]          = SymId::ornamentTurnUp;
       map["inverted-vertical-turn"] = SymId::ornamentTurnUpS;
       map["turn"]                   = SymId::ornamentTurn;
+      map["shake"]                  = SymId::ornamentTremblementCouperin;
       map["schleifer"]              = SymId::ornamentPrecompSlide;
       map["haydn"]                  = SymId::ornamentHaydn;
       // articulations
