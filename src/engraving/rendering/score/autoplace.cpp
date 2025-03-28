@@ -453,6 +453,10 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return type2 != ElementType::KEYSIG;
     }
 
+    if (type1 == ElementType::FRET_DIAGRAM && type2 == ElementType::HARMONY) {
+        return true;
+    }
+
     if ((type1 == ElementType::DYNAMIC || type1 == ElementType::HAIRPIN_SEGMENT)
         && (type2 == ElementType::DYNAMIC || type2 == ElementType::HAIRPIN_SEGMENT)) {
         return true;
@@ -463,8 +467,7 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         static const std::set<ElementType> TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER {
             ElementType::DYNAMIC,
             ElementType::EXPRESSION,
-            ElementType::STICKING,
-            ElementType::HARMONY
+            ElementType::STICKING
         };
         return !itemToAutoplace->isTextBase() || muse::contains(TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER, type1);
     }
