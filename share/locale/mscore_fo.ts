@@ -15030,6 +15030,20 @@ við felagsskapin</translation>
     </message>
 </context>
 <context>
+    <name>Ms::PageSettings</name>
+    <message>
+        <location filename="../../mscore/pagesettings.cpp" line="169"/>
+        <source>mm</source>
+        <translation type="unfinished">mm</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pagesettings.cpp" line="174"/>
+        <source>in</source>
+        <comment>abbreviation for inch</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ms::Palette</name>
     <message>
         <location filename="../../mscore/palette.cpp" line="200"/>
@@ -21110,8 +21124,8 @@ Vitja %1Musescore heimasíðuna%2 fyri at fáa nýggjastu versiónina</translati
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
-        <location filename="../../libmscore/note.cpp" line="3185"/>
-        <location filename="../../libmscore/note.cpp" line="3194"/>
+        <location filename="../../libmscore/note.cpp" line="3186"/>
+        <location filename="../../libmscore/note.cpp" line="3195"/>
         <source>%1 Start of %2</source>
         <translation>%1 byrjan av %2</translation>
     </message>
@@ -21119,8 +21133,8 @@ Vitja %1Musescore heimasíðuna%2 fyri at fáa nýggjastu versiónina</translati
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
-        <location filename="../../libmscore/note.cpp" line="3188"/>
-        <location filename="../../libmscore/note.cpp" line="3201"/>
+        <location filename="../../libmscore/note.cpp" line="3189"/>
+        <location filename="../../libmscore/note.cpp" line="3202"/>
         <source>%1 End of %2</source>
         <translation>%1 Endi av %2</translation>
     </message>
@@ -21274,57 +21288,57 @@ Vitja %1Musescore heimasíðuna%2 fyri at fáa nýggjastu versiónina</translati
         <translation>Nóti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3122"/>
-        <location filename="../../libmscore/note.cpp" line="3152"/>
+        <location filename="../../libmscore/note.cpp" line="3123"/>
+        <location filename="../../libmscore/note.cpp" line="3153"/>
         <location filename="../../libmscore/rest.cpp" line="896"/>
         <location filename="../../libmscore/rest.cpp" line="908"/>
         <source>Voice: %1</source>
         <translation>Rødd: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3129"/>
+        <location filename="../../libmscore/note.cpp" line="3130"/>
         <source> (on %1‰ off %2‰)</source>
         <translation> (á %1‰ av %2‰)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3133"/>
+        <location filename="../../libmscore/note.cpp" line="3134"/>
         <source>Beat slash</source>
         <translation>Slag skákstrikað</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3133"/>
+        <location filename="../../libmscore/note.cpp" line="3134"/>
         <source>Rhythm slash</source>
         <translation>Rútma skákstrikað</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3137"/>
-        <location filename="../../libmscore/note.cpp" line="3160"/>
+        <location filename="../../libmscore/note.cpp" line="3138"/>
+        <location filename="../../libmscore/note.cpp" line="3161"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Strongur: %2; Band: %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3140"/>
+        <location filename="../../libmscore/note.cpp" line="3141"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Tónahædd: %2; Tíðarbil: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3156"/>
+        <location filename="../../libmscore/note.cpp" line="3157"/>
         <source>Beat Slash</source>
         <translation>Slag skákstrikað</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3156"/>
+        <location filename="../../libmscore/note.cpp" line="3157"/>
         <source>Rhythm Slash</source>
         <translation>Rútma skákstrikað</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3164"/>
+        <location filename="../../libmscore/note.cpp" line="3165"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libmscore/read206.cpp" line="3650"/>
-        <location filename="../../libmscore/read302.cpp" line="239"/>
+        <location filename="../../libmscore/read302.cpp" line="241"/>
         <source>XML read error at line %1, column %2: %3</source>
         <translation>XML lesivilla á striku %1 teigur %2: %3</translation>
     </message>
@@ -21509,28 +21523,28 @@ Vitja %1Musescore heimasíðuna%2 fyri at fáa nýggjastu versiónina</translati
         <translation>trífalda ♯</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1983"/>
+        <location filename="../../libmscore/harmony.cpp" line="1987"/>
         <source>Roman numeral</source>
         <translation>Rómartøl</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1985"/>
+        <location filename="../../libmscore/harmony.cpp" line="1989"/>
         <source>Nashville number</source>
         <translation>Nashville tøl</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2023"/>
+        <location filename="../../libmscore/harmony.cpp" line="2027"/>
         <source>lower case</source>
         <translation>niðarlig seting</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2080"/>
+        <location filename="../../libmscore/harmony.cpp" line="2084"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="281"/>
         <source>♭</source>
         <translation>b fyri nótan</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2071"/>
+        <location filename="../../libmscore/harmony.cpp" line="2075"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="290"/>
         <source>♯</source>
         <translation>krossur</translation>
@@ -21677,39 +21691,39 @@ Vitja %1Musescore heimasíðuna%2 fyri at fáa nýggjastu versiónina</translati
         <translation>Misseydna framtøka</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1382"/>
-        <location filename="../../libmscore/fret.cpp" line="1475"/>
+        <location filename="../../libmscore/fret.cpp" line="1391"/>
+        <location filename="../../libmscore/fret.cpp" line="1484"/>
         <source>with chord symbol %1</source>
         <translation>við akkord tekni %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1382"/>
-        <location filename="../../libmscore/fret.cpp" line="1475"/>
+        <location filename="../../libmscore/fret.cpp" line="1391"/>
+        <location filename="../../libmscore/fret.cpp" line="1484"/>
         <source>without chord symbol</source>
         <translation>uttan akkordtekni</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1394"/>
+        <location filename="../../libmscore/fret.cpp" line="1403"/>
         <source>string %1</source>
         <translation>strongur %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1400"/>
+        <location filename="../../libmscore/fret.cpp" line="1409"/>
         <source>circle marker</source>
         <translation>Sirkul merki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1403"/>
+        <location filename="../../libmscore/fret.cpp" line="1412"/>
         <source>cross marker</source>
         <translation>Kross merki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1434"/>
+        <location filename="../../libmscore/fret.cpp" line="1443"/>
         <source>%1 and %2</source>
         <translation>%1 og %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../libmscore/fret.cpp" line="1441"/>
+        <location filename="../../libmscore/fret.cpp" line="1450"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation>
@@ -21718,37 +21732,37 @@ Vitja %1Musescore heimasíðuna%2 fyri at fáa nýggjastu versiónina</translati
         </translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1452"/>
+        <location filename="../../libmscore/fret.cpp" line="1461"/>
         <source>fret %1</source>
         <translation>Band %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1456"/>
+        <location filename="../../libmscore/fret.cpp" line="1465"/>
         <source>barré %1</source>
         <translation>Barré %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1459"/>
+        <location filename="../../libmscore/fret.cpp" line="1468"/>
         <source>beginning string %1</source>
         <translation>Byrjunar strongur %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1462"/>
+        <location filename="../../libmscore/fret.cpp" line="1471"/>
         <source>and ending string %1</source>
         <translation>og seinasti strongur %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1464"/>
+        <location filename="../../libmscore/fret.cpp" line="1473"/>
         <source>partial barré %1 %2 %3</source>
         <translation>Partvís barré %1 %2 &amp;3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1473"/>
+        <location filename="../../libmscore/fret.cpp" line="1482"/>
         <source>no content</source>
         <translation>Einki innihald</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../libmscore/fret.cpp" line="1478"/>
+        <location filename="../../libmscore/fret.cpp" line="1487"/>
         <source>%n string(s) total</source>
         <translation>
             <numerusform>%n strongur(streingir) tilsamans</numerusform>
@@ -21756,7 +21770,7 @@ Vitja %1Musescore heimasíðuna%2 fyri at fáa nýggjastu versiónina</translati
         </translation>
     </message>
     <message>
-        <location filename="../../libmscore/measure.cpp" line="2038"/>
+        <location filename="../../libmscore/measure.cpp" line="2043"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
         <translation>MSCX villa á linju %1 skeiv takt longd: %2</translation>
     </message>
@@ -31120,82 +31134,82 @@ miseydnað</translation>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="39"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="40"/>
         <source>Instrument Name</source>
         <translation>Ljóðførisnavn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="40"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="41"/>
         <source>Slur Segment</source>
         <translation>Bindiboga stykki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="43"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="44"/>
         <source>Staff Lines</source>
         <translation>Nótalinjur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="42"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="43"/>
         <source>Barline</source>
         <translation>Taktstrika</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="45"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="46"/>
         <source>Stem Slash</source>
         <translation>Leggur skrástrikaður</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="46"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="47"/>
         <source>Arpeggio</source>
         <translation>Arpeggio</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="47"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="48"/>
         <source>Accidental</source>
         <translation>Accidental</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="49"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="50"/>
         <source>Stem</source>
         <translation>Stem</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="51"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="52"/>
         <source>Note</source>
         <translation>Nóti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="52"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="53"/>
         <source>Clef</source>
         <translation>Clef</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="53"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="54"/>
         <source>Key Signature</source>
         <translation>Tónaætt</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="54"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="55"/>
         <source>Ambitus</source>
         <translation>Ambitus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="55"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="56"/>
         <source>Time Signature</source>
         <translation>Takttekin</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="56"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="57"/>
         <source>Rest</source>
         <translation>Tøgn</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="57"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="58"/>
         <source>Breath</source>
         <translation>Steðgur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="58"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="59"/>
         <source>Repeat Measure</source>
         <translation>Endurtak takt</translation>
     </message>
@@ -31205,7 +31219,7 @@ miseydnað</translation>
         <translation>Image</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="59"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="60"/>
         <source>Tie</source>
         <translation>Bindibogi</translation>
     </message>
@@ -31230,187 +31244,187 @@ miseydnað</translation>
         <translation>Nótablað</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="37"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="38"/>
         <source>Measure Number</source>
         <translation>Takt nummar</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="41"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="42"/>
         <source>Tie Segment</source>
         <translation>Bindibogapartur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="44"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="45"/>
         <source>System Divider</source>
         <translation>Skipan skiljari</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="60"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="61"/>
         <source>Articulation</source>
         <translation>Framburður</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="61"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="62"/>
         <source>Fermata</source>
         <translation>Fermata</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="62"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="63"/>
         <source>Chord Line</source>
         <translation>Akkord strikur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="63"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="64"/>
         <source>Dynamic</source>
         <translation>Dynamikkur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="64"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="65"/>
         <source>Beam</source>
         <translation>Bjálki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="65"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="66"/>
         <source>Lyrics</source>
         <translation>Sangtekstur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="66"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="67"/>
         <source>Figured Bass</source>
         <translation>Besiffraður bassur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="67"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="68"/>
         <source>Marker</source>
         <translation>Merki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="68"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="69"/>
         <source>Jump</source>
         <translation>Lop</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="69"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="70"/>
         <source>Fingering</source>
         <translation>Fingrasetningur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="70"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="71"/>
         <source>Tuplet</source>
         <translation>Nótabólkur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="71"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="72"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="72"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="73"/>
         <source>Staff Text</source>
         <translation>Nótalinju tekstur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="73"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="74"/>
         <source>System Text</source>
         <translation>Skipanar tekstur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="74"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="75"/>
         <source>Rehearsal Mark</source>
         <translation>Venjingarmerki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="75"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="76"/>
         <source>Instrument Change</source>
         <translation>Ljóðføri, broyting</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="76"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="77"/>
         <source>Staff Type Change</source>
         <translation>Broyt nótalinju slag</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="77"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="78"/>
         <source>Chord Symbol</source>
         <translation>Akkord tekin</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="78"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="79"/>
         <source>Fretboard Diagram</source>
         <translation>Bandatalva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="79"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="80"/>
         <source>Bend</source>
         <translation>Bend</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="80"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="81"/>
         <source>Tremolo Bar</source>
         <translation>Tremolo bummur</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="81"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="82"/>
         <source>Volta</source>
         <translation>Volta</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="82"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="83"/>
         <source>Hairpin Segment</source>
         <translation>Kíla stykki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="83"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="84"/>
         <source>Ottava Segment</source>
         <translation>Ottava stykki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="84"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="85"/>
         <source>Trill Segment</source>
         <translation>Trillu stykki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="85"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="86"/>
         <source>Let Ring Segment</source>
         <translation>Lat ringja petti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="86"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="87"/>
         <source>Vibrato Segment</source>
         <translation>Vibrato petti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="87"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="88"/>
         <source>Palm Mute Segment</source>
         <translation>Hond doyv petti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="88"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="89"/>
         <source>Text Line Segment</source>
         <translation>Stykki av tekststriku</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="89"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="90"/>
         <source>Volta Segment</source>
         <translation>Volta stykki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="90"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="91"/>
         <source>Pedal Segment</source>
         <translation>Pedal stykki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="91"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="92"/>
         <source>Melisma Line Segment</source>
         <translation>Stykki av melismustriku</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="92"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="93"/>
         <source>Glissando Segment</source>
         <translation>Glissando stykki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="93"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="37"/>
         <source>Layout Break</source>
         <translation>Millumrúm í uppseting</translation>
     </message>
@@ -31430,17 +31444,17 @@ miseydnað</translation>
         <translation>Hefting</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="48"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="49"/>
         <source>Ledger Line</source>
         <translation>Eykastrika</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="38"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="39"/>
         <source>Multimeasure Rest Range</source>
         <translation>Fleirtakta tøgn øki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="50"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="51"/>
         <source>Flag</source>
         <translation>Merki</translation>
     </message>

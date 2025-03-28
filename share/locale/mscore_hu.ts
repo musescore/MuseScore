@@ -15031,6 +15031,20 @@ internetkapcsolat szükséges.</translation>
     </message>
 </context>
 <context>
+    <name>Ms::PageSettings</name>
+    <message>
+        <location filename="../../mscore/pagesettings.cpp" line="169"/>
+        <source>mm</source>
+        <translation type="unfinished">mm</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pagesettings.cpp" line="174"/>
+        <source>in</source>
+        <comment>abbreviation for inch</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ms::Palette</name>
     <message>
         <location filename="../../mscore/palette.cpp" line="200"/>
@@ -21107,8 +21121,8 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
-        <location filename="../../libmscore/note.cpp" line="3185"/>
-        <location filename="../../libmscore/note.cpp" line="3194"/>
+        <location filename="../../libmscore/note.cpp" line="3186"/>
+        <location filename="../../libmscore/note.cpp" line="3195"/>
         <source>%1 Start of %2</source>
         <translation>%1 %2 kezdete</translation>
     </message>
@@ -21116,8 +21130,8 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
-        <location filename="../../libmscore/note.cpp" line="3188"/>
-        <location filename="../../libmscore/note.cpp" line="3201"/>
+        <location filename="../../libmscore/note.cpp" line="3189"/>
+        <location filename="../../libmscore/note.cpp" line="3202"/>
         <source>%1 End of %2</source>
         <translation>%1 %2 vége</translation>
     </message>
@@ -21271,57 +21285,57 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <translation>Hangjegy</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3122"/>
-        <location filename="../../libmscore/note.cpp" line="3152"/>
+        <location filename="../../libmscore/note.cpp" line="3123"/>
+        <location filename="../../libmscore/note.cpp" line="3153"/>
         <location filename="../../libmscore/rest.cpp" line="896"/>
         <location filename="../../libmscore/rest.cpp" line="908"/>
         <source>Voice: %1</source>
         <translation>Szólam: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3129"/>
+        <location filename="../../libmscore/note.cpp" line="3130"/>
         <source> (on %1‰ off %2‰)</source>
         <translation> (be %1‰ ki %2‰)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3133"/>
+        <location filename="../../libmscore/note.cpp" line="3134"/>
         <source>Beat slash</source>
         <translation>Ütésvonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3133"/>
+        <location filename="../../libmscore/note.cpp" line="3134"/>
         <source>Rhythm slash</source>
         <translation>Ritmusvonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3137"/>
-        <location filename="../../libmscore/note.cpp" line="3160"/>
+        <location filename="../../libmscore/note.cpp" line="3138"/>
+        <location filename="../../libmscore/note.cpp" line="3161"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Húr: %2; Érintő: %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3140"/>
+        <location filename="../../libmscore/note.cpp" line="3141"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Hangmagasság: %2; Hossz: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3156"/>
+        <location filename="../../libmscore/note.cpp" line="3157"/>
         <source>Beat Slash</source>
         <translation>Ütésvonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3156"/>
+        <location filename="../../libmscore/note.cpp" line="3157"/>
         <source>Rhythm Slash</source>
         <translation>Ritmusvonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3164"/>
+        <location filename="../../libmscore/note.cpp" line="3165"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libmscore/read206.cpp" line="3650"/>
-        <location filename="../../libmscore/read302.cpp" line="239"/>
+        <location filename="../../libmscore/read302.cpp" line="241"/>
         <source>XML read error at line %1, column %2: %3</source>
         <translation>XML-olvasási hiba az %1. sor %2. oszlopában: %3 </translation>
     </message>
@@ -21506,28 +21520,28 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <translation>tripla ♯</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1983"/>
+        <location filename="../../libmscore/harmony.cpp" line="1987"/>
         <source>Roman numeral</source>
         <translation>Római szám</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1985"/>
+        <location filename="../../libmscore/harmony.cpp" line="1989"/>
         <source>Nashville number</source>
         <translation>Nashville szám</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2023"/>
+        <location filename="../../libmscore/harmony.cpp" line="2027"/>
         <source>lower case</source>
         <translation>kisbetűs</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2080"/>
+        <location filename="../../libmscore/harmony.cpp" line="2084"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="281"/>
         <source>♭</source>
         <translation>bé</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2071"/>
+        <location filename="../../libmscore/harmony.cpp" line="2075"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="290"/>
         <source>♯</source>
         <translation>kereszt</translation>
@@ -21674,39 +21688,39 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <translation>Sikertelen betöltés</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1382"/>
-        <location filename="../../libmscore/fret.cpp" line="1475"/>
+        <location filename="../../libmscore/fret.cpp" line="1391"/>
+        <location filename="../../libmscore/fret.cpp" line="1484"/>
         <source>with chord symbol %1</source>
         <translation>%1 akkordjelzéssel</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1382"/>
-        <location filename="../../libmscore/fret.cpp" line="1475"/>
+        <location filename="../../libmscore/fret.cpp" line="1391"/>
+        <location filename="../../libmscore/fret.cpp" line="1484"/>
         <source>without chord symbol</source>
         <translation>akkordjelzés nélkül</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1394"/>
+        <location filename="../../libmscore/fret.cpp" line="1403"/>
         <source>string %1</source>
         <translation>%1. húr</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1400"/>
+        <location filename="../../libmscore/fret.cpp" line="1409"/>
         <source>circle marker</source>
         <translation>karika jelzés</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1403"/>
+        <location filename="../../libmscore/fret.cpp" line="1412"/>
         <source>cross marker</source>
         <translation>kereszt jelzés</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1434"/>
+        <location filename="../../libmscore/fret.cpp" line="1443"/>
         <source>%1 and %2</source>
         <translation>%1 és %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../libmscore/fret.cpp" line="1441"/>
+        <location filename="../../libmscore/fret.cpp" line="1450"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation>
@@ -21714,44 +21728,44 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         </translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1452"/>
+        <location filename="../../libmscore/fret.cpp" line="1461"/>
         <source>fret %1</source>
         <translation>%1. érintő</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1456"/>
+        <location filename="../../libmscore/fret.cpp" line="1465"/>
         <source>barré %1</source>
         <translation>%1. barré</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1459"/>
+        <location filename="../../libmscore/fret.cpp" line="1468"/>
         <source>beginning string %1</source>
         <translation>%1. húrtól kezdve</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1462"/>
+        <location filename="../../libmscore/fret.cpp" line="1471"/>
         <source>and ending string %1</source>
         <translation>%1. húrig</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1464"/>
+        <location filename="../../libmscore/fret.cpp" line="1473"/>
         <source>partial barré %1 %2 %3</source>
         <translation>részleges barré %1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1473"/>
+        <location filename="../../libmscore/fret.cpp" line="1482"/>
         <source>no content</source>
         <translation>nincs</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../libmscore/fret.cpp" line="1478"/>
+        <location filename="../../libmscore/fret.cpp" line="1487"/>
         <source>%n string(s) total</source>
         <translation>
             <numerusform>összesen %n húr</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../libmscore/measure.cpp" line="2038"/>
+        <location filename="../../libmscore/measure.cpp" line="2043"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
         <translation>MSCX hiba a(z) %1. sorban: érvénytelen ütemhossz: %2</translation>
     </message>
@@ -31115,82 +31129,82 @@ sikertelen</translation>
         <translation>Szöveg</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="39"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="40"/>
         <source>Instrument Name</source>
         <translation>Hangszernév</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="40"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="41"/>
         <source>Slur Segment</source>
         <translation>Kötőív szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="43"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="44"/>
         <source>Staff Lines</source>
         <translation>Kottavonalak</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="42"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="43"/>
         <source>Barline</source>
         <translation>Ütemvonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="45"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="46"/>
         <source>Stem Slash</source>
         <translation>Kottaszár áthúzás</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="46"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="47"/>
         <source>Arpeggio</source>
         <translation>Arpeggio</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="47"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="48"/>
         <source>Accidental</source>
         <translation>Módosító</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="49"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="50"/>
         <source>Stem</source>
         <translation>Kottaszár</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="51"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="52"/>
         <source>Note</source>
         <translation>Hangjegy</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="52"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="53"/>
         <source>Clef</source>
         <translation>Kulcs</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="53"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="54"/>
         <source>Key Signature</source>
         <translation>Előjegyzés</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="54"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="55"/>
         <source>Ambitus</source>
         <translation>Hangterjedelem</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="55"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="56"/>
         <source>Time Signature</source>
         <translation>Ütemmutató:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="56"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="57"/>
         <source>Rest</source>
         <translation>Szünet</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="57"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="58"/>
         <source>Breath</source>
         <translation>Cezúra</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="58"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="59"/>
         <source>Repeat Measure</source>
         <translation>Ütemismétlés</translation>
     </message>
@@ -31200,7 +31214,7 @@ sikertelen</translation>
         <translation>Kép</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="59"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="60"/>
         <source>Tie</source>
         <translation>Átkötés</translation>
     </message>
@@ -31225,187 +31239,187 @@ sikertelen</translation>
         <translation>Kotta</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="37"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="38"/>
         <source>Measure Number</source>
         <translation>Ütem száma</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="41"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="42"/>
         <source>Tie Segment</source>
         <translation>Átkötőív szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="44"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="45"/>
         <source>System Divider</source>
         <translation>Sorelválasztó</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="60"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="61"/>
         <source>Articulation</source>
         <translation>Artikuláció</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="61"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="62"/>
         <source>Fermata</source>
         <translation>Fermata</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="62"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="63"/>
         <source>Chord Line</source>
         <translation>Akkordvonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="63"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="64"/>
         <source>Dynamic</source>
         <translation>Dinamika</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="64"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="65"/>
         <source>Beam</source>
         <translation>Gerenda</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="65"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="66"/>
         <source>Lyrics</source>
         <translation>Dalszöveg</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="66"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="67"/>
         <source>Figured Bass</source>
         <translation>Számozott basszus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="67"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="68"/>
         <source>Marker</source>
         <translation>Jelölés</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="68"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="69"/>
         <source>Jump</source>
         <translation>Ugrás</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="69"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="70"/>
         <source>Fingering</source>
         <translation>Ujjrend</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="70"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="71"/>
         <source>Tuplet</source>
         <translation>N-ola</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="71"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="72"/>
         <source>Tempo</source>
         <translation>Tempó</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="72"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="73"/>
         <source>Staff Text</source>
         <translation>Kottasor szöveg</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="73"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="74"/>
         <source>System Text</source>
         <translation>Sorcsoport szöveg</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="74"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="75"/>
         <source>Rehearsal Mark</source>
         <translation>Ciffer</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="75"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="76"/>
         <source>Instrument Change</source>
         <translation>Hangszerváltás</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="76"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="77"/>
         <source>Staff Type Change</source>
         <translation>Sortípusváltás</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="77"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="78"/>
         <source>Chord Symbol</source>
         <translation>Akkordjelzés</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="78"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="79"/>
         <source>Fretboard Diagram</source>
         <translation>Akkordábra</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="79"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="80"/>
         <source>Bend</source>
         <translation>Nyújtás</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="80"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="81"/>
         <source>Tremolo Bar</source>
         <translation>Tremolo jelölés</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="81"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="82"/>
         <source>Volta</source>
         <translation>Volta</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="82"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="83"/>
         <source>Hairpin Segment</source>
         <translation>Villaszakasz</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="83"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="84"/>
         <source>Ottava Segment</source>
         <translation>Ottava szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="84"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="85"/>
         <source>Trill Segment</source>
         <translation>Trilla szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="85"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="86"/>
         <source>Let Ring Segment</source>
         <translation>Kizengetés szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="86"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="87"/>
         <source>Vibrato Segment</source>
         <translation>Vibrato szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="87"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="88"/>
         <source>Palm Mute Segment</source>
         <translation>Palm Mute szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="88"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="89"/>
         <source>Text Line Segment</source>
         <translation>Szöveg vonalszegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="89"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="90"/>
         <source>Volta Segment</source>
         <translation>Volta szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="90"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="91"/>
         <source>Pedal Segment</source>
         <translation>Pedál szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="91"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="92"/>
         <source>Melisma Line Segment</source>
         <translation>Melizma vonalszakasz</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="92"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="93"/>
         <source>Glissando Segment</source>
         <translation>Glissando szegmens</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="93"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="37"/>
         <source>Layout Break</source>
         <translation>Töréspont</translation>
     </message>
@@ -31425,17 +31439,17 @@ sikertelen</translation>
         <translation>Tapadás</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="48"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="49"/>
         <source>Ledger Line</source>
         <translation>Pótvonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="38"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="39"/>
         <source>Multimeasure Rest Range</source>
         <translation>Többütemes szünet tartomány</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="50"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="51"/>
         <source>Flag</source>
         <translation>Zászló</translation>
     </message>

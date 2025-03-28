@@ -15006,6 +15006,20 @@ connection enabled</source>
     </message>
 </context>
 <context>
+    <name>Ms::PageSettings</name>
+    <message>
+        <location filename="../../mscore/pagesettings.cpp" line="169"/>
+        <source>mm</source>
+        <translation type="unfinished">мм</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pagesettings.cpp" line="174"/>
+        <source>in</source>
+        <comment>abbreviation for inch</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ms::Palette</name>
     <message>
         <location filename="../../mscore/palette.cpp" line="200"/>
@@ -21046,8 +21060,8 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
-        <location filename="../../libmscore/note.cpp" line="3185"/>
-        <location filename="../../libmscore/note.cpp" line="3194"/>
+        <location filename="../../libmscore/note.cpp" line="3186"/>
+        <location filename="../../libmscore/note.cpp" line="3195"/>
         <source>%1 Start of %2</source>
         <translation>%1 Почетак %2</translation>
     </message>
@@ -21055,8 +21069,8 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
-        <location filename="../../libmscore/note.cpp" line="3188"/>
-        <location filename="../../libmscore/note.cpp" line="3201"/>
+        <location filename="../../libmscore/note.cpp" line="3189"/>
+        <location filename="../../libmscore/note.cpp" line="3202"/>
         <source>%1 End of %2</source>
         <translation>%1 Свршетак %2</translation>
     </message>
@@ -21210,57 +21224,57 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>Нота</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3122"/>
-        <location filename="../../libmscore/note.cpp" line="3152"/>
+        <location filename="../../libmscore/note.cpp" line="3123"/>
+        <location filename="../../libmscore/note.cpp" line="3153"/>
         <location filename="../../libmscore/rest.cpp" line="896"/>
         <location filename="../../libmscore/rest.cpp" line="908"/>
         <source>Voice: %1</source>
         <translation>Глас: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3129"/>
+        <location filename="../../libmscore/note.cpp" line="3130"/>
         <source> (on %1‰ off %2‰)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3133"/>
+        <location filename="../../libmscore/note.cpp" line="3134"/>
         <source>Beat slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3133"/>
+        <location filename="../../libmscore/note.cpp" line="3134"/>
         <source>Rhythm slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3137"/>
-        <location filename="../../libmscore/note.cpp" line="3160"/>
+        <location filename="../../libmscore/note.cpp" line="3138"/>
+        <location filename="../../libmscore/note.cpp" line="3161"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3140"/>
+        <location filename="../../libmscore/note.cpp" line="3141"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3156"/>
+        <location filename="../../libmscore/note.cpp" line="3157"/>
         <source>Beat Slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3156"/>
+        <location filename="../../libmscore/note.cpp" line="3157"/>
         <source>Rhythm Slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3164"/>
+        <location filename="../../libmscore/note.cpp" line="3165"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libmscore/read206.cpp" line="3650"/>
-        <location filename="../../libmscore/read302.cpp" line="239"/>
+        <location filename="../../libmscore/read302.cpp" line="241"/>
         <source>XML read error at line %1, column %2: %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21445,28 +21459,28 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1983"/>
+        <location filename="../../libmscore/harmony.cpp" line="1987"/>
         <source>Roman numeral</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1985"/>
+        <location filename="../../libmscore/harmony.cpp" line="1989"/>
         <source>Nashville number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2023"/>
+        <location filename="../../libmscore/harmony.cpp" line="2027"/>
         <source>lower case</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2080"/>
+        <location filename="../../libmscore/harmony.cpp" line="2084"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="281"/>
         <source>♭</source>
         <translation>Снизилица</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="2071"/>
+        <location filename="../../libmscore/harmony.cpp" line="2075"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="290"/>
         <source>♯</source>
         <translation>Повисилица</translation>
@@ -21613,39 +21627,39 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1382"/>
-        <location filename="../../libmscore/fret.cpp" line="1475"/>
+        <location filename="../../libmscore/fret.cpp" line="1391"/>
+        <location filename="../../libmscore/fret.cpp" line="1484"/>
         <source>with chord symbol %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1382"/>
-        <location filename="../../libmscore/fret.cpp" line="1475"/>
+        <location filename="../../libmscore/fret.cpp" line="1391"/>
+        <location filename="../../libmscore/fret.cpp" line="1484"/>
         <source>without chord symbol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1394"/>
+        <location filename="../../libmscore/fret.cpp" line="1403"/>
         <source>string %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1400"/>
+        <location filename="../../libmscore/fret.cpp" line="1409"/>
         <source>circle marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1403"/>
+        <location filename="../../libmscore/fret.cpp" line="1412"/>
         <source>cross marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1434"/>
+        <location filename="../../libmscore/fret.cpp" line="1443"/>
         <source>%1 and %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../libmscore/fret.cpp" line="1441"/>
+        <location filename="../../libmscore/fret.cpp" line="1450"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation type="unfinished">
@@ -21655,37 +21669,37 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         </translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1452"/>
+        <location filename="../../libmscore/fret.cpp" line="1461"/>
         <source>fret %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1456"/>
+        <location filename="../../libmscore/fret.cpp" line="1465"/>
         <source>barré %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1459"/>
+        <location filename="../../libmscore/fret.cpp" line="1468"/>
         <source>beginning string %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1462"/>
+        <location filename="../../libmscore/fret.cpp" line="1471"/>
         <source>and ending string %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1464"/>
+        <location filename="../../libmscore/fret.cpp" line="1473"/>
         <source>partial barré %1 %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/fret.cpp" line="1473"/>
+        <location filename="../../libmscore/fret.cpp" line="1482"/>
         <source>no content</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../libmscore/fret.cpp" line="1478"/>
+        <location filename="../../libmscore/fret.cpp" line="1487"/>
         <source>%n string(s) total</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -21694,7 +21708,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         </translation>
     </message>
     <message>
-        <location filename="../../libmscore/measure.cpp" line="2038"/>
+        <location filename="../../libmscore/measure.cpp" line="2043"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -31052,82 +31066,82 @@ failed</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="39"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="40"/>
         <source>Instrument Name</source>
         <translation>Назив инструмента</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="40"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="41"/>
         <source>Slur Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="43"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="44"/>
         <source>Staff Lines</source>
         <translation>Линије нотног система</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="42"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="43"/>
         <source>Barline</source>
         <translation>Тактица</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="45"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="46"/>
         <source>Stem Slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="46"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="47"/>
         <source>Arpeggio</source>
         <translation>Арпеђо</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="47"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="48"/>
         <source>Accidental</source>
         <translation>Украсни</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="49"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="50"/>
         <source>Stem</source>
         <translation>Нотни врат</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="51"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="52"/>
         <source>Note</source>
         <translation>Нота</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="52"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="53"/>
         <source>Clef</source>
         <translation>Кључ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="53"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="54"/>
         <source>Key Signature</source>
         <translation>Тоналитет</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="54"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="55"/>
         <source>Ambitus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="55"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="56"/>
         <source>Time Signature</source>
         <translation>Метар</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="56"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="57"/>
         <source>Rest</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="57"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="58"/>
         <source>Breath</source>
         <translation>Дах</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="58"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="59"/>
         <source>Repeat Measure</source>
         <translation>Понови такт</translation>
     </message>
@@ -31137,7 +31151,7 @@ failed</source>
         <translation>Слика</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="59"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="60"/>
         <source>Tie</source>
         <translation>Лук</translation>
     </message>
@@ -31162,187 +31176,187 @@ failed</source>
         <translation>Партитура</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="37"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="38"/>
         <source>Measure Number</source>
         <translation>Број такта</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="41"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="42"/>
         <source>Tie Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="44"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="45"/>
         <source>System Divider</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="60"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="61"/>
         <source>Articulation</source>
         <translation>Артикулација</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="61"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="62"/>
         <source>Fermata</source>
         <translation>Фермата</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="62"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="63"/>
         <source>Chord Line</source>
         <translation>Линија акорда</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="63"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="64"/>
         <source>Dynamic</source>
         <translation>Динамика</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="64"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="65"/>
         <source>Beam</source>
         <translation>Ребро</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="65"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="66"/>
         <source>Lyrics</source>
         <translation>Стихови</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="66"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="67"/>
         <source>Figured Bass</source>
         <translation>Фигурирани Бас</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="67"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="68"/>
         <source>Marker</source>
         <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="68"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="69"/>
         <source>Jump</source>
         <translation>Прескочи</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="69"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="70"/>
         <source>Fingering</source>
         <translation>Прстореди</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="70"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="71"/>
         <source>Tuplet</source>
         <translation>Неправилна тонска група</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="71"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="72"/>
         <source>Tempo</source>
         <translation>Темпо</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="72"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="73"/>
         <source>Staff Text</source>
         <translation>Текст нот. система</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="73"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="74"/>
         <source>System Text</source>
         <translation>Системски текст</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="74"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="75"/>
         <source>Rehearsal Mark</source>
         <translation>Ознака за пробу</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="75"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="76"/>
         <source>Instrument Change</source>
         <translation>Промена инструмента</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="76"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="77"/>
         <source>Staff Type Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="77"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="78"/>
         <source>Chord Symbol</source>
         <translation>Симбол акорда</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="78"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="79"/>
         <source>Fretboard Diagram</source>
         <translation>Инспектор за врат</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="79"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="80"/>
         <source>Bend</source>
         <translation>Савиј</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="80"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="81"/>
         <source>Tremolo Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="81"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="82"/>
         <source>Volta</source>
         <translation>Волта</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="82"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="83"/>
         <source>Hairpin Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="83"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="84"/>
         <source>Ottava Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="84"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="85"/>
         <source>Trill Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="85"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="86"/>
         <source>Let Ring Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="86"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="87"/>
         <source>Vibrato Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="87"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="88"/>
         <source>Palm Mute Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="88"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="89"/>
         <source>Text Line Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="89"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="90"/>
         <source>Volta Segment</source>
         <translation>Волта</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="90"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="91"/>
         <source>Pedal Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="91"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="92"/>
         <source>Melisma Line Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="92"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="93"/>
         <source>Glissando Segment</source>
         <translation>Одломак глисанда</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="93"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="37"/>
         <source>Layout Break</source>
         <translation type="unfinished"></translation>
     </message>
@@ -31362,17 +31376,17 @@ failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="48"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="49"/>
         <source>Ledger Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="38"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="39"/>
         <source>Multimeasure Rest Range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/scoreElement.cpp" line="50"/>
+        <location filename="../../libmscore/scoreElement.cpp" line="51"/>
         <source>Flag</source>
         <translation type="unfinished"></translation>
     </message>

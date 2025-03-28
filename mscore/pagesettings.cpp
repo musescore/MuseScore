@@ -10,15 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "globals.h"
-#include "pagesettings.h"
-#include "libmscore/page.h"
-#include "libmscore/style.h"
-#include "libmscore/score.h"
-#include "navigator.h"
-#include "libmscore/mscore.h"
-#include "libmscore/excerpt.h"
 #include "musescore.h"
+#include "navigator.h"
+#include "pagesettings.h"
+
+#include "libmscore/excerpt.h"
+#include "libmscore/mscore.h"
+#include "libmscore/page.h"
+#include "libmscore/score.h"
+#include "libmscore/style.h"
 
 namespace Ms {
 
@@ -162,16 +162,16 @@ void PageSettings::updateValues()
 
       blockSignals(true);
 
-      const char* suffix;
+      QString suffix;
       double singleStepSize;
       double singleStepScale;
       if (mm) {
-            suffix = "mm";
+            suffix = tr("mm");
             singleStepSize = 1.0;
             singleStepScale = 0.05;
             }
       else {
-            suffix = "in";
+            suffix = tr("in", "abbreviation for inch");
             singleStepSize = 0.05;
             singleStepScale = 0.002;
             }
@@ -356,7 +356,7 @@ void PageSettings::applyToAllParts()
       if (!_changeFlag)
             return;
       cs->startCmd();
-      for (Excerpt* e : cs->excerpts())
+      for (Excerpt*& e : cs->excerpts())
             applyToScore(e->partScore());
       cs->endCmd();
       _changeFlag = false;
