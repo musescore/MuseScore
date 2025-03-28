@@ -1340,8 +1340,8 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         } else {
             mordent->setAnchor(ArticulationAnchor::AUTO);
         }
-        colorItem(mordent, Color::fromString(notation.attribute(u"color")));
         mordent->setVisible(notation.visible());
+        colorItem(mordent, Color::fromString(notation.attribute(u"color")));
         cr->add(mordent);
     } else {
         LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
