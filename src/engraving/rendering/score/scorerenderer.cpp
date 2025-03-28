@@ -35,6 +35,7 @@
 #include "arpeggiolayout.h"
 #include "horizontalspacing.h"
 #include "slurtielayout.h"
+#include "masklayout.h"
 
 #include "paint.h"
 
@@ -100,6 +101,14 @@ void ScoreRenderer::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 void ScoreRenderer::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
 {
     SlurTieLayout::computeBezier(slurSeg, shoulderOffset);
+}
+
+void ScoreRenderer::computeMasks(Score* score)
+{
+    LayoutContext ctx(score);
+    for (Page* page : score->pages()) {
+        MaskLayout::computeMasks(ctx, page);
+    }
 }
 
 void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)

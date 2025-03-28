@@ -618,8 +618,10 @@ void EditStaffType::updatePreview()
         preview = standardPreview;
     }
     if (preview) {
-        preview->score()->staff(0)->setStaffType(mu::engraving::Fraction(0, 1), staffType);
-        preview->score()->doLayout();
+        Score* score = preview->score();
+        score->staff(0)->setStaffType(mu::engraving::Fraction(0, 1), staffType);
+        score->doLayout();
+        score->renderer()->computeMasks(score);
         preview->updateAll();
         preview->update();
     }

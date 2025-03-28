@@ -53,6 +53,8 @@ public:
     void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) override;
     void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF()) override;
 
+    void computeMasks(Score* score) override;
+
 private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;
