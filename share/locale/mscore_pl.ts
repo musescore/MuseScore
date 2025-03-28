@@ -1949,7 +1949,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="88"/>
         <source>Staff line color:</source>
-        <translation>Kolor pięciolinii:</translation>
+        <translation>Kolor linii pięciolinii:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="114"/>
@@ -2771,7 +2771,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4212"/>
         <source>Staff line thickness:</source>
-        <translation>Grubość pięciolinii:</translation>
+        <translation>Grubość linii pięciolinii:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4356"/>
@@ -3824,7 +3824,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4148"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Resetuj wartość &quot;Grubość pięciolinii&quot;</translation>
+        <translation>Resetuj wartość &quot;Grubość linii pięciolinii&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4655"/>
@@ -9483,7 +9483,7 @@ oznaczeń metrycznych i tonacji</translation>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="369"/>
         <source>Staff line color:</source>
-        <translation>Kolor pięciolinii:</translation>
+        <translation>Kolor linii pięciolinii:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="385"/>
@@ -12339,7 +12339,7 @@ Uzyskaj %2pomoc%3 do programu lub %4przyczyń się%5 do jego rozwoju.</translati
 Published under the %1GNU General Public License version 2%2.</source>
         <translation>Prawa autorskie &amp;copy; 1999-2025 MuseScore BVBA i inni.
 Opublikowano na licencji %1GNU General Public License wersja 2%2.
-Polskie tłumaczenie MuseScore&apos;a: Grzegorz &quot;Gootector&quot; Pruchniakowski.</translation>
+Polskie tłumaczenie MuseScore&apos;a: Grzegorz Pruchniakowski.</translation>
     </message>
 </context>
 <context>
