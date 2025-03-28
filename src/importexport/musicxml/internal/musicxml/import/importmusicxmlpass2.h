@@ -388,7 +388,7 @@ private:
     int m_wavyLineNo = 0;
     muse::String m_arpeggioType;
     int m_arpeggioNo = 0;
-    muse::draw::Color m_arpeggioColor;
+    engraving::Color m_arpeggioColor;
     bool m_slurStop = false;
     bool m_slurStart = false;
     bool m_wavyLineStop = false;
