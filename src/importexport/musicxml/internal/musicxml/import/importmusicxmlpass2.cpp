@@ -8420,6 +8420,7 @@ void MusicXmlParserNotations::ornaments()
     // so don't add an additional one
     if (trillMark && m_wavyLineType != "start" && m_wavyLineType != "startstop") {
         Notation ornament = Notation::notationWithAttributes(u"trill-mark", m_e.attributes(), u"ornaments", SymId::ornamentTrill);
+        ornament.setVisible(m_visible);
         m_notations.push_back(ornament);
     }
 }
