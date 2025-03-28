@@ -145,6 +145,7 @@
         <voice>
           <Expression>
             <snapToDynamics>0</snapToDynamics>
+            <italic>0</italic>
             <offset x="0" y="-4.72943"/>
             <text><i>expr </i><u>text</u></text>
             </Expression>
