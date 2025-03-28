@@ -193,6 +193,8 @@ public:
     virtual void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) = 0;
     virtual void computeBezier(SlurSegment* slurSeg, PointF shoulderOffser = PointF()) = 0;
 
+    virtual void computeMasks(Score* score) = 0;
+
 private:
     // Layout Single Item
     virtual void doLayoutItem(EngravingItem* item) = 0;
