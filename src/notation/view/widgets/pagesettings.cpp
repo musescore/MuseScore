@@ -165,11 +165,11 @@ void PageSettings::updateValues()
     if (mm) {
         suffix = "mm";
         singleStepSize = 1.0;
-        singleStepScale = 0.2;
+        singleStepScale = 0.05;
     } else {
         suffix = "in";
         singleStepSize = 0.05;
-        singleStepScale = 0.005;
+        singleStepScale = 0.002;
     }
     for (auto w : { oddPageTopMargin, oddPageBottomMargin, oddPageLeftMargin, oddPageRightMargin, evenPageTopMargin,
                     evenPageBottomMargin, evenPageLeftMargin, evenPageRightMargin, spatiumEntry, pageWidth, pageHeight }) {
