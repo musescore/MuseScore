@@ -1530,7 +1530,7 @@ static NoteHeadGroup convertNotehead(String mxmlName)
  */
 
 static void addTextToNote(int l, int c, String txt, String placement, String fontWeight,
-                          double fontSize, String fontStyle, String fontFamily, Color color,
+                          double fontSize, String fontStyle, String fontFamily, bool visible, Color color,
                           TextStyleType subType, const Score*, Note* note)
 {
     if (note) {
@@ -1559,6 +1559,7 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
                 t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
                 t->resetProperty(Pid::OFFSET);
             }
+            t->setVisible(visible);
             if (color.isValid()) {
                 t->setColor(color);
                 t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
@@ -4280,7 +4281,7 @@ void MusicXmlInferredFingering::addToNotes(std::vector<Note*>& notes) const
         // Fingerings in reverse order
         addTextToNote(-1, -1,
                       m_fingerings[m_fingerings.size() - 1 - i], m_placement, u"", -1, u"", u"",
-                      Color::BLACK, TextStyleType::FINGERING,
+                      true, Color::BLACK, TextStyleType::FINGERING,
                       notes[i]->score(),
                       notes[i]);
     }
@@ -8531,7 +8532,7 @@ void MusicXmlParserNotations::addTechnical(const Notation& notation, Note* note)
         // TODO: distinguish between keyboards (style TextStyleName::FINGERING)
         // and (plucked) strings (style TextStyleName::LH_GUITAR_FINGERING)
         addTextToNote(m_e.lineNumber(), m_e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                      color, TextStyleType::FINGERING, m_score, note);
+                      notation.visible(), color, TextStyleType::FINGERING, m_score, note);
     } else if (notation.name() == u"fret") {
         int fret = notation.text().toInt();
         if (note) {
@@ -8543,14 +8544,14 @@ void MusicXmlParserNotations::addTechnical(const Notation& notation, Note* note)
         }
     } else if (notation.name() == "pluck") {
         addTextToNote(m_e.lineNumber(), m_e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                      color, TextStyleType::RH_GUITAR_FINGERING, m_score, note);
+                      notation.visible(), color, TextStyleType::RH_GUITAR_FINGERING, m_score, note);
     } else if (notation.name() == "string") {
         if (note) {
             if (note->staff()->isTabStaff(Fraction(0, 1))) {
                 note->setString(notation.text().toInt() - 1);
             } else {
                 addTextToNote(m_e.lineNumber(), m_e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                              color, TextStyleType::STRING_NUMBER, m_score, note);
+                              notation.visible(), color, TextStyleType::STRING_NUMBER, m_score, note);
             }
         } else {
             m_logger->logError(u"no note for string", &m_e);
