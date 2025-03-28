@@ -1,39 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
-  <programVersion>4.0.0</programVersion>
-  <programRevision></programRevision>
+<museScore version="4.50">
+  <programVersion>4.5.0</programVersion>
+  <programRevision>28c68b6</programRevision>
   <Score>
+    <eid>LHw7Fa2dFiK_ueJ5iT1vJiC</eid>
     <Division>480</Division>
-    <Style>
-      <pageWidth>8.26772</pageWidth>
-      <pageHeight>11.6929</pageHeight>
-      <pagePrintableWidth>7.08661</pagePrintableWidth>
-      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
-      <pageOddTopMargin>0.590551</pageOddTopMargin>
-      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
-      <lyricsDashLineThickness>0.15</lyricsDashLineThickness>
-      <minMeasureWidth>5</minMeasureWidth>
-      <repeatBarlineDotSeparation>0.52</repeatBarlineDotSeparation>
-      <minNoteDistance>0.2</minNoteDistance>
-      <beamMinLen>1.3</beamMinLen>
-      <chordSymbolAFontSize>11</chordSymbolAFontSize>
-      <chordSymbolBFontSize>11</chordSymbolBFontSize>
-      <evenFooterC>$:copyright:</evenFooterC>
-      <oddFooterC>$:copyright:</oddFooterC>
-      <subTitleFontSize>16</subTitleFontSize>
-      <measureNumberPosBelow x="0" y="1"/>
-      <headerAlign>center,center</headerAlign>
-      <footerAlign>center,center</footerAlign>
-      <Spatium>1.74978</Spatium>
-      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <open>1</open>
     <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2021-12-23</metaTag>
@@ -43,6 +21,7 @@
     <metaTag name="originalFormat">mscx</metaTag>
     <metaTag name="platform">Linux</metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="subtitle">Subtitle</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -52,7 +31,7 @@
       <instrument id="piano">
         <family id="keyboards">Keyboards</family>
         </instrument>
-      <section id="woodwind" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>flutes</family>
         <family>oboes</family>
         <family>clarinets</family>
@@ -60,7 +39,7 @@
         <family>bassoons</family>
         <unsorted group="woodwinds"/>
         </section>
-      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>horns</family>
         <family>trumpets</family>
         <family>cornets</family>
@@ -68,10 +47,10 @@
         <family>trombones</family>
         <family>tubas</family>
         </section>
-      <section id="timpani" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>timpani</family>
         </section>
-      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>keyboard-percussion</family>
         <family>drums</family>
         <family>unpitched-metal-percussion</family>
@@ -82,31 +61,23 @@
       <family>harps</family>
       <family>organs</family>
       <family>synths</family>
-      <section id="plucked-strings" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="plucked-strings" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>plucked-strings</family>
         </section>
       <soloists/>
-      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
         <family>voices</family>
         </section>
-      <section id="strings" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>orchestral-strings</family>
         </section>
       <unsorted/>
       </Order>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0" visible="1"/>
-        <barLineSpan>1</barLineSpan>
-        </Staff>
-      <Staff id="2">
-        <StaffType group="pitched">
-          <name>stdNormal</name>
-          </StaffType>
-        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -126,38 +97,27 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <Text>
-          <style>title</style>
-          <text>Untitled Score</text>
-          </Text>
-        <Text>
-          <style>subtitle</style>
-          <text>Subtitle</text>
-          </Text>
-        <Text>
-          <style>composer</style>
-          <text>Composer / arranger</text>
-          </Text>
-        </VBox>
       <Measure>
+        <eid>cQa7GOGTlYI_24DpaXR2AiG</eid>
+        <endRepeat>2</endRepeat>
         <voice>
           <TimeSig>
+            <eid>ZDHplZ95drE_au9FZqrscgI</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>C+ICVv8Ken_fG01dG5jEfL</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>75yZLSun/hC_miMSKaoLU6E</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <glissandoStyle>portamento</glissandoStyle>
+                  <eid>04FyP0OSnjK_pMP0cr0EzNI</eid>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -168,8 +128,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>MPiFeltasgB_EPqTiL1Q9XE</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>8pX3wxdQndB_lT/mZdOyBjH</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <Spanner type="Glissando">
@@ -182,21 +144,8 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>SUwTZ2+NJeG_aEXIIxEvfXB</eid>
             <durationType>half</durationType>
-            </Rest>
-          </voice>
-        </Measure>
-      </Staff>
-    <Staff id="2">
-      <Measure>
-        <voice>
-          <TimeSig>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
