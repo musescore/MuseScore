@@ -236,10 +236,11 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Secunda,
                                         mpe::SoundSubCategory::Plucked, } }, { midi::Program(8, 107) } },
 
+        { { mpe::SoundId::Guzheng,  { mpe::SoundSubCategory::Chinese, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
         { { mpe::SoundId::Koto,  { mpe::SoundSubCategory::Japanese, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Oud,  { mpe::SoundSubCategory::African, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
         { { mpe::SoundId::Shamisen,  { mpe::SoundSubCategory::Japanese, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 106) } },
         { { mpe::SoundId::Sitar,  { mpe::SoundSubCategory::Indian, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 104) } },
-        { { mpe::SoundId::Oud,  { mpe::SoundSubCategory::African, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
         { { mpe::SoundId::Prim,  { mpe::SoundSubCategory::Plucked, } }, { midi::Program(0, 24) } },
         { { mpe::SoundId::Brac,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
         { { mpe::SoundId::Bugarija,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
