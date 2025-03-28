@@ -689,8 +689,22 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
     if (readSpanner) {
         Fraction stick = first->tick();
         Fraction etick = last->tick();
+        std::vector<Spanner*> processedSpanners;
         for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
+
+            bool alreadyProcessed = false;
+            for (Spanner* spanner : processedSpanners) {
+                if (muse::contains(spanner->linkList(), static_cast<EngravingObject*>(s))) {
+                    alreadyProcessed = true;
+                }
+            }
+            if (alreadyProcessed) {
+                continue;
+            } else {
+                processedSpanners.push_back(s);
+            }
+
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
                 ns->resetExplicitParent();
