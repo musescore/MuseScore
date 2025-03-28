@@ -41,6 +41,7 @@
 #include "engraving/dom/realizedharmony.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/text.h"
+#include "engraving/dom/textline.h"
 #include "engraving/style/textstyle.h"
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
@@ -332,6 +333,12 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle },
         { StyleId::pedalDashLineLen,        false, pedalLineStyleDashSize,  resetPedalLineStyleDashSize },
         { StyleId::pedalDashGapLen,         false, pedalLineStyleGapSize,   resetPedalLineStyleGapSize },
+        { StyleId::textLineLineStyle,         false, textLineLineStyle,               resetTextLineLineStyle },
+        { StyleId::textLineDashLineLen,       false, textLineLineStyleDashSize,       resetTextLineLineStyleDashSize },
+        { StyleId::textLineDashGapLen,        false, textLineLineStyleGapSize,        resetTextLineLineStyleGapSize },
+        { StyleId::systemTextLineLineStyle,   false, systemTextLineLineStyle,         resetSystemTextLineLineStyle },
+        { StyleId::systemTextLineDashLineLen, false, systemTextLineLineStyleDashSize, resetSystemTextLineLineStyleDashSize },
+        { StyleId::systemTextLineDashGapLen,  false, systemTextLineLineStyleGapSize,  resetSystemTextLineLineStyleGapSize },
 
         { StyleId::staffUpperBorder,        false, staffUpperBorder,        resetStaffUpperBorder },
         { StyleId::staffLowerBorder,        false, staffLowerBorder,        resetStaffLowerBorder },
@@ -643,13 +650,16 @@ EditStyle::EditStyle(QWidget* parent)
 
         { StyleId::autoplaceVerticalAlignRange, false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
         { StyleId::minVerticalDistance,         false, minVerticalDistance,         resetMinVerticalDistance },
+
         { StyleId::textLinePlacement,           false, textLinePlacement,           resetTextLinePlacement },
         { StyleId::textLinePosAbove,            false, textLinePosAbove,            resetTextLinePosAbove },
         { StyleId::textLinePosBelow,            false, textLinePosBelow,            resetTextLinePosBelow },
+        { StyleId::textLineLineWidth,           false, textLineLineWidth,           resetTextLineLineWidth },
 
         { StyleId::systemTextLinePlacement,     false, systemTextLinePlacement,     resetSystemTextLinePlacement },
         { StyleId::systemTextLinePosAbove,      false, systemTextLinePosAbove,      resetSystemTextLinePosAbove },
         { StyleId::systemTextLinePosBelow,      false, systemTextLinePosBelow,      resetSystemTextLinePosBelow },
+        { StyleId::systemTextLineLineWidth,     false, systemTextLineLineWidth,     resetSystemTextLineLineWidth },
 
         { StyleId::fermataPosAbove,         false, fermataPosAbove,       resetFermataPosAbove },
         { StyleId::fermataPosBelow,         false, fermataPosBelow,       resetFermataPosBelow },
@@ -732,6 +742,24 @@ EditStyle::EditStyle(QWidget* parent)
             label_pedalLine_lineStyle_gapSize,
             pedalLineStyleGapSize,
             resetPedalLineStyleGapSize
+        }),
+
+        new LineStyleSelect(this, textLineLineStyle, {
+            label_textLineLine_lineStyle_dashSize,
+            textLineLineStyleDashSize,
+            resetTextLineLineStyleDashSize,
+            label_textLineLine_lineStyle_gapSize,
+            textLineLineStyleGapSize,
+            resetTextLineLineStyleGapSize
+        }),
+
+        new LineStyleSelect(this, systemTextLineLineStyle, {
+            label_systemTextLineLine_lineStyle_dashSize,
+            systemTextLineLineStyleDashSize,
+            resetSystemTextLineLineStyleDashSize,
+            label_systemTextLineLine_lineStyle_gapSize,
+            systemTextLineLineStyleGapSize,
+            resetSystemTextLineLineStyleGapSize
         })
     };
 
@@ -1605,8 +1633,10 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "bend";
 
     case ElementType::TEXTLINE:
+        return element->isTextLine() && toTextLine(element)->systemFlag() ? "system-text-line" : "text-line";
     case ElementType::TEXTLINE_SEGMENT:
-        return "text-line";
+        return element->isTextLineSegment() && toTextLineSegment(element)->systemFlag()
+               ? "system-text-line" : "text-line";
 
     case ElementType::GLISSANDO:
     case ElementType::GLISSANDO_SEGMENT:
