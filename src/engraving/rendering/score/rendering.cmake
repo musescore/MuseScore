@@ -65,6 +65,9 @@ set(RENDERING_SCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/alignmentlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/masklayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/masklayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/stemlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stemlayout.h
+
 
     ${CMAKE_CURRENT_LIST_DIR}/passbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/passbase.h
