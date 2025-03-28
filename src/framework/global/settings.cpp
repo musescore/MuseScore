@@ -98,10 +98,15 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges, bool not
 
     std::vector<Settings::Key> locallyAddedKeys;
     for (auto it = m_localSettings.begin(); it != m_localSettings.end(); ++it) {
-        if (m_items.count(it->first) == 0) {
+        auto item = m_items.find(it->first);
+        if (item == m_items.end()) {
             locallyAddedKeys.push_back(it->first);
+        } else {
+            // UI currently has the values from m_localSettings but we've turned off the transaction.
+            item->second.value = it->second.value;
         }
     }
+
     m_localSettings.clear();
 
     if (!keepDefaultSettings) {
@@ -123,6 +128,7 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges, bool not
         Channel<Val>& channel = findChannel(it->first);
         channel.send(it->second.value);
     }
+
     for (auto it = locallyAddedKeys.cbegin(); it != locallyAddedKeys.cend(); ++it) {
         Channel<Val>& channel = findChannel(*it);
         channel.send(Val());
