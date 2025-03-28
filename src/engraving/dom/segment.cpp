@@ -2440,7 +2440,7 @@ String Segment::accessibleExtraInfo() const
     if (!annotations().empty()) {
         String temp;
         for (const EngravingItem* a : annotations()) {
-            if (!score()->selectionFilter().canSelect(a)) {
+            if (!score()->selectionFilters().canSelect(a)) {
                 continue;
             }
             switch (a->type()) {
@@ -2462,7 +2462,7 @@ String Segment::accessibleExtraInfo() const
     auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks());
     for (auto interval : spanners) {
         Spanner* s = interval.value;
-        if (!score()->selectionFilter().canSelect(s)) {
+        if (!score()->selectionFilters().canSelect(s)) {
             continue;
         }
         if (segmentType() == SegmentType::EndBarLine

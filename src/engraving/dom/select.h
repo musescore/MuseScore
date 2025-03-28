@@ -28,6 +28,9 @@
 #include "pitchspelling.h"
 #include "types.h"
 
+#include "selectionfilter/elementsselectionfilter.h"
+#include "selectionfilter/voicesselectionfilter.h"
+
 namespace mu::engraving {
 class Score;
 class Page;
@@ -41,6 +44,35 @@ class MeasureBase;
 class Chord;
 class Tuplet;
 class GuitarBend;
+
+using SelectionFilterTypesVariant = std::variant<VoicesSelectionFilterTypes, ElementsSelectionFilterTypes>;
+
+class SelectionFilters
+{
+public:
+    SelectionFilters() = default;
+
+    inline bool operator==(const SelectionFilters& f) const
+    {
+        return m_elementsFilter == f.m_elementsFilter
+               && m_voicesFilter == f.m_voicesFilter;
+    }
+
+    inline bool operator!=(const SelectionFilters& f) const { return !this->operator==(f); }
+
+    bool canSelect(const EngravingItem* element) const { return m_elementsFilter.canSelect(element); }
+    bool canSelectVoice(track_idx_t track) const { return m_voicesFilter.canSelectVoice(track); }
+
+    bool isFiltered(const SelectionFilterTypesVariant& variant) const;
+    void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
+
+    VoicesSelectionFilter& voicesSelectionFilter() { return m_voicesFilter; }
+    ElementsSelectionFilter& elementsSelectionFilter() { return m_elementsFilter; }
+
+private:
+    VoicesSelectionFilter m_voicesFilter;
+    ElementsSelectionFilter m_elementsFilter;
+};
 
 //---------------------------------------------------------
 //   ElementPattern
@@ -83,64 +115,6 @@ enum class SelState : char {
     LIST,     // disjoint selection
     RANGE,    // adjacent selection, a range in one or more staves
     // is selected
-};
-
-//---------------------------------------------------------
-//   SelectionFilterType
-//---------------------------------------------------------
-
-static constexpr size_t NUMBER_OF_SELECTION_FILTER_TYPES = 23;
-
-enum class SelectionFilterType : unsigned int {
-    NONE                    = 0,
-    FIRST_VOICE             = 1 << 0,
-    SECOND_VOICE            = 1 << 1,
-    THIRD_VOICE             = 1 << 2,
-    FOURTH_VOICE            = 1 << 3,
-    DYNAMIC                 = 1 << 4,
-    HAIRPIN                 = 1 << 5,
-    FINGERING               = 1 << 6,
-    LYRICS                  = 1 << 7,
-    CHORD_SYMBOL            = 1 << 8,
-    OTHER_TEXT              = 1 << 9,
-    ARTICULATION            = 1 << 10,
-    ORNAMENT                = 1 << 11,
-    SLUR                    = 1 << 12,
-    FIGURED_BASS            = 1 << 13,
-    OTTAVA                  = 1 << 14,
-    PEDAL_LINE              = 1 << 15,
-    OTHER_LINE              = 1 << 16,
-    ARPEGGIO                = 1 << 17,
-    GLISSANDO               = 1 << 18,
-    FRET_DIAGRAM            = 1 << 19,
-    BREATH                  = 1 << 20,
-    TREMOLO                 = 1 << 21,
-    GRACE_NOTE              = 1 << 22,
-    ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES)
-};
-
-//---------------------------------------------------------
-//   SelectionFilter
-//---------------------------------------------------------
-
-class SelectionFilter
-{
-public:
-    SelectionFilter() = default;
-    SelectionFilter(SelectionFilterType type);
-
-    inline bool operator==(const SelectionFilter& f) const { return m_filteredTypes == f.m_filteredTypes; }
-    inline bool operator!=(const SelectionFilter& f) const { return !this->operator==(f); }
-
-    int filteredTypes() const;
-    bool isFiltered(SelectionFilterType type) const;
-    void setFiltered(SelectionFilterType type, bool filtered);
-
-    bool canSelect(const EngravingItem* element) const;
-    bool canSelectVoice(track_idx_t track) const;
-
-private:
-    unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);
 };
 
 //-------------------------------------------------------------------
@@ -225,9 +199,9 @@ private:
 
     muse::ByteArray staffMimeData() const;
     muse::ByteArray symbolListMimeData() const;
-    SelectionFilter selectionFilter() const;
-    bool canSelect(EngravingItem* e) const { return selectionFilter().canSelect(e); }
-    bool canSelectVoice(track_idx_t track) const { return selectionFilter().canSelectVoice(track); }
+    SelectionFilters& selectionFilters() const;
+    bool canSelect(EngravingItem* e) const { return selectionFilters().canSelect(e); }
+    bool canSelectVoice(track_idx_t track) const { return selectionFilters().canSelectVoice(track); }
     void appendFiltered(EngravingItem* e);
     void appendChord(Chord* chord);
     void appendTupletHierarchy(Tuplet* innermostTuplet);

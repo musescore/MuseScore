@@ -1164,14 +1164,14 @@ String BarLine::accessibleExtraInfo() const
     String rez;
 
     for (const EngravingItem* e : *el()) {
-        if (!score()->selectionFilter().canSelect(e)) {
+        if (!score()->selectionFilters().canSelect(e)) {
             continue;
         }
         rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
     }
 
     for (const EngravingItem* e : seg->annotations()) {
-        if (!score()->selectionFilter().canSelect(e)) {
+        if (!score()->selectionFilters().canSelect(e)) {
             continue;
         }
         if (e->track() == track()) {
@@ -1183,7 +1183,7 @@ String BarLine::accessibleExtraInfo() const
     if (m) {      // always true?
         //jumps
         for (const EngravingItem* e : m->el()) {
-            if (!score()->selectionFilter().canSelect(e)) {
+            if (!score()->selectionFilters().canSelect(e)) {
                 continue;
             }
             if (e->type() == ElementType::JUMP) {
@@ -1200,7 +1200,7 @@ String BarLine::accessibleExtraInfo() const
         Measure* nextM = m->nextMeasureMM();
         if (nextM) {
             for (const EngravingItem* e : nextM->el()) {
-                if (!score()->selectionFilter().canSelect(e)) {
+                if (!score()->selectionFilters().canSelect(e)) {
                     continue;
                 }
                 if (e->isMarker()) {
@@ -1218,7 +1218,7 @@ String BarLine::accessibleExtraInfo() const
     auto spanners = score()->spannerMap().findOverlapping(tick.ticks(), tick.ticks());
     for (auto interval : spanners) {
         Spanner* s = interval.value;
-        if (!score()->selectionFilter().canSelect(s)) {
+        if (!score()->selectionFilters().canSelect(s)) {
             continue;
         }
         if (s->type() == ElementType::VOLTA) {

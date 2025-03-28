@@ -71,7 +71,7 @@ public:
     void setWriteTrack(bool v) { _writeTrack= v; }
     void setWritePosition(bool v) { _writePosition = v; }
 
-    void setFilter(SelectionFilter f) { _filter = f; }
+    void setFilters(SelectionFilters f) { _filters = f; }
     bool canWrite(const EngravingItem*) const;
     bool canWriteVoice(track_idx_t track) const;
 
@@ -86,7 +86,7 @@ public:
                && _msczMode == c._msczMode
                && _writeTrack == c._writeTrack
                && _writePosition == c._writePosition
-               && _filter == c._filter
+               && _filters == c._filters
                && m_linksIndexer == c.m_linksIndexer
                && m_lidLocalIndices == c.m_lidLocalIndices;
     }
@@ -108,7 +108,7 @@ private:
     bool _writeTrack     { false };
     bool _writePosition  { false };
 
-    SelectionFilter _filter;
+    SelectionFilters _filters;
 
     LinksIndexer m_linksIndexer;
     std::map<int, int> m_lidLocalIndices;

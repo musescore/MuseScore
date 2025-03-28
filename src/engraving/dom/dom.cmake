@@ -269,6 +269,14 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/segment.h
     ${CMAKE_CURRENT_LIST_DIR}/segmentlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/segmentlist.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter/abstractselectionfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter/abstractselectionfilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter/voicesselectionfilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter/voicesselectionfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter/elementsselectionfilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter/elementsselectionfilter.h
+
     ${CMAKE_CURRENT_LIST_DIR}/select.cpp
     ${CMAKE_CURRENT_LIST_DIR}/select.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp

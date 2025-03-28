@@ -430,7 +430,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     for (Staff* s : sl) {
         track_idx_t idx = s->idx() * VOICES;
         for (voice_idx_t i = 0; i < VOICES; ++i) {
-            if (selectionFilter().canSelectVoice(i)) {
+            if (selectionFilters().canSelectVoice(i)) {
                 tracks.push_back(idx + i);
             }
         }
@@ -510,7 +510,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 }
             }
         }
-        if (transposeChordNames && selectionFilter().isFiltered(SelectionFilterType::CHORD_SYMBOL)) {
+        if (transposeChordNames && selectionFilters().isFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL)) {
             for (EngravingItem* e : segment->annotations()) {
                 if (!e->isHarmony() || (!muse::contains(tracks, e->track()))) {
                     continue;

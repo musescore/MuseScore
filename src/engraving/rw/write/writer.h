@@ -43,7 +43,7 @@ public:
 
     static void write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook);
 
-    void writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool, bool,
+    void writeSegments(XmlWriter& xml, SelectionFilters* filters, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool, bool,
                        Fraction& curTick) override;
 
 private:
