@@ -60,6 +60,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/engravingerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengraving.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingfont.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingfontsprovider.h
