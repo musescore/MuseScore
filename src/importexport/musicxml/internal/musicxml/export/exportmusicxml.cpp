@@ -3669,9 +3669,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
     // write all remaining articulations as other-articulation
     for (const Articulation* a : na) {
-        if (!ExportMusicXml::canWrite(a)) {
-            continue;
-        }
         if (a->isOrnament()) {
             continue;
         }
