@@ -1460,7 +1460,7 @@ static void addTextToNote(long l, long c, QString txt, QString placement, QStrin
  As the SLine has just been created, it does not have any segment yet
  */
 
-static void setSLinePlacement(SLine* sli, const QString placement)
+static void setSLinePlacement(SLine* sli, const QString placement, bool isVocalStaff)
       {
       /*
        qDebug("setSLinePlacement sli %p type %d s=%g pl='%s'",
@@ -1491,7 +1491,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 #endif
       if (placement == "above" || placement == "below") {
             sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
-            sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::NOSTYLE);
+            sli->setPropertyFlags(Pid::PLACEMENT, isVocalStaff ? PropertyFlags::UNSTYLED : PropertyFlags::NOSTYLE);
             sli->resetProperty(Pid::OFFSET);
             }
       }
@@ -1503,11 +1503,11 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 // note that in case of overlapping spanners, handleSpannerStart is called for every spanner
 // as spanners QMap allows only one value per key, this does not hurt at all
 
-static void handleSpannerStart(SLine* new_sp, int track, QString placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStart(SLine* new_sp, int track, QString placement, const Fraction& tick, MusicXmlSpannerMap& spanners, bool isVocalStaff)
       {
       //qDebug("handleSpannerStart(sp %p, track %d, tick %s (%d))", new_sp, track, qPrintable(tick.print()), tick.ticks());
       new_sp->setTrack(track);
-      setSLinePlacement(new_sp, placement);
+      setSLinePlacement(new_sp, placement, isVocalStaff);
       spanners[new_sp] = QPair<int, int>(tick.ticks(), -1);
       }
 
@@ -3640,13 +3640,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         _pass2.addSpanner(desc);
                         // handleSpannerStart and handleSpannerStop must be called in order
                         // due to allocation of elements in the map
-                        handleSpannerStart(desc._sp, track, spannerPlacement, tick + _offset, spanners);
+                        handleSpannerStart(desc._sp, track, spannerPlacement, tick + _offset, spanners, isVocalStaff);
                         handleSpannerStop(spdesc._sp, spdesc._track2, spdesc._tick2, spanners);
                         _pass2.clearSpanner(desc);
                         }
                   else {
                         _pass2.addSpanner(desc);
-                        handleSpannerStart(desc._sp, track, spannerPlacement, tick + _offset, spanners);
+                        handleSpannerStart(desc._sp, track, spannerPlacement, tick + _offset, spanners, isVocalStaff);
                         spdesc._isStarted = true;
                         }
                   }
@@ -4423,7 +4423,7 @@ void MusicXMLParserDirection::addInferredCrescLine(const int track, const Fracti
       QString spannerPlacement = _placement;
       if (_placement.isEmpty())
             spannerPlacement = isVocalStaff ? "above" : "below";
-      setSLinePlacement(_inferredHairpinStart, _placement);
+      setSLinePlacement(_inferredHairpinStart, _placement, isVocalStaff);
 
       _pass2.addInferredHairpin(_inferredHairpinStart);
       }
