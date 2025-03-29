@@ -39,6 +39,11 @@ bool WorkspaceStub::isEdited() const
     return false;
 }
 
+bool WorkspaceStub::isNeedSave() const
+{
+    return false;
+}
+
 RetVal<QByteArray> WorkspaceStub::rawData(const DataKey&) const
 {
     return RetVal<QByteArray>(make_ret(Ret::Code::NotImplemented));
