@@ -775,24 +775,6 @@ int diatonicUpDown(Key k, int pitch, int steps)
     return pitch;
 }
 
-Volta* findVolta(const Segment* seg, const Score* score)
-{
-    if (!seg) {
-        return nullptr;
-    }
-
-    const Measure* measure = seg->measure();
-    const Fraction tick = measure->tick() + Fraction::eps();
-    auto spanners = score->spannerMap().findOverlapping(tick.ticks(), tick.ticks());
-    for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta()) {
-            continue;
-        }
-        return toVolta(spanner.value);
-    }
-    return nullptr;
-}
-
 //---------------------------------------------------------
 //   searchTieNote
 //    search Note to tie to "note"
@@ -1686,26 +1668,50 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
     if (!firstSeg || !secondSeg) {
         return false;
     }
-    // Disallow inputting ties between unrelated voltas
-    // This visually adjacent segment is never the next to be played
-    Score* score = firstSeg->score();
-    Volta* startVolta = findVolta(firstSeg, score);
-    Volta* endVolta = findVolta(secondSeg, score);
+    Measure* firstMeasure = firstSeg->measure();
+    Measure* secondMeasure = secondSeg->measure();
 
-    if (startVolta && endVolta && startVolta != endVolta) {
-        return false;
+    if (firstMeasure == secondMeasure) {
+        return true;
     }
 
-    // Disallow inputting ties across codas
-    // This visually adjacent segment is never the next to be played
-    if (secondSeg->measure() != firstSeg->measure()) {
-        for (const EngravingItem* el : secondSeg->measure()->el()) {
-            if (el->isMarker() && toMarker(el)->isCoda()) {
-                return false;
-            }
+    Score* score = firstSeg->score();
+
+    const RepeatList& repeatList = score->repeatList(true, false);
+
+    std::vector<const Measure*> measures;
+
+    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+        const RepeatSegment* rs = *it;
+        const auto nextSegIt = std::next(it);
+
+        // Check if measures are in the same repeat segment
+        if (rs->containsMeasure(firstMeasure) && rs->containsMeasure(secondMeasure)) {
+            return true;
+        }
+
+        // Continue to build list of measures at the start of following repeat segments
+        if (!rs->endsWithMeasure(firstMeasure) || nextSegIt == repeatList.end()) {
+            continue;
+        }
+
+        // Get next segment
+        const RepeatSegment* nextSeg = *nextSegIt;
+        const Measure* nextSegFirstMeasure = nextSeg->firstMeasure();
+        if (!nextSegFirstMeasure) {
+            continue;
+        }
+
+        measures.push_back(nextSegFirstMeasure);
+    }
+
+    // Check if second segment is in a following measure in the repeat structure
+    for (const Measure* m : measures) {
+        if (m == secondSeg->measure()) {
+            return true;
         }
     }
 
-    return true;
+    return false;
 }
 }
