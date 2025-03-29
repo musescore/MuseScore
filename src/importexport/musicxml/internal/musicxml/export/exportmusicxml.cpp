@@ -3340,7 +3340,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
             }
             subtype += color2xml(cl);
             if (!subtype.empty()) {
-                notations.tag(xml, e);
+                notations.tag(xml, cl);
                 articulations.tag(xml);
                 xml.tagRaw(subtype);
             }
@@ -8731,7 +8731,9 @@ double ExportMusicXml::getTenthsFromDots(double dots) const
 static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
 {
     LOGD("FretDiagram::writeMusicXml() this %p harmony %p", item, item->harmony());
-    xml.startElement("frame");
+    XmlWriter::Attributes frameAttrs;
+    addColorAttr(item, frameAttrs);
+    xml.startElement("frame", frameAttrs);
     xml.tag("frame-strings", item->strings());
     xml.tag("frame-frets", item->frets());
     if (item->fretOffset() > 0) {
