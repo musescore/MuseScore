@@ -3601,17 +3601,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="548"/>
         <source>Enable indentation on first system</source>
-        <translation>Activer l&apos;indentation du premier système</translation>
+        <translation>Activer le retrait du premier système</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="566"/>
         <source>First system indentation:</source>
-        <translation>Indentation du premier système :</translation>
+        <translation>Retrait du premier système :</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="595"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation>Réinitialiser la valeur &apos;Indentation du premier système&apos;</translation>
+        <translation>Réinitialiser la valeur &apos;Retrait du premier système&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="625"/>
@@ -9224,7 +9224,7 @@ Par défaut, elles seront palcées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="166"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation>Réinitialiser la valeur &apos;Indentation du premier système&apos;</translation>
+        <translation>Réinitialiser la valeur &apos;Retrait du premier système&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="120"/>
@@ -9234,7 +9234,7 @@ Par défaut, elles seront palcées à droite et au même niveau. Cochez cette ca
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="140"/>
         <source>First system indentation</source>
-        <translation>Indentation du 1er système</translation>
+        <translation>Retrait du 1er système</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="97"/>
@@ -9260,12 +9260,13 @@ Par défaut, elles seront palcées à droite et au même niveau. Cochez cette ca
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="212"/>
         <source>Hide courtesy clefs,
 time and key signatures</source>
-        <translation type="unfinished"></translation>
+        <translation>Masquer les rappels des Clefs,
+Armures, et Indications de mesure</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="226"/>
         <source>Reset &apos;Hide courtesy clefs, time and key signatures&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser la valeur &apos;Masquer les rappels des Clefs, Armures, et Indications de mesure&apos;</translation>
     </message>
 </context>
 <context>
@@ -15046,13 +15047,13 @@ connexion Internet</translation>
     <message>
         <location filename="../../mscore/pagesettings.cpp" line="169"/>
         <source>mm</source>
-        <translation type="unfinished">mm</translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.cpp" line="174"/>
         <source>in</source>
         <comment>abbreviation for inch</comment>
-        <translation type="unfinished"></translation>
+        <translation>in</translation>
     </message>
 </context>
 <context>
@@ -17599,12 +17600,12 @@ veuillez choisir un nom différent :</translation>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="220"/>
         <source>Inch (in)</source>
-        <translation>Pouce (p)</translation>
+        <translation>Inches (in)</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="227"/>
         <source>Millimeter (mm)</source>
-        <translation>Millimètre (mm)</translation>
+        <translation>Millimètres (mm)</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="253"/>
