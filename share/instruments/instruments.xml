@@ -14798,9 +14798,6 @@
                   <longName>Bass Viol</longName>
                   <shortName>B. Vl.</shortName>
                   <description>Bass viola da gamba (tablature). Third lowest member of the viol family.</description>
-                  <StringData>
-                        <frets>13</frets>
-                  </StringData>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <genre>earlymusic</genre>
             </Instrument>
