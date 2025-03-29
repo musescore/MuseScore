@@ -1467,14 +1467,6 @@ void EditStyle::adjustPagesStackSize(int currentPageIndex)
 {
     QSize preferredSize = pageStack->widget(currentPageIndex)->sizeHint();
     pageStack->setMinimumSize(preferredSize);
-
-    connect(pageStack, &QStackedWidget::currentChanged, this, [this](int currentIndex) {
-        QWidget* currentPage = pageStack->widget(currentIndex);
-        if (!currentPage) {
-            return;
-        }
-        pageStack->setMinimumSize(currentPage->sizeHint());
-    });
 }
 
 EditStyle::WidgetAndView EditStyle::createQmlWidget(QWidget* parent, const QUrl& source)
