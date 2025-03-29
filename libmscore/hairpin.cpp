@@ -676,7 +676,7 @@ void Hairpin::write(XmlWriter& xml) const
       writeProperty(xml, Pid::DYNAMIC_RANGE);
       writeProperty(xml, Pid::SINGLE_NOTE_DYNAMICS);
       writeProperty(xml, Pid::VELO_CHANGE_METHOD);
-      //writeProperty(xml, Pid::PLACEMENT);
+      writeProperty(xml, Pid::PLACEMENT);
 
       TextLineBase::writeProperties(xml);
       xml.etag();
