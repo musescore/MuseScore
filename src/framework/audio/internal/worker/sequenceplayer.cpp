@@ -38,17 +38,28 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
     });
 
     m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
-        audioEngine()->mixer()->setIsActive(status == PlaybackStatus::Running);
+        if (!m_countDownIsSet) {
+            audioEngine()->mixer()->setIsActive(status == PlaybackStatus::Running);
+        }
+    });
+
+    m_clock->countDownEnded().onNotify(this, [this]() {
+        m_countDownIsSet = false;
+        audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
     });
 }
 
-void SequencePlayer::play()
+void SequencePlayer::play(const secs_t delay)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    if (!delay.is_zero()) {
+        m_clock->setCountDown(secsToMicrosecs(delay));
+        m_countDownIsSet = true;
+    }
+
     audioEngine()->setMode(RenderMode::RealTimeMode);
     m_clock->start();
-    audioEngine()->mixer()->setIsActive(true);
 }
 
 void SequencePlayer::seek(const secs_t newPosition)
@@ -66,7 +77,6 @@ void SequencePlayer::stop()
 
     audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->stop();
-    audioEngine()->mixer()->setIsActive(false);
 }
 
 void SequencePlayer::pause()
@@ -75,16 +85,19 @@ void SequencePlayer::pause()
 
     audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->pause();
-    audioEngine()->mixer()->setIsActive(false);
 }
 
-void SequencePlayer::resume()
+void SequencePlayer::resume(const secs_t delay)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    if (!delay.is_zero()) {
+        m_clock->setCountDown(secsToMicrosecs(delay));
+        m_countDownIsSet = true;
+    }
+
     audioEngine()->setMode(RenderMode::RealTimeMode);
     m_clock->resume();
-    audioEngine()->mixer()->setIsActive(true);
 }
 
 msecs_t SequencePlayer::duration() const
