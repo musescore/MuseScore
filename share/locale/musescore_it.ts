@@ -4,7 +4,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="51"/>
         <source>Align left edge of text to reference point</source>
-        <translation>Allinea bordo sinistro del testo al punto di riferimento</translation>
+        <translation>Allinea il bordo sinistro del testo al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="76"/>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="101"/>
         <source>Align right edge of text to reference point</source>
-        <translation>Allinea bordo destro del testo al punto di riferimento</translation>
+        <translation>Allinea il bordo destro del testo al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="139"/>
@@ -1495,7 +1495,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="570"/>
         <source>Continuous</source>
-        <translation>Continui</translation>
+        <translation>Continue</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="592"/>
@@ -2212,7 +2212,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="556"/>
         <source>Hide empty staves within systems</source>
-        <translation>Nascondi pentagrammi vuoti dentro i sistemi</translation>
+        <translation>Nascondi i righi vuoti dentro i sistemi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="575"/>
@@ -2421,7 +2421,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="362"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation>MuseScore Studio cambierà lo stile per adattarlo meglio al tipo di font</translation>
+        <translation>MuseScore Studio cambierà lo stile per adattarlo meglio al font</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1044"/>
@@ -4730,7 +4730,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="239"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13109"/>
         <source>Chord symbols</source>
-        <translation>Simboli accordo</translation>
+        <translation>Sigle accordo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="244"/>
@@ -5618,7 +5618,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="172"/>
         <source>Show more…</source>
-        <translation>Mostra di più…</translation>
+        <translation>Mostra altro...</translation>
     </message>
 </context>
 <context>
@@ -5657,7 +5657,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="99"/>
         <source>Same beat</source>
-        <translation>Stesso battito</translation>
+        <translation>Stesso battere</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="106"/>
@@ -5760,7 +5760,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="82"/>
         <source>Same note name:</source>
-        <translation>Stessa nome nota:</translation>
+        <translation>Stesso nome nota:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="145"/>
@@ -5770,7 +5770,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="166"/>
         <source>Same beat</source>
-        <translation>Stesso battito</translation>
+        <translation>Stesso battere</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="173"/>
@@ -6435,7 +6435,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="122"/>
         <source>Until next chord symbol</source>
-        <translation>Fino al prossimo simbolo di accordo</translation>
+        <translation>Fino alla prossimo sigla accordale</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="127"/>
@@ -6598,12 +6598,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation>&amp;Elimina file recenti</translation>
+        <translation>&amp;Svuota file recenti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear recent files</source>
-        <translation>Elimina file recenti</translation>
+        <translation>Svuota file recenti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>
@@ -6860,7 +6860,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="388"/>
         <source>More…</source>
-        <translation>Di più…</translation>
+        <translation>Altro...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="486"/>
@@ -6938,7 +6938,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="700"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="701"/>
         <source>Insert measures at start of score…</source>
-        <translation>Inserisci battute ad inizio partitura...</translation>
+        <translation>Inserisci battute a inizio partitura...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="706"/>
@@ -8210,7 +8210,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1682"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation>Avanza cursore: tempo seguente (sigla accordale)</translation>
+        <translation>Avanza cursore: battere seguente (sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
@@ -8416,7 +8416,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2012"/>
         <source>Show/hide empty staves</source>
-        <translation>Mostra/nascondi pentagrammi vuoti</translation>
+        <translation>Mostra/nascondi righi vuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2018"/>
@@ -9550,7 +9550,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>Realize &amp;chord symbols</source>
-        <translation>&amp;Realizza sigle accordali</translation>
+        <translation>Realizza &amp;sigle accordali</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
@@ -9595,7 +9595,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="505"/>
         <source>Manage parts</source>
-        <translation>Gestisci parti</translation>
+        <translation>Gestisci le parti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
@@ -9989,7 +9989,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1688"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
-        <translation>Avanzamento del cursore: battito precedente (sigla accordale)</translation>
+        <translation>Avanza cursore: battere precedente (sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1760"/>
@@ -10323,7 +10323,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1681"/>
         <source>Next beat (Chord symbol)</source>
-        <translation>Battere seguente (simbolo accordo)</translation>
+        <translation>Battere seguente (sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1777"/>
@@ -10456,12 +10456,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>
         <source>&amp;Manage plugins…</source>
-        <translation>&amp;Gestisci plugin…</translation>
+        <translation>&amp;Gestisci i plugin…</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="40"/>
         <source>Manage plugins…</source>
-        <translation>Gestisci plugin…</translation>
+        <translation>Gestisci i plugin…</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
@@ -10633,7 +10633,7 @@ altezza x del testo):</translation>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>Questa azione ripristina tutte le preferenze dell&apos;applicazione ed elimina tutte le tavolozze e le scorciatoie personalizzate. Anche l&apos;elenco delle partiture verrà cancellato.
+        <translation>Questa azione ripristina tutte le preferenze dell&apos;applicazione ed elimina tutte le tavolozze e le scorciatoie personalizzate. Anche l&apos;elenco delle partiture verrà svuotato.
 
 Questa azione non eliminerà nessuna delle tue partiture.</translation>
     </message>
@@ -11178,7 +11178,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="30"/>
         <source>Automatic update check</source>
-        <translation>Controllo automatico aggiornamenti</translation>
+        <translation>Controllo automatico degli aggiornamenti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
@@ -11365,7 +11365,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="125"/>
         <source>Play chord symbols and Nashville numbers</source>
-        <translation>Suona simboli accordali e numeri Nashville</translation>
+        <translation>Suona sigle accordali e numeri Nashville</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="142"/>
@@ -12336,7 +12336,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3361"/>
         <source>Beat slash</source>
-        <translation>Battito barra ritmica</translation>
+        <translation>Battere barra ritmica</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
@@ -13168,7 +13168,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1277"/>
         <source>Glissando</source>
-        <translation>Glissando</translation>
+        <translation>glissando</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="289"/>
@@ -14247,7 +14247,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1594"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
         <source>End beat: %1</source>
-        <translation>Fine battito: %1</translation>
+        <translation>Fine battere: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="73"/>
@@ -18832,7 +18832,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="61"/>
         <source>Run plugin %1 (%2)</source>
-        <translation>Esecuzione plugin %1 (%2)</translation>
+        <translation>Esegui plugin %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="105"/>
@@ -21030,7 +21030,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="72"/>
         <source>Text when continuing to a new system</source>
-        <translation>Testo quando si passa a nuovo sistema</translation>
+        <translation>Testo quando si passa ad un nuovo sistema</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="92"/>
@@ -21496,7 +21496,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="77"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="61"/>
         <source>BPM</source>
-        <translation>BPM</translation>
+        <translation>BPm</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
@@ -21668,7 +21668,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="212"/>
         <source>Align center</source>
-        <translation>Centrato</translation>
+        <translation>Allinea al centro</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="213"/>
@@ -21885,7 +21885,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/models/notation/brackets/bracketsettingsmodel.cpp" line="37"/>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="81"/>
         <source>Bracket</source>
-        <translation>Parentesi</translation>
+        <translation>Parentesi quadra</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/clefs/clefsettingsmodel.cpp" line="35"/>
@@ -22394,7 +22394,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
         <source>Laissez vibrer placement</source>
-        <translation>Posizionamento lascia vibrare</translation>
+        <translation>Posizionamento del lascia vibrare</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="98"/>
@@ -22757,7 +22757,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="144"/>
         <source>Remove selected system markings</source>
-        <translation>Rimuovi le indicazioni del sistema selezionate</translation>
+        <translation>Rimuovi le indicazioni di sistema selezionate</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="117"/>
@@ -22772,12 +22772,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="142"/>
         <source>Remove selected instruments</source>
-        <translation>Rimuovi strumenti selezionati</translation>
+        <translation>Rimuovi gli strumenti selezionati</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="143"/>
         <source>Remove selected staves</source>
-        <translation>Rimuovi righi selezionati</translation>
+        <translation>Rimuovi i righi selezionati</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="37"/>
@@ -22828,7 +22828,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
         <source>Create a linked staff</source>
-        <translation>Crea rigo collegato</translation>
+        <translation>Crea un rigo collegato</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="187"/>
@@ -22871,13 +22871,13 @@ battuta in levare</translation>
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="990"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Sei sicuro di voler eliminare lo strumento selezionato?</numerusform><numerusform>Sei sicuro di voler eliminare gli strumenti selezionati?</numerusform><numerusform>Sei sicuro di voler eliminare lo(gli) strumento(i) selezionato(i) (%n)?</numerusform></translation>
+        <translation><numerusform>Sei sicuro di voler eliminare lo strumento selezionato?</numerusform><numerusform>Sei sicuro di voler eliminare gli strumenti selezionati?</numerusform><numerusform>Sei sicuro di voler eliminare gli strumenti selezionati?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="995"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Questo rimuove lo strumento dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuove gli strumenti dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuoverà lo(gli) strumento(i) %n dalla partitura completa e da tutte le parti.</numerusform></translation>
+        <translation><numerusform>Questo rimuoverà lo strumento dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuoverà gli strumenti dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuoverà gli strumenti dalla partitura completa e da tutte le parti.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="242"/>
@@ -23137,7 +23137,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="100"/>
         <source>Broken beam minimum length</source>
-        <translation>Lunghezza minima codetta spezzata</translation>
+        <translation>Lunghezza minima travatura spezzata</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="121"/>
@@ -23236,7 +23236,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="55"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="34"/>
         <source>Parts</source>
-        <translation>Parti1</translation>
+        <translation>Parti</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="60"/>
@@ -23834,7 +23834,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="179"/>
         <source>Chord symbols</source>
-        <translation>Simboli accordo</translation>
+        <translation>Sigle accordali</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="181"/>
@@ -24191,7 +24191,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="91"/>
         <source>Cannot split measure at the first beat</source>
-        <translation>Non è possibile dividere la battuta sul primo battito</translation>
+        <translation>Non è possibile dividere la battuta sul primo battere</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="94"/>
@@ -24453,7 +24453,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2423"/>
         <source>MuseScore chord symbol style files</source>
-        <translation>MuseScore file di stile dei simboli degli accordi</translation>
+        <translation>MuseScore file di stile delle sigle accordali</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="44"/>
@@ -24898,7 +24898,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="965"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1332"/>
         <source>Until next chord symbol</source>
-        <translation>Fino al prossimo simbolo di accordo</translation>
+        <translation>Fino alla prossima sigla accordale</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="967"/>
@@ -25029,7 +25029,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1400"/>
         <source>Available metadata tags and their current values</source>
-        <translation>Disponibili etichette di metadati e loro valori correnti:</translation>
+        <translation>Etichette di metadati disponibili e loro valori correnti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1402"/>
@@ -25098,17 +25098,17 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="159"/>
         <source>On all staves</source>
-        <translation>Su tutti i pentagrammi</translation>
+        <translation>Su tutti i righi</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="160"/>
         <source>Above staves</source>
-        <translation>Sopra i pentagrammi</translation>
+        <translation>Sopra i righi</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="161"/>
         <source>Across staves</source>
-        <translation>Attraverso i pentagrammi</translation>
+        <translation>Attraverso i righi</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
@@ -25133,7 +25133,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="252"/>
         <source>Alignment across staves:</source>
-        <translation>Allineamento attraverso i pentagrammi:</translation>
+        <translation>Allineamento attraverso i righi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="292"/>
@@ -25170,12 +25170,12 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="426"/>
         <source>Inset time signature</source>
-        <translation>Indicazione metrica inserita</translation>
+        <translation>Inserisci dentro l&apos;indicazione metrica</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="431"/>
         <source>Inset barline</source>
-        <translation>Stanghetta inserita</translation>
+        <translation>Inserisci dentro la stanghetta</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="452"/>
@@ -28576,7 +28576,7 @@ non riuscita.</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml" line="109"/>
         <source>Beat</source>
         <comment>Beat number</comment>
-        <translation>Battito</translation>
+        <translation>Battere</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackSpeedPopup.qml" line="43"/>
@@ -29273,7 +29273,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="109"/>
         <source>Clear selection</source>
-        <translation>Cancella selezione</translation>
+        <translation>Svuota selezione</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="128"/>
@@ -30003,12 +30003,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation>Versione di MuseScore Studio:</translation>
+        <translation>versione di MuseScore Studio:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
         <source>Revision:</source>
-        <translation>Revisione: </translation>
+        <translation>revisione: </translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="104"/>
@@ -30265,7 +30265,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1378"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
-        <translation>Tutte le modifiche salvate saranno ora caricate nel cloud. Puoi gestire questo file nel gestore di spartiti su MuseScore.com</translation>
+        <translation>Tutte le modifiche salvate saranno ora caricate nel cloud. Puoi gestire questo file nel gestore partiture su MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1603"/>
@@ -30670,7 +30670,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="58"/>
         <source>The directory could not be cleared</source>
-        <translation>La directory non può essere cancellata</translation>
+        <translation>La directory non può essere svuotata</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="59"/>
@@ -31230,7 +31230,7 @@ non riuscita.</translation>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="167"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="600"/>
         <source>Add linked staff</source>
-        <translation>Aggiungi pentagramma collegato</translation>
+        <translation>Aggiungi rigo collegato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="191"/>
@@ -31725,12 +31725,12 @@ non riuscita.</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6637"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6691"/>
         <source>Navigate to next chord symbol</source>
-        <translation>Vai al simbolo di accordo seguente</translation>
+        <translation>Vai alla sigla accordale seguente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6728"/>
         <source>Navigate to chord symbol</source>
-        <translation>Vai al simbolo di accordo</translation>
+        <translation>Vai alla sigla accordale</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6783"/>

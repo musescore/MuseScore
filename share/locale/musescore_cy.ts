@@ -11058,7 +11058,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="367"/>
         <source>&amp;Plugins</source>
-        <translation>%Plwgmewn</translation>
+        <translation>&amp;Plwgmewn</translation>
     </message>
 </context>
 <context>

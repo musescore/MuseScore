@@ -42,12 +42,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>한 줄당 마디 수</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation type="unfinished"/>
+        <translation>한 줄당 마디 수를 X개로 고정</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -2582,7 +2582,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3178"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation>다중 소절 쉼표에서 소절 수 범위 표시</translation>
+        <translation>여러마디 쉼표에서 마디 번호 범위 표시</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3395"/>
@@ -3658,7 +3658,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Header &amp; footer</source>
-        <translation type="unfinished"/>
+        <translation>머리글 &amp; 바닥글</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="104"/>
@@ -3669,7 +3669,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
         <source>Slurs &amp; ties</source>
-        <translation type="unfinished"/>
+        <translation>이음줄 &amp; 붙임줄</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
@@ -3722,7 +3722,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="199"/>
         <source>Articulations &amp; ornaments</source>
-        <translation type="unfinished"/>
+        <translation>아티큘레이션 &amp; 장식음</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
@@ -4783,13 +4783,13 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5785"/>
         <source>Multimeasure rests</source>
-        <translation>여러 마디 쉼표</translation>
+        <translation>여러마디 쉼표</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6110"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6113"/>
         <source>Old-style multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>옛 스타일의 여러마디 쉼표</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6659"/>
@@ -6556,7 +6556,7 @@ text x-height):</source>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
         <source>Share on Audio.com…</source>
-        <translation type="unfinished"/>
+        <translation>Audio.com에 공유하기</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="102"/>
@@ -6912,25 +6912,25 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Measures per system…</source>
-        <translation type="unfinished"/>
+        <translation>한 줄당 마디 수...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="682"/>
         <source>Insert one measure before selection</source>
-        <translation>선택 뒤에 한 마디 추가</translation>
+        <translation>선택 영역 앞쪽에 한 마디 추가</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="688"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="689"/>
         <source>Insert measures before selection…</source>
-        <translation>선택 뒤에 마디 추가</translation>
+        <translation>선택 영역 뒤쪽에 여러 마디 추가</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="694"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="695"/>
         <source>Insert measures after selection…</source>
-        <translation>선택 앞에 마디 추가</translation>
+        <translation>선택 영역 앞쪽에 여러 마디 추가</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="700"/>
@@ -9468,7 +9468,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1610"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1611"/>
         <source>Repeat selection</source>
-        <translation>선택 반복</translation>
+        <translation>선택 영역 반복하기</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="67"/>
@@ -12642,18 +12642,18 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="173"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1237"/>
         <source>Measure number</source>
-        <translation type="unfinished"/>
+        <translation>마디 번호</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="174"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1238"/>
         <source>Multimeasure rest range</source>
-        <translation type="unfinished"/>
+        <translation>여러마디 쉼표 범위</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="175"/>
         <source>Instrument name</source>
-        <translation type="unfinished"/>
+        <translation>악기 이름</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="176"/>
@@ -13120,7 +13120,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1241"/>
         <source>Gradual tempo change</source>
-        <translation type="unfinished"/>
+        <translation>점진적인 빠르기 변화</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
@@ -13390,7 +13390,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1228"/>
         <source>Instrument name (Part)</source>
-        <translation type="unfinished"/>
+        <translation>악기 이름 (파트보)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="178"/>
@@ -13481,12 +13481,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1229"/>
         <source>Instrument name (Long)</source>
-        <translation type="unfinished"/>
+        <translation>악기 이름 (보표 시작부분)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1230"/>
         <source>Instrument name (Short)</source>
-        <translation type="unfinished"/>
+        <translation>악기 이름 (약칭)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1234"/>
@@ -13496,7 +13496,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1235"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>페이지 번호</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1243"/>
@@ -13531,12 +13531,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1262"/>
         <source>LH guitar fingering</source>
-        <translation type="unfinished"/>
+        <translation>왼손 기타 운지법</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1263"/>
         <source>RH guitar fingering</source>
-        <translation type="unfinished"/>
+        <translation>오른손 기타 운지법</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1267"/>
@@ -23045,12 +23045,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="83"/>
         <source>After selection</source>
-        <translation type="unfinished"/>
+        <translation>선택 영역 뒤쪽에</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="84"/>
         <source>Before selection</source>
-        <translation type="unfinished"/>
+        <translation>선택 영역 앞쪽에</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="85"/>
@@ -23462,7 +23462,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="244"/>
         <source>After selection…</source>
-        <translation type="unfinished"/>
+        <translation>선택 영역 뒤쪽에...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="245"/>
@@ -24316,7 +24316,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/notationerrors.h" line="71"/>
         <source>The selection is empty</source>
-        <translation type="unfinished"/>
+        <translation>선택된 것이 없습니다</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="263"/>
@@ -25422,12 +25422,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.cpp" line="525"/>
         <source>Invalid instrument name</source>
-        <translation type="unfinished"/>
+        <translation>잘못된 악기 이름</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.cpp" line="526"/>
         <source>The instrument name is invalid.</source>
-        <translation>알수 없는 악기 이름입니다.</translation>
+        <translation>잘못된 악기 이름입니다.</translation>
     </message>
 </context>
 <context>
@@ -25873,13 +25873,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="599"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1806"/>
         <source>RH guitar fingering %1</source>
-        <translation type="unfinished"/>
+        <translation>오른손 기타 운지법 %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="607"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1814"/>
         <source>LH guitar fingering %1</source>
-        <translation type="unfinished"/>
+        <translation>왼손 기타 운지법 %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="614"/>
@@ -26346,7 +26346,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1604"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1605"/>
         <source>Measure number</source>
-        <translation type="unfinished"/>
+        <translation>마디 번호</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1608"/>
@@ -28508,7 +28508,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="296"/>
         <source>Allow multiple selection</source>
-        <translation type="unfinished"/>
+        <translation>다중 선택 허용</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="309"/>
@@ -29223,7 +29223,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
         <source>Would you also like to share your music on Audio.com?</source>
-        <translation type="unfinished"/>
+        <translation>당신의 음악을 Audio.com에도 공유하고 싶나요?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
@@ -30264,7 +30264,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
-        <translation type="unfinished"/>
+        <translation>당신의 음악을 공유하려면 Audio.com에서 로그인하거나 새 계정을 만드세요.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="381"/>
@@ -31542,7 +31542,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5462"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>한 줄당 마디 수</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5469"/>
@@ -31861,12 +31861,12 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="423"/>
         <source>Set instrument name</source>
-        <translation type="unfinished"/>
+        <translation>악기 이름 지정</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="450"/>
         <source>Set abbreviated instrument name</source>
-        <translation type="unfinished"/>
+        <translation>악기 약칭 지정</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="477"/>

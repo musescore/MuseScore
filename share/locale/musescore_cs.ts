@@ -9155,7 +9155,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="225"/>
         <source>Preferences…</source>
-        <translation>Předvolby…</translation>
+        <translation>Nastavení…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="93"/>
@@ -9205,7 +9205,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="224"/>
         <source>&amp;Preferences</source>
-        <translation>&amp;Předvolby</translation>
+        <translation>&amp;Nastavení</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updateuiactions.cpp" line="36"/>
@@ -10743,21 +10743,21 @@ Tento krok neodstraní žádný vašich notových zápisů.
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation>Určitě chcete obnovit předvolby?</translation>
+        <translation>Určitě chcete obnovit nastavení?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation>Tato akce obnoví všechny předvolby aplikace a odstraní všechny vlastní klávesové zkratky. Nevymaže žádné vaše notové zápisy.
+        <translation>Tento krok obnoví všechna nastavení aplikace a odstraní všechny vlastní klávesové zkratky. Nevymaže žádné vaše notové zápisy.
 
 Tuto akci nelze vrátit zpět.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
         <source>Reset preferences</source>
-        <translation>Obnovit předvolby</translation>
+        <translation>Obnovit nastavení</translation>
     </message>
 </context>
 <context>
@@ -10970,7 +10970,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Add</source>
-        <translation>&amp;Přidat</translation>
+        <translation>&amp;Přidání</translation>
     </message>
 </context>
 <context>
@@ -11438,7 +11438,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
         <source>Reset preferences</source>
-        <translation>Obnovit předvolby</translation>
+        <translation>Obnovit nastavení</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="79"/>
@@ -11554,7 +11554,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/PreferencesDialog.qml" line="34"/>
         <source>Preferences</source>
-        <translation>Předvolby</translation>
+        <translation>Nastavení</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="167"/>
@@ -29747,7 +29747,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation>Tip: Takty můžete přidat nebo odstranit i po vytvoření notového zápisu</translation>
+        <translation>Rada: Takty můžete přidat nebo odstranit i po vytvoření notového zápisu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="49"/>
@@ -32143,7 +32143,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>
         <source>UI preferences (colors, canvas style, etc.)</source>
-        <translation>Předvolby uživatelského rozhraní (barvy, styl strany atd.)</translation>
+        <translation>Nastavení uživatelského rozhraní (barvy, styl strany atd.)</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>
