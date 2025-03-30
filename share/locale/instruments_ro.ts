@@ -1245,7 +1245,7 @@
         <source>G S. Oc.</source>
         <comment>g-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oc. S. Sol</translation>
+        <translation>Oc. s. sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="609"/>
@@ -1273,7 +1273,7 @@
         <source>F S. Oc.</source>
         <comment>f-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oc. S. Fa</translation>
+        <translation>Oc. a. fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="620"/>
@@ -1336,7 +1336,7 @@
         <source>C S. Oc.</source>
         <comment>c-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oc. S. Do</translation>
+        <translation>Oc. s. do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="640"/>
@@ -1406,7 +1406,7 @@
         <source>G A. Oc.</source>
         <comment>g-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oc. A. Sol</translation>
+        <translation>Oc. a. sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="662"/>
@@ -1441,7 +1441,7 @@
         <source>F A. Oc.</source>
         <comment>f-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oc. A. Fa</translation>
+        <translation>Oc. a. fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="673"/>
@@ -1476,7 +1476,7 @@
         <source>C A. Oc.</source>
         <comment>c-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oc. A. Do</translation>
+        <translation>Oc. a. do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="684"/>
@@ -1546,7 +1546,7 @@
         <source>C B. Oc.</source>
         <comment>c-bass-ocarina shortName</comment>
         <extracomment>shortName for Bass Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oc. B. Do</translation>
+        <translation>Oc. b. do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="706"/>
@@ -4528,21 +4528,21 @@
         <source>Baritone Saxophone</source>
         <comment>baritone-saxophone trackName</comment>
         <extracomment>trackName for Baritone Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon Bariton</translation>
+        <translation>Saxofon bariton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1658"/>
         <source>Baritone Saxophone</source>
         <comment>baritone-saxophone longName</comment>
         <extracomment>longName for Baritone Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofon Bariton</translation>
+        <translation>Saxofon bariton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1660"/>
         <source>Bar. Sax.</source>
         <comment>baritone-saxophone shortName</comment>
         <extracomment>shortName for Baritone Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sax. Bar.</translation>
+        <translation>Sax. bar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1663"/>

@@ -5995,7 +5995,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="35"/>
         <source>To Key</source>
-        <translation>În gama</translation>
+        <translation>în gama</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="57"/>
@@ -6080,7 +6080,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="392"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="395"/>
         <source>Up</source>
-        <translation>În sus</translation>
+        <translation>suitor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="145"/>
@@ -6090,13 +6090,13 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="442"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="445"/>
         <source>Down</source>
-        <translation>În jos</translation>
+        <translation>coborâtor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="155"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="158"/>
         <source>Closest</source>
-        <translation>Cea mai apropiată</translation>
+        <translation>în direcția cea mai apropiată</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="171"/>
@@ -6106,7 +6106,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="174"/>
         <source>By interval</source>
-        <translation>După interval</translation>
+        <translation>cu un interval de</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="212"/>
@@ -6246,12 +6246,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Single ♯ and ♭ only</source>
-        <translation>Doar ♯ și ♭ simpli</translation>
+        <translation>Folosește doar ♯ și ♭ simpli</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="499"/>
         <source>Use double ♯ and ♭</source>
-        <translation>Folosește ♯ și ♭ dubli</translation>
+        <translation>Folosește și ♯ și ♭ dubli</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="208"/>
@@ -6261,7 +6261,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="358"/>
         <source>Transpose key signatures</source>
-        <translation>Transpune armuri</translation>
+        <translation>Transpune armurile</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="405"/>
@@ -6271,38 +6271,38 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="409"/>
         <source>Second</source>
-        <translation>A doua</translation>
+        <translation>la secundă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="414"/>
         <source>Third</source>
-        <translation>A treia</translation>
+        <translation>la terță</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="419"/>
         <source>Fourth</source>
-        <translation>A patra</translation>
+        <translation>la cvartă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="424"/>
         <source>Fifth</source>
-        <translation>A cincea</translation>
+        <translation>la cvintă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="429"/>
         <source>Sixth</source>
-        <translation>A șasea</translation>
+        <translation>la sextă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="434"/>
         <source>Seventh</source>
-        <translation>A șaptea</translation>
+        <translation>la septimă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="452"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="455"/>
         <source>Keep degree alterations</source>
-        <translation>Păstrează gradul alterațiilor</translation>
+        <translation>Păstrează alterațiile pe poziția lor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="468"/>
@@ -7136,12 +7136,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
         <source>Diatonic pitch up (keep degree alterations)</source>
-        <translation>Înățlime diatonică în sus (păstrează gradul alterațiilor)</translation>
+        <translation>Înățlime diatonică în sus (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1993"/>
         <source>Diatonic pitch down (keep degree alterations)</source>
-        <translation>Înățlime diatonică în jos (păstrează gradul alterațiilor)</translation>
+        <translation>Înățlime diatonică în jos (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2081"/>
@@ -8404,12 +8404,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1988"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
-        <translation>Mută înățimea în sus diatonic (păstrează gradul de alterații)</translation>
+        <translation>Mută înățimea în sus diatonic (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1994"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
-        <translation>Mută înățimea în jos diatonic (păstrează gradul de alterații)</translation>
+        <translation>Mută înățimea în jos diatonic (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2000"/>
@@ -9193,7 +9193,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>&amp;Layout</source>
-        <translation>Așezare în Pa&amp;gină</translation>
+        <translation>Așezare în pa&amp;gină</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
@@ -9483,12 +9483,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1975"/>
         <source>Transpose up</source>
-        <translation>Transpune ascendent</translation>
+        <translation>Transpune suitor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
         <source>Transpose down</source>
-        <translation>Transpune descendent</translation>
+        <translation>Transpune coborâtor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
@@ -10162,12 +10162,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1976"/>
         <source>Transpose up a semitone</source>
-        <translation>Transpune ascendent cu un semiton</translation>
+        <translation>Transpune suitor cu un semiton</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1982"/>
         <source>Transpose down a semitone</source>
-        <translation>Transpune descendent cu un semiton</translation>
+        <translation>Transpune coborâtor cu un semiton</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2005"/>
@@ -13161,7 +13161,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1273"/>
         <source>Text line</source>
-        <translation>Text pentru linii</translation>
+        <translation>Text cu linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="283"/>
@@ -22068,7 +22068,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
         <source>Text line</source>
-        <translation>Text pentru linii</translation>
+        <translation>Text cu linie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="34"/>
@@ -22842,7 +22842,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml" line="57"/>
         <source>Display at this position on the score</source>
-        <translation>Afișează la această poziție pe partitură</translation>
+        <translation>Afișează la această poziție</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
@@ -25949,7 +25949,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="932"/>
         <source>Brackets</source>
-        <translation>Paranteze</translation>
+        <translation>Acolade sistem</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="939"/>
@@ -26036,7 +26036,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1319"/>
         <source>Text line</source>
-        <translation>Text pentru linii</translation>
+        <translation>Text cu linie</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
@@ -26071,7 +26071,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1306"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
         <source>Staff text line</source>
-        <translation>Linie text portativ</translation>
+        <translation>Text cu linie portativ</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="581"/>
@@ -26087,7 +26087,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1312"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1548"/>
         <source>System text line</source>
-        <translation>Linie text sistem</translation>
+        <translation>Text cu linie sistem</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1330"/>

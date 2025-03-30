@@ -10421,7 +10421,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation>将无障碍树转储到控制台  (&amp;D)</translation>
+        <translation>将无障碍树状图转储到控制台  (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
@@ -10968,7 +10968,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Add</source>
-        <translation>添加 (&amp;J)</translation>
+        <translation>添加 (&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -11001,7 +11001,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
         <source>E&amp;xtensions</source>
-        <translation>扩展 (&amp;K</translation>
+        <translation>扩展 (&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="489"/>
@@ -11016,7 +11016,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="494"/>
         <source>&amp;Diagnostics</source>
-        <translation>诊断 (&amp;D</translation>
+        <translation>诊断 (&amp;D)</translation>
     </message>
 </context>
 <context>
@@ -11024,7 +11024,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="217"/>
         <source>&amp;Edit</source>
-        <translation>编辑 (&amp;B</translation>
+        <translation>编辑 (&amp;B)</translation>
     </message>
 </context>
 <context>
@@ -11032,12 +11032,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="171"/>
         <source>Open &amp;recent</source>
-        <translation>打开最近文件 (&amp;Z</translation>
+        <translation>打开最近文件 (&amp;Z)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="192"/>
         <source>&amp;File</source>
-        <translation>文件 (&amp;W</translation>
+        <translation>文件 (&amp;W)</translation>
     </message>
 </context>
 <context>
@@ -11045,12 +11045,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="307"/>
         <source>Str&amp;etch</source>
-        <translation>小节宽度 (&amp;K</translation>
+        <translation>小节宽度 (&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="318"/>
         <source>F&amp;ormat</source>
-        <translation>格式 (&amp;G</translation>
+        <translation>格式 (&amp;G)</translation>
     </message>
 </context>
 <context>
@@ -11058,7 +11058,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="412"/>
         <source>&amp;Help</source>
-        <translation>帮助 (&amp;Z</translation>
+        <translation>帮助 (&amp;Z)</translation>
     </message>
 </context>
 <context>
@@ -11066,7 +11066,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="367"/>
         <source>&amp;Plugins</source>
-        <translation>插件 (&amp;C</translation>
+        <translation>插件 (&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -11074,17 +11074,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="343"/>
         <source>&amp;Voices</source>
-        <translation>声部 (&amp;B</translation>
+        <translation>声部 (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="344"/>
         <source>&amp;Measures</source>
-        <translation>小节 (&amp;J</translation>
+        <translation>小节 (&amp;J)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="362"/>
         <source>&amp;Tools</source>
-        <translation>工具 (&amp;J</translation>
+        <translation>工具 (&amp;J)</translation>
     </message>
 </context>
 <context>
@@ -11092,22 +11092,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="267"/>
         <source>&amp;Toolbars</source>
-        <translation>工具栏 (&amp;L</translation>
+        <translation>工具栏 (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="268"/>
         <source>W&amp;orkspaces</source>
-        <translation>工作区 (&amp;G</translation>
+        <translation>工作区 (&amp;G)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="270"/>
         <source>&amp;Show</source>
-        <translation>显示 (&amp;X</translation>
+        <translation>显示 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="275"/>
         <source>&amp;View</source>
-        <translation>视图 (&amp;T</translation>
+        <translation>视图 (&amp;T)</translation>
     </message>
 </context>
 <context>
@@ -28739,7 +28739,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2306"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
-        <translation>此文件包含可能导致MuseScore Studio故障的错误。请尽早修复这些，以防止崩溃和进一步损坏。</translation>
+        <translation>此文件包含可致MuseScore Studio发生故障的错误。请尽快修复这些错误，以防止崩溃和进一步的损坏。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1765"/>
@@ -28823,7 +28823,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</source>
-        <translation>此乐谱已错乱且包含错误。您可以手动修复这些错误，或将其存至您的电脑里，然后到MuseScore.org上寻求帮助。</translation>
+        <translation>此乐谱已损坏且包含错误。您可以手动修复这些错误，或将其保存到您的电脑里，然后到MuseScore.org上寻求帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1537"/>
@@ -28838,7 +28838,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
         <source>This score is corrupted. You can get help for this issue on MuseScore.org.</source>
-        <translation>该乐谱已错乱。您可以到MuseScore.org上寻求帮助。</translation>
+        <translation>该乐谱已损坏。您可以到MuseScore.org上寻求帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1637"/>
@@ -30190,12 +30190,12 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="997"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
-        <translation>登录MuseScore.com将此乐谱保存到云端。</translation>
+        <translation>登录MuseScore.com以将此乐谱保存到云端。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <source>Log in to MuseScore.com to publish this score.</source>
-        <translation>登录MuseScore.com发布此乐谱。</translation>
+        <translation>登录MuseScore.com以发布此乐谱。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
