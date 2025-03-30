@@ -1709,25 +1709,25 @@
     <name>EditStyleBase</name>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="32"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13063"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13066"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13445"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13439"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13821"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13824"/>
         <source>Style</source>
         <translation type="unfinished">Style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14822"/>
         <source>Edit text style</source>
         <translation type="unfinished">Edit text style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14564"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14940"/>
         <source>Padding:</source>
         <translation type="unfinished">Padding:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14610"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14986"/>
         <source>Reset &apos;Padding&apos; value</source>
         <translation type="unfinished">Reset &apos;Padding&apos; value</translation>
     </message>
@@ -1804,8 +1804,8 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11076"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14115"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11452"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14491"/>
         <source>Fermatas</source>
         <translation type="unfinished">Fermatas</translation>
     </message>
@@ -1816,7 +1816,7 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8331"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14263"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14639"/>
         <source>Dynamics</source>
         <translation type="unfinished">Dynamics</translation>
     </message>
@@ -1943,30 +1943,32 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9596"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10332"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10393"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10915"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11095"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11281"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11549"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11678"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11912"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11928"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12014"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12116"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12135"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12287"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12453"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10595"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10931"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11291"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11471"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11657"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12079"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12304"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12492"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12538"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12802"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12948"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13565"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13617"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13639"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13661"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13674"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12576"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12663"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12829"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12868"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13178"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13993"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14015"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14050"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2121,68 +2123,76 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10500"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10513"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10542"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10648"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10661"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11131"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11297"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11383"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11462"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11475"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11504"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11565"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11738"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11751"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11787"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11836"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12040"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12079"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12161"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12226"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12316"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12377"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12405"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12421"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12463"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12476"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12554"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12581"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12661"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12734"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12747"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12770"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12818"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13226"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13259"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13292"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13305"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14538"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14584"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14607"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14647"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14676"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14712"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14751"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14780"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14810"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14823"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14836"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14915"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14935"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14976"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10667"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10767"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10836"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10849"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11003"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11084"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11103"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11527"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11550"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11615"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11673"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11759"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11838"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11851"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11880"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12101"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12114"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12127"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12176"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12199"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12416"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12455"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12537"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12550"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12602"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12637"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12692"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12726"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12753"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12781"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12797"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12839"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12852"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12930"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13123"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13146"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13194"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13602"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13668"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13681"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14863"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14927"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14960"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14983"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15023"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15052"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15088"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15101"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15127"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15156"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15186"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15199"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15291"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15352"/>
         <source>Reset to default</source>
         <translation type="unfinished">Reset to default</translation>
     </message>
@@ -3037,59 +3047,59 @@ space unit</extracomment>
         <translation type="unfinished">Use cue sized numbers for grace note bends</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12036"/>
         <source>Edit lyrics text style</source>
         <translation type="unfinished">Edit lyrics text style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11764"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12140"/>
         <source>Min. gap between lyrics:</source>
         <translation type="unfinished">Min. gap between lyrics:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11861"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12237"/>
         <source>Min. margin to current staff:</source>
         <translation type="unfinished">Min. margin to current staff:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11813"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12189"/>
         <source>Min. margin to other staves:</source>
         <translation type="unfinished">Min. margin to other staves:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11972"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12348"/>
         <source>Line height (% of text size):</source>
         <translation type="unfinished">Line height (% of text size):</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12478"/>
         <source>Dash</source>
         <translation type="unfinished">Dash</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12527"/>
         <source>Max. dash gap:</source>
         <translation type="unfinished">Max. dash gap:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12563"/>
         <source>Min. dash gap:</source>
         <translation type="unfinished">Min. dash gap:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12746"/>
         <source>Omit dash when space is limited</source>
         <translation type="unfinished">Omit dash when space is limited</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12766"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
         <translation type="unfinished">Restate dash before syllable on 
 first note of the system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12398"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12774"/>
         <source>Dash placement at the start of the system:</source>
         <translation type="unfinished">Dash placement at the start of the system:</translation>
     </message>
@@ -3101,23 +3111,23 @@ first note of the system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8454"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12069"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12072"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12448"/>
         <source>Avoid barlines</source>
         <translation type="unfinished">Avoid barlines</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13017"/>
         <source>Snap to dynamics</source>
         <translation type="unfinished">Snap to dynamics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13541"/>
         <source>Playback</source>
         <translation type="unfinished">Playback</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13903"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14279"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
         <translation type="unfinished">Select the elements you would like displayed in common and simple tablature staves</translation>
     </message>
@@ -3286,12 +3296,12 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9903"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10039"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10532"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10680"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11121"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11494"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10868"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11497"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11749"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11870"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12409"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13136"/>
         <source>Offset above:</source>
         <translation type="unfinished">Offset above:</translation>
     </message>
@@ -3305,12 +3315,12 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9976"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10112"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10476"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10624"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11164"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11343"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11438"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11780"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12710"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10812"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11540"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11814"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12156"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13086"/>
         <source>Offset below:</source>
         <translation type="unfinished">Offset below:</translation>
     </message>
@@ -3325,12 +3335,12 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9929"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10065"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10545"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10693"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11154"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11754"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10881"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11530"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11883"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12130"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13149"/>
         <source>Reset &apos;Offset above&apos; value</source>
         <translation type="unfinished">Reset &apos;Offset above&apos; value</translation>
     </message>
@@ -3344,13 +3354,13 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9989"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10125"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10516"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10664"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11177"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11300"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11386"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11478"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11826"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12750"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10852"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11553"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11762"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11854"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12202"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13126"/>
         <source>Reset &apos;Offset below&apos; value</source>
         <translation type="unfinished">Reset &apos;Offset below&apos; value</translation>
     </message>
@@ -3718,7 +3728,7 @@ first note of the system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10612"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10800"/>
         <source>System text lines</source>
         <translation type="unfinished">System text lines</translation>
     </message>
@@ -3729,7 +3739,7 @@ first note of the system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13011"/>
         <source>Expression text</source>
         <translation type="unfinished">Expression text</translation>
     </message>
@@ -3893,7 +3903,9 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9665"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10247"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10380"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12515"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10628"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12891"/>
         <source>Line thickness:</source>
         <translation type="unfinished">Line thickness:</translation>
     </message>
@@ -3917,10 +3929,10 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7689"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7891"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8337"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11082"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11262"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11422"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11458"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11638"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11798"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13076"/>
         <source>Autoplace min. distance:</source>
         <translation type="unfinished">Autoplace min. distance:</translation>
     </message>
@@ -3945,9 +3957,9 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7727"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7929"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8396"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11568"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12821"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11510"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11944"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13197"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation type="unfinished">Reset &apos;Autoplace min. distance&apos; value</translation>
     </message>
@@ -4010,7 +4022,9 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8934"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9434"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12466"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10670"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11006"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12842"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation type="unfinished">Reset &apos;Line thickness&apos; value</translation>
     </message>
@@ -4021,11 +4035,11 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9966"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10102"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10503"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10651"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11320"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11465"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11803"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12737"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10839"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11696"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12179"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13113"/>
         <source>Reset &apos;Position&apos; value</source>
         <translation type="unfinished">Reset &apos;Position&apos; value</translation>
     </message>
@@ -4039,6 +4053,12 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9622"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9848"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9867"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10608"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10751"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10944"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11087"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11106"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation type="unfinished">Reset &apos;Line style&apos; value</translation>
     </message>
@@ -4053,6 +4073,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8895"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9141"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9780"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11026"/>
         <source>Dash size:</source>
         <translation type="unfinished">Dash size:</translation>
     </message>
@@ -4063,11 +4085,11 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9953"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10089"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10555"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10703"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11252"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11517"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11893"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12435"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13159"/>
         <source>Position:</source>
         <translation type="unfinished">Position:</translation>
     </message>
@@ -4075,6 +4097,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8976"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9200"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9632"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10954"/>
         <source>Line style:</source>
         <translation type="unfinished">Line style:</translation>
     </message>
@@ -4087,6 +4111,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9036"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9250"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10639"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10975"/>
         <source>Continuous</source>
         <translation type="unfinished">Continuous</translation>
     </message>
@@ -4094,6 +4120,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9041"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9255"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9698"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10644"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10980"/>
         <source>Dashed</source>
         <translation type="unfinished">Dashed</translation>
     </message>
@@ -4101,6 +4129,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9046"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9260"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10649"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10985"/>
         <source>Dotted</source>
         <translation type="unfinished">Dotted</translation>
     </message>
@@ -4108,6 +4138,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9051"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9265"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9708"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10654"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10990"/>
         <source>Dash-dotted</source>
         <translation type="unfinished">Dash-dotted</translation>
     </message>
@@ -4115,6 +4147,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9056"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9713"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10659"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10995"/>
         <source>Dash-dot-dotted</source>
         <translation type="unfinished">Dash-dot-dotted</translation>
     </message>
@@ -4122,6 +4156,8 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9064"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9415"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9797"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10700"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Gap size:</source>
         <translation type="unfinished">Gap size:</translation>
     </message>
@@ -4187,175 +4223,175 @@ first note of the system</translation>
         <translation type="unfinished">Reset &apos;Line thickness on tablature staves&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10760"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11136"/>
         <source>Articulations &amp;&amp; ornaments</source>
         <translation type="unfinished">Articulations &amp;&amp; ornaments</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10766"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11142"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation type="unfinished">Reset &apos;Articulation distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10776"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10809"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11152"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11185"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11217"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation type="unfinished">sp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10786"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11162"/>
         <source>Distance from stem:</source>
         <translation type="unfinished">Distance from stem:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11172"/>
         <source>Articulation size:</source>
         <translation type="unfinished">Articulation size:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10851"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11227"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation type="unfinished">Reset &apos;Stem distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10858"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11234"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation type="unfinished">Reset &apos;Notehead distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10865"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11241"/>
         <source>Distance from staff:</source>
         <translation type="unfinished">Distance from staff:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10888"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11264"/>
         <source>Distance from notehead:</source>
         <translation type="unfinished">Distance from notehead:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10898"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11274"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation type="unfinished">Reset &apos;Articulation size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10905"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11281"/>
         <source>Minimum vertical distance:</source>
         <translation type="unfinished">Minimum vertical distance:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10951"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11327"/>
         <source>Articulation alignment when positioned at the stem</source>
         <translation type="unfinished">Articulation alignment when positioned at the stem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11333"/>
         <source>Align with stem</source>
         <translation type="unfinished">Align with stem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11340"/>
         <source>Align with notehead</source>
         <translation type="unfinished">Align with notehead</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10971"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11347"/>
         <source>Center between stem and notehead</source>
         <translation type="unfinished">Center between stem and notehead</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10997"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
         <source>Combined articulation</source>
         <translation type="unfinished">Combined articulation</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11003"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11379"/>
         <source>Always keep together</source>
         <translation type="unfinished">Always keep together</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11010"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11386"/>
         <source>Prefer closeness to notehead (combined articulations may become separated)</source>
         <translation type="unfinished">Prefer closeness to notehead (combined articulations may become separated)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12216"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12592"/>
         <source>Dash thickness:</source>
         <translation type="unfinished">Dash thickness:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12264"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12640"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation type="unfinished">Reset &apos;Max. dash distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12408"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12784"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation type="unfinished">Reset &apos;Always force dash&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12319"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12695"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation type="unfinished">Reset &apos;Min. dash length&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12306"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12682"/>
         <source>Max. dash length:</source>
         <translation type="unfinished">Max. dash length:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12229"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12605"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation type="unfinished">Reset &apos;Max. dash length&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12540"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation type="unfinished">Reset &apos;Dash thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12274"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12650"/>
         <source>Min. dash length:</source>
         <translation type="unfinished">Min. dash length:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11899"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12275"/>
         <source>Align verse number</source>
         <translation type="unfinished">Align verse number</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11728"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12104"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation type="unfinished">Reset &apos;Align verse number&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11741"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12117"/>
         <source>Reset &apos;Min. distance&apos; value</source>
         <translation type="unfinished">Reset &apos;Min. distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12967"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13343"/>
         <source>Line height:</source>
         <translation type="unfinished">Line height:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12043"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12419"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation type="unfinished">Reset &apos;Min. bottom margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11839"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12215"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation type="unfinished">Reset &apos;Line height&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11790"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12166"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation type="unfinished">Reset &apos;Min. top margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14849"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15225"/>
         <source>Align:</source>
         <translation type="unfinished">Align:</translation>
     </message>
@@ -4365,100 +4401,100 @@ first note of the system</translation>
         <translation type="unfinished">Reset &apos;Scale&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12886"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14879"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15255"/>
         <source>Size:</source>
         <translation type="unfinished">Size:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12902"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14692"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13278"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15068"/>
         <source>pt</source>
         <translation type="unfinished">pt</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12918"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13294"/>
         <source>from top of staff</source>
         <translation type="unfinished">from top of staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13314"/>
         <source>of font height</source>
         <translation type="unfinished">of font height</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8499"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13002"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14702"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13378"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15078"/>
         <source>Font:</source>
         <translation type="unfinished">Font:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12553"/>
         <source>Reset &apos;Dash gap&apos; value</source>
         <translation type="unfinished">Reset &apos;Dash gap&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12329"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12705"/>
         <source>Vertical position (% of 
 text x-height):</source>
         <translation type="unfinished">Vertical position (% of 
 text x-height):</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12353"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12729"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
         <translation type="unfinished">Reset &apos;Vertical position (% of text x-height)&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12756"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
         <translation type="unfinished">Reset &apos;Omit dash when space is limited&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12800"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
         <translation type="unfinished">Reset &apos;Dash placement at the start of the system&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12439"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12815"/>
         <source>Extension line</source>
         <translation type="unfinished">Extension line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12479"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12855"/>
         <source>Reset &apos;Min. line length&apos; value</source>
         <translation type="unfinished">Reset &apos;Min. line length&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12508"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12884"/>
         <source>Min. line length:</source>
         <translation type="unfinished">Min. line length:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12525"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12901"/>
         <source>Line gap:</source>
         <translation type="unfinished">Line gap:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12557"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12933"/>
         <source>Reset &apos;Line gap&apos; value</source>
         <translation type="unfinished">Reset &apos;Line gap&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12574"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12950"/>
         <source>Omit extension line when space is limited</source>
         <translation type="unfinished">Omit extension line when space is limited</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12584"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12960"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
         <translation type="unfinished">Reset &apos;Omit extension line when space is limited&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6048"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13398"/>
         <source>Vertical position:</source>
         <translation type="unfinished">Vertical position:</translation>
     </message>
@@ -4505,185 +4541,185 @@ text x-height):</translation>
         <translation type="unfinished">Note-anchored lines</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11412"/>
         <source>Trill cue note</source>
         <translation type="unfinished">Trill cue note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11418"/>
         <source>Show only for intervals other than seconds</source>
         <translation type="unfinished">Show only for intervals other than seconds</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11049"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11425"/>
         <source>Show for all intervals</source>
         <translation type="unfinished">Show for all intervals</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12664"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13040"/>
         <source>Reset &apos;Snap to dynamics&apos; value</source>
         <translation type="unfinished">Reset &apos;Snap to dynamics&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13413"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13416"/>
         <source>Alignment</source>
         <translation type="unfinished">Alignment</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13422"/>
         <source>Top</source>
         <translation type="unfinished">Top</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13053"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13429"/>
         <source>Bottom</source>
         <translation type="unfinished">Bottom</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13072"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
         <source>Modern</source>
         <translation type="unfinished">Modern</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13079"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13455"/>
         <source>Historic</source>
         <translation type="unfinished">Historic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13145"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13521"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation type="unfinished">Capo fret position:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13180"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13556"/>
         <source>Appearance</source>
         <translation type="unfinished">Appearance</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13229"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13605"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
         <translation type="unfinished">Reset &apos;Extension vertical offset&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13239"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13615"/>
         <source>Extension vertical offset:</source>
         <translation type="unfinished">Extension vertical offset:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13249"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13625"/>
         <source>Extension scaling:</source>
         <translation type="unfinished">Extension scaling:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13262"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13638"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
         <translation type="unfinished">Reset &apos;Extension scaling&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13272"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13648"/>
         <source>Modifier scaling:</source>
         <translation type="unfinished">Modifier scaling:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13282"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13658"/>
         <source>Modifier vertical offset:</source>
         <translation type="unfinished">Modifier vertical offset:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13295"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13671"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
         <translation type="unfinished">Reset &apos;Modifier scaling&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13308"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13684"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
         <translation type="unfinished">Reset &apos;Modifier vertical offset&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13330"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13706"/>
         <source>Lower case minor chords</source>
         <translation type="unfinished">Lower case minor chords</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13337"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13713"/>
         <source>Lower case bass notes</source>
         <translation type="unfinished">Lower case bass notes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13720"/>
         <source>All caps note names</source>
         <translation type="unfinished">All caps note names</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13367"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13743"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13746"/>
         <source>Spelling</source>
         <translation type="unfinished">Spelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13392"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13768"/>
         <source>German</source>
         <translation type="unfinished">German</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13402"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13778"/>
         <source>Full German</source>
         <translation type="unfinished">Full German</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13788"/>
         <source>Solfeggio</source>
         <translation type="unfinished">Solfeggio</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13422"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13798"/>
         <source>French</source>
         <translation type="unfinished">French</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13464"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13840"/>
         <source>Jazz</source>
         <translation type="unfinished">Jazz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13471"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13847"/>
         <source>Custom</source>
         <translation type="unfinished">Custom</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13869"/>
         <source>Load XML</source>
         <translation type="unfinished">Load XML</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13519"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13895"/>
         <source>Positioning</source>
         <translation type="unfinished">Positioning</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13525"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13901"/>
         <source>Maximum shift below:</source>
         <translation type="unfinished">Maximum shift below:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13542"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13918"/>
         <source>Distance to fretboard diagram:</source>
         <translation type="unfinished">Distance to fretboard diagram:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13552"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13928"/>
         <source>Maximum shift above:</source>
         <translation type="unfinished">Maximum shift above:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13584"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13960"/>
         <source>Minimum chord spacing:</source>
         <translation type="unfinished">Minimum chord spacing:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13594"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13970"/>
         <source>Maximum barline distance:</source>
         <translation type="unfinished">Maximum barline distance:</translation>
     </message>
@@ -4706,31 +4742,31 @@ text x-height):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11596"/>
         <source>Staff text</source>
         <translation type="unfinished">Staff text</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11416"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11792"/>
         <source>Tempo text</source>
         <translation type="unfinished">Tempo text</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12694"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13070"/>
         <source>Rehearsal marks</source>
         <translation type="unfinished">Rehearsal marks</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12878"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13254"/>
         <source>Figured bass</source>
         <translation type="unfinished">Figured bass</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="239"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13109"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13485"/>
         <source>Chord symbols</source>
         <translation type="unfinished">Chord symbols</translation>
     </message>
@@ -4806,13 +4842,13 @@ text x-height):</translation>
         <translation type="unfinished">Horizontal distance from notes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11648"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12024"/>
         <source>Lyrics text</source>
         <translation type="unfinished">Lyrics text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13318"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13694"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13697"/>
         <source>Automatic capitalization</source>
         <translation type="unfinished">Automatic capitalization</translation>
     </message>
@@ -4820,303 +4856,303 @@ text x-height):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="249"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10280"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10283"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13864"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14240"/>
         <source>Tablature</source>
         <translation type="unfinished">Tablature</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14297"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14673"/>
         <source>Staccato</source>
         <translation type="unfinished">Staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13992"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14368"/>
         <source>Accent and marcato marks</source>
         <translation type="unfinished">Accent and marcato marks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14129"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14505"/>
         <source>Harmonic marks</source>
         <translation type="unfinished">Harmonic marks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14101"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14477"/>
         <source>Turns</source>
         <translation type="unfinished">Turns</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14084"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14460"/>
         <source>Palm mute (P.M.)</source>
         <translation type="unfinished">Palm mute (P.M.)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14246"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14622"/>
         <source>Let ring</source>
         <translation type="unfinished">Let ring</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7551"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7554"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14046"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14422"/>
         <source>Slurs</source>
         <translation type="unfinished">Slurs</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14196"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14572"/>
         <source>Wah open/close</source>
         <translation type="unfinished">Wah open/close</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14189"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14565"/>
         <source>Crescendo and diminuendo lines</source>
         <translation type="unfinished">Crescendo and diminuendo lines</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14415"/>
         <source>Simple</source>
         <translation type="unfinished">Simple</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14160"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14536"/>
         <source>Common</source>
         <translation type="unfinished">Common</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14439"/>
         <source>Golpe</source>
         <translation type="unfinished">Golpe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14408"/>
         <source>Mordents</source>
         <translation type="unfinished">Mordents</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13999"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14375"/>
         <source>Rasgueado</source>
         <translation type="unfinished">Rasgueado</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14379"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14755"/>
         <source>Parentheses indicating ties</source>
         <translation type="unfinished">Parentheses indicating ties</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14392"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14768"/>
         <source>Always show at the start of a measure</source>
         <translation type="unfinished">Always show at the start of a measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14406"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14782"/>
         <source>Always show parenthesized fret marks when articulation markings are present</source>
         <translation type="unfinished">Always show parenthesized fret marks when articulation markings are present</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14905"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15281"/>
         <source>Line spacing:</source>
         <translation type="unfinished">Line spacing:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14928"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15304"/>
         <source>Use musical symbols font for tuplet numbers</source>
         <translation type="unfinished">Use musical symbols font for tuplet numbers</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15314"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
         <translation type="unfinished">Reset &apos;Use musical symbols font for tuplet numbers&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14950"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15326"/>
         <source>Musical symbols scale:</source>
         <translation type="unfinished">Musical symbols scale:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14979"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15355"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
         <translation type="unfinished">Reset &apos;Musical symbols scale&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15424"/>
         <source>Reset all styles to default</source>
         <translation type="unfinished">Reset all styles to default</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14834"/>
         <source>Frame:</source>
         <translation type="unfinished">Frame:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12082"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12458"/>
         <source>Reset &apos;Avoid barlines&apos;</source>
         <translation type="unfinished">Reset &apos;Avoid barlines&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13379"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13755"/>
         <source>Standard</source>
         <comment>chord symbol spelling</comment>
         <translation type="unfinished">Standard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13454"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13830"/>
         <source>Standard</source>
         <comment>chord symbol style</comment>
         <translation type="unfinished">Standard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14349"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14725"/>
         <source>Tied fret marks</source>
         <translation type="unfinished">Tied fret marks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14355"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14731"/>
         <source>Show ties and repeat fret marks</source>
         <translation type="unfinished">Show ties and repeat fret marks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14362"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14738"/>
         <source>Show ties only</source>
         <translation type="unfinished">Show ties only</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14369"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14745"/>
         <source>Show initial fret mark only</source>
         <translation type="unfinished">Show initial fret mark only</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14385"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14761"/>
         <source>Only show at the start of a system</source>
         <translation type="unfinished">Only show at the start of a system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14399"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14775"/>
         <source>Never show</source>
         <translation type="unfinished">Never show</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14479"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14855"/>
         <source>Circle</source>
         <translation type="unfinished">Circle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14490"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14866"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation type="unfinished">Reset &apos;Frame&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14518"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14894"/>
         <source>Thickness:</source>
         <translation type="unfinished">Thickness:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14917"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation type="unfinished">Reset &apos;Background&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14554"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14587"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14930"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14963"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation type="unfinished">Reset &apos;Border&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14574"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14950"/>
         <source>Corner radius:</source>
         <translation type="unfinished">Corner radius:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14627"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15003"/>
         <source>Border:</source>
         <translation type="unfinished">Border:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14637"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15013"/>
         <source>Highlight:</source>
         <translation type="unfinished">Highlight:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14650"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15026"/>
         <source>Reset &apos;Corner radius&apos; value</source>
         <translation type="unfinished">Reset &apos;Corner radius&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14679"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15055"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation type="unfinished">Reset &apos;Font style&apos; values</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14715"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15091"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation type="unfinished">Reset &apos;Align&apos; values</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14728"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15104"/>
         <source>Reset &apos;Color&apos; value</source>
         <translation type="unfinished">Reset &apos;Color&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15114"/>
         <source>Color:</source>
         <translation type="unfinished">Color:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14754"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14918"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15130"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15294"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation type="unfinished">Reset &apos;Font size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14767"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15143"/>
         <source>Style:</source>
         <translation type="unfinished">Style:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15159"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
         <translation type="unfinished">Reset &apos;Follow staff size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15169"/>
         <source>Offset:</source>
         <translation type="unfinished">Offset:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14803"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15179"/>
         <source>Follow staff size</source>
         <translation type="unfinished">Follow staff size</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14813"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15189"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation type="unfinished">Reset &apos;Name&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15202"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation type="unfinished">Reset &apos;Font face&apos; value</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14839"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15215"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation type="unfinished">Reset &apos;Offset&apos; values</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14859"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15235"/>
         <source>Name:</source>
         <translation type="unfinished">Name:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="14892"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="15268"/>
         <source>li</source>
         <translation type="unfinished">li</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="878"/>
         <source>Show ‘1’ on 1-measure repeats</source>
         <translation type="unfinished">Show ‘1’ on 1-measure repeats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="851"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="879"/>
         <source>Show number ‘1’</source>
         <translation type="unfinished">Show number ‘1’</translation>
     </message>
@@ -5977,339 +6013,344 @@ text x-height):</translation>
 <context>
     <name>TransposeDialogBase</name>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="14"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="20"/>
         <source>Transpose</source>
         <translation type="unfinished">Transpose</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="23"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="26"/>
         <source>Transpose chromatically</source>
         <translation type="unfinished">Transpose chromatically</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="32"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="35"/>
         <source>Transpose to key (specified at concert pitch)</source>
         <translation type="unfinished">Transpose to key (specified at concert pitch)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="35"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="38"/>
         <source>To Key</source>
         <translation type="unfinished">To Key</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="57"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="53"/>
         <source>C♭ major / A♭ minor</source>
         <translation type="unfinished">C♭ major / A♭ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="62"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="58"/>
         <source>G♭ major / E♭ minor</source>
         <translation type="unfinished">G♭ major / E♭ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="67"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="63"/>
         <source>D♭ major / B♭ minor</source>
         <translation type="unfinished">D♭ major / B♭ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="72"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="68"/>
         <source>A♭ major / F minor</source>
         <translation type="unfinished">A♭ major / F minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="77"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="73"/>
         <source>E♭ major / C minor</source>
         <translation type="unfinished">E♭ major / C minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="82"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="78"/>
         <source>B♭ major / G minor</source>
         <translation type="unfinished">B♭ major / G minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="87"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="83"/>
         <source>F major / D minor</source>
         <translation type="unfinished">F major / D minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="92"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="88"/>
         <source>C major / A minor</source>
         <translation type="unfinished">C major / A minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="97"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="93"/>
         <source>G major / E minor</source>
         <translation type="unfinished">G major / E minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="102"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="98"/>
         <source>D major / B minor</source>
         <translation type="unfinished">D major / B minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="107"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="103"/>
         <source>A major / F♯ minor</source>
         <translation type="unfinished">A major / F♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="112"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="108"/>
         <source>E major / C♯ minor</source>
         <translation type="unfinished">E major / C♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="117"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="113"/>
         <source>B major / G♯ minor</source>
         <translation type="unfinished">B major / G♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="122"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="118"/>
         <source>F♯ major / D♯ minor</source>
         <translation type="unfinished">F♯ major / D♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="127"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="123"/>
         <source>C♯ major / A♯ minor</source>
         <translation type="unfinished">C♯ major / A♯ minor</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="135"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="138"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="195"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="198"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="392"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="395"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="161"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="164"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="357"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="360"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="466"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="469"/>
         <source>Up</source>
         <translation type="unfinished">Up</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="145"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="148"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="345"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="348"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="442"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="445"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="171"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="174"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="370"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="373"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="479"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="482"/>
         <source>Down</source>
         <translation type="unfinished">Down</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="155"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="158"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="148"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="151"/>
         <source>Closest</source>
         <translation type="unfinished">Closest</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="171"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="186"/>
         <source>Transpose by interval</source>
         <translation type="unfinished">Transpose by interval</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="174"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="189"/>
         <source>By interval</source>
         <translation type="unfinished">By interval</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="212"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="207"/>
         <source>Perfect unison</source>
         <translation type="unfinished">Perfect unison</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="217"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="212"/>
         <source>Augmented unison</source>
         <translation type="unfinished">Augmented unison</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="222"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="217"/>
         <source>Diminished second</source>
         <translation type="unfinished">Diminished second</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="227"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="222"/>
         <source>Minor second</source>
         <translation type="unfinished">Minor second</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="232"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="227"/>
         <source>Major second</source>
         <translation type="unfinished">Major second</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="237"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="232"/>
         <source>Augmented second</source>
         <translation type="unfinished">Augmented second</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="242"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="237"/>
         <source>Diminished third</source>
         <translation type="unfinished">Diminished third</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="247"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="242"/>
         <source>Minor third</source>
         <translation type="unfinished">Minor third</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="252"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="247"/>
         <source>Major third</source>
         <translation type="unfinished">Major third</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="257"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="252"/>
         <source>Augmented third</source>
         <translation type="unfinished">Augmented third</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="262"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="257"/>
         <source>Diminished fourth</source>
         <translation type="unfinished">Diminished fourth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="267"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="262"/>
         <source>Perfect fourth</source>
         <translation type="unfinished">Perfect fourth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="272"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="267"/>
         <source>Augmented fourth</source>
         <translation type="unfinished">Augmented fourth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="277"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="272"/>
         <source>Diminished fifth</source>
         <translation type="unfinished">Diminished fifth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="282"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="277"/>
         <source>Perfect fifth</source>
         <translation type="unfinished">Perfect fifth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="287"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="282"/>
         <source>Augmented fifth</source>
         <translation type="unfinished">Augmented fifth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="292"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="287"/>
         <source>Diminished sixth</source>
         <translation type="unfinished">Diminished sixth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="297"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="292"/>
         <source>Minor sixth</source>
         <translation type="unfinished">Minor sixth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="302"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="297"/>
         <source>Major sixth</source>
         <translation type="unfinished">Major sixth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="307"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="302"/>
         <source>Augmented sixth</source>
         <translation type="unfinished">Augmented sixth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="312"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="307"/>
         <source>Diminished seventh</source>
         <translation type="unfinished">Diminished seventh</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="317"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="312"/>
         <source>Minor seventh</source>
         <translation type="unfinished">Minor seventh</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="322"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="317"/>
         <source>Major seventh</source>
         <translation type="unfinished">Major seventh</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="327"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="322"/>
         <source>Augmented seventh</source>
         <translation type="unfinished">Augmented seventh</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="332"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="327"/>
         <source>Diminished octave</source>
         <translation type="unfinished">Diminished octave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="337"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="332"/>
         <source>Perfect octave</source>
         <translation type="unfinished">Perfect octave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="371"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="398"/>
         <source>Transpose diatonically</source>
         <translation type="unfinished">Transpose diatonically</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="523"/>
+        <source>Accidentals:</source>
+        <translation type="unfinished">Accidentals:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="537"/>
         <source>Single ♯ and ♭ only</source>
         <translation type="unfinished">Single ♯ and ♭ only</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="499"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="542"/>
         <source>Use double ♯ and ♭</source>
         <translation type="unfinished">Use double ♯ and ♭</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="208"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="203"/>
         <source>Interval type</source>
         <translation type="unfinished">Interval type</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="358"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="385"/>
         <source>Transpose key signatures</source>
         <translation type="unfinished">Transpose key signatures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="405"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="412"/>
         <source>Degree type</source>
         <translation type="unfinished">Degree type</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="409"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="416"/>
         <source>Second</source>
         <translation type="unfinished">Second</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="414"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="421"/>
         <source>Third</source>
         <translation type="unfinished">Third</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="419"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="426"/>
         <source>Fourth</source>
         <translation type="unfinished">Fourth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="424"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="431"/>
         <source>Fifth</source>
         <translation type="unfinished">Fifth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="429"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="436"/>
         <source>Sixth</source>
         <translation type="unfinished">Sixth</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="434"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="441"/>
         <source>Seventh</source>
         <translation type="unfinished">Seventh</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="452"/>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="455"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="491"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Keep degree alterations</source>
         <translation type="unfinished">Keep degree alterations</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="468"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="507"/>
         <source>Options</source>
         <translation type="unfinished">Options</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="480"/>
+        <location filename="../../src/notation/view/widgets/transposedialog.ui" line="513"/>
         <source>Transpose chord symbols</source>
         <translation type="unfinished">Transpose chord symbols</translation>
     </message>
@@ -8210,99 +8251,10 @@ text x-height):</translation>
         <translation type="unfinished">Toggle concert pitch</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1688"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1689"/>
         <source>Advance cursor: next beat (chord symbols)</source>
         <translation type="unfinished">Advance cursor: next beat (chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1700"/>
-        <source>Advance longa (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance longa (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1701"/>
-        <source>Advance cursor: longa (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: longa (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1706"/>
-        <source>Advance breve (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance breve (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1707"/>
-        <source>Advance cursor: breve (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: breve (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1712"/>
-        <source>Advance whole note (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance whole note (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1713"/>
-        <source>Advance cursor: whole note (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: whole note (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1718"/>
-        <source>Advance half note (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance half note (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1719"/>
-        <source>Advance cursor: half note (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: half note (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1724"/>
-        <source>Advance quarter note (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance quarter note (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1725"/>
-        <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: quarter note (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
-        <source>Advance eighth note (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance eighth note (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1731"/>
-        <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: eighth note (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
-        <source>Advance 16th note (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance 16th note (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1737"/>
-        <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: 16th note (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
-        <source>Advance 32nd note (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance 32nd note (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1743"/>
-        <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: 32nd note (figured bass/chord symbols)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
-        <source>Advance 64th note (F.B./Chord symbol)</source>
-        <translation type="unfinished">Advance 64th note (F.B./Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1749"/>
-        <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
-        <translation type="unfinished">Advance cursor: 64th note (figured bass/chord symbols)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1755"/>
@@ -9994,9 +9946,64 @@ text x-height):</translation>
         <translation type="unfinished">Go to previous text element</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1694"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1695"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
         <translation type="unfinished">Advance cursor: previous beat (chord symbols)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1700"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1701"/>
+        <source>Advance cursor: longa (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: longa (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1706"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1707"/>
+        <source>Advance cursor: breve (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: breve (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1712"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1713"/>
+        <source>Advance cursor: whole note (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: whole note (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1718"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1719"/>
+        <source>Advance cursor: half note (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: half note (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1724"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1725"/>
+        <source>Advance cursor: quarter note (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: quarter note (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1731"/>
+        <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: eighth note (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1737"/>
+        <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: 16th note (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1743"/>
+        <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: 32nd note (chord symbols/figured bass)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1749"/>
+        <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
+        <translation type="unfinished">Advance cursor: 64th note (chord symbols/figured bass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1767"/>
@@ -10326,16 +10333,6 @@ text x-height):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2626"/>
         <source>Check for score corruptions</source>
         <translation type="unfinished">Check for score corruptions</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1694"/>
-        <source>Previous beat (Chord symbol)</source>
-        <translation type="unfinished">Previous beat (Chord symbol)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1688"/>
-        <source>Next beat (Chord symbol)</source>
-        <translation type="unfinished">Next beat (Chord symbol)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1784"/>
@@ -11456,7 +11453,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Reset preferences</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="79"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="88"/>
         <source>Choose starting score</source>
         <translation type="unfinished">Choose starting score</translation>
     </message>
@@ -11578,7 +11575,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="168"/>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="230"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="244"/>
         <source>All</source>
         <translation type="unfinished">All</translation>
     </message>
@@ -11679,7 +11676,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Choose default style for imports</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="30"/>
+        <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="31"/>
         <source>Program start</source>
         <translation type="unfinished">Program start</translation>
     </message>
@@ -11739,27 +11736,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Braille</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="201"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="185"/>
         <source>Start empty</source>
         <translation type="unfinished">Start empty</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="202"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="189"/>
         <source>Continue last session</source>
         <translation type="unfinished">Continue last session</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="203"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="193"/>
         <source>Start with new score</source>
         <translation type="unfinished">Start with new score</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="204"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="197"/>
         <source>Start with score:</source>
         <translation type="unfinished">Start with score:</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="229"/>
+        <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="243"/>
         <source>MuseScore file</source>
         <translation type="unfinished">MuseScore file</translation>
     </message>
@@ -11884,8 +11881,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
-        <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
-        <translation type="unfinished">Toggle track mute by showing/hiding instruments in the Instruments panel</translation>
+        <source>Toggle track mute by showing/hiding instruments in the Layout panel</source>
+        <translation type="unfinished">Toggle track mute by showing/hiding instruments in the Layout panel</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -14097,19 +14094,19 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Cannot create tuplet with ratio %1 for duration %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7408"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7416"/>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7501"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7431"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7439"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7524"/>
         <source>Remove stale partial tie</source>
         <translation type="unfinished">Remove stale partial tie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7427"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7450"/>
         <source>Reset incoming partial slur</source>
         <translation type="unfinished">Reset incoming partial slur</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="7433"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="7456"/>
         <source>Reset outgoing partial slur</source>
         <translation type="unfinished">Reset outgoing partial slur</translation>
     </message>
@@ -19331,7 +19328,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="105"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="121"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="131"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2847"/>
         <source>sp</source>
         <extracomment>Abbreviation of &quot;spatium&quot;</extracomment>
         <translation type="unfinished">sp</translation>
@@ -19343,7 +19340,8 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="69"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="61"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2847"/>
+        <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="166"/>
         <source>mm</source>
         <translation type="unfinished">mm</translation>
     </message>
@@ -19557,6 +19555,18 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="139"/>
         <source>Milliseconds</source>
         <translation type="unfinished">Milliseconds</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/internal/MiscellaneousSection.qml" line="47"/>
+        <source>px</source>
+        <comment>abbreviation of pixels</comment>
+        <translation type="unfinished">px</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="170"/>
+        <source>in</source>
+        <comment>abbreviation of inch</comment>
+        <translation type="unfinished">in</translation>
     </message>
 </context>
 <context>
@@ -22937,24 +22947,6 @@ pickup measure</translation>
         <source>Collapse all instruments</source>
         <translation type="unfinished">Collapse all instruments</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="986"/>
-        <source>Are you sure you want to delete the selected %n instrument(s)?</source>
-        <extracomment>Please omit `%n` in the translation in this case; it&apos;s only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation type="unfinished">
-            <numerusform>Are you sure you want to delete the selected %n instrument(s)?</numerusform>
-            <numerusform>Are you sure you want to delete the selected %n instrument(s)?</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="991"/>
-        <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
-        <extracomment>Please omit `%n` in the translation in this case; it&apos;s only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation type="unfinished">
-            <numerusform>This will remove the %n instrument(s) from the full score and all part scores.</numerusform>
-            <numerusform>This will remove the %n instrument(s) from the full score and all part scores.</numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="242"/>
         <source>Are you sure you want to reset all formatting?</source>
@@ -22985,6 +22977,22 @@ pickup measure</translation>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
         <source>System markings hidden</source>
         <translation type="unfinished">System markings hidden</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="983"/>
+        <source>Are you sure you want to delete the selected instrument(s)?</source>
+        <translation type="unfinished">
+            <numerusform>Are you sure you want to delete the selected instrument(s)?</numerusform>
+            <numerusform>Are you sure you want to delete the selected instrument(s)?</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="984"/>
+        <source>This will remove the instrument(s) from the full score and all part scores.</source>
+        <translation type="unfinished">
+            <numerusform>This will remove the instrument(s) from the full score and all part scores.</numerusform>
+            <numerusform>This will remove the instrument(s) from the full score and all part scores.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -23477,7 +23485,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1827"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2425"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2455"/>
         <source>Load style</source>
         <translation type="unfinished">Load style</translation>
     </message>
@@ -24527,7 +24535,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Continuous view</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2423"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2453"/>
         <source>MuseScore chord symbol style files</source>
         <translation type="unfinished">MuseScore chord symbol style files</translation>
     </message>
@@ -24774,344 +24782,344 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/editstyle</name>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="212"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="764"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1295"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="213"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="792"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1323"/>
         <source>Above</source>
         <translation type="unfinished">Above</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="213"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="765"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1296"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="214"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="793"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1324"/>
         <source>Below</source>
         <translation type="unfinished">Below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="775"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1300"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="803"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1328"/>
         <source>Left</source>
         <translation type="unfinished">Left</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1301"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1329"/>
         <source>Center</source>
         <translation type="unfinished">Center</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="777"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1302"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="805"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1330"/>
         <source>Right</source>
         <translation type="unfinished">Right</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="781"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="809"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1333"/>
         <source>None</source>
         <translation type="unfinished">None</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="782"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1306"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1334"/>
         <source>Brackets</source>
         <translation type="unfinished">Brackets</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1307"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="811"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1335"/>
         <source>Parentheses</source>
         <translation type="unfinished">Parentheses</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="786"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1309"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="814"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1337"/>
         <source>Segment</source>
         <translation type="unfinished">Segment</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="787"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1310"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1338"/>
         <source>Measure</source>
         <translation type="unfinished">Measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="788"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="816"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1339"/>
         <source>System</source>
         <translation type="unfinished">System</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="791"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1313"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="819"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1341"/>
         <source>Number</source>
         <translation type="unfinished">Number</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="792"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1314"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="820"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1342"/>
         <source>Ratio</source>
         <translation type="unfinished">Ratio</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1315"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="821"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1343"/>
         <source>None</source>
         <comment>no tuplet number type</comment>
         <translation type="unfinished">None</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="796"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="956"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1317"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="984"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1345"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1352"/>
         <source>Automatic</source>
         <translation type="unfinished">Automatic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="797"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="825"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1346"/>
         <source>Bracket</source>
         <translation type="unfinished">Bracket</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="798"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1319"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1347"/>
         <source>None</source>
         <comment>no tuplet bracket type</comment>
         <translation type="unfinished">None</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="952"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="980"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1349"/>
         <source>Jazz</source>
         <translation type="unfinished">Jazz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="953"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1322"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="981"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1350"/>
         <source>Literal</source>
         <translation type="unfinished">Literal</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="958"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1326"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="986"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
         <source>Close</source>
         <translation type="unfinished">Close</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="193"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="194"/>
         <source>Continuous</source>
         <extracomment>line style</extracomment>
         <translation type="unfinished">Continuous</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="195"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="196"/>
         <source>Dashed</source>
         <extracomment>line style</extracomment>
         <translation type="unfinished">Dashed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="197"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="198"/>
         <source>Dotted</source>
         <extracomment>line style</extracomment>
         <translation type="unfinished">Dotted</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="211"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="212"/>
         <source>Based on voice</source>
         <translation type="unfinished">Based on voice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="235"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1312"/>
         <source>Apply to all parts</source>
         <translation type="unfinished">Apply to all parts</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="801"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="829"/>
         <source>Standard</source>
         <translation type="unfinished">Standard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="830"/>
         <source>Inside the header</source>
         <translation type="unfinished">Inside the header</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="804"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="832"/>
         <source>Under the first note</source>
         <translation type="unfinished">Under the first note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="957"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1325"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="985"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1353"/>
         <source>Root only</source>
         <translation type="unfinished">Root only</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="959"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1327"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="987"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1355"/>
         <source>Drop two</source>
         <translation type="unfinished">Drop two</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="960"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1328"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="988"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1356"/>
         <source>Six note</source>
         <translation type="unfinished">Six note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="961"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1329"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="989"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1357"/>
         <source>Four note</source>
         <translation type="unfinished">Four note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="962"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1330"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="990"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1358"/>
         <source>Three note</source>
         <translation type="unfinished">Three note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="965"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1332"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="993"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1360"/>
         <source>Until next chord symbol</source>
         <translation type="unfinished">Until next chord symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="967"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1333"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="995"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1361"/>
         <source>Until end of measure</source>
         <translation type="unfinished">Until end of measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="969"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1334"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="997"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1362"/>
         <source>Chord/rest duration</source>
         <translation type="unfinished">Chord/rest duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1346"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1103"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1374"/>
         <source>None</source>
         <comment>no frame for text</comment>
         <translation type="unfinished">None</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1076"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1104"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1375"/>
         <source>Rectangle</source>
         <translation type="unfinished">Rectangle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1077"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1348"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1105"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1376"/>
         <source>Circle</source>
         <translation type="unfinished">Circle</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1361"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1389"/>
         <source>Special symbols in header/footer</source>
         <translation type="unfinished">Special symbols in header/footer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1364"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1392"/>
         <source>Page number, except on first page</source>
         <translation type="unfinished">Page number, except on first page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1366"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1394"/>
         <source>Page number, if there is more than one page</source>
         <translation type="unfinished">Page number, if there is more than one page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1368"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1396"/>
         <source>Page number, on all pages</source>
         <translation type="unfinished">Page number, on all pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1370"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1398"/>
         <source>Number of pages</source>
         <translation type="unfinished">Number of pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1372"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1400"/>
         <source>File name</source>
         <translation type="unfinished">File name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1374"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1402"/>
         <source>File path+name</source>
         <translation type="unfinished">File path+name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1376"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1404"/>
         <source>Part name, except on first page</source>
         <translation type="unfinished">Part name, except on first page</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1378"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1406"/>
         <source>Part name, on all pages</source>
         <translation type="unfinished">Part name, on all pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1380"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1408"/>
         <source>Current date</source>
         <translation type="unfinished">Current date</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1382"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1410"/>
         <source>Creation date</source>
         <translation type="unfinished">Creation date</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1384"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1412"/>
         <source>Last modification time</source>
         <translation type="unfinished">Last modification time</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1386"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1414"/>
         <source>Last modification date</source>
         <translation type="unfinished">Last modification date</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1388"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1416"/>
         <source>Copyright, on first page only</source>
         <translation type="unfinished">Copyright, on first page only</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1418"/>
         <source>Copyright, on all pages</source>
         <translation type="unfinished">Copyright, on all pages</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1392"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1420"/>
         <source>MuseScore Studio version this score was last saved with</source>
         <translation type="unfinished">MuseScore Studio version this score was last saved with</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1394"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1422"/>
         <source>MuseScore Studio revision this score was last saved with</source>
         <translation type="unfinished">MuseScore Studio revision this score was last saved with</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1424"/>
         <source>The $ sign itself</source>
         <translation type="unfinished">The $ sign itself</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1398"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1426"/>
         <source>Metadata tag, see below</source>
         <translation type="unfinished">Metadata tag, see below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1400"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1428"/>
         <source>Available metadata tags and their current values</source>
         <translation type="unfinished">Available metadata tags and their current values</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1402"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1430"/>
         <source>(in File &gt; Project properties…):</source>
         <translation type="unfinished">(in File &gt; Project properties…):</translation>
     </message>
@@ -25493,17 +25501,20 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Reset layout</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="59"/>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="140"/>
         <source>When an unpitched percussion staff is selected</source>
         <translation type="unfinished">When an unpitched percussion staff is selected</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="138"/>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="64"/>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="143"/>
         <source>When inputting notation on an unpitched percussion staff</source>
         <translation type="unfinished">When inputting notation on an unpitched percussion staff</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="141"/>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="69"/>
+        <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="146"/>
         <source>Never</source>
         <translation type="unfinished">Never</translation>
     </message>
@@ -28503,23 +28514,23 @@ failed.</translation>
         <translation type="unfinished">Get more sounds</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="391"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="393"/>
         <source>Bank %1, preset %2</source>
         <translation type="unfinished">Bank %1, preset %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="445"/>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="504"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="447"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="506"/>
         <source>Choose automatically</source>
         <translation type="unfinished">Choose automatically</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="487"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="489"/>
         <source>Preset %1</source>
         <translation type="unfinished">Preset %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="496"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="498"/>
         <source>Bank %1</source>
         <translation type="unfinished">Bank %1</translation>
     </message>
@@ -30314,14 +30325,14 @@ failed.</translation>
         <translation type="unfinished">Always</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="138"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="139"/>
         <source>Every: %1 saves</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
         <translation type="unfinished">Every: %1 saves</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="169"/>
-        <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="189"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="171"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="192"/>
         <source>Every N saves</source>
         <extracomment>Accessibility name for &quot;Every N saves&quot; radio button in MP3 generation settings dialog</extracomment>
         <translation type="unfinished">Every N saves</translation>
@@ -31175,7 +31186,7 @@ failed.</translation>
         <translation type="unfinished">Toggle laissez vibrer</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/edit.cpp" line="4194"/>
+        <location filename="../../src/engraving/dom/edit.cpp" line="4217"/>
         <source>Enter rest</source>
         <translation type="unfinished">Enter rest</translation>
     </message>
@@ -31214,7 +31225,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="463"/>
-        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1248"/>
+        <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1276"/>
         <source>Edit style</source>
         <translation type="unfinished">Edit style</translation>
     </message>
@@ -31232,7 +31243,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5548"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5550"/>
         <source>Change voice</source>
         <translation type="unfinished">Change voice</translation>
     </message>
@@ -31438,38 +31449,38 @@ failed.</translation>
         <translation type="unfinished">Edit text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4414"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4416"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
         <translation type="unfinished">Keystroke edit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4515"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4517"/>
         <source>Split measure</source>
         <translation type="unfinished">Split measure</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4530"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4532"/>
         <source>Join measures</source>
         <translation type="unfinished">Join measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4683"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4685"/>
         <source>Add horizontal frame</source>
         <translation type="unfinished">Add horizontal frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4684"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4686"/>
         <source>Add vertical frame</source>
         <translation type="unfinished">Add vertical frame</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4685"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4687"/>
         <source>Add text frame</source>
         <translation type="unfinished">Add text frame</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4687"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4689"/>
         <source>Add %n measure(s)</source>
         <translation type="unfinished">
             <numerusform>Add %n measure(s)</numerusform>
@@ -31477,70 +31488,70 @@ failed.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4752"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4786"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4754"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4788"/>
         <source>Repeat selection</source>
         <translation type="unfinished">Repeat selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4806"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4808"/>
         <source>Paste</source>
         <translation type="unfinished">Paste</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4913"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4915"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4939"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4941"/>
         <source>Flip direction</source>
         <translation type="unfinished">Flip direction</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4999"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5001"/>
         <source>Add ottava</source>
         <translation type="unfinished">Add ottava</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5006"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5046"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5008"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5048"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="201"/>
         <source>Add hairpin</source>
         <translation type="unfinished">Add hairpin</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5144"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5146"/>
         <source>Toggle accidental</source>
         <translation type="unfinished">Toggle accidental</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5204"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5206"/>
         <source>Toggle augmentation dots</source>
         <translation type="unfinished">Toggle augmentation dots</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5433"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5435"/>
         <source>Lock/unlock selected system(s)</source>
         <translation type="unfinished">Lock/unlock selected system(s)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5440"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5442"/>
         <source>Lock/unlock all systems</source>
         <translation type="unfinished">Lock/unlock all systems</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5447"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5449"/>
         <source>Create system from selection</source>
         <translation type="unfinished">Create system from selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5570"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5572"/>
         <source>Add note-anchored line</source>
         <translation type="unfinished">Add note-anchored line</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5846"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5848"/>
         <source>Delete %n measure(s)</source>
         <translation type="unfinished">
             <numerusform>Delete %n measure(s)</numerusform>
@@ -31548,12 +31559,12 @@ failed.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7583"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7585"/>
         <source>Add accidental</source>
         <translation type="unfinished">Add accidental</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5107"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5109"/>
         <source>Add brackets</source>
         <translation type="unfinished">Add brackets</translation>
     </message>
@@ -31581,331 +31592,331 @@ failed.</translation>
         <translation type="unfinished">Change vertical position</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4686"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4688"/>
         <source>Add fretboard diagram legend</source>
         <translation type="unfinished">Add fretboard diagram legend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4950"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4952"/>
         <source>Flip horizontally</source>
         <translation type="unfinished">Flip horizontally</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5112"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5114"/>
         <source>Add braces</source>
         <translation type="unfinished">Add braces</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5117"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5119"/>
         <source>Add parentheses</source>
         <translation type="unfinished">Add parentheses</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5187"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7557"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5189"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7559"/>
         <source>Toggle articulation</source>
         <translation type="unfinished">Toggle articulation</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5238"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5240"/>
         <source>Add grace note</source>
         <translation type="unfinished">Add grace note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5265"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5267"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="692"/>
         <source>Add tuplet</source>
         <translation type="unfinished">Add tuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5286"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5288"/>
         <source>Set beam type</source>
         <translation type="unfinished">Set beam type</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5298"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5300"/>
         <source>Increase duration</source>
         <translation type="unfinished">Increase duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5299"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5301"/>
         <source>Decrease duration</source>
         <translation type="unfinished">Decrease duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5316"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5318"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
         <source>Change hairpin type</source>
         <translation type="unfinished">Change hairpin type</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5359"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5361"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
         <translation type="unfinished">Add dynamic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5412"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5414"/>
         <source>Toggle layout break</source>
         <translation type="unfinished">Toggle layout break</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5419"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5421"/>
         <source>Move measure to previous system</source>
         <translation type="unfinished">Move measure to previous system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5426"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5428"/>
         <source>Move measure to next system</source>
         <translation type="unfinished">Move measure to next system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5454"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5456"/>
         <source>Apply system lock to selection</source>
         <translation type="unfinished">Apply system lock to selection</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5464"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5466"/>
         <source>Measures per system</source>
         <translation type="unfinished">Measures per system</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5471"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5473"/>
         <source>Transposition</source>
         <translation type="unfinished">Transposition</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5495"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5497"/>
         <source>Swap voices</source>
         <translation type="unfinished">Swap voices</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5526"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5528"/>
         <source>Add interval</source>
         <translation type="unfinished">Add interval</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5533"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5535"/>
         <source>Enter note at fret %1</source>
         <translation type="unfinished">Enter note at fret %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5559"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5561"/>
         <source>Change voice assignment</source>
         <translation type="unfinished">Change voice assignment</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5641"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5643"/>
         <source>Add text</source>
         <translation type="unfinished">Add text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5709"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5711"/>
         <source>Add image</source>
         <translation type="unfinished">Add image</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5728"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5730"/>
         <source>Add figured bass</source>
         <translation type="unfinished">Add figured bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5743"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5745"/>
         <source>Increase layout stretch</source>
         <translation type="unfinished">Increase layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5744"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5746"/>
         <source>Decrease layout stretch</source>
         <translation type="unfinished">Decrease layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5767"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5769"/>
         <source>Add time signature</source>
         <translation type="unfinished">Add time signature</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5778"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5780"/>
         <source>Explode</source>
         <translation type="unfinished">Explode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5789"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5791"/>
         <source>Implode</source>
         <translation type="unfinished">Implode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5800"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5802"/>
         <source>Realize chord symbols</source>
         <translation type="unfinished">Realize chord symbols</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5857"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5859"/>
         <source>Delete range</source>
         <translation type="unfinished">Delete range</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5864"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5866"/>
         <source>Remove empty trailing measures</source>
         <translation type="unfinished">Remove empty trailing measures</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5875"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5877"/>
         <source>Fill with slashes</source>
         <translation type="unfinished">Fill with slashes</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5886"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5888"/>
         <source>Toggle rhythmic slash notation</source>
         <translation type="unfinished">Toggle rhythmic slash notation</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5893"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5895"/>
         <source>Change enharmonic spelling</source>
         <translation type="unfinished">Change enharmonic spelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5900"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5902"/>
         <source>Respell pitches</source>
         <translation type="unfinished">Respell pitches</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5907"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5909"/>
         <source>Regroup rhythms</source>
         <translation type="unfinished">Regroup rhythms</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5914"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5916"/>
         <source>Resequence rehearsal marks</source>
         <translation type="unfinished">Resequence rehearsal marks</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5921"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5923"/>
         <source>Reset layout stretch</source>
         <translation type="unfinished">Reset layout stretch</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5928"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5930"/>
         <source>Reset text style overrides</source>
         <translation type="unfinished">Reset text style overrides</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5935"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5937"/>
         <source>Reset beams</source>
         <translation type="unfinished">Reset beams</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5952"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5954"/>
         <source>Reset shapes and positions</source>
         <translation type="unfinished">Reset shapes and positions</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5972"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5974"/>
         <source>Reset to default layout</source>
         <translation type="unfinished">Reset to default layout</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5998"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6000"/>
         <source>Set score view settings</source>
         <translation type="unfinished">Set score view settings</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6176"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6178"/>
         <source>Navigate to lyrics</source>
         <translation type="unfinished">Navigate to lyrics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6304"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6366"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6306"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6368"/>
         <source>Navigate to next syllable</source>
         <translation type="unfinished">Navigate to next syllable</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6548"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6550"/>
         <source>Navigate to verse</source>
         <translation type="unfinished">Navigate to verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6639"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6693"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6641"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6695"/>
         <source>Navigate to next chord symbol</source>
         <translation type="unfinished">Navigate to next chord symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6730"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6732"/>
         <source>Navigate to chord symbol</source>
         <translation type="unfinished">Navigate to chord symbol</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6785"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6829"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6787"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6831"/>
         <source>Navigate to next figured bass</source>
         <translation type="unfinished">Navigate to next figured bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6877"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6879"/>
         <source>Navigate to figured bass</source>
         <translation type="unfinished">Navigate to figured bass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7174"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7181"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7241"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7176"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7183"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7243"/>
         <source>Enter lyrics extension line</source>
         <translation type="unfinished">Enter lyrics extension line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7323"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7325"/>
         <source>Add lyrics verse</source>
         <translation type="unfinished">Add lyrics verse</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7371"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7373"/>
         <source>Enter guitar bend</source>
         <translation type="unfinished">Enter guitar bend</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7481"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7483"/>
         <source>Format text</source>
         <translation type="unfinished">Format text</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7501"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7503"/>
         <source>Toggle subscript</source>
         <translation type="unfinished">Toggle subscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7503"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7505"/>
         <source>Toggle superscript</source>
         <translation type="unfinished">Toggle superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7505"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7507"/>
         <source>Toggle subscript/superscript</source>
         <translation type="unfinished">Toggle subscript/superscript</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7562"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7564"/>
         <source>Toggle ornament</source>
         <translation type="unfinished">Toggle ornament</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7567"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7569"/>
         <source>Toggle automatic placement</source>
         <translation type="unfinished">Toggle automatic placement</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7578"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7580"/>
         <source>Add clef</source>
         <translation type="unfinished">Add clef</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7588"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7590"/>
         <source>Transpose semitone</source>
         <translation type="unfinished">Transpose semitone</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7594"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7596"/>
         <source>Transpose diatonically</source>
         <translation type="unfinished">Transpose diatonically</translation>
     </message>
@@ -32167,12 +32178,12 @@ failed.</translation>
         <translation type="unfinished">Install update</translation>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="82"/>
+        <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="81"/>
         <source>A new version of MuseScore Studio is available!</source>
         <translation type="unfinished">A new version of MuseScore Studio is available!</translation>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="89"/>
+        <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="88"/>
         <source>Release notes</source>
         <translation type="unfinished">Release notes</translation>
     </message>
