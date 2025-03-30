@@ -22,7 +22,6 @@
 #include <QList>
 #include <QVariant>
 
-#include "config.h"
 #include "element.h"
 #include "sym.h"
 

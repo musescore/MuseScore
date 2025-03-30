@@ -27,10 +27,10 @@ namespace Ms {
 //---------------------------------------------------------
 
 struct Acc {
-      AccidentalVal offset;   // semitone offset
-      int centOffset;
+      qreal centOffset;
       SymId sym;
-      Acc(AccidentalVal o, int o2, SymId s) : offset(o), centOffset(o2), sym(s) {}
+      AccidentalVal offset;   // semitone offset
+      Acc(AccidentalVal o, qreal o2, SymId s) : centOffset(o2), sym(s), offset(o) {}
       };
 
 // NOTE: Keep this in sync with with AccidentalType enum in types.h, watch out for isMicrotonal().
@@ -69,10 +69,10 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,   150, SymId::accidentalThreeQuarterTonesSharpStein), // SHARP_SLASH4
 
       // Arel-Ezgi-Uzdilek (AEU)
-      Acc(AccidentalVal::NATURAL,     0, SymId::accidentalBuyukMucennebFlat),  // FLAT_SLASH2
-      Acc(AccidentalVal::NATURAL,     0, SymId::accidentalBakiyeFlat),         // FLAT_SLASH
-      Acc(AccidentalVal::NATURAL,     0, SymId::accidentalKucukMucennebSharp), // SHARP_SLASH3
-      Acc(AccidentalVal::NATURAL,     0, SymId::accidentalBuyukMucennebSharp), // SHARP_SLASH2
+      Acc(AccidentalVal::NATURAL,   -89, SymId::accidentalBuyukMucennebFlat),  // FLAT_SLASH2
+      Acc(AccidentalVal::NATURAL,   -44, SymId::accidentalBakiyeFlat),         // FLAT_SLASH
+      Acc(AccidentalVal::NATURAL,    56, SymId::accidentalKucukMucennebSharp), // SHARP_SLASH3
+      Acc(AccidentalVal::NATURAL,    89, SymId::accidentalBuyukMucennebSharp), // SHARP_SLASH2
 
       // Extended Helmholtz-Ellis accidentals (just intonation)
       Acc(AccidentalVal::NATURAL,     0, SymId::accidentalDoubleFlatOneArrowDown),
