@@ -825,16 +825,16 @@ static String slurBezier(const Slur* s, const bool start)
     const int spatium = s->spatium();
     if (start) {
         const SlurSegment* front = s->frontSegment();
-        const PointF start = front->ups(Grip::START).pos();
-        const PointF bezier = front->ups(Grip::BEZIER1).pos();
-        rest += String(u" bezier-x=\"%1\"").arg(10 * (bezier.x() - start.x()) / spatium);
-        rest += String(u" bezier-y=\"%1\"").arg(-10 * (bezier.y() - start.y()) / spatium);
+        const PointF startP = front->ups(Grip::START).pos();
+        const PointF bezierP = front->ups(Grip::BEZIER1).pos();
+        rest += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - startP.x()) / spatium);
+        rest += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - startP.y()) / spatium);
     } else {
         const SlurSegment* back = s->backSegment();
-        const PointF end = back->ups(Grip::END).pos();
-        const PointF bezier = back->ups(Grip::BEZIER2).pos();
-        rest += String(u" bezier-x=\"%1\"").arg(10 * (bezier.x() - end.x()) / spatium);
-        rest += String(u" bezier-y=\"%1\"").arg(-10 * (bezier.y() - end.y()) / spatium);
+        const PointF endP = back->ups(Grip::END).pos();
+        const PointF bezierP = back->ups(Grip::BEZIER2).pos();
+        rest += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - endP.x()) / spatium);
+        rest += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - endP.y()) / spatium);
     }
     return rest;
 }
