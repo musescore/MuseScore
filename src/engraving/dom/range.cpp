@@ -297,6 +297,10 @@ void TrackList::read(const Segment* fs, const Segment* es)
         EngravingItem* e = s->element(m_track);
         if (!e || e->generated()) {
             for (EngravingItem* ee : s->annotations()) {
+                if (ee->systemFlag() && ee->track() != 0) {
+                    // Only process the top system object
+                    continue;
+                }
                 if (ee->track() == m_track) {
                     m_range->m_annotations.push_back({ s->tick(), ee->clone() });
                 }
@@ -691,6 +695,11 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
         Fraction etick = last->tick();
         for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
+            if (s->systemFlag() && s->track() != 0) {
+                // Only process the top system object
+                continue;
+            }
+
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
                 ns->resetExplicitParent();
