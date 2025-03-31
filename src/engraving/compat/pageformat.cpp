@@ -94,7 +94,7 @@ void PageFormat::read206(XmlReader& e)
     _printableWidth = std::min(w1, w2);       // silently adjust right margins
 }
 
-static void initPageFormat(MStyle* style, PageFormat* pf)
+void initPageFormat(MStyle* style, PageFormat* pf)
 {
     SizeF sz;
     sz.setWidth(style->value(Sid::pageWidth).toReal());
@@ -110,7 +110,7 @@ static void initPageFormat(MStyle* style, PageFormat* pf)
     pf->setTwosided(style->value(Sid::pageTwosided).toBool());
 }
 
-static void setPageFormat(MStyle* style, const PageFormat& pf)
+void setPageFormat(MStyle* style, const PageFormat& pf)
 {
     style->set(Sid::pageWidth,            pf.size().width());
     style->set(Sid::pageHeight,           pf.size().height());
