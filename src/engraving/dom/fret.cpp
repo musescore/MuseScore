@@ -29,7 +29,6 @@
 #include "harmony.h"
 #include "measure.h"
 #include "note.h"
-#include "pitchspelling.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
