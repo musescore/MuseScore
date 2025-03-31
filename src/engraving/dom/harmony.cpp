@@ -41,11 +41,9 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "textedit.h"
 #include "utils.h"
 
 #include "log.h"
-#include "undo.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -625,24 +623,6 @@ void Harmony::endEditTextual(EditData& ed)
     m_isMisspelled = false;
 
     TextBase::endEditTextual(ed);
-
-    TextEditData* ted = dynamic_cast<TextEditData*>(ed.getData(this).get());
-    bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
-
-    if (textChanged) {
-        Segment* parentSegment = explicitParent() ? getParentSeg() : nullptr;
-        if (parentSegment) {
-            EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
-            if (fretDiagramItem) {
-                FretDiagram* fretDiagram = toFretDiagram(fretDiagramItem);
-
-                UndoStack* undo = score()->undoStack();
-                undo->reopen();
-                score()->undo(new FretDataChange(fretDiagram, s));
-                score()->endCmd();
-            }
-        }
-    }
 
     if (links()) {
         for (EngravingObject* e : *links()) {

@@ -382,22 +382,6 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
     return attrs;
 }
 
-String XmlStreamReader::readBody() const
-{
-    if (m_xml->node) {
-        XMLPrinter printer;
-
-        const XMLElement* child = m_xml->node->FirstChildElement();
-        while (child) {
-            child->Accept(&printer);
-            child = child->NextSiblingElement();
-        }
-
-        return String::fromStdString(printer.CStr());
-    }
-    return String();
-}
-
 String XmlStreamReader::text() const
 {
     if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {

@@ -3120,22 +3120,6 @@ void ChangeDrumset::flip(EditData*)
 }
 
 //---------------------------------------------------------
-//   FretDataChange
-//---------------------------------------------------------
-
-void FretDataChange::redo(EditData*)
-{
-    m_undoData = FretUndoData(m_diagram);
-
-    m_diagram->updateDiagram(m_harmonyName);
-}
-
-void FretDataChange::undo(EditData*)
-{
-    m_undoData.updateDiagram();
-}
-
-//---------------------------------------------------------
 //   FretDot
 //---------------------------------------------------------
 
