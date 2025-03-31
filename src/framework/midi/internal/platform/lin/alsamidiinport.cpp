@@ -336,7 +336,7 @@ void AlsaMidiInPort::doProcess()
             continue;
         }
 
-        e = Event::fromMIDI10Package(data);
+        e = Event::fromMidi10Package(data);
 
         e = e.toMIDI20();
         if (e) {
