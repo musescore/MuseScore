@@ -41,12 +41,12 @@ public:
         }
     };
 
-    static SearchData parse(const std::string& searchCommand);
+    static SearchData parse(const QString& searchCommand);
 
 private:
-    static SearchData parseMeasureCommand(const std::string& searchCommand);
-    static SearchData parsePageCommand(const std::string& searchCommand);
-    static SearchData parseRehearsalMarkCommand(const std::string& searchCommand);
+    static SearchData parseMeasureCommand(const QString& searchCommand);
+    static SearchData parsePageCommand(const QString& searchCommand);
+    static SearchData parseRehearsalMarkCommand(const QString& searchCommand);
 };
 }
 
