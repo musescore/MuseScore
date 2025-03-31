@@ -297,6 +297,10 @@ void TrackList::read(const Segment* fs, const Segment* es)
         EngravingItem* e = s->element(m_track);
         if (!e || e->generated()) {
             for (EngravingItem* ee : s->annotations()) {
+                if (ee->systemFlag() && ee->track() != 0) {
+                    // Only process the top system object
+                    continue;
+                }
                 if (ee->track() == m_track) {
                     m_range->m_annotations.push_back({ s->tick(), ee->clone() });
                 }
