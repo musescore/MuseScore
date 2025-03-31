@@ -67,6 +67,7 @@ public:
     virtual void setOnHidden(const std::function<void()>& callback) = 0;
     virtual void setTakeFocusOnClick(bool takeFocusOnClick) = 0;
 
+    virtual void setAlwaysOnTop(const bool& alwaysOnTop) = 0;
 signals:
     void aboutToClose(QQuickCloseEvent* event);
 };
