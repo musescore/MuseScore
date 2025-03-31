@@ -7476,7 +7476,7 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
         undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
     }
 
-    if (tie->isPartialTie() && tie->allJumpPointsInactive()) {
+    if (tie->isPartialTie() && tie->allJumpPointsInactive() && tie->startNote() && tie->startNote()->tieFor() == tie) {
         startCmd(TranslatableString("engraving", "Remove stale partial tie"));
         undoRemoveElement(tie);
         endCmd();
@@ -7559,13 +7559,16 @@ void Score::undoRemoveStaleTieJumpPoints()
     }
 
     for (PartialTie* incomingPT : incomingPartialTies) {
-        if (incomingPT->jumpPoint()) {
+        if (incomingPT->jumpPoint() || incomingPT->note()->tieBack() != incomingPT) {
             continue;
         }
+        const size_t undoIdx = undoStack()->currentIndex();
         startCmd(TranslatableString("engraving", "Remove stale partial tie"));
         undoRemoveElement(incomingPT);
         endCmd();
-        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+        if (undoIdx != undoStack()->currentIndex() && undoStack()->currentIndex() > 2) {
+            undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+        }
     }
 }
 }
