@@ -37,7 +37,6 @@ public:
     LaissezVibSegment* clone() const override { return new LaissezVibSegment(*this); }
 
     LaissezVib* laissezVib() const { return (LaissezVib*)spanner(); }
-    int subtype() const override { return static_cast<int>(spanner()->type()); }
 
     int gripsCount() const override { return 0; }
     void editDrag(EditData&) override;

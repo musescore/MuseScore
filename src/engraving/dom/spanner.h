@@ -63,6 +63,9 @@ public:
     bool isMiddleType() const { return spannerSegmentType() == SpannerSegmentType::MIDDLE; }
     bool isEndType() const { return spannerSegmentType() == SpannerSegmentType::END; }
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     void setSystem(System* s);
     System* system() const { return toSystem(explicitParent()); }
 

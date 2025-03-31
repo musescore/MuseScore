@@ -424,6 +424,16 @@ bool SpannerSegment::allowTimeAnchor() const
     return spanner()->allowTimeAnchor();
 }
 
+int SpannerSegment::subtype() const
+{
+    return spanner()->subtype();
+}
+
+TranslatableString SpannerSegment::subtypeUserName() const
+{
+    return spanner()->subtypeUserName();
+}
+
 //---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------

@@ -37,7 +37,6 @@ public:
     PartialTieSegment* clone() const override { return new PartialTieSegment(*this); }
 
     PartialTie* partialTie() const { return (PartialTie*)spanner(); }
-    int subtype() const override { return static_cast<int>(spanner()->type()); }
 private:
     String formatBarsAndBeats() const override;
 };
