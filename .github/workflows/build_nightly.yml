@@ -11,7 +11,7 @@ permissions:
   actions: write
 
 # env:
-#   CURRENT_RELEASE_BRANCH: 4.5.1
+#   CURRENT_RELEASE_BRANCH: 4.5.2
 #   IS_CURRENT_RELEASE_BRANCH: ${{ github.event.schedule == '0 4 * * *' && 'true' || 'false' }}
 
 jobs:
