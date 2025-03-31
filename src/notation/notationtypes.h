@@ -412,7 +412,7 @@ struct FilterNotesOptions : FilterElementsOptions
 struct StaffConfig
 {
     bool visible = false;
-    qreal userDistance = 0.0;
+    engraving::Spatium userDistance = engraving::Spatium(0.0);
     bool cutaway = false;
     bool showIfEmpty = false;
     bool hideSystemBarline = false;
@@ -425,7 +425,7 @@ struct StaffConfig
     bool operator==(const StaffConfig& conf) const
     {
         bool equal = visible == conf.visible;
-        equal &= muse::RealIsEqual(userDistance, conf.userDistance);
+        equal &= userDistance == conf.userDistance;
         equal &= cutaway == conf.cutaway;
         equal &= showIfEmpty == conf.showIfEmpty;
         equal &= hideSystemBarline == conf.hideSystemBarline;
