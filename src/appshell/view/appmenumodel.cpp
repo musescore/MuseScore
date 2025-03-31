@@ -400,6 +400,7 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("explode"),
         makeMenuItem("implode"),
         makeMenuItem("realize-chord-symbols"),
+        makeMenuItem("extend-to-next-note"),
         makeMenu(TranslatableString("appshell/menu/tools", "&Voices"), voicesItems, "menu-voices"),
         makeMenu(TranslatableString("appshell/menu/tools", "&Measures"), measuresItems, "menu-tools-measures"),
         makeMenuItem("time-delete"),
