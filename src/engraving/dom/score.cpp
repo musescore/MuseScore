@@ -5576,6 +5576,7 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 Lyrics* newLyric = Factory::copyLyrics(*lyric);
                 newLyric->setParent(dstChord);
                 newLyric->setSelected(false);
+                newLyric->setTrack(dstTrack);
                 score->undoAddElement(newLyric);
                 newElements.push_back(newLyric);
 
