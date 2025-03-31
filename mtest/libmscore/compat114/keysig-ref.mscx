@@ -5,6 +5,13 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <pagePrintableWidth>7.48032</pagePrintableWidth>
+      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <frameSystemDistance>13</frameSystemDistance>
       <measureSpacing>1.14</measureSpacing>
       <voltaPosAbove x="0" y="-2"/>

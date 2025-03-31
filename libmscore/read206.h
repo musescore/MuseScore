@@ -13,6 +13,8 @@
 #ifndef __READ206_H__
 #define __READ206_H__
 
+#include "xml.h"
+
 namespace Ms {
 
 class MStyle;

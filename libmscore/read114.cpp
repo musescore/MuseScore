@@ -2563,7 +2563,7 @@ static void readPart(Part* part, XmlReader& e)
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, XmlReader& e)
+static void readPageFormat(PageFormat* pf, int& pageNumberOffset, XmlReader& e)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
@@ -2614,7 +2614,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
                   pf->setSize(QSizeF(s->w, s->h));
                   }
             else if (tag == "page-offset") {
-                  e.readInt();
+                  pageNumberOffset = e.readInt();
                   }
             else
                   e.unknown();
@@ -2894,7 +2894,11 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   }
             else if (tag == "page-layout") {
                   PageFormat pf;
-                  readPageFormat(&pf, e);
+                  int pageNumberOffset = 0;
+                  initPageFormat(&style(), &pf);
+                  readPageFormat(&pf, pageNumberOffset, e);
+                  setPageFormat(&style(), pf);
+                  score()->setPageNumberOffset(pageNumberOffset);
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
