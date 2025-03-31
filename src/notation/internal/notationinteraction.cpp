@@ -6381,6 +6381,17 @@ void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voic
     apply();
 }
 
+void NotationInteraction::extendToNextNote()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Extend to next note"));
+    score()->cmdExtendToNextNote();
+    apply();
+}
+
 void NotationInteraction::removeSelectedMeasures()
 {
     if (selection()->isNone()) {
