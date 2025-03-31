@@ -63,9 +63,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    int subtype() const override;
-    TranslatableString subtypeUserName() const override;
-
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
