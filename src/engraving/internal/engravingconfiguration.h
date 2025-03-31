@@ -56,6 +56,10 @@ public:
     void setPartStyleFilePath(const muse::io::path_t& path) override;
     muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
 
+    muse::io::path_t paletteStyleFilePath() const override;
+    void setPaletteStyleFilePath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> paletteStyleFilePathChanged() const override;
+
     SizeF defaultPageSize() const override;
 
     String iconsFontFamily() const override;
@@ -134,6 +138,7 @@ private:
     muse::async::Channel<Color> m_unlinkedColorChanged;
     muse::async::Channel<muse::io::path_t> m_defaultStyleFilePathChanged;
     muse::async::Channel<muse::io::path_t> m_partStyleFilePathChanged;
+    muse::async::Channel<muse::io::path_t> m_paletteStyleFilePathChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 

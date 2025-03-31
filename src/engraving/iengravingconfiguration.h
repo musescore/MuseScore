@@ -50,6 +50,10 @@ public:
     virtual void setPartStyleFilePath(const muse::io::path_t& path) = 0;
     virtual muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const = 0;
 
+    virtual muse::io::path_t paletteStyleFilePath() const = 0;
+    virtual void setPaletteStyleFilePath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> paletteStyleFilePathChanged() const = 0;
+
     virtual SizeF defaultPageSize() const = 0;
 
     virtual String iconsFontFamily() const = 0;

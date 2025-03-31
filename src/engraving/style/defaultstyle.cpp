@@ -55,7 +55,8 @@ static void applyPageSizeToStyle(MStyle* style, const SizeF& pageSize)
     style->set(Sid::pagePrintableWidth, newPrintableWidth);
 }
 
-void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath, const SizeF& defaultPageSize)
+bool DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath,
+                        const path_t& paletteStyleFilePath, const SizeF& defaultPageSize)
 {
     m_baseStyle.precomputeValues();
 
@@ -86,6 +87,19 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
             m_defaultStyleForParts->precomputeValues();
         }
     }
+
+    if (!paletteStyleFilePath.empty()) {
+        applyPageSizeToStyle(&m_defaultStyleForPalette, defaultPageSize);
+
+        bool ok = doLoadStyle(&m_defaultStyleForPalette, paletteStyleFilePath);
+        if (!ok) {
+            LOGW() << "Failed to load default palette style file from " << paletteStyleFilePath;
+        } else {
+            m_defaultStyleForPalette.precomputeValues();
+            return true;
+        }
+    }
+    return false;
 }
 
 bool DefaultStyle::doLoadStyle(MStyle* style, const path_t& filePath)
@@ -114,6 +128,11 @@ const MStyle& DefaultStyle::defaultStyle()
 const MStyle* DefaultStyle::defaultStyleForParts()
 {
     return instance()->m_defaultStyleForParts;
+}
+
+const MStyle& DefaultStyle::defaultStyleForPalette()
+{
+    return instance()->m_defaultStyleForPalette;
 }
 
 const MStyle& DefaultStyle::resolveStyleDefaults(const int defaultsVersion)

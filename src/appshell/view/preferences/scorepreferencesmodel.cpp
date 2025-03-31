@@ -97,6 +97,8 @@ void ScorePreferencesModel::load()
           stylePathFilter(), styleChooseTitle() },
         { DefaultFileType::PartStyle, muse::qtrc("appshell/preferences", "Style for part"), partStylePath(),
           stylePathFilter(), partStyleChooseTitle() },
+        { DefaultFileType::PaletteStyle, muse::qtrc("appshell/preferences", "Style for palette"), paletteStylePath(),
+          stylePathFilter(), paletteStyleChooseTitle() },
     };
 
     endResetModel();
@@ -112,6 +114,10 @@ void ScorePreferencesModel::load()
 
     notationConfiguration()->partStyleFilePathChanged().onReceive(this, [this](const io::path_t& val) {
         setPath(DefaultFileType::PartStyle, val.toQString());
+    });
+
+    notationConfiguration()->paletteStyleFilePathChanged().onReceive(this, [this](const io::path_t& val) {
+        setPath(DefaultFileType::PaletteStyle, val.toQString());
     });
 }
 
@@ -129,6 +135,9 @@ void ScorePreferencesModel::savePath(ScorePreferencesModel::DefaultFileType file
         break;
     case DefaultFileType::PartStyle:
         notationConfiguration()->setPartStyleFilePath(path.toStdString());
+        break;
+    case DefaultFileType::PaletteStyle:
+        notationConfiguration()->setPaletteStyleFilePath(path.toStdString());
         break;
     case DefaultFileType::Undefined:
         break;
@@ -189,6 +198,11 @@ QString ScorePreferencesModel::partStylePath() const
     return notationConfiguration()->partStyleFilePath().toQString();
 }
 
+QString ScorePreferencesModel::paletteStylePath() const
+{
+    return notationConfiguration()->paletteStyleFilePath().toQString();
+}
+
 QStringList ScorePreferencesModel::scoreOrderPathFilter() const
 {
     return { muse::qtrc("appshell/preferences", "Score order list") + " (*.xml)" };
@@ -212,6 +226,11 @@ QString ScorePreferencesModel::styleChooseTitle() const
 QString ScorePreferencesModel::partStyleChooseTitle() const
 {
     return muse::qtrc("appshell/preferences", "Choose default style for parts");
+}
+
+QString ScorePreferencesModel::paletteStyleChooseTitle() const
+{
+    return muse::qtrc("appshell/preferences", "Choose default style for palette");
 }
 
 void ScorePreferencesModel::setPath(ScorePreferencesModel::DefaultFileType fileType, const QString& path)

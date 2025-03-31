@@ -124,6 +124,10 @@ public:
     virtual void setPartStyleFilePath(const muse::io::path_t& path) = 0;
     virtual muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const = 0;
 
+    virtual muse::io::path_t paletteStyleFilePath() const = 0;
+    virtual void setPaletteStyleFilePath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> paletteStyleFilePathChanged() const = 0;
+
     virtual NoteInputMethod defaultNoteInputMethod() const = 0;
     virtual void setDefaultNoteInputMethod(NoteInputMethod method) = 0;
     virtual muse::async::Notification defaultNoteInputMethodChanged() const = 0;

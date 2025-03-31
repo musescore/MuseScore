@@ -62,7 +62,8 @@ private:
         FirstScoreOrderList,
         SecondScoreOrderList,
         Style,
-        PartStyle
+        PartStyle,
+        PaletteStyle,
     };
 
     struct DefaultFileInfo {
@@ -83,6 +84,7 @@ private:
 
     QString stylePath() const;
     QString partStylePath() const;
+    QString paletteStylePath() const;
 
     QStringList scoreOrderPathFilter() const;
     QStringList stylePathFilter() const;
@@ -90,6 +92,7 @@ private:
     QString scoreOrderChooseTitle() const;
     QString styleChooseTitle() const;
     QString partStyleChooseTitle() const;
+    QString paletteStyleChooseTitle() const;
 
     void setPath(DefaultFileType fileType, const QString& path);
     QModelIndex fileIndex(DefaultFileType fileType);

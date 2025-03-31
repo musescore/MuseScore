@@ -248,9 +248,10 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
 
-    DefaultStyle::instance()->init(m_configuration->defaultStyleFilePath(),
-                                   m_configuration->partStyleFilePath(),
-                                   m_configuration->defaultPageSize());
+    const bool hasPaletteStyle = DefaultStyle::instance()->init(m_configuration->defaultStyleFilePath(),
+                                                                m_configuration->partStyleFilePath(),
+                                                                m_configuration->paletteStyleFilePath(),
+                                                                m_configuration->defaultPageSize());
 
     StaffType::initStaffTypes(m_configuration->defaultColor());
 #endif // ENGRAVING_NO_INTERNAL
@@ -286,9 +287,13 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         }
 
 #ifndef ENGRAVING_NO_INTERNAL
-        gpaletteScore->setStyle(DefaultStyle::baseStyle());
-        gpaletteScore->style().set(Sid::musicalTextFont, String(u"Leland Text"));
-        IEngravingFontPtr scoreFont = m_engravingfonts->fontByName("Leland");
+        if (hasPaletteStyle) {
+            gpaletteScore->setStyle(DefaultStyle::defaultStyleForPalette());
+        } else {
+            gpaletteScore->setStyle(DefaultStyle::baseStyle());
+        }
+        IEngravingFontPtr scoreFont = m_engravingfonts->fontByName(gpaletteScore->style().value(
+                                                                       Sid::musicalSymbolFont).value<String>().toStdString());
         gpaletteScore->setEngravingFont(scoreFont);
         gpaletteScore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gpaletteScore->style().spatium()) / SPATIUM20);
 #endif

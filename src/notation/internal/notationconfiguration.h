@@ -129,6 +129,10 @@ public:
     void setPartStyleFilePath(const muse::io::path_t& path) override;
     muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
 
+    muse::io::path_t paletteStyleFilePath() const override;
+    void setPaletteStyleFilePath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> paletteStyleFilePathChanged() const override;
+
     NoteInputMethod defaultNoteInputMethod() const override;
     void setDefaultNoteInputMethod(NoteInputMethod method) override;
     muse::async::Notification defaultNoteInputMethodChanged() const override;

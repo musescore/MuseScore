@@ -742,6 +742,21 @@ async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged
     return engravingConfiguration()->partStyleFilePathChanged();
 }
 
+muse::io::path_t NotationConfiguration::paletteStyleFilePath() const
+{
+    return engravingConfiguration()->paletteStyleFilePath();
+}
+
+void NotationConfiguration::setPaletteStyleFilePath(const muse::io::path_t& path)
+{
+    engravingConfiguration()->setPaletteStyleFilePath(path.toQString());
+}
+
+async::Channel<muse::io::path_t> NotationConfiguration::paletteStyleFilePathChanged() const
+{
+    return engravingConfiguration()->paletteStyleFilePathChanged();
+}
+
 NoteInputMethod NotationConfiguration::defaultNoteInputMethod() const
 {
     std::string str = settings()->value(DEFAULT_NOTE_INPUT_METHOD).toString();

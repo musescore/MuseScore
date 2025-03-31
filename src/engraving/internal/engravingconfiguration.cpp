@@ -42,6 +42,7 @@ using namespace mu::engraving;
 
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
+static const Settings::Key PALETTE_STYLE_FILE_PATH("engraving", "engraving/style/paletteStyleFile");
 
 static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
 
@@ -83,6 +84,11 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(PART_STYLE_FILE_PATH, Val(muse::io::path_t()));
     settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_partStyleFilePathChanged.send(val.toPath());
+    });
+
+    settings()->setDefaultValue(PALETTE_STYLE_FILE_PATH, Val(muse::io::path_t()));
+    settings()->valueChanged(PALETTE_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
+        m_paletteStyleFilePathChanged.send(val.toPath());
     });
 
     settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
@@ -195,6 +201,21 @@ void EngravingConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 async::Channel<muse::io::path_t> EngravingConfiguration::partStyleFilePathChanged() const
 {
     return m_partStyleFilePathChanged;
+}
+
+muse::io::path_t EngravingConfiguration::paletteStyleFilePath() const
+{
+    return settings()->value(PALETTE_STYLE_FILE_PATH).toPath();
+}
+
+void EngravingConfiguration::setPaletteStyleFilePath(const muse::io::path_t& path)
+{
+    settings()->setSharedValue(PALETTE_STYLE_FILE_PATH, Val(path.toStdString()));
+}
+
+async::Channel<muse::io::path_t> EngravingConfiguration::paletteStyleFilePathChanged() const
+{
+    return m_paletteStyleFilePathChanged;
 }
 
 static bool defaultPageSizeIsLetter()

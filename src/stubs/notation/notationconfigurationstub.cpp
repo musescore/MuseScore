@@ -304,6 +304,21 @@ muse::async::Channel<muse::io::path_t> NotationConfigurationStub::partStyleFileP
     return ch;
 }
 
+muse::io::path_t NotationConfigurationStub::paletteStyleFilePath() const
+{
+    return muse::io::path_t();
+}
+
+void NotationConfigurationStub::setPaletteStyleFilePath(const muse::io::path_t&)
+{
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::paletteStyleFilePathChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
+    return ch;
+}
+
 NoteInputMethod NotationConfigurationStub::defaultNoteInputMethod() const
 {
     return NoteInputMethod::UNKNOWN;

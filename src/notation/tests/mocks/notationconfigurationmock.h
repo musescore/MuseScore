@@ -114,6 +114,10 @@ public:
     MOCK_METHOD(void, setPartStyleFilePath, (const muse::io::path_t&), (override));
     MOCK_METHOD(muse::async::Channel<muse::io::path_t>, partStyleFilePathChanged, (), (const, override));
 
+    MOCK_METHOD(muse::io::path_t, paletteStyleFilePath, (), (const, override));
+    MOCK_METHOD(void, setPaletteStyleFilePath, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, paletteStyleFilePathChanged, (), (const, override));
+
     MOCK_METHOD(NoteInputMethod, defaultNoteInputMethod, (), (const, override));
     MOCK_METHOD(void, setDefaultNoteInputMethod, (NoteInputMethod), (override));
     MOCK_METHOD(muse::async::Notification, defaultNoteInputMethodChanged, (), (const, override));
