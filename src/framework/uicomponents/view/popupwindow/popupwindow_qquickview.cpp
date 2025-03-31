@@ -24,6 +24,7 @@
 #include <QTimer>
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace muse::uicomponents;
 
@@ -118,7 +119,7 @@ void PopupWindow_QQuickView::setContent(QQmlComponent* component, QQuickItem* it
         if (!m_view->isVisible()) {
             return;
         }
-        if (item->implicitWidth() != m_view->width()) {
+        if (!RealIsEqual(item->implicitWidth(), m_view->width())) {
             updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
         }
     });
@@ -127,7 +128,7 @@ void PopupWindow_QQuickView::setContent(QQmlComponent* component, QQuickItem* it
         if (!m_view->isVisible()) {
             return;
         }
-        if (item->implicitHeight() != m_view->height()) {
+        if (!RealIsEqual(item->implicitHeight(), m_view->height())) {
             updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
         }
     });
