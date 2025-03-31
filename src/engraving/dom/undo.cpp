@@ -2110,7 +2110,7 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
         break;
     case Sid::createMultiMeasureRests:
         if (oldValue.toBool() == true && newValue.toBool() == false) {
-            score->updateSystemLocksOnDisableMMRests();
+            score->removeSystemLocksContainingMMRests();
         }
         break;
     default:

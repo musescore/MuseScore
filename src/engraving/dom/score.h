@@ -415,6 +415,7 @@ public:
 
     const std::vector<Staff*>& staves() const { return m_staves; }
     size_t nstaves() const { return m_staves.size(); }
+    int visibleStavesCount() const;
     size_t ntracks() const { return m_staves.size() * VOICES; }
 
     staff_idx_t staffIdx(const Staff*) const;
@@ -1032,7 +1033,7 @@ public:
     void removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
     void removeLayoutBreaksOnAddSystemLock(const SystemLock* lock);
     void removeSystemLocksOnRemoveMeasures(const MeasureBase* m1, const MeasureBase* m2);
-    void updateSystemLocksOnDisableMMRests();
+    void removeSystemLocksContainingMMRests();
     void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
     friend class Chord;

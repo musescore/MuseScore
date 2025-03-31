@@ -5854,6 +5854,17 @@ int Score::visiblePartCount() const
     return count;
 }
 
+int Score::visibleStavesCount() const
+{
+    int count = 0;
+    for (const Staff* staff : m_staves) {
+        if (staff->show()) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 ShadowNote* Score::shadowNote() const
 {
     return m_shadowNote;
