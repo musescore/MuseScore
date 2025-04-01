@@ -1255,7 +1255,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
 
     if (!hasFretDiagram) {
-        HarmonyLayout::autoplaceHarmonies(sl, ctx);
+        HarmonyLayout::autoplaceHarmonies(sl);
         HarmonyLayout::alignHarmonies(system, sl, true, ctx.conf().maxChordShiftAbove(), ctx.conf().maxChordShiftBelow());
     }
 
@@ -1317,7 +1317,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         // Harmony, 2nd place
         //-------------------------------------------------------------
 
-        HarmonyLayout::autoplaceHarmonies(sl, ctx);
+        HarmonyLayout::autoplaceHarmonies(sl);
         HarmonyLayout::alignHarmonies(system, sl, false, ctx.conf().maxFretShiftAbove(), ctx.conf().maxFretShiftBelow());
     }
 
