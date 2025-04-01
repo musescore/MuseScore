@@ -2882,12 +2882,16 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
  * @brief PlaybackEventsRendererTests_Trill_TiedNotes
  * Checks that we can render the normal trill (ornament) if it starts from a tied note
  * See: https://github.com/musescore/MuseScore/issues/18676
+ * See: https://github.com/musescore/MuseScore/issues/27472
  */
 TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
 {
     // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
     Score* score
         = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "trill_on_tied_notes.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->repeatList().size(), 2);
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
@@ -2915,25 +2919,36 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
 
     // [WHEN] Render the chord
     PlaybackEventsMap result;
-    m_renderer.render(toChord(chord), 0, m_defaultProfile, ctx, result);
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+        m_renderer.render(toChord(chord), tickPositionOffset, m_defaultProfile, ctx, result);
+    }
 
-    // [THEN] We expect 1 list of events (for 2 tied notes)
-    EXPECT_EQ(result.size(), 1);
+    // [THEN] We expect 2 lists of events (for each repeat segment)
+    EXPECT_EQ(result.size(), score->repeatList().size());
 
-    constexpr timestamp_t expectedTrillTimestamp = 0;
     constexpr duration_t expectedTrillDuration = WHOLE_NOTE_DURATION * 2; // 2 tied notes
+    const std::vector<timestamp_t> expectedTrillTimestamps {
+        0,
+        expectedTrillDuration, // 2nd repeat segment
+    };
+
+    int repeatSegmentNum = 0;
 
     for (const auto& pair : result) {
+        // [THEN] Sub-notes of the trill
+        constexpr size_t expectedSubNotes = 64;
+        EXPECT_EQ(pair.second.size(), expectedSubNotes);
+
+        const timestamp_t expectedTrillTimestamp = expectedTrillTimestamps.at(repeatSegmentNum);
+        ++repeatSegmentNum;
+
         for (const PlaybackEvent& event : pair.second) {
             ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
 
             // [THEN] We expect that each note event has only one articulation applied
             ASSERT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-
-            // [THEN] Sub-notes of the trill
-            constexpr size_t expectedSubNotes = 64;
-            EXPECT_EQ(pair.second.size(), expectedSubNotes);
 
             // [THEN] Each note event has the correct articulation time and duration
             const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Trill);
