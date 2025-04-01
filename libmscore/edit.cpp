@@ -870,6 +870,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->setScore(score);
                               nsig->setTrack(si * VOICES);
                               nsig->setParent(seg);
+                              nsig->styleChanged();
                               undoAddElement(nsig);
                               if (score->excerpt()) {
                                     const int masterTrack = score->excerpt()->tracks().key(nsig->track());
@@ -4996,7 +4997,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
       // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
       const bool linked = ostaff->staffList().length() > 1;
 
-      for (const Staff* staff : ostaff->staffList()) {
+      for (Staff*& staff : ostaff->staffList()) {
             QList<int> tracks;
             if (!staff->score()->excerpt()) {
                   // On masterScore.
