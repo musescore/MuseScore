@@ -1115,13 +1115,13 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 
 bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
 {
-    if (viewInteraction()->isElementEditStarted()) {
-        return viewInteraction()->isEditAllowed(event);
-    }
-
     const bool editTextKeysFound = event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter;
     if (editTextKeysFound && startTextEditingAllowed()) {
         return true;
+    }
+
+    if (viewInteraction()->isElementEditStarted()) {
+        return viewInteraction()->isEditAllowed(event);
     }
 
     return tryPercussionShortcut(event);
@@ -1129,13 +1129,11 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
-    if (viewInteraction()->isElementEditStarted()) {
+    if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+        dispatcher()->dispatch("edit-text");
+        event->accept();
+    } else if (viewInteraction()->isElementEditStarted()) {
         viewInteraction()->editElement(event);
-    } else if (startTextEditingAllowed()) {
-        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-            dispatcher()->dispatch("edit-text");
-            event->accept();
-        }
     } else if (event->key() == Qt::Key_Shift) {
         updateShadowNotePopupVisibility();
     }
