@@ -834,12 +834,16 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
  * @brief PlaybackEventsRendererTests_TwoNotes_Continuous_Glissando
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with F4 and B4 quarter notes connected by ContinuousGlissando articulation.
+ *          This measure is then repeated, see: https://github.com/musescore/MuseScore/issues/27287
  */
 TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score
         = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando/two_notes_continuous_glissando.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->repeatList().size(), 2);
 
     Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
@@ -862,6 +866,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
         expectedPitches.push_back(nominalPitchLevel + i * PITCH_LEVEL_STEP);
     }
 
+    std::vector<timestamp_t> expectedTimestamps {
+        0,
+        WHOLE_NOTE_DURATION, // 2nd repeat segment
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::ContinuousGlissando, m_dummyPattern);
 
@@ -870,7 +879,16 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+        m_renderer.render(chord, tickPositionOffset, m_defaultProfile, ctx, result);
+    }
+
+    // [THEN] 2 events, as we have 2 repeat segments
+    EXPECT_EQ(result.size(), 2);
+    ASSERT_EQ(expectedTimestamps.size(), result.size());
+
+    size_t noteEventNum = 0;
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -879,18 +897,29 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
+            // [THEN] We expect that each sub-note has an expected duration
+            timestamp_t expectedTimestamp = expectedTimestamps.at(noteEventNum);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp);
+
             // [THEN] We expect that each note event has only one articulation applied - Continuous Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ContinuousGlissando));
+            auto glissIt = noteEvent.expressionCtx().articulations.find(ArticulationType::ContinuousGlissando);
+            ASSERT_TRUE(glissIt != noteEvent.expressionCtx().articulations.end());
 
-            // [THEN] We expect that each sub-note has an expected duration
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
+            // [THEN] The articulation has the correct timestamp & duration
+            const ArticulationMeta& artMeta = glissIt->second.meta;
+            EXPECT_EQ(artMeta.timestamp, expectedTimestamp);
+            EXPECT_EQ(artMeta.overallDuration, expectedDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+
+            noteEventNum++;
         }
     }
+
+    delete score;
 }
 
 /**
