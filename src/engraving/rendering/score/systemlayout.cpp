@@ -227,12 +227,13 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
 
         const MeasureBase* mb = ctx.state().curMeasure();
+        const MeasureBase* next = mb->nextMM();
         bool lineBreak  = false;
         switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
             lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock()
-                        || (ctx.state().nextMeasure() && ctx.state().nextMeasure()->isStartOfSystemLock());
+                        || (next && next->isStartOfSystemLock());
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:
