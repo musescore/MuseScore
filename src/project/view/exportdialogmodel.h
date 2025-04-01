@@ -83,6 +83,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(bool midiExpandRepeats READ midiExpandRepeats WRITE setMidiExpandRepeats NOTIFY midiExpandRepeatsChanged)
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
+    Q_PROPERTY(bool midiSpaceLyrics READ midiSpaceLyrics WRITE setMidiSpaceLyrics NOTIFY midiSpaceLyricsChanged)
 
     Q_PROPERTY(MusicXmlLayoutType musicXmlLayoutType READ musicXmlLayoutType WRITE setMusicXmlLayoutType NOTIFY musicXmlLayoutTypeChanged)
 
@@ -151,6 +152,10 @@ public:
     bool midiExportRpns() const;
     void setMidiExportRpns(bool exportRpns);
 
+    bool midiSpaceLyrics() const;
+    void setMidiSpaceLyrics(bool spaceLyrics);
+
+
     bool meiExportLayout() const;
     void setMeiExportLayout(bool exportLayout);
 
@@ -196,6 +201,7 @@ signals:
 
     void midiExpandRepeatsChanged(bool expandRepeats);
     void midiExportRpnsChanged(bool exportRpns);
+    void midiSpaceLyricsChanged(bool spaceLyrics);
 
     void musicXmlLayoutTypeChanged(MusicXmlLayoutType layoutType);
 

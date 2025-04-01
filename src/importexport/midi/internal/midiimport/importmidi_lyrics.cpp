@@ -68,6 +68,7 @@ extractLyricsFromTrack(const MidiTrack& track, int division, bool isDivisionInTp
         if (isLyricEvent(e)) {
             const uchar* data = (uchar*)e.edata();
             std::string text = MidiCharset::fromUchar(data);
+            text.erase(text.find_last_not_of(' ')+1);
             if (isLyricText(text)) {
                 const auto tick = toMuseScoreTicks(i.first, division, isDivisionInTps);
                 // no charset handling here

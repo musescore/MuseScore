@@ -44,10 +44,10 @@ class ExportMidi
 {
 public:
     ExportMidi(engraving::Score* s) { m_score = s; }
-    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs);
-    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs);
-    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
-    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
+    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs, bool spaceLyrics);
+    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, bool spaceLyrics);
+    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState, bool spaceLyrics);
+    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState, bool spaceLyrics);
 
 private:
     void writeHeader(const engraving::CompatMidiRendererInternal::Context& context);

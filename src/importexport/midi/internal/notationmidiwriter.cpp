@@ -62,13 +62,14 @@ Ret NotationMidiWriter::write(INotationPtr notation, io::IODevice& destinationDe
 
     bool isPlayRepeatsEnabled = midiImportExportConfiguration()->isExpandRepeats();
     bool isMidiExportRpns = midiImportExportConfiguration()->isMidiExportRpns();
+    bool isMidiSpaceLyrics = midiImportExportConfiguration()->isMidiSpaceLyrics();
     SynthesizerState synthesizerState = score->synthesizerState();
 
     QByteArray qdata;
     QBuffer buf(&qdata);
     buf.open(QIODevice::WriteOnly);
 
-    bool ok = exportMidi.write(&buf, isPlayRepeatsEnabled, isMidiExportRpns, synthesizerState);
+    bool ok = exportMidi.write(&buf, isPlayRepeatsEnabled, isMidiExportRpns, synthesizerState, isMidiSpaceLyrics);
     if (ok) {
         ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
         destinationDevice.write(data);

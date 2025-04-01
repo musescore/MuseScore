@@ -212,7 +212,7 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
 //    from mscore->synthesizerState() as the synthState parameter.
 //---------------------------------------------------------
 
-bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState)
+bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState, bool spaceLyrics)
 {
     m_midiFile.setDivision(Constants::DIVISION);
     m_midiFile.setFormat(1);
@@ -371,7 +371,13 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     ChordRest* cr = toChordRest(seg->element(i));
                     if (cr) {
                         for (const auto& lyric : cr->lyrics()) {
+                            LyricsSyllabic syllabic = lyric->syllabic();
                             muse::ByteArray lyricText = lyric->plainText().toUtf8();
+                            if (spaceLyrics) {
+                                if (syllabic == LyricsSyllabic::SINGLE || syllabic == LyricsSyllabic::END) {
+                                    lyricText.push_back(' ');
+                             }
+                        }
                             size_t len = lyricText.size() + 1;
                             std::vector<unsigned char> data(lyricText.constData(), lyricText.constData() + len);
 
@@ -418,24 +424,24 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     return !m_midiFile.write(device);
 }
 
-bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState)
+bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState, bool spaceLyrics)
 {
     m_file.setFileName(name);
     if (!m_file.open(QIODevice::WriteOnly)) {
         return false;
     }
-    return write(&m_file, midiExpandRepeats, exportRPNs, synthState);
+    return write(&m_file, midiExpandRepeats, exportRPNs, synthState, spaceLyrics);
 }
 
-bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs)
+bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, bool spaceLyrics)
 {
     SynthesizerState ss;
-    return write(device, midiExpandRepeats, exportRPNs, ss);
+    return write(device, midiExpandRepeats, exportRPNs, ss, spaceLyrics);
 }
 
-bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs)
+bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs, bool spaceLyrics)
 {
     SynthesizerState ss;
-    return write(name, midiExpandRepeats, exportRPNs, ss);
+    return write(name, midiExpandRepeats, exportRPNs, ss, spaceLyrics);
 }
 }

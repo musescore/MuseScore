@@ -49,6 +49,9 @@ public:
 
     virtual bool isMidiExportRpns() const = 0;
     virtual void setIsMidiExportRpns(bool exportRpns) = 0;
+
+    virtual bool isMidiSpaceLyrics() const = 0;
+    virtual void setIsMidiSpaceLyrics(bool spaceLyrics) = 0;
 };
 }
 

@@ -54,6 +54,21 @@ ExportSettingsPage {
         }
     }
 
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Add spacing to lyrics")
+
+        navigation.name: "SpaceLyricsCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 2
+
+        checked: root.model.midiSpaceLyrics
+        onClicked: {
+            root.model.midiSpaceLyrics = !checked
+        }
+    }
+
+
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each selected part will be exported as a separate MIDI file.")

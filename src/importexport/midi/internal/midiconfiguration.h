@@ -46,6 +46,9 @@ public:
     bool isMidiExportRpns() const override;
     void setIsMidiExportRpns(bool exportRpns) override;
 
+    bool isMidiSpaceLyrics() const override;
+    void setIsMidiSpaceLyrics(bool exportRpns) override;
+
 private:
     muse::async::Channel<int> m_midiShortestNoteChanged;
 };
