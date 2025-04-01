@@ -813,7 +813,7 @@ static String slurTieLineStyle(const SlurTie* s)
     return rest;
 }
 
-static String slurBezier(const Slur* s, const bool start)
+static String slurTieBezier(const SlurTie* s, const bool start)
 {
     if (!ExportMusicXml::configuration()->exportLayout()) {
         return String();
@@ -822,13 +822,13 @@ static String slurBezier(const Slur* s, const bool start)
     String rest;
     const int spatium = s->spatium();
     if (start) {
-        const SlurSegment* front = s->frontSegment();
+        const SlurTieSegment* front = toSlurTieSegment(s->frontSegment());
         const PointF startP = front->ups(Grip::START).pos();
         const PointF bezierP = front->ups(Grip::BEZIER1).pos();
         rest += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - startP.x()) / spatium);
         rest += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - startP.y()) / spatium);
     } else {
-        const SlurSegment* back = s->backSegment();
+        const SlurTieSegment* back = toSlurTieSegment(s->backSegment());
         const PointF endP = back->ups(Grip::END).pos();
         const PointF bezierP = back->ups(Grip::BEZIER2).pos();
         rest += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - endP.x()) / spatium);
@@ -957,7 +957,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
     String tagName = u"slur";
     tagName += u" type=\"start\"";
     tagName += slurTieLineStyle(s);
-    tagName += slurBezier(s, true);
+    tagName += slurTieBezier(s, true);
 
     if (i >= 0) {
         // remove from list and print start
@@ -1003,7 +1003,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
             m_started[i] = false;
             notations.tag(xml, s);
             String tagName = String(u"slur type=\"stop\" number=\"%1\"").arg(i + 1);
-            tagName += slurBezier(s, false);
+            tagName += slurTieBezier(s, false);
             xml.tagRaw(tagName);
         } else {
             LOGD("no free slur slot");
@@ -1014,7 +1014,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
         m_started[i] = false;
         notations.tag(xml, s);
         String tagName = String(u"slur type=\"stop\" number=\"%1\"").arg(i + 1);
-        tagName += slurBezier(s, false);
+        tagName += slurTieBezier(s, false);
         xml.tagRaw(tagName);
     }
 }
