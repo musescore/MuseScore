@@ -942,7 +942,7 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
                   }
             if (y < y2) {
                   systems.append(s);
-                  for (int iii = i+1; ii < n; ++iii) {
+                  for (int iii = i+1; iii < n; ++iii) {
                         if (sl->at(iii)->y() != s->y())
                               break;
                         systems.append(sl->at(iii));
