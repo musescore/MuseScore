@@ -28,6 +28,7 @@ namespace mu::engraving {
 class BarLine;
 class Page;
 class System;
+class StaffLines;
 class TextBase;
 }
 
@@ -37,6 +38,8 @@ class MaskLayout
 public:
     static void computeMasks(LayoutContext& ctx, Page* page);
 
+    static void maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx);
+
 private:
     static void computeBarlineMasks(const Segment* barlineSement, const System* system, const std::vector<TextBase*>& allSystemText,
                                     LayoutContext& ctx);
@@ -44,7 +47,5 @@ private:
     static std::vector<TextBase*> collectAllSystemText(const System* system);
 
     static void cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength);
-
-    static void maskTABStringLinesForFrets(Measure* measure, staff_idx_t staffIdx, const LayoutContext& ctx);
 };
 } // namespace mu::engraving::rendering::score
