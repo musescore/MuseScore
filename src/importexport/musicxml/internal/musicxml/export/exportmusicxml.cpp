@@ -815,28 +815,28 @@ static String slurTieLineStyle(const SlurTie* s)
     return rest;
 }
 
-static String slurTieBezier(const SlurTie* s, const bool start)
+static String slurTieBezier(const SlurTie* st, const bool start)
 {
     if (!ExportMusicXml::configuration()->exportLayout()) {
         return String();
     }
 
-    String rest;
-    const int spatium = s->spatium();
+    String attributeString;
+    const int spatium = st->spatium();
     if (start) {
-        const SlurTieSegment* front = toSlurTieSegment(s->frontSegment());
+        const SlurTieSegment* front = toSlurTieSegment(st->frontSegment());
         const PointF startP = front->ups(Grip::START).pos();
         const PointF bezierP = front->ups(Grip::BEZIER1).pos();
-        rest += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - startP.x()) / spatium);
-        rest += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - startP.y()) / spatium);
+        attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - startP.x()) / spatium);
+        attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - startP.y()) / spatium);
     } else {
-        const SlurTieSegment* back = toSlurTieSegment(s->backSegment());
+        const SlurTieSegment* back = toSlurTieSegment(st->backSegment());
         const PointF endP = back->ups(Grip::END).pos();
         const PointF bezierP = back->ups(Grip::BEZIER2).pos();
-        rest += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - endP.x()) / spatium);
-        rest += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - endP.y()) / spatium);
+        attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - endP.x()) / spatium);
+        attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - endP.y()) / spatium);
     }
-    return rest;
+    return attributeString;
 }
 
 //---------------------------------------------------------
