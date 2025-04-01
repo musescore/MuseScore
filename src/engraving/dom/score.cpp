@@ -73,6 +73,7 @@
 #include "page.h"
 #include "palmmute.h"
 #include "part.h"
+#include "partialtie.h"
 #include "pitchspelling.h"
 #include "rehearsalmark.h"
 #include "repeatlist.h"
@@ -5497,12 +5498,30 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 // reconnect the tie to this note, if any
                 Tie* tie = linkedNote->tieBack();
                 if (tie) {
-                    score->undoChangeSpannerElements(tie, tie->startNote(), linkedNewNote);
+                    Note* startNote = tie->isPartialTie() && !toPartialTie(tie)->isOutgoing() ? nullptr : tie->startNote();
+                    score->undoChangeSpannerElements(tie, startNote, linkedNewNote);
                 }
                 // reconnect the tie from this note, if any
                 tie = linkedNote->tieFor();
                 if (tie) {
                     score->undoChangeSpannerElements(tie, linkedNewNote, tie->endNote());
+                }
+
+                // Reconnect note anchored spanners
+                for (EngravingItem* item : linkedNote->spannerBack()) {
+                    if (!item || !item->isSpanner()) {
+                        continue;
+                    }
+                    Spanner* spanner = toSpanner(item);
+                    score->undoChangeSpannerElements(spanner, spanner->startElement(), linkedNewNote);
+                }
+
+                for (EngravingItem* item : linkedNote->spannerFor()) {
+                    if (!item || !item->isSpanner()) {
+                        continue;
+                    }
+                    Spanner* spanner = toSpanner(item);
+                    score->undoChangeSpannerElements(spanner, linkedNewNote, spanner->endElement());
                 }
             }
 
@@ -5518,7 +5537,10 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                         continue;
                     }
                     Slur* slur = toSlur(spanner);
-                    if (slur->startElement() == chord) {
+                    if (slur->startElement() == chord && slur->endElement() == chord) {
+                        score->undoChangeSpannerElements(slur, dstChord, dstChord);
+                        slur->undoChangeProperty(Pid::VOICE, voice);
+                    } else if (slur->startElement() == chord) {
                         score->undoChangeSpannerElements(slur, dstChord, slur->endElement());
                     } else if (slur->endElement() == chord) {
                         score->undoChangeSpannerElements(slur, slur->startElement(), dstChord);
@@ -5543,6 +5565,22 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 // remove chord, replace with rest
                 score->undoRemoveElement(chord);
                 score->undoAddCR(r, m, s->tick());
+            }
+
+            // Move lyrics
+            for (Lyrics* lyric : chord->lyrics()) {
+                if (!lyric || dstChord->lyrics(lyric->no(), lyric->placement())) {
+                    continue;
+                }
+
+                Lyrics* newLyric = Factory::copyLyrics(*lyric);
+                newLyric->setParent(dstChord);
+                newLyric->setSelected(false);
+                newLyric->setTrack(dstTrack);
+                score->undoAddElement(newLyric);
+                newElements.push_back(newLyric);
+
+                score->undoRemoveElement(lyric);
             }
         } else if (e->hasVoiceAssignmentProperties()) {
             if (e->isSpannerSegment()) {
