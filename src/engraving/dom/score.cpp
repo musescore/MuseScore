@@ -1132,7 +1132,7 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
         }
         if (y < y2) {
             systems.push_back(s);
-            for (size_t iii = i + 1; ii < n; ++iii) {
+            for (size_t iii = i + 1; iii < n; ++iii) {
                 if (sl.at(iii)->y() != s->y()) {
                     break;
                 }
