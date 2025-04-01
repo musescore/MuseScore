@@ -41,6 +41,7 @@ using namespace mu::engraving::rendering::score;
 
 void HarmonyLayout::autoplaceHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx)
 {
+    UNUSED(ctx);
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
