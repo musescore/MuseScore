@@ -7496,6 +7496,12 @@ FretDiagram* MusicXmlParserPass2::frame()
 {
     FretDiagram* fd = Factory::createFretDiagram(m_score->dummy()->segment());
 
+    const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
+    if (color.isValid()) {
+        fd->setColor(color);
+        fd->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+    }
+
     // Format: fret: string
     std::map<int, int> bStarts;
     std::map<int, int> bEnds;
