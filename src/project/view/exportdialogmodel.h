@@ -155,7 +155,6 @@ public:
     bool midiSpaceLyrics() const;
     void setMidiSpaceLyrics(bool spaceLyrics);
 
-
     bool meiExportLayout() const;
     void setMeiExportLayout(bool exportLayout);
 

@@ -376,8 +376,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                             if (spaceLyrics) {
                                 if (syllabic == LyricsSyllabic::SINGLE || syllabic == LyricsSyllabic::END) {
                                     lyricText.push_back(' ');
-                             }
-                        }
+                                }
+                            }
                             size_t len = lyricText.size() + 1;
                             std::vector<unsigned char> data(lyricText.constData(), lyricText.constData() + len);
 
