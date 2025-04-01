@@ -1303,7 +1303,7 @@ bool ChordRest::hasFollowingJumpItem() const
         return false;
     }
 
-    if (measure->lastChordRest(track()) != this) {
+    if (endTick() != measure->endTick()) {
         return false;
     }
 
@@ -1318,7 +1318,7 @@ bool ChordRest::hasPrecedingJumpItem() const
     const Segment* seg = segment();
     const Measure* measure = seg->measure();
 
-    if (measure->firstChordRest(track()) != this) {
+    if (tick() != measure->tick()) {
         return false;
     }
 
