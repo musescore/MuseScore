@@ -570,6 +570,7 @@ private:
     muse::String metronome(double& r);
     void sound();
     void play();
+    void swing();
     void dynamics();
     void otherDirection();
     void handleRepeats(engraving::Measure* measure, const engraving::Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
@@ -639,6 +640,7 @@ private:
     double m_tpoSound = 0.0;                   // tempo according to sound
     bool m_visible = true;
     bool m_systemDirection = false;
+    std::pair<int, int> m_swing = { 0, 0 };
     std::vector<engraving::EngravingItem*> m_elems;
     engraving::Fraction m_offset;
     engraving::track_idx_t m_track = muse::nidx;
