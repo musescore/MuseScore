@@ -392,7 +392,6 @@ public:
     void playText(PlayTechAnnotation const* const annot, staff_idx_t staff);
     void textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick);
     void dynamic(Dynamic const* const dyn, staff_idx_t staff);
-    void symbol(Symbol const* const sym, staff_idx_t staff);
     void systemText(StaffTextBase const* const text, staff_idx_t staff);
     void tempoText(TempoText const* const text, staff_idx_t staff);
     void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
@@ -718,10 +717,6 @@ static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfigur
 //   color2xml
 //---------------------------------------------------------
 
-/**
- Return \a el color.
- */
-
 static String color2xml(const EngravingItem* el)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
@@ -736,7 +731,23 @@ static String color2xml(const EngravingItem* el)
 static void addColorAttr(const EngravingItem* el, XmlWriter::Attributes& attrs)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
-        attrs.push_back({ "color", String::fromStdString(el->color().toString()) });
+        attrs.emplace_back(std::make_pair("color", String::fromStdString(el->color().toString())));
+    }
+}
+
+//---------------------------------------------------------
+//   frame2xml
+//---------------------------------------------------------
+
+static String frame2xml(const TextBase* el)
+{
+    switch (el->frameType()) {
+    case FrameType::CIRCLE:
+        return u" enclosure=\"circle\"";
+    case FrameType::SQUARE:
+        return u" enclosure=\"rectangle\"";
+    default:
+        return String();
     }
 }
 
@@ -2190,7 +2201,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
         attrs = { { "symbol", "single-number" } };
     }
     if (!tsig->visible()) {
-        attrs.push_back({ "print-object", "no" });
+        attrs.emplace_back(std::make_pair("print-object", "no"));
     }
 
     addColorAttr(tsig, attrs);
@@ -2425,10 +2436,10 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
 
     XmlWriter::Attributes attrs;
     if (staff) {
-        attrs.push_back({ "number", staff });
+        attrs.emplace_back(std::make_pair("number", staff));
     }
     if (!visible) {
-        attrs.push_back({ "print-object", "no" });
+        attrs.emplace_back(std::make_pair("print-object", "no"));
     }
     addColorAttr(ks, attrs);
 
@@ -2793,7 +2804,7 @@ static void tupletStop(const Tuplet* const t, const int number, Notations& notat
     notations.tag(xml, t);
     XmlWriter::Attributes tupletAttrs = { { "type", "stop" } };
     if (!isSimpleTuplet(t)) {
-        tupletAttrs.push_back({ "number", number });
+        tupletAttrs.emplace_back(std::make_pair("number", number));
     }
     xml.tag("tuplet", tupletAttrs);
 }
@@ -2888,6 +2899,7 @@ static void writeAccidental(XmlWriter& xml, const String& tagName, const Acciden
 
 static void writeDisplayName(XmlWriter& xml, const String& partName)
 {
+    // TODO: add text style attributes
     String displayText;
     for (size_t i = 0; i < partName.size(); ++i) {
         Char ch = partName.at(i);
@@ -5004,13 +5016,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     } else {
         xml.startElement("direction-type");
         String attr;
-        if (text->hasFrame()) {
-            if (text->circle()) {
-                attr = u" enclosure=\"circle\"";
-            } else {
-                attr = u" enclosure=\"rectangle\"";
-            }
-        }
+        attr += frame2xml(text);
         attr += color2xml(text);
         attr += ExportMusicXml::positioningAttributes(text);
         MScoreTextToMusicXml mttm(u"words", attr, defFmt, mtf);
@@ -5043,7 +5049,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     XmlWriter::Attributes tempoAttrs;
     tempoAttrs = { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } };
     if (text->systemFlag()) {
-        tempoAttrs.push_back({ "system", text->isLinked() ? "also-top" : "only-top" });
+        tempoAttrs.emplace_back(std::make_pair("system", text->isLinked() ? "also-top" : "only-top"));
     }
 
     m_xml.startElement("direction", tempoAttrs);
@@ -5206,13 +5212,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
     m_xml.startElement("direction", { { "placement", (relativePosition.y() < 0) ? "above" : "below" } });
     m_xml.startElement("direction-type");
     String attr;
-    if (text->hasFrame()) {
-        if (text->circle()) {
-            attr = u" enclosure=\"circle\"";
-        } else {
-            attr = u" enclosure=\"rectangle\"";
-        }
-    }
+    attr += frame2xml(text);
     attr += ExportMusicXml::positioningAttributesForTboxText(relativePosition, text->spatium());
     attr += u" valign=\"top\"";
     MScoreTextToMusicXml mttm(u"words", attr, defFmt, mtf);
@@ -5239,6 +5239,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     if (rmk->circle()) {
         attr = u" enclosure=\"circle\"";
     } else if (!rmk->hasFrame()) {
+        // special default case
         attr = u" enclosure=\"none\"";
     }
     attr += color2xml(rmk);
@@ -5847,6 +5848,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     m_xml.startElement("direction-type");
 
     String tagName = u"dynamics";
+    tagName += frame2xml(dyn);
     tagName += color2xml(dyn);
     tagName += positioningAttributes(dyn);
     m_xml.startElementRaw(tagName);
@@ -5931,37 +5933,6 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     }
 
     m_xml.endElement();
-}
-
-//---------------------------------------------------------
-//   symbol
-//---------------------------------------------------------
-
-// TODO: remove dependency on symbol name and replace by a more stable interface
-// changes in sym.cpp r2494 broke MusicXML export of pedals (again)
-
-void ExportMusicXml::symbol(Symbol const* const sym, staff_idx_t staff)
-{
-    AsciiStringView name = SymNames::nameForSymId(sym->sym());
-    String mxmlName;
-    if (name == "keyboardPedalPed") {
-        mxmlName = u"pedal type=\"start\"";
-    } else if (name == "keyboardPedalUp") {
-        mxmlName = u"pedal type=\"stop\"";
-    } else {
-        mxmlName = String(u"other-direction smufl=\"%1\"").arg(String::fromAscii(name.ascii()));
-    }
-    directionTag(m_xml, m_attr, sym);
-    mxmlName += color2xml(sym);
-    mxmlName += positioningAttributes(sym);
-    m_xml.startElement("direction-type");
-    m_xml.tagRaw(mxmlName);
-    m_xml.endElement();
-    const int offset = calculateTimeDeltaInDivisions(sym->tick(), tick(), m_div);
-    if (offset) {
-        m_xml.tag("offset", offset);
-    }
-    directionETag(m_xml, staff);
 }
 
 //---------------------------------------------------------
@@ -6412,7 +6383,7 @@ static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const
         staff_idx_t staffIdx = scoreRelStaff + i;
         XmlWriter::Attributes styleAttrs;
         if (part->nstaves() > 1) {
-            styleAttrs.push_back({ "number", i + 1 });
+            styleAttrs.emplace_back(std::make_pair("number", i + 1));
         }
         if (m->isMeasureRepeatGroup(staffIdx)
             && (!m->prevMeasure() || !m->prevMeasure()->isMeasureRepeatGroup(staffIdx)
@@ -6487,9 +6458,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
 
     // note: the instrument change details are handled in ExportMusicXml::writeMeasureTracks,
     // optionally writing the associated staff text is done below
-    if (e->isSymbol()) {
-        exp->symbol(toSymbol(e), sstaff);
-    } else if (e->isTempoText()) {
+    if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
     } else if (e->isPlayTechAnnotation()) {
         exp->playText(toPlayTechAnnotation(e), sstaff);
@@ -7655,7 +7624,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         if (partName.empty()) {
             partName = part->partName();
             if (!partName.empty()) {
-                attributes.push_back({ "print-object", "no" });
+                attributes.emplace_back(std::make_pair("print-object", "no"));
             }
         }
         xml.tag("part-name", attributes, MScoreTextToMusicXml::toPlainText(partName).replace(u"♭", u"b").replace(u"♯", u"#"));
@@ -8832,11 +8801,11 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     int rootTpc = h->rootTpc();
     XmlWriter::Attributes harmonyAttrs;
     if (!h->isStyled(Pid::PLACEMENT)) {
-        harmonyAttrs.push_back({ "placement", (h->placement() == PlacementV::BELOW) ? "below" : "above" });
+        harmonyAttrs.emplace_back(std::make_pair("placement", (h->placement() == PlacementV::BELOW) ? "below" : "above"));
     }
-    harmonyAttrs.push_back({ "print-frame", h->hasFrame() ? "yes" : "no" });     // .append(relative));
+    harmonyAttrs.emplace_back(std::make_pair("print-frame", h->hasFrame() ? "yes" : "no"));     // .append(relative));
     if (!h->visible()) {
-        harmonyAttrs.push_back({ "print-object", "no" });
+        harmonyAttrs.emplace_back(std::make_pair("print-object", "no"));
     }
     addColorAttr(h, harmonyAttrs);
     m_xml.startElement("harmony", harmonyAttrs);
