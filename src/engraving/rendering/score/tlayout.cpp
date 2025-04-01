@@ -160,6 +160,7 @@
 #include "chordlayout.h"
 #include "guitarbendlayout.h"
 #include "lyricslayout.h"
+#include "masklayout.h"
 #include "slurtielayout.h"
 #include "tremololayout.h"
 #include "tupletlayout.h"
@@ -5386,6 +5387,10 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
         y += dist;
     }
     item->setLines(ll);
+
+    if (s && s->staffType(item->measure()->tick())->isTabStaff()) {
+        MaskLayout::maskTABStringLinesForFrets(item, ctx);
+    }
 }
 
 void TLayout::layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata)
