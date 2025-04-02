@@ -28,7 +28,7 @@
 
 namespace Bww {
 
-  static const char* symTable[] =
+  static constexpr const char* symTable[] =
   {
     "COMMENT",
     "HEADER",
@@ -50,12 +50,10 @@ namespace Bww {
 
   QString symbolToString(Symbol s)
   {
-    if (s < 0)
+    if (static_cast<size_t>(s) >= sizeof symTable)
       return "INVALID";
-    if (static_cast<unsigned>(s) > sizeof symTable)
-      return "INVALID";
-    else
-      return symTable[s];
+
+    return symTable[s];
   }
 
 } // namespace Bww

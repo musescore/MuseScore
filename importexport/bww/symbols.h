@@ -28,7 +28,7 @@
 
 namespace Bww {
 
-  enum Symbol
+  enum Symbol : unsigned char
   {
     COMMENT,
     HEADER,
@@ -48,7 +48,7 @@ namespace Bww {
     NONE
   };
 
-  enum StartStop
+  enum StartStop : unsigned char
   {
     ST_NONE,
     ST_START,

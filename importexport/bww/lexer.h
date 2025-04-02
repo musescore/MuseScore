@@ -53,7 +53,7 @@ namespace Bww {
     void categorizeWord(QString word);
     QTextStream in;                     ///< Input stream
     QString line;                       ///< The current line
-    int lineNumber;                     ///< The current line number (zero-based)
+    int lineNumber = -1;                ///< The current line number (zero-based)
     QStringList list;                   ///< Unprocessed words
     Symbol type;                        ///< Last symbol type
     QString value;                      ///< Last symbol value
