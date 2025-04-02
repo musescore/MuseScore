@@ -91,7 +91,7 @@ find_package(Qt6 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
 
-qt_standard_project_setup(REQUIRES 6.3 SUPPORTS_UP_TO 6.8)
+qt_standard_project_setup(REQUIRES 6.3 SUPPORTS_UP_TO 6.9)
 
 if (CC_IS_EMCC)
     # see SetupBuildEnvironment.cmake
