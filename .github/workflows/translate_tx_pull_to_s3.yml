@@ -72,7 +72,7 @@ jobs:
         if: env.DO_PUSH_TO_S3 == 'true'
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.*'
+          version: '6.9.*'
           host: 'linux'
           target: 'desktop'
           arch: 'linux_gcc_64'

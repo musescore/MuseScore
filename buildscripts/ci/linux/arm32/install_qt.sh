@@ -25,7 +25,7 @@ trap 'echo Qt installation failed; exit 1' ERR
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
 
-# TODO: Update to Qt 6.8
+# TODO: Update to Qt 6.9
 apt_packages_qt6=(
     libqt6core5compat6-dev
     libqt6networkauth6-dev
