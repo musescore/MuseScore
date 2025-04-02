@@ -166,6 +166,13 @@ void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChange
             continue;
         }
 
+        if (item->isTextBase()) {
+            const TextBase* text = toTextBase(item);
+            if (text->empty()) {
+                continue;
+            }
+        }
+
         if (muse::contains(pair.second, CommandType::AddElement)) {
             shouldUpdateState |= addSystemObject(item);
         } else if (muse::contains(pair.second, CommandType::RemoveElement)) {
