@@ -146,7 +146,7 @@ git config --global --add safe.directory /MuseScore
 # GET QT
 ##########################################################################
 
-# TODO: Update to Qt 6.8
+# TODO: Update to Qt 6.9
 apt_packages_qt6=(
   qt6-base-dev
   qt6-declarative-dev
