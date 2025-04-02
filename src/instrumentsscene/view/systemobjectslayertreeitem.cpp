@@ -98,8 +98,6 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGrou
 
 const Staff* SystemObjectsLayerTreeItem::staff() const
 {
-    const_cast<SystemObjectsLayerTreeItem*>(this)->updateStaff();
-
     return m_staff;
 }
 
@@ -124,8 +122,7 @@ void SystemObjectsLayerTreeItem::setSystemObjects(const SystemObjectGroups& syst
 
 QString SystemObjectsLayerTreeItem::staffId() const
 {
-    const Staff* s = staff();
-    return s ? s->id().toQString() : QString();
+    return m_staff ? m_staff->id().toQString() : QString();
 }
 
 bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
@@ -135,10 +132,6 @@ bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
 
 void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChangesRange& changes)
 {
-    if (muse::contains(changes.changedPropertyIdSet, Pid::TRACK)) {
-        updateStaff();
-    }
-
     if (muse::contains(changes.changedStyleIdSet, Sid::timeSigPlacement)) {
         m_systemObjectGroups = collectSystemObjectGroups(m_staff);
         updateState();
@@ -224,20 +217,9 @@ bool SystemObjectsLayerTreeItem::removeSystemObject(engraving::EngravingItem* ob
     return false;
 }
 
-void SystemObjectsLayerTreeItem::updateStaff()
-{
-    if (!m_systemObjectGroups.empty()) {
-        const SystemObjectsGroup& firstGroup = m_systemObjectGroups.front();
-        if (!firstGroup.items.empty()) {
-            setStaff(firstGroup.items.front()->staff());
-        }
-    }
-}
-
 void SystemObjectsLayerTreeItem::updateState()
 {
     setTitle(formatLayerTitle(m_systemObjectGroups));
     setSettingsEnabled(!m_systemObjectGroups.empty());
-
     setIsVisible(isLayerVisible(m_systemObjectGroups));
 }

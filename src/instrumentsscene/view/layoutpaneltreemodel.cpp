@@ -476,6 +476,7 @@ void LayoutPanelTreeModel::addInstruments()
 void LayoutPanelTreeModel::addSystemMarkings()
 {
     if (const Staff* staff = resolveNewSystemObjectStaff()) {
+        m_systemStaffToSelect = staff->id();
         m_masterNotation->parts()->addSystemObjects({ staff->id() });
     }
 }
@@ -1114,8 +1115,9 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             m_rootItem->insertChild(newItem, row);
             endInsertRows();
 
-            if (row != 0) {
+            if (row != 0 && m_systemStaffToSelect == staff->id()) {
                 m_selectionModel->select(createIndex(row, 0, newItem));
+                m_systemStaffToSelect = ID();
             }
 
             break;
