@@ -45,6 +45,8 @@ using namespace mu::engraving::rendering::score;
 double HorizontalSpacing::computeSpacingForFullSystem(System* system, double stretchReduction, double squeezeFactor,
                                                       bool overrideMinMeasureWidth)
 {
+    TRACEFUNC;
+
     HorizontalSpacingContext ctx;
     ctx.system = system;
     ctx.spatium = system->spatium();
@@ -80,6 +82,8 @@ double HorizontalSpacing::computeSpacingForFullSystem(System* system, double str
 
 double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system, bool startOfContinuousLayoutRegion)
 {
+    TRACEFUNC;
+
     HorizontalSpacingContext ctx;
     ctx.system = system;
     ctx.spatium = system->spatium();
@@ -118,6 +122,8 @@ double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system, bool 
 
 void HorizontalSpacing::squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth)
 {
+    TRACEFUNC;
+
     Measure* firstMeasure = system->firstMeasure();
     if (!firstMeasure) {
         return;
