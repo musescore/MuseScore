@@ -82,7 +82,7 @@ IWorkspacePtrList WorkspaceManager::workspaces() const
 {
     IWorkspacePtrList iworkspaces;
     iworkspaces.reserve(m_workspaces.size());
-    for (WorkspacePtr w : m_workspaces) {
+    for (const WorkspacePtr& w : m_workspaces) {
         iworkspaces.push_back(w);
     }
     return iworkspaces;

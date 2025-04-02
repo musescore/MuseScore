@@ -1,10 +1,42 @@
 #include "compatmidirender.h"
 
+#include <cmath>
+#include <tuple>
+
 #include "global/realfn.h"
 
+#include "types/constants.h"
+
+#include "dom/arpeggio.h"
+#include "dom/articulation.h"
+#include "dom/chord.h"
+#include "dom/durationtype.h"
+#include "dom/dynamic.h"
+#include "dom/easeInOut.h"
+#include "dom/glissando.h"
+#include "dom/instrument.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/measurerepeat.h"
+#include "dom/navigate.h"
+#include "dom/note.h"
+#include "dom/noteevent.h"
+#include "dom/part.h"
+#include "dom/repeatlist.h"
+#include "dom/score.h"
+#include "dom/segment.h"
+#include "dom/slur.h"
+#include "dom/staff.h"
+#include "dom/swing.h"
+#include "dom/synthesizerstate.h"
+#include "dom/tempo.h"
+#include "dom/tie.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
-#include "dom/navigate.h"
+#include "dom/trill.h"
+#include "dom/undo.h"
+#include "dom/utils.h"
+#include "dom/volta.h"
 
 namespace mu::engraving {
 static int slideTicks(const Chord* chord);

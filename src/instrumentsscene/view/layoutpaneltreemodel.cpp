@@ -62,7 +62,7 @@ LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     m_selectionModel->setAllowedModifiers(Qt::ShiftModifier);
 
     connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged,
-            [this](const QItemSelection& selected, const QItemSelection& deselected) {
+            this, [this](const QItemSelection& selected, const QItemSelection& deselected) {
         setItemsSelected(deselected.indexes(), false);
         setItemsSelected(selected.indexes(), true);
 
@@ -165,7 +165,7 @@ void LayoutPanelTreeModel::initPartOrders()
         return;
     }
 
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         NotationKey key = notationToKey(excerpt->notation());
 
         for (const Part* part : excerpt->notation()->parts()->partList()) {
@@ -608,7 +608,8 @@ void LayoutPanelTreeModel::endActiveDrag()
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
 {
-    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+    const QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    for (const QModelIndex& index : selectedIndexes) {
         changeVisibility(index, visible);
     }
 }
@@ -869,7 +870,8 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
 
 void LayoutPanelTreeModel::updateRemovingAvailability()
 {
-    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    const QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+
     bool isRemovingAvailable = !selectedIndexes.empty();
     const AbstractLayoutPanelTreeItem* parent = nullptr;
 
@@ -909,7 +911,8 @@ void LayoutPanelTreeModel::updateRemovingAvailability()
 
 void LayoutPanelTreeModel::updateSelectedItemsType()
 {
-    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    const QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+
     LayoutPanelItemType::ItemType selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 
     for (const QModelIndex& index : selectedIndexes) {
@@ -1157,7 +1160,8 @@ const Staff* LayoutPanelTreeModel::resolveNewSystemObjectStaff() const
         return part->staff(0);
     };
 
-    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+    const QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    for (const QModelIndex& index : selectedIndexes) {
         const AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
         if (const Staff* staff = resolveStaff(item)) {
             return staff;

@@ -26,6 +26,8 @@
 #include "global/io/buffer.h"
 #include "global/types/retval.h"
 
+#include "../engravingerrors.h"
+
 #include "../types/types.h"
 
 #include "../dom/masterscore.h"

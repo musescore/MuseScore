@@ -28,7 +28,7 @@
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
-#include "iengravingfont.h"
+#include "engraving/iengravingfont.h"
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/arpeggio.h"

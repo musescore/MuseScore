@@ -27,8 +27,6 @@
 
 #include "measure.h"
 
-#include <cmath>
-
 #include "accidental.h"
 #include "actionicon.h"
 #include "anchors.h"
@@ -61,7 +59,6 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -72,7 +69,6 @@
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
-
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "tuplet.h"
@@ -947,7 +943,7 @@ void Measure::remove(EngravingItem* e)
         if (e->isJump() || (e->isMarker() && toMarker(e)->isRightMarker())) {
             setProperty(Pid::REPEAT_JUMP, false);
         }
-    // FALLTHROUGH
+        [[fallthrough]];
     case ElementType::HBOX:
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);

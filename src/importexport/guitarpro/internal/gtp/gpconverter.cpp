@@ -46,11 +46,10 @@
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+#include "engraving/types/symid.h"
 
 #include "../utils.h"
 #include "../guitarprodrumset.h"
-
-#include "types/symid.h"
 
 #include "log.h"
 

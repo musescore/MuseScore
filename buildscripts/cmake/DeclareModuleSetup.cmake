@@ -33,7 +33,6 @@
 # set(MODULE_LINK_GLOBAL ON/OFF)              - set whether to link with `global` module (default ON)
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
-# set(MODULE_UI ...)                          - set ui headers
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_USE_PCH ON/OFF)                  - set whether to use precompiled headers for this module (default ON)
@@ -55,9 +54,9 @@ macro(declare_module name)
     unset(MODULE_SRC)
     unset(MODULE_LINK)
     set(MODULE_LINK_GLOBAL ON)
+    set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
-    unset(MODULE_UI)
     unset(MODULE_QML_IMPORT)
     unset(MODULE_QMLEXT_IMPORT)
     set(MODULE_USE_PCH ON)
@@ -67,15 +66,23 @@ macro(declare_module name)
     set(MODULE_USE_COVERAGE ON)
 endmacro()
 
+macro(declare_thirdparty_module name)
+    declare_module(${name})
+    set(MODULE_USE_QT OFF)
+    set(MODULE_LINK_GLOBAL OFF)
+    set(MODULE_USE_PCH OFF)
+    set(MODULE_USE_COVERAGE OFF)
+endmacro()
+
 
 macro(add_qml_import_path input_var)
-  if (NOT ${${input_var}} STREQUAL "")
-      set(QML_IMPORT_PATH "$CACHE{QML_IMPORT_PATH}")
-      list(APPEND QML_IMPORT_PATH ${${input_var}})
-      list(REMOVE_DUPLICATES QML_IMPORT_PATH)
-      set(QML_IMPORT_PATH "${QML_IMPORT_PATH}" CACHE STRING
-          "QtCreator extra import paths for QML modules" FORCE)
-  endif()
+    if (NOT ${${input_var}} STREQUAL "")
+        set(QML_IMPORT_PATH "$CACHE{QML_IMPORT_PATH}")
+        list(APPEND QML_IMPORT_PATH ${${input_var}})
+        list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+        set(QML_IMPORT_PATH "${QML_IMPORT_PATH}" CACHE STRING
+            "QtCreator extra import paths for QML modules" FORCE)
+    endif()
 endmacro()
 
 
@@ -87,26 +94,6 @@ macro(setup_module)
         message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}>")
     endif()
 
-    if (NOT MUSE_FRAMEWORK_PATH)
-        set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
-    endif()
-
-    if (MODULE_QRC AND NOT NO_QT_SUPPORT)
-        qt_add_resources(RCC_SOURCES ${MODULE_QRC})
-    endif()
-
-    if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
-        qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
-    endif()
-
-    if (MODULE_UI)
-        find_package(Qt6Widgets)
-        QT6_WRAP_UI(ui_headers ${MODULE_UI} )
-    endif()
-
-    add_qml_import_path(MODULE_QML_IMPORT)
-    add_qml_import_path(MODULE_QMLAPI_IMPORT)
-
     if (CC_IS_EMSCRIPTEN)
         add_library(${MODULE} OBJECT)
     else()
@@ -117,8 +104,34 @@ macro(setup_module)
         add_library(${MODULE_ALIAS} ALIAS ${MODULE})
     endif()
 
+    if (MODULE_USE_QT AND QT_SUPPORT)
+        if (MODULE_QRC AND NOT NO_QT_SUPPORT)
+            qt_add_resources(RCC_SOURCES ${MODULE_QRC})
+        endif()
+
+        if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
+            qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
+        endif()
+    else()
+        set(RCC_SOURCES)
+        set(RCC_BIG_SOURCES)
+
+        set_target_properties(${MODULE} PROPERTIES
+            AUTOMOC OFF
+            AUTOUIC OFF
+            AUTORCC OFF
+        )
+    endif()
+
+    add_qml_import_path(MODULE_QML_IMPORT)
+    add_qml_import_path(MODULE_QMLAPI_IMPORT)
+
     if (BUILD_SHARED_LIBS)
         install(TARGETS ${MODULE} DESTINATION ${SHARED_LIBS_INSTALL_DESTINATION})
+    endif()
+
+    if (NOT MUSE_FRAMEWORK_PATH)
+        set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
     endif()
 
     if (MUSE_COMPILE_USE_PCH AND MODULE_USE_PCH)
@@ -145,16 +158,20 @@ macro(setup_module)
     endif()
 
     target_sources(${MODULE} PRIVATE
-        ${ui_headers}
         ${RCC_SOURCES}
         ${RCC_BIG_SOURCES}
         ${MODULE_SRC}
-        )
+    )
 
     target_include_directories(${MODULE} PUBLIC
+        ${MODULE_INCLUDE}
+    )
+
+    target_include_directories(${MODULE} PRIVATE
         ${PROJECT_BINARY_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         ${MODULE_ROOT}
+
         ${PROJECT_SOURCE_DIR}/src
 
         ${MUSE_FRAMEWORK_PATH}
@@ -169,10 +186,7 @@ macro(setup_module)
         ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
         # end compat
 
-        ${MODULE_INCLUDE}
-    )
 
-    target_include_directories(${MODULE} PRIVATE
         ${MODULE_INCLUDE_PRIVATE}
     )
 
@@ -188,11 +202,10 @@ macro(setup_module)
     endif()
 
     if (NOT ${MODULE} MATCHES muse_global AND MODULE_LINK_GLOBAL)
-        set(MODULE_LINK muse_global ${MODULE_LINK})
+        target_link_libraries(${MODULE} PRIVATE muse_global)
     endif()
 
-    set(MODULE_LINK ${CMAKE_DL_LIBS} ${QT_LIBRARIES} ${MODULE_LINK})
-
-    target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS})
-
+    target_link_libraries(${MODULE}
+        PRIVATE ${MODULE_LINK} ${CMAKE_DL_LIBS} ${QT_LIBRARIES} ${COVERAGE_FLAGS}
+    )
 endmacro()
