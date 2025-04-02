@@ -165,7 +165,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
             MeasureLayout::createEndBarLines(m, true, ctx);
 
-            if (m->noBreak()) {
+            if (m->noBreak() || systemLock) {
                 MeasureLayout::removeSystemTrailer(m);
             } else {
                 MeasureLayout::addSystemTrailer(m, m->nextMeasure(), ctx);
@@ -175,9 +175,13 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
             MeasureLayout::updateGraceNotes(m, ctx);
 
-            curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
+            if (!systemLock) {
+                curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
+            }
         } else if (ctx.state().curMeasure()->isHBox()) {
-            curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
+            if (!systemLock) {
+                curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
+            }
         } else {
             // vbox:
             MeasureLayout::getNextMeasure(ctx);
@@ -223,7 +227,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
             MeasureLayout::updateGraceNotes(m, ctx);
 
-            curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
+            if (!systemLock) {
+                curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
+            }
         }
 
         const MeasureBase* mb = ctx.state().curMeasure();
