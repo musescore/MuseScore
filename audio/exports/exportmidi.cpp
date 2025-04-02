@@ -12,7 +12,6 @@
 
 #include "exportmidi.h"
 
-
 #include "audio/midi/midifile.h"
 #include "audio/midi/event.h"
 
@@ -28,6 +27,8 @@
 #include "libmscore/staff.h"
 #include "libmscore/synthesizerstate.h"
 #include "libmscore/tempo.h"
+
+#include "mscore/preferences.h"
 
 namespace Ms {
 
@@ -371,6 +372,11 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                               if (cr) {
                                     for (const auto& lyric : cr->lyrics()) {
                                           QByteArray lyricText = lyric->plainText().toUtf8();
+                                          if (preferences.getBool(PREF_IO_MIDI_SPACELYRICS)) {
+                                                Lyrics::Syllabic syllabic = lyric->syllabic();
+                                                if (syllabic == Lyrics::Syllabic::SINGLE || syllabic == Lyrics::Syllabic::END)
+                                                     lyricText.push_back(' ');
+                                                }
                                           size_t len = lyricText.size() + 1;
                                           std::vector<unsigned char> data(lyricText.constData(), lyricText.constData() + len);
 

@@ -198,6 +198,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_IO_MIDI_ENABLEINPUT,                             new BoolPreference(true, false)},
             {PREF_IO_MIDI_EXPANDREPEATS,                           new BoolPreference(true, false)},
             {PREF_IO_MIDI_EXPORTRPNS,                              new BoolPreference(true, false)},
+            {PREF_IO_MIDI_SPACELYRICS,                             new BoolPreference(true, true)},
             {PREF_IO_MIDI_PEDAL_EVENTS_MIN_TICKS,                  new IntPreference(1)},
             {PREF_IO_MIDI_REALTIMEDELAY,                           new IntPreference(750 /* ms */, false)},
             {PREF_IO_MIDI_SHORTESTNOTE,                            new IntPreference(MScore::division/4, false)},
@@ -451,7 +452,8 @@ Preferences::Preferences()
 Preferences::~Preferences()
       {
       // clean up _allPreferences
-      for (Preference* pref : _allPreferences.values())
+      const QList<Preference*> prefs = _allPreferences.values();
+      for (Preference* pref : prefs)
             delete pref;
 
       if (_settings) {

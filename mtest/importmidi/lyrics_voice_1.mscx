@@ -167,10 +167,10 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <text>C_min_0 </text>
+              <text>C_min_0</text>
               </Lyrics>
             <Lyrics>
-              <text>C_min_0 </text>
+              <text>C_min_0</text>
               </Lyrics>
             <Note>
               <pitch>72</pitch>
@@ -273,7 +273,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <text>G_min_0 </text>
+              <text>G_min_0</text>
               </Lyrics>
             <Note>
               <pitch>62</pitch>
@@ -291,7 +291,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <text>C_min_0 </text>
+              <text>C_min_0</text>
               </Lyrics>
             <Note>
               <pitch>63</pitch>

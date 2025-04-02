@@ -100,6 +100,7 @@
 #define PREF_IO_MIDI_ENABLEINPUT                            "io/midi/enableInput"
 #define PREF_IO_MIDI_EXPANDREPEATS                          "io/midi/expandRepeats"
 #define PREF_IO_MIDI_EXPORTRPNS                             "io/midi/exportRPNs"
+#define PREF_IO_MIDI_SPACELYRICS                            "io/midi/spaceLyrics"
 #define PREF_IO_MIDI_PEDAL_EVENTS_MIN_TICKS                 "io/midi/pedalEventsMinTicks"
 #define PREF_IO_MIDI_REALTIMEDELAY                          "io/midi/realtimeDelay"
 #define PREF_IO_MIDI_REMOTE                                 "io/midi/remote"

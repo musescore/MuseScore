@@ -331,6 +331,7 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_IO_MIDI_EXPANDREPEATS, expandRepeats),
                   new BoolPreferenceItem(PREF_EXPORT_AUDIO_NORMALIZE, normalize),
                   new BoolPreferenceItem(PREF_IO_MIDI_EXPORTRPNS, exportRPNs),
+                  // TODO? new BoolPreferenceItem(PREF_IO_MIDI_SPACELYRICS, spaceLyrics),
                   new IntPreferenceItem(PREF_IO_MIDI_REALTIMEDELAY, realtimeDelay),
                   new BoolPreferenceItem(PREF_IO_MIDI_USEREMOTECONTROL, rcGroup),
                   new IntPreferenceItem(PREF_IO_OSC_PORTNUMBER, oscPort),
