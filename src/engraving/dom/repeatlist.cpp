@@ -172,6 +172,7 @@ void RepeatList::update(bool expand, bool updateTies)
     if (!m_scoreChanged && expand == m_expanded) {
         return;
     }
+    LOGI() << "==> update, ties: " << updateTies;
 
     if (expand) {
         unwind();
