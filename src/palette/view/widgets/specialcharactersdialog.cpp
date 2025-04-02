@@ -712,7 +712,7 @@ void SpecialCharactersDialog::populateUnicode()
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(code);
         fs->setFont(m_font);
-        m_pUnicode->appendElement(fs, QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
+        m_pUnicode->appendElement(fs, QString("0x%1").arg(static_cast<int>(code), 5, 16, u'0'));
     }
 }
 
