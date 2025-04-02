@@ -1451,7 +1451,10 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Staff* destinationStaff = destinationItem->staff();
 
     if (sourceScore == destinationScore) {
-        if (sourceStaff != destinationStaff && (propertyId == Pid::VISIBLE || propertyGroup(propertyId) == PropertyGroup::POSITION)) {
+        const bool sameStaff = sourceStaff != destinationStaff;
+        const bool visibleOrPosition = propertyId == Pid::VISIBLE || propertyGroup(propertyId) == PropertyGroup::POSITION;
+        const bool linkSameScore = propertyLinkSameScore(propertyId);
+        if ((sameStaff && visibleOrPosition) || !linkSameScore) {
             // Allow visibility and position to stay independent
             return PropertyPropagation::NONE;
         }
