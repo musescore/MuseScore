@@ -767,6 +767,20 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
                 s->setEndElement(dc->graceNotes()[idx]);
             }
         }
+        if (s->anchor() == Spanner::Anchor::MEASURE) {
+            Fraction startTick = s->tick();
+            Measure* startMeasure = score->tick2measureMM(startTick);
+            Fraction startMeasureTick = startMeasure->tick();
+            Fraction endTick = s->tick2();
+            Measure* endMeasure = score->tick2measureMM(endTick);
+            Fraction endMeasureTick = endMeasure->tick();
+            if (startMeasureTick != startTick) {
+                s->setTick(startMeasureTick);
+            }
+            if (endMeasureTick != endTick) {
+                s->setTick2(endMeasureTick != startMeasureTick ? endMeasureTick : endMeasure->endTick());
+            }
+        }
         score->undoAddElement(s);
     }
     for (const Annotation& a : m_annotations) {
