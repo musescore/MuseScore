@@ -3332,64 +3332,24 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
         deleteRange(selection().startSegment(), selection().endSegment(), staff2track(selection().staffStart()),
                     staff2track(selection().staffEnd()), selectionFilter());
         pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
-        return;
-    } 
-    if (selection().isList() && selection().elements().size() > 1) {
-        // List - act as if pressing duration toggle (distinct from range based Half/Double
-        TDuration newDuration(stepDotted
-                              ? m_is.duration().shiftRetainDots(nSteps, stepDotted)
-                              : m_is.duration().shift(nSteps));
-        m_is.duration().shiftRetainDots(nSteps, stepDotted);
-        m_is.setDuration(newDuration);
+    } else if (selection().isList()) {
         std::set<ChordRest*> crs = getSelectedChordRests();
-        for (auto cr : getSelectedChordRests()) {
+        for (ChordRest* cr : crs) {
+            TDuration newDuration(stepDotted
+                                  ? cr->durationType().fraction() * Fraction(3, 3 + nSteps)
+                                  : cr->durationType().fraction()* Fraction(3 - nSteps, 3 + nSteps), true);
             changeCRlen(cr, newDuration);
         }
-        for (auto cr : crs) {
+        // 2nd loop needed to reselect what was selected before 1st loop
+        // as `changeCRlen()` changes the selection to `SelectType::SINGLE`
+        for (ChordRest* cr : crs) {
             EngravingItem* e = cr;
             if (cr->isChord()) {
                 e = toChord(cr)->upNote();
             }
             select(e, SelectType::ADD);
         }
-        return;
     }
-    EngravingItem* el = selection().element();
-    if (el == 0) {
-        return;
-    }
-    if (el->isNote()) {
-        el = el->parentItem();
-    }
-    if (!el->isChordRest()) {
-        return;
-    }
-    ChordRest* cr = toChordRest(el);
-    // if measure rest is selected as input, then the correct initialDuration will be the
-    // duration of the measure's time signature, else is just the ChordRest's duration
-    TDuration initialDuration = cr->durationType();
-    if (initialDuration == DurationType::V_MEASURE) {
-        initialDuration = TDuration(cr->measure()->timesig(), true);
-        if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
-            // Duration already shortened by truncation; shorten one step less
-            --nSteps;
-        }
-    }
-
-    TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
-    if (!d.isValid()) {
-        return;
-    }
-    if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
-        //
-        // handle appoggiatura and acciaccatura
-        //
-        undoChangeChordRestLen(cr, d);
-    } else {
-        changeCRlen(cr, d);
-    }
-    m_is.setDuration(d);
-    nextInputPos(cr, false);
 }
 
 //---------------------------------------------------------
