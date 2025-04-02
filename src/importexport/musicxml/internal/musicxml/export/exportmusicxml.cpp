@@ -8971,17 +8971,17 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                     alter = 1;
                 }
                 const String numberStr = matches.at(1);
-                size_t harmoy = 1;
+                size_t harmony = 1;
                 if (numberStr.contains(u"v", CaseSensitivity::CaseInsensitive)) {
                     if (numberStr.startsWith(u"i", CaseSensitivity::CaseInsensitive)) {
-                        harmoy = 4;
+                        harmony = 4;
                     } else {
-                        harmoy = 4 + numberStr.size();
+                        harmony = 4 + numberStr.size();
                     }
                 } else {
-                    harmoy = numberStr.size();
+                    harmony = numberStr.size();
                 }
-                m_xml.tag("numeral-root", { { "text", numberStr } }, harmoy);
+                m_xml.tag("numeral-root", { { "text", numberStr } }, harmony);
                 if (alter) {
                     m_xml.tag("numeral-alter", alter);
                 }

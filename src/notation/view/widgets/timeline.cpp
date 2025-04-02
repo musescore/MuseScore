@@ -30,7 +30,6 @@
 #include <QTextDocument>
 
 #include "translation.h"
-#include "types/translatablestring.h"
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/jump.h"

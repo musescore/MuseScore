@@ -26,8 +26,6 @@ set(MODULE_QRC
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
-
 set(MODULE_SRC
     ${WIDGETS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/palettemodule.cpp
@@ -73,10 +71,30 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/palettespanelcontextmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/drumsetpanelview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/drumsetpanelview.cpp
-    )
 
-set(MODULE_UI
-    ${WIDGETS_UI}
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/palettewidget.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/palettewidget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/masterpalette.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/masterpalette.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/timedialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/timedialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/timesignaturepropertiesdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/timesignaturepropertiesdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/keyedit.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/keyedit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/keycanvas.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/noteGroups.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/noteGroups.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/notegroupsexampleview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/notegroupsexampleview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/symboldialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/symboldialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/specialcharactersdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/specialcharactersdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/customizekitdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/customizekitdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/drumsetpalette.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/drumsetpalette.h
     )
 
 set(MODULE_LINK

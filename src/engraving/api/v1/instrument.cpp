@@ -59,7 +59,7 @@ void Channel::setMidiBankAndProgram(int bank, int program, bool setUserBankContr
     patch.prog = program;
 
     mu::engraving::Score* score = _part->score();
-    score->undo(new ChangePatch(score, ch, &patch));
+    score->undo(new ChangePatch(score, ch, patch));
 
     if (setUserBankController) {
         score->undo(new SetUserBankController(ch, true));

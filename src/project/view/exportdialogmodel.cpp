@@ -140,7 +140,7 @@ void ExportDialogModel::load()
 
     masterNotation->sortExcerpts(excerpts);
 
-    for (IExcerptNotationPtr excerpt : excerpts) {
+    for (const IExcerptNotationPtr& excerpt : excerpts) {
         m_notations << excerpt->notation();
     }
 
@@ -215,7 +215,7 @@ void ExportDialogModel::selectCurrentNotation()
 void ExportDialogModel::selectSavedNotations()
 {
     ExportInfo info = exportProjectScenario()->exportInfo();
-    for (INotationPtr notation : info.notations) {
+    for (const INotationPtr& notation : info.notations) {
         auto it = std::find(m_notations.begin(), m_notations.end(), notation);
         if (it != m_notations.end()) {
             setSelected(std::distance(m_notations.begin(), it), true);
@@ -280,7 +280,7 @@ void ExportDialogModel::setExportType(const ExportType& type)
 
 void ExportDialogModel::selectExportTypeById(const QString& id)
 {
-    for (const ExportType& type : m_exportTypeList) {
+    for (const ExportType& type : std::as_const(m_exportTypeList)) {
         // First, check if it's a subtype
         if (type.subtypes.contains(id)) {
             setExportType(type.subtypes.getById(id));
@@ -334,7 +334,7 @@ void ExportDialogModel::setUnitType(UnitType unitType)
     }
 
     bool found = false;
-    for (QVariant availabeUnitType : availableUnitTypes()) {
+    for (const QVariant& availabeUnitType : availableUnitTypes()) {
         if (availabeUnitType.value<QVariantMap>()["value"].toInt() == static_cast<int>(unitType)) {
             found = true;
         }
@@ -600,7 +600,7 @@ void ExportDialogModel::setMeiUseMuseScoreIds(bool useMuseScoreIds)
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
-    QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
+    std::map<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
         //: Specifies to which extent layout customizations should be exported to MusicXML.
         { MusicXmlLayoutType::AllLayout, muse::qtrc("project/export", "All layout") },
         //: Specifies to which extent layout customizations should be exported to MusicXML.
@@ -613,9 +613,9 @@ QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 
     QVariantList result;
 
-    for (MusicXmlLayoutType type : musicXmlLayoutTypeNames.keys()) {
+    for (const auto& [type, name] : musicXmlLayoutTypeNames) {
         QVariantMap obj;
-        obj["text"] = musicXmlLayoutTypeNames[type];
+        obj["text"] = name;
         obj["value"] = static_cast<int>(type);
         result << obj;
     }
@@ -691,7 +691,7 @@ void ExportDialogModel::updateExportInfo()
     info.projectPath = project ? project->path() : "";
 
     std::vector<INotationPtr> notations;
-    for (QModelIndex index : m_selectionModel->selectedIndexes()) {
+    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
         notations.emplace_back(m_notations[index.row()]);
     }
     info.notations = notations;

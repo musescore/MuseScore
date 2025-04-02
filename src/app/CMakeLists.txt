@@ -185,7 +185,7 @@ if (NOT CC_IS_EMSCRIPTEN)
     endif()
 
     if (MUE_BUILD_IMPORTEXPORT_MODULE)
-        set(LINK_LIB ${LINK_LIB}
+        list(APPEND LINK_LIB
             iex_musicxml
             iex_bb
             iex_bww
@@ -300,6 +300,26 @@ if (OS_IS_WASM)
     set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
 endif(OS_IS_WASM)
 
+###########################################
+# Includes
+###########################################
+
+target_include_directories(MuseScoreStudio PRIVATE
+    ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+
+    ${PROJECT_SOURCE_DIR}/src
+
+    ${MUSE_FRAMEWORK_PATH}
+    ${MUSE_FRAMEWORK_PATH}/framework
+    ${MUSE_FRAMEWORK_PATH}/framework/global
+
+    # compat
+    ${MUSE_FRAMEWORK_PATH}/src
+    ${MUSE_FRAMEWORK_PATH}/src/framework
+    ${MUSE_FRAMEWORK_PATH}/src/framework/global
+    # end compat
+)
 
 ###########################################
 # Link
