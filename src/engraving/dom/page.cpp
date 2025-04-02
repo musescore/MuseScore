@@ -170,12 +170,7 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
         dummyText->mutldata()->blocks = { replaceTextMacros(oldBlock) };
         dummyText->genText();
         dummyText->createBlocks();
-        for (const TextBlock& newBlock : dummyText->ldata()->blocks) {
-            if (newBlock.fragments().empty()) {
-                continue;
-            }
-            newBlocks.emplace_back(newBlock);
-        }
+        newBlocks.insert(newBlocks.end(), dummyText->ldata()->blocks.cbegin(), dummyText->ldata()->blocks.cend());
         delete dummyText;
     }
 
