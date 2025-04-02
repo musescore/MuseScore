@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef SYMBOLS_H
-#define SYMBOLS_H
+#pragma once
 
 /**
  \file
@@ -29,7 +27,7 @@
  */
 
 namespace Bww {
-enum Symbol
+enum Symbol : unsigned char
 {
     COMMENT,
     HEADER,
@@ -49,7 +47,7 @@ enum Symbol
     NONE
 };
 
-enum class StartStop
+enum class StartStop : unsigned char
 {
     ST_NONE,
     ST_START,
@@ -58,6 +56,4 @@ enum class StartStop
 };
 
 extern QString symbolToString(Symbol s);
-} // namespace Bww
-
-#endif // SYMBOLS_H
+}
