@@ -716,60 +716,30 @@
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
-            <Instrument id="ocarina">
-                  <longName>Ocarina</longName>
-                  <shortName>Oc.</shortName>
-                  <description>Ocarina</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-86</aPitchRange>
-                  <pPitchRange>72-88</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="g-soprano-ocarina">
-                  <longName>G Soprano Ocarina</longName>
-                  <shortName>G S. Oc.</shortName>
-                  <description>G Soprano Ocarina</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>79-93</aPitchRange>
-                  <pPitchRange>79-95</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="f-soprano-ocarina">
-                  <longName>F Soprano Ocarina</longName>
-                  <shortName>F S. Oc.</shortName>
-                  <description>F Soprano Ocarina</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>77-91</aPitchRange>
-                  <pPitchRange>77-93</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
             <Instrument id="c-soprano-ocarina">
                   <longName>C Soprano Ocarina</longName>
                   <shortName>C S. Oc.</shortName>
                   <description>C Soprano Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-86</aPitchRange>
-                  <pPitchRange>72-88</pPitchRange>
+                  <aPitchRange>84-101</aPitchRange>
+                  <pPitchRange>81-101</pPitchRange>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="ocarina">
+                  <longName>Ocarina</longName>
+                  <shortName>Oc.</shortName>
+                  <description>C Soprano Ocarina</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G15ma</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>84-101</aPitchRange>
+                  <pPitchRange>81-101</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -781,40 +751,46 @@
                   <shortName>B♭ S. Oc.</shortName>
                   <description>B♭ Soprano Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>70-84</aPitchRange>
-                  <pPitchRange>70-86</pPitchRange>
+                  <aPitchRange>82-99</aPitchRange>
+                  <pPitchRange>82-99</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="g-alto-ocarina">
-                  <longName>G Alto Ocarina</longName>
-                  <shortName>G A. Oc.</shortName>
-                  <description>G Alto Ocarina</description>
+            <Instrument id="g-soprano-ocarina">
+                  <longName>G Soprano Ocarina</longName>
+                  <shortName>G S. Oc.</shortName>
+                  <description>G Soprano Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>67-81</aPitchRange>
-                  <pPitchRange>67-83</pPitchRange>
+                  <aPitchRange>79-96</aPitchRange>
+                  <pPitchRange>76-96</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="f-alto-ocarina">
-                  <longName>F Alto Ocarina</longName>
-                  <shortName>F A. Oc.</shortName>
-                  <description>F Alto Ocarina</description>
+            <Instrument id="f-soprano-ocarina">
+                  <longName>F Soprano Ocarina</longName>
+                  <shortName>F S. Oc.</shortName>
+                  <description>F Soprano Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>65-79</aPitchRange>
-                  <pPitchRange>65-81</pPitchRange>
+                  <aPitchRange>77-94</aPitchRange>
+                  <pPitchRange>74-94</pPitchRange>
+                  <transposeDiatonic>-4</transposeDiatonic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -824,12 +800,12 @@
             <Instrument id="c-alto-ocarina">
                   <longName>C Alto Ocarina</longName>
                   <shortName>C A. Oc.</shortName>
-                  <description>C Alto Ocarina</description>
+                  <description>C Alto/Ternor Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-74</aPitchRange>
-                  <pPitchRange>60-76</pPitchRange>
+                  <aPitchRange>72-89</aPitchRange>
+                  <pPitchRange>69-89</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -839,12 +815,48 @@
             <Instrument id="bb-alto-ocarina">
                   <longName>B♭ Alto Ocarina</longName>
                   <shortName>B♭ A. Oc.</shortName>
-                  <description>B♭ Alto Ocarina</description>
+                  <description>B♭ Alto/Tenor Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>58-72</aPitchRange>
-                  <pPitchRange>58-74</pPitchRange>
+                  <aPitchRange>70-87</aPitchRange>
+                  <pPitchRange>67-87</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="g-alto-ocarina">
+                  <longName>G Alto Ocarina</longName>
+                  <shortName>G A. Oc.</shortName>
+                  <description>G Alto/Tenor Ocarina</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>67-84</aPitchRange>
+                  <pPitchRange>64-84</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="f-alto-ocarina">
+                  <longName>F Alto Ocarina</longName>
+                  <shortName>F A. Oc.</shortName>
+                  <description>F Alto/Tenor Ocarina</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>65-82</aPitchRange>
+                  <pPitchRange>62-82</pPitchRange>
+                  <transposeDiatonic>-4</transposeDiatonic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -856,10 +868,10 @@
                   <shortName>C B. Oc.</shortName>
                   <description>C Bass Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>F</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-62</aPitchRange>
-                  <pPitchRange>48-64</pPitchRange>
+                  <aPitchRange>60-77</aPitchRange>
+                  <pPitchRange>57-77</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
