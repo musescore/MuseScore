@@ -460,7 +460,7 @@ void NotationNoteInput::padNote(const Pad& pad)
 
     if (pad >= Pad::NOTE00 && pad <= Pad::NOTE1024) {
         const NoteInputState& is = score()->inputState();
-        if (!is.rest() && is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
+        if (!is.rest() && isNoteInputMode() && is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
             score()->toggleAccidental(AccidentalType::NONE);
         }
     }
