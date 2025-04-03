@@ -14,6 +14,5 @@
         <file>qml/MuseScore/Engraving/EngravingElementsDialog.qml</file>
         <file>qml/MuseScore/Engraving/EngravingElementsPanel.qml</file>
         <file>qml/MuseScore/Engraving/qmldir</file>
-        <file>data/harmony_to_diagram.xml</file>
     </qresource>
 </RCC>

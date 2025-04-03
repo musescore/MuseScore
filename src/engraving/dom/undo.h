@@ -1543,28 +1543,6 @@ public:
     UNDO_NAME("ChangeDrumset")
 };
 
-class FretDataChange : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, FretDataChange)
-
-    FretDiagram* m_diagram = nullptr;
-    FretUndoData m_undoData;
-    String m_harmonyName;
-
-    void redo(EditData*) override;
-    void undo(EditData*) override;
-
-public:
-    FretDataChange(FretDiagram* d, const String& harmonyName)
-        : m_diagram(d), m_harmonyName(harmonyName) {}
-
-    UNDO_TYPE(CommandType::FretDataChange)
-
-    UNDO_NAME("FretDataChange")
-
-    UNDO_CHANGED_OBJECTS({ m_diagram })
-};
-
 class FretDot : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, FretDot)

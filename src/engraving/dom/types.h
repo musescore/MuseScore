@@ -95,7 +95,6 @@ enum class CommandType : signed char {
     AddBracket,
 
     // Fret
-    FretDataChange,
     FretDot,
     FretMarker,
     FretBarre,
