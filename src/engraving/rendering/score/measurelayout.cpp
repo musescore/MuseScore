@@ -1732,6 +1732,7 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
             courtesyTimeSig->setTrack(track);
             courtesyTimeSig->setGenerated(true);
             courtesyTimeSig->setParent(courtesySigSeg);
+            courtesyTimeSig->setIsCourtesy(true);
             courtesySigSeg->add(courtesyTimeSig);
         }
 
@@ -1856,6 +1857,7 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
             courtesyKeySig->setTrack(track);
             courtesyKeySig->setGenerated(true);
             courtesyKeySig->setParent(courtesySigSeg);
+            courtesyKeySig->setIsCourtesy(true);
             courtesySigSeg->add(courtesyKeySig);
         }
         courtesyKeySig->setKeySigEvent(refKey);
@@ -1970,6 +1972,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
             courtesyClef->setSmall(true);
             courtesyClef->setParent(courtesyClefSeg);
             courtesyClef->setClefType(actualClef->clefType());
+            courtesyClef->setIsCourtesy(true);
             courtesyClefSeg->add(courtesyClef);
         }
 

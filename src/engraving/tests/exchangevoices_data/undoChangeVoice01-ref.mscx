@@ -8,6 +8,8 @@
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
       <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
       <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
@@ -570,6 +572,8 @@
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
         <showCourtesiesRepeats>0</showCourtesiesRepeats>
         <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
         <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>

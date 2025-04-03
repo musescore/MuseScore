@@ -70,7 +70,7 @@ public:
 
     SymId symId() const;
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override { return new LaissezVibSegment(parent); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override;
 
     void setEndNote(Note* note) override;
     void setEndElement(EngravingItem*) override;
