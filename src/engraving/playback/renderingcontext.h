@@ -125,15 +125,6 @@ inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPosi
     return ctx;
 }
 
-inline muse::mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
-{
-    if (!note->score()) {
-        return durationFromTempoAndTicks(ctx.beatsPerSecond.val, note->chord()->actualTicks().ticks());
-    }
-
-    return durationFromStartAndTicks(note->score(), note->tick().ticks(), note->chord()->actualTicks().ticks(), 0);
-}
-
 struct NominalNoteCtx {
     voice_idx_t voiceIdx = 0;
     staff_idx_t staffIdx = 0;
@@ -260,33 +251,5 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction,
                                 pitchCurve);
-}
-
-inline muse::mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& ctx)
-{
-    return muse::mpe::NoteEvent(ctx.nominalTimestamp,
-                                noteNominalDuration(note, ctx),
-                                static_cast<muse::mpe::voice_layer_idx_t>(note->voice()),
-                                static_cast<muse::mpe::staff_layer_idx_t>(note->staffIdx()),
-                                notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
-                                ctx.nominalDynamicLevel,
-                                ctx.commonArticulations,
-                                ctx.beatsPerSecond.val,
-                                note->userVelocityFraction());
-}
-
-inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe::duration_t eventDuration,
-                                           const muse::mpe::timestamp_t timestampOffset,
-                                           const muse::mpe::pitch_level_t pitchLevelOffset)
-{
-    return muse::mpe::NoteEvent(ctx.timestamp + timestampOffset,
-                                eventDuration,
-                                static_cast<muse::mpe::voice_layer_idx_t>(ctx.voiceIdx),
-                                static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
-                                ctx.pitchLevel + pitchLevelOffset,
-                                ctx.dynamicLevel,
-                                ctx.articulations,
-                                ctx.tempo.val,
-                                ctx.userVelocityFraction);
 }
 }
