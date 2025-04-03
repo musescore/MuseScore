@@ -39,19 +39,12 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void HarmonyLayout::layoutHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx)
+void HarmonyLayout::autoplaceHarmonies(const std::vector<Segment*>& sl, LayoutContext& ctx)
 {
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
-                Harmony* h = toHarmony(e);
-                // For chord symbols that coincide with a chord or rest,
-                // a partial layout can also happen (if needed) during ChordRest layout
-                // in order to calculate a bbox and allocate its shape to the ChordRest.
-                // But that layout (if it happens at all) does not do autoplace,
-                // so we need the full layout here.
-                TLayout::layoutHarmony(h, h->mutldata(), ctx);
-                Autoplace::autoplaceSegmentElement(h, h->mutldata());
+                Autoplace::autoplaceSegmentElement(e, e->mutldata());
             }
         }
     }

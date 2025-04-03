@@ -988,7 +988,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
             }
         } else if (segment.isChordRestType()) {
             for (EngravingItem* e : segment.annotations()) {
-                if (e->isSymbol()) {
+                if (e->isSymbol() || e->isHarmony() || e->isFretDiagram()) {
                     TLayout::layoutItem(e, ctx);
                 }
             }
@@ -2918,10 +2918,10 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         }
 
         Segment* refCRSeg = m->findSegmentR(SegmentType::ChordRest, segment.rtick());
-        if (!refCRSeg) {
-            refCRSeg = segment.prev();
+        if (!(refCRSeg && refCRSeg->isActive())) {
+            refCRSeg = segment.prevActive();
             while (refCRSeg && !refCRSeg->isChordRestType()) {
-                refCRSeg = refCRSeg->prev();
+                refCRSeg = refCRSeg->prevActive();
             }
         }
 
@@ -2934,7 +2934,7 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         Fraction relativeTick = segment.rtick() - refCRSeg->rtick();
 
         Segment* nextSeg = m->findSegmentR(SegmentType::ChordRest, refCRSeg->rtick() + refCRSeg->ticks());
-        if (!nextSeg) {
+        if (!(nextSeg && nextSeg->isActive())) {
             nextSeg = m->findSegmentR(SegmentType::BarLineType, refCRSeg->rtick() + refCRSeg->ticks());
         }
         double width = nextSeg ? nextSeg->x() - refCRSeg->x() : refCRSeg->width();
