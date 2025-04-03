@@ -1462,7 +1462,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
             deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
 
-        seg = m->undoGetSegment(SegmentType::ChordRest, tick);
+        seg = tm->undoGetSegment(SegmentType::ChordRest, tick);
         bool result = makeGapVoice(seg, track, newLen, tick);
         if (track == strack && !result) {   // makeGap failed for first voice
             return false;
