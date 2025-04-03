@@ -415,7 +415,7 @@ public:
 
     const std::vector<Staff*>& staves() const { return m_staves; }
     size_t nstaves() const { return m_staves.size(); }
-    int visibleStavesCount() const;
+    size_t visibleStavesCount() const;
     size_t ntracks() const { return m_staves.size() * VOICES; }
 
     staff_idx_t staffIdx(const Staff*) const;
@@ -581,7 +581,7 @@ public:
     void changeSelectedElementsVoiceAssignment(VoiceAssignment);
 
     const std::vector<Part*>& parts() const;
-    int visiblePartCount() const;
+    size_t visiblePartCount() const;
 
     using StaffAccepted = std::function<bool (const Staff&)>;
     std::set<staff_idx_t> staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo,
