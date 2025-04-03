@@ -40,6 +40,7 @@ class Spanner;
 class ScoreRange;
 class ChordRest;
 class Score;
+class Volta;
 
 //---------------------------------------------------------
 //   TrackList
@@ -109,6 +110,7 @@ protected:
     std::list<Annotation> m_annotations;
 
 private:
+    void restoreVolta(Score* score, const Fraction& tick, Volta* v) const;
 
     friend class TrackList;
 
