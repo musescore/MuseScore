@@ -786,8 +786,8 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
     for (const Annotation& a : m_annotations) {
         Measure* tm = score->tick2measure(a.tick);
         Segment* op = toSegment(a.e->explicitParent());
-        Fraction tick = a.e->isRehearsalMark() ? tm->tick() : a.tick;
-        Segment* s = tm->undoGetSegment(op->segmentType(), tick);
+        Fraction destTick = a.e->isRehearsalMark() ? tm->tick() : a.tick; // Ensure reharsal mark can only go at measure start
+        Segment* s = tm->undoGetSegment(op->segmentType(), destTick);
         if (s) {
             a.e->setParent(s);
             score->undoAddElement(a.e);
