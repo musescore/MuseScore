@@ -3146,6 +3146,10 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
 
 void TDraw::draw(const TimeTickAnchor* item, Painter* painter)
 {
+    if (item->score()->printing()) {
+        return;
+    }
+
     TimeTickAnchor::DrawRegion drawRegion = item->drawRegion();
 
     if (drawRegion == TimeTickAnchor::DrawRegion::OUT_OF_RANGE) {
