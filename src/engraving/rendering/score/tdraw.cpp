@@ -2176,12 +2176,25 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
 
-            double twoMeasuresWidth = 2 * item->measure()->width();
+            double twoMeasuresLeftWidth = item->measure()->width() + item->measure()->prevMeasure()->width();
+            if (item->measure()->prevMeasure()->isFirstInSystem()) {
+                //twoMeasuresLeftWidth -= yyy; // account for clef, time- and key sig
+            }
+            if (item->measure()->prevMeasure()->repeatStart()) {
+                //twoMeasuresLeftWidth -= xxx; // account for repeat barline
+            }
+            double twoMeasuresRightWidth = item->measure()->nextMeasure()->width() + item->measure()->nextMeasure()->nextMeasure()->width();
+            if (item->measure()->nextMeasure()->nextMeasure()->repeatEnd()) {
+                //twoMeasuresRightWidth -= xxx; // account fot repeat barline
+            }
+            if (item->measure()->nextMeasure()->nextMeasure()->isLastInSystem()) {
+                //twoMeasuresRightWidth -= yyy; // account for courtesy clef, time and key signature
+            }
             double margin = item->style().styleMM(Sid::multiMeasureRestMargin);
             double xOffset = item->symBbox(ldata->symId).width() * .5;
             double gapDistance = (item->symBbox(ldata->symId).width() + item->spatium()) * .5;
-            painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
-            painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
+            painter->drawLine(LineF(-twoMeasuresLeftWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
+            painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresRightWidth + xOffset - margin, 0.0));
         }
     }
 }
