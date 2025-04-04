@@ -541,21 +541,17 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 /// Recursively calls layout() on any nested tuplets and then the tuplet itself
 /// </summary>
 /// <param name="de">Start element of the tuplet</param>
-void TupletLayout::layout(DurationElement* de, LayoutContext& ctx)
+void TupletLayout::layoutTopTuplet(Tuplet* t, LayoutContext& ctx)
 {
-    Tuplet* t = reinterpret_cast<Tuplet*>(de);
-    if (!t) {
-        return;
-    }
     // t is top level tuplet
     // loop through elements of that tuplet
     for (DurationElement* d : t->elements()) {
-        if (d == de) {
+        if (d == t) {
             continue;
         }
         // if element is tuplet, layoutTuplet(that tuplet)
         if (d->isTuplet()) {
-            layout(d, ctx);
+            layoutTopTuplet(toTuplet(d), ctx);
         }
     }
     // layout t

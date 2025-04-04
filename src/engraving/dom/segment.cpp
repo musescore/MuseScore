@@ -2530,17 +2530,6 @@ void Segment::createShape(staff_idx_t staffIdx)
         }
     }
 
-    if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
-        setVisible(true);
-        BarLine* bl = toBarLine(element(staffIdx * VOICES));
-        if (bl) {
-            rendering::score::LayoutContext lctx(score());
-            RectF r = rendering::score::TLayout::layoutRect(bl, lctx);
-            s.add(r.translated(bl->pos() + bl->staffOffset()), bl);
-        }
-        return;
-    }
-
     if (!score()->staff(staffIdx)->show()) {
         return;
     }
