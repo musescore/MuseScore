@@ -669,7 +669,7 @@ void TrillObj::readCapx(XmlReader& e)
 void WedgeObj::readCapx(XmlReader& e)
 {
     // TODO: read LineObj properties
-    decresc          = e.asciiAttribute("decrescendo", "false") == "true";
+    dim              = e.asciiAttribute("decrescendo", "false") == "true"; // this is what Capella calls it internally
     double dheight   = e.doubleAttribute("span", 1.0);
     height = (int)round(dheight * 32.0);
     e.readNext();
