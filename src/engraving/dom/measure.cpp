@@ -2413,6 +2413,9 @@ bool Measure::isCutawayClef(staff_idx_t staffIdx) const
             break;
         }
     }
+    while (s && s->isTimeTickType()) {
+        s = s->prev();
+    }
     if (!s) {
         return false;
     }
