@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef LEXER_H
-#define LEXER_H
+#pragma once
 
 /**
  \file
@@ -54,12 +52,10 @@ private:
     void categorizeWord(QString word);
     QTextStream in;                     ///< Input stream
     QString line;                       ///< The current line
-    int lineNumber;                     ///< The current line number (zero-based)
+    int lineNumber = -1;                ///< The current line number (zero-based)
     QStringList list;                   ///< Unprocessed words
-    Symbol type;                        ///< Last symbol type
+    Symbol type = NONE;                 ///< Last symbol type
     QString value;                      ///< Last symbol value
     QMap<QString, QString> graceMap;    ///< Map bww embellishments to separate grace notes
 };
-} // namespace Bww
-
-#endif // LEXER_H
+}
