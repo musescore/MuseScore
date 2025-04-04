@@ -151,7 +151,7 @@ const std::vector<Part*>& DomAccessor::parts() const
     return score()->parts();
 }
 
-int DomAccessor::visiblePartCount() const
+size_t DomAccessor::visiblePartCount() const
 {
     IF_ASSERT_FAILED(score()) {
         return 0;
