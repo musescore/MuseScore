@@ -2054,6 +2054,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "String below (TAB)"),
              TranslatableString("action", "Go to string below (TAB)")
              ),
+    UiAction("normal-mode",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
+             TranslatableString("action", "Select Mode"),
+             TranslatableString("action", "Switch to note selection input mode"),
+             IconCode::Code::NORMAL_MODE
+             ),
     UiAction(NOTE_INPUT_ACTION_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2881,6 +2888,7 @@ const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
     static ToolConfig config;
     if (!config.isValid()) {
         config.items = {
+            { "normal-mode", true },
             { "note-input-by-note-name", true },
             { "note-input-by-duration", true },
             { "note-input-rhythm", false },

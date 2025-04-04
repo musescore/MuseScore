@@ -80,6 +80,7 @@ private:
 
     mu::engraving::Score* currentNotationScore() const;
 
+    void normalMode();
     void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
     void toggleNoteInputInsert();

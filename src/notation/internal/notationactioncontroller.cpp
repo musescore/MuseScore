@@ -85,6 +85,7 @@ void NotationActionController::init()
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
     registerAction("notation-escape", &Controller::resetState, &Controller::isNotationPage);
 
+    registerAction("normal-mode", [this]() { normalMode(); });
     registerAction("note-input", [this]() { toggleNoteInput(); });
     registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
     registerNoteInputAction("note-input-by-duration", NoteInputMethod::BY_DURATION);
@@ -713,6 +714,23 @@ void NotationActionController::resetState()
     if (!interaction->selection()->isNone()) {
         interaction->clearSelection();
     }
+}
+
+void NotationActionController::normalMode()
+{
+    TRACEFUNC;
+
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->endNoteInput();
+    }
+
+    std::string stateTitle = muse::trc("notation", "Normal mode");
+    notifyAccessibilityAboutVoiceInfo(stateTitle);
 }
 
 void NotationActionController::toggleNoteInput()
@@ -2414,8 +2432,8 @@ void NotationActionController::registerAction(const ActionCode& code,
 }
 
 void NotationActionController::registerAction(const ActionCode& code,
-                                              void (NotationActionController::* handler)(MoveDirection,
-                                                                                         bool), MoveDirection direction, bool quickly,
+                                              void (NotationActionController::* handler)(MoveDirection, bool), MoveDirection direction,
+                                              bool quickly,
                                               bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, [this, handler, direction, quickly]() { (this->*handler)(direction, quickly); }, enabler);
