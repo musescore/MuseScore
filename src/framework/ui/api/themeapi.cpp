@@ -625,7 +625,7 @@ void ProxyStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOpt
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush(0x03000000),
+        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush(QColor::fromRgba(0x03000000)),
                         QPen(m_theme->strokeColor(), fmax(m_theme->borderWidth(), 1.0)));
     } break;
 
