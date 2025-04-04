@@ -158,6 +158,7 @@
 #include "autoplace.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "dynamicslayout.h"
 #include "guitarbendlayout.h"
 #include "lyricslayout.h"
 #include "masklayout.h"
@@ -2001,78 +2002,7 @@ void TLayout::layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData
 
 void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    LAYOUT_CALL_ITEM(item);
-
-    ldata->disconnectSnappedItems();
-
-    HairpinSegment* snapBeforeHairpinAcrossSysBreak = item->findSnapBeforeHairpinAcrossSystemBreak();
-    if (snapBeforeHairpinAcrossSysBreak) {
-        ldata->connectItemSnappedBefore(snapBeforeHairpinAcrossSysBreak);
-    }
-
-    const StaffType* stType = item->staffType();
-    if (stType && stType->isHiddenElementOnTab(conf.style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
-        ldata->setIsSkipDraw(true);
-        return;
-    }
-    ldata->setIsSkipDraw(false);
-
-    item->setPlacementBasedOnVoiceAssignment(conf.styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
-
-    TLayout::layoutBaseTextBase(item, ldata);
-
-    const Segment* s = item->segment();
-    if (!s || (!item->centerOnNotehead() && item->align().horizontal == AlignH::LEFT)) {
-        return;
-    }
-
-    if (item->anchorToEndOfPrevious()) {
-        TLayout::layoutDynamicToEndOfPrevious(item, ldata, conf);
-        return;
-    }
-
-    bool centerOnNote = item->centerOnNotehead() || (!item->centerOnNotehead() && item->align().horizontal == AlignH::HCENTER);
-    double noteHeadWidth = item->score()->noteHeadWidth();
-
-    ldata->moveX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
-
-    if (!item->centerOnNotehead()) {
-        return;
-    }
-
-    // Use Smufl optical center for dynamic if available
-    SymId symId = TConv::symId(item->dynamicType());
-    double opticalCenter = item->symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
-    if (symId != SymId::noSym && opticalCenter) {
-        double symWidth = item->symBbox(symId).width();
-        double offset = symWidth / 2 - opticalCenter + item->symBbox(symId).left();
-        double spatiumScaling = item->spatium() / conf.spatium();
-        offset *= spatiumScaling;
-        ldata->moveX(offset);
-    }
-
-    // If the dynamic contains custom text, keep it aligned
-    ldata->moveX(-item->customTextOffset());
-}
-
-void TLayout::layoutDynamicToEndOfPrevious(const Dynamic* item, TextBase::LayoutData* ldata, const LayoutConfiguration&)
-{
-    Segment* curSegment = item->segment();
-    Segment* leftMostSegment = curSegment;
-    Segment* prevSeg = curSegment;
-    while (true) {
-        prevSeg = prevSeg->prev1enabled();
-        if (!prevSeg || prevSeg->tick() != curSegment->tick()) {
-            break;
-        }
-        if (prevSeg->isActive() && prevSeg->hasElements(item->staffIdx())) {
-            leftMostSegment = prevSeg;
-            break;
-        }
-    }
-
-    double xDiff = curSegment->x() + curSegment->measure()->x() - (leftMostSegment->x() + leftMostSegment->measure()->x());
-    ldata->setPosX(-xDiff - ldata->bbox().right() - 0.50 * item->spatium());
+    DynamicsLayout::layoutDynamic(item, ldata, conf);
 }
 
 void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* ldata)
