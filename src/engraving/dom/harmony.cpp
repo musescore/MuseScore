@@ -2041,3 +2041,14 @@ Sid Harmony::getPropertyStyle(Pid pid) const
     return TextBase::getPropertyStyle(pid);
 }
 }
+
+void Harmony::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
+{
+    if (newSeg->isTimeTickType()) {
+        Measure* measure = newSeg->measure();
+        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
+        newSeg = chordRestSegAtSameTick;
+    }
+
+    TextBase::undoMoveSegment(newSeg, tickDiff);
+}

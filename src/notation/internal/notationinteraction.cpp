@@ -2015,6 +2015,16 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
 
+    if (deleteSourceMaterial) {
+        // pasteStaff limits the layout range to just the destination region,
+        // but if the source material was deleted we must also layout the source region.
+        CmdState& cmdState = score()->cmdState();
+        cmdState.setTick(rdd.sourceTick);
+        cmdState.setTick(rdd.sourceTick + rdd.tickLength);
+        cmdState.setStaff(rdd.sourceStaffIdx);
+        cmdState.setStaff(rdd.sourceStaffIdx + rdd.numStaves);
+    }
+
     endDrop();
     apply();
 
@@ -6620,7 +6630,7 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
                 }
             }
 
-            segment = Factory::createSegment(measure, mu::engraving::SegmentType::TimeTick, newTick - measure->tick());
+            segment = Factory::createSegment(measure, mu::engraving::SegmentType::ChordRest, newTick - measure->tick());
             if (!segment) {
                 LOGD("no prev segment");
                 return;
@@ -6736,7 +6746,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     startEdit(TranslatableString("undoableAction", "Navigate to chord symbol"));
 
     if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
-        segment = EditTimeTickAnchors::createTimeTickAnchor(measure, newTick - measure->tick(), harmony->staffIdx())->segment();
+        segment = measure->undoGetSegment(SegmentType::ChordRest, newTick);
     }
 
     engraving::track_idx_t track = harmony->track();
@@ -6873,7 +6883,7 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
     }
 
     if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
-        nextSegm = EditTimeTickAnchors::createTimeTickAnchor(measure, nextSegTick - measure->tick(), fb->staffIdx())->segment();
+        nextSegm = measure->undoGetSegment(SegmentType::ChordRest, nextSegTick);
         if (!nextSegm) {
             LOGD("figuredBassTicksTab: no next segment");
             return;

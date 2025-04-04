@@ -41,14 +41,6 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 {
     TRACEFUNC;
 
-    std::vector<staff_idx_t> tabStaves;
-    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        const Staff* staff = ctx.dom().staff(staffIdx);
-        if (staff->isTabStaff(Fraction())) {
-            tabStaves.push_back(staffIdx);
-        }
-    }
-
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
 
     for (const System* system : page->systems()) {
@@ -59,10 +51,6 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 continue;
             }
             Measure* measure = toMeasure(mb);
-
-            for (staff_idx_t staffIdx : tabStaves) {
-                maskTABStringLinesForFrets(measure, staffIdx, ctx);
-            }
 
             if (maskBarlines) {
                 for (const Segment& seg : measure->segments()) {
@@ -246,11 +234,11 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
     return allText;
 }
 
-void MaskLayout::maskTABStringLinesForFrets(Measure* measure, staff_idx_t staffIdx, const LayoutContext& ctx)
+void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx)
 {
+    staff_idx_t staffIdx = staffLines->staffIdx();
     bool linesThrough = ctx.dom().staff(staffIdx)->staffType(Fraction())->linesThrough();
 
-    StaffLines* staffLines = measure->staffLines(staffIdx);
     PointF staffLinesPos = staffLines->pagePos();
 
     double padding = ctx.conf().styleMM(Sid::tabFretPadding);
@@ -270,6 +258,7 @@ void MaskLayout::maskTABStringLinesForFrets(Measure* measure, staff_idx_t staffI
         }
     };
 
+    const Measure* measure = staffLines->measure();
     for (Segment* seg = measure->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
             EngravingItem* el = seg->element(track);

@@ -5843,11 +5843,22 @@ const std::vector<Part*>& Score::parts() const
     return m_parts;
 }
 
-int Score::visiblePartCount() const
+size_t Score::visiblePartCount() const
 {
     int count = 0;
     for (const Part* part : m_parts) {
         if (part->show()) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+size_t Score::visibleStavesCount() const
+{
+    int count = 0;
+    for (const Staff* staff : m_staves) {
+        if (staff->show()) {
             ++count;
         }
     }

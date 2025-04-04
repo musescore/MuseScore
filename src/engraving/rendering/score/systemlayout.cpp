@@ -227,12 +227,13 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
 
         const MeasureBase* mb = ctx.state().curMeasure();
+        const MeasureBase* next = mb->nextMM();
         bool lineBreak  = false;
         switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
             lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock()
-                        || (ctx.state().nextMeasure() && ctx.state().nextMeasure()->isStartOfSystemLock());
+                        || (next && next->isStartOfSystemLock());
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:
@@ -1256,7 +1257,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
 
     if (!hasFretDiagram) {
-        HarmonyLayout::layoutHarmonies(sl, ctx);
+        HarmonyLayout::autoplaceHarmonies(sl, ctx);
         HarmonyLayout::alignHarmonies(system, sl, true, ctx.conf().maxChordShiftAbove(), ctx.conf().maxChordShiftBelow());
     }
 
@@ -1304,7 +1305,12 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         for (const Segment* s : sl) {
             for (EngravingItem* e : s->annotations()) {
                 if (e->isFretDiagram()) {
-                    TLayout::layoutItem(e, ctx);
+                    Autoplace::autoplaceSegmentElement(e, e->mutldata());
+                    if (Harmony* harmony = toFretDiagram(e)->harmony()) {
+                        SkylineLine& skl = system->staff(e->staffIdx())->skyline().north();
+                        Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + e->pos() + s->pos() + s->measure()->pos());
+                        skl.add(harmShape);
+                    }
                 }
             }
         }
@@ -1313,7 +1319,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         // Harmony, 2nd place
         //-------------------------------------------------------------
 
-        HarmonyLayout::layoutHarmonies(sl, ctx);
+        HarmonyLayout::autoplaceHarmonies(sl, ctx);
         HarmonyLayout::alignHarmonies(system, sl, false, ctx.conf().maxFretShiftAbove(), ctx.conf().maxFretShiftBelow());
     }
 

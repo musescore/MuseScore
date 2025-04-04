@@ -44,6 +44,9 @@ public:
     RehearsalMark(Segment* parent);
 
     bool isEditAllowed(EditData&) const override;
+    bool allowTimeAnchor() const override { return false; }
+    void editDrag(EditData& ed) override;
+    bool moveSegment(const EditData& ed) override;
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
 

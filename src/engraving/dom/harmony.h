@@ -198,6 +198,8 @@ public:
     bool isDrawEditMode() const { return m_isDrawEditMode; }
     void setIsDrawEditMode(bool val) { m_isDrawEditMode = val; }
 
+    void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
+
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
     };

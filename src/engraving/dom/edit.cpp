@@ -1521,6 +1521,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                     nsig->setScore(score);
                     nsig->setTrack(si * VOICES);
                     nsig->setParent(seg);
+                    nsig->styleChanged();
                     undoAddElement(nsig);
                     if (score->excerpt()) {
                         const track_idx_t masterTrack = muse::key(score->excerpt()->tracksMapping(), nsig->track());
@@ -6789,30 +6790,18 @@ void Score::removeSystemLocksOnRemoveMeasures(const MeasureBase* m1, const Measu
     }
 }
 
-void Score::updateSystemLocksOnDisableMMRests()
+void Score::removeSystemLocksContainingMMRests()
 {
-    // NOTE: this can be done before layout for the full score
-    // because we already know where the mmRests are.
-
-    assert(!style().styleB(Sid::createMultiMeasureRests));
-
     std::vector<const SystemLock*> allLocks = m_systemLocks.allLocks();
     for (const SystemLock* lock : allLocks) {
-        MeasureBase* startMB = lock->startMB();
-        MeasureBase* endMB = lock->endMB();
-        bool startIsMMRest = startMB->isMeasure() && toMeasure(startMB)->isMMRest();
-        bool endIsMMRest = endMB->isMeasure() && toMeasure(endMB)->isMMRest();
-        if (startIsMMRest || endIsMMRest) {
-            undoRemoveSystemLock(lock);
-            MeasureBase* newStartMeas = startMB;
-            MeasureBase* newEndMeas = endMB;
-            if (startIsMMRest) {
-                newStartMeas = toMeasure(startMB)->mmRestFirst();
+        for (MeasureBase* mb = lock->startMB(); mb; mb = mb->next()) {
+            if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
+                undoRemoveSystemLock(lock);
+                break;
             }
-            if (endIsMMRest) {
-                newEndMeas = toMeasure(endMB)->mmRestLast();
+            if (mb->isAfter(lock->endMB())) {
+                break;
             }
-            undoAddSystemLock(new SystemLock(newStartMeas, newEndMeas));
         }
     }
 }

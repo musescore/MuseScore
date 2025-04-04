@@ -160,6 +160,7 @@
 #include "chordlayout.h"
 #include "guitarbendlayout.h"
 #include "lyricslayout.h"
+#include "masklayout.h"
 #include "slurtielayout.h"
 #include "tremololayout.h"
 #include "tupletlayout.h"
@@ -2657,43 +2658,13 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         }
     }
 
-    ldata->setPos((noteheadWidth - item->mainWidth()) / 2, -(ldata->shape().bottom() + item->styleP(Sid::fretY)));
-
-    if (item->autoplace()) {
-        const Segment* s = toSegment(item->explicitParent());
-        const Measure* m = s->measure();
-        LD_CONDITION(ldata->isSetPos());
-        LD_CONDITION(m->ldata()->isSetPos());
-        LD_CONDITION(s->ldata()->isSetPos());
-    }
-
-    Autoplace::autoplaceSegmentElement(item, ldata);
-
     Harmony* harmony = item->harmony();
     if (harmony) {
         TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
-    }
-
-    if (harmony && harmony->autoplace() && harmony->explicitParent()) {
-        Segment* s = toSegment(item->explicitParent());
-        Measure* m = s->measure();
-        staff_idx_t si = item->staffIdx();
-
-        SysStaff* ss = m->system()->staff(si);
-        RectF r = harmony->ldata()->bbox().translated(m->pos() + s->pos() + item->pos() + harmony->pos());
-
-        double minDistance = harmony->minDistance().val() * item->spatium();
-        SkylineLine sk(false);
-        sk.add(r, harmony);
-        double d = sk.minDistance(ss->skyline().north());
-        if (d > -minDistance) {
-            double yd = d + minDistance;
-            yd *= -1.0;
-            harmony->mutldata()->moveY(yd);
-            r.translate(PointF(0.0, yd));
-        }
-        if (harmony->addToSkyline()) {
-            ss->skyline().add(r, harmony);
+        double vertDist = ldata->bbox().top() - harmony->ldata()->bbox().translated(harmony->pos()).bottom();
+        double diff = vertDist - harmony->minDistance().val() * item->spatium();
+        if (diff < 0) {
+            harmony->mutldata()->moveY(diff);
         }
     }
 
@@ -4713,6 +4684,7 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
     if (!header || repeat || !systemFirst) {
         // no header, or header with repeat, or header mid-system - align with barline
         ldata->setPosX(barlineX);
+        checkRehearsalMarkVSBigTimeSig(item, ldata);
         return;
     }
 
@@ -4733,6 +4705,41 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
     // left align with start of measure if that is further left
     if (item->align() == AlignH::RIGHT) {
         ldata->setPosX(std::min(ldata->pos().x(), measureX + ldata->bbox().width()));
+    }
+
+    checkRehearsalMarkVSBigTimeSig(item, ldata);
+}
+
+void TLayout::checkRehearsalMarkVSBigTimeSig(const RehearsalMark* item, TextBase::LayoutData* ldata)
+{
+    if (item->score()->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::ABOVE_STAVES) {
+        return;
+    }
+
+    const Segment* s = item->segment();
+    TimeSig* bigTimeSig = nullptr;
+    for (const Segment* segment = s; segment && segment->tick() == s->tick(); segment = segment->prevActive()) {
+        if (!segment->isType(SegmentType::TimeSigType)) {
+            continue;
+        }
+        TimeSig* timeSig = toTimeSig(segment->element(item->track()));
+        if (timeSig && timeSig->visible()) {
+            bigTimeSig = timeSig;
+            break;
+        }
+    }
+
+    if (!bigTimeSig) {
+        return;
+    }
+
+    double timeSigRightEdge = bigTimeSig->ldata()->bbox().translated(bigTimeSig->ldata()->pos()).right()
+                              + bigTimeSig->segment()->x() - s->x();
+    double rehMarkLeftEdge = ldata->bbox().translated(item->ldata()->pos()).left();
+    double distance = rehMarkLeftEdge - timeSigRightEdge;
+    const double margin = 0.5 * item->fontMetrics().xHeight();
+    if (distance < margin) {
+        ldata->moveX(margin - distance);
     }
 }
 
@@ -5317,6 +5324,10 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
         y += dist;
     }
     item->setLines(ll);
+
+    if (s && s->staffType(item->measure()->tick())->isTabStaff()) {
+        MaskLayout::maskTABStringLinesForFrets(item, ctx);
+    }
 }
 
 void TLayout::layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata)
