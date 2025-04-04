@@ -113,6 +113,7 @@ Ret EngravingProject::doSetupMasterScore(bool forceMode)
 
     m_masterScore->createPaddingTable();
     m_masterScore->connectTies();
+    m_masterScore->undoRemoveStaleTieJumpPoints(false);
 
     for (Part* p : m_masterScore->parts()) {
         p->updateHarmonyChannels(false);
