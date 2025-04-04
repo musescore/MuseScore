@@ -31,8 +31,16 @@
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "global/iapplication.h"
+#include "engraving/iengraving.h"
 
 #include "enums.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/types.h"
+#include "engraving/types/types.h"
+#include "project/iexportprojectscenario.h"
+#include "project/inotationwritersregister.h"
+#include "project/iprojectfilescontroller.h"
+
 #include "apitypes.h"
 #include "cursor.h"
 
@@ -272,6 +280,9 @@ public:
     /// \cond MS_INTERNAL
     PluginAPI(QQuickItem* parent = 0);
 
+    explicit PluginAPI(IEngraving* engraving)
+        : engravingInterface(engraving) {}
+
     static void registerQmlTypes();
 
     void setup(QQmlEngine* e) override;
@@ -292,7 +303,8 @@ public:
     Q_INVOKABLE apiv1::MsProcess* newQProcess();
     Q_INVOKABLE bool writeScore(apiv1::Score*, const QString& name, const QString& ext);
     Q_INVOKABLE apiv1::Score* readScore(const QString& name, bool noninteractive = false);
-    Q_INVOKABLE void closeScore(apiv1::Score*);
+    Q_INVOKABLE void closeScore(apiv1::Score* score);
+    Q_INVOKABLE void closeScore();
 
     Q_INVOKABLE void log(const QString&);
     Q_INVOKABLE void logn(const QString&);
@@ -340,6 +352,8 @@ public:
 
 private:
     mu::engraving::Score* currentScore() const;
+
+    IEngraving* engravingInterface;
 
     QString m_pluginType;
     QString m_title;
