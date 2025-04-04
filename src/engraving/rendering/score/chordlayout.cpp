@@ -73,6 +73,7 @@
 #include "beamlayout.h"
 #include "tremololayout.h"
 #include "autoplace.h"
+#include "stemlayout.h"
 
 using namespace muse;
 using namespace mu::engraving;
@@ -1225,7 +1226,7 @@ void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
 
     // we should calculate default stem length for this chord even if it doesn't have a stem
     // because this length is used for tremolos or other things that attach to where the stem WOULD be
-    item->setDefaultStemLength(item->calcDefaultStemLength());
+    item->setDefaultStemLength(StemLayout::calcDefaultStemLength(item, ctx));
 
     if (!item->stem()) {
         return;
