@@ -2070,7 +2070,7 @@ void Score::cmdAddTie(bool addToChord)
 
 Tie* Score::cmdToggleTie()
 {
-    const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
+    std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
 
     if (noteList.empty()) {
         LOGD("no notes selected");
@@ -2089,7 +2089,7 @@ Tie* Score::cmdToggleTie()
         } else {
             Note* tieNote = searchTieNote(n);
             tieNoteList[i] = tieNote;
-            if (tieNote && !shouldTieListSelection) {
+            if (tieNote) {
                 canAddTies = true;
             }
         }
@@ -2107,6 +2107,10 @@ Tie* Score::cmdToggleTie()
         Note* note = noteList[i];
         Note* tieToNote = tieNoteList[i];
 
+        if (!note) {
+            continue;
+        }
+
         // Tie to adjacent unselected note
         if (canAddTies && tieToNote) {
             Note* startNote = note->tick() <= tieToNote->tick() ? note : tieToNote;
@@ -2119,7 +2123,7 @@ Tie* Score::cmdToggleTie()
         Chord* chord = note->chord();
         if (oldTie) {
             // Toggle existing tie off
-            undoRemoveElement(tie);
+            undoRemoveElement(oldTie);
             continue;
         }
 
@@ -2133,16 +2137,27 @@ Tie* Score::cmdToggleTie()
             continue;
         }
 
-        // Tie to next note in selection
-        Note* note2 = noteList[i + 1];
+        // Tie to next appropriate note in selection
+        Note* note2 = nullptr;
+
+        for (size_t j = i + 1; j < notes; ++j) {
+            Note* candidateNote = noteList[j];
+            if (note->part() == candidateNote->part() && note->pitch() == candidateNote->pitch()
+                && note->unisonIndex() == candidateNote->unisonIndex() && note->tick() != candidateNote->tick()) {
+                note2 = candidateNote;
+                noteList[j] = nullptr;
+                break;
+            }
+        }
+
+        if (!(note && note2)) {
+            continue;
+        }
 
         Note* startNote = note->tick() <= note2->tick() ? note : note2;
         Note* endNote = startNote == note2 ? note : note2;
 
-        if (startNote->part() == endNote->part() && startNote->pitch() == endNote->pitch()
-            && startNote->unisonIndex() == endNote->unisonIndex() && startNote->tick() != endNote->tick()) {
-            tie = createAndAddTie(startNote, endNote);
-        }
+        tie = createAndAddTie(startNote, endNote);
     }
 
     endCmd();
