@@ -580,7 +580,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     QJsonObject jsonForPdfs;
     jsonForPdfs["score"] = QString::fromStdString(scoreFileName);
     QByteArray scoreBin = processWriter(PDF_WRITER_NAME, masterNotation->notation()).val;
-    jsonForPdfs["scoreBin"] = QString::fromLatin1(scoreBin);
+    jsonForPdfs["scoreBin"] = QLatin1String(scoreBin);
 
     INotationPtrList notations;
     notations.push_back(masterNotation->notation());
@@ -595,8 +595,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
         partsNamesArray.append(partNameVal);
 
         QByteArray partBin = processWriter(PDF_WRITER_NAME, e->notation()).val;
-        QJsonValue partVal(QString::fromLatin1(partBin));
-        partsArray.append(partVal);
+        partsArray.append(QLatin1String(partBin));
 
         notations.push_back(e->notation());
     }
@@ -611,7 +610,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     };
 
     QByteArray fullScoreData = processWriter(PDF_WRITER_NAME, notations, options).val;
-    jsonForPdfs["scoreFullBin"] = QString::fromLatin1(fullScoreData.toBase64());
+    jsonForPdfs["scoreFullBin"] = QLatin1String(fullScoreData);
 
     QJsonDocument jsonDoc(jsonForPdfs);
     bool ok = destinationDevice.write(QJsonDocument(jsonDoc).toJson(QJsonDocument::Compact)) != -1;
