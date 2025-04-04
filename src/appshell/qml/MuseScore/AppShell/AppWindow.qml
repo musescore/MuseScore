@@ -24,7 +24,7 @@ import QtQuick.Controls 2.15
 
 import Muse.Ui 1.0
 import Muse.Shortcuts 1.0
-import MuseScore.AppShell 1.0
+import MuseScore.AppShell
 
 import Muse.Tours 1.0
 

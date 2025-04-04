@@ -46,7 +46,7 @@ public:
     SymbolDialog(const QString&, QWidget* parent = 0);
 
 private slots:
-    void systemFlagChanged(int);
+    void systemFlagChanged(Qt::CheckState);
     void systemFontChanged(int);
     void on_search_textChanged(const QString& searchPhrase);
     void on_clearSearch_clicked();
