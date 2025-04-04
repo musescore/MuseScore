@@ -502,6 +502,17 @@ bool propertyLink(Pid id)
 }
 
 //---------------------------------------------------------
+//   propertyLinkSameScore
+//---------------------------------------------------------
+
+bool propertyLinkSameScore(Pid id)
+{
+    assert(id < Pid::END);
+    std::array<Pid, 3> doNotLinkSameScore { Pid::STAFF_BARLINE_SPAN, Pid::STAFF_BARLINE_SPAN_FROM, Pid::STAFF_BARLINE_SPAN_TO };
+    return !muse::contains(doNotLinkSameScore, id);
+}
+
+//---------------------------------------------------------
 //   propertyName
 //---------------------------------------------------------
 
