@@ -49,6 +49,7 @@ public:
 
     bool isBuiltin() const override;
     bool isEdited() const override;
+    bool isNeedSave() const override;
 
     RetVal<QByteArray> rawData(const DataKey& key) const override;
     Ret setRawData(const DataKey& key, const QByteArray& data) override;
