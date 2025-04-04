@@ -34,12 +34,19 @@ namespace mu::engraving::rendering::score {
 class TupletLayout
 {
 public:
-
     static void layout(Tuplet* item, LayoutContext& ctx);
 
     static void layout(DurationElement* de, LayoutContext& ctx);
     static bool isTopTuplet(ChordRest* cr);
     static bool notTopTuplet(ChordRest* cr);
+
+private:
+    static void createNumber(Tuplet* item, LayoutContext& ctx);
+    static void computeDirection(Tuplet* item);
+    static void computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2);
+    static void layoutBracket(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx);
+    static double findRhythmicCenter(Tuplet* item, const ChordRest *cr2);
+    static void extendToEndOfDuration(Tuplet* item, const ChordRest* endCR);
 };
 }
 
