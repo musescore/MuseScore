@@ -5062,7 +5062,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
     BeatsPerMinute bpm = text->tempo().toBPM();
     if (text->isATempo() || text->isTempoPrimo()) {
-        bpm = m_score->tempomap()->originalTempo(text->tick().ticks()).toBPM();
+        bpm = m_score->tempomap()->tempo(text->tick().ticks()).toBPM();
     }
     double bpmRounded = round(bpm.val * 100) / 100;
     m_xml.tag("sound", { { "tempo", bpmRounded } });

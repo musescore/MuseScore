@@ -2622,7 +2622,7 @@ static bool canAddTempoText(const TempoMap* const tempoMap, const int tick)
         return true;
     }
 
-    return tempoMap->originalTempo(tick) == Constants::DEFAULT_TEMPO;
+    return tempoMap->tempo(tick) == Constants::DEFAULT_TEMPO;
 }
 
 //---------------------------------------------------------

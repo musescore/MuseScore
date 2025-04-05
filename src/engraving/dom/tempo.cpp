@@ -86,7 +86,7 @@ void TempoMap::setPause(int tick, double pause)
         e->second.pause = pause;
         e->second.type |= TempoType::PAUSE;
     } else {
-        BeatsPerSecond t = originalTempo(tick);
+        BeatsPerSecond t = tempo(tick);
         insert(std::pair<const int, TEvent>(tick, TEvent(t, pause, TempoType::PAUSE)));
     }
 
@@ -190,7 +190,7 @@ void TempoMap::clearRange(int tick1, int tick2)
 //   tempo
 //---------------------------------------------------------
 
-BeatsPerSecond TempoMap::originalTempo(int tick) const
+BeatsPerSecond TempoMap::tempo(int tick) const
 {
     if (empty()) {
         return 2.0;
@@ -216,7 +216,7 @@ BeatsPerSecond TempoMap::originalTempo(int tick) const
 
 BeatsPerSecond TempoMap::multipliedTempo(int tick) const
 {
-    return originalTempo(tick) * m_tempoMultiplier;
+    return tempo(tick) * m_tempoMultiplier;
 }
 
 double TempoMap::pauseSecs(int tick) const

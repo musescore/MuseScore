@@ -120,8 +120,8 @@ TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 /**
  * @brief TempoMapTests_TEMPO_MULTIPLIER
  * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
- *          There is a originalTempo marking (80 BPM) on the very first measure. The 4-th measure marked by 120BPM originalTempo
- *          Then we apply a global multiplier to all originalTempo marks
+ *          There is a tempo marking (80 BPM) on the very first measure. The 4-th measure marked by 120BPM tempo
+ *          Then we apply a global multiplier to all tempo marks
  */
 TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
 {
@@ -150,7 +150,7 @@ TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
     for (int tick : muse::keys(*tempoMap)) {
         double expectedBps = expectedTempoMap[tick].val;
 
-        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->originalTempo(tick).val, 2), muse::RealRound(expectedBps * multiplier, 2)));
+        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->tempo(tick).val, 2), muse::RealRound(expectedBps * multiplier, 2)));
         EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->at(tick).tempo.val, 2), muse::RealRound(expectedBps, 2)));
     }
 }

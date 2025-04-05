@@ -463,7 +463,7 @@ void Score::setUpTempoMap()
             }
 
             int tickPositionFrom = tempoChange->tick().ticks();
-            BeatsPerSecond currentBps = tempomap()->originalTempo(tickPositionFrom);
+            BeatsPerSecond currentBps = tempomap()->tempo(tickPositionFrom);
             BeatsPerSecond newBps = currentBps * tempoChange->tempoChangeFactor();
 
             int totalTicks = tempoChange->ticks().ticks();
@@ -580,7 +580,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     if (tt->isATempo() && tt->followText()) {
                         // this will effectively reset the tempo to the previous one
                         // when a progressive change was active
-                        tempomap()->setTempo(ticks, tempomap()->originalTempo(ticks));
+                        tempomap()->setTempo(ticks, tempomap()->tempo(ticks));
                     } else if (tt->isTempoPrimo() && tt->followText()) {
                         tempomap()->setTempo(ticks, tempoPrimo ? *tempoPrimo : Constants::DEFAULT_TEMPO);
                     } else {
@@ -590,7 +590,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
             }
 
             if (!RealIsNull(stretch) && !RealIsEqual(stretch, 1.0)) {
-                BeatsPerSecond otempo = tempomap()->originalTempo(segment.tick().ticks());
+                BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
                 BeatsPerSecond ntempo = otempo.val / stretch;
                 tempomap()->setTempo(segment.tick().ticks(), ntempo);
 
@@ -4377,9 +4377,9 @@ void Score::setPause(const Fraction& tick, double seconds)
 //   tempo
 //---------------------------------------------------------
 
-BeatsPerSecond Score::originalTempo(const Fraction& tick) const
+BeatsPerSecond Score::tempo(const Fraction& tick) const
 {
-    return tempomap()->originalTempo(tick.ticks());
+    return tempomap()->tempo(tick.ticks());
 }
 
 BeatsPerSecond Score::multipliedTempo(const Fraction& tick) const
