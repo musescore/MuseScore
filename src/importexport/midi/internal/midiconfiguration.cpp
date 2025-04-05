@@ -34,6 +34,7 @@ using namespace mu::iex::midi;
 static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");
 static const Settings::Key EXPORTRPNS_KEY("iex_midi", "io/midi/exportRPNs");
 static const Settings::Key EXPAND_REPEATS_KEY("iex_midi", "io/midi/expandRepeats");
+static const Settings::Key SPACELYRICS_KEY("iex_midi", "io/midi/spaceLyrics");
 
 void MidiConfiguration::init()
 {
@@ -44,6 +45,7 @@ void MidiConfiguration::init()
 
     settings()->setDefaultValue(EXPAND_REPEATS_KEY, Val(true));
     settings()->setDefaultValue(EXPORTRPNS_KEY, Val(true));
+    settings()->setDefaultValue(SPACELYRICS_KEY, Val(true));
 }
 
 int MidiConfiguration::midiShortestNote() const
@@ -86,4 +88,14 @@ bool MidiConfiguration::isMidiExportRpns() const
 void MidiConfiguration::setIsMidiExportRpns(bool exportRpns)
 {
     settings()->setSharedValue(EXPORTRPNS_KEY, Val(exportRpns));
+}
+
+bool MidiConfiguration::isMidiSpaceLyrics() const
+{
+    return settings()->value(SPACELYRICS_KEY).toBool();
+}
+
+void MidiConfiguration::setIsMidiSpaceLyrics(bool spaceLyrics)
+{
+    settings()->setSharedValue(SPACELYRICS_KEY, Val(spaceLyrics));
 }
