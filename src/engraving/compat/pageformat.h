@@ -80,6 +80,8 @@ public:
     double oddRightMargin() const { return _size.width() - _printableWidth - _oddLeftMargin; }
 };
 
+void initPageFormat(MStyle* style, PageFormat* pf);
+void setPageFormat(MStyle* style, const PageFormat& pf);
 void readPageFormat206(MStyle* style, XmlReader& e);
 }
 #endif // MU_ENGRAVING_READPAGEFORMAT_H
