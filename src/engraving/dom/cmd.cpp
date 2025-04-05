@@ -39,8 +39,10 @@
 #include "barline.h"
 #include "box.h"
 #include "chord.h"
+#include "chordrest.h"
 #include "clef.h"
 #include "drumset.h"
+#include "durationtype.h"
 #include "dynamic.h"
 #include "factory.h"
 #include "glissando.h"
@@ -3273,46 +3275,49 @@ void Score::cmdMirrorNoteHead()
 
 void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 {
-    EngravingItem* el = selection().element();
-    if (el == 0) {
-        return;
-    }
-    if (el->isNote()) {
-        el = el->parentItem();
-    }
-    if (!el->isChordRest()) {
-        return;
-    }
-
-    ChordRest* cr = toChordRest(el);
-
-    // if measure rest is selected as input, then the correct initialDuration will be the
-    // duration of the measure's time signature, else is just the input state's duration
-    TDuration initialDuration;
-    if (cr->durationType() == DurationType::V_MEASURE) {
-        initialDuration = TDuration(cr->measure()->timesig(), true);
-
-        if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
-            // Duration already shortened by truncation; shorten one step less
-            --nSteps;
+    if (selection().isRange()) {
+        if (!selection().canCopy()) {
+            return;
         }
-    } else {
-        initialDuration = m_is.duration();
+        ChordRest* firstCR = selection().firstChordRest();
+        if (firstCR->isGrace()) {
+            firstCR = toChordRest(firstCR->parent());
+        }
+        TDuration initialDuration = firstCR->ticks();
+        TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
+        if (!d.isValid()) {
+            return;
+        }
+        Fraction scale = d.ticks() / initialDuration.ticks();
+        for (ChordRest* cr : getSelectedChordRests()) {
+            Fraction newTicks = cr->ticks() * scale;
+            if (newTicks < Fraction(1, 1024)
+                || (stepDotted && cr->durationType().dots() != firstCR->durationType().dots()
+                    && !cr->isGrace())) {
+                return;
+            }
+        }
+        const muse::ByteArray mimeData(selection().mimeData());
+        XmlReader e(mimeData);
+        deleteRange(selection().startSegment(), selection().endSegment(), staff2track(selection().staffStart()),
+                    staff2track(selection().staffEnd()), selectionFilter());
+        pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
+    } else if (selection().isList()) {
+        std::set<ChordRest*> crs = getSelectedChordRests();
+        for (ChordRest* cr : crs) {
+            TDuration newDuration(stepDotted
+                                  ? cr->durationType().fraction() * Fraction(3, 3 + nSteps)
+                                  : cr->durationType().fraction()* Fraction(3 - nSteps, 3 + nSteps), true);
+            changeCRlen(cr, newDuration);
+        }
+        for (ChordRest* cr : crs) {
+            EngravingItem* e = cr;
+            if (cr->isChord()) {
+                e = toChord(cr)->upNote();
+            }
+            select(e, SelectType::ADD);
+        }
     }
-    TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
-    if (!d.isValid()) {
-        return;
-    }
-    if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
-        //
-        // handle appoggiatura and acciaccatura
-        //
-        undoChangeChordRestLen(cr, d);
-    } else {
-        changeCRlen(cr, d);
-    }
-    m_is.setDuration(d);
-    nextInputPos(cr, false);
 }
 
 //---------------------------------------------------------
