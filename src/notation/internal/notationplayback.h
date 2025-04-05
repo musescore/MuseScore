@@ -72,7 +72,7 @@ public:
     const LoopBoundaries& loopBoundaries() const override;
     muse::async::Notification loopBoundariesChanged() const override;
 
-    const Tempo& tempo(muse::midi::tick_t tick) const override;
+    const Tempo& multipliedTempo(muse::midi::tick_t tick) const override;
     MeasureBeat beat(muse::midi::tick_t tick) const override;
     muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const override;
 

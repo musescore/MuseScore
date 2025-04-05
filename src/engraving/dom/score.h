@@ -743,7 +743,8 @@ public:
     void setTempo(const Fraction& tick, BeatsPerSecond bps);
     void removeTempo(const Fraction& tick);
     void setPause(const Fraction& tick, double seconds);
-    BeatsPerSecond tempo(const Fraction& tick) const;
+    BeatsPerSecond originalTempo(const Fraction& tick) const;
+    BeatsPerSecond multipliedTempo(const Fraction& tick) const;
 
     Text* getText(TextStyleType subtype) const;
 

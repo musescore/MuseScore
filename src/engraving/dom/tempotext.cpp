@@ -231,7 +231,7 @@ void TempoText::updateScore()
 
 void TempoText::updateRelative()
 {
-    BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::fromTicks(1));
+    BeatsPerSecond tempoBefore = score()->originalTempo(tick() - Fraction::fromTicks(1));
     setTempo(tempoBefore * m_relative);
 }
 

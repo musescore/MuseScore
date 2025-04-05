@@ -3114,7 +3114,7 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
         BeatsPerSecond tempo   = i.second.tempo;
-        if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
+        if (masterScore->tempomap()->originalTempo(tick.ticks()) != tempo) {
             TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
             tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
             tt->setTempo(tempo);

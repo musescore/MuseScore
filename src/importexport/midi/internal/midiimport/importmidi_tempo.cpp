@@ -70,7 +70,7 @@ void setTempoToScore(Score* score, int tick, double beatsPerSecond)
         return;
     }
     // don't repeat tempo, always set only tempo for tick 0
-    if (tick > 0 && score->tempo(Fraction::fromTicks(tick)) == beatsPerSecond) {
+    if (tick > 0 && score->originalTempo(Fraction::fromTicks(tick)) == beatsPerSecond) {
         return;
     }
 
