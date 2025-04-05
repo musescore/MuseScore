@@ -20,6 +20,8 @@
 
 declare_thirdparty_module(rtf2html)
 
+set(MODULE_USE_QT ON)
+
 set(MODULE_SRC
     common.h
     config.h
@@ -34,7 +36,7 @@ set(MODULE_SRC
     rtf_tools.h
     )
 
-set(MODULE_USE_COVERAGE OFF)
+set(MODULE_LINK Qt::Core)
 
 setup_module()
 

@@ -181,13 +181,13 @@ void GuiApp::perform()
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     const QString mainQmlFile = "/platform/linux/Main.qml";
 #elif defined(Q_OS_WASM)
-    const QString mainQmlFile = "/Main.wasm.qml";
+    const QString mainQmlFile = "/platform/wasm/Main.qml";
 #endif
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
     const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
 #else
-    const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
+    const QUrl url(QStringLiteral("qrc:/qt/qml/MuseScore/AppShell") + mainQmlFile);
 #endif
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
