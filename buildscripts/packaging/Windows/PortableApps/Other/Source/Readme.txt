@@ -63,7 +63,7 @@ The options in the INI file are as follows:
 The AdditionalParameters entry allows you to pass additional command-line parameters to the 
 application. Whatever you enter here will be appended to the call to MuseScore.exe. The full 
 list of available options is here:
-https://musescore.org/en/handbook/3/command-line-options
+https://handbook.musescore.org/appendix/command-line-usage
 
 The DisableSplashScreen entry allows you to run the launcher without the PortableApps.com splash 
 screen (if present in -\App\AppInfo\Launcher) showing up. The default is false.
