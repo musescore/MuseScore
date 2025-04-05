@@ -95,8 +95,8 @@ public:
     void moveSegmentSelection(MoveDirection d) override;
 
     // SelectionFilter
-    bool isSelectionTypeFiltered(SelectionFilterType type) const override;
-    void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) override;
+    bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const override;
+    void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) override;
 
     // Drag
     bool isDragStarted() const override;

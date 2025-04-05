@@ -81,126 +81,31 @@ using namespace mu;
 using namespace muse::io;
 using namespace mu::engraving;
 
-// ====================================================
-// SelectionFilter
-// ====================================================
-
-SelectionFilter::SelectionFilter(SelectionFilterType type)
-    : m_filteredTypes(static_cast<int>(type))
+bool SelectionFilters::isFiltered(const SelectionFilterTypesVariant& variant) const
 {
-}
-
-int SelectionFilter::filteredTypes() const
-{
-    return m_filteredTypes;
-}
-
-bool SelectionFilter::isFiltered(SelectionFilterType type) const
-{
-    if (type == SelectionFilterType::NONE || type == SelectionFilterType::ALL) {
-        return m_filteredTypes == static_cast<unsigned int>(type);
-    }
-
-    return m_filteredTypes & static_cast<unsigned int>(type);
-}
-
-void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
-{
-    if (type == SelectionFilterType::NONE) {
-        setFiltered(SelectionFilterType::ALL, !filtered);
-        return;
-    }
-
-    if (filtered) {
-        m_filteredTypes |= static_cast<unsigned int>(type);
-    } else {
-        m_filteredTypes &= ~static_cast<unsigned int>(type);
-    }
-}
-
-bool SelectionFilter::canSelect(const EngravingItem* e) const
-{
-    switch (e->type()) {
-    case ElementType::DYNAMIC:
-        return isFiltered(SelectionFilterType::DYNAMIC);
-    case ElementType::HAIRPIN:
-    case ElementType::HAIRPIN_SEGMENT:
-        return isFiltered(SelectionFilterType::HAIRPIN);
-    case ElementType::ARTICULATION:
-    case ElementType::VIBRATO:
-    case ElementType::VIBRATO_SEGMENT:
-    case ElementType::FERMATA:
-        return isFiltered(SelectionFilterType::ARTICULATION);
-    case ElementType::ORNAMENT:
-    case ElementType::TRILL:
-    case ElementType::TRILL_SEGMENT:
-        return isFiltered(SelectionFilterType::ORNAMENT);
-    case ElementType::LYRICS:
-    case ElementType::LYRICSLINE:
-    case ElementType::LYRICSLINE_SEGMENT:
-    case ElementType::PARTIAL_LYRICSLINE:
-    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
-        return isFiltered(SelectionFilterType::LYRICS);
-    case ElementType::FINGERING:
-        return isFiltered(SelectionFilterType::FINGERING);
-    case ElementType::HARMONY:
-        return isFiltered(SelectionFilterType::CHORD_SYMBOL);
-    case ElementType::SLUR:
-    case ElementType::SLUR_SEGMENT:
-        return isFiltered(SelectionFilterType::SLUR);
-    case ElementType::FIGURED_BASS:
-        return isFiltered(SelectionFilterType::FIGURED_BASS);
-    case ElementType::OTTAVA:
-    case ElementType::OTTAVA_SEGMENT:
-        return isFiltered(SelectionFilterType::OTTAVA);
-    case ElementType::PEDAL:
-    case ElementType::PEDAL_SEGMENT:
-        return isFiltered(SelectionFilterType::PEDAL_LINE);
-    case ElementType::ARPEGGIO:
-        return isFiltered(SelectionFilterType::ARPEGGIO);
-    case ElementType::GLISSANDO:
-    case ElementType::GLISSANDO_SEGMENT:
-        return isFiltered(SelectionFilterType::GLISSANDO);
-    case ElementType::FRET_DIAGRAM:
-        return isFiltered(SelectionFilterType::FRET_DIAGRAM);
-    case ElementType::BREATH:
-        return isFiltered(SelectionFilterType::BREATH);
-    case ElementType::TREMOLO_SINGLECHORD:
-    case ElementType::TREMOLO_TWOCHORD:
-        return isFiltered(SelectionFilterType::TREMOLO);
+    switch (variant.index()) {
+    case 0: return m_voicesFilter.isFiltered(std::get<VoicesSelectionFilterTypes>(variant));
+    case 1: return m_elementsFilter.isFiltered(std::get<ElementsSelectionFilterTypes>(variant));
     default: break;
     }
 
-    // Special cases...
-    if (e->isTextBase()) { // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
-        return isFiltered(SelectionFilterType::OTHER_TEXT);
-    }
-
-    if (e->isSLine()) { // NoteLine, Volta
-        return isFiltered(SelectionFilterType::OTHER_LINE);
-    }
-
-    if (e->isChord() && toChord(e)->isGrace()) {
-        return isFiltered(SelectionFilterType::GRACE_NOTE);
-    }
-
+    UNREACHABLE;
     return true;
 }
 
-bool SelectionFilter::canSelectVoice(track_idx_t track) const
+void SelectionFilters::setFiltered(const SelectionFilterTypesVariant& variant, bool filtered)
 {
-    voice_idx_t voice = track % VOICES;
-    switch (voice) {
+    switch (variant.index()) {
     case 0:
-        return isFiltered(SelectionFilterType::FIRST_VOICE);
+        m_voicesFilter.setFiltered(std::get<VoicesSelectionFilterTypes>(variant), filtered);
+        return;
     case 1:
-        return isFiltered(SelectionFilterType::SECOND_VOICE);
-    case 2:
-        return isFiltered(SelectionFilterType::THIRD_VOICE);
-    case 3:
-        return isFiltered(SelectionFilterType::FOURTH_VOICE);
+        m_elementsFilter.setFiltered(std::get<ElementsSelectionFilterTypes>(variant), filtered);
+        return;
+    default: break;
     }
-    return true;
+
+    UNREACHABLE;
 }
 
 // ====================================================
@@ -555,7 +460,7 @@ void Selection::appendFiltered(EngravingItem* e)
         LOGE() << "selection locked, reason: " << lockReason();
         return;
     }
-    if (selectionFilter().canSelect(e)) {
+    if (selectionFilters().canSelect(e)) {
         m_el.push_back(e);
     }
 }
@@ -1023,7 +928,7 @@ muse::ByteArray Selection::staffMimeData() const
 
     xml.startDocument();
 
-    SelectionFilter filter = selectionFilter();
+    SelectionFilters& filters = selectionFilters();
     Fraction curTick;
 
     Fraction ticks  = tickEnd() - tickStart();
@@ -1055,14 +960,15 @@ muse::ByteArray Selection::staffMimeData() const
         }
         xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
+            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filters.canSelectVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
                 xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
         xml.endElement();     // </voiceOffset>
 
-        rw::RWRegister::writer(m_score->iocContext())->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
+        rw::RWRegister::writer(m_score->iocContext())->writeSegments(xml, &filters, startTrack, endTrack, seg1, seg2, false, false,
+                                                                     curTick);
         xml.endElement();
     }
 
@@ -1582,7 +1488,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
     assert(!(m_endSegment && !m_startSegment));
 }
 
-SelectionFilter Selection::selectionFilter() const
+SelectionFilters& Selection::selectionFilters() const
 {
-    return m_score->selectionFilter();
+    return m_score->selectionFilters();
 }

@@ -3404,7 +3404,7 @@ String Note::accessibleExtraInfo() const
     }
     if (!el().empty()) {
         for (EngravingItem* e : el()) {
-            if (!score()->selectionFilter().canSelect(e)) {
+            if (!score()->selectionFilters().canSelect(e)) {
                 continue;
             }
             rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
@@ -3420,7 +3420,7 @@ String Note::accessibleExtraInfo() const
 
     if (!spannerFor().empty()) {
         for (Spanner* s : spannerFor()) {
-            if (!score()->selectionFilter().canSelect(s)) {
+            if (!score()->selectionFilters().canSelect(s)) {
                 continue;
             }
             rez += u" " + muse::mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
@@ -3428,7 +3428,7 @@ String Note::accessibleExtraInfo() const
     }
     if (!spannerBack().empty()) {
         for (Spanner* s : spannerBack()) {
-            if (!score()->selectionFilter().canSelect(s)) {
+            if (!score()->selectionFilters().canSelect(s)) {
                 continue;
             }
             rez += u" " + muse::mtrc("engraving", "End of %1").arg(s->screenReaderInfo());

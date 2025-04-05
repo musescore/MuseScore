@@ -1061,7 +1061,7 @@ String ChordRest::accessibleExtraInfo() const
 {
     String rez;
     for (EngravingItem* l : lyrics()) {
-        if (!score()->selectionFilter().canSelect(l)) {
+        if (!score()->selectionFilters().canSelect(l)) {
             continue;
         }
         rez = String(u"%1 %2").arg(rez, l->screenReaderInfo());
@@ -1069,7 +1069,7 @@ String ChordRest::accessibleExtraInfo() const
 
     if (segment()) {
         for (EngravingItem* e : segment()->annotations()) {
-            if (!score()->selectionFilter().canSelect(e)) {
+            if (!score()->selectionFilters().canSelect(e)) {
                 continue;
             }
             if (e->track() == track()) {
@@ -1081,7 +1081,7 @@ String ChordRest::accessibleExtraInfo() const
         auto spanners = smap.findOverlapping(tick().ticks(), tick().ticks());
         for (auto interval : spanners) {
             Spanner* s = interval.value;
-            if (!score()->selectionFilter().canSelect(s)) {
+            if (!score()->selectionFilters().canSelect(s)) {
                 continue;
             }
             if (s->type() == ElementType::VOLTA          //voltas are added for barlines

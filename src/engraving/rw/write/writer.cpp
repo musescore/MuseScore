@@ -270,12 +270,12 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     }
 }
 
-void Writer::writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t strack, track_idx_t etrack,
+void Writer::writeSegments(XmlWriter& xml, SelectionFilters* filters, track_idx_t strack, track_idx_t etrack,
                            Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig, Fraction& curTick)
 {
     WriteContext ctx(sseg->score());
     ctx.setClipboardmode(true);
-    ctx.setFilter(*filter);
+    ctx.setFilters(*filters);
     ctx.setCurTrack(strack);
     ctx.setCurTick(curTick);
     TWrite::writeSegments(xml, ctx, strack, etrack, sseg, eseg, writeSystemElements, forceTimeSig);

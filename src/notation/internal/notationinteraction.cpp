@@ -1029,14 +1029,14 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
-bool NotationInteraction::isSelectionTypeFiltered(SelectionFilterType type) const
+bool NotationInteraction::isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const
 {
-    return score()->selectionFilter().isFiltered(type);
+    return score()->selectionFilters().isFiltered(variant);
 }
 
-void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, bool filtered)
+void NotationInteraction::setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered)
 {
-    score()->selectionFilter().setFiltered(type, filtered);
+    score()->selectionFilters().setFiltered(variant, filtered);
     if (selection()->isRange()) {
         score()->selection().updateSelectedElements();
         notifyAboutSelectionChangedIfNeed();
@@ -2012,7 +2012,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
             score()->deleteRange(sourceStartSegment, sourceEndSegment,
                                  engraving::staff2track(rdd.sourceStaffIdx),
                                  engraving::staff2track(rdd.sourceStaffIdx + rdd.numStaves),
-                                 score()->selectionFilter());
+                                 score()->selectionFilters());
         }
     }
 
@@ -2466,8 +2466,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             for (mu::engraving::Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                 for (track_idx_t track = track1; track < track2; ++track) {
                     mu::engraving::EngravingItem* e = s->element(track);
-                    if (e == 0 || !score->selectionFilter().canSelect(e)
-                        || !score->selectionFilter().canSelectVoice(track)) {
+                    if (e == 0 || !score->selectionFilters().canSelect(e)
+                        || !score->selectionFilters().canSelectVoice(track)) {
                         continue;
                     }
                     if (e->isChord()) {

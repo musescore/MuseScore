@@ -3089,7 +3089,7 @@ String Chord::accessibleExtraInfo() const
     String rez;
 
     for (const Chord* c : graceNotes()) {
-        if (!score()->selectionFilter().canSelect(c)) {
+        if (!score()->selectionFilters().canSelect(c)) {
             continue;
         }
         for (const Note* n : c->notes()) {
@@ -3098,26 +3098,26 @@ String Chord::accessibleExtraInfo() const
     }
 
     for (Articulation* a : articulations()) {
-        if (!score()->selectionFilter().canSelect(a)) {
+        if (!score()->selectionFilters().canSelect(a)) {
             continue;
         }
         rez = String(u"%1 %2").arg(rez, a->screenReaderInfo());
     }
 
-    if (arpeggio() && score()->selectionFilter().canSelect(arpeggio())) {
+    if (arpeggio() && score()->selectionFilters().canSelect(arpeggio())) {
         rez = String(u"%1 %2").arg(rez, arpeggio()->screenReaderInfo());
     }
 
-    if (tremoloTwoChord() && score()->selectionFilter().canSelect(tremoloTwoChord())) {
+    if (tremoloTwoChord() && score()->selectionFilters().canSelect(tremoloTwoChord())) {
         rez = String(u"%1 %2").arg(rez, tremoloTwoChord()->screenReaderInfo());
     }
 
-    if (tremoloSingleChord() && score()->selectionFilter().canSelect(tremoloSingleChord())) {
+    if (tremoloSingleChord() && score()->selectionFilters().canSelect(tremoloSingleChord())) {
         rez = String(u"%1 %2").arg(rez, tremoloSingleChord()->screenReaderInfo());
     }
 
     for (EngravingItem* e : el()) {
-        if (!score()->selectionFilter().canSelect(e)) {
+        if (!score()->selectionFilters().canSelect(e)) {
             continue;
         }
         rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());

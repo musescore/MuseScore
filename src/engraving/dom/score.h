@@ -533,7 +533,7 @@ public:
     void reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbLast);
     void cmdDeleteSelection();
     std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
-                                        const SelectionFilter& filter);
+                                        const SelectionFilters& filters);
     void cmdFullMeasureRest();
 
     muse::Ret putNote(const PointF&, bool replace, bool insert);
@@ -628,7 +628,7 @@ public:
     EngravingItem* getSelectedElement() const { return m_selection.element(); }
     const Selection& selection() const { return m_selection; }
     Selection& selection() { return m_selection; }
-    SelectionFilter& selectionFilter() { return m_selectionFilter; }
+    SelectionFilters& selectionFilters() { return m_selectionFilters; }
     void setSelection(const Selection& s);
 
     Fraction pos();
@@ -1102,11 +1102,11 @@ private:
     void doUndoResetPartialSlur(Slur* slur);
 
     void deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
-                                             const SelectionFilter& filter);
+                                             const SelectionFilters& filters);
     void deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
-                              const SelectionFilter& filter);
+                              const SelectionFilters& filters);
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
-                                    const SelectionFilter& filter);
+                                    const SelectionFilters& filters);
 
     void update(bool resetCmdState, bool layoutAllParts = false);
 
@@ -1184,7 +1184,7 @@ private:
     std::map<String, String> m_metaTags;
 
     Selection m_selection;
-    SelectionFilter m_selectionFilter;
+    SelectionFilters m_selectionFilters;
     Audio* m_audio = nullptr;
     PlayMode m_playMode = PlayMode::SYNTHESIZER;
 

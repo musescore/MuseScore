@@ -1411,11 +1411,14 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     if (t1 < t2) {
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
-        typedef SelectionFilterType Sel;
+
+        typedef ElementsSelectionFilterTypes Sel;
+        SelectionFilters filters;
         // chord symbols can exist without chord/rest so they should not be removed
-        constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
-        deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
-        deleteSlursFromRange(t1, t2, track, track + 1, filter);
+        filters.elementsSelectionFilter() = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+
+        deleteAnnotationsFromRange(s1, s2, track, track + 1, filters);
+        deleteSlursFromRange(t1, t2, track, track + 1, filters);
     }
 
     return accumulated;
@@ -1455,11 +1458,14 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
 
         if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + newLen;
-            typedef SelectionFilterType Sel;
+
+            typedef ElementsSelectionFilterTypes Sel;
+            SelectionFilters filters;
             // chord symbols can exist without chord/rest so they should not be removed
-            constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
-            deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
-            deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
+            filters.elementsSelectionFilter() = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+
+            deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filters);
+            deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filters);
         }
 
         seg = tm->undoGetSegment(SegmentType::ChordRest, tick);
@@ -2807,7 +2813,7 @@ void Score::cmdResetNoteAndRestGroupings()
         track_idx_t sTrack = staff * VOICES;
         track_idx_t eTrack = sTrack + VOICES;
         for (track_idx_t track = sTrack; track < eTrack; track++) {
-            if (selectionFilter().canSelectVoice(track)) {
+            if (selectionFilters().canSelectVoice(track)) {
                 regroupNotesAndRests(sTick, eTick, track);
             }
         }
