@@ -190,7 +190,7 @@ Fraction Dynamic::velocityChangeLength() const
         return Fraction::fromTicks(0);
     }
 
-    double ratio = score()->tempomap()->tempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
+    double ratio = score()->tempomap()->multipliedTempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
     double speedMult;
     switch (velChangeSpeed()) {
     case DynamicSpeed::SLOW:

@@ -4382,6 +4382,11 @@ BeatsPerSecond Score::tempo(const Fraction& tick) const
     return tempomap()->tempo(tick.ticks());
 }
 
+BeatsPerSecond Score::multipliedTempo(const Fraction& tick) const
+{
+    return tempomap()->multipliedTempo(tick.ticks());
+}
+
 //---------------------------------------------------------
 //   cmdSelectAll
 //---------------------------------------------------------
