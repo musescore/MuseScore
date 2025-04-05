@@ -19,6 +19,7 @@ set(_components
     QuickControls2
     QuickTemplates2
     QuickWidgets
+    Multimedia
     Xml
     Svg
     PrintSupport
