@@ -10970,7 +10970,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Add</source>
-        <translation>&amp;Přidání</translation>
+        <translation>&amp;Přidat</translation>
     </message>
 </context>
 <context>
@@ -11880,7 +11880,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation>Když je zadána, dynamika a dynamické šipky ovlivní:</translation>
+        <translation>Zapsaná dynamika a dynamické šipky ovlivní:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
@@ -11890,7 +11890,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="62"/>
         <source>Only the voice they are applied to</source>
-        <translation>Pouze hlas, ke kterému je přiřazena </translation>
+        <translation>Pouze hlas, ke kterému jsou přiřazeny</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="181"/>

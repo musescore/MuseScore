@@ -1382,7 +1382,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="997"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation>Non riflettere la trasposizione nella tablatura dei pentagrammi collegati</translation>
+        <translation>Non riflettere la trasposizione nei righi di tablatura collegati</translation>
     </message>
 </context>
 <context>
@@ -5245,7 +5245,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="17"/>
         <source>Measure properties</source>
-        <translation>Proprietà battuta</translation>
+        <translation>proprietà della battuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="27"/>
@@ -6904,7 +6904,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="563"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="564"/>
         <source>Measure properties…</source>
-        <translation>Proprietà battuta…</translation>
+        <translation>proprietà della battuta…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
@@ -25273,7 +25273,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="180"/>
         <source>Properties for measure %1</source>
-        <translation>Proprietà per la battuta %1</translation>
+        <translation>proprietà per la battuta %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="226"/>
