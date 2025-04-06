@@ -2603,7 +2603,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, XmlReader& e)
+static void readPageFormat(PageFormat* pf, int& pageNumberOffset, XmlReader& e)
 {
     double _oddRightMargin  = 0.0;
     double _evenRightMargin = 0.0;
@@ -2653,7 +2653,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
             const PaperSize* s = getPaperSize114(e.readText());
             pf->setSize(SizeF(s->w, s->h));
         } else if (tag == "page-offset") {
-            e.readInt();
+            pageNumberOffset = e.readInt();
         } else {
             e.unknown();
         }
@@ -2835,7 +2835,11 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             e.skipCurrentElement();
         } else if (tag == "page-layout") {
             compat::PageFormat pf;
-            readPageFormat(&pf, e);
+            int pageNumberOffset = 0;
+            initPageFormat(&masterScore->style(), &pf);
+            readPageFormat(&pf, pageNumberOffset, e);
+            setPageFormat(&masterScore->style(), pf);
+            masterScore->setPageNumberOffset(pageNumberOffset);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(masterScore->dummy(), TextStyleType::DEFAULT, false);
             readText114(e, ctx, text, text);
