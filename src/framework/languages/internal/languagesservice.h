@@ -31,6 +31,9 @@
 #include "io/ifilesystem.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
+#include "progress.h"
+
+class QJsonObject;
 class QTranslator;
 
 namespace muse::languages {
@@ -69,8 +72,12 @@ private:
     Ret loadLanguage(Language& lang);
     Ret doLoadLanguage(Language& lang);
 
-    void checkUpdateAvailable(const QString& languageCode, std::function<void(const RetVal<bool>&)> finished);
-    void updateLanguage(const QString& languageCode, std::function<void(const Ret&)> finished);
+    void downloadServerLanguagesInfo(const QString& languageCode, std::function<void(const RetVal<QJsonObject>&)> finished);
+    QStringList languagesToUpdate(const QString& mainLanguageCode, const QJsonObject& serverLanguagesInfo) const;
+    void doUpdateLanguages(const QStringList& languageCodes, Progress overallProgress, std::function<void(const Ret&)> overallFinished);
+    void  doUpdateLanguage(const QString& languageCode, std::function<void(int64_t current, int64_t total,
+                                                                           const std::string&)> progressCallback,
+                           std::function<void(const Ret&)> finished);
 
     Ret unpackAndWriteLanguage(const QByteArray& zipData);
 
@@ -83,9 +90,9 @@ private:
     Language m_placeholderLanguage;
 
     std::vector<QTranslator*> m_translators;
-    QHash<QString, Progress> m_updateOperationsHash;
 
     bool m_inited = false;
+    bool m_languageUpdateInProgress = false;
     bool m_restartRequiredToApplyLanguage = false;
     async::Channel<bool> m_restartRequiredToApplyLanguageChanged;
 
