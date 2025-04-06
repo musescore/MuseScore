@@ -36,6 +36,7 @@
 #include "engraving/dom/measure.h"
 
 #include "accessibility/accessibleroot.h"
+#include <QtCore/qglobal.h>
 
 using namespace mu::notation;
 using namespace muse::async;
@@ -180,9 +181,36 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
     }
     end += "; " + muse::qtrc("engraving", "End beat: %1").arg(endBarbeat.beat);
 
-    return muse::qtrc("notation", "Range selection; %1; %2")
-           .arg(start)
-           .arg(end);
+    // QString pitchClasses = muse::qtrc("engraving", "Pitch classes:");
+
+
+    LOGD() << "TTTTTTTT before scanning ";
+
+    QString pitchClasses = muse::qtrc("engraving", "*** Pitch classes:");
+
+    auto elements = selection()->elements();
+
+    std::vector<EngravingItem*> notes;
+
+    std::copy_if(elements.begin(), elements.end(), std::back_inserter(notes), [](EngravingItem* i){return i->type() == ElementType::NOTE;});
+    std::sort(notes.begin(), notes.end(), [](EngravingItem* i, EngravingItem* j){ return ((Note*)i)->pitch() - ((Note*)j)->pitch(); });
+
+    for (EngravingItem* n : notes) {
+        LOGD() << "TTTTTTTT item is playable " << n->isPlayable();
+
+        Note* note = (Note*)n;
+        //String pitchClassName = note->tpcUserName(false);
+        String pitchClassName = note->tpcUserName(note->tpc1(), note->ppitch(), false);
+        LOGD() << "TTTTTTTT note pitch class " << pitchClassName;
+        pitchClasses += " " + muse::qtrc("engraving", pitchClassName);
+    }
+    pitchClasses += " ***";
+    LOGD() << "TTTTTTTT after scanning ";
+
+    return muse::qtrc("notation", "Range selection; %1; %2; %3")
+        .arg(pitchClasses)
+        .arg(start)
+        .arg(end);
 }
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const

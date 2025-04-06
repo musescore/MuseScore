@@ -227,6 +227,8 @@ public:
     int tpc2() const { return m_tpc[1]; }                  // transposed tpc
     String tpcUserName(bool explicitAccidental = false, bool full = false) const;
 
+    static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
+
     void setTpc(int v);
     void setTpc1(int v) { m_tpc[0] = v; }
     void setTpc2(int v) { m_tpc[1] = v; }
@@ -478,8 +480,6 @@ private:
     static std::vector<Note*> findTiedNotes(Note* startNote, bool followPartialTies = true);
 
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
-
-    static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
 
     void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
 
