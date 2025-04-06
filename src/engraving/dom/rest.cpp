@@ -455,9 +455,9 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
             EngravingItem* e = s->element(baseTrack + v);
             // try to find match in any other voice
             if (e) {
-                if (e->type() == ElementType::REST) {
+                if (e->isRest()) {
                     Rest* r = toRest(e);
-                    if (r->globalTicks() == globalTicks()) {
+                    if (r->globalTicks() == globalTicks() && r->durationType() == durationType()) {
                         matchFound = true;
                         ldata->mergedRests.push_back(r);
                         continue;
