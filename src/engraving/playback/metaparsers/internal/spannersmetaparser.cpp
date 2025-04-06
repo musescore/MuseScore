@@ -153,18 +153,10 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     articulationMeta.timestamp = spannerCtx.nominalTimestamp;
     articulationMeta.overallPitchChangesRange = overallPitchRange;
     articulationMeta.overallDynamicChangesRange = overallDynamicRange;
-    articulationMeta.overallDuration = spannerDuration(spannerCtx.score,
-                                                       spannerCtx.nominalPositionStartTick,
-                                                       overallDurationTicks);
+    articulationMeta.overallDuration = durationFromStartAndTicks(spannerCtx.score,
+                                                                 spannerCtx.nominalPositionStartTick,
+                                                                 overallDurationTicks,
+                                                                 spannerCtx.positionTickOffset);
 
     appendArticulationData(std::move(articulationMeta), result);
-}
-
-mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, const int positionTick, const int durationTicks)
-{
-    if (!score) {
-        return 0;
-    }
-
-    return durationFromStartAndTicks(score, positionTick, durationTicks, 0);
 }

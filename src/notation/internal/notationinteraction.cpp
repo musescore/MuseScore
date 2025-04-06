@@ -42,6 +42,8 @@
 #include "draw/painter.h"
 #include "draw/types/painterpath.h"
 #include "draw/types/pen.h"
+
+// TODO: Don't include from engraving/internal
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/accidental.h"
@@ -193,19 +195,21 @@ inline QString extractSyllable(const QString& text)
 {
     QString _text = text;
 
-    _text.replace(QRegularExpression("\r+"), "\n");
-    _text.replace(QRegularExpression("\n+"), "\n");
+    static const QRegularExpression lineBreaks("(\r|\n)+");
+    _text.replace(lineBreaks, "\n");
     if (_text.startsWith(u"\n")) {
         _text.remove("\n");
     }
 
-    int textPos = _text.indexOf(QRegularExpression("\\S"));
+    static const QRegularExpression nonWhitespace("\\S");
+    int textPos = _text.indexOf(nonWhitespace);
     if (textPos == -1) {
         return QString();
     }
 
+    static const QRegularExpression separators("(_| |-|\n)");
     QRegularExpressionMatch match;
-    int splitPos = _text.indexOf(QRegularExpression("(_| |-|\n)"), textPos, &match);
+    int splitPos = _text.indexOf(separators, textPos, &match);
     if (splitPos == -1) {
         splitPos = _text.size();
     } else {
@@ -2015,6 +2019,16 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
 
+    if (deleteSourceMaterial) {
+        // pasteStaff limits the layout range to just the destination region,
+        // but if the source material was deleted we must also layout the source region.
+        CmdState& cmdState = score()->cmdState();
+        cmdState.setTick(rdd.sourceTick);
+        cmdState.setTick(rdd.sourceTick + rdd.tickLength);
+        cmdState.setStaff(rdd.sourceStaffIdx);
+        cmdState.setStaff(rdd.sourceStaffIdx + rdd.numStaves);
+    }
+
     endDrop();
     apply();
 
@@ -2651,7 +2665,11 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
             if (e->isNote()) {
                 e = toNote(e)->chord();
             }
-            if (!e->isChord() && !e->isBarLine()) {
+
+            Measure* meas = e->findMeasure();
+            bool header = meas && meas->header() && e->tick() == meas->tick();
+
+            if (!e->isChord() && !e->isBarLine() && !header) {
                 continue;
             }
 
@@ -2685,13 +2703,17 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     ChordRest* firstChordRest = nullptr;
     ChordRest* secondChordRest = nullptr;
 
-    if (firstItem && secondItem && (firstItem->isBarLine() != secondItem->isBarLine())) {
+    Measure* meas = firstItem ? firstItem->findMeasure() : nullptr;
+    bool header = meas && meas->header() && firstItem->tick() == meas->tick();
+
+    if (firstItem && secondItem
+        && ((firstItem->isBarLine() != secondItem->isBarLine()) || (header && secondItem->isChordRest()))) {
         const bool outgoing = firstItem->isChordRest();
-        const BarLine* bl = outgoing ? toBarLine(secondItem) : toBarLine(firstItem);
+        const EngravingItem* otherElement = outgoing ? secondItem : firstItem;
         ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
 
         const bool hasAdjacentJump = (outgoing && cr->hasFollowingJumpItem()) || (!outgoing && cr->hasPrecedingJumpItem());
-        const bool isNextToBarline = cr->tick() + cr->actualTicks() == bl->tick();
+        const bool isNextToBarline = (outgoing ? cr->tick() + cr->actualTicks() : cr->tick()) == otherElement->tick();
 
         if (!cr || !isNextToBarline || !hasAdjacentJump) {
             return;
@@ -6616,7 +6638,7 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
                 }
             }
 
-            segment = Factory::createSegment(measure, mu::engraving::SegmentType::TimeTick, newTick - measure->tick());
+            segment = Factory::createSegment(measure, mu::engraving::SegmentType::ChordRest, newTick - measure->tick());
             if (!segment) {
                 LOGD("no prev segment");
                 return;
@@ -6732,7 +6754,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     startEdit(TranslatableString("undoableAction", "Navigate to chord symbol"));
 
     if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
-        segment = EditTimeTickAnchors::createTimeTickAnchor(measure, newTick - measure->tick(), harmony->staffIdx())->segment();
+        segment = measure->undoGetSegment(SegmentType::ChordRest, newTick);
     }
 
     engraving::track_idx_t track = harmony->track();
@@ -6869,7 +6891,7 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
     }
 
     if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
-        nextSegm = EditTimeTickAnchors::createTimeTickAnchor(measure, nextSegTick - measure->tick(), fb->staffIdx())->segment();
+        nextSegm = measure->undoGetSegment(SegmentType::ChordRest, nextSegTick);
         if (!nextSegm) {
             LOGD("figuredBassTicksTab: no next segment");
             return;

@@ -11,6 +11,8 @@
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <concertPitch>1</concertPitch>
       <minMMRestWidth>0</minMMRestWidth>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
       <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
       <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>

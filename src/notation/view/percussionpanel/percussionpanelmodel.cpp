@@ -22,9 +22,11 @@
 
 #include "percussionpanelmodel.h"
 
+#include <QCoreApplication>
+#include <QKeyEvent>
+
 #include "notation/utilities/percussionutilities.h"
 
-#include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 
 #include "engraving/dom/factory.h"
@@ -322,12 +324,10 @@ void PercussionPanelModel::setUpConnections()
         });
     }
 
-    if (configuration()) {
-        configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
-            const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
-            emit useNotationPreviewChanged(useNotationPreview);
-        });
-    }
+    configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
+        const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
+        emit useNotationPreviewChanged(useNotationPreview);
+    });
 }
 
 void PercussionPanelModel::setDrumset(engraving::Drumset* drumset)

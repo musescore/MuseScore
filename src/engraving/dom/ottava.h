@@ -95,9 +95,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    int subtype() const override;
-    TranslatableString subtypeUserName() const override;
-
     bool canBeExcludedFromOtherParts() const override { return true; }
 
 private:

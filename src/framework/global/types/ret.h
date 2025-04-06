@@ -101,7 +101,10 @@ public:
         ProjectLast   = 3999,
 
         DiagnosticsFirst = 4000,
-        DiagnosticsLast = 4999
+        DiagnosticsLast = 4999,
+
+        MuseSoundsFirst = 5000,
+        MuseSoundsLast = 5999
     };
 
     Ret() = default;

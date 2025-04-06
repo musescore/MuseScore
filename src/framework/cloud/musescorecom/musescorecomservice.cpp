@@ -140,8 +140,13 @@ Ret MuseScoreComService::downloadAccountInfo()
         return ret;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject user = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject user = doc.object();
 
     AccountInfo info;
     info.id = QString::number(user.value("id").toInt());
@@ -183,8 +188,14 @@ bool MuseScoreComService::doUpdateTokens()
         return false;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject tokens = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        LOGE() << "Error parsing JSON: " << err.errorString();
+        return false;
+    }
+
+    QJsonObject tokens = doc.object();
 
     setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
     setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
@@ -222,8 +233,14 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
         return result;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject scoreInfo = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data());
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        result.ret = muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+        return result;
+    }
+
+    QJsonObject scoreInfo = doc.object();
 
     result.val.id = scoreInfo.value("id").toInt();
     result.val.revisionId = scoreInfo.value("revision_id").toInt();
@@ -266,8 +283,13 @@ async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPer
 
         ScoresList result;
 
-        QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-        QJsonObject obj = document.object();
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(receivedData.data());
+        if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+            return reject(static_cast<int>(Ret::Code::InternalError), err.errorString().toStdString());
+        }
+
+        QJsonObject obj = doc.object();
 
         QJsonObject metaObj = obj.value("_meta").toObject();
         result.meta.totalScoresCount = metaObj.value("totalCount").toInt();
@@ -502,7 +524,15 @@ RetVal<ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr uploadManag
         return result;
     }
 
-    QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        LOGE() << err.errorString();
+        result.ret = muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+        return result;
+    }
+
+    QJsonObject scoreInfo = doc.object();
     QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
     QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
     int newRevisionId = scoreInfo.value("revision_id").toInt();

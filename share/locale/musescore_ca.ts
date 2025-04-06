@@ -16576,7 +16576,7 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1620"/>
         <source>Overdrive</source>
-        <translation>Distorsió</translation>
+        <translation>Overdrive</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1621"/>
@@ -26342,7 +26342,7 @@ A més a més, Mastering MuseScore compta amb una comunitat de músics solidàri
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1581"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>overdrive</source>
-        <translation>distorsió</translation>
+        <translation>overdrive</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1582"/>

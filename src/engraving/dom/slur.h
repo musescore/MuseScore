@@ -46,7 +46,6 @@ public:
     SlurSegment(const SlurSegment& ss);
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
-    int subtype() const override { return static_cast<int>(spanner()->type()); }
 
     bool isEdited() const;
     bool isEndPointsEdited() const;

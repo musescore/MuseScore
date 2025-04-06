@@ -47,7 +47,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation>Læs skipan við X taktum per skipan</translation>
+        <translation>Læs uppstilling við X taktum per skipan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -1056,7 +1056,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="267"/>
         <source>Invisible staff lines</source>
-        <translation>Ósjónligar nótalinjur</translation>
+        <translation>Ósjónligar nótastrikur</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="213"/>
@@ -2344,7 +2344,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1710"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation>Nullstilla &apos;stytsta nótalinju fjarstøðu&apos;</translation>
+        <translation>Nullstilla &apos;Stytsta nótalinju fjarstøðu&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1720"/>
@@ -2747,7 +2747,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4026"/>
         <source>Multiple accidentals in chords</source>
-        <translation>Fleiri fortekin í akkordum</translation>
+        <translation>Fleiri fortekn í akkordum</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4236"/>
@@ -2945,7 +2945,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
         <source>Use double barlines before time signatures</source>
-        <translation>Brúka dupultar taktstrikur áðrenn takttekin</translation>
+        <translation>Brúka dupultar taktstrikur áðrenn takttekn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5362"/>
@@ -2955,7 +2955,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5616"/>
         <source>Accidental to accidental distance:</source>
-        <translation>Fjarstøða millum fortekin:</translation>
+        <translation>Fjarstøða millum fortekn:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5696"/>
@@ -3427,7 +3427,7 @@ fyrsta nóta í skipanini</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5826"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5829"/>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Vídd</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5874"/>
@@ -3768,17 +3768,17 @@ fyrsta nóta í skipanini</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5940"/>
         <source>Fixed, based on time signature of:</source>
-        <translation>Bundið, grunda á takttekin við:</translation>
+        <translation>Bundin, grunda á takttekn við:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5845"/>
         <source>Proportional to time signature</source>
-        <translation>Lutfallsliga til takttekin</translation>
+        <translation>Lutfallsliga til takttekn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5926"/>
         <source>Cap width after:</source>
-        <translation type="unfinished"/>
+        <translation>Cap vídd aftaná</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5957"/>
@@ -3810,7 +3810,7 @@ fyrsta nóta í skipanini</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6213"/>
         <source>Horizontal stroke thickness:</source>
-        <translation>Vatnrøtt strol vídd:</translation>
+        <translation>Vatnrøtt strok vídd:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6284"/>
@@ -3938,7 +3938,7 @@ fyrsta nóta í skipanini</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7972"/>
         <source>Minimum tie length:</source>
-        <translation>stytsta bindiboga longd:</translation>
+        <translation>Stytsta bindiboga longd:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7727"/>
@@ -3972,7 +3972,7 @@ fyrsta nóta í skipanini</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8168"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
-        <translation>Nullstilla &quot;stytsta bindiboga longd&quot;</translation>
+        <translation>Nullstilla &quot;Stytsta bindiboga longd&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8638"/>
@@ -4438,7 +4438,7 @@ tekstur x-hædd):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12479"/>
         <source>Reset &apos;Min. line length&apos; value</source>
-        <translation>Nullstilla &quot;stytsta linjulongd&quot; virði</translation>
+        <translation>Nullstilla &quot;Stytsta linjulongd&quot; virði</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12508"/>
@@ -4512,7 +4512,7 @@ tekstur x-hædd):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
-        <translation type="unfinished"/>
+        <translation>Trillu ábendingarnóti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
@@ -4714,7 +4714,7 @@ tekstur x-hædd):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11416"/>
         <source>Tempo text</source>
-        <translation>Tempo tekin</translation>
+        <translation>Tempo tekn</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
@@ -4955,7 +4955,7 @@ tekstur x-hædd):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13379"/>
         <source>Standard</source>
         <comment>chord symbol spelling</comment>
-        <translation>Vanligt</translation>
+        <translation>Vanligur</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13454"/>
@@ -11420,7 +11420,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="37"/>
         <source>Note colors</source>
-        <translation type="unfinished"/>
+        <translation>Nóta litir</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="43"/>
@@ -14162,7 +14162,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="134"/>
         <source>Score grey color</source>
-        <translation type="unfinished"/>
+        <translation>Nótablað gráur litur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="138"/>
@@ -14172,7 +14172,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="145"/>
         <source>Invisible color</source>
-        <translation type="unfinished"/>
+        <translation>Ósjónligur litur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="152"/>
@@ -17277,12 +17277,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3533"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation>Tulka umaftur enharmonisk fortekin næstan eins</translation>
+        <translation>Tulka umaftur enharmonisk fortekn næstan eins og</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3534"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation>Tulka umaftur enharmonisk eins fortekin</translation>
+        <translation>Tulka umaftur enharmonisk eins fortekn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3535"/>
@@ -20352,7 +20352,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
         <source>Small accidental</source>
-        <translation>Líti leyst fortekin</translation>
+        <translation>Líti leyst fortekn</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="83"/>
@@ -20666,7 +20666,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Vídd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="86"/>
@@ -22338,7 +22338,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="181"/>
         <source>Accidental visibility</source>
-        <translation>Leys fortekin sýni</translation>
+        <translation>Leys fortekn sýni</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="189"/>
@@ -22348,7 +22348,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="190"/>
         <source>Always display an accidental</source>
-        <translation>Vís altíð leyst fortekin</translation>
+        <translation>Vís altíð leyst fortekn</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
@@ -23176,7 +23176,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="71"/>
         <source>Show text:</source>
-        <translation type="unfinished"/>
+        <translation>Vís tekst:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="83"/>
@@ -24582,32 +24582,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
         <source>Always before dots</source>
-        <translation type="unfinished"/>
+        <translation>Altíð áðrenn prikkar</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="117"/>
         <source>Always after dots</source>
-        <translation type="unfinished"/>
+        <translation>Altíð aftaná prikkar</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
         <source>Keep accidentals close to offset notes</source>
-        <translation>Halt fortekin tætt at offsett nótum</translation>
+        <translation>Halt fortekn tætt at offsett nótum</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
         <source>Pair accidentals on seconds</source>
-        <translation type="unfinished"/>
+        <translation>para fortekn á sekundum</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation type="unfinished"/>
+        <translation>Stilla fortekn í okavfjarstøðu á undirakkordir</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
-        <translation>Stilla fortekin á offsett oktavir</translation>
+        <translation>Stilla fortekn á offsett oktavir</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
@@ -24656,7 +24656,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/breaksdialog.cpp" line="43"/>
         <source>Lock layout with %1 measure(s) per system</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Læs uppstilling við %1 takt(um) pr skipan</translation>
     </message>
 </context>
 <context>
@@ -25148,7 +25148,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="398"/>
         <source>Show courtesy time signatures</source>
-        <translation>Vís hjálpi takttekin</translation>
+        <translation>Vís hjálpi takttekn</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="417"/>
@@ -25780,7 +25780,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="99"/>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Vídd</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="114"/>
@@ -28462,7 +28462,7 @@ misseydnaðist</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="84"/>
         <source>Profiles</source>
-        <translation>Umhvørv</translation>
+        <translation>Umhvørvi</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="104"/>

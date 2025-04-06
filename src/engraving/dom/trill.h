@@ -50,9 +50,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    int subtype() const override;
-    TranslatableString subtypeUserName() const override;
-
     void remove(EngravingItem*) override;
 
     const SymIdList& symbols() const { return m_symbols; }

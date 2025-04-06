@@ -737,7 +737,9 @@ void AccidentalsLayout::applyOrderingOffsets(std::vector<Accidental*>& accidenta
 
     // Sort vector
     std::sort(accidentals.begin(), accidentals.end(), [](const Accidental* acc1, const Accidental* acc2) {
-        return acc1->stackingOrder() < acc2->stackingOrder();
+        int stackingOrder1 = acc1->stackingOrder();
+        int stackingOrder2 = acc2->stackingOrder();
+        return stackingOrder1 == stackingOrder2 ? acc1->stackingOrderOffset() < acc2->stackingOrderOffset() : stackingOrder1 < stackingOrder2;
     });
 }
 

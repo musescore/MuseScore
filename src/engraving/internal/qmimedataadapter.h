@@ -19,10 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_QMIMEDATAADAPTER_H
-#define MU_ENGRAVING_QMIMEDATAADAPTER_H
+#pragma once
 
-#include "infrastructure/imimedata.h"
+#include "engraving/infrastructure/imimedata.h"
 
 class QMimeData;
 
@@ -44,5 +43,3 @@ private:
     const QMimeData* m_data = nullptr;
 };
 }
-
-#endif // MU_ENGRAVING_QMIMEDATAADAPTER_H

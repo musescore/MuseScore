@@ -33,7 +33,6 @@
 #include "dom/factory.h"
 #include "dom/figuredbass.h"
 #include "dom/fret.h"
-#include "dom/hairpin.h"
 #include "dom/harmony.h"
 #include "dom/lyrics.h"
 #include "dom/masterscore.h"
@@ -44,11 +43,12 @@
 #include "dom/score.h"
 #include "dom/spanner.h"
 #include "dom/staff.h"
-#include "dom/sticking.h"
 #include "dom/text.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
+
+#include "engravingerrors.h"
 
 #include "../compat/tremolocompat.h"
 #include "staffread.h"
@@ -749,6 +749,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
 
         if (score->cmdState().layoutRange()) {
+            score->cmdState().reset();
             score->setLayout(dstTick, dstTick + tickLen, dstStaff, endStaff, dst);
         }
 

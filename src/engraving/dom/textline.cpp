@@ -66,7 +66,13 @@ static const ElementStyle textLineStyle {
     { Sid::textLineTextAlign,                  Pid::BEGIN_TEXT_ALIGN },
     { Sid::textLineTextAlign,                  Pid::CONTINUE_TEXT_ALIGN },
     { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN },
+    { Sid::textLineHookHeight,                 Pid::BEGIN_HOOK_HEIGHT },
+    { Sid::textLineHookHeight,                 Pid::END_HOOK_HEIGHT },
+    { Sid::textLineLineWidth,                  Pid::LINE_WIDTH },
+    { Sid::textLineDashLineLen,                Pid::DASH_LINE_LEN },
+    { Sid::textLineDashGapLen,                 Pid::DASH_GAP_LEN },
     { Sid::textLinePlacement,                  Pid::PLACEMENT },
+    { Sid::textLineLineStyle,                  Pid::LINE_STYLE },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
     { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
@@ -89,7 +95,13 @@ static const ElementStyle systemTextLineStyle {
     { Sid::systemTextLineTextAlign,            Pid::BEGIN_TEXT_ALIGN },
     { Sid::systemTextLineTextAlign,            Pid::CONTINUE_TEXT_ALIGN },
     { Sid::systemTextLineTextAlign,            Pid::END_TEXT_ALIGN },
+    { Sid::systemTextLineHookHeight,           Pid::BEGIN_HOOK_HEIGHT },
+    { Sid::systemTextLineHookHeight,           Pid::END_HOOK_HEIGHT },
+    { Sid::systemTextLineLineWidth,            Pid::LINE_WIDTH },
+    { Sid::systemTextLineDashLineLen,          Pid::DASH_LINE_LEN },
+    { Sid::systemTextLineDashGapLen,           Pid::DASH_GAP_LEN },
     { Sid::systemTextLinePlacement,            Pid::PLACEMENT },
+    { Sid::systemTextLineLineStyle,            Pid::LINE_STYLE },
     { Sid::systemTextLinePosAbove,             Pid::OFFSET },
 };
 
@@ -101,11 +113,7 @@ TextLineSegment::TextLineSegment(Spanner* sp, System* parent, bool system)
     : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setSystemFlag(system);
-    if (systemFlag()) {
-        initElementStyle(&systemTextLineSegmentStyle);
-    } else {
-        initElementStyle(&textLineSegmentStyle);
-    }
+    initStyle();
 }
 
 //---------------------------------------------------------
@@ -168,6 +176,15 @@ void TextLine::initStyle()
     }
 }
 
+void TextLineSegment::initStyle()
+{
+    if (systemFlag()) {
+        initElementStyle(&systemTextLineSegmentStyle);
+    } else {
+        initElementStyle(&textLineSegmentStyle);
+    }
+}
+
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -180,12 +197,7 @@ LineSegment* TextLine::createLineSegment(System* parent)
     if (anchor() == Spanner::Anchor::NOTE) {
         seg->setFlag(ElementFlag::ON_STAFF, false);
     }
-
-    if (systemFlag()) {
-        seg->initElementStyle(&systemTextLineSegmentStyle);
-    } else {
-        seg->initElementStyle(&textLineSegmentStyle);
-    }
+    seg->initStyle();
 
     return seg;
 }
@@ -196,11 +208,7 @@ LineSegment* TextLine::createLineSegment(System* parent)
 
 Sid TextLineSegment::getTextLinePos(bool above) const
 {
-    if (systemFlag()) {
-        return above ? Sid::systemTextLinePosAbove : Sid::systemTextLinePosBelow;
-    } else {
-        return above ? Sid::textLinePosAbove : Sid::textLinePosBelow;
-    }
+    return textLine()->getTextLinePos(above);
 }
 
 Sid TextLine::getTextLinePos(bool above) const
@@ -247,12 +255,6 @@ Sid TextLine::getPropertyStyle(Pid pid) const
 PropertyValue TextLine::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::PLACEMENT:
-        if (systemFlag()) {
-            return style().styleV(Sid::systemTextLinePlacement);
-        } else {
-            return style().styleV(Sid::textLinePlacement);
-        }
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
@@ -270,9 +272,6 @@ PropertyValue TextLine::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
-    case Pid::BEGIN_HOOK_HEIGHT:
-    case Pid::END_HOOK_HEIGHT:
-        return Spatium(1.5);
     default:
         return TextLineBase::propertyDefault(propertyId);
     }

@@ -551,6 +551,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         set(Sid::showCourtesiesOtherJumps, false);
         set(Sid::showCourtesiesAfterCancellingRepeats, false);
         set(Sid::showCourtesiesAfterCancellingOtherJumps, false);
+        set(Sid::changesBeforeBarlineRepeats, false);
+        set(Sid::changesBeforeBarlineOtherJumps, false);
     }
 
     if (m_version < 420 && !MScore::testMode) {

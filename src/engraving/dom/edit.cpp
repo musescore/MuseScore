@@ -82,13 +82,13 @@
 #include "system.h"
 #include "systemtext.h"
 #include "tempotext.h"
+#include "text.h"
 #include "textline.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
-
-#include "tremolotwochord.h"
 #include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "trill.h"
 #include "tuplet.h"
 #include "tupletmap.h"
@@ -1521,6 +1521,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                     nsig->setScore(score);
                     nsig->setTrack(si * VOICES);
                     nsig->setParent(seg);
+                    nsig->styleChanged();
                     undoAddElement(nsig);
                     if (score->excerpt()) {
                         const track_idx_t masterTrack = muse::key(score->excerpt()->tracksMapping(), nsig->track());
@@ -6812,30 +6813,18 @@ void Score::removeSystemLocksOnRemoveMeasures(const MeasureBase* m1, const Measu
     }
 }
 
-void Score::updateSystemLocksOnDisableMMRests()
+void Score::removeSystemLocksContainingMMRests()
 {
-    // NOTE: this can be done before layout for the full score
-    // because we already know where the mmRests are.
-
-    assert(!style().styleB(Sid::createMultiMeasureRests));
-
     std::vector<const SystemLock*> allLocks = m_systemLocks.allLocks();
     for (const SystemLock* lock : allLocks) {
-        MeasureBase* startMB = lock->startMB();
-        MeasureBase* endMB = lock->endMB();
-        bool startIsMMRest = startMB->isMeasure() && toMeasure(startMB)->isMMRest();
-        bool endIsMMRest = endMB->isMeasure() && toMeasure(endMB)->isMMRest();
-        if (startIsMMRest || endIsMMRest) {
-            undoRemoveSystemLock(lock);
-            MeasureBase* newStartMeas = startMB;
-            MeasureBase* newEndMeas = endMB;
-            if (startIsMMRest) {
-                newStartMeas = toMeasure(startMB)->mmRestFirst();
+        for (MeasureBase* mb = lock->startMB(); mb; mb = mb->next()) {
+            if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
+                undoRemoveSystemLock(lock);
+                break;
             }
-            if (endIsMMRest) {
-                newEndMeas = toMeasure(endMB)->mmRestLast();
+            if (mb->isAfter(lock->endMB())) {
+                break;
             }
-            undoAddSystemLock(new SystemLock(newStartMeas, newEndMeas));
         }
     }
 }
@@ -7073,6 +7062,10 @@ void Score::undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElem
             newEndElement = endElement;
         }
         sp->score()->undo(new ChangeSpannerElements(sp, newStartElement, newEndElement));
+
+        if (sp->isTie()) {
+            toTie(sp)->updatePossibleJumpPoints();
+        }
     }
 }
 
@@ -7404,6 +7397,9 @@ void Score::undoChangeMeasureRepeatCount(Measure* m, int newCount, staff_idx_t s
 void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
 {
     std::vector<Tie*> oldTies;
+    if (!tie->tieJumpPoints()) {
+        return;
+    }
     for (TieJumpPoint* jumpPoint : *tie->tieJumpPoints()) {
         if (jumpPoint->followingNote()) {
             continue;
@@ -7423,6 +7419,9 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
         auto findEndTie = [&oldTie](const TieJumpPoint* jumpPoint) {
             return jumpPoint->endTie() == oldTie;
         };
+        if (!oldTie) {
+            continue;
+        }
 
         if (std::find_if((*tie->tieJumpPoints()).begin(), (*tie->tieJumpPoints()).end(),
                          findEndTie) != (*tie->tieJumpPoints()).end()) {

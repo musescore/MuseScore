@@ -30,7 +30,7 @@
 #include "translation.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
-#include "types/symnames.h"
+#include "engraving/types/symnames.h"
 
 using namespace muse;
 using namespace mu::engraving;

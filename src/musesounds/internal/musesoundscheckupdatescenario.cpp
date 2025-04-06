@@ -29,7 +29,7 @@
 #include "global/types/val.h"
 #include "global/types/translatablestring.h"
 
-#include "update/updateerrors.h"
+#include "musesoundserrors.h"
 
 #include "log.h"
 

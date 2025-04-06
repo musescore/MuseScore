@@ -389,6 +389,8 @@ private:
     static void layoutDynamicToEndOfPrevious(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx);
+
+    static void checkRehearsalMarkVSBigTimeSig(const RehearsalMark* item, RehearsalMark::LayoutData* ldata);
 };
 }
 

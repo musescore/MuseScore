@@ -346,7 +346,7 @@ void OrnamentsRenderer::applyTiedNotesDuration(const Note* note, const Articulat
     }
 
     ctx.nominalPositionEndTick = lastTiedNote->chord()->endTick().ticks();
-    ctx.nominalDuration = timestampFromTicks(ctx.score, ctx.nominalPositionEndTick) - ctx.nominalTimestamp;
+    ctx.nominalDuration = timestampFromTicks(ctx.score, ctx.nominalPositionEndTick + ctx.positionTickOffset) - ctx.nominalTimestamp;
     ctx.nominalDurationTicks = ctx.nominalPositionEndTick - ctx.nominalPositionStartTick;
 
     mpe::ArticulationMeta& meta = ctx.commonArticulations.at(ornamentType).meta;

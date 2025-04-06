@@ -29,7 +29,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "update/updateerrors.h"
+#include "musesoundserrors.h"
 
 #include "log.h"
 

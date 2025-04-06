@@ -188,7 +188,7 @@ jobs:
         exit 1
     - name: Comment push commit
       if: github.event_name == 'push' && contains( env.VTEST_DIFF_FOUND, 'true')
-      uses: peter-evans/commit-comment@v1.1.0
+      uses: peter-evans/commit-comment@v3.0.0
       with:
         body: |
           This is an automatic message. This commit appears to change some of the visual tests.

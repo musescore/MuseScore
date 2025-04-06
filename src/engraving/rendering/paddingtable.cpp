@@ -190,6 +190,9 @@ void PaddingTable::createTable(const MStyle& style)
     // Harmony
     table[ElementType::BAR_LINE][ElementType::HARMONY] = 0.5 * style.styleMM(Sid::minHarmonyDistance);
     table[ElementType::HARMONY][ElementType::HARMONY] = style.styleMM(Sid::minHarmonyDistance);
+    table[ElementType::HARMONY][ElementType::FRET_DIAGRAM] = 0.3 * spatium;
+    table[ElementType::FRET_DIAGRAM][ElementType::HARMONY] = 0.3 * spatium;
+    table[ElementType::FRET_DIAGRAM][ElementType::FRET_DIAGRAM] = 0.25 * spatium;
 
     // Chordlines
     table[ElementType::CHORDLINE].fill(0.35 * spatium);

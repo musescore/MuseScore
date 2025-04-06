@@ -6600,7 +6600,7 @@
         <source>Soprano cornet in E♭.</source>
         <comment>eb-cornet description</comment>
         <extracomment>description for Cornet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprankornett in E♭.</translation>
+        <translation>Soprankornett i E♭.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2315"/>

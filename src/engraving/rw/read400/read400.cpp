@@ -47,6 +47,8 @@
 #include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
 
+#include "engravingerrors.h"
+
 #include "staffrw.h"
 #include "tread.h"
 
@@ -711,6 +713,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
 
         if (score->cmdState().layoutRange()) {
+            score->cmdState().reset();
             score->setLayout(dstTick, dstTick + tickLen, dstStaff, endStaff, dst);
         }
 

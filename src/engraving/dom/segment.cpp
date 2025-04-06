@@ -2586,13 +2586,16 @@ void Segment::createShape(staff_idx_t staffIdx)
             continue;
         }
 
-        if (e->isHarmony()) {
-            // use same spacing calculation as for chordrest
-            renderer()->layoutItem(toHarmony(e));
-
-            double x1 = e->ldata()->bbox().x() + e->pos().x();
-            double x2 = e->ldata()->bbox().x() + e->ldata()->bbox().width() + e->pos().x();
-            s.addHorizontalSpacing(e, x1, x2);
+        if (e->isHarmony() || e->isFretDiagram()) {
+            // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
+            RectF bbox = e->ldata()->bbox().translated(e->pos());
+            s.addHorizontalSpacing(e, bbox.left(), bbox.right());
+            if (e->isFretDiagram()) {
+                if (Harmony* harmony = toFretDiagram(e)->harmony()) {
+                    RectF harmBbox = harmony->ldata()->bbox().translated(harmony->pos() + e->pos());
+                    s.addHorizontalSpacing(harmony, harmBbox.left(), harmBbox.right());
+                }
+            }
         } else if (!e->isRehearsalMark()
                    && !e->isFretDiagram()
                    && !e->isHarmony()

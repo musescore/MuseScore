@@ -165,16 +165,6 @@ muse::TranslatableString Vibrato::subtypeUserName() const
     return TConv::userName(vibratoType());
 }
 
-muse::TranslatableString VibratoSegment::subtypeUserName() const
-{
-    return vibrato()->subtypeUserName();
-}
-
-int VibratoSegment::subtype() const
-{
-    return vibrato()->subtype();
-}
-
 //---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------

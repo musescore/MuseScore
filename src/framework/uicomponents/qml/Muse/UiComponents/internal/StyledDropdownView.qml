@@ -45,6 +45,8 @@ DropdownView {
     property alias closeOnEscape: content.closeOnEscape
     property alias navigationSection: content.navigationSection
 
+    property color itemColor: ui.theme.buttonColor
+
     required property int currentIndex
     required property string textRole
     required property string valueRole
@@ -219,7 +221,7 @@ DropdownView {
                 height: root.itemHeight
                 width: root.contentWidth
 
-                normalColor: ui.theme.buttonColor
+                normalColor: root.itemColor
                 radius: 0
 
                 isSelected: model.index === root.currentIndex

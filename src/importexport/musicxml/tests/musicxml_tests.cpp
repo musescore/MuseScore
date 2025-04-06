@@ -1098,7 +1098,7 @@ TEST_F(MusicXml_Tests, stringVoiceName) {
     musicXmlIoTestRef("testStringVoiceName");
 }
 TEST_F(MusicXml_Tests, swing) {
-    musicXmlMscxExportTestRef("testSwing");
+    musicXmlIoTest("testSwing");
 }
 TEST_F(MusicXml_Tests, systemBrackets1) {
     musicXmlIoTest("testSystemBrackets1");

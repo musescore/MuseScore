@@ -3,7 +3,8 @@
 #include <set>
 
 #include "global/log.h"
-#include "types/constants.h"
+
+#include "engraving/types/constants.h"
 
 using namespace muse;
 

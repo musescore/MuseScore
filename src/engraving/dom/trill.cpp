@@ -431,16 +431,6 @@ muse::TranslatableString Trill::subtypeUserName() const
     return TConv::userName(trillType());
 }
 
-muse::TranslatableString TrillSegment::subtypeUserName() const
-{
-    return trill()->subtypeUserName();
-}
-
-int TrillSegment::subtype() const
-{
-    return trill()->subtype();
-}
-
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------

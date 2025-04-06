@@ -39,7 +39,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
 
     auto onFilterChanged = [this](FilterValue* changedFilterValue) {
         if (changedFilterValue->async()) {
-            QTimer::singleShot(0, [this](){
+            QTimer::singleShot(0, this, [this](){
                 fillRoleIds();
             });
         } else {
@@ -267,9 +267,9 @@ SorterValue* SortFilterProxyModel::currentSorterValue() const
 int SortFilterProxyModel::roleKey(const QString& roleName) const
 {
     QHash<int, QByteArray> roles = sourceModel()->roleNames();
-    for (const QByteArray& roleNameByte: roles.values()) {
-        if (roleName == QString(roleNameByte)) {
-            return roles.key(roleNameByte);
+    for (auto it = roles.begin(); it != roles.end(); ++it) {
+        if (roleName == QString(it.value())) {
+            return it.key();
         }
     }
 

@@ -33,7 +33,6 @@ class Rest;
 class Shape;
 class StemSlash;
 class Segment;
-struct Spring;
 class Measure;
 class System;
 enum class ElementType : unsigned char;
@@ -80,6 +79,16 @@ private:
         double xPosInSystemCoords;
         SegmentPosition(Segment* s, double x)
             : segment(s), xPosInSystemCoords(x) {}
+    };
+
+    struct Spring
+    {
+        double springConst = 0.0;
+        double width = 0.0;
+        double preTension = 0.0;
+        Segment* segment = nullptr;
+        Spring(double sc, double w, double pt, Segment* s)
+            : springConst(sc), width(w), preTension(pt),  segment(s) {}
     };
 
     struct CrossBeamSpacing

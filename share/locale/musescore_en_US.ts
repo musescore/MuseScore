@@ -6598,12 +6598,12 @@ text x-height):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation>&amp;Clear recent files</translation>
+        <translation>&amp;Clear list of recent files</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear recent files</source>
-        <translation>Clear recent files</translation>
+        <translation>Clear list of recent files</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>
@@ -10910,7 +10910,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="80"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</translation>
+        <translation>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>

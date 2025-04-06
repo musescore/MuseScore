@@ -159,17 +159,17 @@ void PageSettings::updateValues()
 
     blockSignals(true);
 
-    const char* suffix;
+    QString suffix;
     double singleStepSize;
     double singleStepScale;
     if (mm) {
-        suffix = "mm";
+        suffix = muse::qtrc("global", "mm");
         singleStepSize = 1.0;
-        singleStepScale = 0.2;
+        singleStepScale = 0.05;
     } else {
-        suffix = "in";
+        suffix = muse::qtrc("global", "in", /*disambiguation*/ "abbreviation of inch");
         singleStepSize = 0.05;
-        singleStepScale = 0.005;
+        singleStepScale = 0.002;
     }
     for (auto w : { oddPageTopMargin, oddPageBottomMargin, oddPageLeftMargin, oddPageRightMargin, evenPageTopMargin,
                     evenPageBottomMargin, evenPageLeftMargin, evenPageRightMargin, spatiumEntry, pageWidth, pageHeight }) {

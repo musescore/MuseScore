@@ -42,7 +42,7 @@ PreferencesPage {
     Column {
         id: contentColumn
 
-        width: root.width
+        width: parent.width
         spacing: root.sectionsSpacing
 
         BaseSection {

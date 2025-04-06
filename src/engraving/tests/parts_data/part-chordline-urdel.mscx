@@ -5,6 +5,8 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
       <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
       <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
@@ -775,6 +777,8 @@
       <Style>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
         <showCourtesiesRepeats>0</showCourtesiesRepeats>
         <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
         <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
@@ -1215,6 +1219,8 @@
       <Style>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
         <showCourtesiesRepeats>0</showCourtesiesRepeats>
         <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
         <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>

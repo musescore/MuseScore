@@ -82,7 +82,7 @@ QString Palette::translatedName() const
 
 void Palette::retranslate()
 {
-    for (PaletteCellPtr cell : m_cells) {
+    for (const PaletteCellPtr& cell : m_cells) {
         cell->retranslate();
     }
 }
@@ -377,7 +377,7 @@ void Palette::write(XmlWriter& xml, bool pasteMode) const
         xml.tag("expanded", m_isExpanded, false);
     }
 
-    for (PaletteCellPtr cell : m_cells) {
+    for (const PaletteCellPtr& cell : m_cells) {
         if (!cell) { // from old palette, not sure if it is still needed
             xml.tag("Cell");
             continue;
@@ -554,7 +554,7 @@ Palette::Type Palette::guessType() const
     }
 
     const EngravingItem* e = nullptr;
-    for (PaletteCellPtr cell : m_cells) {
+    for (const PaletteCellPtr& cell : m_cells) {
         if (cell->element) {
             e = cell->element.get();
             break;

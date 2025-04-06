@@ -827,14 +827,4 @@ muse::TranslatableString Hairpin::subtypeUserName() const
         return TranslatableString("engraving/hairpintype", "Custom");
     }
 }
-
-muse::TranslatableString HairpinSegment::subtypeUserName() const
-{
-    return hairpin()->subtypeUserName();
-}
-
-int HairpinSegment::subtype() const
-{
-    return hairpin()->subtype();
-}
 }

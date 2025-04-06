@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(vst_sdk_3)
+declare_thirdparty_module(vst_sdk_3)
 
 if(MUSE_MODULE_VST_VST3_SDK_PATH)
     set(VST3_SDK_PATH ${MUSE_MODULE_VST_VST3_SDK_PATH})
@@ -57,8 +57,6 @@ else()
 endif()
 
 set(MODULE_USE_UNITY OFF)
-set(MODULE_USE_PCH OFF)
-set(MODULE_USE_COVERAGE OFF)
 
 if (OS_IS_WIN)
     set(PLATFORM_SRC

@@ -28,7 +28,7 @@
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
-#include "iengravingfont.h"
+#include "engraving/iengravingfont.h"
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/arpeggio.h"
@@ -1391,6 +1391,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         { u"vertical-turn",          SymId::ornamentTurnUp },
         { u"inverted-vertical-turn", SymId::ornamentTurnUpS },
         { u"turn",                   SymId::ornamentTurn },
+        { u"shake",                  SymId::ornamentTremblementCouperin },
         { u"schleifer",              SymId::ornamentPrecompSlide },
         { u"haydn",                  SymId::ornamentHaydn },
         // articulations
@@ -3547,6 +3548,13 @@ void MusicXmlParserDirection::direction(const String& partId,
 
             t->setVisible(m_visible);
 
+            if (m_swing.second != 0) {
+                toStaffTextBase(t)->setSwing(true);
+                toStaffTextBase(t)->setSwingParameters(m_swing.first,
+                                                       m_swing.first ? m_swing.second : toStaffTextBase(t)->style().styleI(Sid::swingRatio));
+                m_swing.second = 0;
+            }
+
             String wordsPlacement = m_placement;
             // Case-based defaults
             if (wordsPlacement.empty()) {
@@ -3797,7 +3805,7 @@ bool MusicXmlParserDirection::isLikelyTempoText(const track_idx_t track) const
 {
     if (!configuration()->inferTextType() || m_wordsText.contains(u"<i>") || m_wordsText.contains(u"“")
         || m_wordsText.contains(u"”") || placement() == u"below"
-        || track2staff(track) != 0 || m_wordsText.empty()) {
+        || track2staff(track) || m_wordsText.empty() || m_swing.second) {
         return false;
     }
 
@@ -3999,6 +4007,8 @@ void MusicXmlParserDirection::sound()
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "play") {
             play();
+        } else if (m_e.name() == "swing") {
+            swing();
         } else {
             skipLogCurrElem();
         }
@@ -4026,6 +4036,45 @@ void MusicXmlParserDirection::play()
             skipLogCurrElem();
         }
     }
+}
+
+//---------------------------------------------------------
+//   swing
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/direction/sound/swing node.
+ */
+
+void MusicXmlParserDirection::swing()
+{
+    int swingNumerator = 1;
+    int swingDenominator = 1;
+    int swingUnit = 0;
+    while (m_e.readNextStartElement()) {
+        if (m_e.name() == "straight") {
+            // unused
+            m_e.skipCurrentElement();
+        } else if (m_e.name() == "first") {
+            swingDenominator = m_e.readText().toInt();
+        } else if (m_e.name() == "second") {
+            swingNumerator = m_e.readText().toInt();
+        } else if (m_e.name() == "swing-type") {
+            const String swingType = m_e.readText();
+            if (swingType == u"eighth") {
+                swingUnit = Constants::DIVISION / 2;
+            } else if (swingType == u"16th") {
+                swingUnit = Constants::DIVISION / 4;
+            }
+        } else if (m_e.name() == "swing-style") {
+            // unused
+            m_e.skipCurrentElement();
+        } else {
+            skipLogCurrElem();
+        }
+    }
+    m_swing.first = swingUnit;
+    m_swing.second = (swingNumerator * 100) / swingDenominator;
 }
 
 //---------------------------------------------------------
@@ -4927,10 +4976,13 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
 
             if (lineType == "solid") {
                 textLine->setLineStyle(LineType::SOLID);
+                textLine->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
             } else if (lineType == "dashed") {
                 textLine->setLineStyle(LineType::DASHED);
+                textLine->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
             } else if (lineType == "dotted") {
                 textLine->setLineStyle(LineType::DOTTED);
+                textLine->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
             } else if (lineType != "wavy") {
                 m_logger->logError(String(u"unsupported line-type: %1").arg(String::fromAscii(lineType.ascii())), &m_e);
             }
@@ -6745,6 +6797,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
             // element handled
         } else if (mnd.readProperties(m_e)) {
             // element handled
+        } else if (m_e.name() == "accidental") {
+            m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "beam") {
             beamColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             beamFan = m_e.attribute("fan");
@@ -7441,6 +7495,12 @@ FiguredBass* MusicXmlParserPass2::figuredBass()
 FretDiagram* MusicXmlParserPass2::frame()
 {
     FretDiagram* fd = Factory::createFretDiagram(m_score->dummy()->segment());
+
+    const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
+    if (color.isValid()) {
+        fd->setColor(color);
+        fd->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+    }
 
     // Format: fret: string
     std::map<int, int> bStarts;

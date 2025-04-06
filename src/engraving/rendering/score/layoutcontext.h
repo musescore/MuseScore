@@ -154,7 +154,7 @@ public:
 
     // Const access
     const std::vector<Part*>& parts() const;
-    int visiblePartCount() const;
+    size_t visiblePartCount() const;
 
     size_t npages() const;
     const std::vector<Page*>& pages() const;

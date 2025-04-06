@@ -62,8 +62,7 @@
 #include "engraving/dom/volta.h"
 
 #include "engraving/engravingerrors.h"
-
-#include "infrastructure/messagebox.h"
+#include "engraving/infrastructure/messagebox.h"
 
 #include "log.h"
 

@@ -77,6 +77,37 @@ bool RehearsalMark::isEditAllowed(EditData& ed) const
     return TextBase::isEditAllowed(ed);
 }
 
+void RehearsalMark::editDrag(EditData& ed)
+{
+    return EngravingItem::editDrag(ed);
+}
+
+bool RehearsalMark::moveSegment(const EditData& ed)
+{
+    assert(hasParentSegment());
+
+    bool forward = ed.key == Key_Right;
+
+    Segment* curSeg = toSegment(parent());
+    IF_ASSERT_FAILED(curSeg) {
+        return false;
+    }
+
+    Measure* newMeas = forward ? curSeg->measure()->nextMeasureMM() : curSeg->measure()->prevMeasureMM();
+    if (!newMeas) {
+        return false;
+    }
+
+    Segment* newSeg = newMeas->first(SegmentType::ChordRest);
+    IF_ASSERT_FAILED(newSeg) {
+        return false;
+    }
+
+    undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   setType
 //---------------------------------------------------------

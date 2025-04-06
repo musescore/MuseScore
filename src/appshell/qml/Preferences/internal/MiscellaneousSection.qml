@@ -44,7 +44,7 @@ BaseSection {
 
         minValue: 1
         maxValue: 99
-        measureUnitsSymbol: "px"
+        measureUnitsSymbol: qsTrc("global", "px", /*disambiguation*/ "abbreviation of pixels")
 
         navigation.name: "SelectionProximityControl"
         navigation.panel: root.navigation

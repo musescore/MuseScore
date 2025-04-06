@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <programVersion>4.5.0</programVersion>
-  <programRevision></programRevision>
-  <LastEID>478</LastEID>
+  <programRevision>28c68b6</programRevision>
   <Score>
+    <eid>d/zKVaX9Od_iVFONImJoVO</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -105,28 +105,29 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>RK1+7ezox5M_rAI4TOOEzgG</eid>
         <voice>
           <KeySig>
-            <eid>47244640279</eid>
+            <eid>VX3VfcDfqaN_r+6P1hBaXfM</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>38654705689</eid>
+            <eid>T2CcN6lsRWP_sIT+E0B8q1J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>1095216660594</eid>
+            <eid>mWcdYog7zSH_79ViAntMFBM</eid>
             <durationType>whole</durationType>
             <Ornament>
               <subtype>ornamentTrill</subtype>
-              <eid>1653562408993</eid>
+              <eid>qsgJmiIPd3L_gHj32Wk8EYE</eid>
               </Ornament>
             <Note>
-              <eid>1090921693204</eid>
+              <eid>P1CsaWjLg6D_KnkYblBx4TE</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>1632087572511</eid>
+                  <eid>PXV7N9mVbvD_cgdd70c67AH</eid>
                   </Tie>
                 <next>
                   <location>
@@ -141,12 +142,14 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>9I4t9DmHSvO_KOp75et3YmN</eid>
+        <endRepeat>2</endRepeat>
         <voice>
           <Chord>
-            <eid>1279900254322</eid>
+            <eid>jW+B5diSUpB_drbNUI+uaWO</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>1275605286932</eid>
+              <eid>uwCtNt95V/C_99GhPUUDkKD</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>

@@ -34,6 +34,9 @@ Loader {
     property int itemWidth: 0
     property int itemHeight: 0
 
+    property color itemColor: ui.theme.buttonColor
+    property color backgroundColor: ui.theme.popupBackgroundColor
+
     property alias dropdown: loader.item
     property alias isOpened: loader.active
 
@@ -66,6 +69,9 @@ Loader {
 
         textRole: loader.textRole
         valueRole: loader.valueRole
+
+        itemColor: loader.itemColor
+        background.color: loader.backgroundColor
 
         accessibleWindow: loader.Window.window
 

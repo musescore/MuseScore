@@ -1,0 +1,33 @@
+/* Auto generated from checkpoint rdovae_sparse5m_32.pth */
+
+
+#ifndef DRED_RDOVAE_CONSTANTS_H
+#define DRED_RDOVAE_CONSTANTS_H
+
+#include "nnet.h"
+
+
+#define DRED_NUM_FEATURES 20
+
+#define DRED_LATENT_DIM 21
+
+#define DRED_STATE_DIM 19
+
+#define DRED_PADDED_LATENT_DIM 24
+
+#define DRED_PADDED_STATE_DIM 24
+
+#define DRED_NUM_QUANTIZATION_LEVELS 16
+
+#define DRED_MAX_RNN_NEURONS 96
+
+#define DRED_MAX_CONV_INPUTS 1536
+
+#define DRED_ENC_MAX_RNN_NEURONS 1536
+
+#define DRED_ENC_MAX_CONV_INPUTS 1536
+
+#define DRED_DEC_MAX_RNN_NEURONS 96
+
+
+#endif /* DRED_RDOVAE_CONSTANTS_H */

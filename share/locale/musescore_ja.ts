@@ -18839,7 +18839,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="105"/>
         <source>Not specified</source>
         <extracomment>No version is specified for this plugin.</extracomment>
-        <translation type="unfinished"/>
+        <translation>未定義</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="121"/>

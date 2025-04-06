@@ -19,16 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_RENDERINGCONTEXT_H
-#define MU_ENGRAVING_RENDERINGCONTEXT_H
+#pragma once
 
 #include "mpe/events.h"
 
-#include "dom/chord.h"
-#include "dom/note.h"
-#include "dom/sig.h"
-#include "dom/tie.h"
+#include "../dom/chord.h"
+#include "../dom/note.h"
+#include "../dom/sig.h"
+#include "../dom/tie.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
@@ -283,5 +281,3 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe
                                 ctx.userVelocityFraction);
 }
 }
-
-#endif // MU_ENGRAVING_RENDERINGCONTEXT_H

@@ -9904,7 +9904,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
         <source>&amp;Decrease layout stretch</source>
-        <translation>%Sumažinti išdėstymo tempimą</translation>
+        <translation>&amp;Sumažinti išdėstymo tempimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1435"/>

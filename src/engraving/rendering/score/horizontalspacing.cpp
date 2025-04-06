@@ -1539,7 +1539,7 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
 
 bool HorizontalSpacing::isAlwaysKernable(const EngravingItem* item)
 {
-    return item->isTextBase() || item->isChordLine() || item->isParenthesis();
+    return item->isTextBase() || item->isChordLine() || item->isParenthesis() || item->isFretDiagram();
 }
 
 bool HorizontalSpacing::ignoreItems(const EngravingItem* item1, const EngravingItem* item2)
@@ -1557,13 +1557,14 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
     ElementType type1 = item1->type();
     switch (type1) {
     case ElementType::BAR_LINE:
-        return item2->isLyrics() ? KerningType::ALLOW_COLLISION : KerningType::NON_KERNING;
+        return item2->isLyrics() || item2->isHarmony() || item2->isFretDiagram() ? KerningType::ALLOW_COLLISION : KerningType::NON_KERNING;
     case ElementType::CHORDLINE:
         return item2->isBarLine() ? KerningType::ALLOW_COLLISION : KerningType::KERNING;
     case ElementType::HARMONY:
-        return item2->isHarmony() ? KerningType::NON_KERNING : KerningType::KERNING;
-    case ElementType::LYRICS:
-        return computeLyricsKerningType(toLyrics(item1), item2);
+    case ElementType::FRET_DIAGRAM:
+        return item2->isHarmony() || item2->isFretDiagram() ? KerningType::NON_KERNING : KerningType::KERNING;
+    case ElementType::LYRICS
+        : return computeLyricsKerningType(toLyrics(item1), item2);
     case ElementType::NOTE:
         return computeNoteKerningType(toNote(item1), item2);
     case ElementType::STEM_SLASH:

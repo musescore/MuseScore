@@ -71,7 +71,7 @@ void PartListModel::load()
 
     masterNotation->sortExcerpts(excerpts);
 
-    for (IExcerptNotationPtr excerpt : excerpts) {
+    for (const IExcerptNotationPtr& excerpt : excerpts) {
         m_excerpts.push_back(excerpt);
     }
 

@@ -51,7 +51,6 @@ private:
     bool addSystemObject(mu::engraving::EngravingItem* obj);
     bool removeSystemObject(mu::engraving::EngravingItem* obj);
 
-    void updateStaff();
     void updateState();
 
     const mu::engraving::Staff* m_staff = nullptr;
