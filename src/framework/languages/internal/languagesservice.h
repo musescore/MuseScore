@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_LANGUAGES_LANGUAGESSERVICE_H
-#define MUSE_LANGUAGES_LANGUAGESSERVICE_H
+#pragma once
+
+#include <QMutex>
 
 #include "ilanguagesservice.h"
 #include "async/asyncable.h"
@@ -68,9 +69,9 @@ private:
     Ret loadLanguage(Language& lang);
     Ret doLoadLanguage(Language& lang);
 
-    void th_update(const QString& languageCode, Progress progress);
-    bool canUpdate(const QString& languageCode);
-    Ret downloadLanguage(const QString& languageCode, Progress progress) const;
+    void th_update(const QString& mainLanguageCode, Progress overallProgress);
+    RetVal<QJsonObject> downloadServerLanguagesInfo() const;
+    Ret downloadLanguage(const Language& lang, Progress progress) const;
     RetVal<QString> fileHash(const io::path_t& path);
 
 private:
@@ -80,12 +81,11 @@ private:
     Language m_placeholderLanguage;
 
     QSet<QTranslator*> m_translators;
-    mutable QHash<QString, Progress> m_updateOperationsHash;
+
+    QMutex m_updateMutex;
 
     bool m_inited = false;
     bool m_needRestartToApplyLanguageChange = false;
     async::Channel<bool> m_needRestartToApplyLanguageChangeChanged;
 };
 }
-
-#endif // MUSE_LANGUAGES_LANGUAGESSERVICE_H
