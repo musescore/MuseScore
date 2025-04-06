@@ -3713,7 +3713,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10464"/>
         <source>Text lines</source>
-        <translation>Линии с текстом нотоносца</translation>
+        <translation>Линии с текстом</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
@@ -15417,12 +15417,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2443"/>
         <source>Scratch Push</source>
-        <translation>Скретч от себя</translation>
+        <translation>Царапанье от себя</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2445"/>
         <source>Scratch Pull</source>
-        <translation>Скретч к себе</translation>
+        <translation>Царапанье на себя</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2446"/>
@@ -22070,7 +22070,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
         <source>Text line</source>
-        <translation>Линия с текстом нотоносца</translation>
+        <translation>Линия с текстом</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="34"/>

@@ -6598,12 +6598,12 @@ text x-height):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation>&amp;Clear recent files</translation>
+        <translation>&amp;Clear list of recent files</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear recent files</source>
-        <translation>Clear recent files</translation>
+        <translation>Clear list of recent files</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>

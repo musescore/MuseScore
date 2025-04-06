@@ -12733,7 +12733,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
         <source>Time signature</source>
-        <translation>Metru Măsură</translation>
+        <translation>Metru măsură</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
@@ -19708,7 +19708,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
         <source>Time signature</source>
-        <translation>Metru Măsură</translation>
+        <translation>Metru măsură</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="616"/>
@@ -29678,7 +29678,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="129"/>
         <source>Time signature</source>
-        <translation>Metru Măsură</translation>
+        <translation>Metru măsură</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="164"/>
