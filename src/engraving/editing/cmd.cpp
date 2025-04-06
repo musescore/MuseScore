@@ -3305,11 +3305,11 @@ void Score::cmdMirrorNoteHead()
 
 void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 {
-    if (selection().isRange()) {
-        if (!selection().canCopy()) {
+    if (m_selection.isRange()) {
+        if (!m_selection.canCopy()) {
             return;
         }
-        ChordRest* firstCR = selection().firstChordRest();
+        ChordRest* firstCR = m_selection.firstChordRest();
         if (firstCR->isGrace()) {
             firstCR = toChordRest(firstCR->parent());
         }
@@ -3327,18 +3327,22 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                 return;
             }
         }
-        const muse::ByteArray mimeData(selection().mimeData());
+        const muse::ByteArray mimeData(m_selection.mimeData());
         XmlReader e(mimeData);
-        deleteRange(selection().startSegment(), selection().endSegment(), staff2track(selection().staffStart()),
-                    staff2track(selection().staffEnd()), selectionFilter());
-        pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
-    } else if (selection().isList()) {
+        deleteRange(m_selection.startSegment(), m_selection.endSegment(), staff2track(m_selection.staffStart()),
+                    staff2track(m_selection.staffEnd()), selectionFilter(), m_selection.rangeContainsMultiNoteChords());
+        pasteStaff(e, m_selection.startSegment(), m_selection.staffStart(), scale);
+    } else if (m_selection.isList()) {
         std::set<ChordRest*> crs = getSelectedChordRests();
         for (ChordRest* cr : crs) {
             TDuration newDuration(stepDotted
                                   ? cr->durationType().fraction() * Fraction(3, 3 + nSteps)
                                   : cr->durationType().fraction()* Fraction(3 - nSteps, 3 + nSteps), true);
-            changeCRlen(cr, newDuration);
+            if (cr->isChord() && (toChord(cr)->noteType() != NoteType::NORMAL)) {
+                undoChangeChordRestLen(cr, newDuration);
+            } else {
+                changeCRlen(cr, newDuration);
+            }
         }
         // 2nd loop needed to reselect what was selected before 1st loop
         // as `changeCRlen()` changes the selection to `SelectType::SINGLE`
