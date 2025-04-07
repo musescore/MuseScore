@@ -2070,7 +2070,7 @@ void Score::cmdAddTie(bool addToChord)
 
 Tie* Score::cmdToggleTie()
 {
-    const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
+    std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
 
     if (noteList.empty()) {
         LOGD("no notes selected");
@@ -2080,6 +2080,7 @@ Tie* Score::cmdToggleTie()
     bool canAddTies = false;
     const size_t notes = noteList.size();
     std::vector<Note*> tieNoteList(notes);
+    const bool shouldTieListSelection = notes >= 2;
 
     for (size_t i = 0; i < notes; ++i) {
         Note* n = noteList[i];
@@ -2102,45 +2103,61 @@ Tie* Score::cmdToggleTie()
 
     Tie* tie = nullptr;
 
-    if (canAddTies) {
-        for (size_t i = 0; i < notes; ++i) {
-            Note* note2 = tieNoteList[i];
-            if (note2) {
-                Note* note = noteList[i];
+    for (size_t i = 0; i < notes; ++i) {
+        Note* note = noteList[i];
+        Note* tieToNote = tieNoteList[i];
 
-                Note* startNote = note->tick() <= note2->tick() ? note : note2;
-                Note* endNote = startNote == note2 ? note : note2;
-                tie = createAndAddTie(startNote, endNote);
-            }
-        }
-    } else {
-        bool shouldTieListSelection = noteList.size() == 2;
-        for (Note* n : noteList) {
-            tie = n->tieFor();
-            Chord* chord = n->chord();
-            if (tie) {
-                undoRemoveElement(tie);
-                tie = nullptr;
-                shouldTieListSelection = false;
-            } else if (chord->hasFollowingJumpItem()) {
-                // Create outgoing partial tie
-                tie = createAndAddTie(n, nullptr);
-                shouldTieListSelection = false;
-            }
+        if (!note) {
+            continue;
         }
 
-        if (shouldTieListSelection) {
-            Note* note = noteList.at(0);
-            Note* note2 = noteList.at(1);
+        // Tie to adjacent unselected note
+        if (canAddTies && tieToNote) {
+            Note* startNote = note->tick() <= tieToNote->tick() ? note : tieToNote;
+            Note* endNote = startNote == tieToNote ? note : tieToNote;
+            tie = createAndAddTie(startNote, endNote);
+            continue;
+        }
 
-            Note* startNote = note->tick() <= note2->tick() ? note : note2;
-            Note* endNote = startNote == note2 ? note : note2;
+        Tie* oldTie = note->tieFor();
+        Chord* chord = note->chord();
+        if (oldTie) {
+            // Toggle existing tie off
+            undoRemoveElement(oldTie);
+            continue;
+        }
 
-            if (startNote->part() == endNote->part() && startNote->pitch() == endNote->pitch()
-                && startNote->unisonIndex() == endNote->unisonIndex() && startNote->tick() != endNote->tick()) {
-                tie = createAndAddTie(startNote, endNote);
+        if (chord->hasFollowingJumpItem()) {
+            // Create partial tie
+            tie = createAndAddTie(note, nullptr);
+            continue;
+        }
+
+        if (!shouldTieListSelection || i > notes - 2) {
+            continue;
+        }
+
+        // Tie to next appropriate note in selection
+        Note* note2 = nullptr;
+
+        for (size_t j = i + 1; j < notes; ++j) {
+            Note* candidateNote = noteList[j];
+            if (note->part() == candidateNote->part() && note->pitch() == candidateNote->pitch()
+                && note->unisonIndex() == candidateNote->unisonIndex() && note->tick() != candidateNote->tick()) {
+                note2 = candidateNote;
+                noteList[j] = nullptr;
+                break;
             }
         }
+
+        if (!(note && note2)) {
+            continue;
+        }
+
+        Note* startNote = note->tick() <= note2->tick() ? note : note2;
+        Note* endNote = startNote == note2 ? note : note2;
+
+        tie = createAndAddTie(startNote, endNote);
     }
 
     endCmd();
