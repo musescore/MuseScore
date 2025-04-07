@@ -2040,9 +2040,14 @@ void Score::scanElementsInRange(void* data, void (* func)(void*, EngravingItem*)
             }
         }
     }
+
+    std::set<Spanner*> handledSpanners;
     for (EngravingItem* e : m_selection.elements()) {
-        if (e->isSpanner()) {
-            Spanner* spanner = toSpanner(e);
+        if (!e->isSpannerSegment()) {
+            continue;
+        }
+        Spanner* spanner = toSpannerSegment(e)->spanner();
+        if (handledSpanners.insert(spanner).second) {
             for (SpannerSegment* ss : spanner->spannerSegments()) {
                 ss->scanElements(data, func, all);
             }
