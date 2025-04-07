@@ -28,6 +28,7 @@
 
 #include "playback/metaparsers/notearticulationsparser.h"
 #include "playback/utils/expressionutils.h"
+#include "playback/utils/repeatutils.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -46,12 +47,22 @@ static bool containEqualTremolo(const Chord* c1, const Chord* c2)
     return false;
 }
 
-static const Note* findFirstTremoloNote(const Note* note)
+static timestamp_t tremoloTimestampFrom(const Note* note, const RenderingContext& ctx)
 {
+    const Note* originalNote = note;
     std::unordered_set<const Note*> notes { note };
+    int positionTickOffset = ctx.positionTickOffset;
 
-    while (note && note->tieBack() && note->tieBack()->playSpanner()) {
-        const Note* prevNote = note->tieBack()->startNote();
+    if (note->incomingPartialTie()) {
+        const PartiallyTiedNoteInfo outgoingNoteInfo = findOutgoingNote(note, ctx);
+        if (outgoingNoteInfo.isValid() && containEqualTremolo(outgoingNoteInfo.note->chord(), note->chord())) {
+            note = outgoingNoteInfo.note;
+            positionTickOffset = outgoingNoteInfo.repeat->utick - outgoingNoteInfo.repeat->tick;
+        }
+    }
+
+    while (note && note->tieBackNonPartial() && note->tieBackNonPartial()->playSpanner()) {
+        const Note* prevNote = note->tieBackNonPartial()->startNote();
         const Chord* prevChord = prevNote ? prevNote->chord() : nullptr;
 
         if (!prevChord || !containEqualTremolo(prevChord, note->chord())) {
@@ -66,15 +77,28 @@ static const Note* findFirstTremoloNote(const Note* note)
         notes.insert(note);
     }
 
-    return note;
+    if (note && originalNote != note) {
+        return timestampFromTicks(ctx.score, note->tick().ticks() + positionTickOffset);
+    }
+
+    return ctx.nominalTimestamp;
 }
 
-static const Note* findLastTremoloNote(const Note* note)
+static duration_t tremoloDuration(const Note* note, const timestamp_t tremoloTimestampFrom, const RenderingContext& ctx)
 {
     std::unordered_set<const Note*> notes { note };
+    int positionTickOffset = ctx.positionTickOffset;
 
-    while (note && note->tieFor() && note->tieFor()->playSpanner()) {
-        const Note* nextNote = note->tieFor()->endNote();
+    if (note->outgoingPartialTie()) {
+        const PartiallyTiedNoteInfo incomingNoteInfo = findIncomingNote(note, ctx);
+        if (incomingNoteInfo.isValid() && containEqualTremolo(incomingNoteInfo.note->chord(), note->chord())) {
+            note = incomingNoteInfo.note;
+            positionTickOffset = incomingNoteInfo.repeat->utick - incomingNoteInfo.repeat->tick;
+        }
+    }
+
+    while (note && note->tieForNonPartial() && note->tieForNonPartial()->playSpanner()) {
+        const Note* nextNote = note->tieForNonPartial()->endNote();
         const Chord* nextChord = nextNote ? nextNote->chord() : nullptr;
 
         if (!nextChord || !containEqualTremolo(nextChord, note->chord())) {
@@ -89,7 +113,13 @@ static const Note* findLastTremoloNote(const Note* note)
         notes.insert(note);
     }
 
-    return note;
+    if (note) {
+        const int tickTo = note->chord()->endTick().ticks();
+        const timestamp_t tremoloTimestampTo = timestampFromTicks(ctx.score, tickTo + positionTickOffset);
+        return tremoloTimestampTo - tremoloTimestampFrom;
+    }
+
+    return ctx.nominalDuration;
 }
 
 const ArticulationTypeSet& TremoloRenderer::supportedTypes()
@@ -239,22 +269,8 @@ const TimestampAndDuration& TremoloRenderer::tremoloTimeAndDuration(const Note* 
     }
 
     TimestampAndDuration& tnd = cache[note];
-    tnd.timestamp = ctx.nominalTimestamp;
-    tnd.duration = ctx.nominalDuration;
-
-    const Score* score = note->score();
-
-    if (const Note* firstTremoloNote = findFirstTremoloNote(note)) {
-        if (firstTremoloNote != note) {
-            tnd.timestamp = timestampFromTicks(score, firstTremoloNote->tick().ticks() + ctx.positionTickOffset);
-        }
-    }
-
-    if (const Note* lastTremoloNote = findLastTremoloNote(note)) {
-        const int endTick = lastTremoloNote->tick().ticks() + lastTremoloNote->chord()->actualTicks().ticks() + ctx.positionTickOffset;
-        const timestamp_t endTimestamp = timestampFromTicks(score, endTick);
-        tnd.duration = endTimestamp - tnd.timestamp;
-    }
+    tnd.timestamp = tremoloTimestampFrom(note, ctx);
+    tnd.duration = tremoloDuration(note, tnd.timestamp, ctx);
 
     return tnd;
 }

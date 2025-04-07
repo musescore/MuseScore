@@ -2560,6 +2560,95 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_PartiallyTiedTremolo
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "partially_tied_tremolo.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+    for (const RepeatSegment* repeat : score->repeatList()) {
+        const int tickPositionOffset = repeat->utick - repeat->tick;
+
+        for (const Measure* m : repeat->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    // [THEN] We expect 4 lists of events (for each note with tremolo)
+    EXPECT_EQ(result.size(), 4);
+
+    const std::vector<timestamp_t> expectedTremoloTimestamps {
+        0, // 1st measure
+        5000000, // 3rd measure, outgoing partially tied A4
+        5000000, // 1st measure (repeated), incoming A4
+        11000000, // 3rd measure (repeated), outgoing A4 note
+    };
+
+    const std::vector<duration_t> expectedTremoloDurations {
+        HALF_NOTE_DURATION, // 1st measure
+        HALF_NOTE_DURATION* 2, // 3rd measure: total duration of all partially tied notes
+        HALF_NOTE_DURATION* 2, // 1st measure (repeated): total duration of all partially tied notes
+        HALF_NOTE_DURATION, // 3rd measure (repeated)
+    };
+
+    constexpr pitch_level_t expectedPitchLevel = pitchLevel(PitchClass::A, 4);
+    constexpr size_t expectedSubNoteCount = 8;
+    constexpr duration_t expectedSubNoteDuration = HALF_NOTE_DURATION / expectedSubNoteCount;
+
+    size_t tremoloNoteNum = 0;
+
+    for (const auto& pair : result) {
+        // [THEN] Expected number of sub-notes
+        EXPECT_EQ(pair.second.size(), expectedSubNoteCount);
+
+        const timestamp_t expectedTremoloTimestamp = expectedTremoloTimestamps.at(tremoloNoteNum);
+        const duration_t expectedTremoloDuration = expectedTremoloDurations.at(tremoloNoteNum);
+
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            ASSERT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo16th));
+
+            // [THEN] Each note event has the correct articulation time and duration
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Tremolo16th);
+            EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
+            EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
+
+            // [THEN] Each note event has the correct pitch level
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
+
+            // [THEN] Each note event has the correct duration
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
+        }
+
+        tremoloNoteNum++;
+    }
+
+    delete score;
+}
+
+/**
  * @brief PlaybackEventsRendererTests_Two_Chords_Tremolo
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C5 chord and ends with C5+E5+G5 chord connected by the 16-th Tremolo articulation
