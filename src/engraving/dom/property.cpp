@@ -502,6 +502,23 @@ bool propertyLink(Pid id)
 }
 
 //---------------------------------------------------------
+//   propertyLinkSameScore
+//---------------------------------------------------------
+
+bool propertyLinkSameScore(Pid id)
+{
+    assert(id < Pid::END);
+    switch (id) {
+    case Pid::STAFF_BARLINE_SPAN:
+    case Pid::STAFF_BARLINE_SPAN_FROM:
+    case Pid::STAFF_BARLINE_SPAN_TO:
+        return false;
+    default:
+        return true;
+    }
+}
+
+//---------------------------------------------------------
 //   propertyName
 //---------------------------------------------------------
 
