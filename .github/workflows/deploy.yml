@@ -28,6 +28,7 @@ jobs:
     outputs:
       tag_name: ${{ steps.make_tag_info.outputs.TAG_NAME }}
       release_name: ${{ steps.make_tag_info.outputs.RELEASE_NAME }}
+      release_major_minor: ${{ steps.make_tag_info.outputs.RELEASE_MAJOR_MINOR }}
     steps:
     - name: Clone repo with history
       uses: actions/checkout@v4
@@ -119,12 +120,25 @@ jobs:
         fail_on_unmatched_files: true
         generate_release_notes: false
 
+  backend_default:
+    name: Set new release as default on backend
+    needs:
+      - plan # to access outputs
+      - create_release
+    if: ${{ github.repository == 'musescore/MuseScore' && ! failure() && ! cancelled() && needs.create_release.result == 'success'  }}
+    uses: ./.github/workflows/deploy_backend.yml
+    secrets: inherit
+    with:
+      version_major_minor: ${{ needs.plan.outputs.release_major_minor }}
+      is_default: "true"
+      environment: production # requires approval
+
   notify_users:
     name: Notify users
     needs:
       - plan # to access outputs
       - create_release
-    if: ${{ github.repository == 'musescore/MuseScore' && ! failure() && ! cancelled() && needs.create_release.result == 'success' }}
+    if: ${{ github.repository == 'musescore/MuseScore' && ! failure() && ! cancelled() && needs.backend_default.result == 'success' }}
     uses: ./.github/workflows/update_release_info.yml
     secrets: inherit
     with:

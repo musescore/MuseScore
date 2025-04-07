@@ -21,6 +21,7 @@
 
 import argparse
 import sys
+import time
 
 from jenkinsapi.jenkins import Jenkins
 
@@ -43,30 +44,49 @@ def wait_for_job_to_finish(job, params):
     return build.is_good()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Deploy to musescore.com")
+    parser = argparse.ArgumentParser(description="Build and Deploy")
 
     parser.add_argument("--mu_version", type=str, help="MuseScore version", required=True)
+    parser.add_argument("--deploy_stage", type=str, help="Deploy stage", required=True)
+    parser.add_argument("--is_default", type=str, help="Should be used as default", default="false")
+    parser.add_argument("--with_build", type=str, help="Build before deploy", default="true")
     parser.add_argument("--api_token", type=str, help="API Token", required=True)
     args = parser.parse_args()
 
-    build_params = {"MS_VERSION": args.mu_version}
     api_token = args.api_token
 
     jenkins = Jenkins(jenkins_url, user, api_token)
 
-    # Trigger the build
-    jenkins.build_job(build_job_name, build_params)
-    build_job = jenkins[build_job_name]
-    if wait_for_job_to_finish(build_job, build_params):
-        print("Build finished")
-    else:
-        print("Build failed")
-        sys.exit(1)
+    if args.with_build == "true":
+        # Trigger the build
+        build_params = {
+            "MS_VERSION": args.mu_version,
+            "STAGE": args.deploy_stage
+        }
+
+        jenkins.build_job(build_job_name, build_params)
+        build_job = jenkins[build_job_name]
+
+        if wait_for_job_to_finish(build_job, build_params):
+            print("Build finished")
+        else:
+            print("Build failed")
+            sys.exit(1)
+
+        # Give Jenkins time to complete its work
+        time.sleep(5)
 
     # Trigger the deploy
-    jenkins.build_job(deploy_job_name, build_params)
+    deploy_params = {
+        "MS_VERSION": args.mu_version,
+        "STAGE": args.deploy_stage,
+        "DEFAULT": args.is_default
+    }
+
+    jenkins.build_job(deploy_job_name, deploy_params)
+
     deploy_job = jenkins[deploy_job_name]
-    if wait_for_job_to_finish(deploy_job, build_params):
+    if wait_for_job_to_finish(deploy_job, deploy_params):
         print("Deploy finished")
     else:
         print("Deploy failed")
