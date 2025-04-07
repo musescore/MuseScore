@@ -1099,7 +1099,7 @@ private:
     void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
 
     void doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo = true);
-    void doUndoResetPartialSlur(Slur* slur);
+    void doUndoResetPartialSlur(Slur* slur, bool undo);
 
     void deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
                                              const SelectionFilter& filter);
