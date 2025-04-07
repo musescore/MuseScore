@@ -3474,7 +3474,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   if (_swing.second != 0) {
                       toStaffTextBase(t)->setSwing(true);
                       toStaffTextBase(t)->setSwingParameters(_swing.first,
-                                                             _swing.first ? _swing.second : toStaffTextBase(t)->score()->styleI(Sid::swingRatio));
+                                                             _swing.first ? _swing.second
+                                                             : toStaffTextBase(t)->score()->styleI(Sid::swingRatio));
                       _swing.second = 0;
                   }
 
@@ -6099,11 +6100,8 @@ static void addFiguredBassElemens(FiguredBassList& fbl, const Fraction noteStart
 //   addTremolo
 //---------------------------------------------------------
 
-static void addTremolo(ChordRest* cr,
-                       const int tremoloNr, const QString& tremoloType, const QString& tremoloSmufl,
-                       Chord*& tremStart,
-                       MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
-                       Fraction& timeMod)
+static void addTremolo(ChordRest* cr, const int tremoloNr, const QString& tremoloType, const QString& smufl, const QColor& color,
+                       Chord*& tremStart, MxmlLogger* logger, const QXmlStreamReader* const xmlreader, Fraction& timeMod)
       {
       if (!cr->isChord())
             return;
@@ -6118,6 +6116,8 @@ static void addTremolo(ChordRest* cr,
                               case 3: tremolo->setTremoloType(TremoloType::R32); break;
                               case 4: tremolo->setTremoloType(TremoloType::R64); break;
                               }
+                        if (color.isValid())
+                              tremolo->setColor(color);
                         cr->add(tremolo);
                         }
                   else if (tremoloType == "start") {
@@ -6137,6 +6137,8 @@ static void addTremolo(ChordRest* cr,
                                     case 3: tremolo->setTremoloType(TremoloType::C32); break;
                                     case 4: tremolo->setTremoloType(TremoloType::C64); break;
                                     }
+                              if (color.isValid())
+                                    tremolo->setColor(color);
                               tremolo->setChords(tremStart, static_cast<Chord*>(cr));
                               // fixup chord duration and type
                               const Fraction tremDur = cr->ticks() * Fraction(1,2);
@@ -6158,12 +6160,16 @@ static void addTremolo(ChordRest* cr,
             else
                   logger->logError(QString("unknown tremolo type %1").arg(tremoloNr), xmlreader);
             }
-      else if (tremoloNr == 0 && (tremoloType == "unmeasured" || tremoloType.isEmpty() || tremoloSmufl == "buzzRoll")) {
+      else if (tremoloNr == 0 && (tremoloType == "unmeasured" || tremoloType.isEmpty() || smufl == "buzzRoll")) {
             // Out of all the SMuFL unmeasured tremolos, we only support 'buzzRoll'
             Tremolo* const tremolo = new Tremolo(cr->score());
             tremolo->setTremoloType(TremoloType::BUZZ_ROLL);
+            if (color.isValid())
+                  tremolo->setColor(color);
             cr->add(tremolo);
             }
+      else if (!smufl.isEmpty() && smufl != "buzzRoll")
+              logger->logError("MusicXml::import: only buzzRoll glyph is supported for unmeasured tremolos", xmlreader);
       }
 
 //---------------------------------------------------------
@@ -6654,7 +6660,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // handle tremolo before handling tuplet (two note tremolos modify timeMod)
       if (cr && notations.hasTremolo()) {
-            addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), notations.tremoloSmufl(), _tremStart, _logger, &_e, timeMod);
+            addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), notations.tremoloSmufl(), notations.tremoloColor(),
+                       _tremStart, _logger, &_e, timeMod);
             }
 
       // handle tuplet state for the current chord or rest
@@ -7852,9 +7859,10 @@ void MusicXMLParserNotations::ornaments()
                   }
             else if (_e.name() == "tremolo") {
                   _hasTremolo = true;
+                  _tremoloColor = _e.attributes().value("color").toString();
                   _tremoloType = _e.attributes().value("type").toString();
-                  _tremoloNr = _e.readElementText().toInt();
                   _tremoloSmufl = _e.attributes().value("smufl").toString();
+                  _tremoloNr = _e.readElementText().toInt();
                   }
             else if (_e.name() == "inverted-mordent"
                      || _e.name() == "mordent") {
@@ -7932,6 +7940,7 @@ void MusicXMLParserNotations::technical()
 void MusicXMLParserNotations::otherTechnical()
       {
       const QString smufl = _e.attributes().value("smufl").toString();
+      const QColor color = _e.attributes().value("color").toString();
 
       if (!smufl.isEmpty()) {
             SymId id = Sym::name2id(smufl);
@@ -7949,6 +7958,7 @@ void MusicXMLParserNotations::otherTechnical()
             _hasTremolo = true;
             _tremoloNr = 0;
             _tremoloType = "unmeasured";
+            _tremoloColor = color;
             }
       }
 

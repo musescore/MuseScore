@@ -235,6 +235,7 @@ public:
       bool hasTremolo() const { return _hasTremolo; }
       QString tremoloType() const { return _tremoloType; }
       QString tremoloSmufl() const { return _tremoloSmufl; }
+      QColor tremoloColor() const { return _tremoloColor; }
       int tremoloNr() const { return _tremoloNr; }
       bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
 private:
@@ -271,6 +272,7 @@ private:
       QString _tremoloType;
       int _tremoloNr { 0 };
       QString _tremoloSmufl;
+      QColor _tremoloColor;
       QString _wavyLineType;
       int _wavyLineNo { 0 };
       QString _arpeggioType;
