@@ -83,6 +83,8 @@ public:
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
+    virtual EngravingItem* contextItem() const = 0;
+
     // SelectionFilter
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
     virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
@@ -322,6 +324,4 @@ public:
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
-
-EngravingItem* contextItem(INotationInteractionPtr);
 }

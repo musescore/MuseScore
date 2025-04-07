@@ -1423,7 +1423,7 @@ void NotationActionController::addText(TextStyleType type)
         return;
     }
 
-    EngravingItem* item = contextItem(interaction);
+    EngravingItem* item = interaction->contextItem();
 
     if (isVerticalBoxTextStyle(type)) {
         if (!item || !item->isVBox()) {
@@ -1455,7 +1455,7 @@ void NotationActionController::addImage()
         return;
     }
 
-    EngravingItem* item = contextItem(interaction);
+    EngravingItem* item = interaction->contextItem();
     if (!interaction->canAddImageToItem(item)) {
         return;
     }
@@ -1595,7 +1595,7 @@ void NotationActionController::openSelectionMoreOptions()
         return;
     }
 
-    auto item = contextItem(interaction);
+    auto item = interaction->contextItem();
     if (!item) {
         return;
     }
