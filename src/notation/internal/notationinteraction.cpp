@@ -834,6 +834,21 @@ void NotationInteraction::moveSegmentSelection(MoveDirection d)
     showItem(e);
 }
 
+EngravingItem* NotationInteraction::contextItem() const
+{
+    EngravingItem* item = nullptr;
+    const INotationSelectionPtr sel = selection();
+
+    if (sel->isRange()) {
+        const INotationSelectionRangePtr range = sel->range();
+        item = range->rangeStartSegment()->firstElementForNavigation(range->startStaffIndex());
+    } else {
+        item = sel->element();
+    }
+
+    return item ? item : hitElementContext().element;
+}
+
 void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
 {
     IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
@@ -7742,24 +7757,4 @@ muse::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::
 void NotationInteraction::setGetViewRectFunc(const std::function<RectF()>& func)
 {
     static_cast<NotationNoteInput*>(m_noteInput.get())->setGetViewRectFunc(func);
-}
-
-namespace mu::notation {
-EngravingItem* contextItem(INotationInteractionPtr interaction)
-{
-    EngravingItem* item = nullptr;
-    const INotationSelectionPtr sel = interaction->selection();
-
-    if (sel->isRange()) {
-        const INotationSelectionRangePtr range = sel->range();
-        item = range->rangeStartSegment()->firstElementForNavigation(range->startStaffIndex());
-    } else {
-        item = sel->element();
-    }
-
-    if (item == nullptr) {
-        return interaction->hitElementContext().element;
-    }
-    return item;
-}
 }
