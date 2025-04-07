@@ -773,87 +773,104 @@ LayoutBreak* MeasureBase::sectionBreakElement() const
 
 MeasureBaseList::MeasureBaseList()
 {
-    m_first = 0;
-    m_last  = 0;
+    m_first = nullptr;
+    m_last  = nullptr;
     m_size  = 0;
+}
+
+void MeasureBaseList::clear()
+{
+    m_first = nullptr;
+    m_last = nullptr;
+    m_size = 0;
+    m_tickIndex.clear();
 }
 
 //---------------------------------------------------------
 //   push_back
 //---------------------------------------------------------
 
-void MeasureBaseList::push_back(MeasureBase* e)
+void MeasureBaseList::push_back(MeasureBase* m)
 {
     ++m_size;
     if (m_last) {
-        m_last->setNext(e);
-        e->setPrev(m_last);
-        e->setNext(0);
+        m_last->setNext(m);
+        m->setPrev(m_last);
+        m->setNext(0);
     } else {
-        m_first = e;
-        e->setPrev(0);
-        e->setNext(0);
+        m_first = m;
+        m->setPrev(0);
+        m->setNext(0);
     }
-    m_last = e;
+    m_last = m;
+    m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 
 //---------------------------------------------------------
 //   push_front
 //---------------------------------------------------------
 
-void MeasureBaseList::push_front(MeasureBase* e)
+void MeasureBaseList::push_front(MeasureBase* m)
 {
     ++m_size;
     if (m_first) {
-        m_first->setPrev(e);
-        e->setNext(m_first);
-        e->setPrev(0);
+        m_first->setPrev(m);
+        m->setNext(m_first);
+        m->setPrev(0);
     } else {
-        m_last = e;
-        e->setPrev(0);
-        e->setNext(0);
+        m_last = m;
+        m->setPrev(0);
+        m->setNext(0);
     }
-    m_first = e;
+    m_first = m;
+    m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 
 //---------------------------------------------------------
 //   add
-//    insert e before e->next()
+//    insert m before m->next()
 //---------------------------------------------------------
 
-void MeasureBaseList::add(MeasureBase* e)
+void MeasureBaseList::add(MeasureBase* m)
 {
-    MeasureBase* el = e->next();
+    MeasureBase* el = m->next();
     if (el == 0) {
-        push_back(e);
+        push_back(m);
         return;
     }
     if (el == m_first) {
-        push_front(e);
+        push_front(m);
         return;
     }
     ++m_size;
-    e->setPrev(el->prev());
-    el->prev()->setNext(e);
-    el->setPrev(e);
+    m->setPrev(el->prev());
+    el->prev()->setNext(m);
+    el->setPrev(m);
+
+    m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
-void MeasureBaseList::remove(MeasureBase* el)
+void MeasureBaseList::remove(MeasureBase* m)
 {
     --m_size;
-    if (el->prev()) {
-        el->prev()->setNext(el->next());
+    if (m->prev()) {
+        m->prev()->setNext(m->next());
     } else {
-        m_first = el->next();
+        m_first = m->next();
     }
-    if (el->next()) {
-        el->next()->setPrev(el->prev());
+    if (m->next()) {
+        m->next()->setPrev(m->prev());
     } else {
-        m_last = el->prev();
+        m_last = m->prev();
+    }
+
+    auto mbIt = findMeasureBaseIterator(m);
+    if (mbIt != m_tickIndex.end()) {
+        m_tickIndex.erase(mbIt);
     }
 }
 
@@ -863,10 +880,12 @@ void MeasureBaseList::remove(MeasureBase* el)
 
 void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 {
-    ++m_size;
     for (MeasureBase* m = fm; m != lm; m = m->next()) {
+        m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
         ++m_size;
     }
+    ++m_size;
+    m_tickIndex.emplace(std::make_pair(lm->tick().ticks(), lm));
     MeasureBase* pm = fm->prev();
     if (pm) {
         pm->setNext(fm);
@@ -887,9 +906,17 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 
 void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
 {
-    --m_size;
     for (MeasureBase* m = fm; m != lm; m = m->next()) {
+        auto mbIt = findMeasureBaseIterator(m);
+        if (mbIt != m_tickIndex.end()) {
+            m_tickIndex.erase(mbIt);
+        }
         --m_size;
+    }
+    --m_size;
+    auto mbIt = findMeasureBaseIterator(lm);
+    if (mbIt != m_tickIndex.end()) {
+        m_tickIndex.erase(mbIt);
     }
     MeasureBase* pm = fm->prev();
     MeasureBase* nm = lm->next();
@@ -931,5 +958,104 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     }
     for (EngravingItem* e : nb->el()) {
         e->setParent(nb);
+    }
+
+    auto mbIt = findMeasureBaseIterator(ob);
+    if (mbIt != m_tickIndex.end()) {
+        mbIt->second = nb;
+    }
+}
+
+Measure* MeasureBaseList::measureByTick(int tick) const
+{
+    if (empty() || tick > m_last->endTick().ticks()) {
+        return nullptr;
+    }
+
+    auto it = m_tickIndex.upper_bound(tick);
+
+    if (it == m_tickIndex.begin()) {
+        MeasureBase* mb = it->second;
+
+        if (mb->isMeasure()) {
+            return toMeasure(mb);
+        }
+        return nullptr;
+    }
+
+    --it;
+    for (;; --it) {
+        if (it == m_tickIndex.begin()) {
+            MeasureBase* mb = it->second;
+
+            if (mb->isMeasure()) {
+                return toMeasure(mb);
+            }
+            return nullptr;
+        }
+
+        MeasureBase* mb = it->second;
+        if (!mb) {
+            break;
+        }
+
+        if (mb->isMeasure()) {
+            return toMeasure(mb);
+        }
+    }
+
+    return nullptr;
+}
+
+std::vector<MeasureBase*> MeasureBaseList::measureBasesAtTick(int tick) const
+{
+    std::vector<MeasureBase*> result;
+    if (empty() || tick > m_last->endTick().ticks()) {
+        return result;
+    }
+
+    auto it = m_tickIndex.upper_bound(tick);
+
+    if (it == m_tickIndex.begin()) {
+        result.push_back(it->second);
+        return result;
+    }
+
+    --it;
+    for (;; --it) {
+        if (it == m_tickIndex.begin()) {
+            result.push_back(it->second);
+            break;
+        }
+
+        MeasureBase* mb = it->second;
+        if (!mb) {
+            break;
+        }
+        result.push_back(mb);
+    }
+
+    return result;
+}
+
+std::multimap<int, MeasureBase*>::iterator MeasureBaseList::findMeasureBaseIterator(MeasureBase* m)
+{
+    auto res = m_tickIndex.equal_range(m->tick().ticks());
+    for (auto it = res.first; it != res.second; ++it) {
+        if (it->second == m) {
+            return it;
+        }
+    }
+    return m_tickIndex.end();
+}
+
+void MeasureBaseList::updateTickIndex()
+{
+    std::multimap<int, MeasureBase*> indexCopy = m_tickIndex;
+    m_tickIndex.clear();
+
+    for (auto it : indexCopy) {
+        MeasureBase* mb = it.second;
+        m_tickIndex.emplace(std::make_pair(mb->tick().ticks(), mb));
     }
 }

@@ -450,6 +450,8 @@ void Score::setUpTempoMap()
         tick += measureTicks;
     }
 
+    m_measures.updateTickIndex();
+
     if (isMaster()) {
         for (const auto& pair : spanner()) {
             const Spanner* spannerItem = pair.second;
