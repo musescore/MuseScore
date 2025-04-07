@@ -224,7 +224,7 @@ RadioButtonGroup {
                     currentText: model.name
 
                     onTextChanged: function(newTextValue) {
-                        listItem.incorrectNameWarning = root.model.renameWorkspace(model.index, newTextValue)
+                        listItem.incorrectNameWarning = root.model.validateWorkspaceName(model.index, newTextValue)
                     }
 
                     onTextEditingFinished: function(newTextValue) {
