@@ -1424,7 +1424,15 @@ void NotationActionController::addText(TextStyleType type)
         return;
     }
 
-    EngravingItem* item = interaction->contextItem();
+    EngravingItem* item = nullptr;
+
+    const INotationSelectionPtr sel = interaction->selection();
+    if (sel->isRange()) {
+        const INotationSelectionRangePtr range = sel->range();
+        item = range->rangeStartSegment()->firstElementForNavigation(range->startStaffIndex());
+    } else {
+        item = interaction->contextItem();
+    }
 
     if (isVerticalBoxTextStyle(type)) {
         if (!item || !item->isVBox()) {
