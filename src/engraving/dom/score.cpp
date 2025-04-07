@@ -3886,12 +3886,10 @@ void Score::collectMatch(void* data, EngravingItem* e)
     if (p->measure) {
         auto eMeasure = e->findMeasure();
         if (!eMeasure && e->isSpannerSegment()) {
-            if (auto ss = toSpannerSegment(e)) {
-                if (auto s = ss->spanner()) {
-                    if (auto se = s->startElement()) {
-                        if (auto mse = se->findMeasure()) {
-                            eMeasure = mse;
-                        }
+            if (auto s = toSpannerSegment(e)->spanner()) {
+                if (auto se = s->startElement()) {
+                    if (auto mse = se->findMeasure()) {
+                        eMeasure = mse;
                     }
                 }
             }
