@@ -70,7 +70,6 @@ if [ "$BUILD_MODE" == "nightly" ]; then
   BUILD_REVISION=$(cat $ARTIFACTS_DIR/env/build_revision.env)
   ARTIFACT_NAME=MuseScore-Studio-Nightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}-${PACKARCH}
 else
-  BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
   ARTIFACT_NAME=MuseScore-Studio-${BUILD_VERSION}-${PACKARCH}
 fi
 

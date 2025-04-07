@@ -98,7 +98,7 @@ apt_packages_runtime=(
   libegl1-mesa-dev
   libgles2-mesa-dev
   libodbc1
-  libpq-dev
+  libodbc2
   libssl-dev
   libxcomposite-dev
   libxcursor-dev
@@ -117,6 +117,22 @@ apt_packages_runtime=(
   libxkbcommon-dev
   libopengl-dev
   libvulkan-dev
+  # gstreamer for QtMultimedia - Shouldn't be in the bundle at the moment
+  # libunwind-dev
+  # libgstreamer1.0-dev
+  # libgstreamer-plugins-base1.0-dev
+  # libgstreamer-plugins-bad1.0-dev 
+  # gstreamer1.0-plugins-base 
+  # gstreamer1.0-plugins-good 
+  # gstreamer1.0-plugins-bad 
+  # gstreamer1.0-plugins-ugly 
+  # gstreamer1.0-libav 
+  # gstreamer1.0-tools 
+  # gstreamer1.0-x 
+  # gstreamer1.0-alsa 
+  # gstreamer1.0-gl 
+  # gstreamer1.0-gtk3  
+  # gstreamer1.0-pulseaudio
   )
 
 apt_packages_ffmpeg=(
@@ -140,7 +156,8 @@ case "$PACKARCH" in
   x86_64)
     # Get newer Qt (only used cached version if it is the same)
     qt_version="624"
-    qt_revision="r2" # added websocket module
+    # qt_revision="r2" # added websocket module
+    qt_revision="r3" # added multimedia module
     qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
     if [[ ! -d "${qt_dir}" ]]; then
       mkdir -p "${qt_dir}"

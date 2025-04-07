@@ -1,0 +1,10 @@
+{
+    "uri": "musescore://extensions/dev/multimedia",
+    "type": "form",
+    "title": "Multimedia",
+    "icon": "CLOCK",
+    "ui_context": "Any",
+    "modal": true,
+
+    "path": "Main.qml"
+}

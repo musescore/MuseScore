@@ -79,6 +79,11 @@ if(QT_ADD_WEBSOCKET)
     list(APPEND QT_LIBRARIES Qt::WebSockets)
 endif()
 
+if (QT_ADD_MULTIMEDIA)
+    list(APPEND qt_components Multimedia)
+    list(APPEND QT_LIBRARIES Qt::Multimedia)
+endif()
+
 find_package(Qt6 6.2.4 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
