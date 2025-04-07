@@ -832,16 +832,7 @@ void NotationInteraction::moveSegmentSelection(MoveDirection d)
 
 EngravingItem* NotationInteraction::contextItem() const
 {
-    EngravingItem* item = nullptr;
-    const INotationSelectionPtr sel = selection();
-
-    if (sel->isRange()) {
-        const INotationSelectionRangePtr range = sel->range();
-        item = range->rangeStartSegment()->firstElementForNavigation(range->startStaffIndex());
-    } else {
-        item = sel->element();
-    }
-
+    EngravingItem* item = selection()->element();
     return item ? item : hitElementContext().element;
 }
 
