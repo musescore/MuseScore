@@ -1076,7 +1076,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 TLayout::layoutItem(e, ctx);
                 if (e->autoplace()) {
                     if (e->isDynamic()) {
-                        toDynamic(e)->manageBarlineCollisions();
                         dynamicsExprAndHairpinsToAlign.push_back(e);
                     }
                     Autoplace::autoplaceSegmentElement(e, e->mutldata(), false);

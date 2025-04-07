@@ -72,8 +72,6 @@ public:
     int subtype() const override { return static_cast<int>(m_dynamicType); }
     TranslatableString subtypeUserName() const override;
 
-    double customTextOffset() const;
-
     void reset() override;
 
     void setVelocity(int v) { m_velocity = v; }
@@ -98,8 +96,6 @@ public:
 
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
-
-    void manageBarlineCollisions();
 
     static String dynamicText(DynamicType t);
     bool hasCustomText() const { return dynamicText(m_dynamicType) != xmlText(); }
@@ -141,6 +137,8 @@ public:
     void findAdjacentHairpins();
 
     Shape symShapeWithCutouts(SymId id) const override;
+
+    static Dyn dynInfo(DynamicType type);
 
 private:
 
