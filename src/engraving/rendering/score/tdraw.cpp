@@ -2167,22 +2167,14 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
     }
 
     if (item->style().styleB(Sid::fourMeasureRepeatShowExtenders) && item->numMeasures() == 4) {
-        // TODO: add style settings specific to measure repeats
-        // for now, using thickness and margin same as mmrests
         double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness);
-        if (hBarThickness) {     // don't draw at all if 0, QPainter interprets 0 pen width differently
-            Pen pen(painter->pen());
-            pen.setCapStyle(PenCapStyle::FlatCap);
-            pen.setWidthF(hBarThickness);
-            painter->setPen(pen);
+        Pen pen(painter->pen());
+        pen.setCapStyle(PenCapStyle::FlatCap);
+        pen.setWidthF(hBarThickness);
+        painter->setPen(pen);
 
-            double twoMeasuresWidth = 2 * item->measure()->width();
-            double margin = item->style().styleMM(Sid::multiMeasureRestMargin);
-            double xOffset = item->symBbox(ldata->symId).width() * .5;
-            double gapDistance = (item->symBbox(ldata->symId).width() + item->spatium()) * .5;
-            painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
-            painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
-        }
+        painter->drawLine(ldata->extenderLineLeft);
+        painter->drawLine(ldata->extenderLineRight);
     }
 }
 
