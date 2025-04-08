@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_LANGUAGES_LANGUAGESERRORS_H
-#define MUSE_LANGUAGES_LANGUAGESERRORS_H
+#pragma once
 
 #include "types/ret.h"
 #include "translation.h"
@@ -32,7 +31,7 @@ enum class Err {
     UnknownError    = int(Ret::Code::LanguagesFirst),
 
     AlreadyUpToDate,
-    ErrorParseConfig,
+    ErrorInvalidServerLanguagesInfo,
     ErrorDownloadLanguage,
     ErrorWriteLanguage,
     ErrorLanguageNotFound,
@@ -49,7 +48,7 @@ inline Ret make_ret(Err e)
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
     case Err::AlreadyUpToDate: return Ret(retCode, muse::trc("languages", "Up to date"));
-    case Err::ErrorParseConfig: return Ret(retCode, muse::trc("languages", "Error while parsing response from server"));
+    case Err::ErrorInvalidServerLanguagesInfo: return Ret(retCode, muse::trc("languages", "Error while parsing response from server"));
     case Err::ErrorDownloadLanguage: return Ret(retCode, muse::trc("languages", "Error while downloading language"));
     case Err::ErrorWriteLanguage: return Ret(retCode, muse::trc("languages", "Error while writing language files"));
     case Err::ErrorLanguageNotFound: return Ret(retCode, muse::trc("languages", "Language not found"));
@@ -62,5 +61,3 @@ inline Ret make_ret(Err e)
     return retCode;
 }
 }
-
-#endif // MUSE_LANGUAGES_LANGUAGESERRORS_H
