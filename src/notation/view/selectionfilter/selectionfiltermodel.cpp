@@ -21,7 +21,7 @@
  */
 #include "selectionfiltermodel.h"
 
-#include "engraving/dom/select.h"
+#include "engraving/dom/selectionfilter.h"
 
 #include "log.h"
 #include "translation.h"
