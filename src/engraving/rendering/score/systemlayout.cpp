@@ -929,21 +929,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     createSkylines(elementsToLayout, ctx);
 
-    Fraction stick = elementsToLayout.measures.front()->tick();
-    Fraction etick = elementsToLayout.measures.back()->endTick();
-
-    for (Chord* chord : elementsToLayout.chords) {
-        for (Chord* grace : chord->graceNotesBefore()) {
-            layoutTies(grace, system, stick, ctx);
-            doLayoutGuitarBends(grace, ctx);
-        }
-        layoutTies(chord, system, stick, ctx);
-        doLayoutGuitarBends(chord, ctx);
-        for (Chord* grace : chord->graceNotesAfter()) {
-            layoutTies(grace, system, stick, ctx);
-            doLayoutGuitarBends(grace, ctx);
-        }
-    }
+    layoutTiesAndBends(elementsToLayout, ctx);
 
     if (ctx.conf().isLinearMode()) {
         // TODO: get rid of this
@@ -1418,6 +1404,25 @@ void SystemLayout::layoutTuplets(const std::vector<ChordRest*>& chordRests, Layo
     }
 }
 
+void SystemLayout::layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx)
+{
+    System* system = elementsToLayout.system;
+    Fraction stick = elementsToLayout.measures.front()->tick();
+
+    for (Chord* chord : elementsToLayout.chords) {
+        for (Chord* grace : chord->graceNotesBefore()) {
+            layoutTies(grace, system, stick, ctx);
+            layoutGuitarBends(grace, ctx);
+        }
+        layoutTies(chord, system, stick, ctx);
+        layoutGuitarBends(chord, ctx);
+        for (Chord* grace : chord->graceNotesAfter()) {
+            layoutTies(grace, system, stick, ctx);
+            layoutGuitarBends(grace, ctx);
+        }
+    }
+}
+
 void SystemLayout::layoutNoteAnchoredSpanners(System* system, Chord* chord)
 {
     // Add all spanners attached to notes, otherwise these will be removed if outside of the layout range
@@ -1454,26 +1459,7 @@ void SystemLayout::doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx
     }
 }
 
-void SystemLayout::layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx)
-{
-    for (Segment* seg : sl) {
-        for (EngravingItem* el : seg->elist()) {
-            if (!el || !el->isChord()) {
-                continue;
-            }
-            Chord* chord = toChord(el);
-            for (Chord* grace : chord->graceNotesBefore()) {
-                doLayoutGuitarBends(grace, ctx);
-            }
-            doLayoutGuitarBends(chord, ctx);
-            for (Chord* grace : chord->graceNotesAfter()) {
-                doLayoutGuitarBends(grace, ctx);
-            }
-        }
-    }
-}
-
-void SystemLayout::doLayoutGuitarBends(Chord* chord, LayoutContext& ctx)
+void SystemLayout::layoutGuitarBends(Chord* chord, LayoutContext& ctx)
 {
     for (Note* note : chord->notes()) {
         GuitarBend* bendBack = note->bendBack();
@@ -1788,21 +1774,14 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 
 void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
 {
-    std::vector<Segment*> segList;
+    ElementsToLayout elements(system);
     for (MeasureBase* mb : system->measures()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        for (Segment& seg : toMeasure(mb)->segments()) {
-            if (seg.isChordRestType()) {
-                segList.push_back(&seg);
-            }
+        if (mb->isMeasure()) {
+            collectElementsToLayout(toMeasure(mb), elements, ctx);
         }
     }
-    Fraction stick = system->measures().front()->tick();
-    Fraction etick = system->measures().back()->endTick();
-    doLayoutTies(system, segList, stick, etick, ctx);
-    layoutGuitarBends(segList, ctx);
+
+    layoutTiesAndBends(elements, ctx);
 }
 
 void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
