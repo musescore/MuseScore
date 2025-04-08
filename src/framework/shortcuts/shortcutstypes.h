@@ -26,11 +26,10 @@
 #include <list>
 #include <QKeySequence>
 
-#include "utils.h"
-#include "stringutils.h"
+#include "global/utils.h"
+#include "global/stringutils.h"
+#include "global/translation.h"
 #include "midi/midievent.h"
-
-#include "translation.h"
 
 namespace muse::shortcuts {
 struct Shortcut

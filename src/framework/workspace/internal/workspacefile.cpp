@@ -21,8 +21,6 @@
  */
 #include "workspacefile.h"
 
-#include "stringutils.h"
-
 #include "io/buffer.h"
 
 #include "global/serialization/zipreader.h"
