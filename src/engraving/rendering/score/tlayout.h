@@ -366,7 +366,7 @@ public:
 
     static void layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx);
 
-    static RectF layoutRect(const BarLine* item, LayoutContext& ctx);
+    static void updateBarlineShape(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx);
 
     // layoutSystem;
     static SpannerSegment* layoutSystem(Spanner* item, System* system, LayoutContext& ctx); // factory

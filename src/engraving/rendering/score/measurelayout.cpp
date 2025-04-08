@@ -952,7 +952,12 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         if (!s.isChordRestType()) {
             continue;
         }
-        BeamLayout::layoutNonCrossBeams(&s, ctx);
+        for (EngravingItem* item : s.elist()) {
+            if (!item || !item->isChordRest() || !ctx.dom().staff(item->vStaffIdx())->show()) {
+                continue;
+            }
+            BeamLayout::layoutNonCrossBeams(toChordRest(item), ctx);
+        }
     }
 
     for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {

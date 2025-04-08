@@ -54,7 +54,7 @@ public:
     static void restoreBeams(Measure* m, LayoutContext& ctx);
     static bool measureMayHaveBeamsJoinedIntoNext(const Measure* measure);
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
-    static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
+    static void layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);
     static void checkCrossPosAndStemConsistency(Beam* beam, LayoutContext& ctx);
 
