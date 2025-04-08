@@ -61,7 +61,9 @@ public:
     Q_INVOKABLE void selectWorkspace(int workspaceIndex);
     Q_INVOKABLE void removeWorkspace(int workspaceIndex);
     Q_INVOKABLE void resetWorkspace(int workspaceIndex);
-    Q_INVOKABLE QString renameWorkspace(int workspaceIndex, const QString& newName);
+
+    Q_INVOKABLE QString validateWorkspaceName(int workspaceIndex, const QString& name) const;
+    Q_INVOKABLE bool renameWorkspace(int workspaceIndex, const QString& newName);
 
 signals:
     void selectedWorkspaceChanged(QVariant selectedWorkspace);
@@ -71,8 +73,6 @@ private:
 
     QVariantMap workspaceToObject(IWorkspacePtr workspace) const;
     bool isIndexValid(int index) const;
-
-    Ret doValidateWorkspaceName(int workspaceIndex, const QString& name) const;
 
     enum Roles {
         RoleName = Qt::UserRole + 1,
