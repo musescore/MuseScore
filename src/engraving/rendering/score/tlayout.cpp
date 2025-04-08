@@ -1692,8 +1692,22 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     y += item->isBelow() ? vertOffset : -vertOffset;
 
     const double yBelow = y + r.height();
-    const double chordEdge
+    double chordEdge
         = item->isToTheLeft() ? chordShape.leftMostEdgeAtHeight(y, yBelow) : chordShape.rightMostEdgeAtHeight(y, yBelow);
+
+    if (!item->isToTheLeft()) {
+        // Always place lines to the right of dots
+        double xMin = chordShape.left();
+        for (ShapeElement& shapeEl : chordShape.elements()) {
+            if (!shapeEl.item() || !shapeEl.item()->isNoteDot()) {
+                continue;
+            }
+
+            xMin = std::max(xMin, shapeEl.right());
+        }
+        chordEdge = std::max(chordEdge, xMin);
+    }
+
     x += item->isToTheLeft() ? chordEdge - horOffset : chordEdge + horOffset;
     ldata->setPos(x, y);
 
