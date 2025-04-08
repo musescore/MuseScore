@@ -484,6 +484,7 @@ extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
+extern bool propertyLinkSameScore(Pid id);
 extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const muse::AsciiStringView& name);
 extern String propertyUserName(Pid);

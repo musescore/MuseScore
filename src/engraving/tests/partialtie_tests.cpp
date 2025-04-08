@@ -355,6 +355,40 @@ protected:
         }
     }
 
+    void testPartialTieListSelection(const String& score, const Fraction& startPointLocation, const Fraction& secondNoteLocation,
+                                     const std::vector<Fraction>& jumpPointLocations)
+    {
+        openScore(score, startPointLocation, jumpPointLocations);
+
+        Note* secondTieNote = getNoteAtTick(secondNoteLocation);
+        EXPECT_TRUE(secondTieNote);
+
+        // Add tie to start note
+        // Expect tie to be added successfully and all jump points to have an incoming tie
+        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+        m_masterScore->select(m_startNote);
+        m_masterScore->select(secondTieNote, SelectType::ADD);
+        Tie* t = m_masterScore->cmdToggleTie();
+        EXPECT_TRUE(t);
+        m_masterScore->endCmd();
+
+        for (const Note* note : m_jumpPoints) {
+            EXPECT_TRUE(note->tieBack());
+        }
+
+        saveAndLoad(score, startPointLocation, jumpPointLocations);
+
+        toggleJumpPoint();
+
+        deleteJumpTie();
+
+        deleteJumpNote();
+
+        toggleFirstJumpPoint();
+
+        deleteStartTie();
+    }
+
 private:
     bool m_useRead302 = false;
 
@@ -480,4 +514,16 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials04.mscx"),
                                             PARTIALTIE_DATA_DIR + String(u"copyPastePartials04-ref.mscx")));
+}
+
+TEST_F(Engraving_PartialTieTests, partialTieListSelection)
+{
+    // Test list selection of non-adjacent notes
+    const String test = u"partialTieList";
+
+    const Fraction startPointTick = Fraction(2, 4);
+    const Fraction secondTieNoteTick = Fraction(5, 4);
+    const std::vector<Fraction> jumpPoints = { Fraction(5, 4), Fraction(2, 1) };
+
+    testPartialTieListSelection(test, startPointTick, secondTieNoteTick, jumpPoints);
 }
