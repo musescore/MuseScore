@@ -30,6 +30,8 @@
 #include "playback/utils/expressionutils.h"
 #include "playback/utils/repeatutils.h"
 
+#include "noterenderer.h"
+
 using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
@@ -233,7 +235,7 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
                                            mpe::PlaybackEventList& result)
 {
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note, ctx.commonArticulations)) {
+        if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
             continue;
         }
 

@@ -29,6 +29,7 @@ class Note;
 class NoteRenderer
 {
 public:
+    static bool shouldRender(const Note* note, const RenderingContext& ctx, const muse::mpe::ArticulationMap& articulations);
     static void render(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 
 private:

@@ -37,6 +37,63 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
+bool NoteRenderer::shouldRender(const Note* note, const RenderingContext& ctx, const muse::mpe::ArticulationMap& articulations)
+{
+    if (!note->play()) {
+        return false;
+    }
+
+    const Tie* tie = note->tieBack();
+
+    if (tie && tie->playSpanner()) {
+        //!Note Checking whether the tied note has any multi-note articulation attached
+        //!     If so, we can't ignore such note
+        for (const auto& pair : articulations) {
+            if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
+                return true;
+            }
+        }
+
+        const Note* startNote = tie->startNote();
+        const Chord* startChord = startNote ? startNote->chord() : nullptr;
+        if (startChord) {
+            if (startChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+                return true;
+            }
+        }
+
+        const Note* endNote = tie->endNote();
+        const Chord* endChord = endNote ? endNote->chord() : nullptr;
+        if (endChord) {
+            if (endChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+                return true;
+            }
+        }
+
+        if (tie->isPartialTie()) {
+            return !findOutgoingNote(note, ctx).isValid();
+        }
+
+        if (!startChord || !endChord) {
+            return false;
+        }
+
+        const auto& intervals = startChord->score()->spannerMap().findOverlapping(startChord->tick().ticks(),
+                                                                                  startChord->endTick().ticks(),
+                                                                                  /*excludeCollisions*/ true);
+        for (const auto& interval : intervals) {
+            const Spanner* sp = interval.value;
+            if (sp->isTrill() && sp->playSpanner() && sp->endElement() == startChord) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
 void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result)
 {
     IF_ASSERT_FAILED(note) {
@@ -44,13 +101,7 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
     }
 
     NominalNoteCtx noteCtx = buildNominalNoteCtx(note, ctx);
-
-    if (note->incomingPartialTie()) {
-        const bool hasOutgoingNote = findOutgoingNote(note, ctx).isValid();
-        if (hasOutgoingNote || !isNotePlayable(note, noteCtx.articulations)) {
-            return;
-        }
-    } else if (!isNotePlayable(note, noteCtx.articulations)) {
+    if (!shouldRender(note, ctx, noteCtx.articulations)) {
         return;
     }
 
@@ -108,6 +159,10 @@ void NoteRenderer::renderPartialTie(const Note* outgoingNote, NominalNoteCtx& ou
 
     NominalNoteCtx incomingNoteCtx = buildNominalNoteCtx(incomingNoteInfo.note, incomingChordCtx);
 
+    if (shouldRender(incomingNoteInfo.note, incomingChordCtx, incomingNoteCtx.articulations)) {
+        return;
+    }
+
     const Tie* tieFor = incomingNoteInfo.note->tieFor();
     if (tieFor && tieFor->playSpanner() && !tieFor->isLaissezVib()) {
         renderNormalTie(incomingNoteInfo.note, incomingNoteCtx);
@@ -152,7 +207,7 @@ void NoteRenderer::renderNormalTie(const Note* firstNote, NominalNoteCtx& firstN
         ChordArticulationsParser::buildChordArticulationMap(chord, currChordCtx, currChordCtx.commonArticulations);
 
         const NominalNoteCtx currNoteCtx = buildNominalNoteCtx(currNote, currChordCtx);
-        if (isNotePlayable(currNote, currNoteCtx.articulations)) {
+        if (shouldRender(currNote, currChordCtx, currNoteCtx.articulations)) {
             if (currNoteCtx.articulations.contains(ArticulationType::DiscreteGlissando)) {
                 firstNoteCtx.duration += GlissandosRenderer::discreteGlissandoStepDuration(currNote, currNoteCtx.duration);
             }

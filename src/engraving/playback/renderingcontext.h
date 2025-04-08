@@ -26,7 +26,6 @@
 #include "../dom/chord.h"
 #include "../dom/note.h"
 #include "../dom/sig.h"
-#include "../dom/tie.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
@@ -155,63 +154,6 @@ struct NominalNoteCtx {
     {
     }
 };
-
-inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& articualtionMap)
-{
-    if (!note->play()) {
-        return false;
-    }
-
-    const Tie* tie = note->tieBack();
-
-    if (tie && tie->playSpanner()) {
-        //!Note Checking whether the tied note has any multi-note articulation attached
-        //!     If so, we can't ignore such note
-        for (const auto& pair : articualtionMap) {
-            if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
-                return true;
-            }
-        }
-
-        const Note* startNote = tie->startNote();
-        const Chord* startChord = startNote ? startNote->chord() : nullptr;
-        if (startChord) {
-            if (startChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
-                return true;
-            }
-        }
-
-        const Note* endNote = tie->endNote();
-        const Chord* endChord = endNote ? endNote->chord() : nullptr;
-        if (endChord) {
-            if (endChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
-                return true;
-            }
-        }
-
-        if (tie->isPartialTie()) {
-            return true;
-        }
-
-        if (!startChord || !endChord) {
-            return false;
-        }
-
-        const auto& intervals = startChord->score()->spannerMap().findOverlapping(startChord->tick().ticks(),
-                                                                                  startChord->endTick().ticks(),
-                                                                                  /*excludeCollisions*/ true);
-        for (const auto& interval : intervals) {
-            const Spanner* sp = interval.value;
-            if (sp->isTrill() && sp->playSpanner() && sp->endElement() == startChord) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return true;
-}
 
 inline muse::mpe::NoteEvent buildNoteEvent(const NominalNoteCtx& ctx)
 {

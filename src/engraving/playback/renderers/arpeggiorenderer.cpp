@@ -26,6 +26,7 @@
 #include "dom/arpeggio.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
+#include "noterenderer.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -112,7 +113,7 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
     std::map<pitch_level_t, NominalNoteCtx> result;
 
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note, ctx.commonArticulations)) {
+        if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
             continue;
         }
 

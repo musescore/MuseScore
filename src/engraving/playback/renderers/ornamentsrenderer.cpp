@@ -30,6 +30,8 @@
 #include "playback/metaparsers/notearticulationsparser.h"
 #include "playback/utils/expressionutils.h"
 
+#include "noterenderer.h"
+
 using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
@@ -321,7 +323,7 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     const DisclosurePattern& nominalPattern = search->second;
 
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note, ctx.commonArticulations)) {
+        if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
             continue;
         }
 
