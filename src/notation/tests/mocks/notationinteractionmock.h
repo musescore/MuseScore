@@ -99,6 +99,8 @@ public:
     MOCK_METHOD(void, selectEmptyTrailingMeasure, (), (override));
     MOCK_METHOD(void, moveSegmentSelection, (MoveDirection), (override));
 
+    MOCK_METHOD(EngravingItem*, contextItem, (), (const, override));
+
     MOCK_METHOD(void, movePitch, (MoveDirection, PitchMode), (override));
     MOCK_METHOD(void, nudge, (MoveDirection, bool), (override));
     MOCK_METHOD(void, nudgeAnchors, (MoveDirection), (override));

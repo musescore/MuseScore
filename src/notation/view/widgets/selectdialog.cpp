@@ -46,7 +46,16 @@ SelectDialog::SelectDialog(QWidget* parent)
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    m_element = contextItem(globalContext()->currentNotation()->interaction());
+    const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
+    IF_ASSERT_FAILED(interaction) {
+        return;
+    }
+
+    m_element = interaction->contextItem();
+    IF_ASSERT_FAILED(m_element) {
+        return;
+    }
+
     type->setText(m_element->translatedTypeUserName().toQString());
     subtype->setText(m_element->translatedSubtypeUserName().toQString());
 
@@ -225,7 +234,7 @@ void SelectDialog::apply() const
         return;
     }
 
-    EngravingItem* selectedElement = contextItem(interaction);
+    EngravingItem* selectedElement = interaction->contextItem();
     if (!selectedElement) {
         return;
     }
