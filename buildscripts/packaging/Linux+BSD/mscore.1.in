@@ -536,21 +536,12 @@ option.
 .Xr timidity 1 ,
 .Xr qtoptions 7
 .Bl -tag -width Ds
-.It Pa https://musescore.org/handbook
+.It Pa https://handbook.musescore.org
 Online Handbook, full user manual
 .It Pa https://musescore.org/forum
 Support Forum
-.It Pa https://musescore.org/handbook/command\-line\-options\-0
+.It Pa https://handbook.musescore.org/appendix/command-line-usage
 Further documentation of command line options
-.It Pa https://musescore.org/handbook/revert\-factory\-settings\-0
-Reverting to factory settings (troubleshooting)
-.It Pa https://musescore.org/project/issues
-Project Issue Tracker
-.Pp
-Please check first to if the bug you're encountering
-has already been reported.
-If you just need help with something, then please use the
-support forum (see above) instead.
 .It Pa http://doc.qt.io/qt\-5/qguiapplication.html#supported\-command\-line\-options
 Documentation of automatic Qt command line options
 .El
@@ -558,15 +549,13 @@ Documentation of automatic Qt command line options
 MuseScore attempts to implement the following standards:
 .Bl -bullet
 .It
-MusicXML 3.1 (score interchange format)
+MusicXML 4.0 (score interchange format)
 .It
 SF2 (SoundFont 2.01)
 .It
 SF3 (SoundFont with OGG Vorbis-compressed samples)
 .It
-SFZ (Sforzato soundfont)
-.It
-SMuFL (Standard Music Font Layout 1.30)
+SMuFL (Standard Music Font Layout 1.4)
 .El
 .Sh HISTORY
 MuseScore was split off the MusE sequencer in 2002 and has since
