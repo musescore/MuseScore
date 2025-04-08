@@ -153,7 +153,7 @@ void DrumsetPanelView::updateColors()
     }
 
     options.useElementColors = true;
-    options.colorsInverionsEnabled = true;
+    options.colorsInversionEnabled = true;
 
     widget->setPaintOptions(options);
 
