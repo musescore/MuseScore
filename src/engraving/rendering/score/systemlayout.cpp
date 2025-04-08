@@ -918,7 +918,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     for (BarLine* bl : elementsToLayout.barlines) {
-        TLayout::layoutRect(bl, bl->mutldata(), ctx);
+        TLayout::updateBarlineShape(bl, bl->mutldata(), ctx);
     }
 
     createSkylines(elementsToLayout, ctx);
@@ -1401,16 +1401,13 @@ void SystemLayout::layoutTuplets(const std::vector<ChordRest*>& chordRests, Layo
 {
     std::set<Tuplet*> laidoutTuplets;
     for (ChordRest* cr : chordRests) {
-        Tuplet* tuplet = cr->tuplet();
-        while (tuplet && tuplet->tuplet()) { // find top level tuplet
-            tuplet = tuplet->tuplet();
-        }
+        Tuplet* tuplet = cr->topTuplet();
 
         if (!tuplet || muse::contains(laidoutTuplets, tuplet)) {
             continue;
         }
 
-        TupletLayout::layoutTopTuplet(tuplet, ctx); // this lays out also the inner tuplets
+        TupletLayout::layoutTupletAndNestedTuplets(tuplet, ctx); // this lays out also the inner tuplets
         laidoutTuplets.insert(tuplet);
     }
 }

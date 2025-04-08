@@ -541,7 +541,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 /// Recursively calls layout() on any nested tuplets and then the tuplet itself
 /// </summary>
 /// <param name="de">Start element of the tuplet</param>
-void TupletLayout::layoutTopTuplet(Tuplet* t, LayoutContext& ctx)
+void TupletLayout::layoutTupletAndNestedTuplets(Tuplet* t, LayoutContext& ctx)
 {
     // t is top level tuplet
     // loop through elements of that tuplet
@@ -551,7 +551,7 @@ void TupletLayout::layoutTopTuplet(Tuplet* t, LayoutContext& ctx)
         }
         // if element is tuplet, layoutTuplet(that tuplet)
         if (d->isTuplet()) {
-            layoutTopTuplet(toTuplet(d), ctx);
+            layoutTupletAndNestedTuplets(toTuplet(d), ctx);
         }
     }
     // layout t

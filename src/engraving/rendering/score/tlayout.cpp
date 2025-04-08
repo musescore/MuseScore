@@ -1080,7 +1080,7 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
 
     ldata->setBbox(r);
 
-    layoutRect(item, ldata, ctx);
+    updateBarlineShape(item, ldata, ctx);
 
     //! NOTE The types are listed here explicitly to show what types there are (see add method)
     //! and accordingly show what the barline layout depends on.
@@ -1115,7 +1115,7 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
     }
 }
 
-void TLayout::layoutRect(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx)
+void TLayout::updateBarlineShape(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
 
