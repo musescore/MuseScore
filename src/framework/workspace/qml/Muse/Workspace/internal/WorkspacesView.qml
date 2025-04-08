@@ -210,8 +210,8 @@ RadioButtonGroup {
 
                     Layout.fillWidth: true
 
-                    navigation.panel: root.navigation.panel
-                    navigation.row: root.navigation.row
+                    navigation.panel: root.navigationPanel
+                    navigation.row: root.navigationPanel.row
                     navigation.column: 1
 
                     maximumLength: 40
