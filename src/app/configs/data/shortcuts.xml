@@ -961,6 +961,7 @@
   <SC>
     <key>next-syllable</key>
     <seq>-</seq>
+    <seq>Num+-</seq>
   </SC>
   <SC>
     <key>add-melisma</key>
