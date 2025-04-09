@@ -2710,7 +2710,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     ChordRest* secondChordRest = nullptr;
 
     Measure* meas = firstItem ? firstItem->findMeasure() : nullptr;
-    bool header = meas && meas->header() && firstItem->tick() == meas->tick();
+    bool header = meas && meas->header() && firstItem->tick() == meas->tick() && !firstItem->isChordRest();
 
     if (firstItem && secondItem
         && ((firstItem->isBarLine() != secondItem->isBarLine()) || (header && secondItem->isChordRest()))) {
@@ -2721,7 +2721,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         const bool hasAdjacentJump = (outgoing && cr->hasFollowingJumpItem()) || (!outgoing && cr->hasPrecedingJumpItem());
         const bool isNextToBarline = (outgoing ? cr->tick() + cr->actualTicks() : cr->tick()) == otherElement->tick();
 
-        if (!cr || !isNextToBarline || !hasAdjacentJump) {
+        if (!cr || (!header && (!isNextToBarline || !hasAdjacentJump))) {
             return;
         }
 
