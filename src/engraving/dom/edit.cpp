@@ -3602,8 +3602,8 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
         s2 = s2->measure()->mmRestLast()->last();
     }
 
-    const Fraction stick1 = s1->tick();
-    const Fraction stick2 = s2 ? s2->tick() : lastMeasure()->endTick();
+    const Fraction startTick = s1->tick();
+    const Fraction endTick = s2 ? s2->tick() : Fraction::max();
 
     Segment* ss1 = s1;
     if (!ss1->isChordRestType()) {
@@ -3612,9 +3612,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
     bool fullMeasure = ss1 && (ss1->measure()->first(SegmentType::ChordRest) == ss1)
                        && (s2 == 0 || s2->isEndBarLineType());
 
-    Fraction tick2 = s2 ? s2->tick() : Fraction::max();
-
-    deleteOrShortenOutSpannersFromRange(stick1, stick2, track1, track2, filter);
+    deleteOrShortenOutSpannersFromRange(startTick, endTick, track1, track2, filter);
     deleteAnnotationsFromRange(s1, s2, track1, track2, filter);
 
     for (track_idx_t track = track1; track < track2; ++track) {
@@ -3624,7 +3622,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
         Fraction f;
         Fraction tick  = Fraction(-1, 1);
         Tuplet* currentTuplet = 0;
-        for (Segment* s = s1; s && (s->tick() < stick2); s = s->next1()) {
+        for (Segment* s = s1; s && (s->tick() < endTick); s = s->next1()) {
             if (s->element(track) && s->isBreathType()) {
                 deleteItem(s->element(track));
                 continue;
@@ -3655,7 +3653,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                     tick = s->tick();
                 }
                 currentTuplet = cr1->tuplet();
-                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), stick1, tick2, /*fullMeasure*/ false)) {
+                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick, /*fullMeasure*/ false)) {
                     cmdDeleteTuplet(topTuplet, false);
                     f += topTuplet->ticks();
                     currentTuplet = topTuplet->tuplet();
@@ -3671,7 +3669,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                 if (f.isValid() && !fullMeasure) {     // Set rests for the previous tuplet we were dealing with
                     setRest(tick, track, f, false, currentTuplet);
                 }
-                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), stick1, tick2, fullMeasure)) {
+                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick, fullMeasure)) {
                     cmdDeleteTuplet(topTuplet, false);
                     tick = topTuplet->tick();
                     f = topTuplet->ticks();
