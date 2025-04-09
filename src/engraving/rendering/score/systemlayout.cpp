@@ -1675,7 +1675,7 @@ bool SystemLayout::measureHasCrossStuffOrModifiedBeams(const Measure* measure)
                 continue;
             }
             const Beam* beam = toChordRest(e)->beam();
-            if (beam && (beam->cross() || beam->userModified())) {
+            if (beam && (beam->cross() || beam->fullCross() || beam->userModified())) {
                 return true;
             }
             const Chord* c = e->isChord() ? toChord(e) : nullptr;
@@ -1689,7 +1689,7 @@ bool SystemLayout::measureHasCrossStuffOrModifiedBeams(const Measure* measure)
             }
             if (e->isChord() && !toChord(e)->graceNotes().empty()) {
                 for (const Chord* grace : toChord(e)->graceNotes()) {
-                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->fullCross() || grace->beam()->userModified())) {
                         return true;
                     }
                 }
@@ -1719,8 +1719,8 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                     continue;
                 }
                 for (Chord* grace : toChord(e)->graceNotes()) {
-                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                        ChordLayout::computeUp(grace, ctx);
+                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->fullCross() || grace->beam()->userModified()) && grace->beam()->elements().front() == grace) {
+                        BeamLayout::layout(grace->beam(), ctx);
                     }
                 }
             }
@@ -1741,11 +1741,11 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                     continue;
                 }
                 Chord* chord = toChord(e);
-                if (chord->beam() && (chord->beam()->cross() || chord->beam()->userModified())) {
+                if (chord->beam() && (chord->beam()->cross() || chord->beam()->fullCross() || chord->beam()->userModified()) && chord->beam()->elements().front() == chord) {
                     bool prevUp = chord->up();
                     Stem* stem = chord->stem();
                     double prevStemLength = stem ? stem->length() : 0.0;
-                    ChordLayout::computeUp(chord, ctx);
+                    BeamLayout::layout(chord->beam(), ctx);
                     if (chord->up() != prevUp || (stem && stem->length() != prevStemLength)) {
                         // If the chord has changed direction needs to be re-laid out
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());

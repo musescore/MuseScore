@@ -115,6 +115,7 @@ void BeamLayout::layout(Beam* item, const LayoutContext& ctx)
 
     // The beam may have changed shape. one-note trems within this beam need to be layed out here
     for (ChordRest* cr : item->elements()) {
+        ChordLayout::computeUp(cr, ctx);
         if (cr->isChord() && toChord(cr)->tremoloSingleChord()) {
             TremoloLayout::layout(toChord(cr)->tremoloSingleChord(), ctx);
         }
@@ -878,6 +879,12 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
 void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
 {
+    if (cr->isChord()) {
+        for (Chord* grace : toChord(cr)->graceNotes()) {
+            layoutNonCrossBeams(grace, ctx);
+        }
+    }
+
     if (!BeamLayout::isTopBeam(cr)) {
         return;
     }
@@ -905,16 +912,6 @@ void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
         }
 
         beamCR->segment()->createShape(beamCR->staffIdx());
-    }
-
-    if (!cr->isChord()) {
-        return;
-    }
-
-    for (Chord* grace : toChord(cr)->graceNotes()) {
-        if (BeamLayout::isTopBeam(grace)) {
-            TLayout::layoutBeam(grace->beam(), ctx);
-        }
     }
 }
 
