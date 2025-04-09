@@ -58,7 +58,7 @@ Item {
             }
 
             onClosed: {
-                root.provider.onTourStepClosed(root.parent)
+                Qt.callLater(unloadTourStep)
             }
         }
 
@@ -72,6 +72,8 @@ Item {
         }
 
         function unloadTourStep() {
+            root.provider.onTourStepClosed(root.parent)
+
             tourStepLoader.active = false
         }
 
