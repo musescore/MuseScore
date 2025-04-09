@@ -68,7 +68,7 @@ private:
     muse::audio::msecs_t playbackPosition() const override;
     void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
     bool isActive() const override;
-    void setIsActive(bool arg) override;
+    void setIsActive(bool active) override;
 
     bool initSampler(const muse::audio::sample_rate_t sampleRate, const muse::audio::samples_t blockSize);
 
