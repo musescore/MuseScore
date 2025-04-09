@@ -31,7 +31,6 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
-#include "measurebase.h"
 #include "marker.h"
 #include "masterscore.h"
 #include "repeatlist.h"
@@ -106,8 +105,6 @@ Measure* Score::tick2measureMM(const Fraction& t) const
     }
 
     return measure;
-
-    return 0;
 }
 
 //---------------------------------------------------------

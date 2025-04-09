@@ -1153,8 +1153,6 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
         measures->add(newMeasure);
     }
 
-    measures->updateTickIndex();
-
     size_t n = sourceStavesIndexes.size();
     for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
         Staff* srcStaff = sourceScore->staff(sourceStavesIndexes[dstStaffIdx]);
@@ -1219,8 +1217,6 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
         MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
         measures->add(newMeasure);
     }
-
-    measures->updateTickIndex();
 
     collectTieEndPoints(tieMap);
 }
