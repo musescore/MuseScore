@@ -401,7 +401,7 @@ void RepeatList::collectRepeatListElements()
                               }
                         // Cross-section of the repeatList
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-                        std::list<int> endings(remainder->endings().begin(), remainder->endings().begin());
+                        std::list<int> endings(remainder->endings().begin(), remainder->endings().end());
 #else
                         std::list<int> endings = remainder->endings().toStdList();
 #endif
