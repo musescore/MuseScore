@@ -14198,15 +14198,15 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>651</width>
-             <height>744</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_60">
             <item>
              <widget class="QWidget" name="fretboardsWidget" native="true">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
