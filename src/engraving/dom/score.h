@@ -420,7 +420,7 @@ public:
 
     staff_idx_t staffIdx(const Staff*) const;
     staff_idx_t staffIdx(const Part*) const;
-    Staff* staff(size_t n) const { return (n < m_staves.size()) ? m_staves.at(n) : nullptr; }
+    Staff* staff(size_t n) const { return (n < m_staves.size()) ? m_staves[n] : nullptr; }
     Staff* staffById(const muse::ID& staffId) const;
     Part* partById(const muse::ID& partId) const;
 

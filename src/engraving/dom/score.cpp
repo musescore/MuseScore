@@ -2587,10 +2587,22 @@ void Score::insertStaff(Staff* staff, staff_idx_t ridx)
     }
 
     assignIdIfNeed(*staff);
-    staff->part()->insertStaff(staff, ridx);
 
     staff_idx_t idx = staffIdx(staff->part()) + ridx;
+    staff->setIdx(idx);
     m_staves.insert(m_staves.begin() + idx, staff);
+
+    // Update index of staves ahead of this
+    for (auto staffIt = m_staves.begin() + idx + 1; staffIt != m_staves.end(); staffIt++) {
+        Staff* curStaff = *staffIt;
+        if (!curStaff) {
+            continue;
+        }
+
+        curStaff->setIdx(curStaff->idx() + 1);
+    }
+
+    staff->part()->insertStaff(staff, ridx);
 
     for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
         Spanner* s = i->second;
@@ -2623,8 +2635,9 @@ void Score::appendStaff(Staff* staff)
     }
 
     assignIdIfNeed(*staff);
-    staff->part()->appendStaff(staff);
+    staff->setIdx(m_staves.size());
     m_staves.push_back(staff);
+    staff->part()->appendStaff(staff);
 
     updateStavesNumberForSystems();
 }
@@ -2700,6 +2713,16 @@ void Score::removeStaff(Staff* staff)
 
     muse::remove(m_staves, staff);
     staff->part()->removeStaff(staff);
+
+    // Update index of staves ahead of this
+    for (auto staffIt = m_staves.begin() + idx; staffIt != m_staves.end(); staffIt++) {
+        Staff* curStaff = *staffIt;
+        if (!curStaff) {
+            continue;
+        }
+
+        curStaff->setIdx(curStaff->idx() - 1);
+    }
 
     if (isSystemObjectStaff(staff)) {
         muse::remove(m_systemObjectStaves, staff);
@@ -2987,6 +3010,7 @@ void Score::sortStaves(std::vector<staff_idx_t>& dst)
             m_parts.push_back(curPart);
         }
         curPart->appendStaff(staff);
+        staff->setIdx(dl.size());
         dl.push_back(staff);
         for (size_t itrack = 0; itrack < VOICES; ++itrack) {
             trackMap.insert({ idx* VOICES + itrack, track++ });
@@ -5768,14 +5792,7 @@ void Score::addRefresh(const RectF& r)
 
 staff_idx_t Score::staffIdx(const Staff* staff) const
 {
-    staff_idx_t idx = 0;
-    for (Staff* s : m_staves) {
-        if (s == staff) {
-            break;
-        }
-        ++idx;
-    }
-    return idx;
+    return staff->idx();
 }
 
 //---------------------------------------------------------
@@ -5786,14 +5803,10 @@ staff_idx_t Score::staffIdx(const Staff* staff) const
 
 staff_idx_t Score::staffIdx(const Part* part) const
 {
-    staff_idx_t idx = 0;
-    for (Part* p : m_parts) {
-        if (p == part) {
-            break;
-        }
-        idx += p->nstaves();
+    if (part->staves().empty()) {
+        return m_staves.size();
     }
-    return idx;
+    return part->staves().front()->idx();
 }
 
 Staff* Score::staffById(const ID& staffId) const
