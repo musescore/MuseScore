@@ -35,6 +35,7 @@
 #include "playback/metaparsers/notearticulationsparser.h"
 
 #include "playback/utils/repeatutils.h"
+#include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -192,7 +193,10 @@ void NoteRenderer::renderPartialTie(const Note* outgoingNote, NominalNoteCtx& ou
     }
 
     addTiedNote(incomingNoteCtx, outgoingNoteCtx);
-    updateArticulationBoundaries(outgoingNoteCtx.timestamp, outgoingNoteCtx.duration, outgoingNoteCtx.articulations);
+
+    for (const auto& pair : outgoingNoteCtx.articulations) {
+        updateArticulationBoundaries(pair.first, outgoingNoteCtx.timestamp, outgoingNoteCtx.duration, outgoingNoteCtx.articulations);
+    }
 }
 
 void NoteRenderer::renderNormalTie(const Note* firstNote, NominalNoteCtx& firstNoteCtx)
@@ -248,7 +252,9 @@ void NoteRenderer::renderNormalTie(const Note* firstNote, NominalNoteCtx& firstN
         firstNoteCtx.articulations.erase(mpe::ArticulationType::Standard);
     }
 
-    updateArticulationBoundaries(firstNoteCtx.timestamp, firstNoteCtx.duration, firstNoteCtx.articulations);
+    for (const auto& pair : firstNoteCtx.articulations) {
+        updateArticulationBoundaries(pair.first, firstNoteCtx.timestamp, firstNoteCtx.duration, firstNoteCtx.articulations);
+    }
 }
 
 void NoteRenderer::addTiedNote(const NominalNoteCtx& tiedNoteCtx, NominalNoteCtx& firstNoteCtx)
@@ -273,26 +279,6 @@ void NoteRenderer::addTiedNote(const NominalNoteCtx& tiedNoteCtx, NominalNoteCtx
         if (!muse::contains(ARTICULATION_TO_IGNORE_TYPES, pair.first)) {
             firstNoteCtx.articulations.insert(pair);
         }
-    }
-}
-
-void NoteRenderer::updateArticulationBoundaries(const timestamp_t noteTimestamp, const duration_t noteDuration,
-                                                ArticulationMap& articulations)
-{
-    const timestamp_t noteTimestampTo = noteTimestamp + noteDuration;
-    IF_ASSERT_FAILED(noteTimestampTo > 0) {
-        return;
-    }
-
-    for (const auto& pair : articulations) {
-        const ArticulationAppliedData& articulation = pair.second;
-
-        const duration_percentage_t occupiedFrom = mpe::occupiedPercentage(articulation.meta.timestamp,
-                                                                           noteTimestampTo);
-        const duration_percentage_t occupiedTo = mpe::occupiedPercentage(articulation.meta.timestamp + articulation.meta.overallDuration,
-                                                                         noteTimestampTo);
-
-        articulations.updateOccupiedRange(pair.first, occupiedFrom, occupiedTo);
     }
 }
 
