@@ -3605,12 +3605,13 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
     const Fraction startTick = s1->tick();
     const Fraction endTick = s2 ? s2->tick() : Fraction::max();
 
-    Segment* ss1 = s1;
-    if (!ss1->isChordRestType()) {
-        ss1 = ss1->next1(SegmentType::ChordRest);
+    const Segment* firstCRSeg = s1->isChordRestType() ? s1 : s1->next1(SegmentType::ChordRest);
+    IF_ASSERT_FAILED(firstCRSeg) {
+        return crs;
     }
-    bool fullMeasure = ss1 && (ss1->measure()->first(SegmentType::ChordRest) == ss1)
-                       && (s2 == 0 || s2->isEndBarLineType());
+
+    const bool fullMeasure = firstCRSeg == firstCRSeg->measure()->first(SegmentType::ChordRest)
+                             && (!s2 || s2->isEndBarLineType());
 
     deleteOrShortenOutSpannersFromRange(startTick, endTick, track1, track2, filter);
     deleteAnnotationsFromRange(s1, s2, track1, track2, filter);
