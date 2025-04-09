@@ -26,7 +26,7 @@ module.exports = {
     openNewScoreDialog: function()
     {
         api.autobot.async(function() {
-            Navigation.triggerControl("RecentScores", "RecentScores", "New score")
+            Navigation.triggerControl("RecentScores", "RecentScoresGrid", "New score")
         })
     },
 
@@ -38,9 +38,11 @@ module.exports = {
     chooseInstrument: function(family, instrument)
     {
         Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
-        Navigation.goToControl("NewScoreDialog", "FamilyView", family)
-        Navigation.goToControl("NewScoreDialog", "InstrumentsView", instrument)
-        Navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+        // Navigation.goToControl("NewScoreDialog", "FamilyView", family)
+        // Navigation.goToControl("NewScoreDialog", "InstrumentsView", instrument) 
+        Navigation.triggerControl("NewScoreDialog", "FamilyView", family)
+        Navigation.triggerControl("NewScoreDialog", "InstrumentsView", instrument)
+        //Navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
     },
 
     chooseRandomInstruments: function(count, see_msec)
