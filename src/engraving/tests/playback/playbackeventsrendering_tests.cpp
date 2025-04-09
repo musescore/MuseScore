@@ -2527,9 +2527,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
 
     constexpr timestamp_t expectedTremoloTimestamp = 2000000; // timestamp of the 1st tied note
     constexpr timestamp_t expectedTremoloDuration = WHOLE_NOTE_DURATION * 2; // total duration of all tied notes
+    constexpr timestamp_t expectedTremoloTimestampTo = expectedTremoloTimestamp + expectedTremoloDuration;
 
     constexpr pitch_level_t expectedPitchLevel = pitchLevel(PitchClass::F, 4);
     constexpr duration_t expectedSubNoteDuration = 62500;
+
+    size_t tremoloStartRangeEventCount = 0;
+    size_t tremoloEndRangeEventCount = 0;
 
     for (const auto& pair : result) {
         // [THEN] Expected number of sub-notes
@@ -2548,6 +2552,28 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
             EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
 
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+            // [THEN] Each note has the correct occupiedFrom/To
+            if (noteEvent.arrangementCtx().nominalTimestamp == expectedTremoloTimestamp) {
+                EXPECT_EQ(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloStartRangeEventCount++;
+            } else if (noteTimestampTo == expectedTremoloTimestampTo) {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloEndRangeEventCount++;
+            } else {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+            }
+
+            // [THEN] Each note event has the correct pitch level
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
+
+            // [THEN] Each note event has the correct duration
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
+
             // [THEN] Each note event has the correct pitch level
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
 
@@ -2555,6 +2581,10 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
             EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
         }
     }
+
+    // [THEN] We expect only 1 start & end event for the tremolo
+    EXPECT_EQ(tremoloStartRangeEventCount, 1);
+    EXPECT_EQ(tremoloEndRangeEventCount, 1);
 
     delete score;
 }
@@ -2614,6 +2644,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
     constexpr duration_t expectedSubNoteDuration = HALF_NOTE_DURATION / expectedSubNoteCount;
 
     size_t tremoloNoteNum = 0;
+    size_t tremoloStartRangeEventCount = 0;
+    size_t tremoloEndRangeEventCount = 0;
 
     for (const auto& pair : result) {
         // [THEN] Expected number of sub-notes
@@ -2621,6 +2653,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
 
         const timestamp_t expectedTremoloTimestamp = expectedTremoloTimestamps.at(tremoloNoteNum);
         const duration_t expectedTremoloDuration = expectedTremoloDurations.at(tremoloNoteNum);
+        const timestamp_t expectedTremoloTimestampTo = expectedTremoloTimestamp + expectedTremoloDuration;
 
         for (const PlaybackEvent& event : pair.second) {
             ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
@@ -2635,6 +2668,22 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
             EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
 
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+            // [THEN] Each note has the correct occupiedFrom/To
+            if (noteEvent.arrangementCtx().nominalTimestamp == expectedTremoloTimestamp) {
+                EXPECT_EQ(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloStartRangeEventCount++;
+            } else if (noteTimestampTo == expectedTremoloTimestampTo) {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloEndRangeEventCount++;
+            } else {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+            }
+
             // [THEN] Each note event has the correct pitch level
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
 
@@ -2644,6 +2693,10 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
 
         tremoloNoteNum++;
     }
+
+    // [THEN] We expect 3 start & end events for each tremolo
+    EXPECT_EQ(tremoloStartRangeEventCount, 3);
+    EXPECT_EQ(tremoloEndRangeEventCount, 3);
 
     delete score;
 }
@@ -3035,8 +3088,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
 
     constexpr timestamp_t expectedTrillTimestamp = WHOLE_NOTE_DURATION; // timestamp of the 2nd tied note (where the trill starts)
     constexpr duration_t expectedTrillDuration = WHOLE_NOTE_DURATION * 2;
+    constexpr timestamp_t expectedTrillTimestampTo = expectedTrillTimestamp + expectedTrillDuration;
 
     size_t noteNum = 0;
+    size_t trillStartRangeEventCount = 0;
+    size_t trillEndRangeEventCount = 0;
 
     for (const auto& pair : result) {
         for (const PlaybackEvent& event : pair.second) {
@@ -3064,6 +3120,22 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
                 EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
                 EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
 
+                const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+                // [THEN] Each note has the correct occupiedFrom/To
+                if (noteEvent.arrangementCtx().nominalTimestamp == expectedTrillTimestamp) {
+                    EXPECT_EQ(articulationData.occupiedFrom, 0);
+                    EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                    trillStartRangeEventCount++;
+                } else if (noteTimestampTo == expectedTrillTimestampTo) {
+                    EXPECT_NE(articulationData.occupiedFrom, 0);
+                    EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                    trillEndRangeEventCount++;
+                } else {
+                    EXPECT_NE(articulationData.occupiedFrom, 0);
+                    EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                }
+
                 // [THEN] Each note event has the correct duration
                 constexpr duration_t expectedSubNoteDuration = WHOLE_NOTE_DURATION / expectedSubNotes;
                 EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
@@ -3072,6 +3144,10 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
 
         ++noteNum;
     }
+
+    // [THEN] We expect only 1 start & end event for the trill
+    EXPECT_EQ(trillStartRangeEventCount, 1);
+    EXPECT_EQ(trillEndRangeEventCount, 1);
 
     delete score;
 }
@@ -3131,7 +3207,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
         expectedTrillDuration, // 2nd repeat segment
     };
 
-    int repeatSegmentNum = 0;
+    size_t repeatSegmentNum = 0;
+    size_t trillStartRangeEventCount = 0;
+    size_t trillEndRangeEventCount = 0;
 
     for (const auto& pair : result) {
         // [THEN] Sub-notes of the trill
@@ -3139,6 +3217,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
         EXPECT_EQ(pair.second.size(), expectedSubNotes);
 
         const timestamp_t expectedTrillTimestamp = expectedTrillTimestamps.at(repeatSegmentNum);
+        const timestamp_t expectedTrillTimestampTo = expectedTrillTimestamp + expectedTrillDuration;
         ++repeatSegmentNum;
 
         for (const PlaybackEvent& event : pair.second) {
@@ -3153,11 +3232,31 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
             EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
 
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+            // [THEN] Each note has the correct occupiedFrom/To
+            if (noteEvent.arrangementCtx().nominalTimestamp == expectedTrillTimestamp) {
+                EXPECT_EQ(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                trillStartRangeEventCount++;
+            } else if (noteTimestampTo == expectedTrillTimestampTo) {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                trillEndRangeEventCount++;
+            } else {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+            }
+
             // [THEN] Each note event has the correct duration
             constexpr duration_t expectedSubNoteDuration = expectedTrillDuration / expectedSubNotes;
             EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
         }
     }
+
+    // [THEN] We expect 2 start & end event for each trill
+    EXPECT_EQ(trillStartRangeEventCount, 2);
+    EXPECT_EQ(trillEndRangeEventCount, 2);
 
     delete score;
 }
