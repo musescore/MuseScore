@@ -448,6 +448,38 @@ void Slur::undoSetIncoming(bool incoming)
         return;
     }
 
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, setIncomingCalcDirection(incoming), PropertyFlags::UNSTYLED);
+}
+
+void Slur::undoSetOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, setOutgoingCalcDirection(outgoing), PropertyFlags::UNSTYLED);
+}
+
+void Slur::setIncoming(bool incoming)
+{
+    if (incoming == isIncoming()) {
+        return;
+    }
+
+    _partialSpannerDirection = setIncomingCalcDirection(incoming);
+}
+
+void Slur::setOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    _partialSpannerDirection = setOutgoingCalcDirection(outgoing);
+}
+
+PartialSpannerDirection Slur::setIncomingCalcDirection(bool incoming)
+{
     PartialSpannerDirection dir = PartialSpannerDirection::INCOMING;
     if (incoming) {
         SlurSegment* firstSeg = nsegments() > 0 ? frontSegment() : nullptr;
@@ -459,15 +491,11 @@ void Slur::undoSetIncoming(bool incoming)
     } else {
         dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::OUTGOING : PartialSpannerDirection::NONE;
     }
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+    return dir;
 }
 
-void Slur::undoSetOutgoing(bool outgoing)
+PartialSpannerDirection Slur::setOutgoingCalcDirection(bool outgoing)
 {
-    if (outgoing == isOutgoing()) {
-        return;
-    }
-
     PartialSpannerDirection dir = PartialSpannerDirection::OUTGOING;
     if (outgoing) {
         SlurSegment* lastSeg = nsegments() > 0 ? backSegment() : nullptr;
@@ -479,7 +507,7 @@ void Slur::undoSetOutgoing(bool outgoing)
     } else {
         dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::INCOMING : PartialSpannerDirection::NONE;
     }
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+    return dir;
 }
 
 bool Slur::isIncoming() const
