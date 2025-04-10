@@ -117,6 +117,28 @@ static ChordRest* chordOrRest(EngravingItem* el)
     return nullptr;
 }
 
+static Tuplet* topTupletInRange(Tuplet* currentTuplet, const Fraction& startTick, const Fraction& endTick, bool fullMeasure)
+{
+    const auto isInRange = [startTick, endTick, fullMeasure](const Tuplet* tuplet) -> bool {
+        const bool startsInRange = tuplet->tick() >= startTick;
+        const bool endsInRange = tuplet->tick() + tuplet->actualTicks() <= endTick || fullMeasure;
+        return startsInRange && endsInRange;
+    };
+
+    if (!currentTuplet || !isInRange(currentTuplet)) {
+        return nullptr;
+    }
+
+    while (Tuplet* nextTuplet = currentTuplet->tuplet()) {
+        if (!isInRange(nextTuplet)) {
+            break;
+        }
+        currentTuplet = nextTuplet;
+    }
+
+    return currentTuplet;
+}
+
 //---------------------------------------------------------
 //   getSelectedNote
 //---------------------------------------------------------
@@ -3633,17 +3655,10 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                     tick = s->tick();
                 }
                 currentTuplet = cr1->tuplet();
-                if (currentTuplet && ((currentTuplet->tick()) >= stick1)
-                    && ((currentTuplet->tick() + currentTuplet->actualTicks()) <= tick2)) {
-                    // Find highest-level complete tuplet contained in range
-                    Tuplet* t = cr1->tuplet();
-                    while (t->tuplet() && ((t->tuplet()->tick()) >= stick1)
-                           && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
-                        t = t->tuplet();
-                    }
-                    cmdDeleteTuplet(t, false);
-                    f += t->ticks();
-                    currentTuplet = t->tuplet();
+                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), stick1, tick2, /*fullMeasure*/ false)) {
+                    cmdDeleteTuplet(topTuplet, false);
+                    f += topTuplet->ticks();
+                    currentTuplet = topTuplet->tuplet();
                     continue;
                 }
             }
@@ -3656,17 +3671,11 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                 if (f.isValid() && !fullMeasure) {     // Set rests for the previous tuplet we were dealing with
                     setRest(tick, track, f, false, currentTuplet);
                 }
-                Tuplet* t = cr1->tuplet();
-                if (t && ((t->tick()) >= stick1) && (((t->tick() + t->actualTicks()) <= tick2) || fullMeasure)) {     // If deleting a complete tuplet
-                    // Find highest-level complete tuplet contained in range
-                    while (t->tuplet() && ((t->tuplet()->tick()) >= stick1)
-                           && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
-                        t = t->tuplet();
-                    }
-                    cmdDeleteTuplet(t, false);
-                    tick = t->tick();
-                    f = t->ticks();
-                    currentTuplet = t->tuplet();
+                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), stick1, tick2, fullMeasure)) {
+                    cmdDeleteTuplet(topTuplet, false);
+                    tick = topTuplet->tick();
+                    f = topTuplet->ticks();
+                    currentTuplet = topTuplet->tuplet();
                     continue;
                 }
                 // Not deleting a complete tuplet
