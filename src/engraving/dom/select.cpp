@@ -560,6 +560,43 @@ void Selection::appendFiltered(EngravingItem* e)
     }
 }
 
+void Selection::appendChordRest(ChordRest* cr)
+{
+    IF_ASSERT_FAILED(!isLocked()) {
+        LOGE() << "selection locked, reason: " << lockReason();
+        return;
+    }
+
+    for (EngravingItem* el : cr->lyrics()) {
+        if (el) {
+            appendFiltered(el);
+        }
+    }
+
+    Tuplet* tuplet = cr->tuplet();
+    if (tuplet) {
+        appendTupletHierarchy(tuplet);
+    }
+
+    if (cr->isRest()) {
+        appendFiltered(cr);
+        Rest* r = toRest(cr);
+        for (int i = 0; i < r->dots(); ++i) {
+            appendFiltered(r->dot(i));
+        }
+        return;
+    }
+
+    Chord* chord = toChord(cr);
+    for (Chord* graceNote : chord->graceNotes()) {
+        if (canSelect(graceNote)) {
+            appendChord(graceNote);
+        }
+    }
+
+    appendChord(chord);
+}
+
 void Selection::appendChord(Chord* chord)
 {
     IF_ASSERT_FAILED(!isLocked()) {
@@ -587,6 +624,9 @@ void Selection::appendChord(Chord* chord)
     if (chord->tremoloSingleChord()) {
         appendFiltered(chord->tremoloSingleChord());
     }
+    for (Articulation* art : chord->articulations()) {
+        appendFiltered(art);
+    }
     for (Note* note : chord->notes()) {
         m_el.push_back(note);
         if (note->accidental()) {
@@ -599,30 +639,32 @@ void Selection::appendChord(Chord* chord)
             m_el.push_back(dot);
         }
 
-        if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
-            if (note->tieFor()->endElement()->isNote()) {
-                Note* endNote = toNote(note->tieFor()->endElement());
-                Segment* s = endNote->chord()->segment();
-                if (!s || s->tick() < tickEnd()) {
-                    for (auto seg : note->tieFor()->spannerSegments()) {
-                        appendFiltered(seg);
-                    }
+        const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
+        if (endElement && endElement->isNote()) {
+            const Note* endNote = toNote(endElement);
+            const Segment* endSeg = endNote->chord()->segment();
+            if (!endSeg || endSeg->tick() < tickEnd()) {
+                for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
+                    appendFiltered(spannerSeg);
                 }
             }
         }
+
         for (Spanner* sp : note->spannerFor()) {
-            if (sp->endElement()->isNote()) {
-                Note* endNote = toNote(sp->endElement());
-                Segment* s = endNote->chord()->segment();
-                if (!s || s->tick() < tickEnd()) {
-                    if (sp->isGuitarBend()) {
-                        appendGuitarBend(toGuitarBend(sp));
-                        continue;
-                    }
-                    m_el.push_back(sp);
+            if (!sp->endElement()->isNote()) {
+                continue;
+            }
+            const Note* endNote = toNote(sp->endElement());
+            const Segment* endSeg = endNote->chord()->segment();
+            if (!endSeg || endSeg->tick() < tickEnd()) {
+                if (sp->isGuitarBend()) {
+                    appendGuitarBend(toGuitarBend(sp));
+                    continue;
                 }
+                m_el.push_back(sp);
             }
         }
+
         if (note->laissezVib()) {
             appendFiltered(note->laissezVib()->frontSegment());
         }
@@ -759,36 +801,9 @@ void Selection::updateSelectedElements()
                 continue;
             }
             if (e->isChordRest()) {
-                ChordRest* cr = toChordRest(e);
-                for (EngravingItem* el : cr->lyrics()) {
-                    if (el) {
-                        appendFiltered(el);
-                    }
-                }
-                Tuplet* tuplet = cr->tuplet();
-                if (tuplet) {
-                    appendTupletHierarchy(tuplet);
-                }
-            }
-            if (e->isChord()) {
-                Chord* chord = toChord(e);
-                for (Chord* graceNote : chord->graceNotes()) {
-                    if (canSelect(graceNote)) {
-                        appendChord(graceNote);
-                    }
-                }
-                appendChord(chord);
-                for (Articulation* art : chord->articulations()) {
-                    appendFiltered(art);
-                }
+                appendChordRest(toChordRest(e));
             } else {
                 appendFiltered(e);
-                if (e->isRest()) {
-                    Rest* r = toRest(e);
-                    for (int i = 0; i < r->dots(); ++i) {
-                        appendFiltered(r->dot(i));
-                    }
-                }
             }
         }
     }

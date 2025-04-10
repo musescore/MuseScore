@@ -2535,7 +2535,7 @@ bool Measure::isOnlyDeletedRests(track_idx_t track) const
 //   stretchedLen
 //---------------------------------------------------------
 
-Fraction Measure::stretchedLen(Staff* staff) const
+Fraction Measure::stretchedLen(const Staff* staff) const
 {
     return ticks() * staff->timeStretch(tick());
 }
