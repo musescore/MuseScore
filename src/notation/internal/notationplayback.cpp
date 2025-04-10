@@ -348,33 +348,21 @@ const Tempo& NotationPlayback::multipliedTempo(tick_t tick) const
     return m_currentTempo;
 }
 
-const mu::engraving::TempoText* NotationPlayback::tempoText(int _tick) const
-{
-    Fraction tick = Fraction::fromTicks(_tick);
-    mu::engraving::TempoText* result = nullptr;
-
-    mu::engraving::SegmentType segmentType = mu::engraving::SegmentType::All;
-    for (const mu::engraving::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
-        for (mu::engraving::EngravingItem* element: segment->annotations()) {
-            if (element && element->isTempoText() && element->tick() <= tick) {
-                result = mu::engraving::toTempoText(element);
-            }
-        }
-    }
-
-    return result;
-}
-
 MeasureBeat NotationPlayback::beat(tick_t tick) const
 {
     MeasureBeat measureBeat;
 
     if (score() && score()->checkHasMeasures()) {
-        int dummy = 0;
-        score()->sigmap()->tickValues(tick, &measureBeat.measureIndex, &measureBeat.beatIndex, &dummy);
+        int ticks = 0;
+        int beatIndex = 0;
+        score()->sigmap()->tickValues(tick, &measureBeat.measureIndex, &beatIndex, &ticks);
 
+        const TimeSigFrac timeSig = score()->sigmap()->timesig(Fraction::fromTicks(tick)).timesig();
+        const int ticksB = ticks_beat(timeSig.denominator());
+
+        measureBeat.beat = beatIndex + ticks / static_cast<float>(ticksB);
         measureBeat.maxMeasureIndex = score()->measures()->size() - 1;
-        measureBeat.maxBeatIndex = score()->sigmap()->timesig(Fraction::fromTicks(tick)).timesig().numerator() - 1;
+        measureBeat.maxBeatIndex = timeSig.numerator() - 1;
     }
 
     return measureBeat;

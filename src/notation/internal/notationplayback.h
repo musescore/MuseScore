@@ -89,13 +89,11 @@ private:
 
     void addLoopIn(int tick);
     void addLoopOut(int tick);
-    muse::RectF loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
     void updateLoopBoundaries();
     void updateTotalPlayTime();
 
     bool doAddSoundFlag(mu::engraving::StaffText* staffText);
 
-    const engraving::TempoText* tempoText(int tick) const;
     std::vector<mu::engraving::StaffText*> collectStaffText(const mu::engraving::InstrumentTrackIdSet& trackIdSet,
                                                             bool withSoundFlags) const;
 
