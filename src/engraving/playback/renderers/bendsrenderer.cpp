@@ -74,7 +74,7 @@ void BendsRenderer::render(const Note* note, const RenderingContext& ctx, mpe::P
         }
     }
 
-    if (!isNotePlayable(note, ctx.commonArticulations)) {
+    if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
         return;
     }
 

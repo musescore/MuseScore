@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,27 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ARPEGGIORENDERER_H
-#define MU_ENGRAVING_ARPEGGIORENDERER_H
+#pragma once
 
 #include "renderbase.h"
 
 namespace mu::engraving {
-class Chord;
-
 class ArpeggioRenderer : public RenderBase<ArpeggioRenderer>
 {
 public:
     static const muse::mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
+    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& ctx,
                          muse::mpe::PlaybackEventList& result);
-
-private:
-    static bool isDirectionUp(const muse::mpe::ArticulationType type);
-    static muse::mpe::usecs_t timestampOffsetStep(const RenderingContext& context, int stepCount);
-    static std::map<muse::mpe::pitch_level_t, NominalNoteCtx> arpeggioNotes(const Chord* chord, const RenderingContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_ARPEGGIORENDERER_H

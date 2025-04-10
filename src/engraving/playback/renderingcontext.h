@@ -26,7 +26,6 @@
 #include "../dom/chord.h"
 #include "../dom/note.h"
 #include "../dom/sig.h"
-#include "../dom/tie.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
@@ -125,15 +124,6 @@ inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPosi
     return ctx;
 }
 
-inline muse::mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
-{
-    if (!note->score()) {
-        return durationFromTempoAndTicks(ctx.beatsPerSecond.val, note->chord()->actualTicks().ticks());
-    }
-
-    return durationFromStartAndTicks(note->score(), note->tick().ticks(), note->chord()->actualTicks().ticks(), 0);
-}
-
 struct NominalNoteCtx {
     voice_idx_t voiceIdx = 0;
     staff_idx_t staffIdx = 0;
@@ -164,54 +154,6 @@ struct NominalNoteCtx {
     {
     }
 };
-
-inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& articualtionMap)
-{
-    if (!note->play()) {
-        return false;
-    }
-
-    const Tie* tie = note->tieBack();
-
-    if (tie && tie->playSpanner()) {
-        if (!tie->startNote() || !tie->endNote()) {
-            return false;
-        }
-
-        //!Note Checking whether the tied note has any multi-note articulation attached
-        //!     If so, we can't ignore such note
-        for (const auto& pair : articualtionMap) {
-            if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
-                return true;
-            }
-        }
-
-        const Chord* firstChord = tie->startNote()->chord();
-        const Chord* lastChord = tie->endNote()->chord();
-        if (!firstChord || !lastChord) {
-            return false;
-        }
-
-        if (firstChord->tremoloType() != TremoloType::INVALID_TREMOLO
-            || lastChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
-            return true;
-        }
-
-        auto intervals = firstChord->score()->spannerMap().findOverlapping(firstChord->tick().ticks(),
-                                                                           firstChord->endTick().ticks(),
-                                                                           /*excludeCollisions*/ true);
-        for (auto interval : intervals) {
-            const Spanner* sp = interval.value;
-            if (sp->isTrill() && sp->playSpanner() && sp->endElement() == firstChord) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return true;
-}
 
 inline muse::mpe::NoteEvent buildNoteEvent(const NominalNoteCtx& ctx)
 {
@@ -251,33 +193,5 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction,
                                 pitchCurve);
-}
-
-inline muse::mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& ctx)
-{
-    return muse::mpe::NoteEvent(ctx.nominalTimestamp,
-                                noteNominalDuration(note, ctx),
-                                static_cast<muse::mpe::voice_layer_idx_t>(note->voice()),
-                                static_cast<muse::mpe::staff_layer_idx_t>(note->staffIdx()),
-                                notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
-                                ctx.nominalDynamicLevel,
-                                ctx.commonArticulations,
-                                ctx.beatsPerSecond.val,
-                                note->userVelocityFraction());
-}
-
-inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe::duration_t eventDuration,
-                                           const muse::mpe::timestamp_t timestampOffset,
-                                           const muse::mpe::pitch_level_t pitchLevelOffset)
-{
-    return muse::mpe::NoteEvent(ctx.timestamp + timestampOffset,
-                                eventDuration,
-                                static_cast<muse::mpe::voice_layer_idx_t>(ctx.voiceIdx),
-                                static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
-                                ctx.pitchLevel + pitchLevelOffset,
-                                ctx.dynamicLevel,
-                                ctx.articulations,
-                                ctx.tempo.val,
-                                ctx.userVelocityFraction);
 }
 }
