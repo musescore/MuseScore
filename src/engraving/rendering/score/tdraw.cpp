@@ -2283,7 +2283,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
 
-        if (item->fretConflict() && item->score()->printing() && item->score()->showUnprintable()) {                    //on fret conflict, draw on red background
+        if (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable()) {                    //on fret conflict, draw on red background
             painter->save();
             painter->setPen(config->criticalColor());
             painter->setBrush(config->criticalColor());

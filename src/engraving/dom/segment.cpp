@@ -1106,7 +1106,7 @@ bool Segment::isTupletSubdivision() const
 bool Segment::isInsideTupletOnStaff(staff_idx_t staffIdx) const
 {
     const Segment* refCRSeg = isChordRestType() && hasElements(staffIdx) ? this : prev1WithElemsOnStaff(staffIdx, SegmentType::ChordRest);
-    if (refCRSeg->measure() != measure()) {
+    if (!refCRSeg || refCRSeg->measure() != measure()) {
         return false;
     }
 

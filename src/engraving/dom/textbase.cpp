@@ -3290,6 +3290,11 @@ void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
     }
 }
 
+bool TextBase::supportsNonTextualEdit() const
+{
+    return hasParentSegment() && !m_text.empty();
+}
+
 void TextBase::startEditNonTextual(EditData& ed)
 {
     EngravingItem::startEdit(ed);
