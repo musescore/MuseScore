@@ -30,6 +30,12 @@ function doFocusIn()
 module.exports = {
     focusIn: doFocusIn,
 
+    firstElement: function()
+    {
+        doFocusIn()
+        api.shortcuts.activate("Ctrl+Home")
+    },
+
     nextChord: function()
     {
         doFocusIn()

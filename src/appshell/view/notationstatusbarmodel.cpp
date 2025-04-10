@@ -98,6 +98,9 @@ void NotationStatusBarModel::classBegin()
     connect(m_workspacesMenuModel.get(), &WorkspacesMenuModel::itemsChanged, this, [this]() {
         updateCurrentWorkspaceItem();
     });
+    workspaceConfiguration()->currentWorkspaceNameChanged().onReceive(this, [this](const std::string&){
+        updateCurrentWorkspaceItem();
+    });
 #endif
 
     updateCurrentWorkspaceItem();

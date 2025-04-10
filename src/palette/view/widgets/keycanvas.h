@@ -27,7 +27,8 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
-#include "iengravingconfiguration.h"
+#include "notation/inotationconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 #include "engraving/rendering/isinglerenderer.h"
 
 namespace mu::engraving {
@@ -45,6 +46,7 @@ class KeyCanvas : public QFrame
     Q_OBJECT
 
     INJECT(IPaletteConfiguration, configuration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
     INJECT(engraving::rendering::ISingleRenderer, engravingRender)
 

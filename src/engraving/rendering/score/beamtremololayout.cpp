@@ -37,6 +37,7 @@
 
 #include "tlayout.h"
 #include "chordlayout.h"
+#include "stemlayout.h"
 
 #include "log.h"
 
@@ -1053,10 +1054,10 @@ int BeamTremoloLayout::getTargetStaffLine(const BeamBase::LayoutData* ldata, con
     bool useWideBeams = ctx.conf().styleB(Sid::useWideBeams);
     int startBeams = strokeCount(ldata, startChord);
     int endBeams = strokeCount(ldata, endChord);
-    int startTargetLine = Chord::minStaffOverlap(ldata->up, staffLines, startBeams, false,
-                                                 ldata->beamSpacing / 4.0, useWideBeams, isFullSize);
-    int endTargetLine = Chord::minStaffOverlap(ldata->up, staffLines, endBeams, false,
-                                               ldata->beamSpacing / 4.0, useWideBeams, !ldata->isGrace);
+    int startTargetLine = StemLayout::minStaffOverlap(ldata->up, staffLines, startBeams, false,
+                                                      ldata->beamSpacing / 4.0, useWideBeams, isFullSize);
+    int endTargetLine = StemLayout::minStaffOverlap(ldata->up, staffLines, endBeams, false,
+                                                    ldata->beamSpacing / 4.0, useWideBeams, !ldata->isGrace);
 
     int diff = 0;
     // Get diff between beam closest staff and actual staff, unless its full cross?

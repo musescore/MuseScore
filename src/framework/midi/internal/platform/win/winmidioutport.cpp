@@ -26,9 +26,8 @@
 #include <mmsystem.h>
 
 #include "midierrors.h"
-#include "stringutils.h"
-#include "translation.h"
-#include "defer.h"
+#include "global/translation.h"
+#include "global/defer.h"
 #include "log.h"
 
 struct muse::midi::WinMidiOutPort::Win {

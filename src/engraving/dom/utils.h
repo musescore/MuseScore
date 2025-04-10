@@ -73,7 +73,6 @@ extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
-extern Volta* findVolta(const Segment* seg, const Score* score);
 extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
 extern Note* searchTieNote114(Note* note);
 

@@ -1106,7 +1106,7 @@ bool Segment::isTupletSubdivision() const
 bool Segment::isInsideTupletOnStaff(staff_idx_t staffIdx) const
 {
     const Segment* refCRSeg = isChordRestType() && hasElements(staffIdx) ? this : prev1WithElemsOnStaff(staffIdx, SegmentType::ChordRest);
-    if (refCRSeg->measure() != measure()) {
+    if (!refCRSeg || refCRSeg->measure() != measure()) {
         return false;
     }
 
@@ -2528,17 +2528,6 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (staffIdx < staves.size() && !staves[staffIdx]->show()) {
             return;
         }
-    }
-
-    if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
-        setVisible(true);
-        BarLine* bl = toBarLine(element(staffIdx * VOICES));
-        if (bl) {
-            rendering::score::LayoutContext lctx(score());
-            RectF r = rendering::score::TLayout::layoutRect(bl, lctx);
-            s.add(r.translated(bl->pos() + bl->staffOffset()), bl);
-        }
-        return;
     }
 
     if (!score()->staff(staffIdx)->show()) {

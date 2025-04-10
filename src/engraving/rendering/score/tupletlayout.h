@@ -37,7 +37,7 @@ public:
 
     static void layout(Tuplet* item, LayoutContext& ctx);
 
-    static void layout(DurationElement* de, LayoutContext& ctx);
+    static void layoutTupletAndNestedTuplets(Tuplet* t, LayoutContext& ctx);
     static bool isTopTuplet(ChordRest* cr);
     static bool notTopTuplet(ChordRest* cr);
 };

@@ -113,11 +113,15 @@ IWorkspacePtr WorkspaceManager:: cloneWorkspace(const IWorkspacePtr& workspace, 
 
 void WorkspaceManager::changeCurrentWorkspace(const std::string& newWorkspaceName)
 {
+    prepareCurrentWorkspaceForChange();
+    doChangeCurrentWorkspace(newWorkspaceName);
+}
+
+void WorkspaceManager::doChangeCurrentWorkspace(const std::string& newWorkspaceName)
+{
     if (configuration()->currentWorkspaceName() == newWorkspaceName || newWorkspaceName.empty()) {
         return;
     }
-
-    prepareCurrentWorkspaceForChange();
 
     configuration()->setCurrentWorkspaceName(newWorkspaceName);
 }
@@ -170,7 +174,7 @@ void WorkspaceManager::openConfigureWorkspacesDialog()
     }
 
     std::string selectedWorkspace = result.val.toString();
-    changeCurrentWorkspace(selectedWorkspace);
+    doChangeCurrentWorkspace(selectedWorkspace);
 }
 
 WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) const
@@ -308,15 +312,16 @@ io::paths_t WorkspaceManager::findWorkspaceFiles() const
     };
 
     io::paths_t builtinWorkspacesPaths = configuration()->builtinWorkspacesFilePaths();
-    std::set<io::path_t> builtinWorkspacesFileNames;
-    for (const io::path_t& dirPath : builtinWorkspacesPaths) {
-        builtinWorkspacesFileNames.insert(io::filename(dirPath));
-    }
 
     io::paths_t userWorkspacesPaths = findFiles(configuration()->userWorkspacesPath());
-    muse::remove_if(userWorkspacesPaths, [=](const io::path_t& path) -> bool {
+    std::set<io::path_t> userWorkspacesFileNames;
+    for (const io::path_t& dirPath : userWorkspacesPaths) {
+        userWorkspacesFileNames.insert(io::filename(dirPath));
+    }
+
+    muse::remove_if(builtinWorkspacesPaths, [=](const io::path_t& path) -> bool {
         io::path_t fileName = io::filename(path);
-        return muse::contains(builtinWorkspacesFileNames, fileName);
+        return muse::contains(userWorkspacesFileNames, fileName);
     });
 
     io::paths_t result;

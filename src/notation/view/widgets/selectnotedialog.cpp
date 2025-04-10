@@ -57,8 +57,12 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    m_note = dynamic_cast<mu::engraving::Note*>(contextItem(globalContext()->currentNotation()->interaction()));
+    const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
+    IF_ASSERT_FAILED(interaction) {
+        return;
+    }
 
+    m_note = dynamic_cast<mu::engraving::Note*>(interaction->contextItem());
     IF_ASSERT_FAILED(m_note) {
         return;
     }
@@ -250,7 +254,7 @@ void SelectNoteDialog::apply() const
         return;
     }
 
-    EngravingItem* selectedElement = contextItem(interaction);
+    EngravingItem* selectedElement = interaction->contextItem();
     if (!selectedElement) {
         return;
     }

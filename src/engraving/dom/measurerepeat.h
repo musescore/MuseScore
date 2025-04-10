@@ -81,6 +81,9 @@ public:
         void setNumberSym(int n) { numberSym = timeSigSymIdsFromString(String::number(n)); }
         void setNumberSym(const String& s) { numberSym = timeSigSymIdsFromString(s); }
         void clearNumberSym() { numberSym.clear(); }
+
+        LineF extenderLineLeft = LineF();
+        LineF extenderLineRight = LineF();
     };
     DECLARE_LAYOUTDATA_METHODS(MeasureRepeat)
 

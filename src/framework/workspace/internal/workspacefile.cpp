@@ -21,8 +21,6 @@
  */
 #include "workspacefile.h"
 
-#include "stringutils.h"
-
 #include "io/buffer.h"
 
 #include "global/serialization/zipreader.h"
@@ -52,6 +50,11 @@ WorkspaceFile::WorkspaceFile(const io::path_t& filePath, const WorkspaceFile* ot
 io::path_t WorkspaceFile::filePath() const
 {
     return m_filePath;
+}
+
+void WorkspaceFile::redirect(const io::path_t& filePath)
+{
+    m_filePath = filePath;
 }
 
 Ret WorkspaceFile::load()

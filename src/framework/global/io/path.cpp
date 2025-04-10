@@ -25,7 +25,7 @@
 #include <QDir>
 #endif
 
-#include "stringutils.h"
+#include "global/stringutils.h"
 #include "fileinfo.h"
 
 using namespace muse;

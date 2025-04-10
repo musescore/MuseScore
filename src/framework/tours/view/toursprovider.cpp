@@ -78,7 +78,11 @@ void ToursProvider::doShow()
     m_currentStep++;
 
     const ui::INavigationControl* parentControl = findControl(step.controlUri);
-    IF_ASSERT_FAILED(parentControl) {
+    if (!parentControl) {
+        //! NOTE: It's okay that the control is not found,
+        //! for example, the user has hidded the control.
+        LOGD() << "Control not found: " << step.controlUri << ", skipping step";
+        showNext();
         return;
     }
 
@@ -86,6 +90,11 @@ void ToursProvider::doShow()
     IF_ASSERT_FAILED(parentControlItem) {
         return;
     }
+
+    connect(parentControlItem, &QObject::destroyed, this, [this](){
+        emit closeCurrentTourStep();
+        showNext();
+    });
 
     parentControl->triggered().onNotify(this, [this]() {
         emit closeCurrentTourStep();
@@ -126,7 +135,7 @@ void ToursProvider::clear()
 
 void ToursProvider::setBlockShowingTooltipForItem(QQuickItem* item, bool block)
 {
-    IF_ASSERT_FAILED(item) {
+    if (!item) {
         return;
     }
 

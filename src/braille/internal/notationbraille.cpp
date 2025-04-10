@@ -618,6 +618,8 @@ void NotationBraille::setKeys(const QString& sequence)
                 return;
             }
 
+            interaction()->noteInput()->addNote(params, NoteAddingMode::CurrentChord);
+
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {
                     for (int i = brailleInput()->addedOctave(); i < brailleInput()->octave(); i++) {

@@ -27,7 +27,7 @@
 #include <set>
 #include <sstream>
 
-#include "stringutils.h"
+#include "global/stringutils.h"
 #include "log.h"
 
 using namespace muse;

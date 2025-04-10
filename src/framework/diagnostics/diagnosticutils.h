@@ -82,11 +82,16 @@ inline bool isDiagnosticHierarchy(const QObject* obj, bool print = false)
     return false;
 }
 
+inline bool isDiagnosticsUri(const muse::Uri& uri)
+{
+    return QString::fromStdString(uri.toString()).startsWith("muse://diagnostics");
+}
+
 inline std::vector<muse::Uri> removeDiagnosticsUri(const std::vector<muse::Uri>& uris)
 {
     std::vector<muse::Uri> nuris;
     for (const muse::Uri& uri : uris) {
-        if (!QString::fromStdString(uri.toString()).startsWith("muse://diagnostics")) {
+        if (!isDiagnosticsUri(uri)) {
             nuris.push_back(uri);
         }
     }

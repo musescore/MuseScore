@@ -21,7 +21,7 @@
  */
 #include "uri.h"
 
-#include "../stringutils.h"
+#include "global/stringutils.h"
 
 #include "log.h"
 

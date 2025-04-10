@@ -151,6 +151,8 @@ public:
             }
             break;
         }
+        case ElementType::MEASURE:
+            return chord->segment()->measure();
         default:
             break;
         }
@@ -313,8 +315,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(false));
 
-    EXPECT_CALL(*m_playbackController, isPlaying())
-    .WillOnce(Return(false));
+    ON_CALL(*m_playbackController, isPlaying())
+    .WillByDefault(Return(false));
 
     //! [THEN] We will seek and play selected note, but no select again
     EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
@@ -455,8 +457,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(false));
 
-    EXPECT_CALL(*m_playbackController, isPlaying())
-    .WillOnce(Return(false));
+    ON_CALL(*m_playbackController, isPlaying())
+    .WillByDefault(Return(false));
 
     //! [THEN] We will seek and play selected hairpin, but no select again
     EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
@@ -522,8 +524,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(false));
 
-    EXPECT_CALL(*m_playbackController, isPlaying())
-    .WillOnce(Return(false));
+    ON_CALL(*m_playbackController, isPlaying())
+    .WillByDefault(Return(false));
 
     //! [THEN] We will select and play selected note, but no seek
     std::vector<EngravingItem*> selectElements = { newContext.element };
@@ -551,6 +553,63 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_On_Selected_Selected_Range
+ * @details User pressed left mouse button on already selected range
+ *           The selection shouldn't be changed, but the first measure in the range should be seeked
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] Previous selected measure
+    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::MEASURE });
+
+    //! [GIVEN] User selected measure that is already selected
+    INotationInteraction::HitElementContext newContext = oldContext;
+    newContext.element->setSelected(true);
+
+    std::vector<EngravingItem*> selectedElements {
+        newContext.element
+    };
+
+    EXPECT_CALL(*m_interaction, hitElement(_, _))
+    .WillOnce(Return(newContext.element));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.element->staff()));
+
+    //! [GIVEN] The new hit element context with new measure will be set
+    EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
+    .Times(1);
+
+    EXPECT_CALL(*m_interaction, hitElementContext())
+    .Times(2)
+    .WillOnce(ReturnRef(oldContext))
+    .WillOnce(ReturnRef(oldContext));
+
+    //! [GIVEN] There is a range selection
+    ON_CALL(*m_selection, isRange())
+    .WillByDefault(Return(true));
+    ON_CALL(*m_selectionRange, containsPoint(_))
+    .WillByDefault(Return(true));
+
+    EXPECT_CALL(*m_selection, elements())
+    .WillOnce(ReturnRef(selectedElements));
+
+    //! [THEN] We should seek measure from the range
+    EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
+    .Times(1);
+
+    //! [THEN] No selection change
+    EXPECT_CALL(*m_interaction, select(_, _, _))
+    .Times(0);
+
+    //! [WHEN] User pressed left mouse button
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
 }
 
 /**
@@ -588,8 +647,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(false));
 
-    EXPECT_CALL(*m_playbackController, isPlaying())
-    .WillOnce(Return(false));
+    ON_CALL(*m_playbackController, isPlaying())
+    .WillByDefault(Return(false));
 
     //! [THEN] We will no select already selected note, but play and seek
     std::vector<EngravingItem*> selectElements = { newContext.element };
@@ -614,7 +673,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
 /**
  * @brief Mouse_Press_On_Range
  * @details User pressed selected new measure with ShiftModifier
- *          The new meausure should be selected, shouldn't be played, previous meausure should be seeked
+ *          The new measure should be selected, shouldn't be played, previous measure should be seeked
  */
 TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
 {
@@ -645,8 +704,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(false));
 
-    EXPECT_CALL(*m_playbackController, isPlaying())
-    .WillOnce(Return(false));
+    ON_CALL(*m_playbackController, isPlaying())
+    .WillByDefault(Return(false));
 
     //! [THEN] We will select new measure
     std::vector<EngravingItem*> selectElements = { newContext.element };

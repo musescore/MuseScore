@@ -98,6 +98,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
+        navigation.name: "FamilyView"
         accessible.name: titleLabel.text
 
         onModelChanged: {

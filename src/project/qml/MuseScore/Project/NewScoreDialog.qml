@@ -138,6 +138,7 @@ StyledDialogView {
 
             Layout.preferredWidth: implicitWidth
 
+            navigationPanel.name: "BottomPanel"
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 100
 

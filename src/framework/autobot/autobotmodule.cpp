@@ -68,8 +68,8 @@ void AutobotModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://autobot/batchtests"), "Muse/Autobot/BatchTestsDialog.qml");
-        ir->registerQmlUri(Uri("muse://autobot/scripts"), "Muse/Autobot/ScriptsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/autobot/batchtests"), "Muse/Autobot/BatchTestsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse/Autobot/ScriptsDialog.qml");
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse/Autobot/AutobotSelectFileDialog.qml");
     }
 

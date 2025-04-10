@@ -870,41 +870,44 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
  * layout all non-cross-staff beams starting on this segment
  * **********************************************************/
 
-void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
+void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
 {
-    for (EngravingItem* e : s->elist()) {
-        if (!e || !e->isChordRest() || !ctx.dom().staff(e->staffIdx())->show()) {
-            // the beam and its system may still be referenced when selecting all,
-            // even if the staff is invisible. The old system is invalid and does cause problems in #284012
-            if (e && e->isChordRest() && !ctx.dom().staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
-                toChordRest(e)->beam()->resetExplicitParent();
+    if (!BeamLayout::isTopBeam(cr)) {
+        return;
+    }
+
+    Beam* beam = cr->beam();
+
+    TLayout::layoutBeam(beam, ctx);
+
+    if (!beam->tremAnchors().empty()) {
+        // there are inset tremolos in here
+        for (ChordRest* beamCr : beam->elements()) {
+            if (!beamCr->isChord()) {
+                continue;
             }
-            continue;
-        }
-        ChordRest* cr = toChordRest(e);
-        // layout beam
-        if (BeamLayout::isTopBeam(cr)) {
-            TLayout::layoutBeam(cr->beam(), ctx);
-            if (!cr->beam()->tremAnchors().empty()) {
-                // there are inset tremolos in here
-                for (ChordRest* beamCr : cr->beam()->elements()) {
-                    if (!beamCr->isChord()) {
-                        continue;
-                    }
-                    Chord* c = toChord(beamCr);
-                    if (c->tremoloTwoChord()) {
-                        TremoloLayout::layout(c->tremoloTwoChord(), ctx);
-                    }
-                }
+            Chord* c = toChord(beamCr);
+            if (c->tremoloTwoChord()) {
+                TremoloLayout::layout(c->tremoloTwoChord(), ctx);
             }
         }
-        if (!cr->isChord()) {
-            continue;
+    }
+
+    for (ChordRest* beamCR : beam->elements()) {
+        if (beamCR->isRest()) {
+            verticalAdjustBeamedRests(toRest(beamCR), beam, ctx);
         }
-        for (Chord* grace : toChord(cr)->graceNotes()) {
-            if (BeamLayout::isTopBeam(grace)) {
-                TLayout::layoutBeam(grace->beam(), ctx);
-            }
+
+        beamCR->segment()->createShape(beamCR->staffIdx());
+    }
+
+    if (!cr->isChord()) {
+        return;
+    }
+
+    for (Chord* grace : toChord(cr)->graceNotes()) {
+        if (BeamLayout::isTopBeam(grace)) {
+            TLayout::layoutBeam(grace->beam(), ctx);
         }
     }
 }

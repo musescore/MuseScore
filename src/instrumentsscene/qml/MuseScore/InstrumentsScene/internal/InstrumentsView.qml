@@ -84,6 +84,7 @@ Item {
 
         model: root.instrumentsModel
 
+        navigation.name: "InstrumentsView"
         accessible.name: instrumentsLabel.text
 
         delegate: ListItemBlank {

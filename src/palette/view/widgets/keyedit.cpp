@@ -128,9 +128,10 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
     RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
-    painter.fillRect(background, muse::draw::Color::WHITE);
+    painter.fillRect(background, notationConfiguration()->foregroundColor());
 
-    muse::draw::Pen pen(engravingConfiguration()->defaultColor());
+    muse::draw::Pen pen(engravingConfiguration()->scoreInversionEnabled() ? engravingConfiguration()->scoreInversionColor()
+                        : engravingConfiguration()->defaultColor());
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->style().spatium());
     painter.setPen(pen);
 
