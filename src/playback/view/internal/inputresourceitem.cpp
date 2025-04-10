@@ -147,6 +147,8 @@ void InputResourceItem::setParams(const audio::AudioInputParams& newParams)
 
 void InputResourceItem::setParamsRecourceMeta(const AudioResourceMeta& newMeta)
 {
+    requestToCloseNativeEditorView();
+
     m_currentInputParams.resourceMeta = newMeta;
 
     emit titleChanged();
@@ -154,7 +156,7 @@ void InputResourceItem::setParamsRecourceMeta(const AudioResourceMeta& newMeta)
     emit isActiveChanged();
     emit inputParamsChanged();
 
-    updateNativeEditorView();
+    requestToLaunchNativeEditorView();
 }
 
 QString InputResourceItem::title() const

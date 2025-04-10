@@ -4121,6 +4121,52 @@ void TLayout::layoutMeasureRepeat(const MeasureRepeat* item, MeasureRepeat::Layo
     ChordLayout::fillShape(item, ldata, ctx.conf());
 }
 
+void TLayout::layoutMeasureRepeatExtender(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutContext& ctx)
+{
+    ldata->extenderLineLeft = LineF();
+    ldata->extenderLineRight = LineF();
+
+    Measure* parentMeasure = item->measure();
+    if (!parentMeasure) {
+        return;
+    }
+
+    Measure* startMeasure = parentMeasure->prevMeasure();
+    if (!startMeasure || startMeasure->system() != parentMeasure->system()) {
+        return;
+    }
+
+    Measure* endMeasure = parentMeasure->nextMeasure();
+    if (endMeasure) {
+        endMeasure = endMeasure->nextMeasure();
+    }
+    if (!endMeasure || endMeasure->system() != parentMeasure->system()) {
+        return;
+    }
+
+    // Reuse the function that calculates start and end pos for mmRests,
+    // except start and end point are on different measures
+    staff_idx_t staffIdx = item->staffIdx();
+    double xStart = MeasureLayout::getMeasureStartEndPos(startMeasure, startMeasure->first(SegmentType::ChordRest), staffIdx,
+                                                         /*needHeaderException*/ startMeasure->header(), /*modernMMrest*/ true, ctx).x1;
+    double xEnd = MeasureLayout::getMeasureStartEndPos(endMeasure, endMeasure->first(SegmentType::ChordRest), staffIdx,
+                                                       /*needHeaderException*/ false, /*modernMRest*/ true, ctx).x2;
+
+    double margin = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
+    xStart += margin;
+    xEnd -= margin;
+
+    double xItemInSysCoords = item->x() + item->segment()->x() + parentMeasure->x();
+
+    PointF startPoint(xStart + startMeasure->x() - xItemInSysCoords, 0.0);
+    PointF midPointL(-0.5 * item->spatium(), 0.0);
+    ldata->extenderLineLeft = LineF(startPoint, midPointL);
+
+    PointF midPointR(item->symWidth(ldata->symId) + 0.5 * item->spatium(), 0.0);
+    PointF endPoint(xEnd + endMeasure->x() - xItemInSysCoords, 0.0);
+    ldata->extenderLineRight = LineF(midPointR, endPoint);
+}
+
 void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
