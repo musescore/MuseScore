@@ -527,3 +527,35 @@ TEST_F(Engraving_PartialTieTests, partialTieListSelection)
 
     testPartialTieListSelection(test, startPointTick, secondTieNoteTick, jumpPoints);
 }
+
+static void deleteScoreWithPartialTies(String fileName)
+{
+    // Load score
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + fileName + u".mscx");
+    EXPECT_TRUE(score);
+
+    // Make sure there are some measures to delete
+    Measure* firstMeasure = score->firstMeasure();
+    EXPECT_TRUE(firstMeasure);
+    Measure* lastMeasure = score->lastMeasure();
+    EXPECT_TRUE(lastMeasure);
+    EXPECT_NE(firstMeasure, lastMeasure);
+
+    // Select all measures
+    score->select(firstMeasure, SelectType::RANGE, 0);
+    score->select(lastMeasure, SelectType::RANGE, score->nstaves() - 1);
+
+    // Delete selected measures
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+}
+
+TEST_F(Engraving_PartialTieTests, deleteAllMeasures)
+{
+    const String test1 = u"delete_measure_test1";
+    const String test2 = u"delete_measure_test2";
+
+    deleteScoreWithPartialTies(test1);
+    deleteScoreWithPartialTies(test2);
+}
