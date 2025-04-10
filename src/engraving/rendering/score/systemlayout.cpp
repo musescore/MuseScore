@@ -1358,7 +1358,7 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
                         // add beams to skline
                         if (e->isChordRest()) {
                             ChordRest* cr = toChordRest(e);
-                            if (BeamLayout::isTopBeam(cr)) {
+                            if (BeamLayout::isStartOfNonCrossBeam(cr)) {
                                 Beam* b = cr->beam();
                                 b->addSkyline(skyline);
                             }

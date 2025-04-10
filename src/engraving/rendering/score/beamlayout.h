@@ -48,8 +48,8 @@ public:
     static void layoutIfNeed(Beam* item, const LayoutContext& ctx);
     static void layout1(Beam* item, LayoutContext& ctx);
 
-    static bool isTopBeam(ChordRest* cr);
-    static bool notTopBeam(ChordRest* cr);
+    static bool isStartOfNonCrossBeam(ChordRest* cr);
+    static bool isStartOfCrossBeam(ChordRest* cr);
     static void createBeams(LayoutContext& ctx, Measure* measure);
     static void restoreBeams(Measure* m, LayoutContext& ctx);
     static bool measureMayHaveBeamsJoinedIntoNext(const Measure* measure);

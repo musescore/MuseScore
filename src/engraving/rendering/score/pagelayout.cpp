@@ -305,7 +305,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             continue;
                         }
                         ChordRest* cr = toChordRest(e2);
-                        if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
+                        if (BeamLayout::isStartOfCrossBeam(cr)) {                           // layout cross staff beams
                             TLayout::layoutBeam(cr->beam(), ctx);
                             BeamLayout::checkCrossPosAndStemConsistency(cr->beam(), ctx);
                             for (EngravingItem* item : cr->beam()->elements()) {

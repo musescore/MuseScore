@@ -395,65 +395,29 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
     setTremAnchors(item, ctx);
 }
 
-//---------------------------------------------------------
-//   isTopBeam
-//    returns true for the first CR of a beam that is not cross-staff
-//---------------------------------------------------------
-
-bool BeamLayout::isTopBeam(ChordRest* cr)
+bool BeamLayout::isStartOfNonCrossBeam(ChordRest* cr)
 {
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
-        // beam already considered cross?
         if (b->cross() || b->fullCross()) {
             return false;
         }
 
-        // for beams not already considered cross,
-        // consider them so here if any elements were moved up
-        for (ChordRest* cr1 : b->elements()) {
-            // some element moved up?
-            if (cr1->staffMove() != 0) {
-                return false;
-            }
-        }
-
-        // not cross
         return true;
     }
 
-    // no beam or not first element
     return false;
 }
 
-//---------------------------------------------------------
-//   notTopBeam
-//    returns true for the first CR of a beam that is cross-staff
-//---------------------------------------------------------
-
-bool BeamLayout::notTopBeam(ChordRest* cr)
+bool BeamLayout::isStartOfCrossBeam(ChordRest* cr)
 {
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
-        // beam already considered cross?
         if (b->cross() || b->fullCross()) {
             return true;
         }
-
-        // for beams not already considered cross,
-        // consider them so here if any elements were moved up
-        for (ChordRest* cr1 : b->elements()) {
-            // some element moved up?
-            if (cr1->staffMove() != 0) {
-                return true;
-            }
-        }
-
-        // not cross
-        return false;
     }
 
-    // no beam or not first element
     return false;
 }
 
@@ -885,7 +849,7 @@ void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
         }
     }
 
-    if (!BeamLayout::isTopBeam(cr)) {
+    if (!BeamLayout::isStartOfNonCrossBeam(cr)) {
         return;
     }
 
