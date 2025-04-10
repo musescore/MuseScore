@@ -501,8 +501,6 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
         return;
     }
 
-    TranslatableString undoCmd = addPartialTie ? TranslatableString("engraving", "Replace full tie with partial tie")
-                                 : TranslatableString("engraving", "Replace partial tie with full tie");
     Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(score->dummy()->note());
 
     score->undoRemoveElement(oldTie);
@@ -525,8 +523,6 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
     newTie->setOffset(oldTie->offset());
 
     score->undoAddElement(newTie);
-
-    score->endCmd();
 }
 
 void Tie::updateStartTieOnRemoval()
