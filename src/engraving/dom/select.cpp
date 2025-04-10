@@ -639,30 +639,32 @@ void Selection::appendChord(Chord* chord)
             m_el.push_back(dot);
         }
 
-        if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
-            if (note->tieFor()->endElement()->isNote()) {
-                Note* endNote = toNote(note->tieFor()->endElement());
-                Segment* s = endNote->chord()->segment();
-                if (!s || s->tick() < tickEnd()) {
-                    for (auto seg : note->tieFor()->spannerSegments()) {
-                        appendFiltered(seg);
-                    }
+        const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
+        if (endElement && endElement->isNote()) {
+            const Note* endNote = toNote(endElement);
+            const Segment* endSeg = endNote->chord()->segment();
+            if (!endSeg || endSeg->tick() < tickEnd()) {
+                for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
+                    appendFiltered(spannerSeg);
                 }
             }
         }
+
         for (Spanner* sp : note->spannerFor()) {
-            if (sp->endElement()->isNote()) {
-                Note* endNote = toNote(sp->endElement());
-                Segment* s = endNote->chord()->segment();
-                if (!s || s->tick() < tickEnd()) {
-                    if (sp->isGuitarBend()) {
-                        appendGuitarBend(toGuitarBend(sp));
-                        continue;
-                    }
-                    m_el.push_back(sp);
+            if (!sp->endElement()->isNote()) {
+                continue;
+            }
+            const Note* endNote = toNote(sp->endElement());
+            const Segment* endSeg = endNote->chord()->segment();
+            if (!endSeg || endSeg->tick() < tickEnd()) {
+                if (sp->isGuitarBend()) {
+                    appendGuitarBend(toGuitarBend(sp));
+                    continue;
                 }
+                m_el.push_back(sp);
             }
         }
+
         if (note->laissezVib()) {
             appendFiltered(note->laissezVib()->frontSegment());
         }
