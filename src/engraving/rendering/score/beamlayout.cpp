@@ -399,7 +399,7 @@ bool BeamLayout::isStartOfNonCrossBeam(ChordRest* cr)
 {
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
-        if (b->cross() || b->fullCross()) {
+        if (b->cross()) {
             return false;
         }
 
@@ -413,7 +413,7 @@ bool BeamLayout::isStartOfCrossBeam(ChordRest* cr)
 {
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
-        if (b->cross() || b->fullCross()) {
+        if (b->cross()) {
             return true;
         }
     }
@@ -871,7 +871,7 @@ void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
     }
 
     for (ChordRest* beamCR : beam->elements()) {
-        if (beamCR->isRest()) {
+        if (beamCR->isRest() && beamCR->vStaffIdx() == beam->staffIdx()) {
             verticalAdjustBeamedRests(toRest(beamCR), beam, ctx);
         }
 
