@@ -290,8 +290,20 @@ void Score::update(bool resetCmdState)
             CmdState& cs = ms->cmdState();
             ms->deletePostponed();
             if (cs.layoutRange()) {
+
+                  // Force layout of up to end of next system (to fix, e.g. barline spanning issue and possibly other multi-pass problems)
+                  Fraction endTick = cs.endTick();
+                  if (const Measure* m = tick2measure(cs.endTick())) {
+                        if (const System* s  = m->system()) {
+                              const Measure* nfm = s->lastMeasure() ? s->lastMeasure()->nextMeasure() : nullptr;
+                              const Measure* nlm = nfm ? nfm->system()->lastMeasure() ? nfm->system()->lastMeasure() : nullptr : nullptr;
+                              if (nlm)
+                                    endTick = nlm->endTick();
+                              }
+                        }
+
                   for (Score* s : ms->scoreList())
-                        s->doLayoutRange(cs.startTick(), cs.endTick());
+                        s->doLayoutRange(cs.startTick(), endTick);
                   updateAll = true;
                   }
             }
