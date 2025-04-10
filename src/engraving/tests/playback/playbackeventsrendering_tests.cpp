@@ -2280,6 +2280,85 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_PartiallyTiedArpeggio
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedArpeggio)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "partially_tied_arpeggio.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+    for (const RepeatSegment* repeat : score->repeatList()) {
+        const int tickPositionOffset = repeat->utick - repeat->tick;
+
+        for (const Measure* m : repeat->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    const std::vector<timestamp_t> expectedArpeggioTimestamps {
+        0, // 1st measure
+        3500000, // 2nd measure
+        7500000, // 2nd measure (repeated)
+    };
+
+    const std::vector<duration_t> expectedArpeggioDurations {
+        QUARTER_NOTE_DURATION, // 1st measure
+        QUARTER_NOTE_DURATION* 2, // 2nd measure
+        QUARTER_NOTE_DURATION, // 2nd measure (repeated)
+    };
+
+    size_t arpeggioNum = 0;
+
+    for (const auto& pair : result) {
+        if (pair.second.empty()) {
+            continue;
+        }
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const PlaybackEvent& event = pair.second.at(i);
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            ASSERT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
+
+            // [THEN] Each note event has the correct timestamp & duration
+            ASSERT_TRUE(arpeggioNum < expectedArpeggioTimestamps.size());
+            ASSERT_TRUE(arpeggioNum < expectedArpeggioDurations.size());
+
+            const duration_t expectedOffset = 60000 * i;
+            const timestamp_t expectedTimestamp = expectedArpeggioTimestamps.at(arpeggioNum) + expectedOffset;
+            const duration_t expectedDuration = expectedArpeggioDurations.at(arpeggioNum) - expectedOffset;
+
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTimestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedDuration);
+        }
+
+        arpeggioNum++;
+    }
+
+    delete score;
+}
+
+/**
  * @brief PlaybackEventsRendererTests_Single_Note_Tremolo
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 half note marked by the 8-th Tremolo articulation

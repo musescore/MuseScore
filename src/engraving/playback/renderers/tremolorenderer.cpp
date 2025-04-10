@@ -56,7 +56,7 @@ static timestamp_t tremoloTimestampFrom(const Note* note, const RenderingContext
     int positionTickOffset = ctx.positionTickOffset;
 
     if (note->incomingPartialTie()) {
-        const PartiallyTiedNoteInfo outgoingNoteInfo = findOutgoingNote(note, ctx);
+        const PartiallyTiedNoteInfo outgoingNoteInfo = findOutgoingNoteInPreviousRepeat(note, ctx);
         if (outgoingNoteInfo.isValid() && containEqualTremolo(outgoingNoteInfo.note->chord(), note->chord())) {
             note = outgoingNoteInfo.note;
             positionTickOffset = outgoingNoteInfo.repeat->utick - outgoingNoteInfo.repeat->tick;
@@ -92,7 +92,7 @@ static duration_t tremoloDuration(const Note* note, const timestamp_t tremoloTim
     int positionTickOffset = ctx.positionTickOffset;
 
     if (note->outgoingPartialTie()) {
-        const PartiallyTiedNoteInfo incomingNoteInfo = findIncomingNote(note, ctx);
+        const PartiallyTiedNoteInfo incomingNoteInfo = findIncomingNoteInNextRepeat(note, ctx);
         if (incomingNoteInfo.isValid() && containEqualTremolo(incomingNoteInfo.note->chord(), note->chord())) {
             note = incomingNoteInfo.note;
             positionTickOffset = incomingNoteInfo.repeat->utick - incomingNoteInfo.repeat->tick;

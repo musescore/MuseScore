@@ -22,6 +22,7 @@
 
 #include "noterenderer.h"
 
+#include "dom/arpeggio.h"
 #include "dom/note.h"
 #include "dom/staff.h"
 #include "dom/swing.h"
@@ -46,36 +47,37 @@ bool NoteRenderer::shouldRender(const Note* note, const RenderingContext& ctx, c
     const Tie* tie = note->tieBack();
 
     if (tie && tie->playSpanner()) {
+        const Note* startNote = tie->startNote();
+        const Note* endNote = tie->endNote();
+        if (!startNote || !endNote) {
+            return false;
+        }
+
+        if (tie->isPartialTie()) {
+            // Play the partially tied note if there is no outgoing note in the previous repeat
+            if (!findOutgoingNoteInPreviousRepeat(note, ctx).isValid()) {
+                return true;
+            }
+        }
+
+        const Chord* startChord = startNote->chord();
+        const Chord* endChord = endNote->chord();
+
+        if (startChord->tremoloType() != TremoloType::INVALID_TREMOLO
+            || endChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+            return true;
+        }
+
+        if (startChord->arpeggio() && endChord->arpeggio()) {
+            return false;
+        }
+
         //!Note Checking whether the tied note has any multi-note articulation attached
         //!     If so, we can't ignore such note
         for (const auto& pair : articulations) {
             if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
                 return true;
             }
-        }
-
-        const Note* startNote = tie->startNote();
-        const Chord* startChord = startNote ? startNote->chord() : nullptr;
-        if (startChord) {
-            if (startChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
-                return true;
-            }
-        }
-
-        const Note* endNote = tie->endNote();
-        const Chord* endChord = endNote ? endNote->chord() : nullptr;
-        if (endChord) {
-            if (endChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
-                return true;
-            }
-        }
-
-        if (tie->isPartialTie()) {
-            return !findOutgoingNote(note, ctx).isValid();
-        }
-
-        if (!startChord || !endChord) {
-            return false;
         }
 
         const auto& intervals = startChord->score()->spannerMap().findOverlapping(startChord->tick().ticks(),
@@ -145,7 +147,7 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
 void NoteRenderer::renderPartialTie(const Note* outgoingNote, NominalNoteCtx& outgoingNoteCtx)
 {
     const RenderingContext& outgoingChordCtx = outgoingNoteCtx.chordCtx;
-    const PartiallyTiedNoteInfo incomingNoteInfo = findIncomingNote(outgoingNote, outgoingChordCtx);
+    const PartiallyTiedNoteInfo incomingNoteInfo = findIncomingNoteInNextRepeat(outgoingNote, outgoingChordCtx);
     if (!incomingNoteInfo.isValid()) {
         return;
     }

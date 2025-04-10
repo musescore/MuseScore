@@ -36,7 +36,7 @@ struct PartiallyTiedNoteInfo {
     bool isValid() const { return repeat && note; }
 };
 
-inline PartiallyTiedNoteInfo findOutgoingNote(const Note* incomingNote, const RenderingContext& ctx)
+inline PartiallyTiedNoteInfo findOutgoingNoteInPreviousRepeat(const Note* incomingNote, const RenderingContext& ctx)
 {
     const RepeatList& repeats = ctx.score->repeatList();
     auto currRepeatIt = repeats.findRepeatSegmentFromUTick(ctx.nominalPositionStartTick + ctx.positionTickOffset);
@@ -69,7 +69,7 @@ inline PartiallyTiedNoteInfo findOutgoingNote(const Note* incomingNote, const Re
     return PartiallyTiedNoteInfo();
 }
 
-inline PartiallyTiedNoteInfo findIncomingNote(const Note* outgoingNote, const RenderingContext& ctx)
+inline PartiallyTiedNoteInfo findIncomingNoteInNextRepeat(const Note* outgoingNote, const RenderingContext& ctx)
 {
     const RepeatList& repeats = ctx.score->repeatList();
     auto currRepeatIt = repeats.findRepeatSegmentFromUTick(ctx.nominalPositionStartTick + ctx.positionTickOffset);
