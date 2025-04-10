@@ -417,7 +417,12 @@ TEST_F(Engraving_BendsRendererTests, BendOnTiedNotes)
     // [THEN] The note event contains the multibend articulation with the correct timestamp and duration
     auto multibendIt = event.expressionCtx().articulations.find(ArticulationType::Multibend);
     ASSERT_TRUE(multibendIt != event.expressionCtx().articulations.end());
-    const mpe::ArticulationMeta& multibendMeta = multibendIt->second.meta;
+
+    const mpe::ArticulationAppliedData& articulationData = multibendIt->second;
+    EXPECT_NE(articulationData.occupiedFrom, 0);
+    EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+
+    const mpe::ArticulationMeta& multibendMeta = articulationData.meta;
     EXPECT_EQ(multibendMeta.timestamp, event.arrangementCtx().actualTimestamp);
     EXPECT_EQ(multibendMeta.overallDuration, event.arrangementCtx().actualDuration);
 }

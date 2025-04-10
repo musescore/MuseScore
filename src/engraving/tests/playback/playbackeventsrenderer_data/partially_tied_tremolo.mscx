@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.50">
+  <programVersion>4.5.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>Dc781yrFbVM_+Y/t0CMcjRP</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-04-03</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="violin">
+        <family id="orchestral-strings">Orchestral Strings</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Violin</trackName>
+      <Instrument id="violin">
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
+        <trackName>Violin</trackName>
+        <minPitchP>55</minPitchP>
+        <maxPitchP>103</maxPitchP>
+        <minPitchA>55</minPitchA>
+        <maxPitchA>88</maxPitchA>
+        <instrumentId>strings.violin</instrumentId>
+        <Channel name="arco">
+          <program value="40"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>GY95NU6NXnH_EkfrcsQBW7C</eid>
+        <voice>
+          <KeySig>
+            <eid>qyuTXky5qUI_bKIDoPbKPyE</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>neqSKaT7aXB_hoj7cilrKTJ</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>/uqvoMp24pM_eUekyCIx9+E</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>d72kOdQeAaN_r27vz05nkc</eid>
+              <PartialTie>
+                <partialSpannerDirection>incoming</partialSpannerDirection>
+                <eid>rJRJw0XTjNJ_l4EJW8FHeOH</eid>
+                </PartialTie>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            <TremoloSingleChord>
+              <subtype>r16</subtype>
+              <eid>UULz/DW1BxN_VctUnS4kHPL</eid>
+              </TremoloSingleChord>
+            </Chord>
+          <Rest>
+            <eid>XUHlE4I1FMB_IFWOdtByMNF</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>iNSsvymBr0_fJOHwM82ABE</eid>
+        <voice>
+          <Rest>
+            <eid>vEZ3Q7wP0AE_MjQEM0bepZM</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>OO/eCRNElLN_0v+tgz476cM</eid>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Rest>
+            <eid>FtfhxEBMWnK_FazYVXXeBoM</eid>
+            <durationType>half</durationType>
+            </Rest>
+          <Chord>
+            <eid>3zqxWSDaDtM_0817e5BxQ8J</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>jqNNbrsr8IM_QPZRZ0tuvNE</eid>
+              <PartialTie>
+                <eid>UNvbc9IwJHE_vDtcx60j6V</eid>
+                </PartialTie>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            <TremoloSingleChord>
+              <subtype>r16</subtype>
+              <eid>5ZHnKQ3faX_jDfe3uYifyI</eid>
+              </TremoloSingleChord>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>gmEPfoSLIY_/esGQbVWgNC</eid>
+        <voice>
+          <Rest>
+            <eid>zSPZMw9iyY_Q5O1P0a230P</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
