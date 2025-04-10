@@ -3595,7 +3595,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
     }
 
     // delete content from measures underlying mmrests
-    if (s1 && s1->measure() && s1->measure()->isMMRest()) {
+    if (s1->measure() && s1->measure()->isMMRest()) {
         s1 = s1->measure()->mmRestFirst()->first();
     }
     if (s2 && s2->measure() && s2->measure()->isMMRest()) {
@@ -3620,9 +3620,10 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
         if (!filter.canSelectVoice(track)) {
             continue;
         }
+
         Fraction f;
-        Fraction tick  = Fraction(-1, 1);
-        Tuplet* currentTuplet = 0;
+        Fraction tick = Fraction(-1, 1);
+        Tuplet* currentTuplet = nullptr;
         for (Segment* s = s1; s && (s->tick() < endTick); s = s->next1()) {
             if (s->element(track) && s->isBreathType()) {
                 deleteItem(s->element(track));
@@ -3633,19 +3634,20 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
             if (!e) {
                 continue;
             }
+
             if (!s->isChordRestType()) {
-                // do not delete TimeSig/KeySig,
-                // it doesn't make sense to do it, except on full system
+                // do not delete TimeSig/KeySig, it doesn't make sense to do it (except on full system)
                 if (!s->isTimeTickType() && !s->isTimeSigType() && !s->isKeySigType()
                     && !s->isType(SegmentType::BarLineType) /*covers all barLine types*/) {
                     undoRemoveElement(e);
                 }
                 continue;
             }
+
             ChordRest* cr1 = toChordRest(e);
             if (tick == Fraction(-1, 1)) {
                 // first ChordRest found:
-                Fraction offset = cr1->rtick();
+                const Fraction offset = cr1->rtick();
                 if (cr1->measure()->tick() >= s1->tick() && offset.isNotZero()) {
                     f = offset;
                     tick = s->measure()->tick();
@@ -3653,6 +3655,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                     f = Fraction(0, 1);
                     tick = s->tick();
                 }
+
                 currentTuplet = cr1->tuplet();
                 if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick, /*fullMeasure*/ false)) {
                     cmdDeleteTuplet(topTuplet, false);
@@ -3661,52 +3664,55 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                     continue;
                 }
             }
+
             if (e->isMeasureRepeat()) {
                 deleteItem(e);
                 continue;
             }
 
-            if (currentTuplet != cr1->tuplet()) {
-                if (f.isValid() && !fullMeasure) {     // Set rests for the previous tuplet we were dealing with
-                    setRest(tick, track, f, false, currentTuplet);
-                }
-                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick, fullMeasure)) {
-                    cmdDeleteTuplet(topTuplet, false);
-                    tick = topTuplet->tick();
-                    f = topTuplet->ticks();
-                    currentTuplet = topTuplet->tuplet();
-                    continue;
-                }
-                // Not deleting a complete tuplet
-                tick = cr1->tick();
-                currentTuplet = cr1->tuplet();
-                removeChordRest(cr1, true);
-                f = cr1->ticks();
-            } else {
+            if (currentTuplet == cr1->tuplet()) {
                 removeChordRest(cr1, true);
                 f += cr1->ticks();
+                continue;
             }
+
+            if (f.isValid() && !fullMeasure) { // Set rests for the previous tuplet we were dealing with
+                setRest(tick, track, f, false, currentTuplet);
+            }
+
+            if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick, fullMeasure)) {
+                cmdDeleteTuplet(topTuplet, false);
+                tick = topTuplet->tick();
+                f = topTuplet->ticks();
+                currentTuplet = topTuplet->tuplet();
+                continue;
+            }
+
+            // Not deleting a complete tuplet
+            tick = cr1->tick();
+            currentTuplet = cr1->tuplet();
+            removeChordRest(cr1, true);
+            f = cr1->ticks();
         }
-        if (f.isValid() && !f.isZero()) {
-            if (fullMeasure) {
-                // handle this as special case to be able to
-                // fix broken measures:
-                Staff* staff = Score::staff(track / VOICES);
-                for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
-                    Fraction tick3   = m->tick();
-                    Fraction ff = m->stretchedLen(staff);
-                    Rest* r = setRest(tick3, track, ff, false, 0);
-                    crs.push_back(r);
-                    if (s2 && (m == s2->measure())) {
-                        break;
-                    }
-                }
-            } else {
-                std::vector<Rest*> rests = setRests(tick, track, f, false, currentTuplet);
-                for (Rest* r : rests) {
-                    crs.push_back(r);
+
+        if (!f.isValid() || f.isZero()) {
+            continue;
+        }
+
+        if (fullMeasure) {
+            // handle this as special case (fix broken measures):
+            const Staff* staff = Score::staff(track2staff(track));
+            for (const Measure* m = s1->measure(); m; m = m->nextMeasure()) {
+                const Fraction length = m->stretchedLen(staff);
+                Rest* r = setRest(m->tick(), track, length, false, nullptr);
+                crs.push_back(r);
+                if (s2 && m == s2->measure()) {
+                    break;
                 }
             }
+        } else {
+            const std::vector<Rest*> rests = setRests(tick, track, f, false, currentTuplet);
+            crs.insert(crs.end(), rests.begin(), rests.end());
         }
     }
 

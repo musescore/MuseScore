@@ -190,7 +190,7 @@ public:
     Fraction timesig() const { return m_timesig; }
     void setTimesig(const Fraction& f) { m_timesig = f; }
 
-    Fraction stretchedLen(Staff*) const;
+    Fraction stretchedLen(const Staff*) const;
     bool isIrregular() const { return m_timesig != m_len; }
 
     int size() const { return m_segments.size(); }
