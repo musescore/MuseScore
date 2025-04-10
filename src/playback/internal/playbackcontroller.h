@@ -162,6 +162,8 @@ private:
     muse::audio::secs_t playbackStartSecs() const;
     muse::audio::secs_t playbackEndSecs() const;
 
+    muse::audio::secs_t playbackDelay(const muse::secs_t countInDuration) const;
+
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
     void togglePlayRepeats();
