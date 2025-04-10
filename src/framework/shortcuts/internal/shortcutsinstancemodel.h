@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
 #include "ishortcutscontroller.h"
+#include "ui/imainwindow.h"
 
 namespace muse::shortcuts {
 class ShortcutsInstanceModel : public QObject, public Injectable, public async::Asyncable
@@ -43,6 +44,7 @@ class ShortcutsInstanceModel : public QObject, public Injectable, public async::
 public:
     Inject<IShortcutsRegister> shortcutsRegister = { this };
     Inject<IShortcutsController> controller = { this };
+    Inject<ui::IMainWindow> mainWindow = { this };
 
 public:
     explicit ShortcutsInstanceModel(QObject* parent = nullptr);
@@ -52,6 +54,7 @@ public:
 
     Q_INVOKABLE void init();
     Q_INVOKABLE void activate(const QString& seq);
+    Q_INVOKABLE void activateAmbiguous(const QString& seq);
 
 signals:
     void shortcutsChanged();
@@ -59,10 +62,15 @@ signals:
 
 protected:
     virtual void doLoadShortcuts();
-    virtual void doActivate(const QString& seq);
+    virtual void doActivate(std::vector<QString> sequences);
 
     // Key = sequence (QString), value = autoRepeat (QVariant/bool)
     QVariantMap m_shortcuts;
+
+private:
+    std::map<int, int> m_shortcutSequences;
+
+    bool eventFilter(QObject* watched, QEvent* event);
 };
 }
 

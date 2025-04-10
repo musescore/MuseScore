@@ -56,6 +56,7 @@ QtObject {
             context: Qt.ApplicationShortcut
             enabled: shortcutsModel.active
             onActivated: shortcutsModel.activate(sequence)
+            onActivatedAmbiguously: shortcutsModel.activateAmbiguous(sequence)
         }
     }
 }

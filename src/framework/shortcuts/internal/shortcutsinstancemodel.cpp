@@ -21,7 +21,9 @@
  */
 #include "shortcutsinstancemodel.h"
 
+#include <private/qkeymapper_p.h>
 #include "log.h"
+#include "shortcutstypes.h"
 
 using namespace muse::shortcuts;
 
@@ -41,6 +43,7 @@ void ShortcutsInstanceModel::init()
     });
 
     doLoadShortcuts();
+    qApp->installEventFilter(this);
 }
 
 QVariantMap ShortcutsInstanceModel::shortcuts() const
@@ -55,7 +58,32 @@ bool ShortcutsInstanceModel::active() const
 
 void ShortcutsInstanceModel::activate(const QString& seq)
 {
-    doActivate(seq);
+    std::vector<QString> sequences{ seq };
+    doActivate(sequences);
+}
+
+void ShortcutsInstanceModel::activateAmbiguous(const QString& seq)
+{
+    std::vector<QString> sequences;
+    sequences.push_back(seq);
+
+    QKeySequence ks(seq);
+    QKeyCombination kc = ks[0];
+    int kcKey = kc.toCombined();
+    int key = m_shortcutSequences.find(kcKey)->second;
+
+    for (auto it = m_shortcutSequences.begin(); it != m_shortcutSequences.end(); ++it) {
+        if (it->second == key) {
+            if (it->first == kcKey) {
+                continue;
+            }
+            QKeyCombination match = QKeyCombination::fromCombined(it->first);
+            QString matchSeq = QKeySequence(match).toString();
+            sequences.push_back(matchSeq);
+        }
+    }
+
+    doActivate(sequences);
 }
 
 void ShortcutsInstanceModel::doLoadShortcuts()
@@ -84,7 +112,46 @@ void ShortcutsInstanceModel::doLoadShortcuts()
     emit shortcutsChanged();
 }
 
-void ShortcutsInstanceModel::doActivate(const QString& seq)
+bool ShortcutsInstanceModel::eventFilter(QObject* watched, QEvent* event)
 {
-    controller()->activate(seq.toStdString());
+    if (event->type() != QEvent::ShortcutOverride || watched != mainWindow()->qWindow()) {
+        return false;
+    }
+
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (!keyEvent) {
+        return false;
+    }
+
+    if (needIgnoreKey((Qt::Key)keyEvent->key())) {
+        return false;
+    }
+
+    m_shortcutSequences.clear(); // Is this safe? Multiple events very close in time?
+    QList<int> possibleKeys = QKeyMapper::possibleKeys(keyEvent);
+    if (possibleKeys.size() < 2) {
+        return false;
+    }
+
+    for (auto it = possibleKeys.cbegin(); it != possibleKeys.cend(); ++it) {
+        if (m_shortcutSequences.find(*it) == m_shortcutSequences.end()) {
+            m_shortcutSequences.insert({ *it, 0 });
+        }
+    }
+    int key = QKeyCombination(keyEvent->modifiers(), (Qt::Key)keyEvent->key()).toCombined();
+    for (auto it = m_shortcutSequences.begin(); it != m_shortcutSequences.end(); ++it) {
+        it->second = possibleKeys.contains(it->first) ? key : 0;
+    }
+
+    return false;
+}
+
+void ShortcutsInstanceModel::doActivate(std::vector<QString> sequences)
+{
+    std::vector<std::string> translatedSequences;
+    translatedSequences.reserve(sequences.size());
+    for (const QString& seq : sequences) {
+        translatedSequences.push_back(seq.toStdString());
+    }
+    controller()->activate(translatedSequences);
 }

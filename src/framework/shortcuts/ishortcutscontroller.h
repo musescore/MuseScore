@@ -36,6 +36,7 @@ public:
     virtual ~IShortcutsController() = default;
 
     virtual void activate(const std::string& sequence) = 0;
+    virtual void activate(std::vector<std::string> sequences) = 0;
     virtual bool isRegistered(const std::string& sequence) const = 0;
 };
 }

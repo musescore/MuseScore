@@ -52,10 +52,11 @@ public:
     void init();
 
     void activate(const std::string& sequence) override;
+    void activate(std::vector<std::string> sequences) override;
     bool isRegistered(const std::string& sequence) const override;
 
 private:
-    muse::actions::ActionCode resolveAction(const std::string& sequence) const;
+    muse::actions::ActionCode resolveAction(std::vector<std::string> sequences) const;
 };
 }
 

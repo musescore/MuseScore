@@ -37,15 +37,19 @@ Item {
     property alias originShortcutText: originShortcutField.currentText
     property alias newShortcutText: newShortcutField.currentText
     property alias informationText: informationText.text
+    property alias alternativesText: alternativesText.text
 
     function requestActive() {
-        newShortcutField.navigation.requestActive()
+        //newShortcutField.navigation.requestActive()
+        root.forceActiveFocus()
     }
 
     signal saveRequested()
     signal cancelRequested()
     signal clearRequested()
-    signal keyPressed(var event)
+    signal newShortcutFieldFocusChanged(bool activeFocus)
+    signal currentShortcutAcceptInProgress()
+    signal currentShortcutChanged(var shortcutText)
 
     anchors.fill: parent
     focus: true
@@ -101,7 +105,9 @@ Item {
                 TextInputField {
                     id: originShortcutField
                     Layout.fillWidth: true
-                    enabled: false
+                    //enabled: false
+                    readOnly: true
+                    background.color: ui.theme.backgroundPrimaryColor
                 }
 
                 StyledTextLabel {
@@ -120,14 +126,30 @@ Item {
                     navigation.order: 1
 
                     hint: qsTrc("shortcuts", "Type to set shortcut")
-                    readOnly: true
+                    //readOnly: true
 
                     onActiveFocusChanged: {
-                        if (activeFocus) {
+                        root.newShortcutFieldFocusChanged(activeFocus)
+                        if (!activeFocus && navPanel.active) {
                             root.forceActiveFocus()
                         }
                     }
+
+                    onTextEditingFinished: function(text) {
+                        root.currentShortcutChanged(text)
+                    }
+
+                    onAccepted: root.currentShortcutAcceptInProgress()
                 }
+            }
+
+            StyledTextLabel {
+                id: alternativesText
+
+                width: parent.width
+                horizontalAlignment: Qt.AlignLeft
+                wrapMode: Text.WordWrap
+                maximumLineCount: 2
             }
         }
 
@@ -154,6 +176,9 @@ Item {
                 if (buttonId === ButtonBoxModel.Cancel) {
                     root.cancelRequested()
                 } else if (buttonId === ButtonBoxModel.Save) {
+                    if (newShortcutField.activeFocus) {
+                        root.forceActiveFocus()
+                    }
                     root.saveRequested()
                 }
             }
@@ -164,10 +189,7 @@ Item {
         if(event.key === Qt.Key_Tab) {
             root.focus = false
         }
-        event.accepted = event.key !== Qt.Key_Escape && event.key !== Qt.Key_Tab
-    }
 
-    Keys.onPressed: function(event) {
-        root.keyPressed(event)
+        event.accepted = event.key !== Qt.Key_Escape && event.key !== Qt.Key_Tab
     }
 }
