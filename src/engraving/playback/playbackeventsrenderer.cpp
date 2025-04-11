@@ -139,7 +139,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     ArticulationMap articulations = makeStandardArticulationMap(profile, eventTimestamp, duration);
 
-    double bps = score->tempomap()->tempo(positionTick).val;
+    double bps = score->tempomap()->multipliedTempo(positionTick).val;
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
@@ -208,7 +208,7 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int measu
     }
 
     TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(measureStartTick).timesig();
-    BeatsPerSecond bps = score->tempomap()->tempo(measureStartTick);
+    BeatsPerSecond bps = score->tempomap()->multipliedTempo(measureStartTick);
 
     int step = timeSignatureFraction.isBeatedCompound(bps.val)
                ? timeSignatureFraction.beatTicks() : timeSignatureFraction.dUnitTicks();
@@ -239,7 +239,7 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
 
     const ArticulationMap articulations = makeStandardArticulationMap(profile, actualTimestamp, duration);
 
-    BeatsPerSecond bps = score->tempomap()->tempo(tick);
+    BeatsPerSecond bps = score->tempomap()->multipliedTempo(tick);
 
     result[actualTimestamp].emplace_back(mpe::NoteEvent(actualTimestamp,
                                                         duration,

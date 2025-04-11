@@ -710,7 +710,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
         int off = on + (ticks * e.len()) / 1000 - 1;
 
         if (note->deadNote()) {
-            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::DIVISION;
+            const double ticksPerSecond = chord->score()->multipliedTempo(chord->tick()).val * Constants::DIVISION;
             constexpr double deadNoteDurationInSec = 0.05;
             const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
             if (off - on > deadNoteDurationInTicks) {

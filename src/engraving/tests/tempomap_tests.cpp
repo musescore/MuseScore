@@ -139,7 +139,7 @@ TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
 
     // [GIVEN] Expected tempomap
     std::map<int, BeatsPerSecond> expectedTempoMap = {
-        { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(80.0)) }, // first measure
+        { 0,                           BeatsPerSecond::fromBPM(BeatsPerMinute(80.0)) },  // first measure
         { 4 * 4 * Constants::DIVISION, BeatsPerSecond::fromBPM(BeatsPerMinute(120.0)) } // 4-th measure
     };
 
@@ -150,8 +150,9 @@ TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
     for (int tick : muse::keys(*tempoMap)) {
         double expectedBps = expectedTempoMap[tick].val;
 
-        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->tempo(tick).val, 2), muse::RealRound(expectedBps * multiplier, 2)));
-        EXPECT_TRUE(muse::RealIsEqual(muse::RealRound(tempoMap->at(tick).tempo.val, 2), muse::RealRound(expectedBps, 2)));
+        EXPECT_NEAR(tempoMap->at(tick).tempo.val,        expectedBps,              0.001);
+        EXPECT_NEAR(tempoMap->tempo(tick).val,           expectedBps,              0.001);
+        EXPECT_NEAR(tempoMap->multipliedTempo(tick).val, expectedBps * multiplier, 0.001);
     }
 }
 

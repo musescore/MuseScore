@@ -77,6 +77,7 @@ public:
     void dump() const;
 
     BeatsPerSecond tempo(int tick) const;
+    BeatsPerSecond multipliedTempo(int tick) const;
     double pauseSecs(int tick) const;
 
     double tick2time(int tick, int* sn = 0) const;

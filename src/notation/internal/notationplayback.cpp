@@ -320,14 +320,14 @@ Notification NotationPlayback::loopBoundariesChanged() const
     return m_loopBoundariesChanged;
 }
 
-const Tempo& NotationPlayback::tempo(tick_t tick) const
+const Tempo& NotationPlayback::multipliedTempo(tick_t tick) const
 {
     if (!score()) {
         static Tempo empty;
         return empty;
     }
 
-    m_currentTempo.valueBpm = static_cast<int>(std::round(score()->tempomap()->tempo(tick).toBPM().val));
+    m_currentTempo.valueBpm = static_cast<int>(std::round(score()->tempomap()->multipliedTempo(tick).toBPM().val));
 
     return m_currentTempo;
 }
