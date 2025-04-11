@@ -29,6 +29,7 @@ class ShortcutsControllerStub : public IShortcutsController
 {
 public:
     void activate(const std::string& sequence) override;
+    void activate(std::vector<std::string> sequences) override;
     bool isRegistered(const std::string& sequence) const override;
 };
 }

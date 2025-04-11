@@ -36,7 +36,7 @@ public:
 
 private:
     void doLoadShortcuts() override;
-    void doActivate(const QString& seq) override;
+    void doActivate(std::vector<QString> sequences) override;
 
     QHash<QString, QString> m_macSequenceMap;
 };

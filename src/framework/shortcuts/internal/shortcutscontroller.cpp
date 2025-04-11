@@ -36,9 +36,18 @@ void ShortcutsController::init()
 
 void ShortcutsController::activate(const std::string& sequence)
 {
-    LOGD() << sequence;
+    std::vector<std::string> sequences;
+    sequences.push_back(sequence);
+    activate(sequences);
+}
 
-    ActionCode actionCode = resolveAction(sequence);
+void ShortcutsController::activate(std::vector<std::string> sequences)
+{
+    for (auto sequence = sequences.cbegin(); sequence != sequences.cend(); ++sequence) {
+        LOGD() << *sequence;
+    }
+
+    ActionCode actionCode = resolveAction(sequences);
 
     if (!actionCode.empty()) {
         dispatcher()->dispatch(actionCode);
@@ -66,16 +75,32 @@ static bool defaultHasLowerPriorityThan(const std::string& ctx1, const std::stri
     return index1 < index2;
 }
 
-ActionCode ShortcutsController::resolveAction(const std::string& sequence) const
+ActionCode ShortcutsController::resolveAction(std::vector<std::string> sequences) const
 {
-    ShortcutList shortcutsForSequence = shortcutsRegister()->shortcutsForSequence(sequence);
-    IF_ASSERT_FAILED(!shortcutsForSequence.empty()) {
+    ShortcutList shortcuts;
+    for (auto sequence = sequences.cbegin(); sequence != sequences.cend(); ++sequence) {
+        ShortcutList shortcutsForSequence = shortcutsRegister()->shortcutsForSequence(*sequence);
+        for (auto& sc : shortcutsForSequence) {
+            bool found = false;
+            for (auto& sc2 : shortcuts) {
+                if (sc2 == sc) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                shortcuts.push_back(sc);
+            }
+        }
+    }
+
+    IF_ASSERT_FAILED(!shortcuts.empty()) {
         return ActionCode();
     }
 
     ShortcutList allowedShortcuts;
 
-    for (const Shortcut& sc : shortcutsForSequence) {
+    for (const Shortcut& sc : shortcuts) {
         //! NOTE Check if the shortcut itself is allowed
         if (!uiContextResolver()->isShortcutContextAllowed(sc.context)) {
             continue;
