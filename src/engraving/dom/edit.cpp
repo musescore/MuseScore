@@ -2167,8 +2167,14 @@ Tie* Score::cmdToggleTie()
 
         for (size_t j = i + 1; j < notes; ++j) {
             Note* candidateNote = noteList[j];
-            if (note->part() == candidateNote->part() && note->pitch() == candidateNote->pitch()
-                && note->unisonIndex() == candidateNote->unisonIndex() && note->tick() != candidateNote->tick()) {
+            if (!candidateNote) {
+                continue;
+            }
+            const bool samePart = note->part() == candidateNote->part();
+            const bool samePitch = note->pitch() == candidateNote->pitch();
+            const bool sameUnisonIdx = note->unisonIndex() == candidateNote->unisonIndex();
+            const bool diffTick = note->tick() != candidateNote->tick();
+            if (samePart && samePitch && sameUnisonIdx && diffTick) {
                 note2 = candidateNote;
                 noteList[j] = nullptr;
                 break;
