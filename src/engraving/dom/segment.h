@@ -288,7 +288,6 @@ public:
     EngravingItem* preAppendedItem(track_idx_t track) { return m_preAppendedItems[track]; }
     void preAppend(EngravingItem* item, track_idx_t track) { m_preAppendedItems[track] = item; }
     void clearPreAppended(track_idx_t track) { m_preAppendedItems[track] = nullptr; }
-    void addPreAppendedToShape();
 
     bool goesBefore(const Segment* nextSegment) const;
 
