@@ -3333,7 +3333,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                     staff2track(m_selection.staffEnd()), selectionFilter(), m_selection.rangeContainsMultiNoteChords());
         pasteStaff(e, m_selection.startSegment(), m_selection.staffStart(), scale);
     } else if (m_selection.isList()) {
-        std::set<ChordRest*> crs = getSelectedChordRests();
+        const std::set<ChordRest*> crs = getSelectedChordRests();
         for (ChordRest* cr : crs) {
             TDuration newDuration(stepDotted
                                   ? cr->durationType().fraction() * Fraction(3, 3 + nSteps)
@@ -3351,7 +3351,9 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
             if (cr->isChord()) {
                 e = toChord(cr)->upNote();
             }
-            select(e, SelectType::ADD);
+            if (canReselectItem(e)) {
+                select(e, SelectType::ADD);
+            }
         }
     }
 }
