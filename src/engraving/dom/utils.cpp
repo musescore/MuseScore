@@ -1714,4 +1714,33 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
 
     return false;
 }
+
+bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg)
+{
+    if (!firstSeg || !secondSeg) {
+        return false;
+    }
+    Measure* firstMeasure = firstSeg->measure();
+    Measure* secondMeasure = secondSeg->measure();
+
+    if (firstMeasure == secondMeasure) {
+        return false;
+    }
+
+    Score* score = firstSeg->score();
+
+    const RepeatList& repeatList = score->repeatList(true, false);
+
+    std::vector<const Measure*> measures;
+
+    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+        const RepeatSegment* rs = *it;
+
+        if (!rs->containsMeasure(firstMeasure) || !rs->containsMeasure(secondMeasure)) {
+            return true;
+        }
+    }
+
+    return false;
+}
 }

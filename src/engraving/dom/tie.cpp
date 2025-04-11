@@ -243,12 +243,16 @@ void Tie::updatePossibleJumpPoints()
     if (!hasFollowingJumpItem) {
         const Note* tieEndNote = endNote();
         const Chord* endChord = tieEndNote ? tieEndNote->chord() : nullptr;
+        if (!endChord) {
+            return;
+        }
         const Segment* endNoteSegment = endChord ? endChord->segment() : nullptr;
         const ChordRest* finalCROfMeasure = measure->lastChordRest(track());
         const bool finalCRHasFollowingJump = finalCROfMeasure ? finalCROfMeasure->hasFollowingJumpItem() : false;
         const bool segsAreAdjacent = segmentsAreAdjacentInRepeatStructure(segment, endNoteSegment);
+        const bool segsAreInDifferentRepeatSegments = segmentsAreInDifferentRepeatSegments(segment, endNoteSegment);
 
-        if (!(finalCRHasFollowingJump && segsAreAdjacent)) {
+        if (!(finalCRHasFollowingJump && segsAreAdjacent) || !segsAreInDifferentRepeatSegments) {
             return;
         }
     }
