@@ -88,7 +88,7 @@ apt_packages_runtime=(
   libcups2
   libdbus-1-3
   libegl1-mesa-dev
-  libodbc1
+  libodbc2
   libpq-dev
   libssl-dev
   libxcomposite-dev
@@ -108,6 +108,10 @@ apt_packages_runtime=(
   libxkbcommon-dev
   libopengl-dev
   libvulkan-dev
+  # gstreamer for QtMultimedia
+  libunwind-dev
+  libgstreamer1.0-dev
+  libgstreamer-plugins-base1.0-dev
   )
 
 apt_packages_ffmpeg=(
@@ -130,7 +134,8 @@ sudo apt-get install -y --no-install-recommends \
 
 # Get newer Qt (only used cached version if it is the same)
 qt_version="624"
-qt_revision="r2" # added websocket module
+#qt_revision="r2" # added websocket module
+qt_revision="r3" # added multimedia module
 qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
