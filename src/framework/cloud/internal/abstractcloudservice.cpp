@@ -145,7 +145,13 @@ bool AbstractCloudService::readTokens()
         return false;
     }
 
-    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val.toQByteArrayNoCopy());
+    QJsonParseError err;
+    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val.toQByteArrayNoCopy(), &err);
+    if (err.error != QJsonParseError::NoError || !tokensDoc.isObject()) {
+        LOGE() << "Error on parse tokens file: " << err.errorString();
+        return false;
+    }
+
     QJsonObject saveObject = tokensDoc.object();
 
     m_accessToken = saveObject[ACCESS_TOKEN_KEY].toString();
