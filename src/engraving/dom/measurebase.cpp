@@ -803,7 +803,6 @@ void MeasureBaseList::push_back(MeasureBase* m)
         m->setNext(0);
     }
     m_last = m;
-    m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 
 //---------------------------------------------------------
@@ -823,7 +822,6 @@ void MeasureBaseList::push_front(MeasureBase* m)
         m->setNext(0);
     }
     m_first = m;
-    m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 
 //---------------------------------------------------------
@@ -846,8 +844,6 @@ void MeasureBaseList::add(MeasureBase* m)
     m->setPrev(el->prev());
     el->prev()->setNext(m);
     el->setPrev(m);
-
-    m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 
 //---------------------------------------------------------
@@ -867,11 +863,6 @@ void MeasureBaseList::remove(MeasureBase* m)
     } else {
         m_last = m->prev();
     }
-
-    auto mbIt = findMeasureBaseIterator(m);
-    assert(mbIt != m_tickIndex.end());
-
-    m_tickIndex.erase(mbIt);
 }
 
 //---------------------------------------------------------
@@ -881,11 +872,9 @@ void MeasureBaseList::remove(MeasureBase* m)
 void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 {
     for (MeasureBase* m = fm; m != lm; m = m->next()) {
-        m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
         ++m_size;
     }
     ++m_size;
-    m_tickIndex.emplace(std::make_pair(lm->tick().ticks(), lm));
     MeasureBase* pm = fm->prev();
     if (pm) {
         pm->setNext(fm);
@@ -907,17 +896,9 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
 {
     for (MeasureBase* m = fm; m != lm; m = m->next()) {
-        auto mbIt = findMeasureBaseIterator(m);
-        assert(mbIt != m_tickIndex.end());
-
-        m_tickIndex.erase(mbIt);
         --m_size;
     }
     --m_size;
-    auto mbIt = findMeasureBaseIterator(lm);
-    assert(mbIt != m_tickIndex.end());
-
-    m_tickIndex.erase(mbIt);
     MeasureBase* pm = fm->prev();
     MeasureBase* nm = lm->next();
     if (pm) {
@@ -959,11 +940,33 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     for (EngravingItem* e : nb->el()) {
         e->setParent(nb);
     }
+}
 
-    auto mbIt = findMeasureBaseIterator(ob);
-    assert(mbIt != m_tickIndex.end());
+//---------------------------------------------------------
+//   append
+//    append measure to the end of the list and update
+//    tick index
+//---------------------------------------------------------
 
-    mbIt->second = nb;
+void MeasureBaseList::append(MeasureBase* m)
+{
+    MeasureBase* next = m->next();
+    MeasureBase* prev = m->prev();
+    assert(!next);
+    assert(!prev || prev == m_last);
+
+    ++m_size;
+    if (m_last) {
+        m_last->setNext(m);
+        m->setPrev(m_last);
+        m->setNext(0);
+    } else {
+        m_first = m;
+        m->setPrev(0);
+        m->setNext(0);
+    }
+    m_last = m;
+    m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 
 Measure* MeasureBaseList::measureByTick(int tick) const
@@ -1014,48 +1017,16 @@ std::vector<MeasureBase*> MeasureBaseList::measureBasesAtTick(int tick) const
         return result;
     }
 
-    auto it = m_tickIndex.upper_bound(tick);
-
-    if (it == m_tickIndex.begin()) {
-        result.push_back(it->second);
-        return result;
-    }
-
-    --it;
-    for (;; --it) {
-        if (it == m_tickIndex.begin()) {
-            result.push_back(it->second);
-            break;
-        }
-
-        MeasureBase* mb = it->second;
-        if (!mb) {
-            break;
-        }
-        result.push_back(mb);
-    }
+    result = muse::values(m_tickIndex, tick);
 
     return result;
 }
 
-std::multimap<int, MeasureBase*>::iterator MeasureBaseList::findMeasureBaseIterator(MeasureBase* m)
-{
-    auto res = m_tickIndex.equal_range(m->tick().ticks());
-    for (auto it = res.first; it != res.second; ++it) {
-        if (it->second == m) {
-            return it;
-        }
-    }
-    return m_tickIndex.end();
-}
-
 void MeasureBaseList::updateTickIndex()
 {
-    std::multimap<int, MeasureBase*> indexCopy = m_tickIndex;
     m_tickIndex.clear();
 
-    for (auto it : indexCopy) {
-        MeasureBase* mb = it.second;
+    for (MeasureBase* mb = m_first; mb; mb = mb->next()) {
         m_tickIndex.emplace(std::make_pair(mb->tick().ticks(), mb));
     }
 }

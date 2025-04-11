@@ -238,6 +238,8 @@ public:
     int size() const { return m_size; }
     bool empty() const { return m_size == 0; }
 
+    void append(MeasureBase*);
+
     void updateTickIndex();
 
     Measure* measureByTick(int tick) const;
@@ -246,8 +248,6 @@ public:
 private:
     void push_back(MeasureBase* m);
     void push_front(MeasureBase* m);
-
-    std::multimap<int, MeasureBase*>::iterator findMeasureBaseIterator(MeasureBase* m);
 
     int m_size = 0;
     MeasureBase* m_first = nullptr;

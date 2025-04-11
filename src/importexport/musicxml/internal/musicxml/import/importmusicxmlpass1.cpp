@@ -916,7 +916,7 @@ VBox* MusicXmlParserPass1::createAndAddVBoxForCreditWords(Score* score, Fraction
 {
     VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
     vbox->setTick(tick);
-    score->measures()->add(vbox);
+    score->measures()->append(vbox);
     return vbox;
 }
 
@@ -1154,7 +1154,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
         measure->setNo(int(i));
-        score->measures()->add(measure);
+        score->measures()->append(measure);
 
         // add break to previous measure or vbox
         MeasureBase* mb = vbox;

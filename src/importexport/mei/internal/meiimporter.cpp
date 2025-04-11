@@ -1119,7 +1119,7 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
     }
 
     if (vBox) {
-        m_score->measures()->add(vBox);
+        m_score->measures()->append(vBox);
     }
 
     return true;
@@ -1444,7 +1444,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
         measure->setRepeatCount(measureSt.repeatCount);
     }
 
-    m_score->measures()->add(measure);
+    m_score->measures()->append(measure);
     m_ticks += measure->ticks();
 
     m_lastMeasure = measure;
@@ -3196,7 +3196,7 @@ bool MeiImporter::buildTextFrame()
 
     if (vBox) {
         vBox->setTick(Fraction(0, 1));
-        m_score->measures()->add(vBox);
+        m_score->measures()->append(vBox);
     }
 
     return true;

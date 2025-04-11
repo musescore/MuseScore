@@ -1156,7 +1156,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             continue;
         }
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
-        measures->add(newMeasure);
+        measures->append(newMeasure);
     }
 
     size_t n = sourceStavesIndexes.size();
@@ -1221,7 +1221,7 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
 
     for (MeasureBase* mb = oscore->firstMeasure(); mb; mb = mb->next()) {
         MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
-        measures->add(newMeasure);
+        measures->append(newMeasure);
     }
 
     collectTieEndPoints(tieMap);
