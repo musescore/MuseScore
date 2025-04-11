@@ -5148,6 +5148,21 @@ void LayoutContext::collectPage()
                   }
             }
 
+      // If this is the last page we layout, we must also relayout the first barlines of the
+      // next page, because they may have been altered while collecting the systems.
+      MeasureBase* lastOfThisPage = page->systems().back()->measures().back();
+      MeasureBase* firstOfNextPage = lastOfThisPage ? lastOfThisPage->next() : nullptr;
+      if (firstOfNextPage && firstOfNextPage->isMeasure() && firstOfNextPage->tick() > endTick) {
+            for (Segment& segment : toMeasure(firstOfNextPage)->segments()) {
+                  if (!segment.isType(SegmentType::BarLineType))
+                        continue;
+                  for (Element* e : segment.elist()) {
+                        if (e && e->isBarLine())
+                              toBarLine(e)->layout2();
+                        }
+                  }
+            }
+
       if (score->systemMode()) {
             System* s = page->systems().last();
             qreal height = s ? s->pos().y() + s->height() + s->minBottom() : page->tm();
