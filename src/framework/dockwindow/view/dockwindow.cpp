@@ -308,7 +308,7 @@ void DockWindow::restoreDefaultLayout()
     m_reloadCurrentPageAllowed = false;
     for (const DockPageView* page : m_pages.list()) {
         if (page == m_currentPage) {
-            restorePageState(page->objectName());
+            restorePageState(page);
             continue;
         }
         uiConfiguration()->setPageState(page->objectName(), QByteArray());
