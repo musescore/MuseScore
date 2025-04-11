@@ -2123,6 +2123,9 @@ Tie* Score::cmdToggleTie()
         Chord* chord = note->chord();
         if (oldTie) {
             // Toggle existing tie off
+            if (oldTie->tieJumpPoints()) {
+                oldTie->undoRemoveTiesFromJumpPoints();
+            }
             undoRemoveElement(oldTie);
             continue;
         }
