@@ -553,6 +553,21 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
     emit midiExportRpnsChanged(exportRpns);
 }
 
+bool ExportDialogModel::midiSpaceLyrics() const
+{
+    return midiImportExportConfiguration()->isMidiSpaceLyrics();
+}
+
+void ExportDialogModel::setMidiSpaceLyrics(bool spaceLyrics)
+{
+    if (spaceLyrics == midiSpaceLyrics()) {
+        return;
+    }
+
+    midiImportExportConfiguration()->setIsMidiSpaceLyrics(spaceLyrics);
+    emit midiSpaceLyricsChanged(spaceLyrics);
+}
+
 bool ExportDialogModel::meiExportLayout() const
 {
     return meiConfiguration()->meiExportLayout();
