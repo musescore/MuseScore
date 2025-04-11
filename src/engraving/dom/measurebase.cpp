@@ -869,9 +869,9 @@ void MeasureBaseList::remove(MeasureBase* m)
     }
 
     auto mbIt = findMeasureBaseIterator(m);
-    if (mbIt != m_tickIndex.end()) {
-        m_tickIndex.erase(mbIt);
-    }
+    assert(mbIt != m_tickIndex.end());
+
+    m_tickIndex.erase(mbIt);
 }
 
 //---------------------------------------------------------
@@ -908,16 +908,16 @@ void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
 {
     for (MeasureBase* m = fm; m != lm; m = m->next()) {
         auto mbIt = findMeasureBaseIterator(m);
-        if (mbIt != m_tickIndex.end()) {
-            m_tickIndex.erase(mbIt);
-        }
+        assert(mbIt != m_tickIndex.end());
+
+        m_tickIndex.erase(mbIt);
         --m_size;
     }
     --m_size;
     auto mbIt = findMeasureBaseIterator(lm);
-    if (mbIt != m_tickIndex.end()) {
-        m_tickIndex.erase(mbIt);
-    }
+    assert(mbIt != m_tickIndex.end());
+
+    m_tickIndex.erase(mbIt);
     MeasureBase* pm = fm->prev();
     MeasureBase* nm = lm->next();
     if (pm) {
@@ -961,9 +961,9 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     }
 
     auto mbIt = findMeasureBaseIterator(ob);
-    if (mbIt != m_tickIndex.end()) {
-        mbIt->second = nb;
-    }
+    assert(mbIt != m_tickIndex.end());
+
+    mbIt->second = nb;
 }
 
 Measure* MeasureBaseList::measureByTick(int tick) const

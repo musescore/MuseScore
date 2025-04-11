@@ -854,14 +854,20 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
     if (mb->isHBox()) {
         nmb = Factory::createHBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
     } else if (mb->isVBox()) {
         if (toBox(mb)->isTitleFrame()) {
             nmb = Factory::createTitleVBox(score->dummy()->system());
         } else {
             nmb = Factory::createVBox(score->dummy()->system());
         }
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
     } else if (mb->isTBox()) {
         nmb = Factory::createTBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
         Text* text = toTBox(mb)->text();
         EngravingItem* ne = text->linkedClone();
         ne->setScore(score);

@@ -200,7 +200,7 @@ public:
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
     bool isVocalStaff(const muse::String& partId) const { return m_parts.at(partId).isVocalStaff(); }
     bool isPercussionStaff(const muse::String& partId) const { return m_parts.at(partId).isPercussionStaff(); }
-    static engraving::VBox* createAndAddVBoxForCreditWords(engraving::Score* score);
+    static engraving::VBox* createAndAddVBoxForCreditWords(engraving::Score* score, engraving::Fraction tick);
     void createDefaultHeader(engraving::Score* const score);
     void createMeasuresAndVboxes(engraving::Score* const score, const std::vector<engraving::Fraction>& ml,
                                  const std::vector<engraving::Fraction>& ms, const std::set<int>& systemStartMeasureNrs,
