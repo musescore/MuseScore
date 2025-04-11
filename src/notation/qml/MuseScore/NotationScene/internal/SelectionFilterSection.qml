@@ -20,19 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+import QtQuick 2.15
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
 
-#include "notationtypes.h"
+Column {
+    id: root
 
-namespace mu::notation {
-class INotationSelectionFilter
-{
-public:
-    virtual ~INotationSelectionFilter() = default;
+    property alias navigation: navPanel
+    property alias sectionTitle: title.text
 
-    virtual bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const = 0;
-    virtual void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) = 0;
-};
+    width: parent.width
+    spacing: 8
 
-using INotationSelectionFilterPtr = std::shared_ptr<INotationSelectionFilter>;
+    NavigationPanel {
+        id: navPanel
+        name: "SelectionFilterSection"
+    }
+
+    StyledTextLabel {
+        id: title
+        font: ui.theme.bodyBoldFont
+    }
 }

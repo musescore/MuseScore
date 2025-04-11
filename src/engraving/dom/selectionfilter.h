@@ -26,52 +26,64 @@
 #include "chord.h"
 
 namespace mu::engraving {
-static constexpr size_t NUMBER_OF_SELECTION_FILTER_TYPES = 23;
-
-enum class SelectionFilterType : unsigned int {
+static constexpr size_t NUM_VOICES_SELECTION_FILTER_TYPES = 4;
+enum class VoicesSelectionFilterTypes : unsigned int {
     NONE                    = 0,
     FIRST_VOICE             = 1 << 0,
     SECOND_VOICE            = 1 << 1,
     THIRD_VOICE             = 1 << 2,
     FOURTH_VOICE            = 1 << 3,
-    DYNAMIC                 = 1 << 4,
-    HAIRPIN                 = 1 << 5,
-    FINGERING               = 1 << 6,
-    LYRICS                  = 1 << 7,
-    CHORD_SYMBOL            = 1 << 8,
-    OTHER_TEXT              = 1 << 9,
-    ARTICULATION            = 1 << 10,
-    ORNAMENT                = 1 << 11,
-    SLUR                    = 1 << 12,
-    FIGURED_BASS            = 1 << 13,
-    OTTAVA                  = 1 << 14,
-    PEDAL_LINE              = 1 << 15,
-    OTHER_LINE              = 1 << 16,
-    ARPEGGIO                = 1 << 17,
-    GLISSANDO               = 1 << 18,
-    FRET_DIAGRAM            = 1 << 19,
-    BREATH                  = 1 << 20,
-    TREMOLO                 = 1 << 21,
-    GRACE_NOTE              = 1 << 22,
-    ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES)
+    ALL                     = ~(~0u << NUM_VOICES_SELECTION_FILTER_TYPES)
 };
+
+static constexpr size_t NUM_ELEMENTS_SELECTION_FILTER_TYPES = 19;
+enum class ElementsSelectionFilterTypes : unsigned int {
+    NONE                    = 0,
+    DYNAMIC                 = 1 << 0,
+    HAIRPIN                 = 1 << 1,
+    FINGERING               = 1 << 2,
+    LYRICS                  = 1 << 3,
+    CHORD_SYMBOL            = 1 << 4,
+    OTHER_TEXT              = 1 << 5,
+    ARTICULATION            = 1 << 6,
+    ORNAMENT                = 1 << 7,
+    SLUR                    = 1 << 8,
+    FIGURED_BASS            = 1 << 9,
+    OTTAVA                  = 1 << 10,
+    PEDAL_LINE              = 1 << 11,
+    OTHER_LINE              = 1 << 12,
+    ARPEGGIO                = 1 << 13,
+    GLISSANDO               = 1 << 14,
+    FRET_DIAGRAM            = 1 << 15,
+    BREATH                  = 1 << 16,
+    TREMOLO                 = 1 << 17,
+    GRACE_NOTE              = 1 << 18,
+    ALL                     = ~(~0u << NUM_ELEMENTS_SELECTION_FILTER_TYPES)
+};
+
+using SelectionFilterTypesVariant = std::variant<VoicesSelectionFilterTypes, ElementsSelectionFilterTypes>;
 
 class SelectionFilter
 {
 public:
     SelectionFilter() = default;
-    SelectionFilter(SelectionFilterType type);
 
-    inline bool operator==(const SelectionFilter& f) const { return m_filteredTypes == f.m_filteredTypes; }
+    inline bool operator==(const SelectionFilter& f) const
+    {
+        return m_filteredVoicesTypes == f.m_filteredVoicesTypes
+               && m_filteredElementsTypes == f.m_filteredElementsTypes;
+    }
+
     inline bool operator!=(const SelectionFilter& f) const { return !this->operator==(f); }
 
-    bool isFiltered(SelectionFilterType type) const;
-    void setFiltered(SelectionFilterType type, bool filtered);
+    bool isFiltered(const SelectionFilterTypesVariant& variant) const;
+    void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
 
     bool canSelect(const EngravingItem* element) const;
     bool canSelectVoice(track_idx_t track) const;
 
 private:
-    unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);
+    unsigned int m_filteredVoicesTypes = static_cast<unsigned int>(VoicesSelectionFilterTypes::ALL);
+    unsigned int m_filteredElementsTypes = static_cast<unsigned int>(ElementsSelectionFilterTypes::ALL);
 };
 }

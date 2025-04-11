@@ -22,17 +22,22 @@
 
 #pragma once
 
-#include "notationtypes.h"
+#include "abstractselectionfiltermodel.h"
 
 namespace mu::notation {
-class INotationSelectionFilter
+class VoicesSelectionFilterModel : public AbstractSelectionFilterModel
 {
+    Q_OBJECT
+
 public:
-    virtual ~INotationSelectionFilter() = default;
+    explicit VoicesSelectionFilterModel(QObject* parent = nullptr);
 
-    virtual bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const = 0;
-    virtual void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) = 0;
+private:
+    void loadTypes() override;
+
+    SelectionFilterTypesVariant getAllMask() const override { return engraving::VoicesSelectionFilterTypes::ALL; }
+    SelectionFilterTypesVariant getNoneMask() const override { return engraving::VoicesSelectionFilterTypes::NONE; }
+
+    QString titleForType(const SelectionFilterTypesVariant& variant) const override;
 };
-
-using INotationSelectionFilterPtr = std::shared_ptr<INotationSelectionFilter>;
 }

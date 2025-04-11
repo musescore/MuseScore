@@ -32,16 +32,16 @@ NotationSelectionFilter::NotationSelectionFilter(const IGetScore* getScore, cons
 {
 }
 
-bool NotationSelectionFilter::isSelectionTypeFiltered(const SelectionFilterType& type) const
+bool NotationSelectionFilter::isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const
 {
-    return score()->selectionFilter().isFiltered(type);
+    return score()->selectionFilter().isFiltered(variant);
 }
 
-void NotationSelectionFilter::setSelectionTypeFiltered(const SelectionFilterType& type, bool filtered)
+void NotationSelectionFilter::setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered)
 {
     engraving::Selection& selection = score()->selection();
 
-    score()->selectionFilter().setFiltered(type, filtered);
+    score()->selectionFilter().setFiltered(variant, filtered);
 
     if (selection.isRange()) {
         selection.updateSelectedElements();

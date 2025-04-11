@@ -510,7 +510,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 }
             }
         }
-        if (transposeChordNames && selectionFilter().isFiltered(SelectionFilterType::CHORD_SYMBOL)) {
+        if (transposeChordNames && selectionFilter().isFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL)) {
             for (EngravingItem* e : segment->annotations()) {
                 if (!e->isHarmony() || (!muse::contains(tracks, e->track()))) {
                     continue;
