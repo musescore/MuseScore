@@ -2303,7 +2303,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 measure->checkMeasure(staff);
 
                 if (!measure->isMMRest()) {
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                     ctx.setLastMeasure(measure);
                     ctx.setTick(measure->tick() + measure->ticks());
                 } else {
@@ -2321,7 +2321,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                     LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(ctx.tick());
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                 }
                 ctx.setTick(measure->tick());
 
@@ -2343,7 +2343,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
             Box* mb = toBox(Factory::createItemByName(tag, score->dummy()));
             readBox(e, ctx, mb);
             mb->setTick(ctx.tick());
-            score->measures()->add(mb);
+            score->measures()->append(mb);
         } else if (tag == "tick") {
             ctx.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
         } else {

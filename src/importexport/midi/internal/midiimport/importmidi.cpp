@@ -373,7 +373,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             measure = Factory::createVBox(cs->dummy()->system());
             measure->setTick(Fraction(0, 1));
             measure->setNext(cs->first());
-            cs->measures()->add(measure);
+            cs->measures()->append(measure);
         }
         measure->add(text);
     }
@@ -837,7 +837,7 @@ void tryCreatePickupMeasure(
         pickup->setIrregular(true);
         pickup->setTimesig(secondTimeSig);           // nominal time signature
         pickup->setTicks(firstTimeSig);                // actual length
-        score->measures()->add(pickup);
+        score->measures()->append(pickup);
         *begBarIndex = 1;
     } else if (isPickupWithGreaterTimeSig(firstTimeSig, secondTimeSig, firstTick)) {
         // split measure into 2 equal measures
@@ -852,14 +852,14 @@ void tryCreatePickupMeasure(
         firstBar->setNo(0);
         firstBar->setTimesig(secondTimeSig);
         firstBar->setTicks(secondTimeSig);
-        score->measures()->add(firstBar);
+        score->measures()->append(firstBar);
 
         Measure* secondBar = Factory::createMeasure(score->dummy()->system());
         secondBar->setTick(Fraction::fromTicks(firstBarTick + secondTimeSig.ticks()));
         secondBar->setNo(1);
         secondBar->setTimesig(secondTimeSig);
         secondBar->setTicks(secondTimeSig);
-        score->measures()->add(secondBar);
+        score->measures()->append(secondBar);
 
         *begBarIndex = 2;
     }
@@ -894,7 +894,7 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
         const Fraction timeSig = score->sigmap()->timesig(t).timesig();
         m->setTimesig(timeSig);
         m->setTicks(timeSig);
-        score->measures()->add(m);
+        score->measures()->append(m);
     }
 
     const Measure* m = score->lastMeasure();
