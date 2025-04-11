@@ -48,7 +48,10 @@
 #include "view/internal/undohistorymodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
-#include "view/selectionfiltermodel.h"
+
+#include "view/selectionfilter/voicesselectionfiltermodel.h"
+#include "view/selectionfilter/elementsselectionfiltermodel.h"
+
 #include "view/editgridsizedialogmodel.h"
 #include "view/editpercussionshortcutmodel.h"
 #include "view/paintedengravingitem.h"
@@ -187,7 +190,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<UndoRedoToolbarModel>("MuseScore.NotationScene", 1, 0, "UndoRedoToolbarModel");
     qmlRegisterType<UndoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoHistoryModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
-    qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
+    qmlRegisterType<ElementsSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "ElementsSelectionFilterModel");
+    qmlRegisterType<VoicesSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "VoicesSelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
     qmlRegisterType<EditPercussionShortcutModel>("MuseScore.NotationScene", 1, 0, "EditPercussionShortcutModel");
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");

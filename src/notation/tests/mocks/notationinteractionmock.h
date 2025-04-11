@@ -57,8 +57,7 @@ public:
     MOCK_METHOD(muse::async::Notification, selectionChanged, (), (const, override));
     MOCK_METHOD(void, selectTopOrBottomOfChord, (MoveDirection), (override));
 
-    MOCK_METHOD(bool, isSelectionTypeFiltered, (SelectionFilterType), (const, override));
-    MOCK_METHOD(void, setSelectionTypeFiltered, (SelectionFilterType, bool), (override));
+    MOCK_METHOD(INotationSelectionFilterPtr, selectionFilter, (), (const, override));
 
     MOCK_METHOD(bool, isDragStarted, (), (const, override));
     MOCK_METHOD(void, startDrag, (const std::vector<EngravingItem*>&, const muse::PointF&, const IsDraggable&), (override));
