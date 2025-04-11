@@ -523,6 +523,10 @@ void RepeatList::collectRepeatListElements()
             }
             // Jumps and Markers
             for (EngravingItem* e : mb->el()) {
+                if (e->systemFlag() && !e->isTopSystemObject()) {
+                    continue;
+                }
+
                 if (e->isJump()) {
                     sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
                     if (volta != nullptr) {
