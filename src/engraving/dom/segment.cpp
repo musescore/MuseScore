@@ -2609,7 +2609,7 @@ void Segment::createShape(staff_idx_t staffIdx)
         }
     }
 
-    for (unsigned track = strack; track < etrack; ++track) {
+    for (track_idx_t track = strack; track < etrack; ++track) {
         if (!m_preAppendedItems[track]) {
             continue;
         }
