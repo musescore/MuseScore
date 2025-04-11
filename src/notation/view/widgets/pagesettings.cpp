@@ -265,6 +265,8 @@ void PageSettings::on_resetPageStyleButton_clicked()
         globalContext()->currentNotation()->style()->resetStyleValue(styleId);
     }
 
+    pageOffsetEntry->setValue(1);
+
     updateValues();
 }
 
