@@ -90,7 +90,7 @@ bool SelectionFilterModel::setData(const QModelIndex& index, const QVariant& dat
         return false;
     }
 
-    if (!currentNotationInteraction()) {
+    if (!currentNotationSelectionFilter()) {
         return false;
     }
 
@@ -137,20 +137,21 @@ INotationPtr SelectionFilterModel::currentNotation() const
     return globalContext()->currentNotation();
 }
 
-INotationInteractionPtr SelectionFilterModel::currentNotationInteraction() const
+INotationSelectionFilterPtr SelectionFilterModel::currentNotationSelectionFilter() const
 {
-    return currentNotation() ? currentNotation()->interaction() : nullptr;
+    const INotationInteractionPtr interaction = currentNotation() ? currentNotation()->interaction() : nullptr;
+    return interaction ? interaction->selectionFilter() : nullptr;
 }
 
 bool SelectionFilterModel::isFiltered(SelectionFilterType type) const
 {
-    return currentNotationInteraction() ? currentNotationInteraction()->isSelectionTypeFiltered(type) : false;
+    return currentNotationSelectionFilter() ? currentNotationSelectionFilter()->isSelectionTypeFiltered(type) : false;
 }
 
 void SelectionFilterModel::setFiltered(SelectionFilterType type, bool filtered)
 {
-    if (currentNotationInteraction()) {
-        currentNotationInteraction()->setSelectionTypeFiltered(type, filtered);
+    if (currentNotationSelectionFilter()) {
+        currentNotationSelectionFilter()->setSelectionTypeFiltered(type, filtered);
     }
 }
 

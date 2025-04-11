@@ -225,6 +225,10 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack, iocContext());
     m_selection = std::make_shared<NotationSelection>(notation);
 
+    m_selectionFilter = std::make_shared<NotationSelectionFilter>(notation, [this]() {
+        notifyAboutSelectionChangedIfNeed();
+    });
+
     m_noteInput->stateChanged().onNotify(this, [this]() {
         if (!m_noteInput->isNoteInputMode()) {
             hideShadowNote();
@@ -1035,18 +1039,9 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
-bool NotationInteraction::isSelectionTypeFiltered(SelectionFilterType type) const
+INotationSelectionFilterPtr NotationInteraction::selectionFilter() const
 {
-    return score()->selectionFilter().isFiltered(type);
-}
-
-void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, bool filtered)
-{
-    score()->selectionFilter().setFiltered(type, filtered);
-    if (selection()->isRange()) {
-        score()->selection().updateSelectedElements();
-        notifyAboutSelectionChangedIfNeed();
-    }
+    return m_selectionFilter;
 }
 
 bool NotationInteraction::isDragStarted() const
