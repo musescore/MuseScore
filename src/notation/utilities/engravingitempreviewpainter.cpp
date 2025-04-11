@@ -25,6 +25,8 @@
 #include "engraving/dom/actionicon.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/textlinebase.h"
+#include "engraving/dom/text.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -77,6 +79,12 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
 
         item->setColorsInversionEnabled(ctx->colorsInversionEnabled);
 
+        if (item->isTextLineBaseSegment()) {
+            TextLineBaseSegment* tls = item_cast<TextLineBaseSegment*>(item);
+            tls->text()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
+            tls->endText()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
+        }
+
         if (!ctx->useElementColors) {
             const Color color = ctx->color;
             item->setProperty(Pid::COLOR, color);
@@ -88,6 +96,12 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         item->setColorsInversionEnabled(colorsInversionEnabledBackup);
         item->setProperty(Pid::COLOR, colorBackup);
         item->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+
+        if (item->isTextLineBaseSegment()) {
+            TextLineBaseSegment* tls = item_cast<TextLineBaseSegment*>(item);
+            tls->text()->setColorsInversionEnabled(colorsInversionEnabledBackup);
+            tls->endText()->setColorsInversionEnabled(colorsInversionEnabledBackup);
+        }
 
         painter->restore();
     };
