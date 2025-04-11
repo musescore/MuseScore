@@ -2652,12 +2652,6 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
 
             // [THEN] Each note event has the correct duration
             EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
-
-            // [THEN] Each note event has the correct pitch level
-            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
-
-            // [THEN] Each note event has the correct duration
-            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
         }
     }
 
