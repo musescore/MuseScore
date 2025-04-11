@@ -68,6 +68,9 @@ public:
     bool isPlayChordSymbolsEnabled() const;
     void setPlayChordSymbols(const bool isEnabled);
 
+    bool isMetronomeEnabled() const;
+    void setIsMetronomeEnabled(const bool isEnabled);
+
     const InstrumentTrackId& metronomeTrackId() const;
     InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
     bool isChordSymbolsTrack(const InstrumentTrackId& trackId) const;
@@ -79,6 +82,7 @@ public:
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
 
     void triggerMetronome(int tick);
+    void triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
@@ -151,6 +155,7 @@ private:
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
     bool m_playChordSymbols = true;
+    bool m_metronomeEnabled = true;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;
