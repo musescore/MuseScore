@@ -72,8 +72,6 @@ public:
     int subtype() const override { return static_cast<int>(m_dynamicType); }
     TranslatableString subtypeUserName() const override;
 
-    double customTextOffset() const;
-
     void reset() override;
 
     void setVelocity(int v) { m_velocity = v; }
@@ -99,8 +97,6 @@ public:
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
 
-    void manageBarlineCollisions();
-
     static String dynamicText(DynamicType t);
     bool hasCustomText() const { return dynamicText(m_dynamicType) != xmlText(); }
 
@@ -124,6 +120,8 @@ public:
     void endEditDrag(EditData&) override;
     void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
+    bool isTextualEditAllowed(EditData&) const override;
+
     Hairpin* leftHairpin() const { return m_leftHairpin; }
     Hairpin* rightHairpin() const { return m_rightHairpin; }
 
@@ -137,6 +135,10 @@ public:
     double rightDragOffset() const { return m_rightDragOffset; }
 
     void findAdjacentHairpins();
+
+    Shape symShapeWithCutouts(SymId id) const override;
+
+    static Dyn dynInfo(DynamicType type);
 
 private:
 

@@ -190,7 +190,7 @@ public:
     Fraction timesig() const { return m_timesig; }
     void setTimesig(const Fraction& f) { m_timesig = f; }
 
-    Fraction stretchedLen(Staff*) const;
+    Fraction stretchedLen(const Staff*) const;
     bool isIrregular() const { return m_timesig != m_len; }
 
     int size() const { return m_segments.size(); }
@@ -303,6 +303,7 @@ public:
     bool hasMMRest() const { return m_mmRest != 0; }
     bool isMMRest() const { return m_mmRestCount > 0; }
     Measure* mmRest() const { return m_mmRest; }
+    Measure* coveringMMRestOrThis();
     const Measure* coveringMMRestOrThis() const;
     void setMMRest(Measure* m) { m_mmRest = m; }
     int mmRestCount() const { return m_mmRestCount; }            // number of measures m_mmRest spans

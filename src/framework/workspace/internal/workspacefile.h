@@ -45,6 +45,7 @@ public:
     WorkspaceFile(const io::path_t& filePath, const WorkspaceFile* other);
 
     io::path_t filePath() const;
+    void redirect(const io::path_t& filePath);
 
     Ret load();
     Ret save();

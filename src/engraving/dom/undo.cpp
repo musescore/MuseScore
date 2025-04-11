@@ -41,7 +41,6 @@
 #include "bracket.h"
 #include "chord.h"
 #include "clef.h"
-#include "capo.h"
 #include "engravingitem.h"
 #include "excerpt.h"
 #include "fret.h"
@@ -59,12 +58,9 @@
 #include "noteevent.h"
 #include "page.h"
 #include "part.h"
-#include "partialtie.h"
-#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "select.h"
-#include "sig.h"
 #include "spanner.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -75,8 +71,6 @@
 #include "textedit.h"
 #include "textline.h"
 #include "tie.h"
-
-#include "tremolobar.h"
 #include "tuplet.h"
 #include "utils.h"
 
@@ -2110,7 +2104,7 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
         break;
     case Sid::createMultiMeasureRests:
         if (oldValue.toBool() == true && newValue.toBool() == false) {
-            score->updateSystemLocksOnDisableMMRests();
+            score->removeSystemLocksContainingMMRests();
         }
         break;
     default:
@@ -2879,9 +2873,10 @@ void ChangeSpannerElements::flip(EditData*)
 {
     EngravingItem* oldStartElement   = spanner->startElement();
     EngravingItem* oldEndElement     = spanner->endElement();
+    bool isPartialSpanner = spanner->isPartialTie() || spanner->isLaissezVib();
     if (spanner->anchor() == Spanner::Anchor::NOTE) {
         // be sure new spanner elements are of the right type
-        if (!startElement || !startElement->isNote() || !endElement || !endElement->isNote()) {
+        if (!isPartialSpanner && (!startElement || !startElement->isNote() || !endElement || !endElement->isNote())) {
             return;
         }
         Note* oldStartNote = toNote(oldStartElement);
@@ -2889,14 +2884,18 @@ void ChangeSpannerElements::flip(EditData*)
         Note* newStartNote = toNote(startElement);
         Note* newEndNote = toNote(endElement);
         // update spanner's start and end notes
-        if (newStartNote && newEndNote) {
+        if ((newStartNote && newEndNote) || (isPartialSpanner && (newStartNote || newEndNote))) {
             spanner->setNoteSpan(newStartNote, newEndNote);
             if (spanner->isTie()) {
                 Tie* tie = toTie(spanner);
-                oldStartNote->setTieFor(nullptr);
-                oldEndNote->setTieBack(nullptr);
-                newStartNote->setTieFor(tie);
-                newEndNote->setTieBack(tie);
+                if (oldStartNote && newStartNote) {
+                    oldStartNote->setTieFor(nullptr);
+                    newStartNote->setTieFor(tie);
+                }
+                if (oldEndNote && newEndNote) {
+                    oldEndNote->setTieBack(nullptr);
+                    newEndNote->setTieBack(tie);
+                }
             } else {
                 oldStartNote->removeSpannerFor(spanner);
                 oldEndNote->removeSpannerBack(spanner);

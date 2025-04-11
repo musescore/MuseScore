@@ -1406,7 +1406,7 @@
           </Drum>
         <Drum pitch="41">
           <head>normal</head>
-          <line>5</line>
+          <line>6</line>
           <voice>0</voice>
           <name>Low Floor Tom</name>
           <stem>1</stem>
@@ -1424,7 +1424,7 @@
           </Drum>
         <Drum pitch="43">
           <head>normal</head>
-          <line>6</line>
+          <line>5</line>
           <voice>0</voice>
           <name>High Floor Tom</name>
           <stem>1</stem>
@@ -2046,7 +2046,7 @@
           </Drum>
         <Drum pitch="41">
           <head>normal</head>
-          <line>5</line>
+          <line>6</line>
           <voice>0</voice>
           <name>Low Floor Tom</name>
           <stem>1</stem>
@@ -2064,7 +2064,7 @@
           </Drum>
         <Drum pitch="43">
           <head>normal</head>
-          <line>6</line>
+          <line>5</line>
           <voice>0</voice>
           <name>High Floor Tom</name>
           <stem>1</stem>

@@ -250,6 +250,7 @@ public:
     bool hRaster = false;
     bool vRaster = false;
     bool editTextualProperties = true;
+    bool isHairpinDragCreatedFromDynamic = false;
 
     int key = 0;
     bool isKeyRelease = false;

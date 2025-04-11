@@ -73,18 +73,18 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             m_checkProgress = false;
         };
 
-        if (!res.ret) {
+        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        if (!noUpdate && !res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
             if (manual) {
-                processUpdateResult(res.ret.code());
+                showServerErrorMsg();
             }
 
             return;
         }
 
         ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (!manual) {
             bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
             if (noUpdate || shouldIgnoreUpdate) {
@@ -138,7 +138,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
 void UpdateScenario::showNoUpdateMsg()
 {
     QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
-                                       "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
+                                       "Please visit <a href=\"%1\">MuseScore.org</a> for news on what’s coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);

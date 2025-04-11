@@ -37,6 +37,9 @@ Item {
 
     property int currentIndex: -1
 
+    property alias background: backgroundItem
+    property alias itemColor: dropdownLoader.itemColor
+
     property string currentText: Utils.getItemValue(model, currentIndex, textRole, indeterminateText)
     property var currentValue: Utils.getItemValue(model, currentIndex, valueRole, undefined)
 

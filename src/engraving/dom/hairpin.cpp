@@ -326,6 +326,16 @@ EngravingItem* HairpinSegment::findElementToSnapAfter(bool ignoreInvisible) cons
     return findEndDynamicOrExpression(ignoreInvisible);
 }
 
+void HairpinSegment::endEditDrag(EditData& ed)
+{
+    if (ed.isHairpinDragCreatedFromDynamic) {
+        undoResetProperty(Pid::OFFSET);
+        undoResetProperty(Pid::OFFSET2);
+    }
+
+    LineSegment::endEditDrag(ed);
+}
+
 TextBase* HairpinSegment::findStartDynamicOrExpression(bool ignoreInvisible) const
 {
     Fraction refTick = hairpin()->tick();
@@ -816,15 +826,5 @@ muse::TranslatableString Hairpin::subtypeUserName() const
     default:
         return TranslatableString("engraving/hairpintype", "Custom");
     }
-}
-
-muse::TranslatableString HairpinSegment::subtypeUserName() const
-{
-    return hairpin()->subtypeUserName();
-}
-
-int HairpinSegment::subtype() const
-{
-    return hairpin()->subtype();
 }
 }

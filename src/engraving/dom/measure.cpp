@@ -27,8 +27,6 @@
 
 #include "measure.h"
 
-#include <cmath>
-
 #include "accidental.h"
 #include "actionicon.h"
 #include "anchors.h"
@@ -61,7 +59,6 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -72,7 +69,6 @@
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
-
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "tuplet.h"
@@ -947,6 +943,7 @@ void Measure::remove(EngravingItem* e)
         if (e->isJump() || (e->isMarker() && toMarker(e)->isRightMarker())) {
             setProperty(Pid::REPEAT_JUMP, false);
         }
+        [[fallthrough]];
     case ElementType::HBOX:
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
@@ -2416,6 +2413,9 @@ bool Measure::isCutawayClef(staff_idx_t staffIdx) const
             break;
         }
     }
+    while (s && s->isTimeTickType()) {
+        s = s->prev();
+    }
     if (!s) {
         return false;
     }
@@ -2535,7 +2535,7 @@ bool Measure::isOnlyDeletedRests(track_idx_t track) const
 //   stretchedLen
 //---------------------------------------------------------
 
-Fraction Measure::stretchedLen(Staff* staff) const
+Fraction Measure::stretchedLen(const Staff* staff) const
 {
     return ticks() * staff->timeStretch(tick());
 }
@@ -2898,7 +2898,7 @@ Measure* Measure::mmRestLast() const
 //    otherwise, return the measure itself.
 //---------------------------------------------------------
 
-const Measure* Measure::coveringMMRestOrThis() const
+Measure* Measure::coveringMMRestOrThis()
 {
     if (!style().styleB(Sid::createMultiMeasureRests)) {
         return this;
@@ -2922,6 +2922,11 @@ const Measure* Measure::coveringMMRestOrThis() const
     }
 
     return 0;
+}
+
+const Measure* Measure::coveringMMRestOrThis() const
+{
+    return const_cast<Measure*>(this)->coveringMMRestOrThis();
 }
 
 int Measure::measureRepeatCount(staff_idx_t staffIdx) const

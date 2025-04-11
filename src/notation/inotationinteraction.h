@@ -83,6 +83,8 @@ public:
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
+    virtual EngravingItem* contextItem() const = 0;
+
     // SelectionFilter
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
     virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
@@ -191,7 +193,7 @@ public:
     virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
-    virtual void addHairpinOnGripDrag(engraving::Dynamic* dynamic, bool isLeftGrip) = 0;
+    virtual void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;
     virtual void putRestToSelection() = 0;
     virtual void putRest(Duration duration) = 0;
@@ -322,6 +324,4 @@ public:
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
-
-EngravingItem* contextItem(INotationInteractionPtr);
 }

@@ -216,10 +216,6 @@ set(MODULE_SRC
     ${STYLEDIALOG_SRC}
     )
 
-set(MODULE_UI
-    ${WIDGETS_UI}
-    )
-
 set(MODULE_LINK
     muse::draw
     engraving

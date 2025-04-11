@@ -24,7 +24,8 @@
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+
+#include "engraving/iengravingconfiguration.h"
 
 #include "../inotation.h"
 #include "igetscore.h"

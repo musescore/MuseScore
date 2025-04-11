@@ -7,8 +7,8 @@
   <identification>
     <creator type="composer">Klaus Rettinghaus</creator>
     <encoding>
-      <software>MuseScore 4.5.0</software>
-      <encoding-date>2024-12-19</encoding-date>
+      <software>MuseScore 0.7.0</software>
+      <encoding-date>2007-09-10</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="no"/>

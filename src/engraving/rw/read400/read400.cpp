@@ -47,6 +47,8 @@
 #include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
 
+#include "engravingerrors.h"
+
 #include "staffrw.h"
 #include "tread.h"
 
@@ -504,7 +506,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             if (cr->isChord()) {
                                 Chord* c = toChord(cr);
                                 for (Note* note: c->notes()) {
-                                    Tie* tie = note->tieFor();
+                                    Tie* tie = note->tieForNonPartial();
                                     if (tie) {
                                         note->setTieFor(0);
                                         delete tie;

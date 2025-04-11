@@ -37,7 +37,6 @@ public:
     LaissezVibSegment* clone() const override { return new LaissezVibSegment(*this); }
 
     LaissezVib* laissezVib() const { return (LaissezVib*)spanner(); }
-    int subtype() const override { return static_cast<int>(spanner()->type()); }
 
     int gripsCount() const override { return 0; }
     void editDrag(EditData&) override;
@@ -70,7 +69,7 @@ public:
 
     SymId symId() const;
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override { return new LaissezVibSegment(parent); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override;
 
     void setEndNote(Note* note) override;
     void setEndElement(EngravingItem*) override;

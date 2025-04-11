@@ -226,7 +226,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     // Load view settings & solo-mute states (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
     m_masterNotation->notation()->soloMuteState()->read(reader);
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         if (!excerpt->hasFileName()) {
             continue;
         }
@@ -298,7 +298,7 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->makeDefault();
     }
 
@@ -348,7 +348,7 @@ Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->makeDefault();
     }
 
@@ -757,7 +757,7 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection, boo
 
     // Write view settings and excerpt solo-mute states
     m_masterNotation->notation()->viewState()->write(msczWriter);
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         muse::io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
         excerpt->notation()->viewState()->write(msczWriter, path);
 
@@ -1018,37 +1018,37 @@ ProjectMeta NotationProject::metaInfo() const
 {
     TRACEFUNC;
 
-    mu::engraving::MasterScore* score = m_masterNotation->masterScore();
+    const engraving::MasterScore* score = m_masterNotation->masterScore();
 
     ProjectMeta meta;
     meta.filePath = m_path;
 
-    auto allTags = score->metaTags();
+    const std::map<String, String>& allTags = score->metaTags();
 
-    meta.title = allTags[WORK_TITLE_TAG];
-    meta.subtitle = allTags[SUBTITLE_TAG];
-    meta.composer = allTags[COMPOSER_TAG];
-    meta.arranger = allTags[ARRANGER_TAG];
-    meta.lyricist = allTags[LYRICIST_TAG];
-    meta.translator = allTags[TRANSLATOR_TAG];
-    meta.copyright = allTags[COPYRIGHT_TAG];
-    meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
+    meta.title = allTags.at(WORK_TITLE_TAG);
+    meta.subtitle = allTags.at(SUBTITLE_TAG);
+    meta.composer = allTags.at(COMPOSER_TAG);
+    meta.arranger = allTags.at(ARRANGER_TAG);
+    meta.lyricist = allTags.at(LYRICIST_TAG);
+    meta.translator = allTags.at(TRANSLATOR_TAG);
+    meta.copyright = allTags.at(COPYRIGHT_TAG);
+    meta.creationDate = QDate::fromString(allTags.at(CREATION_DATE_TAG), Qt::ISODate);
 
     meta.partsCount = score->excerpts().size();
 
-    meta.source = allTags[SOURCE_TAG];
-    meta.audioComUrl = allTags[AUDIO_COM_URL_TAG];
-    meta.platform = allTags[PLATFORM_TAG];
+    meta.source = allTags.at(SOURCE_TAG);
+    meta.audioComUrl = allTags.at(AUDIO_COM_URL_TAG);
+    meta.platform = allTags.at(PLATFORM_TAG);
     meta.musescoreVersion = score->mscoreVersion();
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();
 
-    for (const String& tag : muse::keys(allTags)) {
+    for (const auto& [tag, value] : allTags) {
         if (isRepresentedInProjectMeta(tag)) {
             continue;
         }
 
-        meta.additionalTags[tag] = allTags[tag].toQString();
+        meta.additionalTags[tag] = value.toQString();
     }
 
     return meta;
@@ -1074,8 +1074,8 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         { PLATFORM_TAG, meta.platform },
     };
 
-    for (const QString& tag : meta.additionalTags.keys()) {
-        tags[tag] = meta.additionalTags[tag].toString();
+    for (auto it = meta.additionalTags.cbegin(); it != meta.additionalTags.cend(); ++it) {
+        tags[it.key()] = it.value().toString();
     }
 
     MasterScore* score = m_masterNotation->masterScore();

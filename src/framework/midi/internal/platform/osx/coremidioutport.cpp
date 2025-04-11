@@ -287,7 +287,7 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    OSStatus result;
+    OSStatus result = noErr;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
     // Note: there could be three cases: MIDI2+MIDIEventList, MIDI1+MIDIEventList, MIDI1+MIDIPacketList.
@@ -315,6 +315,8 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
             MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
 
             result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
+        } else {
+            __builtin_unreachable();
         }
     } else {
         const std::vector<Event> events = e.toMIDI10();

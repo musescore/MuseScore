@@ -24,6 +24,7 @@
 
 #include "internal/workspaceutils.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace muse::workspace;
@@ -73,6 +74,11 @@ QVariant WorkspaceListModel::selectedWorkspace() const
     }
 
     return obj;
+}
+
+QString WorkspaceListModel::appTitle() const
+{
+    return application()->title();
 }
 
 QVariant WorkspaceListModel::data(const QModelIndex& index, int role) const
@@ -235,15 +241,10 @@ void WorkspaceListModel::resetWorkspace(int workspaceIndex)
     emit dataChanged(modelIndex, modelIndex);
 }
 
-QString WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& newName)
+bool WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& newName)
 {
     if (!isIndexValid(workspaceIndex)) {
-        return {};
-    }
-
-    Ret ret = doValidateWorkspaceName(workspaceIndex, newName);
-    if (!ret) {
-        return QString::fromStdString(ret.text());
+        return false;
     }
 
     IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
@@ -252,13 +253,13 @@ QString WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& n
     QModelIndex modelIndex = index(workspaceIndex);
     emit dataChanged(modelIndex, modelIndex, { RoleName });
 
-    return {};
+    return true;
 }
 
-Ret WorkspaceListModel::doValidateWorkspaceName(int workspaceIndex, const QString& name) const
+QString WorkspaceListModel::validateWorkspaceName(int workspaceIndex, const QString& name) const
 {
     if (name.isEmpty()) {
-        return false;
+        return muse::qtrc("workspace", "Name cannot be empty");
     }
 
     QString nameLower = name.toLower();
@@ -269,11 +270,11 @@ Ret WorkspaceListModel::doValidateWorkspaceName(int workspaceIndex, const QStrin
         }
 
         if (QString::fromStdString(m_workspaces[i]->name()).toLower() == nameLower) {
-            return make_ret(Ret::Code::UnknownError, muse::trc("workspace", "Name already exists"));
+            return muse::qtrc("workspace", "Name already exists");
         }
     }
 
-    return true;
+    return {};
 }
 
 bool WorkspaceListModel::apply()

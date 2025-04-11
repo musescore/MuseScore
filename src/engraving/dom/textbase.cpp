@@ -2797,7 +2797,7 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 
 bool TextBase::setProperty(Pid pid, const PropertyValue& v)
 {
-    if (m_textInvalid) {
+    if (m_textInvalid && ldata() && ldata()->isValid()) {
         genText();
     }
 
@@ -3252,8 +3252,7 @@ void TextBase::editDrag(EditData& ed)
     score()->dragPosition(canvasPos(), &si, &newSeg, spacingFactor, allowTimeAnchor());
     if (newSeg && (newSeg != segment || staffIdx() != si)) {
         undoMoveSegment(newSeg, newSeg->tick() - segment->tick());
-        double deltaX = newSeg->pageX() - segment->pageX();
-        PointF offsetShift = PointF(deltaX, 0.0);
+        PointF offsetShift = newSeg->pagePos() - segment->pagePos();
         shiftInitOffset(ed, offsetShift);
     }
 }
@@ -3288,6 +3287,11 @@ void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
             }
         }
     }
+}
+
+bool TextBase::supportsNonTextualEdit() const
+{
+    return hasParentSegment() && !m_text.empty();
 }
 
 void TextBase::startEditNonTextual(EditData& ed)
@@ -3364,7 +3368,9 @@ bool TextBase::isNonTextualEditAllowed(EditData& ed) const
         Key_Down
     };
 
-    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
+    bool altKeyWithoutShift = (ed.modifiers & AltModifier) && !(ed.modifiers & ShiftModifier);
+
+    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key)) && !altKeyWithoutShift;
 }
 
 void TextBase::checkMeasureBoundariesAndMoveIfNeed()
@@ -3435,6 +3441,24 @@ bool TextBase::moveSegment(const EditData& ed)
 
 void TextBase::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
 {
+    // NOTE: when creating mmRests, we clone text elements from the underlying measure onto the
+    // mmRest measure. This creates lots of additional linked copies which are hard to manage
+    // and can result in duplicates. Here we need to remove copies on mmRests because they are invalidated
+    // when moving segments (and if needed will be recreated at the next layout). In future we need to
+    // change approach and *move* elements onto the mmRests, not clone them. [M.S.]
+    std::list<EngravingObject*> linkedElements = linkList();
+    for (EngravingObject* linkedElement : linkedElements) {
+        if (linkedElement == this) {
+            continue;
+        }
+        Segment* curParent = toSegment(linkedElement->parent());
+        bool isOnMMRest = curParent->parent() && toMeasure(curParent->parent())->isMMRest();
+        if (isOnMMRest) {
+            linkedElement->undoUnlink();
+            score()->undoRemoveElement(static_cast<EngravingItem*>(linkedElement));
+        }
+    }
+
     score()->undoChangeParent(this, newSeg, staffIdx());
     moveSnappedItems(newSeg, tickDiff);
 }

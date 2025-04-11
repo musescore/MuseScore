@@ -24,6 +24,7 @@
 #define MU_NOTATION_NOTATIONSTATUSBARMODEL_H
 
 #include <QObject>
+#include <QQmlParserStatus>
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
@@ -43,13 +44,15 @@
 #include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {
-class NotationStatusBarModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
+class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Injectable, public muse::async::Asyncable,
+    public muse::actions::Actionable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
-    Q_PROPERTY(QVariant currentWorkspaceItem READ currentWorkspaceItem NOTIFY currentWorkspaceActionChanged)
-    Q_PROPERTY(QVariant concertPitchItem READ concertPitchItem NOTIFY concertPitchActionChanged)
+    Q_PROPERTY(QVariant currentWorkspaceItem READ currentWorkspaceItem CONSTANT)
+    Q_PROPERTY(QVariant concertPitchItem READ concertPitchItem CONSTANT)
     Q_PROPERTY(QVariant currentViewMode READ currentViewMode NOTIFY currentViewModeChanged)
     Q_PROPERTY(bool zoomEnabled READ zoomEnabled NOTIFY zoomEnabledChanged)
     Q_PROPERTY(QVariantList availableViewModeList READ availableViewModeList_property NOTIFY availableViewModeListChanged)
@@ -72,8 +75,6 @@ public:
     QVariant currentViewMode();
     bool zoomEnabled() const;
     int currentZoomPercentage() const;
-
-    Q_INVOKABLE void load();
 
     Q_INVOKABLE void toggleConcertPitch();
     Q_INVOKABLE void setCurrentViewMode(const QString& modeCode);
@@ -101,6 +102,9 @@ signals:
     void currentZoomPercentageChanged();
 
 private:
+    void classBegin() override;
+    void componentComplete() override {}
+
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
@@ -108,6 +112,9 @@ private:
     void initAvailableZoomList();
 
     muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode);
+
+    void updateConcertPitchItem();
+    void updateCurrentWorkspaceItem();
 
     void dispatch(const muse::actions::ActionCode& code, const muse::actions::ActionData& args = muse::actions::ActionData());
 

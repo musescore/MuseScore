@@ -950,7 +950,7 @@ void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "play") {
             b->setPlay(e.readInt());
         } else if (TRead::readProperty(b, tag, e, ctx, Pid::LINE_WIDTH)) {
-        } else {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -3039,7 +3039,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "text") {
-            g->setShowText(true);
             textRead = true;
             TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
         } else if (tag == "isHarpGliss" && ctx.pasteMode()) {

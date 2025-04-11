@@ -55,7 +55,7 @@ Ret RegisterAudioPluginsScenario::registerNewPlugins()
 
     io::paths_t newPluginPaths;
 
-    for (IAudioPluginsScannerPtr scanner : scannerRegister()->scanners()) {
+    for (const IAudioPluginsScannerPtr& scanner : scannerRegister()->scanners()) {
         io::paths_t paths = scanner->scanPlugins();
 
         for (const io::path_t& path : paths) {
@@ -174,7 +174,7 @@ Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginP
 
 IAudioPluginMetaReaderPtr RegisterAudioPluginsScenario::metaReader(const io::path_t& pluginPath) const
 {
-    for (IAudioPluginMetaReaderPtr reader : metaReaderRegister()->readers()) {
+    for (const IAudioPluginMetaReaderPtr& reader : metaReaderRegister()->readers()) {
         if (reader->canReadMeta(pluginPath)) {
             return reader;
         }

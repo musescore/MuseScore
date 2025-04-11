@@ -8,6 +8,8 @@
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
       <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
       <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
@@ -106,7 +108,6 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <linkedMain/>
             <offset x="-12.5239" y="-3.69242"/>
             <text>test1</text>
             </StaffText>
@@ -134,7 +135,6 @@
       <Measure>
         <voice>
           <StaffText>
-            <linkedMain/>
             <offset x="28.5455" y="-4.14373"/>
             <text>test2</text>
             </StaffText>
@@ -162,7 +162,6 @@
       <Measure>
         <voice>
           <StaffText>
-            <linkedMain/>
             <text>test3</text>
             </StaffText>
           <Rest>

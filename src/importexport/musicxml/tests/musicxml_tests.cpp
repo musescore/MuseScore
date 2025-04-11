@@ -436,6 +436,9 @@ TEST_F(MusicXml_Tests, beams2) {
 TEST_F(MusicXml_Tests, beams3) {
     musicXmlIoTestRef("testBeams3");
 }
+TEST_F(MusicXml_Tests, beams4) {
+    musicXmlIoTest("testBeams4");
+}
 TEST_F(MusicXml_Tests, breaksImplExpl) {
     musicXmlMscxExportTestRefBreaks("testBreaksImplExpl");
 }
@@ -643,6 +646,9 @@ TEST_F(MusicXml_Tests, fractionPlus) {
 TEST_F(MusicXml_Tests, fractionTicks) {
     musicXmlIoTestRef("testFractionTicks");
 }
+TEST_F(MusicXml_Tests, glissandoLines) {
+    musicXmlIoTest("testGlissandoLines");
+}
 TEST_F(MusicXml_Tests, glissFall) {
     musicXmlImportTestRef("testGlissFall");
 }
@@ -837,7 +843,7 @@ TEST_F(MusicXml_Tests, lines3) {
     musicXmlIoTest("testLines3");
 }
 TEST_F(MusicXml_Tests, lines4) {
-    musicXmlMscxExportTestRef("testLines4");
+    musicXmlIoTest("testLines4");
 }
 TEST_F(MusicXml_Tests, lineDetails) {
     musicXmlIoTest("testLineDetails");
@@ -963,7 +969,7 @@ TEST_F(MusicXml_Tests, noteColor) {
     musicXmlIoTest("testNoteColor");
 }
 TEST_F(MusicXml_Tests, noteheadNames) {
-    musicXmlMscxExportTestRef("testNoteheadNames");
+    musicXmlIoTest("testNoteheadNames");
 }
 TEST_F(MusicXml_Tests, noteheadParentheses) {
     musicXmlIoTest("testNoteheadParentheses");
@@ -990,7 +996,7 @@ TEST_F(MusicXml_Tests, numerals) {
     musicXmlIoTest("testNumerals");
 }
 TEST_F(MusicXml_Tests, ornaments) {
-    musicXmlImportTestRef("testOrnaments");
+    musicXmlIoTest("testOrnaments");
 }
 TEST_F(MusicXml_Tests, overlappingSpanners) {
     musicXmlIoTest("testOverlappingSpanners");
@@ -1092,7 +1098,7 @@ TEST_F(MusicXml_Tests, stringVoiceName) {
     musicXmlIoTestRef("testStringVoiceName");
 }
 TEST_F(MusicXml_Tests, swing) {
-    musicXmlMscxExportTestRef("testSwing");
+    musicXmlIoTest("testSwing");
 }
 TEST_F(MusicXml_Tests, systemBrackets1) {
     musicXmlIoTest("testSystemBrackets1");
@@ -1213,6 +1219,9 @@ TEST_F(MusicXml_Tests, importTie3) {
 TEST_F(MusicXml_Tests, importTie4) {
     // Dolet8 ties to different voices & staves
     musicXmlImportTestRef("importTie4");
+}
+TEST_F(MusicXml_Tests, importTie5) {
+    musicXmlIoTest("importTie5");
 }
 TEST_F(MusicXml_Tests, timesig1) {
     musicXmlIoTest("testTimesig1");

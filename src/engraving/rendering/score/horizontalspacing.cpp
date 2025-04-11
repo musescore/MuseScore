@@ -45,6 +45,8 @@ using namespace mu::engraving::rendering::score;
 double HorizontalSpacing::computeSpacingForFullSystem(System* system, double stretchReduction, double squeezeFactor,
                                                       bool overrideMinMeasureWidth)
 {
+    TRACEFUNC;
+
     HorizontalSpacingContext ctx;
     ctx.system = system;
     ctx.spatium = system->spatium();
@@ -78,8 +80,10 @@ double HorizontalSpacing::computeSpacingForFullSystem(System* system, double str
     return ctx.xCur;
 }
 
-double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system)
+double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system, bool startOfContinuousLayoutRegion)
 {
+    TRACEFUNC;
+
     HorizontalSpacingContext ctx;
     ctx.system = system;
     ctx.spatium = system->spatium();
@@ -95,7 +99,7 @@ double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system)
 
     if (secondToLast) {
         ctx.xCur = secondToLast->x();
-        if (secondToLast->isHBox() || last->isHBox()) {
+        if (secondToLast->isHBox() || last->isHBox() || startOfContinuousLayoutRegion) {
             ctx.xCur += secondToLast->width();
         }
     } else {
@@ -106,7 +110,7 @@ double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system)
         last->mutldata()->setPosX(ctx.xCur);
         last->computeMinWidth();
         ctx.xCur += last->width();
-    } else if (!secondToLast || secondToLast->isHBox()) {
+    } else if (!secondToLast || secondToLast->isHBox() || startOfContinuousLayoutRegion) {
         spaceMeasureGroup({ toMeasure(last) }, ctx);
     } else {
         ctx.startMeas = toMeasure(last);
@@ -118,6 +122,8 @@ double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system)
 
 void HorizontalSpacing::squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth)
 {
+    TRACEFUNC;
+
     Measure* firstMeasure = system->firstMeasure();
     if (!firstMeasure) {
         return;
@@ -250,7 +256,7 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
     for (size_t i = 0; i < segList.size(); ++i) {
         Segment* curSeg = segList[i];
         if (ignoreSegmentForSpacing(curSeg)) {
-            placedSegments.emplace_back(curSeg, ctx.xCur);
+            placedSegments.emplace_back(curSeg, ctx.xCur, /*ignoreForSpacing*/ true);
             continue;
         }
 
@@ -308,7 +314,7 @@ bool HorizontalSpacing::ignoreSegmentForSpacing(const Segment* segment)
 bool HorizontalSpacing::ignoreAllSegmentsForSpacing(const std::vector<SegmentPosition>& segmentPositions)
 {
     for (const SegmentPosition& segPos : segmentPositions) {
-        if (!ignoreSegmentForSpacing(segPos.segment)) {
+        if (!segPos.ignoreForSpacing) {
             return false;
         }
     }
@@ -330,12 +336,12 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
 
     for (size_t i = prevSegPositions.size(); i > 0; --i) {
         const SegmentPosition& prevSegPos = prevSegPositions[i - 1];
-        Segment* prevSeg = prevSegPos.segment;
-        double xPrevSeg = prevSegPos.xPosInSystemCoords;
-
-        if (ignoreSegmentForSpacing(prevSeg)) {
+        if (prevSegPos.ignoreForSpacing) {
             continue;
         }
+
+        Segment* prevSeg = prevSegPos.segment;
+        double xPrevSeg = prevSegPos.xPosInSystemCoords;
 
         if (prevSeg->isChordRestType()) {
             ++prevCRSegmentsCount;
@@ -366,6 +372,9 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
                 double xMovement = spaceIncrease;
                 for (size_t j = i; j < prevSegPositions.size(); ++j) {
                     SegmentPosition& segPos = prevSegPositions[j];
+                    if (segPos.ignoreForSpacing) {
+                        continue;
+                    }
                     segPos.xPosInSystemCoords += xMovement;
                     if (segPos.segment->isChordRestType()) {
                         xMovement += spaceIncrease;
@@ -598,14 +607,19 @@ void HorizontalSpacing::moveRightAlignedSegments(std::vector<SegmentPosition>& p
         double x = DBL_MAX;
 
         for (size_t j = i + 1; j < placedSegments.size(); ++j) {
-            Segment* followingSeg = placedSegments[j].segment;
-            if (followingSeg->isRightAligned() || ignoreSegmentForSpacing(followingSeg) || followingSeg->hasTimeSigAboveStaves()) {
+            SegmentPosition& segPos = placedSegments[j];
+            if (segPos.ignoreForSpacing) {
+                continue;
+            }
+
+            Segment* followingSeg = segPos.segment;
+            if (followingSeg->isRightAligned() || followingSeg->hasTimeSigAboveStaves()) {
                 continue;
             }
             if (followingSeg->measure() != segment->measure()) {
                 break;
             }
-            double followingSegX = placedSegments[j].xPosInSystemCoords;
+            double followingSegX = segPos.xPosInSystemCoords;
             double minDist = minHorizontalDistance(segment, followingSeg, ctx.squeezeFactor);
             x = std::min(x, followingSegX - minDist);
         }
@@ -1017,10 +1031,11 @@ void HorizontalSpacing::setPositionsAndWidths(const std::vector<SegmentPosition>
 {
     size_t segmentsSize = segmentPositions.size();
     for (size_t i = 0; i < segmentsSize; ++i) {
-        Segment* curSeg = segmentPositions[i].segment;
-        double curX = segmentPositions[i].xPosInSystemCoords;
+        const SegmentPosition& segPos = segmentPositions[i];
+        Segment* curSeg = segPos.segment;
+        double curX = segPos.xPosInSystemCoords;
 
-        if (ignoreSegmentForSpacing(curSeg)) {
+        if (segPos.ignoreForSpacing) {
             curSeg->setWidth(0.0);
             continue;
         }
@@ -1028,9 +1043,10 @@ void HorizontalSpacing::setPositionsAndWidths(const std::vector<SegmentPosition>
         Segment* nextSeg = curSeg;
         double nextX = curX;
         for (size_t j = i + 1; j < segmentsSize; ++j) {
-            if (!ignoreSegmentForSpacing(segmentPositions[j].segment)) {
-                nextSeg = segmentPositions[j].segment;
-                nextX = segmentPositions[j].xPosInSystemCoords;
+            const SegmentPosition& nextSegPos = segmentPositions[j];
+            if (!nextSegPos.ignoreForSpacing) {
+                nextSeg = nextSegPos.segment;
+                nextX = nextSegPos.xPosInSystemCoords;
                 break;
             }
         }
@@ -1536,7 +1552,7 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
 
 bool HorizontalSpacing::isAlwaysKernable(const EngravingItem* item)
 {
-    return item->isTextBase() || item->isChordLine() || item->isParenthesis();
+    return item->isTextBase() || item->isChordLine() || item->isParenthesis() || item->isFretDiagram();
 }
 
 bool HorizontalSpacing::ignoreItems(const EngravingItem* item1, const EngravingItem* item2)
@@ -1554,13 +1570,14 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
     ElementType type1 = item1->type();
     switch (type1) {
     case ElementType::BAR_LINE:
-        return item2->isLyrics() ? KerningType::ALLOW_COLLISION : KerningType::NON_KERNING;
+        return item2->isLyrics() || item2->isHarmony() || item2->isFretDiagram() ? KerningType::ALLOW_COLLISION : KerningType::NON_KERNING;
     case ElementType::CHORDLINE:
         return item2->isBarLine() ? KerningType::ALLOW_COLLISION : KerningType::KERNING;
     case ElementType::HARMONY:
-        return item2->isHarmony() ? KerningType::NON_KERNING : KerningType::KERNING;
-    case ElementType::LYRICS:
-        return computeLyricsKerningType(toLyrics(item1), item2);
+    case ElementType::FRET_DIAGRAM:
+        return item2->isHarmony() || item2->isFretDiagram() ? KerningType::NON_KERNING : KerningType::KERNING;
+    case ElementType::LYRICS
+        : return computeLyricsKerningType(toLyrics(item1), item2);
     case ElementType::NOTE:
         return computeNoteKerningType(toNote(item1), item2);
     case ElementType::STEM_SLASH:

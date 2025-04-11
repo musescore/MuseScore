@@ -23,6 +23,7 @@
 #include "abstractelementpopupmodel.h"
 #include "internal/partialtiepopupmodel.h"
 #include "internal/shadownotepopupmodel.h"
+#include "engraving/dom/property.h"
 #include "log.h"
 
 using namespace mu::notation;
@@ -160,7 +161,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         flags = mu::engraving::PropertyFlags::UNSTYLED;
     }
 
-    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(muse::TranslatableString("undoableAction", "Edit %1").arg(mu::engraving::propertyUserName(id)));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();
@@ -172,7 +173,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         return;
     }
 
-    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(muse::TranslatableString("undoableAction", "Edit %1").arg(mu::engraving::propertyUserName(id)));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();

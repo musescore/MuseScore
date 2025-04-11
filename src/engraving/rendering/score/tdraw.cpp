@@ -2167,22 +2167,14 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
     }
 
     if (item->style().styleB(Sid::fourMeasureRepeatShowExtenders) && item->numMeasures() == 4) {
-        // TODO: add style settings specific to measure repeats
-        // for now, using thickness and margin same as mmrests
         double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness);
-        if (hBarThickness) {     // don't draw at all if 0, QPainter interprets 0 pen width differently
-            Pen pen(painter->pen());
-            pen.setCapStyle(PenCapStyle::FlatCap);
-            pen.setWidthF(hBarThickness);
-            painter->setPen(pen);
+        Pen pen(painter->pen());
+        pen.setCapStyle(PenCapStyle::FlatCap);
+        pen.setWidthF(hBarThickness);
+        painter->setPen(pen);
 
-            double twoMeasuresWidth = 2 * item->measure()->width();
-            double margin = item->style().styleMM(Sid::multiMeasureRestMargin);
-            double xOffset = item->symBbox(ldata->symId).width() * .5;
-            double gapDistance = (item->symBbox(ldata->symId).width() + item->spatium()) * .5;
-            painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
-            painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
-        }
+        painter->drawLine(ldata->extenderLineLeft);
+        painter->drawLine(ldata->extenderLineRight);
     }
 }
 
@@ -2283,7 +2275,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
 
-        if (item->fretConflict() && item->score()->printing() && item->score()->showUnprintable()) {                    //on fret conflict, draw on red background
+        if (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable()) {                    //on fret conflict, draw on red background
             painter->save();
             painter->setPen(config->criticalColor());
             painter->setBrush(config->criticalColor());
@@ -2442,6 +2434,14 @@ void TDraw::draw(const Page* item, Painter* painter)
 void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
+
+    Segment* seg = item->segment();
+    EngravingItem* segItem = seg ? seg->element(item->track()) : nullptr;
+    TimeSig* segTs = segItem && segItem->isTimeSig() ? toTimeSig(segItem) : nullptr;
+
+    if (segTs && !segTs->showOnThisStaff()) {
+        return;
+    }
 
     Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>());
 
@@ -3138,6 +3138,10 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
 
 void TDraw::draw(const TimeTickAnchor* item, Painter* painter)
 {
+    if (item->score()->printing()) {
+        return;
+    }
+
     TimeTickAnchor::DrawRegion drawRegion = item->drawRegion();
 
     if (drawRegion == TimeTickAnchor::DrawRegion::OUT_OF_RANGE) {

@@ -21,12 +21,13 @@
  */
 #include "abstractinspectormodel.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/property.h"
 
 #include "shortcuts/shortcutstypes.h"
 
 #include "types/texttypes.h"
 
-#include "dom/tempotext.h"
+#include "engraving/dom/tempotext.h"
 
 #include "log.h"
 
@@ -377,7 +378,7 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
         return;
     }
 
-    beginCommand(TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(TranslatableString("undoableAction", "Edit %1").arg(propertyUserName(pid)));
 
     for (mu::engraving::EngravingItem* item : items) {
         IF_ASSERT_FAILED(item) {

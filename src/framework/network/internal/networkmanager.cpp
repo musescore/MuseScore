@@ -97,12 +97,17 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
     QNetworkRequest request(url);
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
 
-    for (QNetworkRequest::KnownHeaders knownHeader: headers.knownHeaders.keys()) {
-        request.setHeader(knownHeader, headers.knownHeaders[knownHeader]);
+    RequestHeaders _headers = headers;
+    if (_headers.isEmpty()) {
+        _headers = configuration()->defaultHeaders();
     }
 
-    for (const QByteArray& rawHeader: headers.rawHeaders.keys()) {
-        request.setRawHeader(rawHeader, headers.rawHeaders[rawHeader]);
+    for (QNetworkRequest::KnownHeaders knownHeader: _headers.knownHeaders.keys()) {
+        request.setHeader(knownHeader, _headers.knownHeaders[knownHeader]);
+    }
+
+    for (const QByteArray& rawHeader: _headers.rawHeaders.keys()) {
+        request.setRawHeader(rawHeader, _headers.rawHeaders[rawHeader]);
     }
 
     m_progress.start();

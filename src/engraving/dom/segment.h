@@ -56,29 +56,6 @@ class System;
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
-struct CrossBeamType
-{
-    bool upDown = false; // This chord is stem-up, next chord is stem-down
-    bool downUp = false; // This chord is stem-down, next chord is stem-up
-    bool canBeAdjusted = true;
-    void reset()
-    {
-        upDown = false;
-        downUp = false;
-        canBeAdjusted = true;
-    }
-};
-
-struct Spring
-{
-    double springConst = 0.0;
-    double width = 0.0;
-    double preTension = 0.0;
-    Segment* segment = nullptr;
-    Spring(double sc, double w, double pt, Segment* s)
-        : springConst(sc), width(w), preTension(pt),  segment(s) {}
-};
-
 class Segment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Segment)
@@ -319,6 +296,9 @@ public:
 
     double xPosInSystemCoords() const;
     void setXPosInSystemCoords(double x);
+
+    bool isTupletSubdivision() const;
+    bool isInsideTupletOnStaff(staff_idx_t staffIdx) const;
 
 private:
 

@@ -1028,9 +1028,15 @@ void TWrite::writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext
             continue;
         }
 
-        if (s->startElement() == item) {
+        const bool isPartialSlur = toSlur(s)->partialSpannerDirection() != PartialSpannerDirection::NONE;
+        const bool writeStart = s->startElement() == item && (s->endElement() != item || isPartialSlur);
+        const bool writeEnd = s->endElement() == item && (s->startElement() != item || isPartialSlur);
+
+        if (writeStart) {
             writeSpannerStart(s, xml, ctx, item, item->track());
-        } else if (s->endElement() == item) {
+        }
+
+        if (writeEnd) {
             writeSpannerEnd(s, xml, ctx, item, item->track());
         }
     }
@@ -1501,9 +1507,8 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    if (item->showText() && !item->text().isEmpty()) {
-        xml.tagProperty("text", item->text(), item->propertyDefault(Pid::GLISS_TEXT));
-    }
+
+    xml.tagProperty("text", item->text(), item->propertyDefault(Pid::GLISS_TEXT));
 
     if (ctx.clipboardmode() && item->isHarpGliss().has_value()) {
         xml.tagProperty("isHarpGliss", PropertyValue(item->isHarpGliss().value()));
@@ -2129,6 +2134,10 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("mode", TConv::toXml(item->mode()));
     }
 
+    if (item->isCourtesy()) {
+        xml.tag("isCourtesy", item->isCourtesy());
+    }
+
     if (!item->showCourtesy()) {
         xml.tag("showCourtesySig", item->showCourtesy());
     }
@@ -2295,11 +2304,11 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         write(item->laissezVib(), xml, ctx);
     }
 
-    if (item->incomingPartialTie() && !ctx.clipboardmode()) {
+    if (item->incomingPartialTie()) {
         write(item->incomingPartialTie(), xml, ctx);
     }
 
-    if (item->outgoingPartialTie() && !ctx.clipboardmode()) {
+    if (item->outgoingPartialTie()) {
         write(item->outgoingPartialTie(), xml, ctx);
     }
 
@@ -2600,10 +2609,8 @@ void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
     }
 
-    // We don't know if the paste destination has the correct repeat structure for partial slurs to be permitted
-    if (!ctx.clipboardmode()) {
-        writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
-    }
+    writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }
@@ -3167,7 +3174,7 @@ void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ct
     xml.endElement();
 }
 
-void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext&)
+void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     writeProperty(item, xml, Pid::MAG);
@@ -3176,6 +3183,7 @@ void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext&)
     for (const PitchValue& v : item->points()) {
         xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
     }
+    writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
 

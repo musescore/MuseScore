@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
+#include "iapplication.h"
 #include "iworkspacemanager.h"
 
 namespace muse::workspace {
@@ -37,8 +38,11 @@ class WorkspaceListModel : public QAbstractListModel, public Injectable, public 
 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
 
-    Inject<IWorkspaceManager> workspacesManager = { this };
+    Q_PROPERTY(QString appTitle READ appTitle CONSTANT)
+
     Inject<IInteractive> interactive = { this };
+    Inject<IApplication> application = { this };
+    Inject<IWorkspaceManager> workspacesManager = { this };
 
 public:
     explicit WorkspaceListModel(QObject* parent = nullptr);
@@ -48,6 +52,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     QVariant selectedWorkspace() const;
+    QString appTitle() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
@@ -56,7 +61,9 @@ public:
     Q_INVOKABLE void selectWorkspace(int workspaceIndex);
     Q_INVOKABLE void removeWorkspace(int workspaceIndex);
     Q_INVOKABLE void resetWorkspace(int workspaceIndex);
-    Q_INVOKABLE QString renameWorkspace(int workspaceIndex, const QString& newName);
+
+    Q_INVOKABLE QString validateWorkspaceName(int workspaceIndex, const QString& name) const;
+    Q_INVOKABLE bool renameWorkspace(int workspaceIndex, const QString& newName);
 
 signals:
     void selectedWorkspaceChanged(QVariant selectedWorkspace);
@@ -66,8 +73,6 @@ private:
 
     QVariantMap workspaceToObject(IWorkspacePtr workspace) const;
     bool isIndexValid(int index) const;
-
-    Ret doValidateWorkspaceName(int workspaceIndex, const QString& name) const;
 
     enum Roles {
         RoleName = Qt::UserRole + 1,

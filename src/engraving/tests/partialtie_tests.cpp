@@ -22,10 +22,12 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <QMimeData>
 
 #include "dom/note.h"
 #include "dom/chord.h"
 
+#include "internal/qmimedataadapter.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -353,6 +355,40 @@ protected:
         }
     }
 
+    void testPartialTieListSelection(const String& score, const Fraction& startPointLocation, const Fraction& secondNoteLocation,
+                                     const std::vector<Fraction>& jumpPointLocations)
+    {
+        openScore(score, startPointLocation, jumpPointLocations);
+
+        Note* secondTieNote = getNoteAtTick(secondNoteLocation);
+        EXPECT_TRUE(secondTieNote);
+
+        // Add tie to start note
+        // Expect tie to be added successfully and all jump points to have an incoming tie
+        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+        m_masterScore->select(m_startNote);
+        m_masterScore->select(secondTieNote, SelectType::ADD);
+        Tie* t = m_masterScore->cmdToggleTie();
+        EXPECT_TRUE(t);
+        m_masterScore->endCmd();
+
+        for (const Note* note : m_jumpPoints) {
+            EXPECT_TRUE(note->tieBack());
+        }
+
+        saveAndLoad(score, startPointLocation, jumpPointLocations);
+
+        toggleJumpPoint();
+
+        deleteJumpTie();
+
+        deleteJumpNote();
+
+        toggleFirstJumpPoint();
+
+        deleteStartTie();
+    }
+
 private:
     bool m_useRead302 = false;
 
@@ -414,4 +450,171 @@ TEST_F(Engraving_PartialTieTests, segnoAfter)
     openScore(test, startPointTick, jumpPoints);
 
     testSegnoPartialTieAfter(Fraction(3, 4));
+}
+
+TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
+{
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + u"copyPastePartials.mscx");
+    EXPECT_TRUE(score);
+    Measure* m1 = score->firstMeasure()->nextMeasure();
+    Measure* m2 = m1->nextMeasure();
+    Measure* m3 = m2->nextMeasure();
+    Measure* m4 = m3->nextMeasure();
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+    EXPECT_TRUE(m3);
+    EXPECT_TRUE(m4);
+    // Copy staff 0, m1
+
+    score->select(m1, SelectType::SINGLE, 0);
+    EXPECT_TRUE(score->selection().canCopy());
+    String mimeType = score->selection().mimeType();
+    EXPECT_TRUE(!mimeType.isEmpty());
+    QMimeData* mimeData = new QMimeData;
+    QByteArray ba = score->selection().mimeData().toQByteArray();
+    mimeData->setData(mimeType, ba);
+
+    // Paste staff 1, m1
+    EXPECT_TRUE(m1->first(SegmentType::ChordRest)->element(4));
+    score->select(m1->first(SegmentType::ChordRest)->element(4));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials01.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials01-ref.mscx")));
+
+    // Paste staff 0, m3
+    EXPECT_TRUE(m3->first(SegmentType::ChordRest)->element(0));
+    score->select(m3->first(SegmentType::ChordRest)->element(0));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials02.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials02-ref.mscx")));
+
+    // Paste staff 0, m4
+    EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
+    score->select(m4->first(SegmentType::ChordRest)->element(0));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials03.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials03-ref.mscx")));
+
+    // Paste staff 1, m4
+    EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(4));
+    score->select(m4->first(SegmentType::ChordRest)->element(4));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials04.mscx"),
+                                            PARTIALTIE_DATA_DIR + String(u"copyPastePartials04-ref.mscx")));
+}
+
+TEST_F(Engraving_PartialTieTests, partialTieListSelection)
+{
+    // Test list selection of non-adjacent notes
+    const String test = u"partialTieList";
+
+    const Fraction startPointTick = Fraction(2, 4);
+    const Fraction secondTieNoteTick = Fraction(5, 4);
+    const std::vector<Fraction> jumpPoints = { Fraction(5, 4), Fraction(2, 1) };
+
+    testPartialTieListSelection(test, startPointTick, secondTieNoteTick, jumpPoints);
+}
+TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
+{
+    const String test = u"toggle_delete";
+
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + test + u".mscx");
+    EXPECT_TRUE(score);
+
+    const Fraction tieFromTick = Fraction(3, 4);
+    const Fraction tieToTick = Fraction(4, 4);
+
+    Measure* m1 = score->firstMeasure();
+    EXPECT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
+    EXPECT_TRUE(m2);
+    Segment* tieFromSegment = m1->findSegment(SegmentType::ChordRest, tieFromTick);
+    EXPECT_TRUE(tieFromSegment);
+    Segment* tieToSegment = m2->findSegment(SegmentType::ChordRest, tieToTick);
+    EXPECT_TRUE(tieToSegment);
+
+    const int pitchC = 42;
+
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(tieToSegment);
+    score->inputState().setDuration(DurationType::V_WHOLE);
+    score->inputState().setNoteEntryMode(true);
+
+    score->cmdAddPitch(pitchC, false, false);
+    score->endCmd();
+
+    Chord* tieToChord = m2->findChord(Fraction(4, 4), 0);
+    Note* tieToNote = tieToChord ? tieToChord->upNote() : nullptr;
+    EXPECT_TRUE(tieToChord);
+    EXPECT_TRUE(tieToNote);
+
+    Chord* tieFromChord = toChord(tieFromSegment->element(0));
+    Note* tieFromNote = tieFromChord ? tieFromChord->upNote() : nullptr;
+    EXPECT_TRUE(tieFromNote);
+
+    // Toggle tie at 4/4
+    score->select(tieFromNote);
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdToggleTie();
+    score->endCmd();
+
+    // Clear the second measure
+
+    score->select(m2, SelectType::SINGLE, 0);
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    // Verify the tie is now partial
+    Tie* tie = tieFromNote->tieFor();
+    EXPECT_TRUE(tie);
+    EXPECT_TRUE(tie->isPartialTie());
+
+    // Undo
+    score->undoRedo(true, nullptr); // undo clear
+    score->undoRedo(true, nullptr); // undo toggle tie
+    score->undoRedo(true, nullptr); // undo add note
+
+    tieToSegment = m2->findSegment(SegmentType::ChordRest, tieToTick);
+    EXPECT_TRUE(tieToSegment);
+
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(tieToSegment);
+    score->inputState().setDuration(DurationType::V_WHOLE);
+    score->inputState().setNoteEntryMode(true);
+
+    score->cmdAddPitch(pitchC, false, false);
+    score->endCmd();
+
+    Chord* newTieToChord = m2->findChord(Fraction(4, 4), 0);
+    Note* newTieToNote = newTieToChord ? newTieToChord->upNote() : nullptr;
+    EXPECT_TRUE(newTieToChord);
+    EXPECT_TRUE(newTieToNote);
+
+    // Toggle tie again at 4/4
+    score->select(tieFromNote);
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdToggleTie();
+    score->endCmd();
+
+    // Verify the tie is now full
+    Tie* newTie = tieFromNote->tieFor();
+    EXPECT_TRUE(newTie);
+    EXPECT_FALSE(newTie->isPartialTie());
+    EXPECT_EQ(newTie->endNote(), newTieToNote);
 }

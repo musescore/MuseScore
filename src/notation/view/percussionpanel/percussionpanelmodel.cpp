@@ -22,9 +22,11 @@
 
 #include "percussionpanelmodel.h"
 
+#include <QCoreApplication>
+#include <QKeyEvent>
+
 #include "notation/utilities/percussionutilities.h"
 
-#include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 
 #include "engraving/dom/factory.h"
@@ -322,12 +324,10 @@ void PercussionPanelModel::setUpConnections()
         });
     }
 
-    if (configuration()) {
-        configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
-            const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
-            emit useNotationPreviewChanged(useNotationPreview);
-        });
-    }
+    configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
+        const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
+        emit useNotationPreviewChanged(useNotationPreview);
+    });
 }
 
 void PercussionPanelModel::setDrumset(engraving::Drumset* drumset)
@@ -357,15 +357,25 @@ void PercussionPanelModel::updateSoundTitle(const InstrumentTrackId& trackId)
     }
 
     const audio::AudioInputParams& params = audioSettings()->trackInputParams(trackId);
-
     const QString name = muse::audio::audioSourceName(params).toQString();
-    const QString category = muse::audio::audioSourceCategoryName(params).toQString();
-    if (name.isEmpty() || category.isEmpty()) {
+    if (name.isEmpty()) {
         setSoundTitle(QString());
         return;
     }
 
-    setSoundTitle(category + ": " + name);
+    const QString pack = muse::audio::audioSourcePackName(params).toQString();
+    if (!pack.isEmpty() && pack != name) {
+        setSoundTitle(pack + ": " + name);
+        return;
+    }
+
+    const QString category = muse::audio::audioSourceCategoryName(params).toQString();
+    if (!category.isEmpty() && category != name) {
+        setSoundTitle(category + ": " + name);
+        return;
+    }
+
+    setSoundTitle(name);
 }
 
 bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)

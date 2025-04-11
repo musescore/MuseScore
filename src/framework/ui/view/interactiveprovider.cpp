@@ -29,7 +29,8 @@
 #include <QGuiApplication>
 #include <QWindow>
 
-#include "containers.h"
+#include "global/containers.h"
+#include "diagnostics/diagnosticutils.h"
 
 #include "log.h"
 
@@ -345,6 +346,9 @@ void InteractiveProvider::closeAllDialogs()
 {
     for (const ObjectInfo& objectInfo: allOpenObjects()) {
         UriQuery uriQuery = objectInfo.uriQuery;
+        if (muse::diagnostics::isDiagnosticsUri(uriQuery.uri())) {
+            continue;
+        }
         ContainerMeta openMeta = uriRegister()->meta(uriQuery.uri());
         if (openMeta.type == ContainerType::QWidgetDialog || openMeta.type == ContainerType::QmlDialog) {
             closeObject(objectInfo);

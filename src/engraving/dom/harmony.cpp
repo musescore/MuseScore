@@ -615,11 +615,8 @@ void Harmony::endEditTextual(EditData& ed)
         s.replace(u"\ue262",  u"\u266f");         // sharp
     }
 
-    String oldHarmonyName = harmonyName();
-
     //play chord on edit and set dirty
     score()->setPlayChord(true);
-    m_realizedHarmony.setDirty(true);
 
     setHarmony(s);
     setPlainText(harmonyName());
@@ -686,6 +683,8 @@ void Harmony::endEditTextual(EditData& ed)
 
 void Harmony::setHarmony(const String& s)
 {
+    m_realizedHarmony.setDirty(true);
+
     int r, b;
     const ChordDescription* cd = parseHarmony(s, &r, &b);
     if (!cd && m_parsedForm && m_parsedForm->parseable()) {
@@ -1914,5 +1913,16 @@ double Harmony::mag() const
     }
 
     return EngravingItem::mag();
+}
+
+void Harmony::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
+{
+    if (newSeg->isTimeTickType()) {
+        Measure* measure = newSeg->measure();
+        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
+        newSeg = chordRestSegAtSameTick;
+    }
+
+    TextBase::undoMoveSegment(newSeg, tickDiff);
 }
 }

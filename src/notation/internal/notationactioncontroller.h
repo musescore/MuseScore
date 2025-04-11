@@ -102,7 +102,7 @@ private:
     bool moveSelectionAvailable(MoveSelectionType type) const;
     void moveSelection(MoveSelectionType type, MoveDirection direction);
     void move(MoveDirection direction, bool quickly = false);
-    void moveInputNotes(bool up, bool quickly = false);
+    void moveInputNotes(bool up, PitchMode mode);
     void movePitchDiatonic(MoveDirection direction, bool);
     void moveWithinChord(MoveDirection direction);
     void selectTopOrBottomOfChord(MoveDirection direction);

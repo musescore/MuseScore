@@ -43,7 +43,7 @@ Workspace::Workspace(const io::path_t& filePath, const modularity::ContextPtr& i
     });
 }
 
-Workspace::Workspace(const io::path_t& filePath, const Workspace* other, const ContextPtr& iocCtx)
+Workspace::Workspace(const io::path_t& filePath, const Workspace* other, const modularity::ContextPtr& iocCtx)
     : Workspace(filePath, iocCtx)
 {
     m_file = std::make_shared<WorkspaceFile>(filePath, other->m_file.get());
@@ -71,6 +71,11 @@ bool Workspace::isEdited() const
     }
 
     return io::absoluteDirpath(filePath()) == configuration()->userWorkspacesPath();
+}
+
+bool Workspace::isNeedSave() const
+{
+    return m_file ? m_file->isNeedSave() : false;
 }
 
 RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
@@ -159,6 +164,10 @@ Ret Workspace::load()
 
 Ret Workspace::save()
 {
+    if (!m_file->isNeedSave()) {
+        return true;
+    }
+
     if (isBuiltin()) {
         copyBuiltinWorkspaceToUserDir();
     }
@@ -201,15 +210,15 @@ io::path_t Workspace::builtinWorkspacePath() const
 
 void Workspace::copyBuiltinWorkspaceToUserDir()
 {
-    Ret ret = doSave();
-    if (!ret) {
-        LOGE() << "Failed to save builtin workspace, error: " << ret.toString();
-    }
-
     io::path_t userFilePath = configuration()->userWorkspacesPath() + "/" + io::filename(filePath());
 
     fileSystem()->copy(m_file->filePath(), userFilePath);
+    m_file->redirect(userFilePath);
 
-    m_file = std::make_shared<WorkspaceFile>(userFilePath);
+    Ret ret = doSave();
+    if (!ret) {
+        LOGE() << "Failed to save workspace: " << ret.toString();
+    }
+
     load();
 }

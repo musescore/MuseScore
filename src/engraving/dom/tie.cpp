@@ -228,11 +228,29 @@ void Tie::updatePossibleJumpPoints()
     tieJumpPoints()->clear();
 
     const Note* note = toNote(parentItem());
-    const Chord* chord = note->chord();
-    const Measure* measure = chord->measure();
-
-    if (!chord->hasFollowingJumpItem()) {
+    const Chord* chord = note ? note->chord() : nullptr;
+    const Measure* measure = chord ? chord->measure() : nullptr;
+    if (!measure) {
         return;
+    }
+
+    const Segment* segment = chord ? chord->segment() : nullptr;
+
+    // Check ties starting in this measure and ending in another
+    // If they cross a repeat, add jump points
+    const bool hasFollowingJumpItem = chord->hasFollowingJumpItem();
+
+    if (!hasFollowingJumpItem) {
+        const Note* tieEndNote = endNote();
+        const Chord* endChord = tieEndNote ? tieEndNote->chord() : nullptr;
+        const Segment* endNoteSegment = endChord ? endChord->segment() : nullptr;
+        const ChordRest* finalCROfMeasure = measure->lastChordRest(track());
+        const bool finalCRHasFollowingJump = finalCROfMeasure ? finalCROfMeasure->hasFollowingJumpItem() : false;
+        const bool segsAreAdjacent = segmentsAreAdjacentInRepeatStructure(segment, endNoteSegment);
+
+        if (!(finalCRHasFollowingJump && segsAreAdjacent)) {
+            return;
+        }
     }
 
     int jumpPointIdx = 0;
@@ -282,6 +300,14 @@ void Tie::addTiesToJumpPoints()
             continue;
         }
         jumpPoints->undoAddTieToScore(jumpPoint);
+    }
+
+    // Update jump points for linked ties
+    for (EngravingObject* linkedTie : linkList()) {
+        if (!linkedTie || !linkedTie->isTie() || linkedTie == this) {
+            continue;
+        }
+        toTie(linkedTie)->updatePossibleJumpPoints();
     }
 }
 
@@ -333,6 +359,15 @@ Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
     setAnchor(Anchor::NOTE);
+}
+
+Tie::Tie(const Tie& t)
+    : SlurTie(t)
+{
+    m_isInside = t.m_isInside;
+    m_tiePlacement = t.m_tiePlacement;
+    // Jump points must be recalculated for this tie
+    m_jumpPoint = nullptr;
 }
 
 PropertyValue Tie::getProperty(Pid propertyId) const
@@ -466,22 +501,19 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
         return;
     }
 
-    TranslatableString undoCmd = addPartialTie ? TranslatableString("engraving", "Replace full tie with partial tie")
-                                 : TranslatableString("engraving", "Replace partial tie with full tie");
     Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(score->dummy()->note());
 
     score->undoRemoveElement(oldTie);
 
     newTie->setParent(startNote);
     newTie->setStartNote(startNote);
+    newTie->setTick(startNote->tick());
+    newTie->setTrack(startNote->track());
     startNote->setTieFor(newTie);
     if (!addPartialTie) {
         newTie->setEndNote(endNote);
         endNote->setTieBack(newTie);
     }
-
-    newTie->setTick(startNote->tick());
-    newTie->setTrack(startNote->track());
 
     newTie->setStyleType(oldTie->styleType());
     newTie->setTiePlacement(oldTie->tiePlacement());
@@ -491,8 +523,6 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
     newTie->setOffset(oldTie->offset());
 
     score->undoAddElement(newTie);
-
-    score->endCmd();
 }
 
 void Tie::updateStartTieOnRemoval()

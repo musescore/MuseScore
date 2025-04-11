@@ -83,7 +83,7 @@ FocusScope {
             id: pageTitle
             Layout.fillWidth: true
 
-            text: qsTrc("appshell", "Muse Sounds")
+            text: qsTrc("appshell", "MuseSounds")
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
         }

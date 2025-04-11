@@ -140,6 +140,21 @@ void NotationSelection::onElementHit(EngravingItem* el)
     m_lastElementHit = el;
 }
 
+mu::engraving::MeasureBase* NotationSelection::startMeasureBase() const
+{
+    return score()->selection().startMeasureBase();
+}
+
+mu::engraving::MeasureBase* NotationSelection::endMeasureBase() const
+{
+    return score()->selection().endMeasureBase();
+}
+
+std::vector<mu::engraving::System*> NotationSelection::selectedSystems() const
+{
+    return score()->selection().selectedSystems();
+}
+
 EngravingItem* NotationSelection::lastElementHit() const
 {
     return m_lastElementHit;

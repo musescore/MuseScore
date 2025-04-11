@@ -149,7 +149,11 @@ bool MeasuresSettingsModel::allSystemsAreLocked() const
 
 void MeasuresSettingsModel::updateAllSystemsAreLocked()
 {
-    std::vector<System*> systems = currentNotation()->elements()->msScore()->selection().selectedSystems();
+    if (isEmpty()) {
+        return;
+    }
+
+    std::vector<System*> systems = selection()->selectedSystems();
 
     bool allLocked = true;
     for (System* system : systems) {
@@ -182,8 +186,7 @@ size_t MeasuresSettingsModel::systemCount() const
 
 void MeasuresSettingsModel::updateScoreIsInPageView()
 {
-    const Score* score = currentNotation()->elements()->msScore();
-    bool isInPageView = score->layoutMode() != LayoutMode::LINE;
+    bool isInPageView = currentNotation()->viewMode() != LayoutMode::LINE;
 
     if (m_scoreIsInPageView != isInPageView) {
         m_scoreIsInPageView = isInPageView;
@@ -193,9 +196,12 @@ void MeasuresSettingsModel::updateScoreIsInPageView()
 
 void MeasuresSettingsModel::updateIsMakeIntoSystemAvailable()
 {
-    const Selection& selection = currentNotation()->elements()->msScore()->selection();
-    const MeasureBase* startMB = selection.startMeasureBase();
-    const MeasureBase* endMB = selection.endMeasureBase();
+    if (isEmpty()) {
+        return;
+    }
+
+    const MeasureBase* startMB = selection()->startMeasureBase();
+    const MeasureBase* endMB = selection()->endMeasureBase();
     if (!startMB || !endMB) {
         return;
     }
@@ -213,7 +219,11 @@ void MeasuresSettingsModel::updateIsMakeIntoSystemAvailable()
 
 void MeasuresSettingsModel::updateSystemCount()
 {
-    size_t count = currentNotation()->elements()->msScore()->selection().selectedSystems().size();
+    if (isEmpty()) {
+        return;
+    }
+
+    size_t count = selection()->selectedSystems().size();
     if (count != m_systemCount) {
         m_systemCount = count;
         emit systemCountChanged(count);

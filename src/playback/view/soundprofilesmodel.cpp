@@ -44,7 +44,7 @@ void SoundProfilesModel::init()
 
     std::sort(m_profiles.begin(), m_profiles.end(), [this](const SoundProfile& left, const SoundProfile& right) {
         if (left.name == config()->basicSoundProfileName()
-            && right.name == config()->museSoundProfileName()) {
+            && right.name == config()->museSoundsProfileName()) {
             return true;
         }
 

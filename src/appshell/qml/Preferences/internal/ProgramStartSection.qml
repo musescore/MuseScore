@@ -23,6 +23,7 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import MuseScore.Preferences
 
 BaseSection {
     id: root
@@ -31,8 +32,7 @@ BaseSection {
 
     navigation.direction: NavigationPanel.Both
 
-    property alias startupModes: startupModesBox.model
-    property var scorePathFilter: null
+    required property GeneralPreferencesModel model
 
     signal currentStartupModesChanged(int index)
     signal startupScorePathChanged(string path)
@@ -47,18 +47,22 @@ BaseSection {
 
         width: parent.width
 
+        model: root.model.startupModes
+
         delegate: Row {
             width: parent.width
+            height: radioButton.implicitHeight
             spacing: root.columnSpacing
 
             RoundedRadioButton {
+                id: radioButton
                 anchors.verticalCenter: parent.verticalCenter
 
-                width: filePicker.visible ? Math.max(implicitWidth, root.columnWidth)
-                                          : parent.width
+                width: filePickerLoader.active ? Math.max(implicitWidth, root.columnWidth)
+                                               : parent.width
 
-                checked: modelData.checked
                 text: modelData.title
+                checked: modelData.value === root.model.currentStartupMode
 
                 navigation.name: modelData.title
                 navigation.panel: root.navigation
@@ -66,28 +70,33 @@ BaseSection {
                 navigation.column: 0
 
                 onToggled: {
-                    root.currentStartupModesChanged(model.index)
+                    root.model.currentStartupMode = modelData.value
                 }
             }
 
-            FilePicker {
-                id: filePicker
+            Loader {
+                id: filePickerLoader
+                active: modelData.isStartWithScore ?? false
+                anchors.verticalCenter: parent.verticalCenter
 
-                pathFieldWidth: root.columnWidth
-                spacing: root.columnSpacing
+                sourceComponent: FilePicker {
+                    enabled: radioButton.checked
 
-                dialogTitle: qsTrc("appshell/preferences", "Choose starting score")
-                filter: root.scorePathFilter
+                    pathFieldWidth: root.columnWidth
+                    spacing: root.columnSpacing
 
-                visible: modelData.canSelectScorePath
-                path: modelData.scorePath
+                    dialogTitle: qsTrc("appshell/preferences", "Choose starting score")
+                    filter: root.model.scorePathFilter
 
-                navigation: root.navigation
-                navigationRowOrderStart: model.index
-                navigationColumnOrderStart: 1
+                    path: root.model.startupScorePath
 
-                onPathEdited: function(newPath) {
-                    root.startupScorePathChanged(newPath)
+                    navigation: root.navigation
+                    navigationRowOrderStart: model.index
+                    navigationColumnOrderStart: 1
+
+                    onPathEdited: function(newPath) {
+                        root.model.startupScorePath = newPath
+                    }
                 }
             }
         }

@@ -26,18 +26,12 @@
 #include "updateconfigurationstub.h"
 #include "updatescenariostub.h"
 #include "updateservicestub.h"
-#include "musesoundscheckupdatescenariostub.h"
-#include "musesoundscheckupdateservicestub.h"
 
 using namespace muse::update;
 using namespace muse::modularity;
 
 static std::shared_ptr<UpdateScenarioStub> s_scenario = std::make_shared<UpdateScenarioStub>();
 static std::shared_ptr<UpdateServiceStub> s_service = std::make_shared<UpdateServiceStub>();
-static std::shared_ptr<MuseSoundsCheckUpdateScenarioStub> s_museSoundsCheckUpdateScenario
-    = std::make_shared<MuseSoundsCheckUpdateScenarioStub>();
-static std::shared_ptr<MuseSoundsCheckUpdateServiceStub> s_museSoundsCheckUpdateService
-    = std::make_shared<MuseSoundsCheckUpdateServiceStub>();
 static std::shared_ptr<UpdateConfigurationStub> s_configuration = std::make_shared<UpdateConfigurationStub>();
 
 std::string UpdateModule::moduleName() const
@@ -49,7 +43,5 @@ void UpdateModule::registerExports()
 {
     ioc()->registerExport<IUpdateScenario>(moduleName(), s_scenario);
     ioc()->registerExport<IAppUpdateService>(moduleName(), s_service);
-    ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), s_museSoundsCheckUpdateScenario);
-    ioc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), s_museSoundsCheckUpdateService);
     ioc()->registerExport<IUpdateConfiguration>(moduleName(), s_configuration);
 }

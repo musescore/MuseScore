@@ -63,9 +63,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    int subtype() const override;
-    TranslatableString subtypeUserName() const override;
-
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
@@ -75,6 +72,8 @@ public:
 
     EngravingItem* findElementToSnapBefore(bool ignoreInvisible = true) const;
     EngravingItem* findElementToSnapAfter(bool ignoreInvisible = true) const;
+
+    void endEditDrag(EditData& ed) override;
 
 private:
     TextBase* findStartDynamicOrExpression(bool ignoreInvisible = true) const;

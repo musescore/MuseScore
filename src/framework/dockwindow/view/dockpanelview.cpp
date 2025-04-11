@@ -287,6 +287,10 @@ bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
         return false;
     }
 
+    if (tab->location() != location()) {
+        return false;
+    }
+
     return m_groupName == tab->m_groupName;
 }
 

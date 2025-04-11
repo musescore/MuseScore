@@ -120,66 +120,70 @@ void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
 
 bool SelectionFilter::canSelect(const EngravingItem* e) const
 {
-    if (e->isDynamic()) {
+    switch (e->type()) {
+    case ElementType::DYNAMIC:
         return isFiltered(SelectionFilterType::DYNAMIC);
-    }
-    if (e->isHairpin()) {
+    case ElementType::HAIRPIN:
+    case ElementType::HAIRPIN_SEGMENT:
         return isFiltered(SelectionFilterType::HAIRPIN);
-    }
-    if ((e->isArticulationFamily() && !toArticulation(e)->isOrnament()) || e->isVibrato() || e->isFermata()) {
+    case ElementType::ARTICULATION:
+    case ElementType::VIBRATO:
+    case ElementType::VIBRATO_SEGMENT:
+    case ElementType::FERMATA:
         return isFiltered(SelectionFilterType::ARTICULATION);
-    }
-    if ((e->isArticulationFamily() && toArticulation(e)->isOrnament()) || e->isTrill()) {
+    case ElementType::ORNAMENT:
+    case ElementType::TRILL:
+    case ElementType::TRILL_SEGMENT:
         return isFiltered(SelectionFilterType::ORNAMENT);
-    }
-    if (e->type() == ElementType::LYRICS) {
+    case ElementType::LYRICS:
+    case ElementType::LYRICSLINE:
+    case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
         return isFiltered(SelectionFilterType::LYRICS);
-    }
-    if (e->type() == ElementType::FINGERING) {
+    case ElementType::FINGERING:
         return isFiltered(SelectionFilterType::FINGERING);
-    }
-    if (e->type() == ElementType::HARMONY) {
+    case ElementType::HARMONY:
         return isFiltered(SelectionFilterType::CHORD_SYMBOL);
-    }
-    if (e->type() == ElementType::SLUR) {
+    case ElementType::SLUR:
+    case ElementType::SLUR_SEGMENT:
         return isFiltered(SelectionFilterType::SLUR);
-    }
-    if (e->type() == ElementType::FIGURED_BASS) {
+    case ElementType::FIGURED_BASS:
         return isFiltered(SelectionFilterType::FIGURED_BASS);
-    }
-    if (e->type() == ElementType::OTTAVA) {
+    case ElementType::OTTAVA:
+    case ElementType::OTTAVA_SEGMENT:
         return isFiltered(SelectionFilterType::OTTAVA);
-    }
-    if (e->type() == ElementType::PEDAL) {
+    case ElementType::PEDAL:
+    case ElementType::PEDAL_SEGMENT:
         return isFiltered(SelectionFilterType::PEDAL_LINE);
-    }
-    if (e->type() == ElementType::ARPEGGIO) {
+    case ElementType::ARPEGGIO:
         return isFiltered(SelectionFilterType::ARPEGGIO);
-    }
-    if (e->type() == ElementType::GLISSANDO) {
+    case ElementType::GLISSANDO:
+    case ElementType::GLISSANDO_SEGMENT:
         return isFiltered(SelectionFilterType::GLISSANDO);
-    }
-    if (e->type() == ElementType::FRET_DIAGRAM) {
+    case ElementType::FRET_DIAGRAM:
         return isFiltered(SelectionFilterType::FRET_DIAGRAM);
-    }
-    if (e->type() == ElementType::BREATH) {
+    case ElementType::BREATH:
         return isFiltered(SelectionFilterType::BREATH);
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
+        return isFiltered(SelectionFilterType::TREMOLO);
+    default: break;
     }
+
+    // Special cases...
     if (e->isTextBase()) { // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
         return isFiltered(SelectionFilterType::OTHER_TEXT);
     }
+
     if (e->isSLine()) { // NoteLine, Volta
         return isFiltered(SelectionFilterType::OTHER_LINE);
     }
-    if (e->type() == ElementType::TREMOLO_TWOCHORD) {
-        return isFiltered(SelectionFilterType::TREMOLO);
-    }
-    if (e->type() == ElementType::TREMOLO_SINGLECHORD) {
-        return isFiltered(SelectionFilterType::TREMOLO);
-    }
+
     if (e->isChord() && toChord(e)->isGrace()) {
         return isFiltered(SelectionFilterType::GRACE_NOTE);
     }
+
     return true;
 }
 
@@ -556,6 +560,43 @@ void Selection::appendFiltered(EngravingItem* e)
     }
 }
 
+void Selection::appendChordRest(ChordRest* cr)
+{
+    IF_ASSERT_FAILED(!isLocked()) {
+        LOGE() << "selection locked, reason: " << lockReason();
+        return;
+    }
+
+    for (EngravingItem* el : cr->lyrics()) {
+        if (el) {
+            appendFiltered(el);
+        }
+    }
+
+    Tuplet* tuplet = cr->tuplet();
+    if (tuplet) {
+        appendTupletHierarchy(tuplet);
+    }
+
+    if (cr->isRest()) {
+        appendFiltered(cr);
+        Rest* r = toRest(cr);
+        for (int i = 0; i < r->dots(); ++i) {
+            appendFiltered(r->dot(i));
+        }
+        return;
+    }
+
+    Chord* chord = toChord(cr);
+    for (Chord* graceNote : chord->graceNotes()) {
+        if (canSelect(graceNote)) {
+            appendChord(graceNote);
+        }
+    }
+
+    appendChord(chord);
+}
+
 void Selection::appendChord(Chord* chord)
 {
     IF_ASSERT_FAILED(!isLocked()) {
@@ -583,6 +624,9 @@ void Selection::appendChord(Chord* chord)
     if (chord->tremoloSingleChord()) {
         appendFiltered(chord->tremoloSingleChord());
     }
+    for (Articulation* art : chord->articulations()) {
+        appendFiltered(art);
+    }
     for (Note* note : chord->notes()) {
         m_el.push_back(note);
         if (note->accidental()) {
@@ -595,30 +639,32 @@ void Selection::appendChord(Chord* chord)
             m_el.push_back(dot);
         }
 
-        if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
-            if (note->tieFor()->endElement()->isNote()) {
-                Note* endNote = toNote(note->tieFor()->endElement());
-                Segment* s = endNote->chord()->segment();
-                if (!s || s->tick() < tickEnd()) {
-                    for (auto seg : note->tieFor()->spannerSegments()) {
-                        appendFiltered(seg);
-                    }
+        const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
+        if (endElement && endElement->isNote()) {
+            const Note* endNote = toNote(endElement);
+            const Segment* endSeg = endNote->chord()->segment();
+            if (!endSeg || endSeg->tick() < tickEnd()) {
+                for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
+                    appendFiltered(spannerSeg);
                 }
             }
         }
+
         for (Spanner* sp : note->spannerFor()) {
-            if (sp->endElement()->isNote()) {
-                Note* endNote = toNote(sp->endElement());
-                Segment* s = endNote->chord()->segment();
-                if (!s || s->tick() < tickEnd()) {
-                    if (sp->isGuitarBend()) {
-                        appendGuitarBend(toGuitarBend(sp));
-                        continue;
-                    }
-                    m_el.push_back(sp);
+            if (!sp->endElement()->isNote()) {
+                continue;
+            }
+            const Note* endNote = toNote(sp->endElement());
+            const Segment* endSeg = endNote->chord()->segment();
+            if (!endSeg || endSeg->tick() < tickEnd()) {
+                if (sp->isGuitarBend()) {
+                    appendGuitarBend(toGuitarBend(sp));
+                    continue;
                 }
+                m_el.push_back(sp);
             }
         }
+
         if (note->laissezVib()) {
             appendFiltered(note->laissezVib()->frontSegment());
         }
@@ -755,36 +801,9 @@ void Selection::updateSelectedElements()
                 continue;
             }
             if (e->isChordRest()) {
-                ChordRest* cr = toChordRest(e);
-                for (EngravingItem* el : cr->lyrics()) {
-                    if (el) {
-                        appendFiltered(el);
-                    }
-                }
-                Tuplet* tuplet = cr->tuplet();
-                if (tuplet) {
-                    appendTupletHierarchy(tuplet);
-                }
-            }
-            if (e->isChord()) {
-                Chord* chord = toChord(e);
-                for (Chord* graceNote : chord->graceNotes()) {
-                    if (canSelect(graceNote)) {
-                        appendChord(graceNote);
-                    }
-                }
-                appendChord(chord);
-                for (Articulation* art : chord->articulations()) {
-                    appendFiltered(art);
-                }
+                appendChordRest(toChordRest(e));
             } else {
                 appendFiltered(e);
-                if (e->isRest()) {
-                    Rest* r = toRest(e);
-                    for (int i = 0; i < r->dots(); ++i) {
-                        appendFiltered(r->dot(i));
-                    }
-                }
             }
         }
     }

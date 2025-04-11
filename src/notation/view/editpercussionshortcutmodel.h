@@ -68,6 +68,8 @@ private:
 
     QString getConflictWarningText() const;
 
+    bool needIgnoreKey(const Qt::Key& key) const;
+
     QVariantMap m_originDrum;
 
     QKeySequence m_newShortcut;

@@ -28,6 +28,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/networkmanagercreatorstub.h
     ${CMAKE_CURRENT_LIST_DIR}/networkmanagerstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/networkmanagerstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/networkconfigurationstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/networkconfigurationstub.h
     )
 
 set(MODULE_IS_STUB ON)

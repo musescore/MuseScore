@@ -154,7 +154,7 @@ public:
 
     // Const access
     const std::vector<Part*>& parts() const;
-    int visiblePartCount() const;
+    size_t visiblePartCount() const;
 
     size_t npages() const;
     const std::vector<Page*>& pages() const;
@@ -166,6 +166,8 @@ public:
     const Staff* staff(staff_idx_t idx) const;
 
     size_t ntracks() const;
+
+    size_t nmeasures() const;
 
     const Measure* tick2measure(const Fraction& tick) const;
     const Measure* firstMeasure() const;
