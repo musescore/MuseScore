@@ -5351,7 +5351,7 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
             && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
             && !leftHp->isLineType()) {
             if (int(startDyn->dynamicType()) > int(selDyn->dynamicType())) {
-                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
             } else {
                 leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
             }
@@ -5366,7 +5366,7 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
             if (int(endDyn->dynamicType()) > int(selDyn->dynamicType())) {
                 rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
             } else {
-                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
             }
         }
     }
