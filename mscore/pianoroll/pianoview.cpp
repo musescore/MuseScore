@@ -1318,8 +1318,8 @@ QVector<Note*> PianoView::addNote(Fraction startTick, Fraction duration, int pit
                   }
             }
 
-      for (auto it = addedNotes.begin(); it != std::prev(addedNotes.end()); it++)
-            toggleTie(*it);
+      for (auto it : addedNotes)
+            toggleTie(it);
 
       return addedNotes;
       }
