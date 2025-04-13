@@ -9191,7 +9191,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>&amp;Layout</source>
-        <translation>&amp;Макет</translation>
+        <translation>&amp;Расстановка </translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
@@ -10571,7 +10571,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="301"/>
         <source>Layout</source>
-        <translation>Макет</translation>
+        <translation>Расстановка</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="327"/>
@@ -25119,7 +25119,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
         <source>Set where time signatures appear using the Layout panel.</source>
-        <translation>Точное положение и количество настраивается в Макете</translation>
+        <translation>Задать, где показываются тактовые размеры, через панель макета.</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="191"/>
@@ -25377,7 +25377,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="232"/>
         <source>Layout</source>
-        <translation>Макет</translation>
+        <translation>Расстановка </translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="253"/>
@@ -25402,7 +25402,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="150"/>
         <source>Edit layout</source>
-        <translation>Редактировать макет </translation>
+        <translation>Редактировать расстановку </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="156"/>
@@ -25417,7 +25417,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="168"/>
         <source>Reset layout</source>
-        <translation>Сбросить макет</translation>
+        <translation>Сбросить расстановку</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>

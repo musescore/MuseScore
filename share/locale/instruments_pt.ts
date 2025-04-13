@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Secção de sopros no sistema principal.</translation>
+        <translation>Seção de sopros no sistema principal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
@@ -15582,7 +15582,7 @@
         <source>Percussion</source>
         <comment>percussion-synthesizer longName</comment>
         <extracomment>longName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>percurssão</translation>
+        <translation>Percussão</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4340"/>
@@ -15603,7 +15603,7 @@
         <source>Mixed Percussion</source>
         <comment>percussion trackName</comment>
         <extracomment>trackName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Percussão Mista</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
@@ -15638,7 +15638,7 @@
         <source>Acoustic Guitar</source>
         <comment>guitar-steel longName</comment>
         <extracomment>longName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitarra Acustica</translation>
+        <translation>Violão acústico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5152"/>
@@ -15694,14 +15694,14 @@
         <source>Classical Guitar</source>
         <comment>guitar-nylon trackName</comment>
         <extracomment>trackName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitarra Clássica</translation>
+        <translation>Violão Clássico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5174"/>
         <source>Classical Guitar</source>
         <comment>guitar-nylon longName</comment>
         <extracomment>longName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitarra Clássica</translation>
+        <translation>Violão Clássico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5176"/>
