@@ -2669,7 +2669,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="637"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation>Återställ &apos;Instrumentnamn på första systemet&apos;</translation>
+        <translation>Återställ &apos;Instrumentnamn på första ackoladen i avsnitt&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="647"/>
@@ -2685,7 +2685,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="661"/>
         <source>On first system of sections:</source>
-        <translation>På första systemet i avdelningar:</translation>
+        <translation>I första ackoladen i avsnitt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="668"/>

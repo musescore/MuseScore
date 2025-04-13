@@ -118,17 +118,17 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="137"/>
         <source>Quarter note</source>
-        <translation>תו רבע</translation>
+        <translation>רבע</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="150"/>
         <source>Half note</source>
-        <translation>תו חצי</translation>
+        <translation>חצי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="163"/>
         <source>Whole note</source>
-        <translation>תו שלם</translation>
+        <translation>שלם</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="176"/>
@@ -198,7 +198,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="372"/>
         <source>Load…</source>
-        <translation>טען…</translation>
+        <translation>טעינה…</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="379"/>
@@ -22737,7 +22737,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="93"/>
         <source>Move selected staves up</source>
-        <translation>הזזת חמשות שנבחרו מעלה</translation>
+        <translation>הזזת החמשות שנבחרו מעלה</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="94"/>
@@ -22762,7 +22762,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="118"/>
         <source>Move selected staves down</source>
-        <translation>הזזת חמשות שנבחרו מטה</translation>
+        <translation>הזזת החמשות שנבחרו מטה</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml" line="142"/>
@@ -22882,7 +22882,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="243"/>
         <source>This action can not be undone</source>
-        <translation>לא ניתן לבטל את פעולה זו</translation>
+        <translation>פעולה זו אינה ניתנת לביטול</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>

@@ -13096,7 +13096,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1251"/>
         <source>Hairpin</source>
-        <translation>Crescendo-/diminuendopil</translation>
+        <translation>Crescendo/diminuendo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="271"/>
@@ -26535,7 +26535,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1927"/>
         <source>Pitch</source>
         <extracomment>The name of a palette</extracomment>
-        <translation>Tonhöjd</translation>
+        <translation>Oktaver</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="71"/>

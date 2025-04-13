@@ -5844,7 +5844,7 @@
         <source>Brass section notated on a grand staff.</source>
         <comment>brass description</comment>
         <extracomment>description for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brassektionen noterad i pianoackolad.</translation>
+        <translation>Brassektion noterad i pianoackolad.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2082"/>
@@ -18192,7 +18192,7 @@
         <source>Violins (section)</source>
         <comment>violins trackName</comment>
         <extracomment>trackName for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Violiner (stämma)</translation>
+        <translation>Violiner (sektion)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5978"/>
@@ -18479,7 +18479,7 @@
         <source>Contrabass (double bass) section.</source>
         <comment>contrabasses description</comment>
         <extracomment>description for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabas (basfiol) sektion.</translation>
+        <translation>Kontrabas- (basfiol-) sektion.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6066"/>
