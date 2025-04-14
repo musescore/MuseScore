@@ -439,6 +439,11 @@ void DockBase::deinit()
     setInited(false);
 }
 
+bool DockBase::hasLastPositions() const
+{
+    return m_dockWidget ? m_dockWidget->hasPreviousDockedLocation() : false;
+}
+
 bool DockBase::isOpen() const
 {
     IF_ASSERT_FAILED(m_dockWidget) {
@@ -456,8 +461,14 @@ void DockBase::open()
         return;
     }
 
-    setVisible(true);
-    m_dockWidget->show();
+    // If the widget is in the frame (was not closed), just ask the frame to make the widget's tab active.
+    // Otherwise show the widget. This will add it back into the frame or float it. It will also make it active.
+    if (m_dockWidget->frame() && m_dockWidget->frame()->containsDockWidget(m_dockWidget)) {
+        m_dockWidget->frame()->setCurrentDockWidget(m_dockWidget);
+    } else {
+        setVisible(true);
+        m_dockWidget->show();
+    }
 
     applySizeConstraints();
 }
@@ -470,7 +481,7 @@ void DockBase::close()
         return;
     }
 
-    m_dockWidget->forceClose();
+    m_dockWidget->close();
     setVisible(false);
 }
 
