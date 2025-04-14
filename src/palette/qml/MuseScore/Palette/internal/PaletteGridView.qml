@@ -566,7 +566,7 @@ StyledGridView {
             }
 
             onClicked: {
-                paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())
+                Qt.callLater(paletteView.paletteController.applyPaletteElement, paletteCell.modelIndex, ui.keyboardModifiers())
 
                 updateSelection()
             }
