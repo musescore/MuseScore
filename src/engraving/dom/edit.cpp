@@ -7436,8 +7436,25 @@ void Score::undoChangeMeasureRepeatCount(Measure* m, int newCount, staff_idx_t s
     }
 }
 
-void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
+void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo)
 {
+    auto removeTie = [&](Tie* tie) {
+        if (undo) {
+            const size_t undoIdx = undoStack()->currentIndex();
+            startCmd(TranslatableString("engraving", "Remove stale partial tie"));
+            undoRemoveElement(tie);
+            endCmd();
+            if (undoIdx != undoStack()->currentIndex() && undoStack()->currentIndex() >= 2) {
+                // These changes should be merged with the change in repeat structure which caused the ties to become invalid
+                // currentIndex returns the next empty index for an undo command
+                const size_t penultimateCmdIdx = undoStack()->currentIndex() - 2;
+                undoStack()->mergeCommands(penultimateCmdIdx);
+            }
+        } else {
+            removeElement(tie);
+        }
+    };
+
     std::vector<Tie*> oldTies;
     if (!tie->tieJumpPoints()) {
         return;
@@ -7469,42 +7486,50 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
                          findEndTie) != (*tie->tieJumpPoints()).end()) {
             continue;
         }
-        startCmd(TranslatableString("engraving", "Remove stale partial tie"));
-        undoRemoveElement(oldTie);
-        endCmd();
-        // These changes should be merged with the change in repeat structure which caused the ties to become invalid
-        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+        removeTie(oldTie);
     }
 
-    if (tie->isPartialTie() && tie->allJumpPointsInactive()) {
-        startCmd(TranslatableString("engraving", "Remove stale partial tie"));
-        undoRemoveElement(tie);
-        endCmd();
-        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    if (tie->isPartialTie() && tie->allJumpPointsInactive() && tie->startNote() && tie->startNote()->tieFor() == tie) {
+        removeTie(tie);
     }
 }
 
-void Score::doUndoResetPartialSlur(Slur* slur)
+void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
 {
     const size_t undoIdx = undoStack()->currentIndex();
     if (!slur->startCR()->hasPrecedingJumpItem() && slur->isIncoming()) {
-        startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
-        slur->undoSetIncoming(false);
-        endCmd();
+        if (undo) {
+            startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
+            slur->undoSetIncoming(false);
+            endCmd();
+        } else {
+            slur->setIncoming(false);
+        }
     }
 
     if (!slur->endCR()->hasFollowingJumpItem() && slur->isOutgoing()) {
-        startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
-        slur->undoSetOutgoing(false);
-        endCmd();
+        if (undo) {
+            startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
+            slur->undoSetOutgoing(false);
+            endCmd();
+        } else {
+            slur->setOutgoing(false);
+        }
     }
 
-    if (undoIdx != undoStack()->currentIndex()) {
-        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    if (!undo) {
+        return;
+    }
+
+    if (undoIdx != undoStack()->currentIndex() && undoStack()->currentIndex() >= 2) {
+        // These changes should be merged with the change in repeat structure which caused the ties to become invalid
+        // currentIdx returns the next empty index for an undo command
+        const size_t penultimateCmdIdx = undoStack()->currentIndex() - 2;
+        undoStack()->mergeCommands(penultimateCmdIdx);
     }
 }
 
-void Score::undoRemoveStaleTieJumpPoints()
+void Score::undoRemoveStaleTieJumpPoints(bool undo)
 {
     size_t tracks = nstaves() * VOICES;
     Measure* m = firstMeasure();
@@ -7517,7 +7542,7 @@ void Score::undoRemoveStaleTieJumpPoints()
         if (!sp || !sp->isSlur()) {
             continue;
         }
-        doUndoResetPartialSlur(toSlur(sp));
+        doUndoResetPartialSlur(toSlur(sp), undo);
     }
 
     std::set<PartialTie*> incomingPartialTies;
@@ -7559,13 +7584,20 @@ void Score::undoRemoveStaleTieJumpPoints()
     }
 
     for (PartialTie* incomingPT : incomingPartialTies) {
-        if (incomingPT->jumpPoint()) {
+        if (incomingPT->jumpPoint() || incomingPT->note()->tieBack() != incomingPT) {
             continue;
         }
-        startCmd(TranslatableString("engraving", "Remove stale partial tie"));
-        undoRemoveElement(incomingPT);
-        endCmd();
-        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+        const size_t undoIdx = undoStack()->currentIndex();
+        if (undo) {
+            startCmd(TranslatableString("engraving", "Remove stale partial tie"));
+            undoRemoveElement(incomingPT);
+            endCmd();
+            if (undoIdx != undoStack()->currentIndex() && undoStack()->currentIndex() > 2) {
+                undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+            }
+        } else {
+            removeElement(incomingPT);
+        }
     }
 }
 }
