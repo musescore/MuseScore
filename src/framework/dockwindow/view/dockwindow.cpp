@@ -550,6 +550,11 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
     newPage->setParams(params);
 
     m_currentPage = newPage;
+
+    connect(m_currentPage, &DockPageView::layoutRequested, this, [this](){
+        m_mainWindow->layoutEqually();
+    }, Qt::UniqueConnection);
+
     m_currentPage->setVisible(true);
 
     return true;
