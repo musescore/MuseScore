@@ -1075,11 +1075,11 @@ static void findTrills(const Measure* const measure, int strack, int etrack, Tri
 //---------------------------------------------------------
 
 typedef std::set<Fraction> FractionSet;
-static FractionSet fractions;
+Q_GLOBAL_STATIC(FractionSet, fractions);
 
 static void addFraction(const Fraction& len)
       {
-      fractions.insert(len.reduced());
+      fractions->insert(len.reduced());
       }
 
 //---------------------------------------------------------
@@ -1168,7 +1168,7 @@ static Fraction stretch(Score* score, int st, Fraction tick)
 void ExportMusicXml::calcDivisions()
       {
       // init
-      fractions.clear();
+      fractions->clear();
 
       const QList<Part*>& il = _score->parts();
 
@@ -1234,7 +1234,7 @@ void ExportMusicXml::calcDivisions()
 
       // compute divisions
       int divisions { 4 };  // ensure divisions > 0 for half and whole note
-      for (auto f : fractions)
+      for (auto f : *fractions)
             divisions = lcm(divisions, f.denominator()); // std::lcm() needs C++2017
       divisions /= 4;
 
@@ -4781,6 +4781,21 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
             attr = " enclosure=\"none\"";
       attr += color2xml(rmk);
       attr += positioningAttributes(rmk);
+      if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
+            switch (rmk->align()) {
+                  case Align::LEFT:
+                        // default in MusicXML
+                        break;
+                  case Align::HCENTER:
+                        attr += " justify=\"center\"";
+                        break;
+                  case Align::RIGHT:
+                        attr += " justify=\"right\"";
+                        break;
+                  default:
+                        break;
+                  }
+            }
       // set the default words format
       const QString mtf = _score->styleSt(Sid::musicalTextFont);
       const CharFormat defFmt = formatForWords(_score);
@@ -6281,7 +6296,8 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                   }
             else {
                   // staff-specific keysigs
-                  for (int st : keysigs.keys())
+                  const QList<int> ksigs = keysigs.keys();
+                  for (int st : ksigs)
                         keysig(keysigs.value(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
                   }
             }
@@ -6320,17 +6336,17 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
       if (!timesigs.empty()) {
             // determine if all staves have a timesig and all timesigs are identical
             // in that case a single <time> is written, without number=... attribute
-            size_t nstaves = p->nstaves();
+            int nstaves = p->nstaves();
             bool singleTime = true;
             // check if all staves have a keysig
-            for (size_t i = 0; i < nstaves; i++) {
-                  if (!timesigs.contains(static_cast<int>(i)))
+            for (int i = 0; i < nstaves; i++) {
+                  if (!timesigs.contains(i))
                         singleTime = false;
                   }
             // check if all timesigs are identical
             if (singleTime) {
-                  for (size_t i = 1; i < nstaves; i++) {
-                        if (!(timesigs[static_cast<int>(i)]->sig() == timesigs[0]->sig()))
+                  for (int i = 1; i < nstaves; i++) {
+                        if (!(timesigs[i]->sig() == timesigs[0]->sig()))
                               singleTime = false;
                         }
                   }
@@ -6343,7 +6359,8 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                   }
             else {
                   // staff-specific timesig
-                  for (int st : timesigs.keys())
+                  const QList<int> tsigs = timesigs.keys();
+                  for (int st : tsigs)
                         timesig(timesigs[st], st + 1);
                   }
             }
@@ -6505,7 +6522,8 @@ typedef QMap<int, const Instrument*> MxmlReverseInstrumentMap;
 static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrumentMap& im)
       {
       rim.clear();
-      for (const Instrument* i : im.keys()) {
+      const QList<const Instrument*> instrs = im.keys();
+      for (const Instrument* i : instrs) {
             int instNr = im.value(i);
             rim.insert(instNr, i);
             }
@@ -6967,7 +6985,8 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             else {
                   MxmlReverseInstrumentMap rim;
                   initReverseInstrMap(rim, instrMap);
-                  for (int instNr : rim.keys()) {
+                  const QList<int> instrNrs = rim.keys();
+                  for (int instNr : instrNrs) {
                         scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()), rim.value(instNr));
                         }
                   for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
@@ -7604,7 +7623,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
             writeInstrumentDetails(part->instrument(), _score->styleB(Sid::concertPitch));
             }
       else {
-            for (int staffIdx : _hiddenStaves) {
+            for (int& staffIdx : _hiddenStaves) {
                 _attr.doAttr(_xml, true);
                 QString attributes;
                 if (staves > 1)

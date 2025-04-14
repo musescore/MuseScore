@@ -423,6 +423,7 @@ private:
       QString _wordsText;
       QString _metroText;
       QString _rehearsalText;
+      QString _justify;
       QString _dynaVelocity;
       QString _sndCoda;
       QString _sndDacapo;

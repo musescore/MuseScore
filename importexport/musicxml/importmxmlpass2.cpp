@@ -857,8 +857,8 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
                       const QSet<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
       {
-      const QList<int> keys = numbrdLyrics.keys();
-      for (const auto& lyricNo : keys) {
+      const QList<int> lyricNos = numbrdLyrics.keys();
+      for (int lyricNo : lyricNos) {
             Lyrics* const lyric = numbrdLyrics.value(lyricNo);
             addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
             if (extLyrics.contains(lyric))
@@ -869,8 +869,8 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
 static void addGraceNoteLyrics(const QMap<int, Lyrics*>& numberedLyrics, QSet<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
       {
-      const QList<int> keys = numberedLyrics.keys();
-      for (const auto& lyricNo : keys) {
+      const QList<int> lyricNos = numberedLyrics.keys();
+      for (int lyricNo : lyricNos) {
             Lyrics* const lyric = numberedLyrics[lyricNo];
             if (lyric) {
                   bool extend = extendedLyrics.contains(lyric);
@@ -3479,6 +3479,16 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
                         }
 
+                  if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+                        if (_justify == "right")
+                              t->setAlign(Align::RIGHT);
+                        else if (_justify == "center")
+                              t->setAlign(Align::HCENTER);
+                        else
+                              t->setAlign(Align::LEFT);
+                        }
+
+
                   t->setVisible(_visible);
 
                   if (_swing.second != 0) {
@@ -3702,6 +3712,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                   }
             QString type = _e.attributes().value("type").toString();
             _color       = _e.attributes().value("color").toString();
+            _justify     = _e.attributes().value("justify").toString();
 
             if  (_e.name() == "metronome")
                   _metroText = metronome(_tpoMetro);
@@ -4821,6 +4832,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                         // likely an unrecorded "discontinue", so delete the line.
                         _pass2.deleteHandledSpanner(spdesc._sp);
                         spdesc._isStarted = false;
+                        spdesc._sp = nullptr;
                         }
                   }
             Pedal* p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score);
