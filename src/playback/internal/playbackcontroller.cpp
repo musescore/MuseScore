@@ -152,7 +152,7 @@ void PlaybackController::updateCurrentTempo()
         return;
     }
 
-    const Tempo& newTempo = notationPlayback()->tempo(m_currentTick);
+    const Tempo& newTempo = notationPlayback()->multipliedTempo(m_currentTick);
 
     if (newTempo == m_currentTempo) {
         return;
