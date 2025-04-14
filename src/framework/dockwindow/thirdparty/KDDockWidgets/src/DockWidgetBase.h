@@ -336,6 +336,9 @@ public:
      */
     QStringList affinities() const;
 
+    /// @brief Returns whether the widget has last positions.
+    bool hasLastPositions() const;
+
     /// @brief Equivalent to QWidget::show(), but it's optimized to reduce flickering on some platforms
     Q_INVOKABLE void show();
 

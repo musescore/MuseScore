@@ -224,6 +224,11 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
         return;
     }
 
+    if (dock->hasLastPositions()) {
+        dock->open();
+        return;
+    }
+
     DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
     if (!panel) {
         dock->open();
