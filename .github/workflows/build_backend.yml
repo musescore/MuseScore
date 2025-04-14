@@ -106,11 +106,12 @@ jobs:
       run: |
         bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
 
-    - name: Deploy to musescore.com
+    - name: Deploy
       if: env.DO_PUBLISH == 'true'
-      run: |
-        pip install jenkinsapi
-        python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION_MAJOR_MINOR }} --api_token ${{ secrets.JENKINS_API_TOKEN }}
+      uses: ./.github/workflows/deploy_backend.yml
+      with:
+        version_major_minor: ${{ env.VERSION_MAJOR_MINOR }}
+        is_default: "false"
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
