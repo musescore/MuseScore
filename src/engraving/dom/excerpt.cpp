@@ -1295,10 +1295,14 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
             TremoloTwoChord* prevTremolo = nullptr;
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 EngravingItem* oe = seg->element(srcTrack);
-                if (oe == 0 || oe->generated()) {
+                EngravingItem* de = seg->elementAt(dstTrack);
+                if (oe == 0) {
+                    if (de != 0) {
+                        seg->remove(de);
+                    }
                     continue;
                 }
-                if (oe->isTimeSig()) {
+                if (oe->isTimeSig() || oe->generated()) {
                     continue;
                 }
                 EngravingItem* ne = 0;
