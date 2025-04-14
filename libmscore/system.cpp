@@ -259,14 +259,7 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
       //---------------------------------------------------
 
       int columns = getBracketsColumnsCount();
-
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      qreal bracketWidth[columns];
-#else
-      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-      //    heap allocation is slow, an optimization might be used.
       std::vector<qreal> bracketWidth(columns);
-#endif
       for (int i = 0; i < columns; ++i)
             bracketWidth[i] = 0.0;
 

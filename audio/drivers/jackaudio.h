@@ -20,9 +20,9 @@
 #ifndef __JACKAUDIO_H__
 #define __JACKAUDIO_H__
 
-#include "config.h"
-#include "driver.h"
 #include <jack/jack.h>
+
+#include "driver.h"
 
 namespace Ms {
 
@@ -63,29 +63,29 @@ class JackAudio : public Driver {
    public:
       JackAudio(Seq*);
       virtual ~JackAudio();
-      virtual bool init(bool hot = false);
-      virtual bool start(bool hotPlug = false);
-      virtual bool stop();
+      virtual bool init(bool hot = false) override;
+      virtual bool start(bool hotPlug = false) override;
+      virtual bool stop() override;
       int framePos() const;
       void connect(void*, void*);
       void connect(const char* src, const char* dst);
       void disconnect(void* src, void* dst);
       virtual bool isRealtime() const   { return jack_is_realtime(client); }
-      virtual void startTransport();
-      virtual void stopTransport();
+      virtual void startTransport() override;
+      virtual void stopTransport() override;
       virtual Transport getState() override;
-      virtual void seekTransport(int);
-      virtual int sampleRate() const    { return jack_get_sample_rate(client); }
-      virtual void putEvent(const NPlayEvent&, unsigned framePos);
-      virtual void midiRead();
+      virtual void seekTransport(int) override;
+      virtual int sampleRate() const override { return jack_get_sample_rate(client); }
+      virtual void putEvent(const NPlayEvent&, unsigned framePos) override;
+      virtual void midiRead() override;
 
       virtual void registerPort(const QString& name, bool input, bool midi);
       virtual void unregisterPort(jack_port_t*);
-      virtual void handleTimeSigTempoChanged();
-      virtual void checkTransportSeek(int, int, bool);
-      virtual int bufferSize() {return _segmentSize;}
+      virtual void handleTimeSigTempoChanged() override;
+      virtual void checkTransportSeek(int, int, bool) override;
+      virtual int bufferSize() override {return _segmentSize;}
       void setBufferSize(int nframes) { _segmentSize = nframes;}
-      void updateOutPortCount(int);
+      void updateOutPortCount(int) override;
       };
 
 

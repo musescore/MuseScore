@@ -1709,13 +1709,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       qreal x1 = crl[0]->stemPosX() + crl[0]->pageX() - pageX();
 
       int baseLevel = 0;      // beam level that covers all notes of beam
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      int crBase[n];          // offset of beam level 0 for each chord
-#else
-      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-      //    heap allocation is slow, an optimization might be used.
       std::vector<int> crBase(n);
-#endif
       bool growDown = _up;
 
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {

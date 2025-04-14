@@ -10,11 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "resourceManager.h"
-#include "musescore.h"
 #include "extension.h"
-#include "libmscore/utils.h"
+#include "musescore.h"
+#include "resourceManager.h"
 #include "stringutils.h"
+
+#include "libmscore/utils.h"
+
 #include "thirdparty/qzip/qzipreader_p.h"
 
 namespace Ms {
@@ -133,7 +135,7 @@ void ResourceManager::displayExtensions()
       extensionsTable->verticalHeader()->show();
 
       QStringList exts = result.object().keys();
-      for (QString key : exts) {
+      for (QString& key : exts) {
             if (!result.object().value(key).isObject())
                   continue;
             QJsonObject value = result.object().value(key).toObject();
@@ -209,13 +211,7 @@ void ResourceManager::displayLanguages()
 
       int row = 0;
       int col = 0;
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      QPushButton* updateButtons[rowCount];
-#else
-      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-      //    heap allocation is slow, an optimization might be used.
       std::vector<QPushButton*> updateButtons(rowCount);
-#endif
       QPushButton* temp;
       languagesTable->verticalHeader()->show();
 
@@ -233,7 +229,7 @@ void ResourceManager::displayLanguages()
             langs.prepend(currentLanguageKey);
             }
 
-      for (QString key : langs) {
+      for (QString& key : langs) {
             if (!result.object().value(key).isObject())
                   continue;
             QJsonObject object = result.object().value(key).toObject();

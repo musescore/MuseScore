@@ -443,14 +443,8 @@ void MidiFile::skip(qint64 len)
       //       as bytes do not need to be moved around.
       if (len <= 0)
             return;
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      char tmp[len];
-#else
-      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-      //    heap allocation is slow, an optimization might be used.
       std::vector<char> buffer(len);
       char *tmp = buffer.data();
-#endif
       read(tmp, len);
       }
 

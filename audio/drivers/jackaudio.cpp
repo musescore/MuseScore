@@ -29,14 +29,14 @@
 #include <jack/midiport.h>
 
 #include "libmscore/mscore.h"
-#include "libmscore/sig.h"
-#include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/sig.h"
 
+#include "mscore/iplaypanel.h"
 #include "mscore/musescore.h"
 #include "mscore/preferences.h"
 #include "mscore/seq.h"
-#include "mscore/iplaypanel.h"
 
 // Prevent killing sequencer with wrong data
 #define less128(__less) ((__less >=0 && __less <= 127) ? __less : 0)
@@ -406,14 +406,8 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                   }
             }
       if (l && r) {
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-         float buffer[frames * 2];
-#else
-         // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-         //    heap allocation is slow, an optimization might be used.
-         std::vector<float> vBuffer(frames * 2);
-         float* buffer = vBuffer.data();
-#endif
+            std::vector<float> vBuffer(frames * 2);
+            float* buffer = vBuffer.data();
             audio->seq->process((unsigned)frames, buffer);
             float* sp = buffer;
             for (unsigned i = 0; i < frames; ++i) {
@@ -423,14 +417,8 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
             }
       else {
             // JACK MIDI only
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-         float buffer[frames * 2];
-#else
-            // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-            //    heap allocation is slow, an optimization might be used.
-         std::vector<float> vBuffer(frames * 2);
-         float* buffer = vBuffer.data();
-#endif
+            std::vector<float> vBuffer(frames * 2);
+            float* buffer = vBuffer.data();
             audio->seq->process((unsigned)frames, buffer);
             }
       return 0;

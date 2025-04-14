@@ -2120,15 +2120,8 @@ void Score::respace(std::vector<ChordRest*>* elements)
       qreal x1       = cr1->segment()->pos().x();
       qreal x2       = cr2->segment()->pos().x();
 
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      qreal width[n-1];
-      int ticksList[n-1];
-#else
-      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-      //    heap allocation is slow, an optimization might be used.
       std::vector<qreal> width(n-1);
       std::vector<int> ticksList(n-1);
-#endif
       int minTick = 100000;
 
       for (int i = 0; i < n-1; ++i) {
@@ -3831,7 +3824,8 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
                   //    the highest element if placed below.
                   bool first { true };
                   qreal ref { 0.0 };
-                  for (auto s : elements.keys()) {
+                  const QList<const Segment*> segs = elements.keys();
+                  for (auto s : segs) {
                         Element* e { getReferenceElement(s, above, true) };
                         if (!e)
                               continue;
@@ -3857,7 +3851,8 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
                   if (almostZero(reference))
                         return moved;
 
-                  for (auto s : elements.keys()) {
+                  const QList<const Segment*> segs = elements.keys();
+                  for (auto s : segs) {
                         QList<Element*> handled;
                         Element* be = getReferenceElement(s, above, false);
                         if (!be)
@@ -3915,7 +3910,8 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
                   }
             }
 
-      for (int idx : staves.keys()) {
+      const QList<int> idxs = staves.keys();
+      for (int idx : idxs) {
             // Align the objects.
             // Algorithm:
             //    - Find highest placed harmony/fretdiagram.

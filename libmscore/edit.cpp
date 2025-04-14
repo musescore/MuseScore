@@ -1082,15 +1082,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         if (!(curr->tuplet())) {
                               // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
                               size_t numNotes = chord->notes().size();
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-                              Note* tieBack[numNotes];
-                              Note* tieFor[numNotes];
-#else
-                              // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-                              //    heap allocation is slow, an optimization might be used.
                               std::vector<Note *> tieBack(numNotes);
                               std::vector<Note *> tieFor(numNotes);
-#endif
                               for (size_t i = 0; i < numNotes; i++) {
                                     Note* n = chord->notes()[i];
                                     Note* nn = lastTiedChord->notes()[i];
@@ -1478,7 +1471,8 @@ void Score::cmdAddOttava(OttavaType type)
 
 void Score::cmdSetBeamMode(Beam::Mode mode)
       {
-      for (ChordRest* cr : getSelectedChordRests()) {
+      const QSet<ChordRest*> crs = getSelectedChordRests();
+      for (ChordRest* cr : crs) {
             if (cr)
                   cr->undoChangeProperty(Pid::BEAM_MODE, int(mode));
             }

@@ -562,7 +562,7 @@ void populateGenreCombo(QComboBox* combo)
       combo->addItem(qApp->translate("InstrumentsDialog", "All instruments"), "all");
       int i = 1;
       int defaultIndex = 0;
-      for (InstrumentGenre *ig : instrumentGenres) {
+      for (InstrumentGenre*& ig : instrumentGenres) {
             combo->addItem(ig->name, ig->id);
             if (ig->id == "common")
                   defaultIndex = i;
@@ -580,12 +580,12 @@ void populateInstrumentList(QTreeWidget* instrumentList)
       {
       instrumentList->clear();
       // TODO: memory leak?
-      for (InstrumentGroup* g : instrumentGroups) {
+      for (InstrumentGroup*& g : instrumentGroups) {
             InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
             // provide feedback to blind users that they have selected a group rather than an instrument
             group->setData(0, Qt::AccessibleTextRole, QVariant(QObject::tr("%1 category").arg(g->name))); // spoken by screen readers
             group->setFlags(Qt::ItemIsEnabled);
-            for (InstrumentTemplate* t : g->instrumentTemplates) {
+            for (InstrumentTemplate*& t : g->instrumentTemplates) {
                   InstrumentTemplateListItem* instrument = new InstrumentTemplateListItem(t, group);
                   instrument->setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren));
                   }
@@ -613,11 +613,11 @@ void InstrumentsWidget::genPartList(Score* cs)
       {
       partiturList->clear();
 
-      for (Part* p : cs->parts()) {
+      for (Part*& p : cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
             pli->setVisible(p->show());
             pli->setSoloist(p->soloist());
-            for (Staff* s : *p->staves()) {
+            for (Staff*& s : *p->staves()) {
                   StaffListItem* sli = new StaffListItem(pli);
                   sli->setStaff(s);
                   sli->setClefType(s->clefType(Fraction(0,1)));
@@ -710,13 +710,7 @@ QTreeWidgetItem* InstrumentsWidget::movePartItem(int oldPos, int newPos)
       // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
       // get the currently selected staff type of each combo and re-insert
       int numOfStaffListItems = item->childCount();
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      int staffIdx[numOfStaffListItems];
-#else
-      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-      //    heap allocation is slow, an optimization might be used.
       std::vector<int> staffIdx(numOfStaffListItems);
-#endif
       for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
             staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
       // do not consider hidden ones
@@ -775,7 +769,7 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
       int count = 0; // item can be hidden
       QTreeWidgetItem* it = 0;
       QList<QTreeWidgetItem*> witems;
-      if(item->type() == PART_LIST_ITEM) {
+      if(item && item->type() == PART_LIST_ITEM) {
             for (int idx = 0; (it = partiturList->topLevelItem(idx)); ++idx) {
                   if (!it->isHidden()) {
                         count++;
@@ -784,7 +778,7 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
                   }
             }
       else {
-            for (int idx = 0; (it = item->parent()->child(idx)); ++idx) {
+            for (int idx = 0; item && (it = item->parent()->child(idx)); ++idx) {
                   if (!it->isHidden()){
                         count++;
                         witems.append(it);
@@ -823,7 +817,7 @@ void InstrumentsWidget::on_instrumentList_itemActivated(QTreeWidgetItem* item, i
 
 void InstrumentsWidget::on_addButton_clicked()
       {
-      for (QTreeWidgetItem* i : instrumentList->selectedItems()) {
+      for (QTreeWidgetItem*& i : instrumentList->selectedItems()) {
             InstrumentTemplateListItem* item = static_cast<InstrumentTemplateListItem*>(i);
             const InstrumentTemplate* it     = item->instrumentTemplate();
             if (it == 0)
@@ -882,6 +876,7 @@ void InstrumentsWidget::on_removeButton_clicked()
                   if (parent->childCount() == 1) {
                         partiturList->takeTopLevelItem(partiturList->indexOfTopLevelItem(parent));
                         delete parent;
+                        parent = nullptr;
                         }
                   else {
                         parent->takeChild(parent->indexOfChild(item));
@@ -904,7 +899,8 @@ void InstrumentsWidget::on_removeButton_clicked()
                               }
                         }
                   }
-            static_cast<PartListItem*>(parent)->updateClefs();
+            if (parent)
+                  static_cast<PartListItem*>(parent)->updateClefs();
             partiturList->setCurrentItem(parent);
             updatePartIdx();
             }
@@ -920,7 +916,7 @@ void InstrumentsWidget::on_removeButton_clicked()
                   partiturList->blockSignals(true);
                   delete item; // fires selectionChanged too early (item is still in view)
                   partiturList->blockSignals(false);
-                  emit on_partiturList_itemSelectionChanged(); // fire manually (item gone by now)
+                  /*emit*/ on_partiturList_itemSelectionChanged(); // fire manually (item gone by now)
                   }
             else {
                   ((PartListItem*)item)->op = ListItemOp::I_DELETE;
@@ -1389,7 +1385,7 @@ void InstrumentsWidget::numberInstrumentNames(Score* cs)
       };
 
       QMap<QString, PartNamer*> namers;
-      for (Part* p : cs->parts()) {
+      for (Part*& p : cs->parts()) {
             const QString key = QString("%1/%2").arg(p->partName()).arg(p->soloist());
             if (namers.contains(key))
                   namers[key]->update(p);
@@ -1397,7 +1393,8 @@ void InstrumentsWidget::numberInstrumentNames(Score* cs)
                   namers.insert(key, new PartNamer(p));
             }
 
-      for (auto namer : namers.values())
+      const QList<PartNamer*> namerVals;
+      for (auto& namer : namerVals)
             delete namer;
       }
 

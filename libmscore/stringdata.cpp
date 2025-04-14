@@ -160,13 +160,7 @@ void StringData::fretChords(Chord * chord) const
       bFretting = true;
 
       // we need to keep track of string allocation
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      int bUsed[strings()];                    // initially all strings are available
-#else
-      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-      //    heap allocation is slow, an optimization might be used.
       std::vector<int> bUsed(strings());
-#endif
       for(nString=0; nString<strings(); nString++)
             bUsed[nString] = 0;
       // we also need the notes sorted in order of string (from highest to lowest) and then pitch
@@ -253,7 +247,7 @@ void StringData::fretChords(Chord * chord) const
             }
 
       // check for any remaining fret conflict
-      for (Note* note : sortedNotes)
+      for (Note*& note : sortedNotes)
             if (note->string() == -1 || bUsed[note->string()] > 1)
                   note->setFretConflict(true);
 

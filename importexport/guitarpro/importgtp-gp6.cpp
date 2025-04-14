@@ -941,8 +941,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                           QString variation;
 
                                           Note* note = new Note(score);
-                                          if (graceNote)
-                                                lyrNote = note;
                                           if (id != -1) {
                                                 auto iter1 = lyrics.find(id);
                                                 if (iter1 != lyrics.end()) {
@@ -1763,7 +1761,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                         }
                   currentNode = currentNode.nextSibling();
                   }
-            dotted = 0;
             if (graceNote)
                   continue;
             // we have handled the beat - was there a note?
@@ -2445,7 +2442,7 @@ void GuitarPro6::readGpif(QByteArray* data)
       qdomDoc.setContent(*data);
       QDomElement qdomElem = qdomDoc.documentElement();
       // GPRevision node
-      QDomNode revision = qdomElem.firstChildElement("GPRevision");
+      //QDomNode revision = qdomElem.firstChildElement("GPRevision");
       // Score node
       QDomNode scoreNode = qdomElem.firstChildElement("Score");
       readScore(&scoreNode);
@@ -2516,20 +2513,14 @@ void GuitarPro6::readGpif(QByteArray* data)
             }
       // change the tuning to deal with transposition
       // It's needed to create correct tabs
-      for (Part * p : score->parts()) {
+      for (Part*& p : score->parts()) {
             Instrument* instr = p->instrument();
             if (instr->transpose().chromatic == 0)
                   continue;
             const StringData* sd = instr->stringData();
             if (sd) {
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-               int tuning[sd->strings()];
-#else
-               // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-               //    heap allocation is slow, an optimization might be used.
-               std::vector<int> vTuning(sd->strings());
-               int* tuning = vTuning.data();
-#endif
+                  std::vector<int> vTuning(sd->strings());
+                  int* tuning = vTuning.data();
                   int frets   = sd->frets();
                   int strings;
                   for (strings = 0; strings < sd->strings(); strings++) {

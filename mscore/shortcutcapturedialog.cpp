@@ -211,9 +211,6 @@ bool ShortcutCaptureDialog::isShiftAllowed(int k)
             case Qt::Key_PageDown:
             case Qt::Key_Space:
             case Qt::Key_Escape:
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-            case Qt::Key_F1 ... Qt::Key_F35: // needs gcc or a derived compiler
-#else
             case Qt::Key_F1:
             case Qt::Key_F2:
             case Qt::Key_F3:
@@ -249,7 +246,6 @@ bool ShortcutCaptureDialog::isShiftAllowed(int k)
             case Qt::Key_F33:
             case Qt::Key_F34:
             case Qt::Key_F35:
-#endif
                   return true;
             default:
                   return false;

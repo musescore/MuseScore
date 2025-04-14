@@ -22,24 +22,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+#include <iostream>
+#include <math.h>
+#include <stdlib.h>
 #if (defined (_MSCVER) || defined (_MSC_VER))
    // Include stdint.h and #define _STDINT_H to prevent <systemdeps.h> from redefining types
    // #undef UNICODE to force LoadLibrary to use the char-based implementation instead of the wchar_t one.
    #include <stdint.h>
    #define _STDINT_H 1  
 #endif
+
 #include <jack/jack.h>
-#include <jack/session.h>
-#include <jack/thread.h>
 #include <jack/midiport.h>
-#include <math.h>
+#include <jack/thread.h>
+#include <jack/session.h>
 #ifndef WIN32
 #include <dlfcn.h>
 //for backward compatibility of Jack headers. Might not be necessary.
 typedef pthread_t jack_native_thread_t;
 #endif
-#include <stdlib.h>
-#include <iostream>
 
 using std::cerr;
 
@@ -62,7 +63,6 @@ static void *libjack_handle = 0;
 //   static object construction is implemented. 
 //   See https://stackoverflow.com/questions/1113409/attribute-constructor-equivalent-in-vc for a similar
 //   approach.
-//#if (!defined (_MSCVER) && !defined (_MSC_VER))
 static void __attribute__((constructor)) tryload_libjack()
 #else
 static int tryload_libjack();

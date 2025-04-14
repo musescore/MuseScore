@@ -221,20 +221,20 @@ bool exportScorePartsPdf = false;
 bool unrollRepeats = false;
 bool needUpdateSource = false;
 static bool exportTransposedScore = false;
-static QString transposeExportOptions;
-static QString highlightConfigPath;
+Q_GLOBAL_STATIC(QString, transposeExportOptions);
+Q_GLOBAL_STATIC(QString, highlightConfigPath);
 
 QString mscoreGlobalShare;
 
-static QString outFileName;
-static QString jsonFileName;
-static QString audioDriver;
-static QString pluginName;
-static QString styleFile;
-static QString extensionName;
+Q_GLOBAL_STATIC(QString, outFileName);
+Q_GLOBAL_STATIC( QString, jsonFileName);
+Q_GLOBAL_STATIC( QString, audioDriver);
+Q_GLOBAL_STATIC(QString, pluginName);
+Q_GLOBAL_STATIC(QString, styleFile);
+Q_GLOBAL_STATIC(QString, extensionName);
 static bool scoresOnCommandline { false };
 
-static QList<QTranslator*> translatorList;
+Q_GLOBAL_STATIC(QList<QTranslator*>, translatorList);
 
 bool useFactorySettings = false;
 bool deletePreferences = false;
@@ -477,7 +477,7 @@ void updateExternalValuesFromPreferences() {
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSCOREFONTS));
-            for (QString path : preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
+            for (QString& path : preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
                   dir.mkpath(path);
                   }
             }
@@ -811,7 +811,7 @@ bool MuseScore::importExtension(QString path)
 
       auto loadSoundFontAsync = [&]() {
             // After install: add sfz to zerberus
-            QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version).arg(Extension::sfzsDir));
+            QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version, QString(Extension::sfzsDir)));
             if (sfzDir.exists()) {
                   // get all sfz files
                   QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
@@ -832,7 +832,7 @@ bool MuseScore::importExtension(QString path)
                   }
 
             // After install: add soundfont to fluid
-            QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version).arg(Extension::soundfontsDir));
+            QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version, QString(Extension::soundfontsDir)));
             if (sfDir.exists()) {
                   // get all soundfont files
                   QStringList filters("*.sf2");
@@ -868,7 +868,7 @@ bool MuseScore::importExtension(QString path)
             }
 
       // after install: refresh workspaces if needed
-      QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version).arg(Extension::workspacesDir));
+      QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version, QString(Extension::workspacesDir)));
       if (workspacesDir.exists() && !MScore::noGui) {
             auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
             if (!wsList.isEmpty()) {
@@ -888,7 +888,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
       {
       QString version = Extension::getLatestVersion(extensionId);
       // Before install: remove sfz from zerberus
-      QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version).arg(Extension::sfzsDir));
+      QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version, QString(Extension::sfzsDir)));
       if (sfzDir.exists()) {
             // get all sfz files
             QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
@@ -903,7 +903,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
             s->gui()->synthesizerChanged();
             }
       // Before install: remove soundfont from fluid
-      QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version).arg(Extension::soundfontsDir));
+      QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version, QString(Extension::soundfontsDir)));
       if (sfDir.exists()) {
             // get all soundfont files
             QStringList filters("*.sf2");
@@ -921,7 +921,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
             s->gui()->synthesizerChanged();
             }
       bool refreshWorkspaces = false;
-      QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version).arg(Extension::workspacesDir));
+      QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId, version, QString(Extension::workspacesDir)));
       if (workspacesDir.exists()) {
             auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
             if (!wsList.isEmpty())
@@ -1984,7 +1984,7 @@ MuseScore::MuseScore()
       if (!MScore::noGui) {
             retranslate();
             //accessibility for menus
-            for (QMenu* menu : mb->findChildren<QMenu*>()) {
+            for (QMenu*& menu : mb->findChildren<QMenu*>()) {
                   menu->setAccessibleName(menu->objectName());
                   menu->setAccessibleDescription(Shortcut::getMenuShortcutString(menu));
                   }
@@ -2096,7 +2096,7 @@ void MuseScore::onFocusWindowChanged(QWindow* w)
             tmpContainer->show();
             tmpContainer->setFocus();
 
-            QTimer::singleShot(0, [this, tmpContainer]() {
+            QTimer::singleShot(0, this, [this, tmpContainer]() {
                   focusScoreView();
                   tmpContainer->deleteLater();
                   });
@@ -2328,7 +2328,8 @@ void MuseScore::helpBrowser1() const
       QString help = QString("https://musescore.org/redirect/help?tag=handbook&locale=%1").arg(getLocaleISOCode());
       //try to find an exact match
       bool found = false;
-      for (LanguageItem item : _languages) {
+      const QList<LanguageItem> langItems = _languages;
+      for (const LanguageItem& item : langItems) {
             if (item.key == lang) {
                   QString handbook = item.handbook;
                   if (!handbook.isNull()) {
@@ -2341,7 +2342,7 @@ void MuseScore::helpBrowser1() const
       //try a to find a match on first two letters
       if (!found && lang.size() > 2) {
             lang = lang.left(2);
-            for (LanguageItem item : _languages) {
+            for (const LanguageItem& item : langItems) {
                   if (item.key == lang){
                       QString handbook = item.handbook;
                       if (!handbook.isNull())
@@ -2602,7 +2603,7 @@ void MuseScore::openRecentMenu()
       {
       openRecent->clear();
       bool hasAnyRecentFiles = false;
-      for (const QFileInfo& fi : recentScores()) {
+      for (QFileInfo& fi : recentScores()) {
             QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
 
             QString filePath = fi.canonicalFilePath();
@@ -2981,7 +2982,7 @@ void MuseScore::dropEvent(QDropEvent* event)
       {
       const QMimeData* dta = event->mimeData();
       if (dta->hasUrls()) {
-            for (const QUrl& u : event->mimeData()->urls()) {
+            for (QUrl& u : event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
                         QString file = u.toLocalFile();
                         openScore(file);
@@ -3478,7 +3479,7 @@ void loadTranslation(QString filename, QString _localeName)
       bool success = translator->load(lp);
       if (success) {
             qApp->installTranslator(translator);
-            translatorList.append(translator);
+            translatorList->append(translator);
             }
       else {
             if (MScore::debugMode)
@@ -3493,11 +3494,11 @@ void loadTranslation(QString filename, QString _localeName)
 
 void setMscoreLocale(QString _localeName)
       {
-      for (QTranslator* t : qAsConst(translatorList)) {
+      for (QTranslator*& t : *translatorList) {
             qApp->removeTranslator(t);
             delete t;
             }
-      translatorList.clear();
+      translatorList->clear();
 
       if (MScore::debugMode)
             qDebug("configured localeName <%s>", qPrintable(_localeName));
@@ -3533,7 +3534,7 @@ void setMscoreLocale(QString _localeName)
             qDebug("load translator <qt_%s> failed", qPrintable(_localeName));
       else {
             qApp->installTranslator(qtTranslator);
-            translatorList.append(qtTranslator);
+            translatorList->append(qtTranslator);
             }
       QLocale locale(_localeName);
       QLocale::setDefault(locale);
@@ -3635,10 +3636,10 @@ static bool doConvert(Score* cs, const QJsonArray& outFiles, QString plugin)
       if (cs->layoutMode() != layoutMode)
             cs->doLayout();
 
-      if (!styleFile.isEmpty()) {
-            QFile f(styleFile);
+      if (!styleFile->isEmpty()) {
+            QFile f(*styleFile);
             if (f.open(QIODevice::ReadOnly)) {
-                  fprintf(stderr, "\tusing style <%s>\n", qPrintable(styleFile));
+                  fprintf(stderr, "\tusing style <%s>\n", qPrintable(*styleFile));
                   cs->style().load(&f);
                   }
             }
@@ -3809,7 +3810,7 @@ static bool convert(const QString& inFile, const QJsonArray& outFiles, const QSt
 static bool convert(const QString& inFile, const QString& outFile)
       {
       if (pluginMode)
-            return convert(inFile, QJsonArray{ outFile }, pluginName);
+            return convert(inFile, QJsonArray { outFile }, *pluginName);
       else
             return convert(inFile, QJsonArray{ outFile });
       }
@@ -3846,7 +3847,7 @@ static bool doProcessJob(QString jsonFile)
                   return false;
                   }
             QJsonObject obj = i.toObject();
-            for (const auto& key : obj.keys()) {
+            for (auto& key : obj.keys()) {
                   if (key == "in")
                         inFile = obj.value(key).toString();
                   else if (key == "out") {
@@ -3877,7 +3878,7 @@ static bool processNonGui(const QStringList& argv)
       if (cliSaveOnline)
             return mscore->saveOnline(argv);
       if (exportScoreMedia)
-            return mscore->exportAllMediaFiles(argv[0], highlightConfigPath);
+            return mscore->exportAllMediaFiles(argv[0], *highlightConfigPath);
       if (exportScoreMeta)
             return mscore->exportScoreMetadata(argv[0]);
       else if (exportScoreMp3)
@@ -3887,20 +3888,20 @@ static bool processNonGui(const QStringList& argv)
       else if (exportScorePartsPdf)
             return mscore->exportPartsPdfsToJSON(argv[0]);
       else if (unrollRepeats)
-            return mscore->exportUnrolled(outFileName);
+            return mscore->exportUnrolled(*outFileName);
       else if (exportTransposedScore)
-            return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
+            return mscore->exportTransposedScoreToJSON(argv[0], *transposeExportOptions);
       else if (needUpdateSource)
             return mscore->updateSource(argv[0] /* scorePath */, argv[1] /* newSource */);
 
       if (pluginMode && !converterMode) {
             loadScores(argv);
-            QString pn(pluginName);
+            QString pn(*pluginName);
             bool res = false;
             if (mscore->loadPlugin(pn)){
                   Score* cs = mscore->currentScore();
-                  if (!styleFile.isEmpty()) {
-                        QFile f(styleFile);
+                  if (!styleFile->isEmpty()) {
+                        QFile f(*styleFile);
                         if (f.open(QIODevice::ReadOnly))
                               cs->style().load(&f);
                         }
@@ -3921,18 +3922,18 @@ static bool processNonGui(const QStringList& argv)
 
       if (converterMode) {
             if (processJob)
-                  return doProcessJob(jsonFileName);
+                  return doProcessJob(*jsonFileName);
             else
-                  return convert(argv[0], outFileName);
+                  return convert(argv[0], *outFileName);
             }
 
-      if (!extensionName.isEmpty()) {
-            QFileInfo fi(extensionName);
+      if (!extensionName->isEmpty()) {
+            QFileInfo fi(*extensionName);
             QString suffix = fi.suffix().toLower();
             if (suffix == "muxt")
-                  return mscore->importExtension(extensionName);
+                  return mscore->importExtension(*extensionName);
             else {
-                  fprintf(stderr, "cannot install extension: <%s>\n", qPrintable(extensionName));
+                  fprintf(stderr, "cannot install extension: <%s>\n", qPrintable(*extensionName));
                   return false;
                   }
             }
@@ -4519,6 +4520,8 @@ void MuseScore::changeState(ScoreState val)
                   }
                   break;
             case STATE_NOTE_ENTRY_STAFF_TAB:
+                  if (!cs)
+                        break;
                   if (getAction("note-input-repitch")->isChecked())
                         cs->setNoteEntryMethod(NoteEntryMethod::REPITCH);
                   else if (getAction("note-input-rhythm")->isChecked())
@@ -4862,7 +4865,7 @@ void MuseScore::play(Element* e, int pitch) const
 
             Note* masterNote = note;
             if (note->linkList().size() > 1) {
-                  for (ScoreElement* se_ : note->linkList()) {
+                  for (ScoreElement*& se_ : note->linkList()) {
                         if (se_->score() == note->masterScore() && se_->isNote()) {
                               masterNote = toNote(se_);
                               break;
@@ -5164,7 +5167,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
       xml.stag(QStringLiteral("museScore version=\"" MSC_VERSION "\" full-version=\"%1\"").arg(fullVersion()));
       xml.tagE(cleanExit ? "clean" : "dirty");
 
-      for (MasterScore* score : scoreList) {
+      for (MasterScore*& score : scoreList) {
             xml.stag("Score");
             xml.tag("created", score->created());
             xml.tag("dirty", score->dirty());
@@ -6035,7 +6038,7 @@ void MuseScore::cmd(QAction* a)
             qDebug("MuseScore::cmd <%s>", qPrintable(cmdn));
 
       const Shortcut* sc = Shortcut::getShortcut(cmdn.toLatin1().data());
-      if (sc == 0) {
+      if (!sc ) {
             qDebug("MuseScore::cmd(): unknown action <%s>", qPrintable(cmdn));
             return;
             }
@@ -6081,12 +6084,12 @@ void MuseScore::cmd(QAction* a)
             qDebug("no score");
             return;
             }
-      if (sc->isCmd()) {
+      if (cs && sc->isCmd()) {
             if (!cv->editMode())
                   cs->startCmd();
             }
       cmd(a, cmdn);
-      if (lastShortcut->isCmd())
+      if (cs && lastShortcut->isCmd())
             cs->endCmd();
       else if (!lastShortcut->isUndoRedo()) // undoRedo() calls endCmd() itself
             endCmd();
@@ -6181,8 +6184,6 @@ void MuseScore::endCmd(bool undoRedo)
 
             getAction("concert-pitch")->setChecked(cs->styleB(Sid::concertPitch));
 
-            if (e == 0 && cs->noteEntryMode())
-                  e = cs->inputState().cr();
             updateViewModeCombo();
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
@@ -6735,7 +6736,7 @@ void MuseScore::updateLayer()
       if (cs) {
             enable = cs->layer().size() > 1;
             if (enable) {
-                  for (const Layer& l : cs->layer())
+                  for (Layer& l : cs->layer())
                         layerSwitch->addItem(l.name);
                   layerSwitch->setCurrentIndex(cs->currentLayer());
                   }
@@ -7295,16 +7296,8 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                               break;
                         int n = f - playTime;
                         if (n) {
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-                              float bu[n * 2];
-                              memset(bu, 0, sizeof(float) * 2 * n);
-#else
-                              // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-                              //    heap allocation is slow, an optimization might be used.
                               std::vector<float> vBu(n * 2, 0);   // Default initialized, memset() not required.
                               float* bu = vBu.data();
-#endif
-
                               synth->process(n, bu);
                               float* sp = bu;
                               for (int i = 0; i < n; ++i) {
@@ -7324,15 +7317,8 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                               }
                         }
                   if (frames) {
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-                        float bu[frames * 2];
-                        memset(bu, 0, sizeof(float) * 2 * frames);
-#else
-                        // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-                        //    heap allocation is slow, an optimization might be used.
                         std::vector<float> vBu(frames * 2, 0);   // Default initialized, memset() not required.
                         float* bu = vBu.data();
-#endif
                         synth->process(frames, bu);
                         float* sp = bu;
                         for (unsigned i = 0; i < frames; ++i) {
@@ -7678,8 +7664,8 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       noSeq = parser.isSet("s");
       noMidi = parser.isSet("m");
       if (parser.isSet("a")) {
-            audioDriver = parser.value("a");
-            if (audioDriver.isEmpty())
+            *audioDriver = parser.value("a");
+            if (audioDriver->isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
       startWithNewScore = parser.isSet("n");
@@ -7690,34 +7676,34 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
 
       if ((converterMode = parser.isSet("o"))) {
             MScore::noGui = true;
-            outFileName = parser.value("o");
-            if (outFileName.isEmpty())
+            *outFileName = parser.value("o");
+            if (outFileName->isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
       if ((unrollRepeats = parser.isSet("u"))) {
             MScore::noGui = true;
-            outFileName = parser.value("u");
-            if (outFileName.isEmpty())
+            *outFileName = parser.value("u");
+            if (outFileName->isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
       if ((processJob = parser.isSet("j"))) {
             MScore::noGui = true;
             converterMode = true;
-            jsonFileName = parser.value("j");
-            if (jsonFileName.isEmpty()) {
+            *jsonFileName = parser.value("j");
+            if (jsonFileName->isEmpty()) {
                   fprintf(stderr, "json file name missing\n");
                   parser.showHelp(EXIT_FAILURE);
                   }
             }
       if ((pluginMode = parser.isSet("p"))) {
             MScore::noGui = true;
-            pluginName = parser.value("p");
-            if (pluginName.isEmpty())
+            *pluginName = parser.value("p");
+            if (pluginName->isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
       if (parser.isSet("E")) {
             MScore::noGui = true;
-            extensionName = parser.value("E");
+            *extensionName = parser.value("E");
             }
       MScore::saveTemplateMode = parser.isSet("template-mode");
       if (parser.isSet("r")) {
@@ -7765,8 +7751,8 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
                   }
             }
       if (parser.isSet("S")) {
-            styleFile = parser.value("S");
-            if (styleFile.isEmpty())
+            *styleFile = parser.value("S");
+            if (styleFile->isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
       deletePreferences = parser.isSet("F");
@@ -7817,7 +7803,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
             converterMode = true;
 
             if (parser.isSet("highlight-config")) {
-                highlightConfigPath = parser.value("highlight-config");
+                *highlightConfigPath = parser.value("highlight-config");
             }
       }
 
@@ -7847,7 +7833,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
 
       if (parser.isSet("score-transpose")) {
             exportTransposedScore = true;
-            transposeExportOptions = parser.value("score-transpose");
+            *transposeExportOptions = parser.value("score-transpose");
             MScore::noGui = true;
             converterMode = true;
             }
@@ -8128,7 +8114,7 @@ void MuseScore::init(QStringList& argv)
             showSplashMessage(sc, tr("Initializing sequencer and audio driver…"));
             seq            = new Seq();
             MScore::seq    = seq;
-            Driver* driver = driverFactory(seq, audioDriver);
+            Driver* driver = driverFactory(seq, *audioDriver);
             synti          = synthesizerFactory();
             if (driver) {
                   MScore::sampleRate = driver->sampleRate();
@@ -8165,7 +8151,7 @@ void MuseScore::init(QStringList& argv)
 
       if (MScore::debugMode) {
             QStringList sl(QCoreApplication::libraryPaths());
-            for (const QString& s : sl)
+            for (QString& s : sl)
                   qDebug("LibraryPath: <%s>", qPrintable(s));
             }
 
@@ -8264,8 +8250,8 @@ void MuseScore::init(QStringList& argv)
       else {
             showSplashMessage(sc, tr("Initializing main window…"));
             mscore->readSettings();
-            QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
-               mscore, SLOT(handleMessage(const QString&)));
+            QObject::connect(qApp, SIGNAL(messageReceived(QString&)),
+               mscore, SLOT(handleMessage(QString&)));
 
             static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
             // count filenames specified on the command line
@@ -8375,8 +8361,8 @@ bool MuseScore::saveScoreParts(const QString& inFilePath, const QString& outFile
         return false;
     }
 
-    if (!styleFile.isEmpty()) {
-        QFile f(styleFile);
+    if (!styleFile->isEmpty()) {
+        QFile f(*styleFile);
         if (f.open(QIODevice::ReadOnly)) {
             score->style().load(&f);
         }
@@ -8408,7 +8394,8 @@ bool MuseScore::saveScoreParts(const QString& inFilePath, const QString& outFile
         partsTitles << partTitle;
 
         QVariantMap meta;
-        for (const QString& key: partMetaTags.keys()) {
+        const QList<QString> keys;
+        for (const QString& key: keys) {
             meta[key] = partMetaTags[key];
         }
 
@@ -8484,8 +8471,8 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       jsonForPdfs["score"] = outName;
 
       //save score pdf
-      if (!styleFile.isEmpty()) {
-            QFile f(styleFile);
+      if (!styleFile->isEmpty()) {
+            QFile f(*styleFile);
             if (f.open(QIODevice::ReadOnly))
                   score->style().load(&f);
       }

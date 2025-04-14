@@ -10,52 +10,36 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
-#include "musescoreCore.h"
-#include "style.h"
-#include "mscore.h"
-#include "sequencer.h"
-#include "element.h"
-#include "dynamic.h"
 #include "accidental.h"
-#include "figuredbass.h"
-#include "stafftype.h"
-#include "note.h"
-#include "spanner.h"
-#include "volta.h"
-#include "ottava.h"
-#include "trill.h"
-#include "repeat.h"
-#include "jump.h"
-#include "marker.h"
-#include "layoutbreak.h"
-#include "hairpin.h"
-#include "glissando.h"
-#include "page.h"
-#include "slur.h"
-#include "lyrics.h"
-#include "accidental.h"
-#include "notedot.h"
-#include "tie.h"
-#include "staff.h"
 #include "beam.h"
-#include "timesig.h"
-#include "part.h"
-#include "measure.h"
-#include "score.h"
-#include "keysig.h"
-#include "harmony.h"
-#include "stafftext.h"
-#include "mscoreview.h"
 #include "chord.h"
-#include "hook.h"
-#include "stem.h"
-#include "stemslash.h"
+#include "config.h"
+#include "dynamic.h"
+#include "element.h"
+#include "figuredbass.h"
 #include "fraction.h"
-#include "excerpt.h"
+#include "glissando.h"
+#include "hairpin.h"
+#include "jump.h"
+#include "layoutbreak.h"
+#include "lyrics.h"
+#include "marker.h"
+#include "measure.h"
+#include "mscore.h"
+#include "mscoreview.h"
+#include "musescoreCore.h"
+#include "note.h"
+#include "notedot.h"
+#include "ottava.h"
+#include "score.h"
+#include "sequencer.h"
+#include "spanner.h"
 #include "spatium.h"
-#include "barline.h"
-#include "skyline.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "style.h"
+#include "trill.h"
+#include "volta.h"
 
 namespace Ms {
 
@@ -190,12 +174,7 @@ const char* toString(Direction val)
             case Direction::UP:   return "up";
             case Direction::DOWN: return "down";
             }
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      __builtin_unreachable();
-#else
-      // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
-      __assume(0);
-#endif
+      Q_UNREACHABLE();
       }
 
 //---------------------------------------------------------
@@ -209,12 +188,7 @@ QString toUserString(Direction val)
             case Direction::UP:   return qApp->translate("Direction", "Up");
             case Direction::DOWN: return qApp->translate("Direction", "Down");
             }
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-      __builtin_unreachable();
-#else
-      // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
-      __assume(0);
-#endif
+      Q_UNREACHABLE();
       }
 
 //---------------------------------------------------------
@@ -307,13 +281,13 @@ void MScore::init()
             _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[0].setNamedColor("#0065BF");   //blue
-      selectColor[1].setNamedColor("#007F00");   //green
-      selectColor[2].setNamedColor("#C53F00");   //orange
-      selectColor[3].setNamedColor("#C31989");   //purple
+      selectColor[0] = QColor(0x0065BF);   //blue
+      selectColor[1] = QColor(0x007F00);   //green
+      selectColor[2] = QColor(0xC53F00);   //orange
+      selectColor[3] = QColor(0xC31989);   //purple
 
       defaultColor           = Qt::black;
-      dropColor              = QColor("#1778db");
+      dropColor              = QColor(0x1778db);
       defaultPlayDuration    = 300;      // ms
       warnPitchRange         = true;
       pedalEventsMinTicks    = 1;
@@ -323,9 +297,9 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = QColor("#A0A0A4");
-      frameMarginColor    = QColor("#A0A0A4");
-      bgColor.setNamedColor("#dddddd");
+      layoutBreakColor    = QColor(0xA0A0A4);
+      frameMarginColor    = QColor(0xA0A0A4);
+      bgColor             = QColor(0xdddddd);
 
       //
       //  initialize styles

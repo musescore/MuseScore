@@ -10,15 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "config.h"
-#include "synthesizer.h"
 #include "msynthesizer.h"
+#include "synthesizer.h"
 #include "synthesizergui.h"
+
 #include "libmscore/xml.h"
-#include "mscore/preferences.h"
 
 #include "midi/event.h"
 #include "midi/midipatch.h"
+
+#include "mscore/preferences.h"
 
 namespace Ms {
 
