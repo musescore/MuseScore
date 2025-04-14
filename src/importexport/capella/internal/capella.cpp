@@ -1102,8 +1102,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                              tick.ticks(), track, cr1, cr2);
                     } else {
                         Hairpin* hp = Factory::createHairpin(score->dummy()->segment());
-                        if (wdgo->decresc) {
-                            hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+                        if (wdgo->dim) {
+                            hp->setHairpinType(HairpinType::DIM_HAIRPIN);
                         } else {
                             hp->setHairpinType(HairpinType::CRESC_HAIRPIN);
                         }
@@ -2492,7 +2492,7 @@ void WedgeObj::read()
     LineObj::read();
     char b = cap->readByte();
     height = b & 0x7f;
-    decresc = b & 0x80;
+    dim = b & 0x80;
 }
 
 //---------------------------------------------------------
