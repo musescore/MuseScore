@@ -64,6 +64,7 @@
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 #include "dom/note.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 #include "dom/palmmute.h"
@@ -179,6 +180,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::MEASURE_REPEAT: layout(toMeasureRepeat(item), ctx);
         break;
     case ElementType::NOTEHEAD:     layout(toNoteHead(item), ctx);
+        break;
+    case ElementType::NOTELINE:     layout(toNoteLine(item), ctx);
         break;
     case ElementType::OTTAVA:       layout(toOttava(item), ctx);
         break;
@@ -977,7 +980,7 @@ void SingleLayout::layout(GradualTempoChangeSegment* item, const Context& ctx)
 void SingleLayout::layout(GuitarBend*, const Context&)
 {
     NOT_IMPLEMENTED;
-    //! NOTE: Bends can be removed from disallowed elements in NotationInteraction::dragCopyAllowed once this has been implemented
+    //! NOTE: Bends can be removed from disallowed elements in NotationInteraction::isOutgoingDragElementAllowed once this has been implemented
 }
 
 void SingleLayout::layout(GuitarBendSegment*, const Context&)
@@ -1282,6 +1285,12 @@ void SingleLayout::layout(Lyrics* item, const Context& ctx)
 void SingleLayout::layout(NoteHead* item, const Context& ctx)
 {
     layout(static_cast<Symbol*>(item), ctx);
+}
+
+void SingleLayout::layout(NoteLine*, const Context&)
+{
+    NOT_IMPLEMENTED;
+    //! NOTE: NoteLines can be removed from disallowed elements in NotationInteraction::isOutgoingDragElementAllowed once this has been implemented
 }
 
 void SingleLayout::layout(Marker* item, const Context& ctx)
