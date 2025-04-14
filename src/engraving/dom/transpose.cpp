@@ -375,11 +375,11 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                     Key key = !h->staff() ? Key::C : h->staff()->key(tick);
                     rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                                         transposeInterval, key, trKeys, useDoubleSharpsFlats);
-                    baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
+                    baseTpc = transposeTpcDiatonicByKey(h->bassTpc(),
                                                         transposeInterval, key, trKeys, useDoubleSharpsFlats);
                 } else {
                     rootTpc = transposeTpc(h->rootTpc(), hInterval, useDoubleSharpsFlats);
-                    baseTpc = transposeTpc(h->baseTpc(), hInterval, useDoubleSharpsFlats);
+                    baseTpc = transposeTpc(h->bassTpc(), hInterval, useDoubleSharpsFlats);
                 }
                 undoTransposeHarmony(h, rootTpc, baseTpc);
             } else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
@@ -535,11 +535,11 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         Key key = !h->staff() ? Key::C : h->staff()->key(tick);
                         rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                                             transposeInterval, key, trKeys, useDoubleSharpsFlats);
-                        baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
+                        baseTpc = transposeTpcDiatonicByKey(h->bassTpc(),
                                                             transposeInterval, key, trKeys, useDoubleSharpsFlats);
                     } else {
                         rootTpc = transposeTpc(h->rootTpc(), hInterval, useDoubleSharpsFlats);
-                        baseTpc = transposeTpc(h->baseTpc(), hInterval, useDoubleSharpsFlats);
+                        baseTpc = transposeTpc(h->bassTpc(), hInterval, useDoubleSharpsFlats);
                     }
                     undoTransposeHarmony(h, rootTpc, baseTpc);
                 }
@@ -845,7 +845,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                     }
                     Harmony* h  = toHarmony(element);
                     int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
-                    int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
+                    int baseTpc = transposeTpc(h->bassTpc(), diffV, false);
                     for (EngravingObject* scoreElement : h->linkList()) {
                         if (!scoreElement->style().styleB(Sid::concertPitch)) {
                             undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);

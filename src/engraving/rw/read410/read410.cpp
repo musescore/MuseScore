@@ -599,7 +599,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
                         int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
+                        int baseTpc = transposeTpc(harmony->bassTpc(), interval, true);
                         score->undoTransposeHarmony(harmony, rootTpc, baseTpc);
                     }
 
@@ -965,7 +965,7 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
                         int rootTpc = transposeTpc(el->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(el->baseTpc(), interval, true);
+                        int baseTpc = transposeTpc(el->bassTpc(), interval, true);
                         score->undoTransposeHarmony(el, rootTpc, baseTpc);
                     }
                     el->setParent(seg);

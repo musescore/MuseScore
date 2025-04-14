@@ -1760,7 +1760,7 @@ void ChordList::read(XmlReader& e, int mscVersion)
         } else if (tag == "renderFunction") {
             readRenderList(e.readText(), renderListFunction);
         } else if (tag == "renderBase") {
-            readRenderList(e.readText(), renderListBase);
+            readRenderList(e.readText(), renderListBass);
         } else {
             e.unknown();
         }
@@ -1803,8 +1803,8 @@ void ChordList::write(XmlWriter& xml) const
     if (!renderListFunction.empty()) {
         writeRenderList(xml, renderListFunction, "renderFunction");
     }
-    if (!renderListBase.empty()) {
-        writeRenderList(xml, renderListBase, "renderBase");
+    if (!renderListBass.empty()) {
+        writeRenderList(xml, renderListBass, "renderBase");
     }
     for (const auto& p : *this) {
         const ChordDescription& cd = p.second;
@@ -1923,7 +1923,7 @@ void ChordList::unload()
     m_symbols.clear();
     fonts.clear();
     renderListRoot.clear();
-    renderListBase.clear();
+    renderListBass.clear();
     chordTokenList.clear();
     m_autoAdjust = false;
 }

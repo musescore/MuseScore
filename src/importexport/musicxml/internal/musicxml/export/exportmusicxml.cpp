@@ -8835,7 +8835,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             }
             m_xml.tagRaw(s, h->xmlKind());
 
-            int baseTpc = h->baseTpc();
+            int baseTpc = h->bassTpc();
             if (baseTpc != Tpc::TPC_INVALID) {
                 m_xml.startElement("bass");
                 m_xml.tag("bass-step", tpc2stepName(baseTpc));
@@ -8894,7 +8894,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 m_xml.tag("kind", { { "text", h->extensionName() } }, "");
             }
 
-            int baseTpc = h->baseTpc();
+            int baseTpc = h->bassTpc();
             if (baseTpc != Tpc::TPC_INVALID) {
                 m_xml.startElement("bass");
                 m_xml.tag("bass-step", tpc2stepName(baseTpc));

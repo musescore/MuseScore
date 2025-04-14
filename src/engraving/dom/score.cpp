@@ -3063,7 +3063,7 @@ void Score::cmdConcertPitchChanged(bool flag)
                 }
                 Harmony* h  = toHarmony(e);
                 int rootTpc = transposeTpc(h->rootTpc(), interval, true);
-                int baseTpc = transposeTpc(h->baseTpc(), interval, true);
+                int baseTpc = transposeTpc(h->bassTpc(), interval, true);
                 for (EngravingObject* se : h->linkList()) {
                     // don't transpose all links
                     // just ones resulting from mmrests
