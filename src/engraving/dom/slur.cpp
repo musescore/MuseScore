@@ -448,7 +448,7 @@ void Slur::undoSetIncoming(bool incoming)
         return;
     }
 
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, setIncomingCalcDirection(incoming), PropertyFlags::UNSTYLED);
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcIncomingDirection(incoming), PropertyFlags::UNSTYLED);
 }
 
 void Slur::undoSetOutgoing(bool outgoing)
@@ -457,7 +457,7 @@ void Slur::undoSetOutgoing(bool outgoing)
         return;
     }
 
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, setOutgoingCalcDirection(outgoing), PropertyFlags::UNSTYLED);
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcOutgoingDirection(outgoing), PropertyFlags::UNSTYLED);
 }
 
 void Slur::setIncoming(bool incoming)
@@ -466,7 +466,7 @@ void Slur::setIncoming(bool incoming)
         return;
     }
 
-    _partialSpannerDirection = setIncomingCalcDirection(incoming);
+    _partialSpannerDirection = calcIncomingDirection(incoming);
 }
 
 void Slur::setOutgoing(bool outgoing)
@@ -475,10 +475,10 @@ void Slur::setOutgoing(bool outgoing)
         return;
     }
 
-    _partialSpannerDirection = setOutgoingCalcDirection(outgoing);
+    _partialSpannerDirection = calcOutgoingDirection(outgoing);
 }
 
-PartialSpannerDirection Slur::setIncomingCalcDirection(bool incoming)
+PartialSpannerDirection Slur::calcIncomingDirection(bool incoming)
 {
     PartialSpannerDirection dir = PartialSpannerDirection::INCOMING;
     if (incoming) {
@@ -494,7 +494,7 @@ PartialSpannerDirection Slur::setIncomingCalcDirection(bool incoming)
     return dir;
 }
 
-PartialSpannerDirection Slur::setOutgoingCalcDirection(bool outgoing)
+PartialSpannerDirection Slur::calcOutgoingDirection(bool outgoing)
 {
     PartialSpannerDirection dir = PartialSpannerDirection::OUTGOING;
     if (outgoing) {

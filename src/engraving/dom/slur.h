@@ -131,8 +131,8 @@ private:
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
     M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::NONE)
 
-    PartialSpannerDirection setIncomingCalcDirection(bool incoming);
-    PartialSpannerDirection setOutgoingCalcDirection(bool outgoing);
+    PartialSpannerDirection calcIncomingDirection(bool incoming);
+    PartialSpannerDirection calcOutgoingDirection(bool outgoing);
 
     friend class Factory;
     Slur(EngravingItem* parent);
