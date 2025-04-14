@@ -156,9 +156,9 @@
         <shortName>A. Sax</shortName>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
-        <maxPitchP>87</maxPitchP>
+        <maxPitchP>92</maxPitchP>
         <minPitchA>49</minPitchA>
-        <maxPitchA>82</maxPitchA>
+        <maxPitchA>80</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
         <instrumentId>wind.reed.saxophone.alto</instrumentId>
@@ -226,9 +226,9 @@
         <shortName>T. Sax</shortName>
         <trackName>Tenor Saxophone</trackName>
         <minPitchP>44</minPitchP>
-        <maxPitchP>82</maxPitchP>
+        <maxPitchP>87</maxPitchP>
         <minPitchA>44</minPitchA>
-        <maxPitchA>77</maxPitchA>
+        <maxPitchA>75</maxPitchA>
         <transposeDiatonic>-8</transposeDiatonic>
         <transposeChromatic>-14</transposeChromatic>
         <instrumentId>wind.reed.saxophone.tenor</instrumentId>
