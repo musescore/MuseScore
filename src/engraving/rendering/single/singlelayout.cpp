@@ -1287,7 +1287,7 @@ void SingleLayout::layout(NoteHead* item, const Context& ctx)
     layout(static_cast<Symbol*>(item), ctx);
 }
 
-void SingleLayout::layout(NoteLine* item, const Context& ctx)
+void SingleLayout::layout(NoteLine*, const Context&)
 {
     NOT_IMPLEMENTED;
     //! NOTE: NoteLines can be removed from disallowed elements in NotationInteraction::isOutgoingDragElementAllowed once this has been implemented
