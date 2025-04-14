@@ -3177,6 +3177,7 @@ void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ct
 void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::COLOR);
     writeProperty(item, xml, Pid::MAG);
     writeProperty(item, xml, Pid::LINE_WIDTH);
     writeProperty(item, xml, Pid::PLAY);
