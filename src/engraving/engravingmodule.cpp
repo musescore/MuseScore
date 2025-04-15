@@ -41,6 +41,7 @@
 
 #include "engraving/style/defaultstyle.h"
 
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"

@@ -96,7 +96,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "brf" },
                                      //: Meaning like "measure-over-measure", but called "bar-over-bar"
                                      //: even in US English. Not to be confused with "bar-by-bar" format.
-                                     //: See https://musescore.org/en/handbook/4/file-export#Score_formats
+                                     //: See https://handbook.musescore.org/file-management/file-export#braille
                                      muse::qtrc("project/export", "Braille (basic bar-over-bar)"),
                                      muse::qtrc("project/export", "Braille files")),
         ExportType::makeWithSuffixes({ "mei" },
