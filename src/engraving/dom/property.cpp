@@ -151,6 +151,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SPACE,                   false, "space",                 P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "space") },
     { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tempo") },
     { Pid::TEMPO_FOLLOW_TEXT,       true,  "followText",            P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "following text") },
+    { Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK, false, "tempoAlignRightOfRehearsalMark", P_TYPE::BOOL, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "tempo align right of rehearsal mark") },
     { Pid::ACCIDENTAL_BRACKET,      false, "bracket",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bracket") },
     { Pid::ACCIDENTAL_TYPE,         true,  "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "type") },
     { Pid::ACCIDENTAL_STACKING_ORDER_OFFSET, true, "stackingOrderOffset", P_TYPE::INT,          PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "stacking order offset") },
