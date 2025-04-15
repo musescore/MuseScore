@@ -879,11 +879,13 @@ HorizontalSpacing::CrossBeamSpacing HorizontalSpacing::computeCrossBeamSpacing(S
         if (!thisCR->visible() || thisCR->isFullMeasureRest() || (thisCR->isRest() && toRest(thisCR)->isGap())) {
             continue;
         }
-        if (!thisCR->beam()) {
+        Beam* beam = thisCR->beam();
+        if (!beam && thisCR->actualTicks() <= thisSeg->ticks()) {
             canBeAdjusted = false;
+        }
+        if (!beam || (beam->elements().size() == 2 && thisCR->up())) {
             continue;
         }
-        Beam* beam = thisCR->beam();
         for (EngravingItem* ee : nextSeg->elist()) {
             if (!ee || !ee->isChordRest() || !ee->staff()->visible()) {
                 continue;
