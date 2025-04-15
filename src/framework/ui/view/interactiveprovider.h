@@ -140,6 +140,12 @@ private:
         SelectDirectory
     };
 
+    struct FileInfo
+    {
+        io::path_t path;
+        std::string extension;
+    };
+
     void raiseWindowInStack(QObject* newActiveWindow);
 
     void fillExtData(QmlLaunchData* data, const UriQuery& q) const;
@@ -162,8 +168,8 @@ private:
                                    int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
                                    const std::string& dialogTitle = "");
 
-    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                      const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
+    RetVal<FileInfo> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
+                                    const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
 
     void closeObject(const ObjectInfo& obj);
 
