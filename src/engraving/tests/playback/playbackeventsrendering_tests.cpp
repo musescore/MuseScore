@@ -2944,10 +2944,12 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
  * @brief PlaybackEventsRendererTests_TiedNotesAndRepeats
  *  @details Checks whether we correctly calculate tied note durations when they are inside/outside repeats. See:
  *  https://github.com/musescore/MuseScore/issues/22863
+ *  https://github.com/musescore/MuseScore/issues/27661
  */
 TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
 {
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "tied_notes_and_repeats.mscx");
+    ASSERT_TRUE(score);
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
@@ -2959,7 +2961,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
     PlaybackEventsMap result;
 
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
-        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+        const int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const Measure* m : repeatSegment->measureList()) {
             for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
@@ -2974,28 +2976,52 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
     }
 
     // [THEN] Expected pitch, time and duration of each event
-    std::vector<pitch_level_t> expectedPitchList {
+    const std::vector<pitch_level_t> expectedPitchList {
+        // 1st measure (no notes)
+
+        // 2nd measure
         pitchLevel(PitchClass::C, 5),
         pitchLevel(PitchClass::A, 4),
+
+        // 2nd measure (repeated)
         pitchLevel(PitchClass::C, 5),
         pitchLevel(PitchClass::A, 4),
+
+        // 3rd measure
+        pitchLevel(PitchClass::B, 4),
+
+        // 4th measure
+        pitchLevel(PitchClass::B, 4),
+
+        // 4th measure (repeated)
+        pitchLevel(PitchClass::B, 4),
     };
 
-    timestamp_t secondMeasureTime = WHOLE_NOTE_DURATION;
-    timestamp_t secondMesaureRepeatedTime = secondMeasureTime + QUARTER_NOTE_DURATION * 2 + HALF_NOTE_DURATION;
+    constexpr timestamp_t secondMeasureTime = WHOLE_NOTE_DURATION;
+    constexpr timestamp_t secondMesaureRepeatedTime = WHOLE_NOTE_DURATION * 2;
+    constexpr timestamp_t thirdMeasure = WHOLE_NOTE_DURATION * 3;
+    constexpr timestamp_t fourthMeasure = WHOLE_NOTE_DURATION * 4;
+    constexpr timestamp_t fourthMeasureRepeated = WHOLE_NOTE_DURATION * 5;
 
-    std::vector<TimestampAndDuration> expectedTnDList {
+    const std::vector<TimestampAndDuration> expectedTnDList {
         // 1st measure (no notes)
 
         // 2nd measure
         { secondMeasureTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
-        { secondMeasureTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION }, // A4 tied to a whole A4 outside of the repeat
+        { secondMeasureTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION }, // A4 tied to a quarter A4 outside of the repeat
 
         // 2nd measure (repeated)
         { secondMesaureRepeatedTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
-        { secondMesaureRepeatedTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION + WHOLE_NOTE_DURATION }, // A4 tied to a whole A4 outside of the repeat
+        { secondMesaureRepeatedTime + HALF_NOTE_DURATION, HALF_NOTE_DURATION + QUARTER_NOTE_DURATION }, // A4 tied to a quarter A4 outside of the repeat
 
-        // 3rd measure (there is only the whole tied A4)
+        // 3rd measure
+        { thirdMeasure + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION* 2 }, // B4 tied to a quarter B4 in the next measure
+
+        // 4th measure
+        { fourthMeasure + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION* 2 }, // B4 tied to a quarter B4 in the next repeat segment
+
+        // 4th measure (repeated)
+        { fourthMeasureRepeated + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION + HALF_NOTE_DURATION }, // B4 tied to a half B4 in the next measure
     };
 
     ASSERT_EQ(expectedPitchList.size(), expectedTnDList.size());
