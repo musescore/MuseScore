@@ -448,6 +448,38 @@ void Slur::undoSetIncoming(bool incoming)
         return;
     }
 
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcIncomingDirection(incoming), PropertyFlags::UNSTYLED);
+}
+
+void Slur::undoSetOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcOutgoingDirection(outgoing), PropertyFlags::UNSTYLED);
+}
+
+void Slur::setIncoming(bool incoming)
+{
+    if (incoming == isIncoming()) {
+        return;
+    }
+
+    _partialSpannerDirection = calcIncomingDirection(incoming);
+}
+
+void Slur::setOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    _partialSpannerDirection = calcOutgoingDirection(outgoing);
+}
+
+PartialSpannerDirection Slur::calcIncomingDirection(bool incoming)
+{
     PartialSpannerDirection dir = PartialSpannerDirection::INCOMING;
     if (incoming) {
         SlurSegment* firstSeg = nsegments() > 0 ? frontSegment() : nullptr;
@@ -459,15 +491,11 @@ void Slur::undoSetIncoming(bool incoming)
     } else {
         dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::OUTGOING : PartialSpannerDirection::NONE;
     }
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+    return dir;
 }
 
-void Slur::undoSetOutgoing(bool outgoing)
+PartialSpannerDirection Slur::calcOutgoingDirection(bool outgoing)
 {
-    if (outgoing == isOutgoing()) {
-        return;
-    }
-
     PartialSpannerDirection dir = PartialSpannerDirection::OUTGOING;
     if (outgoing) {
         SlurSegment* lastSeg = nsegments() > 0 ? backSegment() : nullptr;
@@ -479,7 +507,7 @@ void Slur::undoSetOutgoing(bool outgoing)
     } else {
         dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::INCOMING : PartialSpannerDirection::NONE;
     }
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+    return dir;
 }
 
 bool Slur::isIncoming() const
