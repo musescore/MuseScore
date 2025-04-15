@@ -268,11 +268,15 @@ QVariantMap BackendApi::readBeatsColors(const muse::io::path_t& filePath)
 
     QVariantMap result;
 
-    for (const auto colorObj : colors) {
+    // for (const QJsonValueRef colorObj: colors) {
+    // modified by alex - comiled error: error: no viable conversion from 'const QJsonValueConstRef' to 'const QJsonValueRef'
+    for (const QJsonValueConstRef colorObj: colors) {
         const QJsonArray beatsIndexes = colorObj[u"beats"].toArray();
         const QColor beatsColor = QColor(colorObj[u"color"].toString());
 
-        for (const auto index : beatsIndexes) {
+        // for (const QJsonValueRef index: beatsIndexes) {
+        // modified by alex - comiled error: error: no viable conversion from 'const QJsonValueConstRef' to 'const QJsonValueRef'
+        for (const QJsonValueConstRef index: beatsIndexes) {
             result[index.toString()] = beatsColor;
         }
     }
