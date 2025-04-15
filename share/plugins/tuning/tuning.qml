@@ -473,29 +473,26 @@ MuseScore {
         }
     ]    
 
-    property var westernTemperaments: JSON.parse(JSON.stringify(defaultWesternTemperaments)) 
-    property var middleEasternTemperaments: JSON.parse(JSON.stringify(defaultMiddleEasternTemperaments))
-
-    //property var currentTemperamentIndex: 0
+    property var defaultTemperaments: [defaultWesternTemperaments, defaultMiddleEasternTemperaments]
+    
+    property var temperaments: JSON.parse(JSON.stringify(defaultTemperaments))
+        
+    property var userTemperaments: [[],[]]
 
     property var currentDefaultTemperament: defaultWesternTemperaments[currentTemperamentIndex]
-    property var currentTemperament: westernTemperaments[currentTemperamentIndex]
-      
-    property var currentRoot: 0;
-    property var currentPureTone: 0;
-    property var currentTweak: 0.0;
+    property var currentTemperament: temperaments[0][0]
+
+    property var currentTemperamentIndex: 0
+    property var currentRoot: 0
+    property var currentPureTone: 0
+    property var currentTweak: 0.0
+
+    property var currentListView: tabBar.currentIndex == 0 ? westernListView : middleEasternListView
+    property var currentTab: tabBar.currentIndex
 
     onRun: {
-        var savedArray= fileIO.read()
-        savedArray = JSON.parse(savedArray)
-        westernTemperaments = savedArray[0]
-        middleEasternTemperaments = savedArray[1]
-        // var userTemperaments = JSON.parse(JSON.stringify([
-        //     westernTemperaments.slice(defaultWesternTemperaments.length), 
-        //     middleEasternTemperaments.slice(defaultMiddleEasternTemperaments.length)
-        //     ]))
-        //defaultWesternTemperaments = defaultWesternTemperaments.concat(userTemperaments[0])
-        //defaultMiddleEasternTemperaments = defaultMiddleEasternTemperaments.concat(userTemperaments[1])
+        temperaments = JSON.parse(fileIO.read())               
+        userTemperaments = JSON.parse(fileIOUserTemp.read())                     
     }    
 
     function applyTemperament() {
@@ -606,12 +603,7 @@ MuseScore {
                 }
             }
         }
-    }
-
-    function error(errorMessage) {
-        errorDialog.text = qsTr(errorMessage)
-        errorDialog.open()
-    }
+    }    
 
     function getTuning(temp=currentTemperament) {
         var dRoot = currentRoot - temp.root
@@ -684,30 +676,23 @@ MuseScore {
     }
     
     function checkIfEdited() {  
-        if (currentDefaultTemperament.root !== currentTemperament.root ||
-            currentDefaultTemperament.pure !== currentTemperament.pure ||
+        if (currentDefaultTemperament.root  !== currentTemperament.root ||
+            currentDefaultTemperament.pure  !== currentTemperament.pure ||
             currentDefaultTemperament.tweak !== currentTemperament.tweak) {
             resetButton.enabled = true 
+            saveButton.enabled = true
             return
         } 
-        else {
-            //var newOffsets = getTuning(currentDefaultTemperament)  
+        else {            
             for (var i=0; i<12; i++) {
                 if (currentDefaultTemperament.offsets[i] !== currentTemperament.offsets[i]) {
                     resetButton.enabled = true
+                    saveButton.enabled = true
                     return
-                }
-                ////Rotate the offsets array so the current root is at the start
-                //// var offset = temp.offsets[(i - currentRoot + 12) % 12]            
-                //// var pureNoteAdjustment = temp.offsets[(currentPureTone - currentRoot + 12) % 12]
-                //// var newOffset = offset - pureNoteAdjustment + tweakValue.currentValue      
-
-                // if (newOffsets[i] !== parseFloat(finalOffsets.itemAt(i).children[1].currentText)) { //currentTemperament.offsets[i]) {
-                //     resetButton.enabled = true
-                //     return
-                // }
+                }                
             }
             resetButton.enabled = false
+            saveButton.enabled = false
         }
     }
 
@@ -765,8 +750,9 @@ MuseScore {
                             onClicked: {                   
                                 addTemperament()
                                 addDialog.close()
-                                saveCustomTemperaments()
-                                customTempName.currentText = ""                                       
+                                saveCustomTemperaments()                                
+                                saveUserTemperaments()
+                                customTempName.currentText = ""                               
                             }   
                         } 
                     }  
@@ -776,27 +762,12 @@ MuseScore {
             FlatButton {
                 id: removeButton
                 icon: IconCode.DELETE_TANK              
-                enabled: {
-                    switch (tabBar.currentIndex) {
-                    case 0:
-                        if (westernTemperaments.indexOf(currentTemperament) <  defaultWesternTemperaments.length)  {
-                            return false
-                        }
-                        else {
-                            return true
-                        }
-                    case 1:
-                        if (middleEasternTemperaments.indexOf(currentTemperament) < defaultMiddleEasternTemperaments.length)  {
-                            return false
-                        }
-                        else {
-                            return true
-                        }
-                    }
-                }                               
+                enabled: temperaments[currentTab].indexOf(currentTemperament) <  defaultTemperaments[currentTab].length ? false : true
+                                                 
                 onClicked: {
                     removeTemperament()
                     saveCustomTemperaments()
+                    saveUserTemperaments()
                 }
             }                    
         }
@@ -810,7 +781,7 @@ MuseScore {
                 width: parent.width
                 height: parent.height-10                      
                 visible: westernTab.checked  
-                model: westernTemperaments
+                model: temperaments[0]
 
                 delegate: PageTabButton {
                     width: 280
@@ -821,15 +792,25 @@ MuseScore {
                     title: modelData.name
                     checked: index==0
                     onClicked: {
-                        //currentTemperamentIndex = index
-                        currentDefaultTemperament = defaultWesternTemperaments[index]
-                        currentTemperament = westernTemperaments[index]
+                        currentTemperamentIndex = index
+                        currentTemperament = temperaments[0][index]
+                        if (index < defaultWesternTemperaments.length) {
+                            currentDefaultTemperament = defaultWesternTemperaments[index]
+                        }
+                        else {   
+                            currentDefaultTemperament = userTemperaments[currentTab][index - defaultWesternTemperaments.length]
+                        }
                         temperamentClicked(currentTemperament)
                     }                    
                 }                
-                Component.onCompleted: {
-                    //westernListView.itemAtIndex(0).checked = true 
-                    westernListView.itemAtIndex(0).clicked()
+                // not sure why Component.onCompleted did not work, even with Qt.callLater
+                Timer {
+                    interval: 10 // Time in milliseconds
+                    running: true
+                    repeat: false
+                    onTriggered: {
+                        westernListView.itemAtIndex(0).clicked()
+                    }
                 }
             }
 
@@ -838,7 +819,7 @@ MuseScore {
                 width: parent.width
                 height: parent.height-10                   
                 visible: middleEasternTab.checked 
-                model: middleEasternTemperaments
+                model: temperaments[1]
 
                 delegate: PageTabButton {
                     width: 280
@@ -848,9 +829,14 @@ MuseScore {
                     leftPadding: 5
                     title: modelData.name
                     onClicked: {
-                        //currentTemperamentIndex = index
-                        currentDefaultTemperament = defaultMiddleEasternTemperaments[index]
-                        currentTemperament = middleEasternTemperaments[index]
+                        currentTemperamentIndex = index
+                        currentTemperament = temperaments[1][index]
+                        if (index < defaultMiddleEasternTemperaments.length) {
+                            currentDefaultTemperament = defaultMiddleEasternTemperaments[index]
+                        }
+                        else {   
+                            currentDefaultTemperament = userTemperaments[currentTab][index - defaultMiddleEasternTemperaments.length]
+                        }   
                         temperamentClicked(currentTemperament)
                     }
                 }
@@ -978,7 +964,7 @@ MuseScore {
         }        
     }
 
-    FlatButton{
+    FlatButton {
         id: resetButton
         icon: IconCode.UNDO
         anchors.top: rightColumn.top
@@ -994,6 +980,23 @@ MuseScore {
             }   
             temperamentClicked(currentTemperament)
             updateCurrentTemperament()
+        }
+    }
+
+    FlatButton {
+        id: saveButton
+        icon: IconCode.SAVE
+        anchors.top: buttonBox.top
+        anchors.right: buttonBox.left
+        anchors.rightMargin: 12 
+        visible: temperaments[currentTab].indexOf(currentTemperament) <  defaultTemperaments[currentTab].length ? false : true
+                         
+        onClicked: {
+            var userTempIndex = currentTemperamentIndex - defaultTemperaments[currentTab].length            
+            userTemperaments[currentTab][userTempIndex] = JSON.parse(JSON.stringify(currentTemperament))
+              
+            saveUserTemperaments()
+            currentListView.itemAtIndex(currentTemperamentIndex).clicked() 
         }
     }
 
@@ -1015,21 +1018,17 @@ MuseScore {
                 }
             }
         }
-    }
-
-    MessageDialog {
-        id: errorDialog
-        title: "Error"
-        text: ""
-        onAccepted: {
-            errorDialog.close()
-        }
     }    
 
     FileIO {
         id: fileIO
         source: fileIO.homePath()+"/Documents/MuseScore4/Plugins/tuningPluginData.json" //Qt.resolvedUrl("tuningPluginData.json").toString().replace("file:///", ""); 
     }   
+    
+    FileIO {
+        id: fileIOUserTemp
+        source: fileIO.homePath()+"/Documents/MuseScore4/Plugins/tuningPluginData2.json"     
+    }
 
     function addTemperament() {
         var entry= {
@@ -1040,52 +1039,38 @@ MuseScore {
                         "tweak": currentTweak                       
                     } 
         for (var i=0; i<12; i++) {
-            entry.offsets.push( finalOffsets.itemAt(i).children[1].currentText )
+            entry.offsets.push( parseFloat(finalOffsets.itemAt(i).children[1].currentText) )
         }
-
-        switch (tabBar.currentIndex) {
-            case 0:
-                westernTemperaments = westernTemperaments.concat(entry) //adds new entry and updates buttons 
-                westernListView.positionViewAtEnd()
-                westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
-                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true
-                break
-            case 1:
-                middleEasternTemperaments = middleEasternTemperaments.concat(entry) //adds new entry and updates buttons 
-                middleEasternListView.positionViewAtEnd()
-                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
-                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true
-                break
-        }                        
+        
+        temperaments[currentTab].push(entry)  
+        currentListView.model = temperaments[currentTab]
+        userTemperaments[currentTab].push(JSON.parse(JSON.stringify(entry)))
+        currentListView.positionViewAtEnd()
+        currentListView.itemAtIndex(temperaments[currentTab].length-1).checked = true
+        currentListView.itemAtIndex(temperaments[currentTab].length-1).clicked()
     }
 
-    function removeTemperament() {
-        switch (tabBar.currentIndex) {
-            case 0:                
-                westernTemperaments = westernTemperaments.filter(x => x !== currentTemperament)
-                westernListView.positionViewAtEnd()
-                westernListView.itemAtIndex(westernTemperaments.length-1).clicked()
-                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true                 
-                break
-
-            case 1:                
-                middleEasternTemperaments = middleEasternTemperaments.filter(x => x !== currentTemperament)
-                middleEasternListView.positionViewAtEnd()
-                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).clicked()
-                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true                
-                break
-        }
+    function removeTemperament() {                   
+        var userTempIndex = currentTemperamentIndex - defaultTemperaments[currentTab].length  
+        userTemperaments[currentTab] = userTemperaments[currentTab].filter((x,i) => i !== userTempIndex)  
+                                    
+        temperaments[currentTab] = temperaments[currentTab].filter((x,i) => i !== currentTemperamentIndex)                
+        currentListView.model = temperaments[currentTab]
+        currentListView.positionViewAtEnd()
+        currentListView.itemAtIndex(temperaments[currentTab].length-1).checked = true
+        currentListView.itemAtIndex(temperaments[currentTab].length-1).clicked()                
     }
 
     function saveCustomTemperaments() {
         fileIO.write(
-            JSON.stringify(
-                [
-                    westernTemperaments, 
-                    middleEasternTemperaments
-                ]
-            )
+            JSON.stringify(temperaments)
         ) 
     }    
+
+    function saveUserTemperaments() {
+        fileIOUserTemp.write(
+            JSON.stringify(userTemperaments)
+        )
+    }
 }
 
