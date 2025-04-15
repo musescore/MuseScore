@@ -5955,7 +5955,8 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     RectF rehearsMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
 
-    if (rehearsalMark && rehearsMarkBbox.bottom() > thisBbox.top()) {
+    if (rehearsalMark && rehearsMarkBbox.bottom() > thisBbox.top()
+        && item->getProperty(Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK).toBool()) {
         double rightEdge = rehearsMarkBbox.right();
         const double padding = 0.5 * item->fontMetrics().xHeight();
         double curX = ldata->pos().x();
