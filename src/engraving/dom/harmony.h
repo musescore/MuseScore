@@ -166,7 +166,6 @@ public:
     double baseLine() const override;
 
     const ChordDescription* fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&);
-    const ChordDescription* fromXml(const String& s, const std::list<HDegree>&);//UNUSED
     const ChordDescription* fromXml(const String& s);
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;

@@ -862,35 +862,6 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 //---------------------------------------------------------
 //   fromXml
 //    lookup harmony in harmony database
-//    using musicXml "kind" string and degree list
-//---------------------------------------------------------
-
-const ChordDescription* Harmony::fromXml(const String& kind, const std::list<HDegree>& dl)
-{
-    StringList degrees;
-
-    for (const HDegree& d : dl) {
-        degrees.push_back(d.text());
-    }
-
-    String lowerCaseKind = kind.toLower();
-    const ChordList* cl = score()->chordList();
-    for (const auto& p : *cl) {
-        const ChordDescription& cd = p.second;
-        String k     = cd.xmlKind;
-        String lowerCaseK = k.toLower();     // required for xmlKind Tristan
-        StringList d = cd.xmlDegrees;
-        if ((lowerCaseKind == lowerCaseK) && (d == degrees)) {
-//                  LOGD("harmony found in db: %s %s -> %d", muPrintable(kind), muPrintable(degrees), cd->id);
-            return &cd;
-        }
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
-//   fromXml
-//    lookup harmony in harmony database
 //    using musicXml "kind" string only
 //---------------------------------------------------------
 
