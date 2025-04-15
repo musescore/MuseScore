@@ -2293,7 +2293,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1373"/>
         <source>Vertical frame top margin:</source>
-        <translation>Margine de sus pentru cadru veritical:</translation>
+        <translation>Marginea de sus pentru cadru veritical:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1409"/>
@@ -2308,7 +2308,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1396"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>Margine de jos pentru cadru veritical:</translation>
+        <translation>Marginea de jos pentru cadru veritical:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1270"/>
@@ -2339,7 +2339,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1665"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation>Resetează valoarea pentru „Factor pentru distanța deasupra/dedesubt acoladă”</translation>
+        <translation>Resetează valoarea pentru „Factor pentru distanță deasupra/dedesubt acoladă”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1710"/>
@@ -2354,7 +2354,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1733"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>Resetează valoarea pentru „Factor pentru distanța deasupra/dedesubt paranteză”</translation>
+        <translation>Resetează valoarea pentru „Factor pentru distanță deasupra/dedesubt paranteză”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1746"/>
@@ -2375,29 +2375,29 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1156"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1776"/>
         <source>Max. system distance:</source>
-        <translation>Distanţa maximă între sisteme:</translation>
+        <translation>Distanța maximă dintre sisteme:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1172"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1842"/>
         <source>Min. system distance:</source>
-        <translation>Distanţa minimă între sisteme:</translation>
+        <translation>Distanța minimă dintre sisteme:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1855"/>
         <source>Factor for distance above/below brace:</source>
-        <translation>Factor pentru distanța deasupra/dedesubt paranteză:</translation>
+        <translation>Factor pentru distanță deasupra/dedesubt paranteză:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1868"/>
         <source>Factor for distance above/below bracket:</source>
-        <translation>Factor pentru distanța deasupra/dedesubt acoladă:</translation>
+        <translation>Factor pentru distanță deasupra/dedesubt acoladă:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1086"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1929"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
-        <translation>Resetează valoarea pentru „Distanța maximă între sisteme”</translation>
+        <translation>Resetează valoarea pentru „Distanța maximă dintre sisteme”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1939"/>
@@ -2407,12 +2407,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1980"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
-        <translation>Resetează valoarea pentru „Factor pentru distanța între sisteme”</translation>
+        <translation>Resetează valoarea pentru „Factor pentru distanța dintre sisteme”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1993"/>
         <source>Factor for distance between systems:</source>
-        <translation>Factor pentru distanța între sisteme:</translation>
+        <translation>Factor pentru distanța dintre sisteme:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1001"/>
@@ -2432,7 +2432,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1060"/>
         <source>Staff distance:</source>
-        <translation>Distanța între portative:</translation>
+        <translation>Distanța dintre portativele simple:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1112"/>
@@ -2442,7 +2442,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1216"/>
         <source>Grand staff distance:</source>
-        <translation>Distanţa de la acoladă:</translation>
+        <translation>Distanţă portativ dublu:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2128"/>
@@ -2498,7 +2498,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2384"/>
         <source>Use odd/even page header</source>
-        <translation>Folosește antet impar/par pentru pagini</translation>
+        <translation>Folosește antet par/impar pentru pagini</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2387"/>
@@ -2518,7 +2518,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2533"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2824"/>
         <source>Even</source>
-        <translation>Impar</translation>
+        <translation>Pară</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2571"/>
@@ -2530,7 +2530,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2625"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2720"/>
         <source>Odd</source>
-        <translation>Par</translation>
+        <translation>Impară</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2638"/>
@@ -2548,7 +2548,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2687"/>
         <source>Use odd/even page footer</source>
-        <translation>Folosește antet impar/par pentru pagini </translation>
+        <translation>Folosește antet par/impar pentru pagini </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2989"/>
@@ -2946,12 +2946,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
         <source>Use double barlines before time signatures</source>
-        <translation>Folosește bară de măsură dublă înainte de metrii de măsură</translation>
+        <translation>Folosește bară de măsură dublă înainte de metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5362"/>
         <source>Only before courtesy time signatures</source>
-        <translation>Doar înaintea metrilor de măsură de curtoazie</translation>
+        <translation>Doar înaintea metricii de curtoazie</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5616"/>
@@ -3124,12 +3124,12 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4122"/>
         <source>Minimum note distance:</source>
-        <translation>Distanţă minimă între note:</translation>
+        <translation>Distanţa minimă dintre note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>Glissandi și linii ancorate pe note</translation>
+        <translation>Glissando și linii ancorate pe note</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
@@ -3274,7 +3274,7 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Chei, armuri și metri măsură</translation>
+        <translation>Chei, armuri și metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
@@ -4502,7 +4502,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10172"/>
         <source>Glissandos</source>
-        <translation>Glissandi</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10180"/>
@@ -4945,7 +4945,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Frame:</source>
-        <translation>Cadru:</translation>
+        <translation>Încadrare:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12082"/>
@@ -4997,7 +4997,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14479"/>
         <source>Circle</source>
-        <translation>Elipsă</translation>
+        <translation>Cerc</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14490"/>
@@ -5534,7 +5534,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="199"/>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="202"/>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation>Distanța între 2 linii într-un portativ standard cu 5 linii</translation>
+        <translation>Distanța dintre 2 linii dintr-un portativ standard cu 5 linii</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="205"/>
@@ -5995,7 +5995,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="35"/>
         <source>To Key</source>
-        <translation>În gama</translation>
+        <translation>în gama</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="57"/>
@@ -6080,7 +6080,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="392"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="395"/>
         <source>Up</source>
-        <translation>În sus</translation>
+        <translation>suitor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="145"/>
@@ -6090,13 +6090,13 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="442"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="445"/>
         <source>Down</source>
-        <translation>În jos</translation>
+        <translation>coborâtor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="155"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="158"/>
         <source>Closest</source>
-        <translation>Cea mai apropiată</translation>
+        <translation>în direcția cea mai apropiată</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="171"/>
@@ -6106,7 +6106,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="174"/>
         <source>By interval</source>
-        <translation>După interval</translation>
+        <translation>cu un interval de</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="212"/>
@@ -6246,12 +6246,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Single ♯ and ♭ only</source>
-        <translation>Doar ♯ și ♭ simpli</translation>
+        <translation>Folosește doar ♯ și ♭ simpli</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="499"/>
         <source>Use double ♯ and ♭</source>
-        <translation>Folosește ♯ și ♭ dubli</translation>
+        <translation>Folosește și ♯ și ♭ dubli</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="208"/>
@@ -6261,7 +6261,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="358"/>
         <source>Transpose key signatures</source>
-        <translation>Transpune armuri</translation>
+        <translation>Transpune armurile</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="405"/>
@@ -6271,38 +6271,38 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="409"/>
         <source>Second</source>
-        <translation>A doua</translation>
+        <translation>la secundă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="414"/>
         <source>Third</source>
-        <translation>A treia</translation>
+        <translation>la terță</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="419"/>
         <source>Fourth</source>
-        <translation>A patra</translation>
+        <translation>la cvartă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="424"/>
         <source>Fifth</source>
-        <translation>A cincea</translation>
+        <translation>la cvintă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="429"/>
         <source>Sixth</source>
-        <translation>A șasea</translation>
+        <translation>la sextă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="434"/>
         <source>Seventh</source>
-        <translation>A șaptea</translation>
+        <translation>la septimă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="452"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="455"/>
         <source>Keep degree alterations</source>
-        <translation>Păstrează gradul alterațiilor</translation>
+        <translation>Păstrează alterațiile pe poziția lor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="468"/>
@@ -7136,12 +7136,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
         <source>Diatonic pitch up (keep degree alterations)</source>
-        <translation>Înățlime diatonică în sus (păstrează gradul alterațiilor)</translation>
+        <translation>Înățlime diatonică în sus (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1993"/>
         <source>Diatonic pitch down (keep degree alterations)</source>
-        <translation>Înățlime diatonică în jos (păstrează gradul alterațiilor)</translation>
+        <translation>Înățlime diatonică în jos (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2081"/>
@@ -8404,12 +8404,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1988"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
-        <translation>Mută înățimea în sus diatonic (păstrează gradul de alterații)</translation>
+        <translation>Mută înățimea în sus diatonic (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1994"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
-        <translation>Mută înățimea în jos diatonic (păstrează gradul de alterații)</translation>
+        <translation>Mută înățimea în jos diatonic (păstrează alterațiile)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2000"/>
@@ -9193,7 +9193,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>&amp;Layout</source>
-        <translation>Așezare în Pa&amp;gină</translation>
+        <translation>Așezare în pa&amp;gină</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
@@ -9483,12 +9483,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1975"/>
         <source>Transpose up</source>
-        <translation>Transpune ascendent</translation>
+        <translation>Transpune suitor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
         <source>Transpose down</source>
-        <translation>Transpune descendent</translation>
+        <translation>Transpune coborâtor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
@@ -10162,12 +10162,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1976"/>
         <source>Transpose up a semitone</source>
-        <translation>Transpune ascendent cu un semiton</translation>
+        <translation>Transpune suitor cu un semiton</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1982"/>
         <source>Transpose down a semitone</source>
-        <translation>Transpune descendent cu un semiton</translation>
+        <translation>Transpune coborâtor cu un semiton</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2005"/>
@@ -10573,7 +10573,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="301"/>
         <source>Layout</source>
-        <translation>Așezare în pagină</translation>
+        <translation>Aspect</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="327"/>
@@ -12733,7 +12733,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
         <source>Time signature</source>
-        <translation>Metru Măsură</translation>
+        <translation>Metru măsură</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
@@ -12869,7 +12869,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
         <source>System text</source>
-        <translation>Text pt. distem</translation>
+        <translation>Text sistem</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
@@ -12895,7 +12895,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
         <source>Triplet feel</source>
-        <translation>Simț de triplet</translation>
+        <translation>Efect de swing</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
@@ -13161,7 +13161,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1273"/>
         <source>Text line</source>
-        <translation>Text pentru linii</translation>
+        <translation>Text cu linie</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="283"/>
@@ -13368,7 +13368,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1227"/>
         <source>Frame</source>
-        <translation>Încadrare</translation>
+        <translation>Cadru</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1232"/>
@@ -18717,7 +18717,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/dom/tripletfeel.cpp" line="112"/>
         <source>No triplet feel</source>
-        <translation>Fără simț de triplet</translation>
+        <translation>Fără efect de swing</translation>
     </message>
 </context>
 <context>
@@ -19708,7 +19708,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
         <source>Time signature</source>
-        <translation>Metru Măsură</translation>
+        <translation>Metru măsură</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="616"/>
@@ -19762,7 +19762,7 @@ cu punct</translation>
         <source>Show
 tempo text</source>
         <translation>Afișează
-Textul de tempo</translation>
+textul de tempo</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="835"/>
@@ -21024,7 +21024,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="52"/>
         <source>Beginning text</source>
-        <translation>Text de început</translation>
+        <translation>Text la început</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="116"/>
@@ -21039,7 +21039,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="92"/>
         <source>End text</source>
-        <translation>Text de final</translation>
+        <translation>Text la final</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="61"/>
@@ -21474,7 +21474,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="245"/>
         <source>Generate time signatures</source>
-        <translation>Generează metri măsură</translation>
+        <translation>Generează metrică</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="254"/>
@@ -21757,7 +21757,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <source>Frame</source>
-        <translation>Încadrare</translation>
+        <translation>Cadru</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
@@ -21767,7 +21767,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="59"/>
         <source>Circle</source>
-        <translation>Elipsă</translation>
+        <translation>Cerc</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="80"/>
@@ -22068,7 +22068,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
         <source>Text line</source>
-        <translation>Text pentru linii</translation>
+        <translation>Text cu linie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="34"/>
@@ -22842,7 +22842,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml" line="57"/>
         <source>Display at this position on the score</source>
-        <translation>Afișează la această poziție pe partitură</translation>
+        <translation>Afișează la această poziție</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
@@ -23863,7 +23863,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="199"/>
         <source>Glissandos</source>
-        <translation>Glissandi</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="43"/>
@@ -24291,7 +24291,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="143"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation>Această partitură are deja partide. Schimbarea metrilor măsurilor locale când există partide nu este suportată în prezent.</translation>
+        <translation>Această partitură are deja partide. Schimbarea metricii locale când există partide nu este suportată în prezent.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="147"/>
@@ -24588,7 +24588,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="101"/>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Automat</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
@@ -24703,7 +24703,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="764"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1295"/>
         <source>Above</source>
-        <translation>Desupra</translation>
+        <translation>deasupra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="213"/>
@@ -24734,7 +24734,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="781"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1305"/>
         <source>None</source>
-        <translation>Fără</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="782"/>
@@ -24783,7 +24783,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1315"/>
         <source>None</source>
         <comment>no tuplet number type</comment>
-        <translation>Fără</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="796"/>
@@ -24804,7 +24804,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1319"/>
         <source>None</source>
         <comment>no tuplet bracket type</comment>
-        <translation>Fără</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="952"/>
@@ -24828,19 +24828,19 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="193"/>
         <source>Continuous</source>
         <extracomment>line style</extracomment>
-        <translation>Neîntreruptă</translation>
+        <translation>neîntreruptă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="195"/>
         <source>Dashed</source>
         <extracomment>line style</extracomment>
-        <translation>Întreruptă</translation>
+        <translation>întreruptă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="197"/>
         <source>Dotted</source>
         <extracomment>line style</extracomment>
-        <translation>Punctată</translation>
+        <translation>punctată</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="211"/>
@@ -24921,24 +24921,24 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1346"/>
         <source>None</source>
         <comment>no frame for text</comment>
-        <translation>Fără</translation>
+        <translation>fără</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1076"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1347"/>
         <source>Rectangle</source>
-        <translation>Dreptunghi</translation>
+        <translation>dreptunghi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1077"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1348"/>
         <source>Circle</source>
-        <translation>Elipsă</translation>
+        <translation>cerc</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1361"/>
         <source>Special symbols in header/footer</source>
-        <translation>Simboluri speciale in antet/subsol</translation>
+        <translation>Simboluri speciale în antet/subsol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1364"/>
@@ -25092,7 +25092,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="138"/>
         <source>Time signatures</source>
-        <translation>Metri măsură</translation>
+        <translation>Metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="152"/>
@@ -25117,7 +25117,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="173"/>
         <source>Set where time signatures appear using the Layout panel.</source>
-        <translation>Setează unde apar metrii măsură folosind panoul de aspect.</translation>
+        <translation>Setează unde apare metrica folosind panoul de aspect.</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="191"/>
@@ -25159,7 +25159,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="398"/>
         <source>Show courtesy time signatures</source>
-        <translation>Arată metrii de măsură de curtoazie</translation>
+        <translation>Arată metrica de curtoazie</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="417"/>
@@ -25204,7 +25204,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="488"/>
         <source>Clefs, key &amp; time signatures at repeats and jumps</source>
-        <translation>Chei, armuri și metri măsură la repetiții și salturi</translation>
+        <translation>Chei, armuri și metrică la repetiții și salturi</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="532"/>
@@ -25949,7 +25949,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="932"/>
         <source>Brackets</source>
-        <translation>Paranteze</translation>
+        <translation>Acolade sistem</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="939"/>
@@ -26036,7 +26036,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1319"/>
         <source>Text line</source>
-        <translation>Text pentru linii</translation>
+        <translation>Text cu linie</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
@@ -26071,7 +26071,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1306"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
         <source>Staff text line</source>
-        <translation>Linie text portativ</translation>
+        <translation>Text cu linie portativ</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="581"/>
@@ -26087,7 +26087,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1312"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1548"/>
         <source>System text line</source>
-        <translation>Linie text sistem</translation>
+        <translation>Text cu linie sistem</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1330"/>
@@ -26274,7 +26274,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1541"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1542"/>
         <source>System text</source>
-        <translation>Text pt. sistem</translation>
+        <translation>Text sistem</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1554"/>
@@ -26519,7 +26519,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
-        <translation>Metri măsură</translation>
+        <translation>Metrică</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1695"/>
@@ -29678,7 +29678,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="129"/>
         <source>Time signature</source>
-        <translation>Metru Măsură</translation>
+        <translation>Metru măsură</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="164"/>

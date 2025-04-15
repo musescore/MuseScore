@@ -15483,42 +15483,42 @@
         <source>Large drum kit.</source>
         <comment>drumset description</comment>
         <extracomment>description for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stórt trummusett</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3877"/>
         <source>Drum Kit (large)</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trummusett (stórt)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3884"/>
         <source>Minimal drum kit, 4-piece.</source>
         <comment>drum-kit-4 description</comment>
         <extracomment>description for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Minsta trummusett, 4 ljóðføri.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3886"/>
         <source>Drum Kit (minimal)</source>
         <comment>drum-kit-4 trackName</comment>
         <extracomment>trackName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trummusett (minsta)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3893"/>
         <source>Common drum kit, 5-piece.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vanligt trummusett, 5 ljóðføri.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3895"/>
         <source>Drum Kit (common)</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trummusett (vanligt)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4010"/>

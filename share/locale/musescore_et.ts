@@ -9003,7 +9003,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="59"/>
         <source>&amp;Full screen</source>
-        <translation>%Täisekraan</translation>
+        <translation>&amp;Täisekraan</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="66"/>

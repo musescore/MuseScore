@@ -8215,92 +8215,92 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
         <source>Advance longa (F.B./Chord symbol)</source>
-        <translation>Longa-Schritt (Generalbass/Akkordsymbol)</translation>
+        <translation>Longa-Schritt (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1694"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: Longa (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: Longa (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1699"/>
         <source>Advance breve (F.B./Chord symbol)</source>
-        <translation>Brevis-Schritt (Generalbass/Akkordsymbol)</translation>
+        <translation>Brevis-Schritt (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1700"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: Brevis (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: Brevis (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1705"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
-        <translation>Fortschritt um ganze Note (Generalbass/Akkordsymbol)</translation>
+        <translation>Fortschritt um ganze Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1706"/>
         <source>Advance cursor: whole note (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: Ganze Note (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: Ganze Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1711"/>
         <source>Advance half note (F.B./Chord symbol)</source>
-        <translation>Fortschritt um halbe Note (Generalbass/Akkordsymbol)</translation>
+        <translation>Fortschritt um halbe Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1712"/>
         <source>Advance cursor: half note (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: Halbe Note (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: Halbe Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1717"/>
         <source>Advance quarter note (F.B./Chord symbol)</source>
-        <translation>Fortschritt um Viertelnote (Generalbass/Akkordsymbol)</translation>
+        <translation>Fortschritt um Viertelnote (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1718"/>
         <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: Viertelnote (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: Viertelnote (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
         <source>Advance eighth note (F.B./Chord symbol)</source>
-        <translation>Fortschritt um Achtelnote (Generalbass/Akkordsymbol)</translation>
+        <translation>Fortschritt um Achtelnote (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1724"/>
         <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: Achtelnote (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: Achtelnote (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
         <source>Advance 16th note (F.B./Chord symbol)</source>
-        <translation>Fortschritt um 16tel Note (Generalbass/Akkordsymbol)</translation>
+        <translation>Fortschritt um 16tel Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
         <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: 16tel Note (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: 16tel Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
-        <translation>Fortschritt um 32stel Note (Generalbass/Akkordsymbol)</translation>
+        <translation>Fortschritt um 32stel Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: 32stel Note (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: 32stel Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
-        <translation>Fortschritt um 64stel Note (Generalbass/Akkordsymbol)</translation>
+        <translation>Fortschritt um 64stel Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
-        <translation>Schreibmarke bewegen: 64stel Note (Generalbass/Akkordsymbole)</translation>
+        <translation>Schreibmarke bewegen: 64stel Note (Akkordsymbole/Generalbass)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
@@ -20263,12 +20263,12 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="94"/>
         <source>Move to system</source>
-        <translation>System verschieben</translation>
+        <translation>Zu System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="115"/>
         <source>Previous</source>
-        <translation>Zurück</translation>
+        <translation>Voriges</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="117"/>
@@ -20278,7 +20278,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="134"/>
         <source>Next</source>
-        <translation>Weiter</translation>
+        <translation>Nächstes</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="136"/>
@@ -23139,7 +23139,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="100"/>
         <source>Broken beam minimum length</source>
-        <translation>Min. länge unterbrochener Balken</translation>
+        <translation>Min. Länge unterbrochener Balken</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="121"/>
@@ -28726,7 +28726,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2301"/>
         <source>File “%1” seems not corrupted</source>
-        <translation>Datei „%1“ scheint korrumpiert zu sein</translation>
+        <translation>Datei „%1“ scheint nicht korrumpiert zu sein</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2302"/>

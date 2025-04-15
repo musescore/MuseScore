@@ -29346,7 +29346,7 @@ failed.</source>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="74"/>
         <source>Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation>BHagian</translation>
+        <translation>Bagian</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>

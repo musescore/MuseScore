@@ -7290,7 +7290,7 @@ altor del testu):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="227"/>
         <source>Add previous chord to selection</source>
-        <translation>Amestar l&apos;acorde anterior a la escoyeta</translation>
+        <translation>Amestar l&apos;acorde previu a la escoyeta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1521"/>
@@ -9931,22 +9931,22 @@ altor del testu):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1570"/>
         <source>Jump to previous screen</source>
-        <translation>Saltar a la pantalla anterior</translation>
+        <translation>Saltar a la pantalla previa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
         <source>Jump to next screen</source>
-        <translation>Salta a la pantalla posterior</translation>
+        <translation>Salta a la pantalla viniente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1582"/>
         <source>Jump to previous page</source>
-        <translation>Salta a la páxina anterior</translation>
+        <translation>Salta a la páxina previa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1588"/>
         <source>Jump to next page</source>
-        <translation>Saltar a la páxina posterior</translation>
+        <translation>Saltar a la páxina viniente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
@@ -10665,7 +10665,7 @@ Esta aición nun va desaniciar denguna de les tos partitures.</translation>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="208"/>
         <source>The previous session quit unexpectedly.</source>
-        <translation>La sesión anterior zarróse de forma inesperada.</translation>
+        <translation>La sesión previa zarróse de forma inesperada.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="209"/>
@@ -11396,12 +11396,12 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
         <source>To next note entered</source>
-        <translation>A la próxima nota introducida</translation>
+        <translation>A la nota viniente introducida</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="70"/>
         <source>To previous note entered</source>
-        <translation>A la previa nota introducida</translation>
+        <translation>A la nota previa introducida</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="81"/>

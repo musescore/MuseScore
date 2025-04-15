@@ -2664,12 +2664,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="617"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation>Återställ värde för &quot;Instrumentetiketter på följande notsystem&quot;</translation>
+        <translation>Återställ värde för &quot;Instrumentetiketter på följande system&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="637"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation>Återställ värde för &quot;Instrumentetiketter på första notsystemet i avsnitt&quot;</translation>
+        <translation>Återställ värde för &quot;Instrumentetiketter på första systemet i avsnitt&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="647"/>
@@ -2680,12 +2680,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="654"/>
         <source>On subsequent systems:</source>
-        <translation>På följande notsystem:</translation>
+        <translation>På följande system:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="661"/>
         <source>On first system of sections:</source>
-        <translation>På första notsystemet i avsnitt:</translation>
+        <translation>På första systemet i avsnitt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="668"/>
@@ -7023,7 +7023,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2422"/>
         <source>Cross-staff beaming</source>
-        <translation>Balk som korsar notrad</translation>
+        <translation>Balk mellan notrader</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
@@ -13096,7 +13096,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1251"/>
         <source>Hairpin</source>
-        <translation>Crescendo-/diminuendopil</translation>
+        <translation>Crescendo/diminuendo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="271"/>
@@ -21361,7 +21361,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="85"/>
         <source>Indent first system of new section</source>
-        <translation>Indrag i första notsystemet i nytt avsnitt</translation>
+        <translation>Indrag i första systemet i nytt avsnitt</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
@@ -26535,7 +26535,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1927"/>
         <source>Pitch</source>
         <extracomment>The name of a palette</extracomment>
-        <translation>Tonhöjd</translation>
+        <translation>Oktaver</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="71"/>

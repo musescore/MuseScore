@@ -1112,7 +1112,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="354"/>
         <source>Merge matching rests:</source>
-        <translation>Fusionar silencios condicientes</translation>
+        <translation>Fusionar silencios coincidentes</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="367"/>
@@ -24474,7 +24474,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="63"/>
         <source>Merge matching rests</source>
-        <translation>Unir silencios conjuntos</translation>
+        <translation>Fusionar silencios coincidentes</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="75"/>

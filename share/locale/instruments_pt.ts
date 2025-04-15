@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Secção de sopros no sistema principal.</translation>
+        <translation>Seção de sopros no sistema principal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
@@ -11711,28 +11711,28 @@
         <source>Taiko.</source>
         <comment>taiko description</comment>
         <extracomment>description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Taiko.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3958"/>
         <source>Taiko</source>
         <comment>taiko trackName</comment>
         <extracomment>trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Taiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3960"/>
         <source>Taiko</source>
         <comment>taiko longName</comment>
         <extracomment>longName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Taiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3962"/>
         <source>Taiko</source>
         <comment>taiko shortName</comment>
         <extracomment>shortName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Taiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3965"/>
@@ -15484,42 +15484,42 @@
         <source>Large drum kit.</source>
         <comment>drumset description</comment>
         <extracomment>description for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria alargada</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3877"/>
         <source>Drum Kit (large)</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria (alargada)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3884"/>
         <source>Minimal drum kit, 4-piece.</source>
         <comment>drum-kit-4 description</comment>
         <extracomment>description for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria reduzida, conjunto de 4 peças</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3886"/>
         <source>Drum Kit (minimal)</source>
         <comment>drum-kit-4 trackName</comment>
         <extracomment>trackName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria (reduzida)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3893"/>
         <source>Common drum kit, 5-piece.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria padrão, conjunto de 5 peças</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3895"/>
         <source>Drum Kit (common)</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bateria (padrão)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4010"/>
@@ -15568,21 +15568,21 @@
         <source>General MIDI percussion kit with Level 2 extensions.</source>
         <comment>percussion-synthesizer description</comment>
         <extracomment>description for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Conjunto de percussão genérica MIDI com extensões nível 2.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4336"/>
         <source>General MIDI Percussion</source>
         <comment>percussion-synthesizer trackName</comment>
         <extracomment>trackName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Percussão genérica MIDI</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4338"/>
         <source>Percussion</source>
         <comment>percussion-synthesizer longName</comment>
         <extracomment>longName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>percurssão</translation>
+        <translation>Percussão</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4340"/>
@@ -15596,14 +15596,14 @@
         <source>Orchestral percussion kit.</source>
         <comment>percussion description</comment>
         <extracomment>description for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Conjunto de percussão de orquestra.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4345"/>
         <source>Mixed Percussion</source>
         <comment>percussion trackName</comment>
         <extracomment>trackName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Percussão Mista</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
@@ -15638,7 +15638,7 @@
         <source>Acoustic Guitar</source>
         <comment>guitar-steel longName</comment>
         <extracomment>longName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitarra Acustica</translation>
+        <translation>Violão acústico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5152"/>
@@ -15694,14 +15694,14 @@
         <source>Classical Guitar</source>
         <comment>guitar-nylon trackName</comment>
         <extracomment>trackName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitarra Clássica</translation>
+        <translation>Violão Clássico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5174"/>
         <source>Classical Guitar</source>
         <comment>guitar-nylon longName</comment>
         <extracomment>longName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guitarra Clássica</translation>
+        <translation>Violão Clássico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5176"/>
