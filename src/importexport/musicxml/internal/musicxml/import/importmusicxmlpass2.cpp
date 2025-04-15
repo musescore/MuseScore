@@ -3546,12 +3546,14 @@ void MusicXmlParserDirection::direction(const String& partId,
                 t->setColor(m_color);
             }
 
-            if (m_justify == u"right") {
-                t->setAlign(AlignH::RIGHT);
-            } else if (m_justify == u"center") {
-                t->setAlign(AlignH::HCENTER);
-            } else {
-                t->setAlign(AlignH::LEFT);
+            if (configuration()->importLayout()) {
+                if (m_justify == u"right") {
+                    t->setAlign(AlignH::RIGHT);
+                } else if (m_justify == u"center") {
+                    t->setAlign(AlignH::HCENTER);
+                } else {
+                    t->setAlign(AlignH::LEFT);
+                }
             }
 
             t->setVisible(m_visible);
