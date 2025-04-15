@@ -177,12 +177,11 @@ public:
 
         // Empty sequence means to continue the previous sequence
         result.emplace(m_playbackPosition, EventSequence());
+        m_playbackPosition += nextMsecs;
 
         if (m_currentMainSequenceIt == m_mainStreamEvents.cend()) {
             return result;
         }
-
-        m_playbackPosition += nextMsecs;
 
         handleMainStream(result);
         handleDynamicChanges(result);
