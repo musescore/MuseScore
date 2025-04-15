@@ -2510,7 +2510,6 @@ void Segment::createShapes()
     for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         createShape(staffIdx);
     }
-    addPreAppendedToShape();
 }
 
 //---------------------------------------------------------
@@ -2609,12 +2608,8 @@ void Segment::createShape(staff_idx_t staffIdx)
             s.add(e->shape().translate(e->pos() + e->staffOffset()));
         }
     }
-}
 
-void Segment::addPreAppendedToShape()
-{
-    track_idx_t tracks = score()->ntracks();
-    for (unsigned track = 0; track < tracks; ++track) {
+    for (track_idx_t track = strack; track < etrack; ++track) {
         if (!m_preAppendedItems[track]) {
             continue;
         }
