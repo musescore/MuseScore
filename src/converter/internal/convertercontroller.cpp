@@ -268,7 +268,9 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         return io::Dir::fromNativeSeparators(path).toQString();
     };
 
-    for (const auto obj : arr) {
+    // for (const QJsonValueRef obj : arr) {
+    // modified by alex - comiled error: error: no viable conversion from 'const QJsonValueConstRef' to 'const QJsonValueRef'
+    for (const QJsonValueConstRef obj : arr) {
         Job job;
         job.in = correctUserInputPath(obj[u"in"].toString());
 
@@ -288,7 +290,9 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
             rv.val.push_back(std::move(job));
         } else if (outValue.isArray()) {
             const QJsonArray outArray = outValue.toArray();
-            for (const auto outItem : outArray) {
+            // for (const QJsonValueRef outItem : outArray) {
+            // modified by alex - comiled error: error: no viable conversion from 'const QJsonValueConstRef' to 'const QJsonValueRef'
+            for (const QJsonValueConstRef outItem : outArray) {
                 Job partJob = job; // Copy the input path
                 if (outItem.isString()) {
                     partJob.out = correctUserInputPath(outItem.toString());
