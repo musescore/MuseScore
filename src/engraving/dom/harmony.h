@@ -125,8 +125,6 @@ public:
     void determineRootBassSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase, NoteSpellingType& bassSpelling,
                                    NoteCaseType& bassCase);
 
-    void textChanged();
-
     bool isEditable() const override { return true; }
     void startEditTextual(EditData&) override;
     bool isTextualEditAllowed(EditData&) const override;
@@ -136,7 +134,6 @@ public:
     bool isRealizable() const;
 
     String hFunction() const { return m_function; }
-    String hUserName() const { return m_userName; }
     String hTextName() const { return m_textName; }
     int bassTpc() const { return m_bassTpc; }
     void setBassTpc(int val) { m_bassTpc = val; }
@@ -144,12 +141,7 @@ public:
     void setRootTpc(int val) { m_rootTpc = val; }
     void setTextName(const String& s) { m_textName = s; }
     void setFunction(const String& s) { m_function = s; }
-    String rootName();
-    String bassName();
     void addDegree(const HDegree& d);
-    size_t numberOfDegrees() const;
-    HDegree degree(int i) const;
-    void clearDegrees();
     const std::vector<HDegree>& degreeList() const;
     const ParsedChord* parsedForm() const;
     HarmonyType harmonyType() const { return m_harmonyType; }
@@ -171,12 +163,10 @@ public:
     String xmlParens() const;
     StringList xmlDegrees() const;
 
-    void resolveDegreeList();
-
     double baseLine() const override;
 
     const ChordDescription* fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&);
-    const ChordDescription* fromXml(const String& s, const std::list<HDegree>&);
+    const ChordDescription* fromXml(const String& s, const std::list<HDegree>&);//UNUSED
     const ChordDescription* fromXml(const String& s);
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;

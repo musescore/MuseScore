@@ -114,67 +114,10 @@ String Harmony::harmonyName() const
     return s;
 }
 
-//---------------------------------------------------------
-//   rootName
-//---------------------------------------------------------
-
-String Harmony::rootName()
-{
-    determineRootBassSpelling();
-    return tpc2name(m_rootTpc, m_rootSpelling, m_rootCase);
-}
-
-//---------------------------------------------------------
-//   bassName
-//---------------------------------------------------------
-
-String Harmony::bassName()
-{
-    determineRootBassSpelling();
-    if (m_bassTpc == Tpc::TPC_INVALID) {
-        return rootName();
-    }
-    return tpc2name(m_bassTpc, m_bassSpelling, m_bassCase);
-}
-
 bool Harmony::isRealizable() const
 {
     return (m_rootTpc != Tpc::TPC_INVALID)
            || (m_harmonyType == HarmonyType::NASHVILLE);        // unable to fully check at for nashville at the moment
-}
-
-//---------------------------------------------------------
-//   resolveDegreeList
-//    try to detect chord number and to eliminate degree
-//    list
-//---------------------------------------------------------
-
-void Harmony::resolveDegreeList()
-{
-    if (m_degreeList.empty()) {
-        return;
-    }
-
-    HChord hc = descr() ? descr()->chord : HChord();
-
-    hc.add(m_degreeList);
-
-// LOGD("resolveDegreeList: <%s> <%s-%s>: ", _descr->name, _descr->xmlKind, _descr->xmlDegrees);
-// hc.print();
-// _descr->chord.print();
-
-    // try to find the chord in chordList
-    const ChordList* cl = score()->chordList();
-    for (const auto& p : *cl) {
-        const ChordDescription& cd = p.second;
-        if ((cd.chord == hc) && !cd.names.empty()) {
-            LOGD("ResolveDegreeList: found in table as %s", muPrintable(cd.names.front()));
-            m_id = cd.id;
-            m_degreeList.clear();
-            return;
-        }
-    }
-    LOGD("ResolveDegreeList: not found in table");
 }
 
 //---------------------------------------------------------
@@ -1525,39 +1468,12 @@ StringList Harmony::xmlDegrees() const
 }
 
 //---------------------------------------------------------
-//   degree
-//---------------------------------------------------------
-
-HDegree Harmony::degree(int i) const
-{
-    return muse::value(m_degreeList, i);
-}
-
-//---------------------------------------------------------
 //   addDegree
 //---------------------------------------------------------
 
 void Harmony::addDegree(const HDegree& d)
 {
     m_degreeList.push_back(d);
-}
-
-//---------------------------------------------------------
-//   numberOfDegrees
-//---------------------------------------------------------
-
-size_t Harmony::numberOfDegrees() const
-{
-    return m_degreeList.size();
-}
-
-//---------------------------------------------------------
-//   clearDegrees
-//---------------------------------------------------------
-
-void Harmony::clearDegrees()
-{
-    m_degreeList.clear();
 }
 
 //---------------------------------------------------------
