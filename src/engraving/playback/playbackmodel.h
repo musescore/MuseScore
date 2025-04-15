@@ -118,6 +118,8 @@ private:
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
+    void reloadMetronomeEvents();
+
     void processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
                         bool isFirstChordRestSegmentOfMeasure, ChangedTrackIdSet* trackChanges);
     void processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,

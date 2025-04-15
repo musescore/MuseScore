@@ -162,7 +162,12 @@ bool PlaybackModel::isMetronomeEnabled() const
 
 void PlaybackModel::setIsMetronomeEnabled(const bool isEnabled)
 {
+    if (m_metronomeEnabled == isEnabled) {
+        return;
+    }
+
     m_metronomeEnabled = isEnabled;
+    reloadMetronomeEvents();
 }
 
 const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
@@ -509,6 +514,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
     });
 
     const ArticulationsProfilePtr metronomeProfile = defaultActiculationProfile(METRONOME_TRACK_ID);
+    PlaybackEventsMap& metronomeEvents = m_playbackDataMap[METRONOME_TRACK_ID].originEvents;
 
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -550,11 +556,40 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
 
             if (m_metronomeEnabled) {
                 m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
-                                           metronomeProfile, m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
+                                           metronomeProfile, metronomeEvents);
                 collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
             }
         }
     }
+}
+
+void PlaybackModel::reloadMetronomeEvents()
+{
+    TRACEFUNC;
+
+    PlaybackData& metronomeData = m_playbackDataMap[METRONOME_TRACK_ID];
+    metronomeData.originEvents.clear();
+
+    if (!m_metronomeEnabled) {
+        metronomeData.mainStream.send(metronomeData.originEvents, metronomeData.dynamics, metronomeData.params);
+        return;
+    }
+
+    const ArticulationsProfilePtr metronomeProfile = defaultActiculationProfile(METRONOME_TRACK_ID);
+
+    for (const RepeatSegment* repeatSegment : repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+
+        for (const Measure* measure : repeatSegment->measureList()) {
+            int measureStartTick = measure->tick().ticks();
+            int measureEndTick = measure->endTick().ticks();
+
+            m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
+                                       metronomeProfile, metronomeData.originEvents);
+        }
+    }
+
+    metronomeData.mainStream.send(metronomeData.originEvents, metronomeData.dynamics, metronomeData.params);
 }
 
 bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) const

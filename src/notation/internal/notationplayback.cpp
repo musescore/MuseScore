@@ -105,7 +105,6 @@ void NotationPlayback::init()
         bool metronomeEnabled = configuration()->isMetronomeEnabled();
         if (metronomeEnabled != m_playbackModel.isMetronomeEnabled()) {
             m_playbackModel.setIsMetronomeEnabled(metronomeEnabled);
-            m_playbackModel.reload();
         }
     });
 
