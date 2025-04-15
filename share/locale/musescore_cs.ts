@@ -8210,97 +8210,97 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1682"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation>Posun ukazovátka: na další dobu (značky akordů)</translation>
+        <translation>Posunout ukazatel: na další dobu (značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1693"/>
         <source>Advance longa (F.B./Chord symbol)</source>
-        <translation>Posunout se o čtyřcelou notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o čtyřcelou notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1694"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o čtyřcelou notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o čtyřcelou notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1699"/>
         <source>Advance breve (F.B./Chord symbol)</source>
-        <translation>Posunout se o dvoucelou notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o dvoucelou notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1700"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o dvoucelou notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o dvoucelou notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1705"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
-        <translation>Posunout se o celou notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o celou notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1706"/>
         <source>Advance cursor: whole note (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o celou notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o celou notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1711"/>
         <source>Advance half note (F.B./Chord symbol)</source>
-        <translation>Posunout se o půlovou notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o půlovou notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1712"/>
         <source>Advance cursor: half note (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o půlovou notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o půlovou notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1717"/>
         <source>Advance quarter note (F.B./Chord symbol)</source>
-        <translation>Posunout se o čtvrťovou notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o čtvrťovou notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1718"/>
         <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o čtvrťovou notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o čtvrťovou notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1723"/>
         <source>Advance eighth note (F.B./Chord symbol)</source>
-        <translation>Posunout se o osminovou notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o osminovou notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1724"/>
         <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o osminovou notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o osminovou notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1729"/>
         <source>Advance 16th note (F.B./Chord symbol)</source>
-        <translation>Posunout se o 1/16 notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o 1/16 notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1730"/>
         <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o 1/16 notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o 1/16 notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1735"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
-        <translation>Posunout se o 1/32 notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o 1/32 notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1736"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o 1/32 notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o 1/32 notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1741"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
-        <translation>Posunout se o 1/64 notu (g. b. / akordová značka)</translation>
+        <translation>Posunout se o 1/64 notu (gen. bas / akordová značka)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1742"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
-        <translation>Posun ukazovátka: o 1/64 notu (číslovaný bas/značky akordů)</translation>
+        <translation>Posunout ukazatel: o 1/64 notu (číslovaný bas/značky akordů)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1748"/>
@@ -9155,7 +9155,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="225"/>
         <source>Preferences…</source>
-        <translation>Předvolby…</translation>
+        <translation>Nastavení…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="93"/>
@@ -9205,7 +9205,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="224"/>
         <source>&amp;Preferences</source>
-        <translation>&amp;Předvolby</translation>
+        <translation>&amp;Nastavení</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updateuiactions.cpp" line="36"/>
@@ -10227,7 +10227,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2116"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2117"/>
         <source>Real-time advance</source>
-        <translation>Postup v reálném čase</translation>
+        <translation>Posun v reálném čase</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2338"/>
@@ -10743,21 +10743,21 @@ Tento krok neodstraní žádný vašich notových zápisů.
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation>Určitě chcete obnovit předvolby?</translation>
+        <translation>Určitě chcete obnovit nastavení?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation>Tato akce obnoví všechny předvolby aplikace a odstraní všechny vlastní klávesové zkratky. Nevymaže žádné vaše notové zápisy.
+        <translation>Tento krok obnoví všechna nastavení aplikace a odstraní všechny vlastní klávesové zkratky. Nevymaže žádné vaše notové zápisy.
 
 Tuto akci nelze vrátit zpět.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
         <source>Reset preferences</source>
-        <translation>Obnovit předvolby</translation>
+        <translation>Obnovit nastavení</translation>
     </message>
 </context>
 <context>
@@ -11408,7 +11408,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="81"/>
         <source>Input by duration mode cursor:</source>
-        <translation>Zápis pomocí kurzoru režimu délek:</translation>
+        <translation>Zápis pomocí ukazatele režimu délek:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="88"/>
@@ -11438,7 +11438,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
         <source>Reset preferences</source>
-        <translation>Obnovit předvolby</translation>
+        <translation>Obnovit nastavení</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="79"/>
@@ -11554,7 +11554,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/PreferencesDialog.qml" line="34"/>
         <source>Preferences</source>
-        <translation>Předvolby</translation>
+        <translation>Nastavení</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="167"/>
@@ -11716,7 +11716,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="196"/>
         <source>Advanced</source>
-        <translation>Rozšířený</translation>
+        <translation>Pokročilé</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="199"/>
@@ -11880,7 +11880,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation>Když je zadána, dynamika a dynamické šipky ovlivní:</translation>
+        <translation>Zapsaná dynamika a dynamické šipky ovlivní:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
@@ -11890,7 +11890,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="62"/>
         <source>Only the voice they are applied to</source>
-        <translation>Pouze hlas, ke kterému je přiřazena </translation>
+        <translation>Pouze hlas, ke kterému jsou přiřazeny</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="181"/>
@@ -21720,7 +21720,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="278"/>
         <source>Align baseline</source>
-        <translation>Zarovnat textu podle účaří</translation>
+        <translation>Zarovnání textu podle účaří</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="279"/>
@@ -29747,7 +29747,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation>Tip: Takty můžete přidat nebo odstranit i po vytvoření notového zápisu</translation>
+        <translation>Rada: Takty můžete přidat nebo odstranit i po vytvoření notového zápisu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="49"/>
@@ -32143,7 +32143,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>
         <source>UI preferences (colors, canvas style, etc.)</source>
-        <translation>Předvolby uživatelského rozhraní (barvy, styl strany atd.)</translation>
+        <translation>Nastavení uživatelského rozhraní (barvy, styl strany atd.)</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>

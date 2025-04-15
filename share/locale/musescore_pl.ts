@@ -1051,7 +1051,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="194"/>
         <source>Staff line color:</source>
-        <translation>Kolor pięciolinii:</translation>
+        <translation>Kolor linii pięciolinii:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="267"/>
@@ -1836,7 +1836,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="432"/>
         <source>Staff line thickness:</source>
-        <translation>Grubość pięciolinii:</translation>
+        <translation>Grubość linii pięciolinii:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="448"/>
@@ -2187,7 +2187,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="461"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Resetuj wartość &quot;Grubość pięciolinii&quot;</translation>
+        <translation>Resetuj wartość &quot;Grubość linii pięciolinii&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="473"/>
@@ -10791,7 +10791,7 @@ Tej czynności nie można cofnąć.</translation>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="131"/>
         <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
         <translation>Aby uzyskać informacje o prywatności, zobacz naszą &lt;a href=&quot;%1&quot;&gt;Politykę prywatności&lt;/a&gt;.
-Polskie tłum. MuseScore Studio: Grzegorz „Gootector” Pruchniakowski.</translation>
+Polskie tłumaczenie MuseScore Studio: Grzegorz Pruchniakowski.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
@@ -11869,7 +11869,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
-        <translation>Przełącz wyciszenie ścieżki, pokazując/ukrywając instrumenty w panelu instrumentów</translation>
+        <translation>Przełącz wyciszenie ścieżki, pokazując/ukrywając instrumenty w panelu Układ</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -21393,7 +21393,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="172"/>
         <source>Staff line color</source>
-        <translation>Kolor pięciolinii</translation>
+        <translation>Kolor linii pięciolinii</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="136"/>

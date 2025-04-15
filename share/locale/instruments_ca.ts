@@ -14917,7 +14917,7 @@
         <source>Sweep synth pad (General MIDI program 96).</source>
         <comment>sweep-synth description</comment>
         <extracomment>description for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sintetitzador fons Escombratge harmònics (General MIDI program 96).</translation>
+        <translation>Sintetitzador fons Escombratge d&apos;harmònics (General MIDI program 96).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5033"/>

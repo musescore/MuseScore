@@ -108,7 +108,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="109"/>
         <source>Notehead group:</source>
-        <translation>Nothuvudgrupp:</translation>
+        <translation>Nothuvudsgrupp:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="125"/>
@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="260"/>
         <source>Show time signature</source>
-        <translation>Visa taktart</translation>
+        <translation>Visa taktartsbeteckning</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="240"/>
@@ -1046,7 +1046,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="316"/>
         <source>Instrument</source>
-        <translation>&amp;Instrument</translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="194"/>
@@ -1087,7 +1087,7 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="108"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="128"/>
         <source>sp</source>
-        <translation>sp</translation>
+        <translation>mr</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="118"/>
@@ -1107,7 +1107,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="339"/>
         <source>Advanced style properties…</source>
-        <translation>Avancerade stilegenskaper…</translation>
+        <translation>Avancerade stilegenskaper …</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="354"/>
@@ -1132,7 +1132,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="416"/>
         <source>Replace instrument…</source>
-        <translation>Ersätt instrument…</translation>
+        <translation>Ersätt instrument …</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="438"/>
@@ -1407,7 +1407,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="504"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="784"/>
         <source>sp</source>
-        <translation>sp</translation>
+        <translation>mr</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="188"/>
@@ -1417,7 +1417,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="195"/>
         <source>Show time signature</source>
-        <translation>Visa taktart</translation>
+        <translation>Visa taktartsbeteckning</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="202"/>
@@ -1428,7 +1428,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="244"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="360"/>
         <source>Show key signature</source>
-        <translation>Visa tonart</translation>
+        <translation>Visa fasta förtecken</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="251"/>
@@ -1445,7 +1445,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="268"/>
         <source>Notehead scheme:</source>
-        <translation>Nothuvudschema:</translation>
+        <translation>Nothuvudsschema:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="292"/>
@@ -1685,7 +1685,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="51"/>
         <source>New string…</source>
-        <translation>Ny sträng…</translation>
+        <translation>Ny sträng …</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="58"/>
@@ -2416,7 +2416,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1001"/>
         <source>Disable vertical justification of staves</source>
-        <translation>Inaktivera vertikal justering för system</translation>
+        <translation>Inaktivera vertikal justering av system</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="362"/>
@@ -2638,7 +2638,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3886"/>
         <source>Reset padding inside parentheses to default</source>
-        <translation>Återställ avstånd inuti parenteser till förval</translation>
+        <translation>Återställ till standardavstånd inuti parenteser</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
@@ -2669,7 +2669,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="637"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation>Återställ &apos;Instrumentnamn på första systemet&apos;</translation>
+        <translation>Återställ &apos;Instrumentnamn på första ackoladen i avsnitt&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="647"/>
@@ -2685,7 +2685,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="661"/>
         <source>On first system of sections:</source>
-        <translation>På första systemet i avdelningar:</translation>
+        <translation>I första ackoladen i avsnitt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="668"/>
@@ -2939,7 +2939,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5332"/>
         <source>Only before courtesy key signatures</source>
-        <translation>Bara före varningsförtecken</translation>
+        <translation>Bara före varnande tonartssignaturer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
@@ -3117,7 +3117,7 @@ första noten i systemet</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13903"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
-        <translation>Markera elementen du vill visa i vanliga och enkla tablatursystem</translation>
+        <translation>Markera elementen du vill visa i vanliga och enkla tabulatursystem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4122"/>
@@ -3227,7 +3227,7 @@ första noten i systemet</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5006"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation>Återställ &apos;Avstånd mellan dubbelstreck&apos;</translation>
+        <translation>Återställ &apos;Gap i dubbelstreck&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5150"/>
@@ -3503,7 +3503,7 @@ första noten i systemet</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6425"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6428"/>
         <source>Number consecutive measure repeats</source>
-        <translation>Numrera på varandra följande respristakter</translation>
+        <translation>Numrera på varandra följande repristakter</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6437"/>
@@ -4370,7 +4370,7 @@ första noten i systemet</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12664"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
-        <translation>Återställ &quot;Fäst till dynamikbeteckning&quot;</translation>
+        <translation>Återställ inställningen &quot;Fäst till dynamikbeteckning&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12886"/>
@@ -4473,12 +4473,12 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8043"/>
         <source>Minimum hanging tie length:</source>
-        <translation>Minsta hängande bindebågelängd:</translation>
+        <translation>Minsta hängande bindebåglängd:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8081"/>
         <source>Reset &apos;Minimum hanging tie length&apos; value</source>
-        <translation>Återställ &apos;Minsta hängande bindebågelängd&apos;</translation>
+        <translation>Återställ &apos;Minsta hängande bindebåglängd&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
@@ -4552,7 +4552,7 @@ textens x-höjd):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13145"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
-        <translation>Capotasto på band:</translation>
+        <translation>Bandposition för capotasto:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13180"/>
