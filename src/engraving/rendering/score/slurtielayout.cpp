@@ -1455,7 +1455,7 @@ static bool tieSegmentShouldBeSkipped(Tie* item)
         return false;
     }
 
-    if (startNote->isContinuationOfBend()) {
+    if (startNote && startNote->isContinuationOfBend()) {
         return true;
     }
 
