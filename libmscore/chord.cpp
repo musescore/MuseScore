@@ -310,7 +310,7 @@ void Chord::undoUnlink()
       ChordRest::undoUnlink();
       for (Note* n : _notes)
             n->undoUnlink();
-      for (Chord* gn : graceNotes())
+      for (Chord*& gn : graceNotes())
             gn->undoUnlink();
       for (Articulation* a : qAsConst(_articulations))
             a->undoUnlink();
@@ -1715,7 +1715,7 @@ void Chord::layout2()
 
 static void updatePercussionNotes(Chord* c, const Drumset* drumset)
       {
-      for (Chord* ch : c->graceNotes())
+      for (Chord*& ch : c->graceNotes())
             updatePercussionNotes(ch, drumset);
       std::vector<Note*> lnotes(c->notes());  // we need a copy!
       for (Note* note : lnotes) {
@@ -1748,7 +1748,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, int staffIdx)
       StaffGroup staffGroup = st->staffTypeForElement(this)->group();
       if (staffGroup == StaffGroup::TAB) {
             const Instrument* instrument = part()->instrument(this->tick());
-            for (Chord* ch : graceNotes()) {
+            for (Chord*& ch : graceNotes()) {
                   if (ch->vStaffIdx() == staffIdx)
                         instrument->stringData()->fretChords(ch);
                   }
@@ -2774,7 +2774,7 @@ void Chord::setStemDirection(Direction d, Direction beamDir)
       _stemDirection = d;
       if (beam()) {
             for (ChordRest* cr : beam()->elements()) {
-                  Chord* c = toChord(cr);
+                  Chord* c = cr->isChord() ? toChord(cr) : nullptr;
                   if (c)
                         c->_stemDirection = d;
                   }
@@ -2790,7 +2790,7 @@ void Chord::setStemDirection(Direction d, Direction beamDir)
 void Chord::localSpatiumChanged(qreal oldValue, qreal newValue)
       {
       ChordRest::localSpatiumChanged(oldValue, newValue);
-      for (Element* e : graceNotes())
+      for (Element* e : qAsConst(graceNotes()))
             e->localSpatiumChanged(oldValue, newValue);
       if (_hook)
             _hook->localSpatiumChanged(oldValue, newValue);
@@ -2802,7 +2802,7 @@ void Chord::localSpatiumChanged(qreal oldValue, qreal newValue)
             arpeggio()->localSpatiumChanged(oldValue, newValue);
       if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
             _tremolo->localSpatiumChanged(oldValue, newValue);
-      for (Element* e : articulations())
+      for (Element* e : qAsConst(articulations()))
             e->localSpatiumChanged(oldValue, newValue);
       for (Note* note : notes())
             note->localSpatiumChanged(oldValue, newValue);
@@ -3216,6 +3216,9 @@ Element* Chord::nextElement()
       if (!e && !score()->selection().elements().isEmpty())
             e = score()->selection().elements().first();
 
+      if (!e)
+            return nullptr;
+
       switch(e->type()) {
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
@@ -3303,6 +3306,10 @@ Element* Chord::prevElement()
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty())
             e = score()->selection().elements().last();
+
+      if (!e)
+            return nullptr;
+
       switch (e->type()) {
             case ElementType::NOTE: {
                   if (e == _notes.back())
@@ -3313,7 +3320,7 @@ Element* Chord::prevElement()
                               prevNote = *(&i+1);
                               }
                         }
-                  Element* next = prevNote->lastElementBeforeSegment();
+                  Element* next = prevNote ? prevNote->lastElementBeforeSegment() : nullptr;
                   return next;
                   }
 
@@ -3386,6 +3393,10 @@ Element* Chord::prevSegmentElement()
       Element* el = score()->selection().element();
       if (!el && !score()->selection().elements().isEmpty() )
             el = score()->selection().elements().first();
+
+      if (!el)
+            return nullptr;
+
       Element* e = segment()->lastInPrevSegments(el->staffIdx());
       if (e) {
             if (e->isChord())
@@ -3496,7 +3507,7 @@ Shape Chord::shape() const
 
 void Chord::layoutArticulations()
       {
-      for (Chord* gc : graceNotes())
+      for (Chord*& gc : graceNotes())
             gc->layoutArticulations();
 
       if (_articulations.empty())
@@ -3611,7 +3622,7 @@ void Chord::layoutArticulations()
 
 void Chord::layoutArticulations2()
       {
-      for (Chord* gc : graceNotes())
+      for (Chord*& gc : graceNotes())
             gc->layoutArticulations2();
 
       if (_articulations.empty())
