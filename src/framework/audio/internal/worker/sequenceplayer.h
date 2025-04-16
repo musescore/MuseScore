@@ -59,6 +59,7 @@ public:
 
 private:
     void seekAllTracks(const msecs_t newPositionMsecs);
+    void flushAllTracks();
 
     IGetTracks* m_getTracks = nullptr;
     IClockPtr m_clock = nullptr;

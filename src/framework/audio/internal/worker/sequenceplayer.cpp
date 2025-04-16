@@ -38,8 +38,12 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
     });
 
     m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
+        const bool active = status == PlaybackStatus::Running;
+
         if (!m_countDownIsSet) {
-            audioEngine()->mixer()->setIsActive(status == PlaybackStatus::Running);
+            audioEngine()->mixer()->setIsActive(active);
+        } else if (!active) {
+            flushAllTracks();
         }
     });
 
@@ -163,6 +167,19 @@ void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs)
     for (const auto& pair : m_getTracks->allTracks()) {
         if (pair.second->inputHandler) {
             pair.second->inputHandler->seek(newPositionMsecs);
+        }
+    }
+}
+
+void SequencePlayer::flushAllTracks()
+{
+    IF_ASSERT_FAILED(m_getTracks) {
+        return;
+    }
+
+    for (const auto& pair : m_getTracks->allTracks()) {
+        if (pair.second->inputHandler) {
+            pair.second->inputHandler->flush();
         }
     }
 }

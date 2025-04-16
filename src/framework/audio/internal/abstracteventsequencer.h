@@ -89,6 +89,20 @@ public:
         }
     }
 
+    void flushOffstream()
+    {
+        if (m_offStreamEvents.empty()) {
+            return;
+        }
+
+        m_offStreamEvents.clear();
+        updateOffSequenceIterator();
+
+        if (m_onOffStreamFlushed) {
+            m_onOffStreamFlushed();
+        }
+    }
+
     void setActive(const bool active)
     {
         if (m_isActive == active) {
@@ -98,11 +112,6 @@ public:
         m_isActive = active;
 
         if (m_isActive) {
-            if (!m_offStreamEvents.empty()) {
-                m_offStreamEvents.clear();
-                updateOffSequenceIterator();
-            }
-
             updateMainStream();
         }
     }
