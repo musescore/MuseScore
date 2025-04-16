@@ -209,6 +209,7 @@ public:
     String harmonyText() const { return m_harmony ? m_harmony->plainText() : String(); }
     void setHarmony(String harmonyText);
     void linkHarmony(Harmony* harmony);
+    void unlinkHarmony();
     Harmony* harmony() const { return m_harmony; }
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
@@ -290,6 +291,8 @@ private:
     void removeDotsMarkers(int ss, int es, int fret);
 
     static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
+
+    void applyAlignmentToHarmony();
 
     int m_strings = 0;
     int m_frets = 0;

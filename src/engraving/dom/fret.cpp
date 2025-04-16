@@ -605,6 +605,16 @@ void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& patter
     }
 }
 
+void FretDiagram::applyAlignmentToHarmony()
+{
+    if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+        m_harmony->resetProperty(Pid::OFFSET);
+    }
+
+    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+    m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+}
+
 //---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
@@ -727,13 +737,22 @@ void FretDiagram::linkHarmony(Harmony* harmony)
 {
     m_harmony = harmony;
 
-    m_harmony->setTrack(track());
-    if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
-        m_harmony->resetProperty(Pid::OFFSET);
-    }
+    setParent(harmony->explicitParent());
+    harmony->setParent(this);
+    segment()->removeAnnotation(harmony);
 
-    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
-    m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+    m_harmony->setTrack(track());
+
+    applyAlignmentToHarmony();
+}
+
+void FretDiagram::unlinkHarmony()
+{
+    m_harmony->setTrack(track());
+
+    segment()->add(m_harmony);
+
+    m_harmony = nullptr;
 }
 
 //---------------------------------------------------------
@@ -744,7 +763,12 @@ void FretDiagram::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isHarmony()) {
-        linkHarmony(toHarmony(e));
+        m_harmony = toHarmony(e);
+
+        m_harmony->setTrack(track());
+
+        applyAlignmentToHarmony();
+
         e->added();
     } else {
         LOGW("FretDiagram: cannot add <%s>\n", e->typeName());

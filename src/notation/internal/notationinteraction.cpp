@@ -7459,19 +7459,14 @@ void NotationInteraction::addFretboardDiagram()
     }
 
     engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(harmony->score()->dummy()->segment());
-
-    //! make diagram as parent of harmony
-    diagram->setParent(harmony->explicitParent());
-    harmony->setParent(diagram);
-    diagram->segment()->removeAnnotation(harmony);
-
     diagram->setTrack(harmony->track());
     diagram->updateDiagram(harmony->plainText());
 
-    diagram->linkHarmony(harmony);
-
     startEdit(TranslatableString("undoableAction", "Add fretboard diagram"));
+
+    score->undo(new FretLinkHarmony(diagram, harmony));
     score->undoAddElement(diagram);
+
     apply();
 
     select({ diagram });
