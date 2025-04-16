@@ -266,7 +266,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     const qreal w = gpaletteScore->style().spatium() * 8;
 
     for (HairpinType hairpinType : hairpins) {
-        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
         qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DECRESC_LINE) ? 1 : 0.9;
@@ -1153,13 +1153,13 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     };
 
     for (HairpinType hairpinType : hairpins) {
-        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
         sp->appendElement(hairpin, hairpin->subtypeUserName());
     }
 
-    auto gabel = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+    auto gabel = Factory::makeHairpin(gpaletteScore->dummy());
     gabel->setHairpinType(HairpinType::CRESC_HAIRPIN);
     gabel->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
     gabel->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
