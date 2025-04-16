@@ -202,31 +202,37 @@ void GuiApp::perform()
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
                      qApp, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
-        if (!obj && url == objUrl) {
+        if (url != objUrl) {
+            return;
+        }
+
+        if (!obj) {
             LOGE() << "failed Qml load\n";
             QCoreApplication::exit(-1);
             return;
         }
 
-        if (url == objUrl) {
-            // ====================================================
-            // Setup modules: onDelayedInit
-            // ====================================================
+        // ====================================================
+        // Setup modules: onDelayedInit
+        // ====================================================
 
-            m_globalModule.onDelayedInit();
-            for (modularity::IModuleSetup* m : m_modules) {
-                m->onDelayedInit();
-            }
-
-            startupScenario()->runOnSplashScreen();
-
-            if (splashScreen) {
-                splashScreen->close();
-                delete splashScreen;
-            }
-
-            startupScenario()->runAfterSplashScreen();
+        m_globalModule.onDelayedInit();
+        for (modularity::IModuleSetup* m : m_modules) {
+            m->onDelayedInit();
         }
+
+        startupScenario()->runOnSplashScreen();
+
+        if (splashScreen) {
+            splashScreen->close();
+            delete splashScreen;
+        }
+
+        // The main window must be shown at this point so KDDockWidgets can read its size correctly
+        // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
+        obj->setProperty("visible", true);
+
+        startupScenario()->runAfterSplashScreen();
     }, Qt::QueuedConnection);
 
     QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
