@@ -578,23 +578,22 @@ void Selection::appendChordRest(ChordRest* cr)
         appendTupletHierarchy(tuplet);
     }
 
-    if (cr->isRest()) {
-        appendFiltered(cr);
-        Rest* r = toRest(cr);
-        for (int i = 0; i < r->dots(); ++i) {
-            appendFiltered(r->dot(i));
+    if (cr->isChord()) {
+        Chord* chord = toChord(cr);
+        for (Chord* graceNote : chord->graceNotes()) {
+            if (canSelect(graceNote)) {
+                appendChord(graceNote);
+            }
         }
+        appendChord(chord);
         return;
     }
 
-    Chord* chord = toChord(cr);
-    for (Chord* graceNote : chord->graceNotes()) {
-        if (canSelect(graceNote)) {
-            appendChord(graceNote);
-        }
+    appendFiltered(cr);
+    Rest* r = toRest(cr);
+    for (int i = 0; i < r->dots(); ++i) {
+        appendFiltered(r->dot(i));
     }
-
-    appendChord(chord);
 }
 
 void Selection::appendChord(Chord* chord)
