@@ -190,6 +190,8 @@ private:
     static void layoutDynamicExpressionAndHairpins(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 
     static void layoutParenthesisAndBigTimeSigs(const ElementsToLayout& elementsToLayout);
+
+    static void alignRests(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 };
 }
 
