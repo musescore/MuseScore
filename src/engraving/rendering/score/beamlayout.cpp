@@ -903,21 +903,18 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     const double restToBeamClearance = up
                                        ? beamShape.verticalClearance(restShape, minBeamToRestXDist)
                                        : restShape.verticalClearance(beamShape);
+    const double lineDistance = rest->staff()->lineDistance(rest->tick()) * spatium;
+
+    int clearanceInSteps = std::ceil(restToBeamClearance / lineDistance);
+    up ? rest->verticalClearance().setAbove(clearanceInSteps) : rest->verticalClearance().setBelow(clearanceInSteps);
 
     if (restToBeamClearance > restToBeamPadding) {
         return;
     }
 
-    if (up) {
-        rest->verticalClearance().setAbove(restToBeamClearance);
-    } else {
-        rest->verticalClearance().setBelow(restToBeamClearance);
-    }
-
     const bool restIsLocked = rest->verticalClearance().locked();
     if (!restIsLocked) {
         double overlap = (restToBeamPadding - restToBeamClearance);
-        double lineDistance = rest->staff()->lineDistance(rest->tick()) * spatium;
         int lineMoves = ceil(overlap / lineDistance);
         lineMoves *= up ? 1 : -1;
         double yMove = lineMoves * lineDistance;

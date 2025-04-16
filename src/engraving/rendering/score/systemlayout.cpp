@@ -941,6 +941,60 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
     }
 }
 
+void SystemLayout::alignRests(const ElementsToLayout& elementsToLayout, LayoutContext& ctx)
+{
+    using RestGroup = std::vector<Rest*>;
+    using RestGroups = std::vector<RestGroup>;
+
+    RestGroups restGroups;
+
+    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        for (const Measure* measure : elementsToLayout.measures) {
+            if (!measure->hasVoices(staffIdx)) {
+                continue;
+            }
+            track_idx_t sTrack = staffIdx * VOICES;
+            track_idx_t eTrack = sTrack + VOICES;
+            for (track_idx_t track = sTrack; track < eTrack; ++track) {
+                RestGroup restGroup;
+                for (const Segment& segment : measure->segments()) {
+                    EngravingItem* element = segment.element(track);
+                    if (element && element->isRest() && toRest(element)->staffMove() == 0) {
+                        restGroup.push_back(toRest(element));
+                    }
+                }
+                if (restGroup.size() > 0) {
+                    restGroups.push_back(restGroup);
+                }
+            }
+        }
+    }
+
+    for (RestGroup& group : restGroups) {
+        Rest* firstRest = group.front();
+        const bool alignUpwards = firstRest->voice() == 0;
+        const double lineDist = firstRest->staff()->lineDistance(firstRest->tick()) * firstRest->spatium();
+
+        double yOuterRest = alignUpwards ? DBL_MAX : -DBL_MAX;
+        for (Rest* rest : group) {
+            double yRest = rest->ldata()->pos().y();
+            yOuterRest = alignUpwards ? std::min(yOuterRest, yRest) : std::max(yOuterRest, yRest);
+        }
+        for (Rest* rest : group) {
+            double yCur = rest->ldata()->pos().y();
+            double yResult = yOuterRest;
+            double restVertClearance = lineDist * (alignUpwards ? rest->verticalClearance().above() : rest->verticalClearance().below());
+            double vertPadding = lineDist;
+            restVertClearance = std::max(0.0, restVertClearance - vertPadding);
+            double requiredMove = yOuterRest - yCur;
+            if (std::abs(requiredMove) > restVertClearance) {
+                yResult = alignUpwards ? yCur - restVertClearance : yCur + restVertClearance;
+            }
+            rest->mutldata()->setPosY(yResult);
+        }
+    }
+}
+
 void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 {
     TRACEFUNC;
@@ -984,6 +1038,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     for (ChordRest* cr : elementsToLayout.chordRests) {
         BeamLayout::layoutNonCrossBeams(cr, ctx);
     }
+
+    alignRests(elementsToLayout, ctx);
 
     for (BarLine* bl : elementsToLayout.barlines) {
         TLayout::updateBarlineShape(bl, bl->mutldata(), ctx);
