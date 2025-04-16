@@ -208,6 +208,7 @@ public:
 
     String harmonyText() const { return m_harmony ? m_harmony->plainText() : String(); }
     void setHarmony(String harmonyText);
+    void linkHarmony(Harmony* harmony);
     Harmony* harmony() const { return m_harmony; }
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;

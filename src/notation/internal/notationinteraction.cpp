@@ -7430,6 +7430,53 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
     }
 }
 
+muse::Ret NotationInteraction::canAddFretboardDiagram() const
+{
+    bool canAdd = elementsSelected({ ElementType::HARMONY });
+    return canAdd ? muse::make_ok() : make_ret(Err::HarmonyIsNotSelected);
+}
+
+void NotationInteraction::addFretboardDiagram()
+{
+    Score* score = this->score();
+    if (!score) {
+        return;
+    }
+
+    const Selection& selection = score->selection();
+    if (selection.isNone()) {
+        return;
+    }
+
+    engraving::EngravingItem* item = selection.element();
+    if (!item || !item->isHarmony()) {
+        return;
+    }
+
+    engraving::Harmony* harmony = engraving::toHarmony(item);
+    if (!harmony) {
+        return;
+    }
+
+    engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(harmony->score()->dummy()->segment());
+
+    //! make diagram as parent of harmony
+    diagram->setParent(harmony->explicitParent());
+    harmony->setParent(diagram);
+    diagram->segment()->removeAnnotation(harmony);
+
+    diagram->setTrack(harmony->track());
+    diagram->updateDiagram(harmony->plainText());
+
+    diagram->linkHarmony(harmony);
+
+    startEdit(TranslatableString("undoableAction", "Add fretboard diagram"));
+    score->undoAddElement(diagram);
+    apply();
+
+    select({ diagram });
+}
+
 mu::engraving::Harmony* NotationInteraction::editedHarmony() const
 {
     Harmony* harmony = static_cast<Harmony*>(m_editData.element);

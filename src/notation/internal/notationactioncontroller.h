@@ -127,6 +127,7 @@ private:
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
+    void addFretboardDiagram();
 
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();

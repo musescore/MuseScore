@@ -437,6 +437,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "&Implode"),
              TranslatableString("action", "Implode")
              ),
+    UiAction("add-fretboard-diagram",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Add fretboard diagram"),
+             TranslatableString("action", "Add fretboard diagram"),
+             IconCode::Code::FRETBOARD_DIAGRAM
+             ),
     UiAction("realize-chord-symbols",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

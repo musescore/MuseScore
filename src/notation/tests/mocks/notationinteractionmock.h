@@ -238,6 +238,9 @@ public:
     MOCK_METHOD(muse::Ret, canAddGuitarBend, (), (const, override));
     MOCK_METHOD(void, addGuitarBend, (GuitarBendType), (override));
 
+    MOCK_METHOD(muse::Ret, canAddFretboardDiagram, (), (const, override));
+    MOCK_METHOD(void, addFretboardDiagram, (), (override));
+
     MOCK_METHOD(void, navigateToLyrics, (MoveDirection, bool), (override));
     MOCK_METHOD(void, navigateToLyricsVerse, (MoveDirection), (override));
 

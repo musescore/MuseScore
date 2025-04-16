@@ -176,6 +176,7 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
+    items << makeMenuItem("add-fretboard-diagram");
     items << makeMenuItem("realize-chord-symbols");
 
     return items;

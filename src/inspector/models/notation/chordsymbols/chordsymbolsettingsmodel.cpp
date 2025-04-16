@@ -44,6 +44,7 @@ void ChordSymbolSettingsModel::createProperties()
 void ChordSymbolSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HARMONY);
+    updateHasLinkedFretboardDiagram();
 }
 
 void ChordSymbolSettingsModel::loadProperties()
@@ -73,4 +74,30 @@ PropertyItem* ChordSymbolSettingsModel::voicingType() const
 PropertyItem* ChordSymbolSettingsModel::durationType() const
 {
     return m_durationType;
+}
+
+void ChordSymbolSettingsModel::addFretboardDiagram()
+{
+    dispatcher()->dispatch("add-fretboard-diagram");
+}
+
+bool ChordSymbolSettingsModel::hasLinkedFretboardDiagram() const
+{
+    return m_hasLinkedFretboardDiagram;
+}
+
+void ChordSymbolSettingsModel::setHasLinkedFretboardDiagram(bool has)
+{
+    if (m_hasLinkedFretboardDiagram == has) {
+        return;
+    }
+
+    m_hasLinkedFretboardDiagram = has;
+    emit hasLinkedFretboardDiagramChanged();
+}
+
+void ChordSymbolSettingsModel::updateHasLinkedFretboardDiagram()
+{
+    engraving::EngravingObject* parent = m_elementList.front()->explicitParent();
+    setHasLinkedFretboardDiagram(parent && parent->isFretDiagram());
 }

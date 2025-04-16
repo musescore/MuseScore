@@ -723,6 +723,19 @@ void FretDiagram::setHarmony(String harmonyText)
     triggerLayout();
 }
 
+void FretDiagram::linkHarmony(Harmony* harmony)
+{
+    m_harmony = harmony;
+
+    m_harmony->setTrack(track());
+    if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+        m_harmony->resetProperty(Pid::OFFSET);
+    }
+
+    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+    m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+}
+
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
@@ -731,14 +744,7 @@ void FretDiagram::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isHarmony()) {
-        m_harmony = toHarmony(e);
-        m_harmony->setTrack(track());
-        if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
-            m_harmony->resetProperty(Pid::OFFSET);
-        }
-
-        m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
-        m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+        linkHarmony(toHarmony(e));
         e->added();
     } else {
         LOGW("FretDiagram: cannot add <%s>\n", e->typeName());
