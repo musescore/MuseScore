@@ -389,7 +389,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             double overlap = 0.0;                // how much tie can overlap start and end notes
             bool shortStart = false;            // whether tie should clear start note or not
             Note* startNote = tie->startNote();
-            Chord* startChord = startNote->chord();
+            Chord* startChord = startNote ? startNote->chord() : nullptr;
             if (startChord && startChord->measure() == item->measure() && startChord == prevChordRest(item)) {
                 double startNoteWidth = startNote->width();
                 // overlap into start chord?
