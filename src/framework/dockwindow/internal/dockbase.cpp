@@ -629,12 +629,18 @@ void DockBase::componentComplete()
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::widthChanged, this, [this]() {
         if (m_dockWidget) {
             setWidth(m_dockWidget->width());
+            if (inited()) {
+                applySizeConstraints();
+            }
         }
     });
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::heightChanged, this, [this]() {
         if (m_dockWidget) {
             setHeight(m_dockWidget->height());
+            if (inited()) {
+                applySizeConstraints();
+            }
         }
     });
 

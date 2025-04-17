@@ -41,6 +41,7 @@ Rectangle {
     property int separatorHeight: rowHeight
 
     property int maximumWidth: -1
+    property bool isMultiline: height > rowHeight
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"

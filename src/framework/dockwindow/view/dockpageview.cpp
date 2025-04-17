@@ -427,6 +427,11 @@ void DockPageView::setDefaultNavigationControl(muse::ui::NavigationControl* cont
     navigationController()->setDefaultNavigationControl(_control);
 }
 
+void DockPageView::forceLayout()
+{
+    emit layoutRequested();
+}
+
 QVariant DockPageView::tours() const
 {
     return m_tours;

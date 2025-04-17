@@ -139,7 +139,7 @@ private:
 
     void initDocks(DockPageView* page);
 
-    void adjustContentForAvailableSpace();
+    void adjustContentForAvailableSpace(DockPageView* page);
 
     void notifyAboutDocksOpenStatus();
 
