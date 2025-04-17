@@ -145,11 +145,12 @@ jobs:
         POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
       run: |
         bash ./buildscripts/ci/translation/run_lupdate.sh
-    - name: Update .ts files
+    - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
-      run: |
-        bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-        bash ./buildscripts/ci/translation/tx_pull.sh
+      uses: transifex/cli-action@v2
+      with:
+        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+        args: "pull -f"
     - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
