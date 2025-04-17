@@ -856,7 +856,12 @@ void LayoutSaver::MainWindow::scaleSizes()
         return;
     }
 
-    scalingInfo = ScalingInfo(uniqueName, geometry, screenIndex);
+    // This follows the same logic as in deserializeWindowGeometry()
+    QRect geometry = !isNormalWindowState(windowState) ? normalGeometry : geometry;
+    QRect realGeometry = geometry;
+    ::FloatingWindow::ensureRectIsOnScreen(realGeometry);
+
+    scalingInfo = ScalingInfo(uniqueName, geometry, realGeometry, screenIndex);
 }
 
 QVariantMap LayoutSaver::MainWindow::toVariantMap() const
@@ -1033,7 +1038,7 @@ void LayoutSaver::Placeholder::fromVariantMap(const QVariantMap &map)
     mainWindowUniqueName = map.value(QStringLiteral("mainWindowUniqueName")).toString();
 }
 
-LayoutSaver::ScalingInfo::ScalingInfo(const QString &mainWindowId, QRect savedMainWindowGeo, int screenIndex)
+LayoutSaver::ScalingInfo::ScalingInfo(const QString &mainWindowId, QRect savedMainWindowGeo, QRect realMainWindowGeometry, int screenIndex)
 {
     auto mainWindow = DockRegistry::self()->mainWindowByName(mainWindowId);
     if (!mainWindow) {
@@ -1046,6 +1051,11 @@ LayoutSaver::ScalingInfo::ScalingInfo(const QString &mainWindowId, QRect savedMa
         return;
     }
 
+    if (!realMainWindowGeometry.isValid() || realMainWindowGeometry.isNull()) {
+        qWarning() << Q_FUNC_INFO << "Invalid real main window geometry" << realMainWindowGeometry;
+        return;
+    }
+
     if (!mainWindow->geometry().isValid() || mainWindow->geometry().isNull()) {
         qWarning() << Q_FUNC_INFO << "Invalid main window geometry" << mainWindow->geometry();
         return;
@@ -1055,7 +1065,7 @@ LayoutSaver::ScalingInfo::ScalingInfo(const QString &mainWindowId, QRect savedMa
 
     this->mainWindowName = mainWindowId;
     this->savedMainWindowGeometry = savedMainWindowGeo;
-    realMainWindowGeometry = mainWindow->window()->geometry(); // window() as our main window might be embedded
+    this->realMainWindowGeometry = realMainWindowGeometry;
     widthFactor = double(realMainWindowGeometry.width()) / savedMainWindowGeo.width();
     heightFactor = double(realMainWindowGeometry.height()) / savedMainWindowGeo.height();
     mainWindowChangedScreen = currentScreenIndex != screenIndex;
