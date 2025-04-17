@@ -54,7 +54,19 @@ public:
 
     void unknown();
 
-    bool readBool() { return XmlStreamReader::readInt(); }
+    bool readBool()
+    {
+        bool val;
+        XmlStreamReader::TokenType tt = readNext();
+        if (tt == XmlStreamReader::Characters) {
+            val = text().toInt() != 0;
+            readNext();
+        } else {
+            val = true;
+        }
+        return val;
+    }
+
     double readDouble(bool* ok = nullptr) { return XmlStreamReader::readDouble(ok); }
     double readDouble(double min, double max);
 
