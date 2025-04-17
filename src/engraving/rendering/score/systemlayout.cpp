@@ -2242,7 +2242,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         } else {
             dist += staffDistance;
         }
-        dist += staff2->userDist();
+        dist += staff2->absoluteFromSpatium(staff2->userDist());
         bool fixedSpace = false;
         for (const MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
@@ -2252,16 +2252,16 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             Spacer* sp = m->vspacerDown(si1);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->staffHeight() + sp->gap();
+                    dist = staff->staffHeight() + sp->absoluteGap();
                     fixedSpace = true;
                     break;
                 } else {
-                    dist = std::max(dist, staff->staffHeight() + sp->gap());
+                    dist = std::max(dist, staff->staffHeight() + sp->absoluteGap());
                 }
             }
             sp = m->vspacerUp(si2);
             if (sp) {
-                dist = std::max(dist, sp->gap() + staff->staffHeight());
+                dist = std::max(dist, sp->absoluteGap() + staff->staffHeight());
             }
         }
         if (!fixedSpace) {
@@ -2649,7 +2649,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     }
 
     const Staff* staff = dom.staff(firstStaff);
-    double userDist = staff ? staff->userDist() : 0.0;
+    double userDist = staff ? staff->absoluteFromSpatium(staff->userDist()) : 0.0;
     dist = std::max(dist, userDist);
     top->setFixedDownDistance(false);
 
@@ -2668,11 +2668,11 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
             const Spacer* sp = m->vspacerDown(lastStaff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = sp->gap();
+                    dist = sp->absoluteGap();
                     top->setFixedDownDistance(true);
                     break;
                 } else {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }
@@ -2683,7 +2683,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
                 const Measure* m = toMeasure(mb2);
                 const Spacer* sp = m->vspacerUp(firstStaff);
                 if (sp) {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }

@@ -46,7 +46,7 @@ VerticalGapData::VerticalGapData(const MStyle* style, bool first, System* sys, c
 
         if (spacer) {
             m_fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
-            m_normalisedSpacing = std::max(m_normalisedSpacing, spacer->gap().val());
+            m_normalisedSpacing = std::max(m_normalisedSpacing, spacer->absoluteGap());
             if (m_fixedSpacer) {
                 m_maxActualSpacing = m_normalisedSpacing;
             }
