@@ -39,6 +39,13 @@ QtPlatform.FileDialog {
 
     onAccepted: {
         root.ret = { "errcode": 0, "value":  root.currentFile.toString() }
+        root.ret = {
+            "errcode": 0,
+            "value": {
+                "path": root.currentFile.toString(),
+                "extension": root.selectedNameFilter.extensions[0],
+            }
+        }
         root.close()
         root.closed()
     }

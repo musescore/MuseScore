@@ -37,6 +37,8 @@
 using namespace muse;
 using namespace muse::ui;
 
+static constexpr auto ALL_FILES_FILTER = "*";
+
 class WidgetDialogEventFilter : public QObject
 {
 public:
@@ -175,19 +177,35 @@ Ret InteractiveProvider::showProgress(const std::string& title, Progress* progre
 RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                           const std::vector<std::string>& filter)
 {
-    return openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
+    RetVal<InteractiveProvider::FileInfo> fileInfo = openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
+    return fileInfo.ret.code()
+           == int(Ret::Code::Ok) ? RetVal<io::path_t>::make_ok(fileInfo.val.path) : RetVal<io::path_t>(fileInfo.ret);
 }
 
 RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& path,
                                                          const std::vector<std::string>& filter,
                                                          bool confirmOverwrite)
 {
-    return openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
+    RetVal<InteractiveProvider::FileInfo> fileInfo
+        = openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
+
+    if (fileInfo.ret.code() != int(Ret::Code::Ok)) {
+        return RetVal<io::path_t>(fileInfo.ret);
+    }
+
+    io::path_t filePath = fileInfo.val.path;
+    if (fileInfo.val.extension != ALL_FILES_FILTER) {
+        filePath += "." + fileInfo.val.extension;
+    }
+
+    return RetVal<io::path_t>::make_ok(filePath);
 }
 
 RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
 {
-    return openFileDialog(FileDialogType::SelectDirectory, title, dir);
+    RetVal<InteractiveProvider::FileInfo> fileInfo = openFileDialog(FileDialogType::SelectDirectory, title, dir);
+    return fileInfo.ret.code()
+           == int(Ret::Code::Ok) ? RetVal<io::path_t>::make_ok(fileInfo.val.path) : RetVal<io::path_t>(fileInfo.ret);
 }
 
 RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QString& title)
@@ -498,6 +516,7 @@ void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType
         }
 
         params["nameFilters"] = filterList;
+        params["selectedNameFilter.index"] = 0;
         params["selectExisting"] = type == FileDialogType::SelectOpenningFile;
 
         if (type == FileDialogType::SelectOpenningFile) {
@@ -776,12 +795,13 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const s
     return result;
 }
 
-RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                                       const std::vector<std::string>& filter, bool confirmOverwrite)
+RetVal<InteractiveProvider::FileInfo> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title,
+                                                                          const io::path_t& path,
+                                                                          const std::vector<std::string>& filter, bool confirmOverwrite)
 {
     notifyAboutCurrentUriWillBeChanged();
 
-    RetVal<io::path_t> result;
+    RetVal<InteractiveProvider::FileInfo> result;
 
     QmlLaunchData* data = new QmlLaunchData();
     fillFileDialogData(data, type, title, path, filter, confirmOverwrite);
@@ -798,7 +818,17 @@ RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, cons
         RetVal<Val> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
             result.ret = rv.ret;
-            result.val = QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
+            if (rv.ret) {
+                QVariantMap resultMap = rv.val.toQVariant().toMap();
+
+                io::path_t selectedPath = QUrl::fromUserInput(resultMap["path"].toString()).toLocalFile();
+                std::string extension{};
+
+                if (muse::io::suffix(path).empty()) {
+                    extension = resultMap["extension"].toString().toStdString();
+                }
+                result.val = InteractiveProvider::FileInfo{ selectedPath, extension };
+            }
         }
     }
 
