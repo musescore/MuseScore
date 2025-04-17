@@ -788,6 +788,7 @@ static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* sc
         if (tie) {
             newNote->setTieBack(tie);
             tie->setEndNote(newNote);
+            tie->setTrack2(newNote->track());
         } else {
             LOGD("addTiesToMap: cannot find tie");
         }
