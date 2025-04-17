@@ -55,7 +55,7 @@ class EngravingFont : public IEngravingFont, public muse::Injectable
     muse::Inject<IEngravingFontsProvider> engravingFonts = { this };
 public:
     EngravingFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
-                  const muse::modularity::ContextPtr& iocCtx);
+                  const muse::io::path_t& metadataPath, const muse::modularity::ContextPtr& iocCtx);
     EngravingFont(const EngravingFont& other);
 
     const std::string& name() const override;
@@ -139,6 +139,7 @@ private:
     std::string m_name;
     std::string m_family;
     muse::io::path_t m_fontPath;
+    muse::io::path_t m_metadataPath;
 
     std::unordered_map<Sid, PropertyValue> m_engravingDefaults;
     double m_textEnclosureThickness = 0;
