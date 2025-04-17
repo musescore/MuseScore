@@ -60,51 +60,34 @@ fi
 ##########################################################################
 
 apt_packages=(
-  cimg-dev
+  coreutils
   curl
-  desktop-file-utils
-  file
-  fuse
+  desktop-file-utils # installs `desktop-file-validate` for appimagetool
+  gawk
   git
-  gpg
-  libboost-dev
-  libboost-filesystem-dev
-  libboost-regex-dev
-  libcairo2-dev
-  libfuse-dev
-  libtool
-  libssl-dev
-  patchelf
-  software-properties-common # installs `add-apt-repository`
-  unzip
-  wget
-  xxd
-  p7zip-full
   libasound2-dev 
   libfontconfig1-dev
-  libfreetype6-dev
   libfreetype6
+  libfreetype6-dev
+  libgcrypt20-dev
   libgl1-mesa-dev
+  libglib2.0-dev
+  libgpgme-dev # install for appimagetool
   libjack-dev
   libnss3-dev
   libportmidi-dev
   libpulse-dev
-  libsndfile1-dev
-  zlib1g-dev
-  make
-  patch
-  coreutils
-  gawk
-  sed
-  desktop-file-utils # installs `desktop-file-validate` for appimagetool
-  zsync # installs `zsyncmake` for appimagetool
-  libgpgme-dev # install for appimagetool
-  libglib2.0-dev
   librsvg2-dev
-  argagg-dev
-  libgcrypt20-dev
-  libcurl4-openssl-dev
-  libgpg-error-dev
+  libsndfile1-dev
+  libssl-dev
+  libtool
+  make
+  p7zip-full
+  sed
+  software-properties-common # installs `add-apt-repository`
+  unzip
+  wget
+  zsync # installs `zsyncmake` for appimagetool
   )
 
 # MuseScore compiles without these but won't run without them
@@ -175,27 +158,28 @@ case "$PACKARCH" in
     ;;
   armv7l | aarch64)
     apt_packages_qt6=(
-      qt6-base-dev
-      qt6-declarative-dev
-      qt6-base-private-dev
+      libqt6core5compat6-dev
       libqt6networkauth6-dev
+      libqt6opengl6-dev
+      libqt6printsupport6
       libqt6qml6
-      qml6-module-* # installs all qml modules
       libqt6quick6
       libqt6quickcontrols2-6
       libqt6quicktemplates2-6
       libqt6quickwidgets6
-      libqt6xml6
       libqt6svg6-dev
+      libqt6websockets6-dev
+      libqt6xml6
+      qml6-module-* # installs all qml modules
+      qt6-base-dev
+      qt6-base-private-dev
+      qt6-declarative-dev
+      qt6-gtk-platformtheme
+      qt6-l10n-tools
+      qt6-scxml-dev
       qt6-tools-dev
       qt6-tools-dev-tools
-      libqt6printsupport6
-      libqt6opengl6-dev
-      qt6-l10n-tools
-      libqt6core5compat6-dev
-      qt6-scxml-dev
       qt6-wayland
-      libqt6websockets6-dev
       )
 
     $SUDO apt-get install -y --no-install-recommends \
