@@ -555,9 +555,8 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
 
         double yNumber = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
 
-        if (style.styleB(Sid::tupletNumberRythmicCenter) && !isSymmetric(item, cr1, cr2)) {
-            xNumber = findRhythmicCenter(item, cr2);
-            xNumber = std::min(xNumber, item->p2().x());
+        if (placeNumberOnRhythmicCenter(item, cr1, cr2, ctx)) {
+            xNumber = computeRhythmicCenter(item, cr2);
         } else if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam() && !item->hasBracket()) {
             // for beamed tuplets, center number on beam - if they don't have a bracket
             const ChordRest* crr = toChordRest(cr1);
@@ -631,6 +630,20 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
     }
 }
 
+bool TupletLayout::placeNumberOnRhythmicCenter(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx)
+{
+    if (ctx.conf().styleB(Sid::tupletNumberRythmicCenter) && !isSymmetric(item, cr1, cr2)) {
+        Fraction center = centerTick(item);
+        if (cr2->tick() <= center) {
+            return ctx.conf().styleB(Sid::tupletExtendToEndOfDuration);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 bool TupletLayout::isSymmetric(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2)
 {
     Fraction center = centerTick(item);
@@ -665,7 +678,7 @@ bool TupletLayout::isSymmetric(Tuplet* item, const ChordRest* cr1, const ChordRe
     return tickDistancesFromCenter.size() == 0; // Every distance had a match
 }
 
-double TupletLayout::findRhythmicCenter(Tuplet* item, const ChordRest* endChord)
+double TupletLayout::computeRhythmicCenter(Tuplet* item, const ChordRest* endChord)
 {
     Fraction center = centerTick(item);
 
