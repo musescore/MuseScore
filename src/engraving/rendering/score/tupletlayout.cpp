@@ -579,11 +579,12 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
 
     if (item->hasBracket()) {
         double slope = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
+        const double numberGap = 0.35 * spatium;
 
         if (item->isUp()) {
             if (item->number()) {
                 //set width of bracket hole
-                double x     = xNumber - numberWidth * .5 - spatium * .5;
+                double x     = xNumber - numberWidth * .5 - numberGap;
                 item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
@@ -591,7 +592,7 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
                 item->bracketL[2] = PointF(x,   y - l1);
 
                 //set width of bracket hole
-                x           = xNumber + numberWidth * .5 + spatium * .5;
+                x           = xNumber + numberWidth * .5 + numberGap;
                 item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1); // ensure enough space for the number
                 y           = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketR[0] = PointF(x,   y - l1);
@@ -606,7 +607,7 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
         } else {
             if (item->number()) {
                 //set width of bracket hole
-                double x     = xNumber - numberWidth * .5 - spatium * .5;
+                double x     = xNumber - numberWidth * .5 - numberGap;
                 item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
@@ -614,7 +615,7 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
                 item->bracketL[2] = PointF(x,   y + l1);
 
                 //set width of bracket hole
-                x           = xNumber + numberWidth * .5 + spatium * .5;
+                x           = xNumber + numberWidth * .5 + numberGap;
                 item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1);
                 y           = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketR[0] = PointF(x,   y + l1);
