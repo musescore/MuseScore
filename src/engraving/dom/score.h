@@ -927,10 +927,6 @@ public:
     PlayMode playMode() const { return m_playMode; }
     void setPlayMode(PlayMode v) { m_playMode = v; }
 
-    int linkId();
-    void linkId(int);
-    int getLinkId() const { return m_linkId; }
-
     std::list<Score*> scoreList();
 
     //@ appends to the score a number of measures
@@ -1146,7 +1142,6 @@ private:
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
-    int m_linkId = 0;
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;
     Excerpt* m_excerpt = nullptr;

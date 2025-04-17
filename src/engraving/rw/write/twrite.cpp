@@ -487,10 +487,6 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
 
     // copy paste should not keep links
     if (item->links() && (item->links()->size() > 1) && !ctx.clipboardmode()) {
-        if (MScore::debugMode) {
-            xml.tag("lid", item->links()->lid());
-        }
-
         EngravingItem* me = static_cast<EngravingItem*>(item->links()->mainElement());
         DO_ASSERT(item->type() == me->type());
         Staff* s = item->staff();
@@ -503,8 +499,6 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         Location loc = Location::positionForElement(item);
         if (me == item) {
             xml.tag("linkedMain");
-            int index = ctx.assignLocalIndex(loc);
-            ctx.setLidLocalIndex(item->links()->lid(), index);
         } else {
             if (s && s->links()) {
                 Staff* linkedStaff = toStaff(s->links()->mainElement());
@@ -514,21 +508,14 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
             if (!me->score()->isMaster()) {
                 if (me->score() == item->score()) {
                     xml.tag("score", "same");
-                } else {
-                    LOGW(
-                        "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
-                        item->typeName(), item->links()->lid());
                 }
             }
 
             Location mainLoc = Location::positionForElement(me);
-            const int guessedLocalIndex = ctx.assignLocalIndex(mainLoc);
             if (loc != mainLoc) {
                 mainLoc.toRelative(loc);
                 write(&mainLoc, xml, ctx);
             }
-            const int indexDiff = ctx.lidLocalIndex(item->links()->lid()) - guessedLocalIndex;
-            xml.tag("indexDiff", indexDiff, 0);
             xml.endElement();       // </linked>
         }
     }

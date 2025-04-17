@@ -178,110 +178,6 @@ bool ReadContext::isSameScore(const EngravingObject* obj) const
     return obj->score() == m_score;
 }
 
-rw::ReadLinks ReadContext::readLinks() const
-{
-    return doReadLinks();
-}
-
-rw::ReadLinks ReadContext::doReadLinks() const
-{
-    rw::ReadLinks l;
-    l.linksIndexer = m_linksIndexer;
-    l.staffLinkedElements = m_staffLinkedElements;
-    return l;
-}
-
-void ReadContext::initLinks(const rw::ReadLinks& l)
-{
-    doInitLinks(l);
-}
-
-void ReadContext::doInitLinks(const rw::ReadLinks& l)
-{
-    m_linksIndexer = l.linksIndexer;
-    m_staffLinkedElements = l.staffLinkedElements;
-}
-
-void ReadContext::addLink(Staff* staff, LinkedObjects* link, const Location& location)
-{
-    doAddLink(staff, link, location);
-}
-
-void ReadContext::doAddLink(Staff* staff, LinkedObjects* link, const Location& location)
-{
-    int staffIndex = static_cast<int>(staff->idx());
-    const bool isMasterScore = staff->score()->isMaster();
-    if (!isMasterScore) {
-        staffIndex *= -1;
-    }
-
-    std::vector<std::pair<LinkedObjects*, Location> >& staffLinks = m_staffLinkedElements[staffIndex];
-    if (!isMasterScore) {
-        if (!staffLinks.empty()
-            && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
-            ) {
-            staffLinks.clear();
-        }
-    }
-
-    m_linksIndexer.assignLocalIndex(location);
-    staffLinks.push_back(std::make_pair(link, location));
-}
-
-LinkedObjects* ReadContext::getLink(bool isMasterScore, const Location& location, int localIndexDiff)
-{
-    return doGetLink(isMasterScore, location, localIndexDiff);
-}
-
-LinkedObjects* ReadContext::doGetLink(bool isMasterScore, const Location& location, int localIndexDiff)
-{
-    int staffIndex = location.staff();
-    if (!isMasterScore) {
-        staffIndex *= -1;
-    }
-
-    const int localIndex = m_linksIndexer.assignLocalIndex(location) + localIndexDiff;
-    std::vector<std::pair<LinkedObjects*, Location> >& staffLinks = m_staffLinkedElements[staffIndex];
-
-    if (!staffLinks.empty() && staffLinks.back().second == location) {
-        // This element potentially affects local index for "main"
-        // elements that may go afterwards at the same tick, so
-        // append it to staffLinks as well.
-        staffLinks.push_back(staffLinks.back()); // nothing should reference exactly this local index, so it shouldn't matter what to append
-    }
-
-    for (size_t i = 0; i < staffLinks.size(); ++i) {
-        if (staffLinks[i].second == location) {
-            if (localIndex == 0) {
-                return staffLinks[i].first;
-            }
-
-            i += localIndex;
-            if (i >= staffLinks.size()) {
-                return nullptr;
-            }
-
-            if (staffLinks[i].second == location) {
-                return staffLinks[i].first;
-            }
-
-            return nullptr;
-        }
-    }
-
-    return nullptr;
-}
-
-std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& ReadContext::staffLinkedElements()
-{
-    return m_staffLinkedElements;
-}
-
-std::map<int, LinkedObjects*>& ReadContext::linkIds()
-{
-    return masterCtx()->_elinks;
-}
-
 Fraction ReadContext::rtick() const
 {
     return _curMeasure ? _tick - _curMeasure->tick() : _tick;
@@ -563,13 +459,6 @@ void ReadContext::clearOrphanedConnectors()
             deleteConnectors(c);
         }
         _pendingConnectors.clear();
-    }
-
-    for (auto& it : m_staffLinkedElements) {
-        std::vector<std::pair<LinkedObjects*, Location> >& vector = it.second;
-        muse::remove_if(vector, [&deletedLinks](std::pair<LinkedObjects*, Location>& pair){
-            return deletedLinks.count(pair.first);
-        });
     }
 }
 

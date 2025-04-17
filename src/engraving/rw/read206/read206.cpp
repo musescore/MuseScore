@@ -1910,9 +1910,6 @@ static void convertDoubleArticulations(Chord* chord, XmlReader& e, ReadContext& 
         for (Articulation* a : pairableArticulations) {
             chord->remove(a);
             if (a != newArtic) {
-                if (LinkedObjects* link = a->links()) {
-                    muse::remove(ctx.linkIds(), link->lid());
-                }
                 delete a;
             }
         }
@@ -2746,10 +2743,6 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 if (ctx.staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType()) {
                     ctx.staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
-                if (clef->links() && clef->links()->size() == 1) {
-                    muse::remove(ctx.linkIds(), clef->links()->lid());
-                    LOGD("remove link %d", clef->links()->lid());
-                }
                 delete clef;
                 continue;
             }
@@ -2867,8 +2860,6 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (t->empty()) {
                 if (t->links()) {
                     if (t->links()->size() == 1) {
-                        LOGD("reading empty text: deleted lid = %d", t->links()->lid());
-                        muse::remove(ctx.linkIds(), t->links()->lid());
                         delete t;
                     }
                 }
@@ -3463,10 +3454,6 @@ Ret Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     int id = 1;
-    for (auto& p : ctx.linkIds()) {
-        LinkedObjects* le = p.second;
-        le->setLid(score, id++);
-    }
 
     for (Staff* s : score->staves()) {
         s->updateOttava();

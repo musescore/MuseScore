@@ -70,10 +70,6 @@ muse::Ret Read460::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data
         ctx.setPropertiesToSkip(data->propertiesToSkip);
     }
 
-    if (!score->isMaster() && data) {
-        ctx.initLinks(data->links);
-    }
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
@@ -112,7 +108,6 @@ muse::Ret Read460::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data
     ctx.clearOrphanedConnectors();
 
     if (data) {
-        data->links = ctx.readLinks();
         data->settingsCompat = ctx.settingCompat();
     }
 

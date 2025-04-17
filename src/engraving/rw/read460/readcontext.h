@@ -174,13 +174,6 @@ public:
     void fillLocation(Location&, bool forceAbsFrac = false) const;
     void setLocation(const Location&);   // sets a new reading point, taking into account its type (absolute or relative).
 
-    rw::ReadLinks readLinks() const;
-    void initLinks(const rw::ReadLinks& l);
-    void addLink(Staff* staff, LinkedObjects* link, const Location& location);
-    LinkedObjects* getLink(bool isMasterScore, const Location& location, int localIndexDiff);
-    std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
-    std::map<int, LinkedObjects*>& linkIds();
-
     void addConnectorInfoLater(std::shared_ptr<ConnectorInfoReader> c);   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
     void reconnectBrokenConnectors();
@@ -207,11 +200,6 @@ private:
     ReadContext* m_masterCtx = nullptr;
 
     bool _pasteMode = false;  // modifies read behaviour on paste operation
-
-    std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > m_staffLinkedElements; // one list per staff
-    LinksIndexer m_linksIndexer;
-
-    std::map<int, LinkedObjects*> _elinks;       // for reading old files (< 3.01)
 
     std::vector<std::shared_ptr<ConnectorInfoReader> > _connectors;
     std::vector<std::shared_ptr<ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.

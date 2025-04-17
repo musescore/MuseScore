@@ -538,99 +538,10 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     } else if (tag == "selected") { // obsolete
         e.readInt();
     } else if ((tag == "linked") || (tag == "linkedMain")) {
-        Staff* s = item->staff();
-        if (!s) {
-            s = ctx.score()->staff(ctx.track() / VOICES);
-            if (!s) {
-                LOGW("EngravingItem::readProperties: linked element's staff not found (%s)", item->typeName());
-                e.skipCurrentElement();
-                return true;
-            }
-        }
-        if (tag == "linkedMain") {
-            item->setLinks(new LinkedObjects(item->score()));
-            item->links()->push_back(item);
-
-            ctx.addLink(s, item->links(), ctx.location(true));
-
-            e.readNext();
-        } else {
-            Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
-            bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
-            Location loc = ctx.location(true);
-            if (ls) {
-                loc.setStaff(static_cast<int>(ls->idx()));
-            }
-            Location mainLoc = Location::relative();
-            bool locationRead = false;
-            int localIndexDiff = 0;
-            while (e.readNextStartElement()) {
-                const AsciiStringView ntag(e.name());
-
-                if (ntag == "score") {
-                    String val(e.readText());
-                    if (val == "same") {
-                        linkedIsMaster = item->score()->isMaster();
-                    }
-                } else if (ntag == "location") {
-                    TRead::read(&mainLoc, e, ctx);
-                    mainLoc.toAbsolute(loc);
-                    locationRead = true;
-                } else if (ntag == "indexDiff") {
-                    localIndexDiff = e.readInt();
-                } else {
-                    e.unknown();
-                }
-            }
-            if (!locationRead) {
-                mainLoc = loc;
-            }
-            LinkedObjects* link = ctx.getLink(linkedIsMaster, mainLoc, localIndexDiff);
-            if (link) {
-                EngravingObject* linked = link->mainElement();
-                if (linked->type() == item->type()) {
-                    item->linkTo(linked);
-                } else {
-                    LOGW("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
-                         item->typeName(), linked->typeName());
-                }
-            }
-            if (!item->links()) {
-                LOGW("EngravingItem::readProperties: could not link %s at staff %d", item->typeName(), mainLoc.staff() + 1);
-            }
-        }
+        // REIMPLEMENT LINK READ
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::POSITION_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::APPEARANCE_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::EXCLUDE_FROM_OTHER_PARTS)) {
-    } else if (tag == "lid") {
-        if (ctx.mscVersion() >= 301) {
-            e.skipCurrentElement();
-            return true;
-        }
-        int id = e.readInt();
-        item->setLinks(muse::value(ctx.linkIds(), id, nullptr));
-        if (!item->links()) {
-            if (!ctx.isMasterScore()) {       // DEBUG
-                LOGD() << "not found link, id: " << id << ", count: " << ctx.linkIds().size() << ", item: " << item->typeName();
-            }
-            item->setLinks(new LinkedObjects(item->score(), id));
-            ctx.linkIds().insert({ id, item->links() });
-        }
-#ifndef NDEBUG
-        else {
-            for (EngravingObject* eee : *item->links()) {
-                EngravingItem* ee = static_cast<EngravingItem*>(eee);
-                if (ee->type() != item->type()) {
-                    ASSERT_X(String(u"link %1(%2) type mismatch %3 linked to %4")
-                             .arg(String::fromAscii(ee->typeName()))
-                             .arg(id)
-                             .arg(String::fromAscii(ee->typeName()), String::fromAscii(item->typeName())));
-                }
-            }
-        }
-#endif
-        DO_ASSERT(!item->links()->contains(item));
-        item->links()->push_back(item);
     } else if (tag == "tick") {
         int val = e.readInt();
         if (val >= 0) {
