@@ -91,25 +91,15 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     }
 }
 
-/// <summary>
-/// Recursively calls layout() on any nested tuplets and then the tuplet itself
-/// </summary>
-/// <param name="de">Start element of the tuplet</param>
-void TupletLayout::layout(DurationElement* de, LayoutContext& ctx)
+void TupletLayout::layoutTupletAndNestedTuplets(Tuplet* t, LayoutContext& ctx)
 {
-    Tuplet* t = reinterpret_cast<Tuplet*>(de);
-    if (!t) {
-        return;
-    }
-    // t is top level tuplet
-    // loop through elements of that tuplet
     for (DurationElement* d : t->elements()) {
-        if (d == de) {
+        if (d == t) {
             continue;
         }
         // if element is tuplet, layoutTuplet(that tuplet)
         if (d->isTuplet()) {
-            layout(d, ctx);
+            layoutTupletAndNestedTuplets(toTuplet(d), ctx);
         }
     }
     // layout t
@@ -565,7 +555,7 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
 
         double yNumber = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
 
-        if (style.styleB(Sid::tupletNumberRythmicCenter)) {
+        if (style.styleB(Sid::tupletNumberRythmicCenter) && !isSymmetric(item)) {
             xNumber = findRhythmicCenter(item, cr2);
         } else if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam() && !item->hasBracket()) {
             // for beamed tuplets, center number on beam - if they don't have a bracket
@@ -639,23 +629,37 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
     }
 }
 
-double TupletLayout::findRhythmicCenter(Tuplet* item, const ChordRest* cr2)
+bool TupletLayout::isSymmetric(Tuplet* item)
 {
-    Fraction startTick = item->tick();
-    Fraction tupletSubdivision = item->baseLen().ticks() / item->ratio();
-    Fraction endTick = cr2->endTick() - tupletSubdivision;
-    Fraction centerTick = (startTick + endTick) / 2;
+    Fraction center = centerTick(item);
+
+    const std::vector<DurationElement*>& tupletElements = item->elements();
+    size_t elementsSize = tupletElements.size();
+    for (size_t i = 0; i < elementsSize / 2; ++i) {
+        DurationElement* frontElement = tupletElements[i];
+        DurationElement* backElement = tupletElements[elementsSize - 1 - i];
+        if (center - frontElement->tick() != backElement->tick() - center) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+double TupletLayout::findRhythmicCenter(Tuplet* item, const ChordRest* endChord)
+{
+    Fraction center = centerTick(item);
 
     staff_idx_t track = item->track();
     const Segment* refSeg = nullptr;
     const ChordRest* refCR = nullptr;
-    for (Segment* seg = cr2->segment(); seg; seg = seg->prev(SegmentType::ChordRest)) {
+    for (Segment* seg = endChord->segment(); seg; seg = seg->prev(SegmentType::ChordRest)) {
         refSeg = seg;
         refCR = toChordRest(seg->element(track));
         if (!refCR) {
             continue;
         }
-        if (seg->tick() <= centerTick) {
+        if (seg->tick() <= center) {
             break;
         }
     }
@@ -664,12 +668,12 @@ double TupletLayout::findRhythmicCenter(Tuplet* item, const ChordRest* cr2)
         return 0.0;
     }
 
-    if (refSeg->tick() == centerTick) {
+    if (refSeg->tick() == center) {
         return refSeg->x() + 0.5 * (refCR->isChord() ? toChord(refCR)->upNote()->headWidth() : refCR->width());
     }
 
     Fraction refCRTicks = refCR->actualTicks();
-    Fraction tickDiff = centerTick - refCR->tick();
+    Fraction tickDiff = center - refCR->tick();
     double tickRatio = (tickDiff / refCRTicks).toDouble();
 
     const Segment* nextSeg = item->measure()->findSegment(SegmentType::ChordRest, refSeg->tick() + refCRTicks);
@@ -679,6 +683,19 @@ double TupletLayout::findRhythmicCenter(Tuplet* item, const ChordRest* cr2)
     double relativeWidth = refWidth * tickRatio;
 
     return xRef + relativeWidth;
+}
+
+Fraction TupletLayout::centerTick(Tuplet* item)
+{
+    Fraction startTick = item->tick();
+    Fraction baseLen = item->baseLen().ticks();
+    Fraction ratio = item->ratio();
+    Fraction subdivision = item->baseLen().ticks() / item->ratio();
+    Fraction endTick = startTick + baseLen * ratio.denominator();
+
+    Fraction centerTick = (startTick + endTick - subdivision) / 2;
+
+    return centerTick;
 }
 
 void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
