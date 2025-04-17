@@ -533,7 +533,7 @@ struct MeasureBeat
 {
     int measureIndex = 0;
     int maxMeasureIndex = 0;
-    int beatIndex = 0;
+    float beat = 0.f;
     int maxBeatIndex = 0;
 };
 

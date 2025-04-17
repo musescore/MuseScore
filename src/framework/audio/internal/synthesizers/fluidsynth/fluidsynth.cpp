@@ -203,6 +203,8 @@ void FluidSynth::allNotesOff()
             port->sendEvent(e);
         }
     }
+
+    m_allNotesOffRequested = false;
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -364,6 +366,8 @@ void FluidSynth::flushSound()
         return;
     }
 
+    m_sequencer.flushOffstream();
+
     allNotesOff();
 
     fluid_synth_all_sounds_off(m_fluid->synth, -1);
@@ -408,7 +412,6 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 
     if (m_allNotesOffRequested) {
         allNotesOff();
-        m_allNotesOffRequested = false;
     }
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);

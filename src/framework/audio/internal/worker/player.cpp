@@ -88,15 +88,15 @@ TrackSequenceId Player::sequenceId() const
     return m_sequenceId;
 }
 
-void Player::play()
+void Player::play(const secs_t delay)
 {
     ONLY_AUDIO_MAIN_THREAD;
 
-    Async::call(this, [this]() {
+    Async::call(this, [this, delay]() {
         ONLY_AUDIO_WORKER_THREAD;
         ITrackSequencePtr s = seq();
         if (s) {
-            s->player()->play();
+            s->player()->play(delay);
         }
     }, AudioThread::ID);
 }
@@ -140,15 +140,15 @@ void Player::pause()
     }, AudioThread::ID);
 }
 
-void Player::resume()
+void Player::resume(const secs_t delay)
 {
     ONLY_AUDIO_MAIN_THREAD;
 
-    Async::call(this, [this]() {
+    Async::call(this, [this, delay]() {
         ONLY_AUDIO_WORKER_THREAD;
         ITrackSequencePtr s = seq();
         if (s) {
-            s->player()->resume();
+            s->player()->resume(delay);
         }
     }, AudioThread::ID);
 }

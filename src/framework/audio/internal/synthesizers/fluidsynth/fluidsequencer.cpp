@@ -61,12 +61,7 @@ int FluidSequencer::naturalExpressionLevel() const
 
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamList&)
 {
-    m_offStreamEvents.clear();
-
-    if (m_onOffStreamFlushed) {
-        m_onOffStreamFlushed();
-    }
-
+    flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }

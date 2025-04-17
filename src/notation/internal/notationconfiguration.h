@@ -165,6 +165,7 @@ public:
 
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled) override;
+    muse::async::Notification isMetronomeEnabledChanged() const override;
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled) override;
@@ -299,6 +300,7 @@ private:
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::async::Notification m_isPlayNotesPreviewInInputByDurationChanged;
+    muse::async::Notification m_isMetronomeEnabledChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
     muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;

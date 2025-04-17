@@ -38,11 +38,11 @@ public:
 
     TrackSequenceId sequenceId() const override;
 
-    void play() override;
+    void play(const secs_t delay = 0) override;
     void seek(const secs_t newPosition) override;
     void stop() override;
     void pause() override;
-    void resume() override;
+    void resume(const secs_t delay = 0) override;
 
     PlaybackStatus playbackStatus() const override;
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;

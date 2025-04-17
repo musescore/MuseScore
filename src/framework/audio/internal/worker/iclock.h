@@ -58,6 +58,9 @@ public:
     virtual Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
     virtual void resetTimeLoop() = 0;
 
+    virtual void setCountDown(const msecs_t duration) = 0;
+    virtual async::Notification countDownEnded() const = 0;
+
     virtual async::Channel<secs_t> timeChanged() const = 0;
 };
 
