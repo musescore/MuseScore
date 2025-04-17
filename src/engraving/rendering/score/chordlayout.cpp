@@ -2078,11 +2078,13 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         layoutChords3(chords, notes, staff, ctx);
     }
 
-    layoutLedgerLines(chords);
-    AccidentalsLayout::layoutAccidentals(chords, ctx);
-    for (Chord* chord : chords) {
-        for (Chord* grace : chord->graceNotes()) {
-            AccidentalsLayout::layoutAccidentals({ grace }, ctx);
+    if (!isTab) {
+        layoutLedgerLines(chords);
+        AccidentalsLayout::layoutAccidentals(chords, ctx);
+        for (Chord* chord : chords) {
+            for (Chord* grace : chord->graceNotes()) {
+                AccidentalsLayout::layoutAccidentals({ grace }, ctx);
+            }
         }
     }
 
