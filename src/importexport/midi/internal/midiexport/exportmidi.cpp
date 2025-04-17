@@ -372,7 +372,13 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     ChordRest* cr = toChordRest(seg->element(i));
                     if (cr) {
                         for (const auto& lyric : cr->lyrics()) {
+                            LyricsSyllabic syllabic = lyric->syllabic();
                             muse::ByteArray lyricText = lyric->plainText().toUtf8();
+                            if ((syllabic == LyricsSyllabic::SINGLE || syllabic == LyricsSyllabic::END)
+                                && (lyricText.empty() || lyricText[lyricText.size() - 1] != ' ')) {
+                                lyricText.push_back(' ');
+                            }
+
                             size_t len = lyricText.size() + 1;
                             std::vector<unsigned char> data(lyricText.constData(), lyricText.constData() + len);
 
