@@ -7553,7 +7553,7 @@ void Score::undoRemoveStaleTieJumpPoints(bool undo)
             startCmd(TranslatableString("engraving", "Remove stale partial tie"));
             undoRemoveElement(incomingPT);
             endCmd();
-            if (undoIdx != undoStack()->currentIndex() && undoStack()->currentIndex() > 2) {
+            if (undoIdx != undoStack()->currentIndex() && undoStack()->currentIndex() >= 2) {
                 undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
             }
         } else {
