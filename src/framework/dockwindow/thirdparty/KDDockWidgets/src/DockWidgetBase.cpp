@@ -368,6 +368,11 @@ QStringList DockWidgetBase::affinities() const
     return d->affinities;
 }
 
+bool DockWidgetBase::hasLastPositions() const
+{
+    return d->m_lastPositions.isValid();
+}
+
 void DockWidgetBase::show()
 {
     if (isWindow() && (d->m_lastPositions.wasFloating() || !d->m_lastPositions.isValid())) {
