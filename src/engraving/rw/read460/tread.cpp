@@ -537,8 +537,14 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
         item->setVisible(e.readInt());
     } else if (tag == "selected") { // obsolete
         e.readInt();
-    } else if ((tag == "linked") || (tag == "linkedMain")) {
-        // REIMPLEMENT LINK READ
+    } else if (tag == "linkedTo") {
+        AsciiStringView s = e.readAsciiText();
+        EID eid = EID::fromStdString(s);
+        DO_ASSERT(eid.isValid());
+        EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
+        EngravingObject* mainElement = eidRegister->itemFromEID(eid);
+        DO_ASSERT(mainElement && mainElement->type() == item->type());
+        item->linkTo(mainElement);
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::POSITION_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::APPEARANCE_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::EXCLUDE_FROM_OTHER_PARTS)) {
