@@ -685,7 +685,7 @@ void NotationBraille::setKeys(const QString& sequence)
         case BieSequencePatternType::Dot: {
             LOGD() << "dot " << brailleInput()->dots();
             if (brailleInput()->dots() > 0) {
-                interaction()->increaseDecreaseDuration(-brailleInput()->dots(), true);
+                interaction()->increaseDecreaseDuration(brailleInput()->dots(), true);
             }
             brailleInput()->reset();
             break;
