@@ -252,10 +252,10 @@ Ret AlsaMidiOutPort::sendEvent(const Event& e)
 
     switch (e.opcode()) {
     case Event::Opcode::NoteOn:
-        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
+        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity7());
         break;
     case Event::Opcode::NoteOff:
-        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
+        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity7());
         break;
     case Event::Opcode::ProgramChange:
         snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.program());
