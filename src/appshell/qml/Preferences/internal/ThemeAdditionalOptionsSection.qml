@@ -26,23 +26,31 @@ import Muse.UiComponents 1.0
 BaseSection {
     id: root
 
-    property alias scoreInversionEnabled: scoreInversionEnable.checked
+    property int scoreInversionMode: 0
 
     signal resetThemeToDefaultRequested()
-    signal scoreInversionEnableChangeRequested(bool enable)
+    signal scoreInversionModeChangeRequested(int mode)
 
-    CheckBox {
-        id: scoreInversionEnable
+    ComboBoxWithTitle {
+        id: scoreInversionModeDropdown
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Invert score")
+        title: qsTrc("appshell/preferences", "Invert score:")
 
-        navigation.name: "ScoreInversionBox"
+        navigation.name: "ScoreInversionModeDropdown"
         navigation.panel: root.navigation
         navigation.row: 0
 
-        onClicked: {
-            root.scoreInversionEnableChangeRequested(!checked)
+        model: [
+            { text: qsTrc("appshell/preferences", "Disabled"), value: 0 },
+            { text: qsTrc("appshell/preferences", "Follow app theme"), value: 1 },
+            { text: qsTrc("appshell/preferences", "Always"), value: 2 },
+        ]
+
+        currentIndex: scoreInversionModeDropdown.indexOfValue(root.scoreInversionMode)
+
+        onValueEdited: function(newIndex, newValue) {
+            root.scoreInversionModeChangeRequested(newValue)
         }
     }
 

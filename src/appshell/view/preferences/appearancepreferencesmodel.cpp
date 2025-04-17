@@ -57,7 +57,7 @@ void AppearancePreferencesModel::init()
     });
 
     engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
-        emit invertScoreColorChanged();
+        emit scoreInversionModeChanged();
         emit foregroundColorChanged();
     });
 
@@ -252,9 +252,9 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
-bool AppearancePreferencesModel::scoreInversionEnabled() const
+int AppearancePreferencesModel::scoreInversionMode() const
 {
-    return engravingConfiguration()->scoreInversionEnabled();
+    return static_cast<int>(engravingConfiguration()->scoreInversionMode());
 }
 
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
@@ -362,12 +362,12 @@ void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
     emit foregroundWallpaperPathChanged();
 }
 
-void AppearancePreferencesModel::setScoreInversionEnabled(bool value)
+void AppearancePreferencesModel::setScoreInversionMode(int mode)
 {
-    if (value == scoreInversionEnabled()) {
+    if (mode == scoreInversionMode()) {
         return;
     }
 
-    engravingConfiguration()->setScoreInversionEnabled(value);
-    emit invertScoreColorChanged();
+    engravingConfiguration()->setScoreInversionMode(static_cast<mu::engraving::ScoreInversionMode>(mode));
+    emit scoreInversionModeChanged();
 }
