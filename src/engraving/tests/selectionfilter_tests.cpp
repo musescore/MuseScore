@@ -36,11 +36,11 @@ static const String SELECTIONFILTER_DATA_DIR("selectionfilter_data/");
 class Engraving_SelectionFilterTests : public ::testing::Test
 {
 public:
-    void testFilter(int idx, SelectionFilterType filter);
-    void testFilterSpanner(int idx, SelectionFilterType filter);
+    void testFilter(int idx, const SelectionFilterTypesVariant& type);
+    void testFilterSpanner(int idx, const SelectionFilterTypesVariant& type);
 };
 
-void Engraving_SelectionFilterTests::testFilter(int idx, SelectionFilterType filter)
+void Engraving_SelectionFilterTests::testFilter(int idx, const SelectionFilterTypesVariant& type)
 {
     Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter%1.mscx").arg(idx));
     EXPECT_TRUE(score);
@@ -57,7 +57,7 @@ void Engraving_SelectionFilterTests::testFilter(int idx, SelectionFilterType fil
     EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), String("selectionfilter%1-base.xml").arg(idx),
                                                SELECTIONFILTER_DATA_DIR + String("selectionfilter%1-base-ref.xml").arg(idx)));
 
-    score->selectionFilter().setFiltered(filter, false);
+    score->selectionFilter().setFiltered(type, false);
 
     EXPECT_TRUE(score->selection().canCopy());
     EXPECT_EQ(score->selection().mimeType(), mimeStaffListFormat);
@@ -68,7 +68,7 @@ void Engraving_SelectionFilterTests::testFilter(int idx, SelectionFilterType fil
     delete score;
 }
 
-void Engraving_SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterType filter)
+void Engraving_SelectionFilterTests::testFilterSpanner(int idx, const SelectionFilterTypesVariant& type)
 {
     Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String("selectionfilter%1.mscx").arg(idx));
     EXPECT_TRUE(score);
@@ -89,7 +89,7 @@ void Engraving_SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterT
     EXPECT_TRUE(ScoreComp::saveCompareMimeData(score->selection().mimeData(), String("selectionfilter%1-base.xml").arg(idx),
                                                SELECTIONFILTER_DATA_DIR + String("selectionfilter%1-base-ref.xml").arg(idx)));
 
-    score->selectionFilter().setFiltered(filter, false);
+    score->selectionFilter().setFiltered(type, false);
 
     EXPECT_TRUE(score->selection().canCopy());
     EXPECT_EQ(score->selection().mimeType(), mimeStaffListFormat);
@@ -102,110 +102,110 @@ void Engraving_SelectionFilterTests::testFilterSpanner(int idx, SelectionFilterT
 
 TEST_F(Engraving_SelectionFilterTests, filterDynamic)
 {
-    testFilter(1, SelectionFilterType::DYNAMIC);
+    testFilter(1, ElementsSelectionFilterTypes::DYNAMIC);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterArticulation)
 {
-    testFilter(2, SelectionFilterType::ARTICULATION);
+    testFilter(2, ElementsSelectionFilterTypes::ARTICULATION);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterLyrics)
 {
-    testFilter(3, SelectionFilterType::LYRICS);
+    testFilter(3, ElementsSelectionFilterTypes::LYRICS);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterFingering)
 {
-    testFilter(4, SelectionFilterType::FINGERING);
+    testFilter(4, ElementsSelectionFilterTypes::FINGERING);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterChordSymbol)
 {
-    testFilter(5, SelectionFilterType::CHORD_SYMBOL);
+    testFilter(5, ElementsSelectionFilterTypes::CHORD_SYMBOL);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterSlur)
 {
-    testFilter(6, SelectionFilterType::SLUR);
+    testFilter(6, ElementsSelectionFilterTypes::SLUR);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterFiguredBass)
 {
-    testFilter(7, SelectionFilterType::FIGURED_BASS);
+    testFilter(7, ElementsSelectionFilterTypes::FIGURED_BASS);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterOttava)
 {
-    testFilter(8, SelectionFilterType::OTTAVA);
+    testFilter(8, ElementsSelectionFilterTypes::OTTAVA);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterPedalLine)
 {
-    testFilter(9, SelectionFilterType::PEDAL_LINE);
+    testFilter(9, ElementsSelectionFilterTypes::PEDAL_LINE);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterArpeggio)
 {
-    testFilter(10, SelectionFilterType::ARPEGGIO);
+    testFilter(10, ElementsSelectionFilterTypes::ARPEGGIO);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterFretDiagram)
 {
-    testFilter(11, SelectionFilterType::FRET_DIAGRAM);
+    testFilter(11, ElementsSelectionFilterTypes::FRET_DIAGRAM);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterGlissando)
 {
-    testFilter(12, SelectionFilterType::GLISSANDO);
+    testFilter(12, ElementsSelectionFilterTypes::GLISSANDO);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterBreath)
 {
-    testFilter(13, SelectionFilterType::BREATH);
+    testFilter(13, ElementsSelectionFilterTypes::BREATH);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterOtherText)
 {
-    testFilter(14, SelectionFilterType::OTHER_TEXT);
+    testFilter(14, ElementsSelectionFilterTypes::OTHER_TEXT);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterOtherLine)
 {
-    testFilterSpanner(15, SelectionFilterType::OTHER_LINE);
+    testFilterSpanner(15, ElementsSelectionFilterTypes::OTHER_LINE);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterTremolo)
 {
-    testFilter(16, SelectionFilterType::TREMOLO);
+    testFilter(16, ElementsSelectionFilterTypes::TREMOLO);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterVoice1)
 {
-    testFilter(17, SelectionFilterType::FIRST_VOICE);
+    testFilter(17, VoicesSelectionFilterTypes::FIRST_VOICE);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterVoice2)
 {
-    testFilter(18, SelectionFilterType::SECOND_VOICE);
+    testFilter(18, VoicesSelectionFilterTypes::SECOND_VOICE);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterVoice3)
 {
-    testFilter(19, SelectionFilterType::THIRD_VOICE);
+    testFilter(19, VoicesSelectionFilterTypes::THIRD_VOICE);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterVoice4)
 {
-    testFilter(20, SelectionFilterType::FOURTH_VOICE);
+    testFilter(20, VoicesSelectionFilterTypes::FOURTH_VOICE);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterHairpin)
 {
-    testFilter(22, SelectionFilterType::HAIRPIN);
+    testFilter(22, ElementsSelectionFilterTypes::HAIRPIN);
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterOrnament)
 {
-    testFilter(23, SelectionFilterType::ORNAMENT);
+    testFilter(23, ElementsSelectionFilterTypes::ORNAMENT);
 }
