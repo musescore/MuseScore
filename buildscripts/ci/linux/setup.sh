@@ -29,10 +29,12 @@ df -h .
 
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
+PACKARCH="x86_64" # x86_64, armv7l, aarch64
 COMPILER="gcc" # gcc, clang
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+        --arch) PACKARCH="$2"; shift ;;
         --compiler) COMPILER="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -46,28 +48,38 @@ rm -f $ENV_FILE
 
 echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
 
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  SUDO=""
+  export DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
+else
+  SUDO="sudo"
+fi
+
 ##########################################################################
 # GET DEPENDENCIES
 ##########################################################################
 
-# DISTRIBUTION PACKAGES
-
-# These are installed by default on Travis CI, but not on Docker
-apt_packages_basic=(
-  # Alphabetical order please!
+apt_packages=(
+  cimg-dev
+  curl
   desktop-file-utils
   file
+  fuse
   git
-  lcov # for code coverage
+  gpg
+  libboost-dev
+  libboost-filesystem-dev
+  libboost-regex-dev
+  libcairo2-dev
+  libfuse-dev
+  libtool
+  libssl-dev
+  patchelf
   software-properties-common # installs `add-apt-repository`
   unzip
+  wget
+  xxd
   p7zip-full
-  )
-
-# These are the same as on Travis CI
-apt_packages_standard=(
-  # Alphabetical order please!
-  curl
   libasound2-dev 
   libfontconfig1-dev
   libfreetype6-dev
@@ -78,8 +90,21 @@ apt_packages_standard=(
   libportmidi-dev
   libpulse-dev
   libsndfile1-dev
+  zlib1g-dev
   make
-  wget
+  patch
+  coreutils
+  gawk
+  sed
+  desktop-file-utils # installs `desktop-file-validate` for appimagetool
+  zsync # installs `zsyncmake` for appimagetool
+  libgpgme-dev # install for appimagetool
+  libglib2.0-dev
+  librsvg2-dev
+  argagg-dev
+  libgcrypt20-dev
+  libcurl4-openssl-dev
+  libgpg-error-dev
   )
 
 # MuseScore compiles without these but won't run without them
@@ -88,6 +113,7 @@ apt_packages_runtime=(
   libcups2
   libdbus-1-3
   libegl1-mesa-dev
+  libgles2-mesa-dev
   libodbc1
   libpq-dev
   libssl-dev
@@ -117,10 +143,9 @@ apt_packages_ffmpeg=(
   libswscale-dev
   )
 
-sudo apt-get update 
-sudo apt-get install -y --no-install-recommends \
-  "${apt_packages_basic[@]}" \
-  "${apt_packages_standard[@]}" \
+$SUDO apt-get update 
+$SUDO apt-get install -y --no-install-recommends \
+  "${apt_packages[@]}" \
   "${apt_packages_runtime[@]}" \
   "${apt_packages_ffmpeg[@]}"
 
@@ -128,24 +153,87 @@ sudo apt-get install -y --no-install-recommends \
 # GET QT
 ##########################################################################
 
-# Get newer Qt (only used cached version if it is the same)
-qt_version="624"
-qt_revision="r2" # added websocket module
-qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
-if [[ ! -d "${qt_dir}" ]]; then
-  mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64_${qt_revision}.7z"
-  wget -q --show-progress -O qt.7z "${qt_url}"
-  7z x -y qt.7z -o"${qt_dir}"
-  rm qt.7z
-fi
+case "$PACKARCH" in
+  x86_64)
+    # Get newer Qt (only used cached version if it is the same)
+    qt_version="624"
+    qt_revision="r2" # added websocket module
+    qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
+    if [[ ! -d "${qt_dir}" ]]; then
+      mkdir -p "${qt_dir}"
+      qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64_${qt_revision}.7z"
+      wget -q --show-progress -O qt.7z "${qt_url}"
+      7z x -y qt.7z -o"${qt_dir}"
+      rm qt.7z
+    fi
 
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
+    echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
+    echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
+    echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
+    echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
+    echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
+    ;;
+  armv7l | aarch64)
+    apt_packages_qt6=(
+      qt6-base-dev
+      qt6-declarative-dev
+      qt6-base-private-dev
+      libqt6networkauth6-dev
+      libqt6qml6
+      qml6-module-* # installs all qml modules
+      libqt6quick6
+      libqt6quickcontrols2-6
+      libqt6quicktemplates2-6
+      libqt6quickwidgets6
+      libqt6xml6
+      libqt6svg6-dev
+      qt6-tools-dev
+      qt6-tools-dev-tools
+      libqt6printsupport6
+      libqt6opengl6-dev
+      qt6-l10n-tools
+      libqt6core5compat6-dev
+      qt6-scxml-dev
+      qt6-wayland
+      libqt6websockets6-dev
+      )
 
+    $SUDO apt-get install -y --no-install-recommends \
+      "${apt_packages_qt6[@]}"
+
+    case $PACKARCH in
+      aarch64)
+        qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
+        ;;
+      armv7l)
+        qt_dir="/usr/lib/arm-linux-gnueabihf/qt6"
+        ;;
+    esac
+
+    if [[ ! -d "${qt_dir}" ]]; then
+      echo "Qt directory not found: ${qt_dir}"
+      exit 1
+    fi
+
+    export QT_SELECT=qt6
+    echo export QT_SELECT=qt6 >> ${ENV_FILE}
+    echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
+    echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
+    echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
+    echo export CFLAGS="-Wno-psabi" >> ${ENV_FILE}
+    echo export CXXFLAGS="-Wno-psabi" >> ${ENV_FILE}
+    # explicitly set QMAKE path for linuxdeploy-plugin-qt
+    echo export QMAKE="/usr/bin/qmake6" >> ${ENV_FILE}
+
+    # https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
+    qtchooser -install qt6 $(which qmake6)
+    ;;
+
+  *)
+    echo "Unknown architecture: $PACKARCH"
+    exit 1
+    ;;
+esac
 
 ##########################################################################
 # GET TOOLS
@@ -155,8 +243,8 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 if [ "$COMPILER" == "gcc" ]; then
 
   gcc_version="10"
-  sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
-  sudo update-alternatives \
+  $SUDO apt-get install -y --no-install-recommends "g++-${gcc_version}"
+  $SUDO update-alternatives \
     --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
     --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
@@ -168,7 +256,7 @@ if [ "$COMPILER" == "gcc" ]; then
 
 elif [ "$COMPILER" == "clang" ]; then
 
-  sudo apt-get install clang
+  $SUDO apt-get install clang
   echo export CC="/usr/bin/clang" >> ${ENV_FILE}
   echo export CXX="/usr/bin/clang++" >> ${ENV_FILE}
 
@@ -181,27 +269,43 @@ fi
 
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
-cmake_version="3.24.0"
-cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
-if [[ ! -d "$cmake_dir" ]]; then
-  mkdir -p "$cmake_dir"
-  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz" 
-  wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
-fi
-echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
-$cmake_dir/bin/cmake --version
+case "$PACKARCH" in
+  x86_64)
+    cmake_version="3.24.0"
+    cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
+    if [[ ! -d "$cmake_dir" ]]; then
+      mkdir -p "$cmake_dir"
+      cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz" 
+      wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
+    fi
+    export PATH="$cmake_dir/bin:$PATH"
+    echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
+    ;;
+  armv7l | aarch64)
+    $SUDO apt-get install -y --no-install-recommends cmake
+    ;;
+esac
+cmake --version
 
 # Ninja
-echo "Get Ninja"
-ninja_dir=$BUILD_TOOLS/Ninja
-if [[ ! -d "$ninja_dir" ]]; then
-  mkdir -p $ninja_dir
-  wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
-  chmod +x $ninja_dir/ninja
-fi
-echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
+case "$PACKARCH" in
+  x86_64)
+    echo "Get Ninja"
+    ninja_dir=$BUILD_TOOLS/Ninja
+    if [[ ! -d "$ninja_dir" ]]; then
+      mkdir -p $ninja_dir
+      wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
+      chmod +x $ninja_dir/ninja
+    fi
+    export PATH="${ninja_dir}:${PATH}"
+    echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
+    ;;
+  armv7l | aarch64)
+    $SUDO apt-get install -y --no-install-recommends ninja-build
+    ;;
+esac
 echo "ninja version"
-$ninja_dir/ninja --version
+ninja --version
 
 ##########################################################################
 # POST INSTALL
@@ -209,10 +313,10 @@ $ninja_dir/ninja --version
 
 chmod +x "$ENV_FILE"
 
-# # tidy up (reduce size of Docker image)
-# apt-get clean autoclean
-# apt-get autoremove --purge -y
-# rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  # add an exception for the "detected dubious ownership in repository" (only seen inside a Docker image)
+  git config --global --add safe.directory /MuseScore
+fi
 
 df -h .
 echo "Setup script done"
