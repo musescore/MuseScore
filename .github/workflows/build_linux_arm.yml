@@ -49,10 +49,6 @@ jobs:
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm32')
     runs-on: ubuntu-22.04-arm
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.12.1
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v4
     - name: Setup QEMU
@@ -187,10 +183,6 @@ jobs:
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm64')
     runs-on: ubuntu-22.04-arm
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.12.1
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v4
     - name: Configure workflow
