@@ -47,7 +47,7 @@ jobs:
 
   linux_arm32:
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm32')
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-arm
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -189,7 +189,7 @@ jobs:
 
   linux_arm64:
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm64')
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-arm
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -197,13 +197,12 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v4
-    - name: Setup QEMU
-      run: |
-        sudo apt-get update
-        sudo apt-get install qemu-user-static -y
     - name: Configure workflow
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
+        SENTRY_SERVER_MU4_KEY: ${{ secrets.SENTRY_SERVER_MU4_KEY }}
+        SENTRY_SERVER_SANDBOX_KEY: ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
+        SENTRY_PROJECT: ${{ inputs.sentry_project }}
       run: |
         bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -226,16 +225,26 @@ jobs:
         fi
 
         DO_UPLOAD_SYMBOLS='false'
-        SENTRY_PROJECT=${{ inputs.sentry_project }}
         SENTRY_URL=""
-        if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then
-          DO_UPLOAD_SYMBOLS='true'
-          SENTRY_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU3_KEY }}
+
+        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
+            SENTRY_PROJECT="mu4"
+          fi
+
+          if [ "$SENTRY_PROJECT" == "mu4" ]; then
+            DO_UPLOAD_SYMBOLS='true'
+            SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=$SENTRY_SERVER_MU4_KEY
+          fi
         fi
 
-        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then
+        if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly" ]; then
+          SENTRY_PROJECT="sandbox"
+        fi
+
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then
           DO_UPLOAD_SYMBOLS='true'
-          SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
+          SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
         fi
 
         DO_PUBLISH='false'
@@ -254,49 +263,42 @@ jobs:
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Lin_aarch64${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
-        echo "BUILD_MODE=$BUILD_MODE" | tee -a "${GITHUB_ENV}"
-        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a "${GITHUB_ENV}"
-        echo "DO_UPDATE_TS=$DO_UPDATE_TS" | tee -a "${GITHUB_ENV}"
-        echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" | tee -a "${GITHUB_ENV}"
-        echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" | tee -a "${GITHUB_ENV}"
-        echo "SENTRY_PROJECT=$SENTRY_PROJECT" | tee -a "${GITHUB_ENV}"
-        echo "SENTRY_URL=$SENTRY_URL" | tee -a "${GITHUB_ENV}"
-        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a "${GITHUB_ENV}"
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a "${GITHUB_ENV}"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_UPDATE_TS=$DO_UPDATE_TS" | tee -a $GITHUB_ENV
+        echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" | tee -a $GITHUB_ENV
+        echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" | tee -a $GITHUB_ENV
+        echo "SENTRY_PROJECT=$SENTRY_PROJECT" | tee -a $GITHUB_ENV
+        echo "SENTRY_URL=$SENTRY_URL" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    # - name: Generate _en.ts files
-    #   env:
-    #     LUPDATE_ARGS: ""
-    #     POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
-    #   run: |
-    #     bash ./buildscripts/ci/translation/run_lupdate.sh
+    - name: Setup environment
+      run: |
+        bash ./buildscripts/ci/linux/setup-arm.sh --arch aarch64
+    - name: Generate _en.ts files
+      env:
+        LUPDATE_ARGS: ""
+        POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
+      run: |
+        bash ./buildscripts/ci/translation/run_lupdate.sh
     - name: Update .ts files
       if: env.DO_UPDATE_TS == 'true'
       run: |
         bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
         bash ./buildscripts/ci/translation/tx_pull.sh
-
-    - name: Setup, Generate _en.ts files, Build AppImage, Package, Checksum
-      env: # For lupdate
-        LUPDATE_ARGS: ""
-        POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
+    - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-
-        # Re. `export QT_SELECT=qt6`, see https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
-        # and accompanying `qtchooser` comment in `buildscripts/ci/linux/setup-arm.sh`.
-        sudo docker run --platform linux/arm64 -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "arm64v8/ubuntu:jammy" /bin/bash -c "\
-          cd /MuseScore && \
-          export QT_SELECT=qt6 && \
-          bash /MuseScore/buildscripts/ci/linux/setup-arm.sh --arch aarch64 && \
-          bash /MuseScore/buildscripts/ci/translation/run_lupdate.sh && \
-          bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch aarch64 && \
-          bash /MuseScore/buildscripts/ci/linux/package.sh --arch aarch64 && \
-          bash /MuseScore/buildscripts/ci/tools/checksum.sh \
-        "
+        bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch aarch64
+    - name: Package
+      run: |
+        bash ./buildscripts/ci/linux/package.sh --arch aarch64
+    - name: Checksum
+      run: |
+        bash ./buildscripts/ci/tools/checksum.sh
     - name: Generate and upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
-      shell: bash
       run: |
         APP_BIN=$(find "$(pwd)/build.release/src/app/" -type f -name "mscore4portable*" -print -quit)
         ARCH=aarch64
