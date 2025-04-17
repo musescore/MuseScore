@@ -39,6 +39,10 @@ namespace mu::engraving::read410 {
 class MeasureRead;
 }
 
+namespace mu::engraving::read460 {
+class MeasureRead;
+}
+
 namespace mu::engraving::write {
 class MeasureWrite;
 }
@@ -359,6 +363,7 @@ private:
     friend class Factory;
     friend class read400::MeasureRead;
     friend class read410::MeasureRead;
+    friend class read460::MeasureRead;
     friend class write::MeasureWrite;
 
     Measure(System* parent = 0);
