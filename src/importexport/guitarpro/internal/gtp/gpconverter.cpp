@@ -1036,7 +1036,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     MeasureBase* m = nullptr;
     if (!_score->measures()->first()) {
         m = Factory::createTitleVBox(_score->dummy()->system());
-        _score->addMeasure(m, 0);
+        _score->measures()->append(m);
     } else {
         m = _score->measures()->first();
         if (!m->isVBox()) {
@@ -1713,7 +1713,7 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
     auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
     measure->setTimesig(scoreTimeSig);
     measure->setTicks(scoreTimeSig);
-    _score->measures()->add(measure);
+    _score->measures()->append(measure);
 
     return measure;
 }

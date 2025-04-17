@@ -74,7 +74,7 @@ void MCursor::createMeasures()
         measure->setTick(tick);
         measure->setTimesig(m_sig);
         measure->setTicks(m_sig);
-        m_score->measures()->add(measure);
+        m_score->measures()->append(measure);
     }
 }
 

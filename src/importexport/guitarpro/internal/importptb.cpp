@@ -1172,7 +1172,7 @@ Measure* PowerTab::createMeasure(ptBar* bar, const Fraction& tick)
     measure->setTimesig(nts);
     measure->setTicks(nts);
 
-    score->measures()->add(measure);
+    score->measures()->append(measure);
 
     return measure;
 }
@@ -1269,7 +1269,7 @@ Err PowerTab::read()
     MeasureBase* m;
     if (!score->measures()->first()) {
         m = Factory::createTitleVBox(score->dummy()->system());
-        score->addMeasure(m, 0);
+        score->measures()->append(m);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {

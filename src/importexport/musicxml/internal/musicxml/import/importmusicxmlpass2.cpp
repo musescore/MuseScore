@@ -3867,7 +3867,8 @@ Text* MusicXmlParserDirection::addTextToHeader(const TextStyleType textStyleType
     Text* t = Factory::createText(m_score->dummy(), textStyleType);
     t->setXmlText(m_wordsText.trimmed());
     MeasureBase* const firstMeasure = m_score->measures()->first();
-    VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXmlParserPass1::createAndAddVBoxForCreditWords(m_score);
+    VBox* vbox
+        = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXmlParserPass1::createAndAddVBoxForCreditWords(m_score, Fraction(0, 1));
     double spatium = m_score->style().styleD(Sid::spatium);
     vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
     vbox->add(t);
