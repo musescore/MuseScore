@@ -56,6 +56,12 @@ if (QT_ADD_WEBSOCKET)
     )
 endif()
 
+if (QT_ADD_MULTIMEDIA)
+    set(_components ${_components}
+        Multimedia
+    )
+endif()
+
 foreach(_component ${_components})
     find_package(Qt6${_component} REQUIRED)
     list(APPEND QT_LIBRARIES ${Qt6${_component}_LIBRARIES})
