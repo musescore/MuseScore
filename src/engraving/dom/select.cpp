@@ -680,7 +680,8 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
 {
-    if (muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
+    if (muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))
+        || !innermostTuplet->isInRange(tickStart(), tickEnd())) {
         return;
     }
 
