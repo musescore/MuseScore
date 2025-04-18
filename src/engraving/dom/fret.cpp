@@ -38,6 +38,11 @@
 #include "stringdata.h"
 #include "system.h"
 #include "undo.h"
+#include <QEvent>
+#include <QCloseEvent>
+#include <QTimer>
+#include <QScopedValueRollback>
+
 
 #include "rw/read410/tread.h"
 #include "rw/read410/harmonytodiagramreader.h"
@@ -250,7 +255,9 @@ std::vector<LineF> FretDiagram::dragAnchorLines() const
 //---------------------------------------------------------
 
 void FretDiagram::setStrings(int n)
-{
+{   
+    qDebug() << "SET STRINGS";
+    qWarning() << "SET STRING";
     int difference = n - m_strings;
     if (difference == 0 || n <= 0) {
         return;
@@ -321,7 +328,9 @@ void FretDiagram::setStrings(int n)
 //---------------------------------------------------------
 
 void FretDiagram::init(StringData* stringData, Chord* chord)
-{
+{   
+    qDebug() << "I HOPE THIS WORKS";
+    qWarning() << "DOES THIS WORK";
     if (!stringData) {
         setStrings(6);
     } else {
@@ -411,10 +420,12 @@ void FretDiagram::setMarker(int string, FretMarkerType mtype)
 
 void FretDiagram::setBarre(int startString, int endString, int fret)
 {
+    qDebug() << "SET BARRE";
+    qWarning() << "SET BARRE";
     if (startString == -1) {
         removeBarre(fret);
     } else if (startString >= 0 && endString >= -1 && startString < m_strings && endString < m_strings) {
-        m_barres[fret].push_back(FretItem::Barre(startString, endString));
+        m_barres[fret].push_back(FretItem::Barre(startString, endString+1));
     }
 }
 
@@ -429,8 +440,12 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
 void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 {
     UNUSED(add);
-
+    qDebug() << "SET BARRE2";
+    qWarning() << "SET BARRE2";
     std::vector<FretItem::Barre> bVect = barre(fret);
+    for (auto& b: bVect) {
+        qWarning() << b.startString << b.endString;
+    }
     for (auto& b: bVect){
         if (!b.exists()) {
             if (string < m_strings - 1) {
