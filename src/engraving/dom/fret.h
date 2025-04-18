@@ -107,7 +107,8 @@ public:
 };
 
 // The three main storage containers used by fret diagrams
-typedef std::map<int, FretItem::Barre> BarreMap;
+// typedef std::map<int, FretItem::Barre> BarreMap;
+typedef std::map<int, std::vector<FretItem::Barre> > BarreMap;
 typedef std::map<int, FretItem::Marker> MarkerMap;
 typedef std::map<int, std::vector<FretItem::Dot> > DotMap;
 
@@ -212,7 +213,8 @@ public:
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;
-    FretItem::Barre barre(int fret) const;
+    std::vector<FretItem::Barre>& getBarres(int fret);
+    std::vector<FretItem::Barre> barre(int fret) const;
 
     const BarreMap& barres() const { return m_barres; }
     const DotMap& dots() const { return m_dots; }

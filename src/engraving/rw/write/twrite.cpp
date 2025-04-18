@@ -1398,12 +1398,14 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         }
 
         for (int fi = 1; fi <= item->frets(); ++fi) {
-            FretItem::Barre b = item->barre(fi);
-            if (!b.exists()) {
-                continue;
-            }
+            std::vector<FretItem::Barre> bVect = item->barre(fi);
+            for (auto& b: bVect) {
+                if (!b.exists()) {
+                    continue;
+                }
 
-            xml.tag("barre", { { "start", b.startString }, { "end", b.endString } }, fi);
+                xml.tag("barre", { { "start", b.startString }, { "end", b.endString } }, fi);
+            }
         }
     }
     xml.endElement();
@@ -1447,13 +1449,15 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         int barreStartString = -1;
         int barreFret = -1;
         for (auto const& i : item->barres()) {
-            FretItem::Barre b = i.second;
-            if (b.exists()) {
-                int fret = i.first;
-                if (fret <= lowestDotFret && b.endString == -1 && !(fret == lowestDotFret && b.startString > furthestLeftLowestDot)) {
-                    barreStartString = b.startString;
-                    barreFret = fret;
-                    break;
+            std::vector<FretItem::Barre> bVect = i.second;
+            for (auto& b: bVect) {
+                if (!b.exists()) {
+                    int fret = i.first;
+                    if (fret <= lowestDotFret && b.endString == -1 && !(fret == lowestDotFret && b.startString > furthestLeftLowestDot)) {
+                        barreStartString = b.startString;
+                        barreFret = fret;
+                        break;
+                    }
                 }
             }
         }
