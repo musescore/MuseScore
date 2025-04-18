@@ -2394,7 +2394,7 @@ bool EngravingItem::colorsInversionEnabled() const
     return m_colorsInversionEnabled;
 }
 
-void EngravingItem::setColorsInverionEnabled(bool enabled)
+void EngravingItem::setColorsInversionEnabled(bool enabled)
 {
     m_colorsInversionEnabled = enabled;
 }
