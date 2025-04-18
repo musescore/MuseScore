@@ -2672,14 +2672,16 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     if (item->fretOffset() > 0) {
         double padding = 0.4 * ldata->stringDist;
         for (auto i : item->barres()) {
-            FretItem::Barre barre = i.second;
-            if (!barre.exists()) {
+            std::vector<FretItem::Barre> barreVect = i.second;
+            if (barreVect.empty()) {
                 continue;
             }
-            if ((barre.startString == 0 && item->numPos() == 0)
-                || (barre.endString == -1 && item->numPos() == 1)) {
-                padding += 0.20 * ldata->dotDiameter * ctx.conf().styleD(Sid::barreLineWidth);
-                break;
+            for (auto& barre: barreVect) {
+                if ((barre.startString == 0 && item->numPos() == 0)
+                    || (barre.endString == -1 && item->numPos() == 1)) {
+                    padding += 0.20 * ldata->dotDiameter * ctx.conf().styleD(Sid::barreLineWidth);
+                    break;
+                }
             }
         }
         Font scaledFont(item->fretNumFont());
@@ -2795,42 +2797,44 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     }
 
     for (auto i : item->barres()) {
-        FretItem::Barre barre = i.second;
-        if (!barre.exists()) {
+        std::vector<FretItem::Barre> barreVect = i.second;
+        if (barreVect.empty()) {
             continue;
         }
-        int startString = barre.startString;
-        int endString = barre.endString != -1 ? barre.endString : item->strings();
-        int fret = i.first;
-        if (!ctx.conf().styleB(Sid::barreAppearanceSlur)) {
-            for (int string = startString; string < endString; ++string) {
-                const_cast<FretDiagram*>(item)->removeDotForDotStyleBarre(string, fret);
+        for (auto& barre: barreVect) {
+            int startString = barre.startString;
+            int endString = barre.endString != -1 ? barre.endString : item->strings();
+            int fret = i.first;
+            if (!ctx.conf().styleB(Sid::barreAppearanceSlur)) {
+                for (int string = startString; string < endString; ++string) {
+                    const_cast<FretDiagram*>(item)->removeDotForDotStyleBarre(string, fret);
+                }
+                break;
             }
+            for (int string = startString; string < endString; ++string) {
+                const_cast<FretDiagram*>(item)->addDotForDotStyleBarre(string, fret);
+            }
+            double insetX = 2 * ldata->stringLineWidth;
+            double insetY = fret == 1 ? ldata->nutLineWidth + ldata->stringLineWidth : insetX;
+            double startX = startString * ldata->stringDist + insetX;
+            double endX = (endString - 1) * ldata->stringDist - insetX;
+            double shoulderXoffset = 0.2 * (endX - startX);
+            double startEndY = (fret - 1) * ldata->fretDist - insetY;
+            double shoulderY = startEndY - 0.5 * ldata->fretDist;
+            double slurThickness = 0.1 * item->spatium() * item->userMag();
+            double shoulderYfor = shoulderY - slurThickness;
+            double shoulderYback = shoulderY + slurThickness;
+            PointF bezier1for = PointF(startX + shoulderXoffset, shoulderYfor);
+            PointF bezier2for = PointF(endX - shoulderXoffset, shoulderYfor);
+            PointF bezier1back = PointF(startX + shoulderXoffset, shoulderYback);
+            PointF bezier2back = PointF(endX - shoulderXoffset, shoulderYback);
+            PainterPath slurPath = PainterPath();
+            slurPath.moveTo(startX, startEndY);
+            slurPath.cubicTo(bezier1for, bezier2for, PointF(endX, startEndY));
+            slurPath.cubicTo(bezier2back, bezier1back, PointF(startX, startEndY));
+            ldata->slurPath = slurPath;
             break;
         }
-        for (int string = startString; string < endString; ++string) {
-            const_cast<FretDiagram*>(item)->addDotForDotStyleBarre(string, fret);
-        }
-        double insetX = 2 * ldata->stringLineWidth;
-        double insetY = fret == 1 ? ldata->nutLineWidth + ldata->stringLineWidth : insetX;
-        double startX = startString * ldata->stringDist + insetX;
-        double endX = (endString - 1) * ldata->stringDist - insetX;
-        double shoulderXoffset = 0.2 * (endX - startX);
-        double startEndY = (fret - 1) * ldata->fretDist - insetY;
-        double shoulderY = startEndY - 0.5 * ldata->fretDist;
-        double slurThickness = 0.1 * item->spatium() * item->userMag();
-        double shoulderYfor = shoulderY - slurThickness;
-        double shoulderYback = shoulderY + slurThickness;
-        PointF bezier1for = PointF(startX + shoulderXoffset, shoulderYfor);
-        PointF bezier2for = PointF(endX - shoulderXoffset, shoulderYfor);
-        PointF bezier1back = PointF(startX + shoulderXoffset, shoulderYback);
-        PointF bezier2back = PointF(endX - shoulderXoffset, shoulderYback);
-        PainterPath slurPath = PainterPath();
-        slurPath.moveTo(startX, startEndY);
-        slurPath.cubicTo(bezier1for, bezier2for, PointF(endX, startEndY));
-        slurPath.cubicTo(bezier2back, bezier1back, PointF(startX, startEndY));
-        ldata->slurPath = slurPath;
-        break;
     }
 }
 

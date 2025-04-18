@@ -1400,25 +1400,27 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
 
     // Draw barres
     for (auto const& i : item->barres()) {
-        int fret        = i.first;
-        int startString = i.second.startString;
-        int endString   = i.second.endString;
+        int fret = i.first;
+        for (auto barre : i.second) {
+            int startString = barre.startString;
+            int endString   = barre.endString;
 
-        double x1    = ldata->stringDist * startString;
-        double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
-        double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
-        if (item->style().styleB(Sid::barreAppearanceSlur)) {
-            pen.setWidthF(0.25 * ldata->stringLineWidth);
-            pen.setCapStyle(PenCapStyle::RoundCap);
-            pen.setJoinStyle(PenJoinStyle::RoundJoin);
-            painter->setPen(pen);
-            painter->setBrush(Brush(pen.color()));
-            painter->drawPath(ldata->slurPath);
-        } else {
-            pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
-            pen.setCapStyle(PenCapStyle::RoundCap);
-            painter->setPen(pen);
-            painter->drawLine(LineF(x1, y, newX2, y));
+            double x1    = ldata->stringDist * startString;
+            double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
+            double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
+            if (item->style().styleB(Sid::barreAppearanceSlur)) {
+                pen.setWidthF(0.25 * ldata->stringLineWidth);
+                pen.setCapStyle(PenCapStyle::RoundCap);
+                pen.setJoinStyle(PenJoinStyle::RoundJoin);
+                painter->setPen(pen);
+                painter->setBrush(Brush(pen.color()));
+                painter->drawPath(ldata->slurPath);
+            } else {
+                pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
+                pen.setCapStyle(PenCapStyle::RoundCap);
+                painter->setPen(pen);
+                painter->drawLine(LineF(x1, y, newX2, y));
+            }
         }
     }
 

@@ -1273,16 +1273,18 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
     // Draw barres
     for (auto const& i : item->barres()) {
         int fret        = i.first;
-        int startString = i.second.startString;
-        int endString   = i.second.endString;
+        for (auto b: i.second) {
+            int startString = b.startString;
+            int endString   = b.endString;
 
-        double x1    = ldata->stringDist * startString;
-        double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
-        double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
-        pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
-        pen.setCapStyle(PenCapStyle::RoundCap);
-        painter->setPen(pen);
-        painter->drawLine(LineF(x1, y, newX2, y));
+            double x1    = ldata->stringDist * startString;
+            double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
+            double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
+            pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
+            pen.setCapStyle(PenCapStyle::RoundCap);
+            painter->setPen(pen);
+            painter->drawLine(LineF(x1, y, newX2, y));
+        }
     }
 
     // Draw fret offset number

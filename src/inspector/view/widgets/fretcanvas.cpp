@@ -121,45 +121,47 @@ void FretCanvas::draw(QPainter* painter)
     painter->setPen(pen);
     for (auto const& i : m_diagram->barres()) {
         int fret        = i.first;
-        int startString = i.second.startString;
-        int endString   = i.second.endString;
+        std::vector<mu::engraving::FretItem::Barre> bVect = i.second;
+        for (auto b : bVect) {
+            int startString = b.startString;
+            int endString   = b.endString;
+            if (m_diagram->score()->style().styleB(mu::engraving::Sid::barreAppearanceSlur)) {
+                // Copy-pasted from TLayout and TDraw, like most of the other code in this class.
+                // This probably needs a better solution in the future. (M.S.)
+                double insetX = 2 * lw1;
+                double insetY = fret == 1 ? lw2 + lw1 : insetX;
+                double startX = startString * stringDist + insetX;
+                double endX = (endString == -1 ? x2 : stringDist * (endString - 1)) - insetX;
+                double shoulderXoffset = 0.2 * (endX - startX);
+                double startEndY = (fret - 1) * fretDist - insetY;
+                double shoulderY = startEndY - 0.5 * fretDist;
+                double slurThickness = 0.1 * _spatium;
+                double shoulderYfor = shoulderY - slurThickness;
+                double shoulderYback = shoulderY + slurThickness;
+                QPointF bezier1for = QPointF(startX + shoulderXoffset, shoulderYfor);
+                QPointF bezier2for = QPointF(endX - shoulderXoffset, shoulderYfor);
+                QPointF bezier1back = QPointF(startX + shoulderXoffset, shoulderYback);
+                QPointF bezier2back = QPointF(endX - shoulderXoffset, shoulderYback);
+                QPainterPath slurPath = QPainterPath();
+                slurPath.moveTo(startX, startEndY);
+                slurPath.cubicTo(bezier1for, bezier2for, QPointF(endX, startEndY));
+                slurPath.cubicTo(bezier2back, bezier1back, QPointF(startX, startEndY));
+                pen.setWidthF(0.25 * lw1);
+                pen.setCapStyle(Qt::RoundCap);
+                pen.setJoinStyle(Qt::RoundJoin);
+                painter->setPen(pen);
+                painter->setBrush(pen.color());
+                painter->drawPath(slurPath);
+            } else {
+                qreal x1   = stringDist * startString;
+                qreal newX2 = endString == -1 ? x2 : stringDist * endString;
 
-        if (m_diagram->score()->style().styleB(mu::engraving::Sid::barreAppearanceSlur)) {
-            // Copy-pasted from TLayout and TDraw, like most of the other code in this class.
-            // This probably needs a better solution in the future. (M.S.)
-            double insetX = 2 * lw1;
-            double insetY = fret == 1 ? lw2 + lw1 : insetX;
-            double startX = startString * stringDist + insetX;
-            double endX = (endString == -1 ? x2 : stringDist * (endString - 1)) - insetX;
-            double shoulderXoffset = 0.2 * (endX - startX);
-            double startEndY = (fret - 1) * fretDist - insetY;
-            double shoulderY = startEndY - 0.5 * fretDist;
-            double slurThickness = 0.1 * _spatium;
-            double shoulderYfor = shoulderY - slurThickness;
-            double shoulderYback = shoulderY + slurThickness;
-            QPointF bezier1for = QPointF(startX + shoulderXoffset, shoulderYfor);
-            QPointF bezier2for = QPointF(endX - shoulderXoffset, shoulderYfor);
-            QPointF bezier1back = QPointF(startX + shoulderXoffset, shoulderYback);
-            QPointF bezier2back = QPointF(endX - shoulderXoffset, shoulderYback);
-            QPainterPath slurPath = QPainterPath();
-            slurPath.moveTo(startX, startEndY);
-            slurPath.cubicTo(bezier1for, bezier2for, QPointF(endX, startEndY));
-            slurPath.cubicTo(bezier2back, bezier1back, QPointF(startX, startEndY));
-            pen.setWidthF(0.25 * lw1);
-            pen.setCapStyle(Qt::RoundCap);
-            pen.setJoinStyle(Qt::RoundJoin);
-            painter->setPen(pen);
-            painter->setBrush(pen.color());
-            painter->drawPath(slurPath);
-        } else {
-            qreal x1   = stringDist * startString;
-            qreal newX2 = endString == -1 ? x2 : stringDist * endString;
-
-            qreal y    = fretDist * (fret - 1) + fretDist * .5;
-            pen.setWidthF(dotd * m_diagram->score()->style().styleD(mu::engraving::Sid::barreLineWidth));      // don't use style barreLineWidth - why not?
-            pen.setCapStyle(Qt::RoundCap);
-            painter->setPen(pen);
-            painter->drawLine(QLineF(x1, y, newX2, y));
+                qreal y    = fretDist * (fret - 1) + fretDist * .5;
+                pen.setWidthF(dotd * m_diagram->score()->style().styleD(mu::engraving::Sid::barreLineWidth));      // don't use style barreLineWidth - why not?
+                pen.setCapStyle(Qt::RoundCap);
+                painter->setPen(pen);
+                painter->drawLine(QLineF(x1, y, newX2, y));
+            }
         }
     }
 

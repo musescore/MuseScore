@@ -8744,16 +8744,17 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
         std::vector<int> bStarts;
         std::vector<int> bEnds;
         for (auto const& j : item->barres()) {
-            FretItem::Barre b = j.second;
+            std::vector<FretItem::Barre> bVect = j.second;
             const int fret = j.first;
-            if (!b.exists()) {
+            if (bVect.empty()) {
                 continue;
             }
-
-            if (b.startString == i) {
-                bStarts.push_back(fret);
-            } else if (b.endString == i || (b.endString == -1 && mxmlString == 1)) {
-                bEnds.push_back(fret);
+            for (auto b: bVect) {
+                if (b.startString == i) {
+                    bStarts.push_back(fret);
+                } else if (b.endString == i || (b.endString == -1 && mxmlString == 1)) {
+                    bEnds.push_back(fret);
+                }
             }
         }
 

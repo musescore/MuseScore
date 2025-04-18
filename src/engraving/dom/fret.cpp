@@ -281,14 +281,27 @@ void FretDiagram::setStrings(int n)
     m_markers = tempMarkers;
 
     for (int fret = 1; fret <= m_frets; ++fret) {
-        if (barre(fret).exists()) {
-            if (m_barres[fret].startString + difference <= 0) {
-                removeBarre(fret);
-                continue;
+        // @ allysa
+        if (!barre(fret).empty()) {
+            // if (m_barres[fret].startString + difference <= 0) {
+            //     removeBarre(fret);
+            //     continue;
+            // }
+            
+            for (auto& b : m_barres[fret]) {
+                if (b.startString + difference <= 0) {
+                    removeBarre(fret);
+                    break;
+                }
             }
-
-            m_barres[fret].startString = std::max(0, m_barres[fret].startString + difference);
-            m_barres[fret].endString   = m_barres[fret].endString == -1 ? -1 : m_barres[fret].endString + difference;
+            for (auto& b: m_barres[fret]) {
+                if (b.startString + difference <= 0) {
+                    int startString = std::max(0, b.startString + difference);
+                    int endString   = b.endString == -1 ? -1 : b.endString + difference;
+                    FretItem::Barre newBarre(startString, endString);
+                    m_barres[fret].push_back(newBarre);
+                }
+            }    
         }
     }
 
@@ -401,7 +414,7 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
     if (startString == -1) {
         removeBarre(fret);
     } else if (startString >= 0 && endString >= -1 && startString < m_strings && endString < m_strings) {
-        m_barres[fret] = FretItem::Barre(startString, endString);
+        m_barres[fret].push_back(FretItem::Barre(startString, endString));
     }
 }
 
@@ -417,17 +430,19 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 {
     UNUSED(add);
 
-    FretItem::Barre b = barre(fret);
-    if (!b.exists()) {
-        if (string < m_strings - 1) {
-            m_barres[fret] = FretItem::Barre(string, -1);
-            removeDotsMarkers(string, -1, fret);
+    std::vector<FretItem::Barre> bVect = barre(fret);
+    for (auto& b: bVect){
+        if (!b.exists()) {
+            if (string < m_strings - 1) {
+                m_barres[fret].push_back(FretItem::Barre(string, -1));
+                removeDotsMarkers(string, -1, fret);
+            }
+        } else if (b.endString == -1 && b.startString < string) {
+            m_barres[fret].push_back(FretItem::Barre(b.startString, string));
+        } else {
+            removeDotsMarkers(b.startString, b.endString, fret);
+            removeBarre(fret);
         }
-    } else if (b.endString == -1 && b.startString < string) {
-        m_barres[fret].endString = string;
-    } else {
-        removeDotsMarkers(b.startString, b.endString, fret);
-        removeBarre(fret);
     }
 }
 
@@ -489,16 +504,17 @@ void FretDiagram::removeBarres(int string, int fret /*= 0*/)
     auto iter = m_barres.begin();
     while (iter != m_barres.end()) {
         int bfret = iter->first;
-        FretItem::Barre b = iter->second;
-
-        if (b.exists() && b.startString <= string && (b.endString >= string || b.endString == -1)) {
-            if (fret > 0 && fret != bfret) {
-                ++iter;
+        std::vector<FretItem::Barre> bVect = iter->second;
+        for (auto& b : bVect) {
+            if (b.exists() && b.startString <= string && (b.endString >= string || b.endString == -1)) {
+                if (fret > 0 && fret != bfret) {
+                    ++iter;
+                } else {
+                    iter = m_barres.erase(iter);
+                }
             } else {
-                iter = m_barres.erase(iter);
+                ++iter;
             }
-        } else {
-            ++iter;
         }
     }
 }
@@ -669,12 +685,12 @@ FretItem::Marker FretDiagram::marker(int s) const
 //   barre
 //---------------------------------------------------------
 
-FretItem::Barre FretDiagram::barre(int f) const
+std::vector<FretItem::Barre> FretDiagram::barre(int f) const
 {
     if (m_barres.find(f) != m_barres.end()) {
         return m_barres.at(f);
     }
-    return FretItem::Barre(-1, -1);
+    return {FretItem::Barre(-1, -1)};
 }
 
 Font FretDiagram::fretNumFont() const
@@ -995,27 +1011,30 @@ String FretDiagram::screenReaderInfo() const
 
     String barreInfo;
     for (auto const& iter : m_barres) {
-        const FretItem::Barre& b = iter.second;
-        if (!b.exists()) {
+        const std::vector<FretItem::Barre>& bVect = iter.second;
+        if (bVect.empty()) {
             continue;
         }
+        
+        for (auto& b : bVect) {
 
-        String fretInfo = muse::mtrc("engraving", "fret %1").arg(iter.first);
+            String fretInfo = muse::mtrc("engraving", "fret %1").arg(iter.first);
 
-        String newBarreInfo;
-        if (b.startString == 0 && (b.endString == -1 || b.endString == m_strings - 1)) {
-            newBarreInfo = muse::mtrc("engraving", "barré %1").arg(fretInfo);
-        } else {
-            String startPart = muse::mtrc("engraving", "beginning string %1").arg(b.startString + 1);
-            String endPart;
-            if (b.endString != -1) {
-                endPart = muse::mtrc("engraving", "and ending string %1").arg(b.endString + 1);
+            String newBarreInfo;
+            if (b.startString == 0 && (b.endString == -1 || b.endString == m_strings - 1)) {
+                newBarreInfo = muse::mtrc("engraving", "barré %1").arg(fretInfo);
+            } else {
+                String startPart = muse::mtrc("engraving", "beginning string %1").arg(b.startString + 1);
+                String endPart;
+                if (b.endString != -1) {
+                    endPart = muse::mtrc("engraving", "and ending string %1").arg(b.endString + 1);
+                }
+
+                newBarreInfo = muse::mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
             }
 
-            newBarreInfo = muse::mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
+            barreInfo = String(u"%1 %2").arg(barreInfo, newBarreInfo);
         }
-
-        barreInfo = String(u"%1 %2").arg(barreInfo, newBarreInfo);
     }
 
     detailedInfo = String(u"%1 %2").arg(detailedInfo, barreInfo);
