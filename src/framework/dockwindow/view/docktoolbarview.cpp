@@ -201,3 +201,27 @@ void DockToolBarView::resetToDefault()
 
     setOrientation(Qt::Horizontal);
 }
+
+void DockToolBarView::onGripDoubleClicked()
+{
+    if (KDDockWidgets::DockWidgetBase* dw = m_draggableArea->singleDockWidget()) {
+        bool isFloating = dw->isFloating();
+
+        // If the toolbar is floating, first make it think it is docked so it can update itself
+        // for the docked state and then actually dock it. This is a hack for toolbars that
+        // change their size between the docked and undocked state, e.g. the Playback toolbar.
+        // Otheriwse docking a toolbar that will shrink itself after docking will leave gaps.
+        if (isFloating) {
+            doSetFloating(false);
+        }
+
+        dw->setFloating(!isFloating);
+
+        if (isFloating) {
+            if (dw->isFloating()) { // If it didn't dock for some reason, undo our hack above
+                doSetFloating(true);
+            }
+            emit floatingChanged();
+        }
+    }
+}
