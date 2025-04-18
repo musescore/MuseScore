@@ -3546,12 +3546,23 @@ void MusicXmlParserDirection::direction(const String& partId,
                 t->setColor(m_color);
             }
 
+            if (configuration()->importLayout()) {
+                if (m_justify == u"right") {
+                    t->setAlign(AlignH::RIGHT);
+                } else if (m_justify == u"center") {
+                    t->setAlign(AlignH::HCENTER);
+                } else {
+                    t->setAlign(AlignH::LEFT);
+                }
+            }
+
             t->setVisible(m_visible);
 
             if (m_swing.second != 0) {
                 toStaffTextBase(t)->setSwing(true);
                 toStaffTextBase(t)->setSwingParameters(m_swing.first,
-                                                       m_swing.first ? m_swing.second : toStaffTextBase(t)->style().styleI(Sid::swingRatio));
+                                                       m_swing.first ? m_swing.second
+                                                       : toStaffTextBase(t)->style().styleI(Sid::swingRatio));
                 m_swing.second = 0;
             }
 
@@ -3930,6 +3941,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         }
         String type = m_e.attribute("type");
         m_color = Color::fromString(m_e.asciiAttribute("color").ascii());
+        m_justify = m_e.attribute("justify");
         if (m_e.name() == "metronome") {
             m_metroText = metronome(m_tpoMetro);
         } else if (m_e.name() == "words") {
