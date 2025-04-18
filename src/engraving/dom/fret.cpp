@@ -38,15 +38,8 @@
 #include "stringdata.h"
 #include "system.h"
 #include "undo.h"
-#include <QEvent>
-#include <QCloseEvent>
-#include <QTimer>
-#include <QScopedValueRollback>
-
-
 #include "rw/read410/tread.h"
 #include "rw/read410/harmonytodiagramreader.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -286,12 +279,7 @@ void FretDiagram::setStrings(int n)
     m_markers = tempMarkers;
 
     for (int fret = 1; fret <= m_frets; ++fret) {
-        // @ allysa
         if (!barre(fret).empty()) {
-            // if (m_barres[fret].startString + difference <= 0) {
-            //     removeBarre(fret);
-            //     continue;
-            // }
             
             for (auto& b : m_barres[fret]) {
                 if (b.startString + difference <= 0) {
@@ -299,6 +287,7 @@ void FretDiagram::setStrings(int n)
                     break;
                 }
             }
+            
             for (auto& b: m_barres[fret]) {
                 if (b.startString + difference <= 0) {
                     int startString = std::max(0, b.startString + difference);
@@ -419,7 +408,7 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
     if (startString == -1) {
         removeBarre(fret);
     } else if (startString >= 0 && endString >= -1 && startString < m_strings && endString < m_strings) {
-        m_barres[fret].push_back(FretItem::Barre(startString, endString+1));
+        m_barres[fret].push_back(FretItem::Barre(startString, endString + 1));
     }
 }
 
@@ -443,7 +432,7 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
     }
 
     for (auto it = bVect.begin(); it != bVect.end(); ++it) {
-        if (string < it->startString ) {
+        if (string < it->startString) {
             it->startString = string;
             removeDotsMarkers(it->startString, string, fret);
             return; 
@@ -702,7 +691,7 @@ std::vector<FretItem::Barre>& FretDiagram::getBarres(int f)
     if (m_barres.find(f) != m_barres.end()) {
         return m_barres[f];
     }
-    m_barres[f] = std::vector<FretItem::Barre>{FretItem::Barre(-1, -1)};
+    m_barres[f] = std::vector<FretItem::Barre>{ FretItem::Barre(-1, -1) };
     return m_barres[f];
 }
 
@@ -711,7 +700,7 @@ std::vector<FretItem::Barre> FretDiagram::barre(int f) const
     if (m_barres.find(f) != m_barres.end()) {
         return m_barres.at(f);
     }
-    return {FretItem::Barre(-1, -1)};
+    return { FretItem::Barre(-1, -1) };
 }
 
 Font FretDiagram::fretNumFont() const
@@ -1038,9 +1027,7 @@ String FretDiagram::screenReaderInfo() const
         }
         
         for (auto& b : bVect) {
-
             String fretInfo = muse::mtrc("engraving", "fret %1").arg(iter.first);
-
             String newBarreInfo;
             if (b.startString == 0 && (b.endString == -1 || b.endString == m_strings - 1)) {
                 newBarreInfo = muse::mtrc("engraving", "barré %1").arg(fretInfo);
