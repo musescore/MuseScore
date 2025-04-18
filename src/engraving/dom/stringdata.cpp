@@ -182,16 +182,7 @@ void StringData::fretChords(Chord* chord) const
     }
 
     // we need to keep track of string allocation
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    int bUsed[strings];                      // initially all strings are available
-    for (int nString = 0; nString < strings; ++nString) {
-        bUsed[nString] = 0;
-    }
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
     std::vector<int> bUsed(strings);
-#endif
 
     // determine used range of frets
     int minFret = INT32_MAX;
