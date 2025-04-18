@@ -27,6 +27,10 @@ void ShortcutsControllerStub::activate(const std::string&)
 {
 }
 
+void ShortcutsControllerStub::activate(std::vector<std::string> sequences)
+{
+}
+
 bool ShortcutsControllerStub::isRegistered(const std::string&) const
 {
     return false;

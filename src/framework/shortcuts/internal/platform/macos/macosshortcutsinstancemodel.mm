@@ -410,9 +410,14 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
     emit shortcutsChanged();
 }
 
-void MacOSShortcutsInstanceModel::doActivate(const QString& seq)
+void MacOSShortcutsInstanceModel::doActivate(std::vector<QString> sequences)
 {
-    // `seq` will always be in the map, because it comes from one of the QML `Shortcut` objects
-    // and for every such object, we have also created an entry in the map, in `doLoadShortcuts`.
-    ShortcutsInstanceModel::doActivate(m_macSequenceMap.value(seq));
+    std::vector<QString> translatedSequences;
+    translatedSequences.reserve(sequences.size());
+    for (const QString& seq : sequences) {
+        if (m_macSequenceMap.contains(seq)) {
+            translatedSequences.push_back(m_macSequenceMap.value(seq));
+        }
+    }
+    ShortcutsInstanceModel::doActivate(translatedSequences);
 }

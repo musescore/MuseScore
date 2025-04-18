@@ -31,7 +31,7 @@ StyledDialogView {
     title: qsTrc("shortcuts", "Enter shortcut sequence")
 
     contentWidth: 538
-    contentHeight: 200
+    contentHeight: 280
 
     margins: 20
 
@@ -43,6 +43,7 @@ StyledDialogView {
     }
 
     onLoad: function(currentShortcut, allShortcuts) {
+        editShortcutModel.window = editShortcutDialogContent;
         editShortcutModel.load(currentShortcut, allShortcuts)
     }
 
@@ -65,6 +66,7 @@ StyledDialogView {
         originShortcutText: !editShortcutModel.cleared ? editShortcutModel.originSequence : ""
         newShortcutText: editShortcutModel.newSequence
         informationText: editShortcutModel.conflictWarning
+        alternativesText: editShortcutModel.alternatives
 
         onSaveRequested: {
             editShortcutModel.trySave()
@@ -79,8 +81,16 @@ StyledDialogView {
             editShortcutModel.clear()
         }
 
-        onKeyPressed: function(event) {
-            editShortcutModel.inputKey(event.key, event.modifiers)
+        onNewShortcutFieldFocusChanged: function(activeFocus) {
+            editShortcutModel.newShortcutFieldFocusChanged(activeFocus)
+        }
+
+        onCurrentShortcutAcceptInProgress: {
+            editShortcutModel.currentShortcutAcceptInProgress()
+        }
+
+        onCurrentShortcutChanged: function(shortcutText) {
+            editShortcutModel.editShortcut(shortcutText)
         }
     }
 }
