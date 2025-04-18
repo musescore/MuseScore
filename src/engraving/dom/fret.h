@@ -213,6 +213,7 @@ public:
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;
+    std::vector<FretItem::Barre>& getBarres(int fret);
     std::vector<FretItem::Barre> barre(int fret) const;
 
     // @ allysa const BarreMap& barres() const { return m_barres; }

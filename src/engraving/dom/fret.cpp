@@ -430,7 +430,7 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
 }
 
 //---------------------------------------------------------
-//    This version is for clicks on a dot with shift.
+//    Multiple Barres are supported, but Barres can only be set from the left to right. 
 //    If there is no barre at fret, then add one with the string as the start.
 //    If there is a barre with a -1 end string, set the end string to string.
 //    If there is a barre with a set start and end, remove it.
@@ -442,23 +442,28 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
     UNUSED(add);
     qDebug() << "SET BARRE2";
     qWarning() << "SET BARRE2";
-    std::vector<FretItem::Barre> bVect = barre(fret);
+    std::vector<FretItem::Barre>& bVect = getBarres(fret);
     for (auto& b: bVect) {
         qWarning() << b.startString << b.endString;
     }
-    for (auto& b: bVect){
-        if (!b.exists()) {
-            if (string < m_strings - 1) {
-                m_barres[fret].push_back(FretItem::Barre(string, -1));
-                removeDotsMarkers(string, -1, fret);
-            }
-        } else if (b.endString == -1 && b.startString < string) {
-            m_barres[fret].push_back(FretItem::Barre(b.startString, string));
-        } else {
-            removeDotsMarkers(b.startString, b.endString, fret);
-            removeBarre(fret);
+
+    if (bVect.size() == 1 && bVect[0].endString == -1 && bVect[0].startString == -1) { // if there are no existing barres
+        bVect[0] = FretItem::Barre(string, -1);
+        removeDotsMarkers(string, -1, fret);
+        return;
+    }
+
+    for (auto it = bVect.begin(); it != bVect.end(); ++it) {
+        qWarning() << "HERE: " << string << it->startString << it->endString;
+        if ((string > it->startString && it->endString == -1) || (string > it->startString && it->endString > string)) {
+            it->endString = string;
+            qWarning() << "END STRING: " << it->endString;
+            removeDotsMarkers(it->startString, string, fret);
+            return;
         }
     }
+
+    m_barres[fret].push_back(FretItem::Barre(string, -1));
 }
 
 //---------------------------------------------------------
@@ -516,6 +521,7 @@ void FretDiagram::removeBarre(int f)
 
 void FretDiagram::removeBarres(int string, int fret /*= 0*/)
 {
+    qWarning() << "REMOVE BARRES" << string << fret;
     auto iter = m_barres.begin();
     while (iter != m_barres.end()) {
         int bfret = iter->first;
@@ -699,6 +705,15 @@ FretItem::Marker FretDiagram::marker(int s) const
 //---------------------------------------------------------
 //   barre
 //---------------------------------------------------------
+
+std::vector<FretItem::Barre>& FretDiagram::getBarres(int f)
+{
+    if (m_barres.find(f) != m_barres.end()) {
+        return m_barres[f];
+    }
+    m_barres[f] = std::vector<FretItem::Barre>{FretItem::Barre(-1, -1)};
+    return m_barres[f];
+}
 
 std::vector<FretItem::Barre> FretDiagram::barre(int f) const
 {
