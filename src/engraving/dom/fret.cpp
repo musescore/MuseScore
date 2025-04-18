@@ -427,7 +427,7 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
 //    Multiple Barres are supported, but Barres can only be set from the left to right. 
 //    If there is no barre at fret, then add one with the string as the start.
 //    If there is a barre with a -1 end string, set the end string to string.
-//    If there is a barre with a set start and end, remove it.
+//    If existing barres are on the left, add barre with string as start to the last string.
 //    Add may be used in the future if we decide to add dots as default with barres.
 //---------------------------------------------------------
 
@@ -454,8 +454,7 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
             return;
         }
     }
-    
-    // if (string < v.back() *&& )
+
     m_barres[fret].push_back(FretItem::Barre(string, -1));
 }
 
