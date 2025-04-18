@@ -30,12 +30,6 @@ MouseArea {
     /// Set to true if you're using a custom MouseEventRedirector in your code
     property bool hasCustomMouseEventRedirector: false
 
-    onDoubleClicked: {
-        if (titleBarCpp) {
-            titleBarCpp.onDoubleClicked();
-        }
-    }
-
     onTitleBarCppChanged: {
         if (titleBarCpp && !hasCustomMouseEventRedirector) {
             titleBarCpp.redirectMouseEvents(this)
