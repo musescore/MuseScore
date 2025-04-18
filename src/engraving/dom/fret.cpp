@@ -256,8 +256,6 @@ std::vector<LineF> FretDiagram::dragAnchorLines() const
 
 void FretDiagram::setStrings(int n)
 {   
-    qDebug() << "SET STRINGS";
-    qWarning() << "SET STRING";
     int difference = n - m_strings;
     if (difference == 0 || n <= 0) {
         return;
@@ -329,8 +327,6 @@ void FretDiagram::setStrings(int n)
 
 void FretDiagram::init(StringData* stringData, Chord* chord)
 {   
-    qDebug() << "I HOPE THIS WORKS";
-    qWarning() << "DOES THIS WORK";
     if (!stringData) {
         setStrings(6);
     } else {
@@ -420,8 +416,6 @@ void FretDiagram::setMarker(int string, FretMarkerType mtype)
 
 void FretDiagram::setBarre(int startString, int endString, int fret)
 {
-    qDebug() << "SET BARRE";
-    qWarning() << "SET BARRE";
     if (startString == -1) {
         removeBarre(fret);
     } else if (startString >= 0 && endString >= -1 && startString < m_strings && endString < m_strings) {
@@ -440,12 +434,7 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
 void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 {
     UNUSED(add);
-    qDebug() << "SET BARRE2";
-    qWarning() << "SET BARRE2";
     std::vector<FretItem::Barre>& bVect = getBarres(fret);
-    for (auto& b: bVect) {
-        qWarning() << b.startString << b.endString;
-    }
 
     if (bVect.size() == 1 && bVect[0].endString == -1 && bVect[0].startString == -1) { // if there are no existing barres
         bVect[0] = FretItem::Barre(string, -1);
@@ -454,15 +443,19 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
     }
 
     for (auto it = bVect.begin(); it != bVect.end(); ++it) {
-        qWarning() << "HERE: " << string << it->startString << it->endString;
+        if (string < it->startString ) {
+            it->startString = string;
+            removeDotsMarkers(it->startString, string, fret);
+            return; 
+        }
         if ((string > it->startString && it->endString == -1) || (string > it->startString && it->endString > string)) {
             it->endString = string;
-            qWarning() << "END STRING: " << it->endString;
             removeDotsMarkers(it->startString, string, fret);
             return;
         }
     }
-
+    
+    // if (string < v.back() *&& )
     m_barres[fret].push_back(FretItem::Barre(string, -1));
 }
 
@@ -521,7 +514,6 @@ void FretDiagram::removeBarre(int f)
 
 void FretDiagram::removeBarres(int string, int fret /*= 0*/)
 {
-    qWarning() << "REMOVE BARRES" << string << fret;
     auto iter = m_barres.begin();
     while (iter != m_barres.end()) {
         int bfret = iter->first;
