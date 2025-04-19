@@ -43,7 +43,6 @@ using namespace mu::engraving;
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
 
-static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
 static const Settings::Key SCORE_COLOR_INVERSION_MODE("engraving", "engraving/scoreColorInversionMode");
 
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
@@ -86,16 +85,21 @@ void EngravingConfiguration::init()
         m_partStyleFilePathChanged.send(val.toPath());
     });
 
-    // TODO: How to upgrade old setting to new one?
-    settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
-    settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
-        m_scoreInversionChanged.notify();
-    });
-
     settings()->setDefaultValue(SCORE_COLOR_INVERSION_MODE, Val(ScoreInversionMode::Disabled));
     settings()->valueChanged(SCORE_COLOR_INVERSION_MODE).onReceive(nullptr, [this](const Val&) {
         m_scoreInversionChanged.notify();
     });
+
+    // Upgrade old scoreColorInversion setting to new inversion mode
+    {
+        static const Settings::Key INVERT_SCORE_COLOR_deprecated("engraving", "engraving/scoreColorInversion");
+        if (!settings()->contains(SCORE_COLOR_INVERSION_MODE) && settings()->contains(INVERT_SCORE_COLOR_deprecated)) {
+            ScoreInversionMode mode
+                = settings()->value(INVERT_SCORE_COLOR_deprecated).toBool() ? ScoreInversionMode::Always : ScoreInversionMode::Disabled;
+            settings()->setSharedValue(SCORE_COLOR_INVERSION_MODE, Val(mode));
+            settings()->remove(INVERT_SCORE_COLOR_deprecated);
+        }
+    }
 
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
