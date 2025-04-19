@@ -67,7 +67,8 @@ public:
     MOCK_METHOD((muse::async::Channel<bool>), dynamicsApplyToAllVoicesChanged, (), (const, override));
 
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
-    MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
+    MOCK_METHOD(ScoreInversionMode, scoreInversionMode, (), (const, override));
+    MOCK_METHOD(void, setScoreInversionMode, (ScoreInversionMode), (override));
     MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
 
     MOCK_METHOD(Color, formattingColor, (), (const, override));

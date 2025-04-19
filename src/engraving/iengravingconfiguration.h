@@ -73,7 +73,8 @@ public:
     virtual muse::async::Channel<voice_idx_t, Color> selectionColorChanged() const = 0;
 
     virtual bool scoreInversionEnabled() const = 0;
-    virtual void setScoreInversionEnabled(bool value) = 0;
+    virtual ScoreInversionMode scoreInversionMode() const = 0;
+    virtual void setScoreInversionMode(ScoreInversionMode mode) = 0;
     virtual muse::async::Notification scoreInversionChanged() const = 0;
 
     virtual bool dynamicsApplyToAllVoices() const = 0;
