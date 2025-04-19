@@ -540,7 +540,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             else if (qobject_cast<QDoubleSpinBox*>(sw.widget))
                   connect(qobject_cast<QDoubleSpinBox*>(sw.widget), SIGNAL(valueChanged(double)), mapper2, SLOT(map()));
             else if (qobject_cast<QFontComboBox*>(sw.widget))
-                  connect(qobject_cast<QFontComboBox*>(sw.widget), SIGNAL(currentFontChanged(QFont&)), mapper2, SLOT(map()));
+                  connect(qobject_cast<QFontComboBox*>(sw.widget), SIGNAL(currentFontChanged(QFont)), mapper2, SLOT(map()));
             else if (qobject_cast<QComboBox*>(sw.widget))
                   connect(qobject_cast<QComboBox*>(sw.widget), SIGNAL(currentIndexChanged(int)), mapper2, SLOT(map()));
             else if (qobject_cast<QRadioButton*>(sw.widget))
@@ -560,7 +560,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             else if (qobject_cast<AlignSelect*>(sw.widget))
                   connect(qobject_cast<AlignSelect*>(sw.widget), SIGNAL(alignChanged(Align)), mapper2, SLOT(map()));
             else if (qobject_cast<OffsetSelect*>(sw.widget))
-                  connect(qobject_cast<OffsetSelect*>(sw.widget), SIGNAL(offsetChanged(QPointF&)), mapper2, SLOT(map()));
+                  connect(qobject_cast<OffsetSelect*>(sw.widget), SIGNAL(offsetChanged(QPointF)), mapper2, SLOT(map()));
             else if (FontStyleSelect* fontStyle = qobject_cast<FontStyleSelect*>(sw.widget))
                   connect(fontStyle, &FontStyleSelect::fontStyleChanged, mapper2, QOverload<>::of(&QSignalMapper::map));
             else {
