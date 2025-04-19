@@ -133,6 +133,9 @@ jobs:
         token: ${{ secrets.TRANSIFEX_API_TOKEN }}
         args: "pull -f"
 
+    - name: Register gcc problem matcher
+      run: echo "::add-matcher::.github/problem_matchers/gcc.json"
+  
     - name: Setup, Generate _en.ts files, Build AppImage, Package, Checksum
       env: # For lupdate
         LUPDATE_ARGS: ""
