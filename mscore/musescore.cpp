@@ -8250,9 +8250,8 @@ void MuseScore::init(QStringList& argv)
       else {
             showSplashMessage(sc, tr("Initializing main window…"));
             mscore->readSettings();
-            QObject::connect(qApp, SIGNAL(messageReceived(QString&)),
-               mscore, SLOT(handleMessage(QString&)));
-
+            QObject::connect(qApp, SIGNAL(messageReceived(const QString&)), // const needed here
+               mscore, SLOT(handleMessage(const QString&))); // and here, see https://github.com/Jojo-Schmitz/MuseScore/issues/679
             static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
             // count filenames specified on the command line
             // these are the non-empty strings remaining in argv
