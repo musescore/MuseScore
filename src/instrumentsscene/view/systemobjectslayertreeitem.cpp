@@ -53,7 +53,7 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
         }
 
         if (i == lastIdx) {
-            title += " & ";
+            title += " " + muse::qtrc("layoutpanel", "&") + " ";
         } else {
             title += ", ";
         }
