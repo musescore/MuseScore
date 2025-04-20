@@ -219,6 +219,11 @@ void ExtensionsListModel::reloadPlugins()
     provider()->reloadExtensions();
 }
 
+void ExtensionsListModel::removeExtension(const QString& uri)
+{
+    provider()->removeExtension(Uri(uri.toStdString()));
+}
+
 QVariantList ExtensionsListModel::categories() const
 {
     QVariantList result;
