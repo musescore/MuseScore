@@ -198,6 +198,12 @@ Item {
             extensionsModel.selectExecPoint(selectedPlugin.uri, index)
         }
 
+        onRemove: function() {
+            extensionsModel.removeExtension(selectedPlugin.uri)
+            prv.resetSelectedPlugin()
+            panel.close()
+        }
+
         onEditShortcutRequested: {
             Qt.callLater(extensionsModel.editShortcut, selectedPlugin.uri)
             panel.close()

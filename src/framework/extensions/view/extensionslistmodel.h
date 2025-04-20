@@ -58,6 +58,7 @@ public:
 
     Q_INVOKABLE void editShortcut(const QString& uri);
     Q_INVOKABLE void reloadPlugins();
+    Q_INVOKABLE void removeExtension(const QString& uri);
 
     Q_INVOKABLE QVariantList categories() const;
 
