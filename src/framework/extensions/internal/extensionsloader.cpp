@@ -80,6 +80,7 @@ ManifestList ExtensionsLoader::manifestList(const io::path_t& rootPath) const
     for (const io::path_t& path : paths) {
         LOGD() << "parsing manifest: " << path;
         Manifest manifest = parseManifest(path);
+        manifest.path = path;
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }

@@ -36,10 +36,30 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
         ExtensionsLoader loader;
         Manifest m = loader.parseManifest(data);
 
-        bool hasSame = provider()->manifest(m.uri).isValid();
-        if (hasSame) {
+        Manifest existingManifest = provider()->manifest(m.uri);
+        bool alreadyInstalled = existingManifest.isValid();
+        if (alreadyInstalled && existingManifest.version == m.version) {
             LOGI() << "already installed: " << m.uri;
+
+            interactive()->info("Info", "The extension is already installed.", { interactive()->buttonData(IInteractive::Button::Ok) });
+
             return make_ok();
+        }
+
+        if (alreadyInstalled) {
+            std::stringstream text;
+            text << "The extension \"" << existingManifest.title.toStdString() <<
+                "\" is already installed in a different version.\nDo you want to upgrade?\n\nCurrent version: " <<
+                existingManifest.version.toStdString() << "\nNew version: " << m.version.toStdString();
+            IInteractive::Result result = interactive()->question("Update Extension", text.str(), {
+                interactive()->buttonData(IInteractive::Button::Cancel), interactive()->buttonData(IInteractive::Button::Ok)
+            });
+
+            if (result.button() == int(IInteractive::Button::Ok)) {
+                provider()->removeExtension(existingManifest.uri);
+            } else {
+                return make_ok();
+            }
         }
     }
 

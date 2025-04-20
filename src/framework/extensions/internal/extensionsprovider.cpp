@@ -23,6 +23,7 @@
 
 #include "global/containers.h"
 #include "global/async/async.h"
+#include "global/io/fileinfo.h"
 
 #include "extensionsloader.h"
 #include "legacy/extpluginsloader.h"
@@ -66,6 +67,25 @@ void ExtensionsProvider::reloadExtensions()
     }
 
     m_manifestListChanged.notify();
+}
+
+muse::Ret ExtensionsProvider::removeExtension(const Uri& uri)
+{
+    const Manifest manifest = this->manifest(uri);
+    if (!manifest.isValid()) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    io::path_t path = manifest.path;
+
+    if (!fileSystem()->remove(io::FileInfo(path).dirPath())) {
+        LOGE() << "Failed to delete the folder: " << path;
+        return make_ok();
+    } else {
+        LOGI() << "Successfully deleted the folder: " << path;
+        this->reloadExtensions();
+        return make_ret(Ret::Code::UnknownError);
+    }
 }
 
 ManifestList ExtensionsProvider::manifestList(Filter filter) const
