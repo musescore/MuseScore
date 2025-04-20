@@ -95,6 +95,7 @@ ManifestList ExtPluginsLoader::manifestList(const io::path_t& rootPath) const
         if (!manifest.isValid()) {
             continue;
         }
+        manifest.path = path;
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }

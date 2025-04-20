@@ -218,6 +218,7 @@ struct Manifest {
     };
 
     Uri uri;
+    io::path_t path;
     Type type = Type::Undefined;
     String title;
     String description;
