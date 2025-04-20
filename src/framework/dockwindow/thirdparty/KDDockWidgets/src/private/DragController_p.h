@@ -162,15 +162,19 @@ public:
     {
         return false;
     }
-    virtual bool handleMouseMove(QPoint /*globalPos*/)
+    virtual bool handleMouseMove(QPoint /*globalPos*/, int /*modifiers*/)
     {
         return false;
     }
-    virtual bool handleMouseButtonRelease(QPoint /*globalPos*/)
+    virtual bool handleMouseButtonRelease(QPoint /*globalPos*/, int /*modifiers*/)
     {
         return false;
     }
     virtual bool handleMouseDoubleClick()
+    {
+        return false;
+    }
+    virtual bool handleKeyboardModifierPressOrRelease(Qt::Key /*modifier*/, int /*modifiers*/)
     {
         return false;
     }
@@ -216,8 +220,8 @@ public:
     explicit StatePreDrag(DragController *parent);
     ~StatePreDrag() override;
     void onEntry() override;
-    bool handleMouseMove(QPoint globalPos) override;
-    bool handleMouseButtonRelease(QPoint) override;
+    bool handleMouseMove(QPoint globalPos, int /*modifiers*/) override;
+    bool handleMouseButtonRelease(QPoint, int /*modifiers*/) override;
     bool handleMouseDoubleClick() override;
 };
 
@@ -230,11 +234,12 @@ public:
     ~StateDragging() override;
     void onEntry() override;
     void onExit() override;
-    bool handleMouseButtonRelease(QPoint globalPos) override;
-    bool handleMouseMove(QPoint globalPos) override;
+    bool handleMouseButtonRelease(QPoint globalPos, int modifiers) override;
+    bool handleMouseMove(QPoint globalPos, int modifiers) override;
     bool handleMouseDoubleClick() override;
+    bool handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers) override;
 
-private:
+    private:
     QTimer m_maybeCancelDrag;
 };
 
@@ -248,8 +253,8 @@ public:
     explicit StateInternalMDIDragging(DragController *parent);
     ~StateInternalMDIDragging() override;
     void onEntry() override;
-    bool handleMouseButtonRelease(QPoint globalPos) override;
-    bool handleMouseMove(QPoint globalPos) override;
+    bool handleMouseButtonRelease(QPoint globalPos, int /*modifiers*/) override;
+    bool handleMouseMove(QPoint globalPos, int /*modifiers*/) override;
     bool handleMouseDoubleClick() override;
 };
 
@@ -261,12 +266,16 @@ public:
     explicit StateDraggingWayland(DragController *parent);
     ~StateDraggingWayland() override;
     void onEntry() override;
-    bool handleMouseButtonRelease(QPoint globalPos) override;
+    bool handleMouseButtonRelease(QPoint globalPos, int /*modifiers*/) override;
     bool handleDragEnter(QDragEnterEvent *, DropArea *) override;
     bool handleDragMove(QDragMoveEvent *, DropArea *) override;
     bool handleDragLeave(DropArea *) override;
     bool handleDrop(QDropEvent *, DropArea *) override;
+    bool handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers) override;
     bool m_inQDrag = false;
+
+private:
+    DropArea *m_dropArea = nullptr;
 };
 
 // A sub-class just so we don't use QMimeData directly. We'll only accept drops if its mime data
