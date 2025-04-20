@@ -54,6 +54,11 @@ QWidgetOrQuick *Draggable::asWidget() const
 
 bool Draggable::dragCanStart(QPoint pressPos, QPoint globalPos) const
 {
+    // Start dragging single-dock floating windows immediately
+    DockWidgetBase *dw = singleDockWidget();
+    if (dw && dw->isFloating())
+        return true;
+
     return (globalPos - pressPos).manhattanLength() > KDDockWidgets::startDragDistance();
 }
 
