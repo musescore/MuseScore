@@ -69,12 +69,24 @@ public:
 
     KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::Frame* frame) const override
     {
-        return new DockTitleBar(frame);
+        KDDockWidgets::TitleBar* titleBar = new DockTitleBar(frame);
+
+        // Hide the default title bar because we add our own. The worst part is that the default
+        // title bar captures and steals the mouse events from our title bar.
+        titleBar->setHeight(0);
+
+        return titleBar;
     }
 
     KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::FloatingWindow* floatingWindow) const override
     {
-        return new DockTitleBar(floatingWindow);
+        KDDockWidgets::TitleBar* titleBar = new DockTitleBar(floatingWindow);
+
+        // Hide the default title bar because we add our own. The worst part is that the default
+        // title bar captures and steals the mouse events from our title bar.
+        titleBar->setHeight(0);
+
+        return titleBar;
     }
 
     KDDockWidgets::TabBar* createTabBar(KDDockWidgets::TabWidget* parent) const override
