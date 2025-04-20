@@ -11500,42 +11500,42 @@
         <source>Drum Kit</source>
         <comment>drumset longName</comment>
         <extracomment>longName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tromstel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3881"/>
         <source>D. Kit</source>
         <comment>drumset shortName</comment>
         <extracomment>shortName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>T. stel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3888"/>
         <source>Drum Kit</source>
         <comment>drum-kit-4 longName</comment>
         <extracomment>longName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tromstel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3890"/>
         <source>D. Kit</source>
         <comment>drum-kit-4 shortName</comment>
         <extracomment>shortName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>T. stel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3897"/>
         <source>Drum Kit</source>
         <comment>drum-kit-5 longName</comment>
         <extracomment>longName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tromstel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3899"/>
         <source>D. Kit</source>
         <comment>drum-kit-5 shortName</comment>
         <extracomment>shortName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>T. stel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3902"/>
@@ -11710,28 +11710,28 @@
         <source>Taiko.</source>
         <comment>taiko description</comment>
         <extracomment>description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamboer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3958"/>
         <source>Taiko</source>
         <comment>taiko trackName</comment>
         <extracomment>trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamboer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3960"/>
         <source>Taiko</source>
         <comment>taiko longName</comment>
         <extracomment>longName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamboer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3962"/>
         <source>Taiko</source>
         <comment>taiko shortName</comment>
         <extracomment>shortName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamboer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3965"/>
@@ -11913,42 +11913,42 @@
         <source>Suspended Cymbal.</source>
         <comment>crash-cymbal description</comment>
         <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hangende simbaal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4030"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal trackName</comment>
         <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hangende simbaal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal longName</comment>
         <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hangende simbaal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
         <source>Sus. Cym.</source>
         <comment>crash-cymbal shortName</comment>
         <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hang. sim.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4037"/>
         <source>Hand Cymbals.</source>
         <comment>cymbal description</comment>
         <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handsimbale.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4039"/>
         <source>Hand Cymbals</source>
         <comment>cymbal trackName</comment>
         <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handsimbale</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4043"/>
@@ -15308,84 +15308,84 @@
         <source>Treble viola da gamba. Second highest member of the viol family.</source>
         <comment>treble-viol description</comment>
         <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Treble viola da gamba. Lid van die viol-familie met die tweede hoogste toonhoogte.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6094"/>
         <source>Alto viola da gamba. Third highest member of the viol family.</source>
         <comment>alto-viol description</comment>
         <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alto viola da gamba. Lid van die viol-familie met die derde hoogste toonhoogte.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6124"/>
         <source>Tenor viola da gamba. Middle member of the viol family.</source>
         <comment>tenor-viol description</comment>
         <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tenor viola da gamba. Middelste lid van die viol-familie.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6154"/>
         <source>Bass viola da gamba (staff notation). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba description</comment>
         <extracomment>description for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bass viola da gamba. Lid van die viol-familie met die derde laagste toonhoogte.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6156"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba trackName</comment>
         <extracomment>trackName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basviol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6158"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba longName</comment>
         <extracomment>longName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basviol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6160"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba shortName</comment>
         <extracomment>shortName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Vl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6169"/>
         <source>Bass viola da gamba (tablature). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba-tablature description</comment>
         <extracomment>description for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bass viola da gamba (tablatuur). Lid van die viol-familie met die derde laagste toonhoogte.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
         <source>Bass Viol (tablature)</source>
         <comment>viola-da-gamba-tablature trackName</comment>
         <extracomment>trackName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basviol (tablatuur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6173"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba-tablature longName</comment>
         <extracomment>longName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basviol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6175"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba-tablature shortName</comment>
         <extracomment>shortName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Vl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6178"/>
         <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</source>
         <comment>violone description</comment>
         <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Groot viola met die laagste snaar gestem op G. Soms die G-kontrabasviola genoem. Lid van die viol-familie met die tweede laagste toonhoogte.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6180"/>
@@ -15399,7 +15399,7 @@
         <source>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</source>
         <comment>d-violone description</comment>
         <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Groot viola met die laagste snaar gestem op D. Soms die D-kontrabasviola genoem. Lid van die viol-familie met die laagste toonhoogte.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6197"/>
@@ -15462,7 +15462,7 @@
         <source>Hel.</source>
         <comment>helicon shortName</comment>
         <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
@@ -15483,63 +15483,63 @@
         <source>Large drum kit.</source>
         <comment>drumset description</comment>
         <extracomment>description for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Groot tromstel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3877"/>
         <source>Drum Kit (large)</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tromstel (groot)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3884"/>
         <source>Minimal drum kit, 4-piece.</source>
         <comment>drum-kit-4 description</comment>
         <extracomment>description for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Minimale tromstel, 4-stuk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3886"/>
         <source>Drum Kit (minimal)</source>
         <comment>drum-kit-4 trackName</comment>
         <extracomment>trackName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tromstel (minimaal)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3893"/>
         <source>Common drum kit, 5-piece.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Algemene tromstel, 5-stuk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3895"/>
         <source>Drum Kit (common)</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tromstel (algemeen)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4010"/>
         <source>China cymbal for drum kit.</source>
         <comment>chinese-cymbal description</comment>
         <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chinese simbaal vir tromstel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4012"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal trackName</comment>
         <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chinese simbaal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4014"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal longName</comment>
         <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chinese simbaal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4041"/>
@@ -15553,28 +15553,28 @@
         <source>Tam-tam</source>
         <comment>tam-tam trackName</comment>
         <extracomment>trackName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tom-tom</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4131"/>
         <source>Tam-tam</source>
         <comment>tam-tam longName</comment>
         <extracomment>longName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tom-tom</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4334"/>
         <source>General MIDI percussion kit with Level 2 extensions.</source>
         <comment>percussion-synthesizer description</comment>
         <extracomment>description for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Algemene MIDI-perkussiestel met vlak 2-uitbreidings.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4336"/>
         <source>General MIDI Percussion</source>
         <comment>percussion-synthesizer trackName</comment>
         <extracomment>trackName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Algemene MIDI-perkussie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4338"/>
@@ -15595,42 +15595,42 @@
         <source>Orchestral percussion kit.</source>
         <comment>percussion description</comment>
         <extracomment>description for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Orkesperkussiestel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4345"/>
         <source>Mixed Percussion</source>
         <comment>percussion trackName</comment>
         <extracomment>trackName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gemengde perkussie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
         <source>Marching Snare Drum</source>
         <comment>marching-snare trackName</comment>
         <extracomment>trackName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Marsjeersnaartrom</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4366"/>
         <source>Marching Tenor Drums</source>
         <comment>marching-tenor-drums trackName</comment>
         <extracomment>trackName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Marsjeertenoortrom</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4375"/>
         <source>Marching Bass Drums</source>
         <comment>marching-bass-drums trackName</comment>
         <extracomment>trackName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Marsjeerbastrom</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4384"/>
         <source>Marching Cymbals</source>
         <comment>marching-cymbals trackName</comment>
         <extracomment>trackName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Marsjeersimbale</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5150"/>
@@ -19270,7 +19270,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>Cimbassos</source>
-        <translation type="unfinished"/>
+        <translation>Cimbassos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="142"/>
