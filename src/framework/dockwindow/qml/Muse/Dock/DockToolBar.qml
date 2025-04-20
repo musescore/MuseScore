@@ -76,8 +76,8 @@ DockToolBarView {
         FlatButton {
             id: gripButton
 
-            width: root.isVertical ? 30 : 24
-            height: root.isVertical ? 24 : 30
+            width: root.isVertical ? parent.width : 24
+            height: root.isVertical ? 24 : parent.height
 
             visible: root.floatable
 
