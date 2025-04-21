@@ -55,9 +55,6 @@ void PluginManager::init()
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
       loadList(false);
-      connect(pluginListWidget, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
-      connect(pluginListWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-              SLOT(pluginListWidgetItemChanged(QListWidgetItem*, QListWidgetItem*)));
 }
 
 //---------------------------------------------------------
@@ -188,7 +185,9 @@ void PluginManager::updatePluginList(bool forceRefresh)
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
-      pluginPathList.append(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
+      QString p = preferences.getString(PREF_APP_PATHS_MYPLUGINS);
+      if (!p.isEmpty())
+            pluginPathList.append(p);
       if (forceRefresh) {
             _pluginList.clear();
             QmlPluginEngine* engine = mscore->getPluginEngine();
@@ -231,6 +230,7 @@ void PluginManager::loadList(bool forceRefresh)
       updatePluginList(forceRefresh);
       n = _pluginList.size();
       pluginListWidget->clear();
+      disconnect(pluginListWidget, nullptr, nullptr, nullptr);
       for (int i = 0; i < n; ++i) {
             PluginDescription& d = _pluginList[i];
             Shortcut* s = &d.shortcut;
@@ -241,7 +241,9 @@ void PluginManager::loadList(bool forceRefresh)
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
             }
-
+      connect(pluginListWidget, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
+      connect(pluginListWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+              SLOT(pluginListWidgetItemChanged(QListWidgetItem*,QListWidgetItem*)));
       if (n) {
             pluginListWidget->setCurrentRow(0);
             pluginListWidgetItemChanged(pluginListWidget->item(0), 0);
@@ -279,8 +281,6 @@ void PluginManager::accept()
             Shortcut::save();
       Shortcut::dirty = false;
 
-      disconnect(pluginListWidget, SIGNAL(itemChanged(QListWidgetItem*)));
-      disconnect(pluginListWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)));
       QDialog::accept();
       }
 
