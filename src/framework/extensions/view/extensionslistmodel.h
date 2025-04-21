@@ -74,7 +74,8 @@ private:
         rEnabled,
         rCategory,
         rVersion,
-        rShortcuts
+        rShortcuts,
+        rIsUserExtension
     };
 
     struct ExecPoints {

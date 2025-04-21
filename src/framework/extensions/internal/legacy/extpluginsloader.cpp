@@ -76,10 +76,11 @@ ManifestList ExtPluginsLoader::loadManifestList(const io::path_t& defPath, const
         retList.push_back(m);
     }
 
-    for (const Manifest& m : externalManifests) {
+    for (Manifest& m : externalManifests) {
         if (!m.isValid()) {
             continue;
         }
+        m.isUserExtension = true;
         retList.push_back(m);
     }
 
