@@ -3103,13 +3103,14 @@ EngravingItem* Score::move(const String& cmd)
                 Segment* s = m_is.segment()->prev1(SegmentType::ChordRest);
                 track_idx_t track = m_is.track();
                 for (; s; s = s->prev1(SegmentType::ChordRest)) {
-                    if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
-                        if (s->element(track)) {
-                            el = s->nextChordRest(track, true);
-                            noteEntryPos = true;
-                            if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
-                                continue;
-                            }
+                    if (s->measure() != m && s->rtick().isZero()) {
+                        break;
+                    }
+                    if (s->element(track)) {
+                        el = s->nextChordRest(track, true);
+                        noteEntryPos = true;
+                        if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
+                            continue;
                         }
                         break;
                     }
