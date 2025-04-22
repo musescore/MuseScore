@@ -2,6 +2,7 @@
 
 #include "global/io/fileinfo.h"
 #include "global/serialization/zipreader.h"
+#include "global/translation.h"
 #include "global/uuid.h"
 
 #include "../extensionstypes.h"
@@ -41,24 +42,27 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
         if (alreadyInstalled && existingManifest.version == m.version) {
             LOGI() << "already installed: " << m.uri;
 
-            interactive()->info("Info", "The extension is already installed.", { interactive()->buttonData(IInteractive::Button::Ok) });
+            interactive()->info(trc("extensions", "The extension is already installed."), std::string(),
+                                { interactive()->buttonData(IInteractive::Button::Ok) });
 
             return make_ok();
         }
 
         if (alreadyInstalled && !existingManifest.isUserExtension) {
-            interactive()->error("Error", "This extension cannot be updated.", { interactive()->buttonData(IInteractive::Button::Ok) });
+            interactive()->error(trc("extensions", "This extension cannot be updated."), std::string(),
+                                 { interactive()->buttonData(IInteractive::Button::Ok) });
 
             return make_ok();
         }
 
         if (alreadyInstalled) {
-            std::stringstream text;
-            text << "The extension \"" << existingManifest.title.toStdString() <<
-                "\" is already installed in a different version.\nDo you want to upgrade?\n\nCurrent version: " <<
-                existingManifest.version.toStdString() << "\nNew version: " << m.version.toStdString();
-            IInteractive::Result result = interactive()->question("Update Extension", text.str(), {
-                interactive()->buttonData(IInteractive::Button::Cancel), interactive()->buttonData(IInteractive::Button::Ok)
+            std::string text = qtrc("extensions", "Another version of the extension “%1” is already installed (version %2). "
+                                                  "Do you want to replace it with version %3?")
+                               .arg(existingManifest.title, existingManifest.version, m.version).toStdString();
+
+            IInteractive::Result result = interactive()->question(trc("extensions", "Update Extension"), text, {
+                interactive()->buttonData(IInteractive::Button::Cancel),
+                interactive()->buttonData(IInteractive::Button::Ok)
             });
 
             if (result.button() == int(IInteractive::Button::Ok)) {

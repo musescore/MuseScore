@@ -23,7 +23,7 @@
 
 #include "global/containers.h"
 #include "global/async/async.h"
-#include "global/io/fileinfo.h"
+#include "global/io/path.h"
 
 #include "extensionsloader.h"
 #include "legacy/extpluginsloader.h"
@@ -78,14 +78,14 @@ muse::Ret ExtensionsProvider::removeExtension(const Uri& uri)
 
     io::path_t path = manifest.path;
 
-    if (!fileSystem()->remove(io::FileInfo(path).dirPath())) {
+    Ret ret = fileSystem()->remove(io::dirpath(path));
+    if (!ret) {
         LOGE() << "Failed to delete the folder: " << path;
-        return make_ok();
-    } else {
-        LOGI() << "Successfully deleted the folder: " << path;
-        this->reloadExtensions();
-        return make_ret(Ret::Code::UnknownError);
+        return ret;
     }
+
+    reloadExtensions();
+    return make_ok();
 }
 
 ManifestList ExtensionsProvider::manifestList(Filter filter) const
