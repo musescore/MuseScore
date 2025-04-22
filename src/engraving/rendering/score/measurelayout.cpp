@@ -806,29 +806,43 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
             ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure());
         } else {
             if (firstMeasure->mmRest()) {
+                removeMMRestElements(firstMeasure->mmRest());
                 ctx.mutDom().undo(new ChangeMMRest(firstMeasure, 0));
             }
             firstMeasure->setMMRestCount(0);
             ctx.mutState().setMeasureNo(mno);
         }
     } else if (firstMeasure->mmRest()) {
-        // Removed linked clones that were created for the mmRest measure
-        Measure* mmRestMeasure = firstMeasure->mmRest();
-        for (EngravingItem* item : mmRestMeasure->el()) {
-            item->undoUnlink();
-            mmRestMeasure->score()->doUndoRemoveElement(item);
-        }
-        for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
-            for (EngravingItem* item : seg->annotations()) {
-                item->undoUnlink();
-                mmRestMeasure->score()->doUndoRemoveElement(item);
-            }
-        }
+        removeMMRestElements(firstMeasure->mmRest());
 
         if (firstMeasure->mmRestCount() > 0) {
             LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
             int measureNo = ctx.state().measureNo() + firstMeasure->mmRestCount() - 1;
             ctx.mutState().setMeasureNo(measureNo);
+        }
+    }
+}
+
+void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
+{
+    // Removed linked clones that were created for the mmRest measure
+    for (EngravingItem* item : mmRestMeasure->el()) {
+        item->undoUnlink();
+        mmRestMeasure->score()->doUndoRemoveElement(item);
+    }
+
+    for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
+        if (!seg->isChordRestType()) {
+            for (EngravingItem* item : seg->elist()) {
+                if (item) {
+                    item->undoUnlink();
+                    mmRestMeasure->score()->doUndoRemoveElement(item);
+                }
+            }
+        }
+        for (EngravingItem* item : seg->annotations()) {
+            item->undoUnlink();
+            mmRestMeasure->score()->doUndoRemoveElement(item);
         }
     }
 }
