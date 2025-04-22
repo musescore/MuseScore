@@ -1631,19 +1631,23 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         }
 
         std::set<track_idx_t> tracksToAdjust;
-
         double sp                 = staff->spatium(tick);
-        double upOffset           = 0.0;          // offset to apply to upstem chords
-        double downOffset         = 0.0;          // offset to apply to downstem chords
-        double dotAdjust          = 0.0;          // additional chord offset to account for dots
-        double dotAdjustThreshold = 0.0;          // if it exceeds this amount
 
-        // centering adjustments for whole note, breve, and small chords
-        double centerUp          = 0.0;          // offset to apply in order to center upstem chords
-        double oversizeUp        = 0.0;          // adjustment to oversized upstem chord needed if laid out to the right
-        double centerDown        = 0.0;          // offset to apply in order to center downstem chords
-        double centerAdjustUp    = 0.0;          // adjustment to upstem chord needed after centering donwstem chord
-        double centerAdjustDown  = 0.0;          // adjustment to downstem chord needed after centering upstem chord
+        struct OffsetInfo {
+            double upOffset           = 0.0;      // offset to apply to upstem chords
+            double downOffset         = 0.0;      // offset to apply to downstem chords
+            double dotAdjust          = 0.0;      // additional chord offset to account for dots
+            double dotAdjustThreshold = 0.0;      // if it exceeds this amount
+
+            // centering adjustments for whole note, breve, and small chords
+            double centerUp          = 0.0;      // offset to apply in order to center upstem chords
+            double oversizeUp        = 0.0;      // adjustment to oversized upstem chord needed if laid out to the right
+            double centerDown        = 0.0;      // offset to apply in order to center downstem chords
+            double centerAdjustUp    = 0.0;      // adjustment to upstem chord needed after centering donwstem chord
+            double centerAdjustDown  = 0.0;      // adjustment to downstem chord needed after centering upstem chord
+        };
+
+        OffsetInfo offsetInfo = OffsetInfo();
 
         if (!isTab) {
             // only center chords on standard staves.  This is a simpler process for TAB and done elsewhere
@@ -1661,42 +1665,42 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             double headDiff2 = posInfo.maxUpWidth - nominalWidth * (posInfo.maxUpMag / staff->staffMag(tick));
             if (headDiff > centerThreshold && !isTab) {
                 // larger than nominal
-                centerUp = headDiff * -0.5;
+                offsetInfo.centerUp = headDiff * -0.5;
                 // maxUpWidth is true width, but we no longer will care about that
                 // instead, we care only about portion to right of origin
-                posInfo.maxUpWidth += centerUp;
+                posInfo.maxUpWidth += offsetInfo.centerUp;
                 // to left align rather than center, delete both of the above
                 if (headDiff2 > centerThreshold) {
                     // if max notehead is wider than nominal with chord/note mag() applied
                     // then noteheads extend to left of origin
                     // because stemPosX() is based on nominal width
                     // so we need to correct for that too
-                    centerUp += headDiff2;
-                    oversizeUp = headDiff2;
+                    offsetInfo.centerUp += headDiff2;
+                    offsetInfo.oversizeUp = headDiff2;
                 }
             } else if (-headDiff > centerThreshold) {
                 // smaller than nominal
-                centerUp = -headDiff * 0.5;
+                offsetInfo.centerUp = -headDiff * 0.5;
                 if (headDiff2 > centerThreshold) {
                     // max notehead is wider than nominal with chord/note mag() applied
                     // perform same adjustment as above
-                    centerUp += headDiff2;
-                    oversizeUp = headDiff2;
+                    offsetInfo.centerUp += headDiff2;
+                    offsetInfo.oversizeUp = headDiff2;
                 }
-                centerAdjustDown = centerUp;
+                offsetInfo.centerAdjustDown = offsetInfo.centerUp;
             }
 
             headDiff = posInfo.maxDownWidth - nominalWidth;
             if (headDiff > centerThreshold) {
                 // larger than nominal
-                centerDown = headDiff * -0.5;
+                offsetInfo.centerDown = headDiff * -0.5;
                 // to left align rather than center, change the above to
                 //centerAdjustUp = headDiff;
-                posInfo.maxDownWidth = nominalWidth - centerDown;
+                posInfo.maxDownWidth = nominalWidth - offsetInfo.centerDown;
             } else if (-headDiff > centerThreshold && !isTab) {
                 // smaller than nominal
-                centerDown = -headDiff * 0.5;
-                centerAdjustUp = centerDown;
+                offsetInfo.centerDown = -headDiff * 0.5;
+                offsetInfo.centerAdjustUp = offsetInfo.centerDown;
             }
         }
 
@@ -1713,19 +1717,19 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             if (separation == 1) {
                 // second
                 if (posInfo.upDots && !posInfo.downDots) {
-                    upOffset = posInfo.maxDownWidth + 0.1 * sp;
+                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
                     tracksToAdjust.insert(bottomUpNote->track());
                 } else {
-                    downOffset = posInfo.maxUpWidth;
+                    offsetInfo.downOffset = posInfo.maxUpWidth;
                     // align stems if present
                     if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
                         const Stem* topDownStem = topDownNote->chord()->stem();
-                        downOffset -= topDownStem->lineWidthMag();
+                        offsetInfo.downOffset -= topDownStem->lineWidthMag();
                     } else if (topDownNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS
                                && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
                         // stemless notes should be aligned as is they were stemmed
                         // (except in case of brevis, cause the notehead has the side bars)
-                        downOffset -= ctx.conf().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
+                        offsetInfo.downOffset -= ctx.conf().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
                     }
                     tracksToAdjust.insert(topDownNote->track());
                 }
@@ -1905,9 +1909,9 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                             smallChord = nChordSmall ? n->chord() : smallChord;
                             if (smallChord && !(prevChordSmall && nChordSmall)) {
                                 if (smallChord->up()) {
-                                    centerUp *= 2;
+                                    offsetInfo.centerUp *= 2;
                                 } else {
-                                    centerDown = 0;
+                                    offsetInfo.centerDown = 0;
                                 }
                             }
                             // formerly we hid noteheads in an effort to fix playback
@@ -1916,32 +1920,32 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         }
                     }
                 } else if (conflict && (posInfo.upDots && !posInfo.downDots)) {
-                    upOffset = posInfo.maxDownWidth + 0.1 * sp;
+                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
                 } else if (conflictUnison && separation == 0 && (!posInfo.downGrace || posInfo.upGrace)) {
-                    downOffset = posInfo.maxUpWidth + 0.15 * sp;
+                    offsetInfo.downOffset = posInfo.maxUpWidth + 0.15 * sp;
                 } else if (conflictUnison) {
-                    upOffset = posInfo.maxDownWidth + 0.15 * sp;
+                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.15 * sp;
                 } else if (conflictSecondUpHigher) {
-                    upOffset = posInfo.maxDownWidth + 0.15 * sp;
+                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.15 * sp;
                 } else if ((posInfo.downHooks && !posInfo.upHooks) && !(posInfo.upDots && !posInfo.downDots)) {
                     // Shift by ledger line length if ledger line conflict or just 0.3sp if no ledger lines
                     double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.3 * sp;
-                    downOffset = posInfo.maxUpWidth + adjSpace;
+                    offsetInfo.downOffset = posInfo.maxUpWidth + adjSpace;
                 } else if (conflictSecondDownHigher) {
                     if (posInfo.downDots && !posInfo.upDots) {
                         double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.2 * sp;
-                        downOffset = posInfo.maxUpWidth + adjSpace;
+                        offsetInfo.downOffset = posInfo.maxUpWidth + adjSpace;
                     } else {
                         // Prevent ledger line & notehead collision
                         double adjSpace
                             = (topDownNote->stringOrLine() <= firstLedgerAbove
                                || bottomUpNote->stringOrLine() >= firstLedgerBelow) ? ledgerLen - ledgerGap - 0.2 * sp : -0.2 * sp;
-                        upOffset = posInfo.maxDownWidth + adjSpace;
+                        offsetInfo.upOffset = posInfo.maxDownWidth + adjSpace;
                         if (posInfo.downHooks) {
                             bool needsHookSpace = (ledgerOverlapBelow || ledgerOverlapAbove);
                             Hook* hook = topDownNote->chord()->hook();
                             double hookSpace = hook ? hook->width() : 0.0;
-                            upOffset = needsHookSpace ? hookSpace + ledgerLen + ledgerGap : upOffset + 0.3 * sp;
+                            offsetInfo.upOffset = needsHookSpace ? hookSpace + ledgerLen + ledgerGap : offsetInfo.upOffset + 0.3 * sp;
                         }
                     }
                 } else {
@@ -1971,7 +1975,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     } else {
                         posInfo.downDots = 0;             // no need to adjust for dots in this case
                     }
-                    upOffset = std::max(clearLeft, clearRight);
+                    offsetInfo.upOffset = std::max(clearLeft, clearRight);
                     // Check if there's enough space to tuck under a flag
                     Note* topUpNote = posInfo.upStemNotes.back();
                     // Move notes out of the way of straight flags
@@ -1983,20 +1987,20 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         Hook* hook = topDownNote->chord()->hook();
                         double hookWidth = hook ? hook->width() : 0.0;
                         if (ledgerOverlapBelow) {
-                            upOffset = hookWidth + ledgerLen + ledgerGap;
+                            offsetInfo.upOffset = hookWidth + ledgerLen + ledgerGap;
                         }
                         if (isTab) {
-                            upOffset = hookWidth + posInfo.maxDownWidth;
+                            offsetInfo.upOffset = hookWidth + posInfo.maxDownWidth;
                         }
-                        upOffset = std::max(upOffset, posInfo.maxDownWidth + 0.1 * sp);
-                        dotAdjustThreshold = posInfo.maxUpWidth - 0.3 * sp;
+                        offsetInfo.upOffset = std::max(offsetInfo.upOffset, posInfo.maxDownWidth + 0.1 * sp);
+                        offsetInfo.dotAdjustThreshold = posInfo.maxUpWidth - 0.3 * sp;
                     }
                     // if downstem chord is small, don't center
                     // and we might not need as much dot adjustment either
-                    if (centerDown > 0.0) {
-                        centerDown = 0.0;
-                        centerAdjustUp = 0.0;
-                        dotAdjustThreshold = (upOffset - posInfo.maxDownWidth) + posInfo.maxUpWidth - 0.3 * sp;
+                    if (offsetInfo.centerDown > 0.0) {
+                        offsetInfo.centerDown = 0.0;
+                        offsetInfo.centerAdjustUp = 0.0;
+                        offsetInfo.dotAdjustThreshold = (offsetInfo.upOffset - posInfo.maxDownWidth) + posInfo.maxUpWidth - 0.3 * sp;
                     }
                 }
             }
@@ -2016,17 +2020,17 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 }
                 double dotWidth = segment->symWidth(SymId::augmentationDot);
                 // first dot
-                dotAdjust = ctx.conf().styleMM(Sid::dotNoteDistance) + dotWidth;
+                offsetInfo.dotAdjust = ctx.conf().styleMM(Sid::dotNoteDistance) + dotWidth;
                 // additional dots
                 if (dots > 1) {
-                    dotAdjust += ctx.conf().styleMM(Sid::dotDotDistance).val() * (dots - 1);
+                    offsetInfo.dotAdjust += ctx.conf().styleMM(Sid::dotDotDistance).val() * (dots - 1);
                 }
-                dotAdjust *= mag;
+                offsetInfo.dotAdjust *= mag;
                 // only by amount over threshold
-                dotAdjust = std::max(dotAdjust - dotAdjustThreshold, 0.0);
+                offsetInfo.dotAdjust = std::max(offsetInfo.dotAdjust - offsetInfo.dotAdjustThreshold, 0.0);
             }
             if (separation == 1) {
-                dotAdjust += 0.1 * sp;
+                offsetInfo.dotAdjust += 0.1 * sp;
             }
         }
 
@@ -2040,31 +2044,31 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 const bool combineVoices = chord->shouldCombineVoice();
                 if (!combineVoices && !muse::contains(tracksToAdjust, track)) {
                     if (chord->up()) {
-                        chordLdata->moveX(centerUp);
+                        chordLdata->moveX(offsetInfo.centerUp);
                     } else {
-                        chordLdata->moveX(centerDown);
+                        chordLdata->moveX(offsetInfo.centerDown);
                     }
                     continue;
                 }
 
                 if (chord->up()) {
-                    if (!muse::RealIsNull(upOffset)) {
-                        oversizeUp = isTab ? oversizeUp / 2 : oversizeUp;
-                        chordLdata->moveX(upOffset + centerAdjustUp + oversizeUp);
+                    if (!muse::RealIsNull(offsetInfo.upOffset)) {
+                        offsetInfo.oversizeUp = isTab ? offsetInfo.oversizeUp / 2 : offsetInfo.oversizeUp;
+                        chordLdata->moveX(offsetInfo.upOffset + offsetInfo.centerAdjustUp + offsetInfo.oversizeUp);
                         if (posInfo.downDots && !posInfo.upDots) {
-                            chordLdata->moveX(dotAdjust);
+                            chordLdata->moveX(offsetInfo.dotAdjust);
                         }
                     } else {
-                        chordLdata->moveX(centerUp);
+                        chordLdata->moveX(offsetInfo.centerUp);
                     }
                 } else {
-                    if (!muse::RealIsNull(downOffset)) {
-                        chordLdata->moveX(downOffset + centerAdjustDown);
+                    if (!muse::RealIsNull(offsetInfo.downOffset)) {
+                        chordLdata->moveX(offsetInfo.downOffset + offsetInfo.centerAdjustDown);
                         if (posInfo.upDots && !posInfo.downDots) {
-                            chordLdata->moveX(dotAdjust);
+                            chordLdata->moveX(offsetInfo.dotAdjust);
                         }
                     } else {
-                        chordLdata->moveX(centerDown);
+                        chordLdata->moveX(offsetInfo.centerDown);
                     }
                 }
             }
