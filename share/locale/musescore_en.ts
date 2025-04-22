@@ -22965,6 +22965,11 @@ pickup measure</translation>
         <translation type="unfinished">System markings</translation>
     </message>
     <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="56"/>
+        <source>&amp;</source>
+        <translation type="unfinished">&amp;</translation>
+    </message>
+    <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
         <source>System markings hidden</source>
         <translation type="unfinished">System markings hidden</translation>
