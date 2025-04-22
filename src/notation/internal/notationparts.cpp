@@ -385,6 +385,9 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
         m_systemObjectStavesChanged.notify();
     }
 
+    std::vector<Staff*> removedStaves;
+    std::vector<Staff*> addedStaves;
+
     for (auto& pair : range.changedItems) {
         if (!pair.first || !pair.first->isStaff()) {
             continue;
@@ -393,10 +396,18 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
         Staff* staff = toStaff(pair.first);
 
         if (muse::contains(pair.second, CommandType::RemoveStaff)) {
-            notifyAboutStaffRemoved(staff);
+            removedStaves.push_back(staff);
         } else if (muse::contains(pair.second, CommandType::InsertStaff)) {
-            notifyAboutStaffAdded(staff);
+            addedStaves.push_back(staff);
         }
+    }
+
+    for (Staff* staff : removedStaves) {
+        notifyAboutStaffRemoved(staff);
+    }
+
+    for (Staff* staff: addedStaves) {
+        notifyAboutStaffAdded(staff);
     }
 }
 
