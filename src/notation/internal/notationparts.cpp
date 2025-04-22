@@ -338,7 +338,7 @@ void NotationParts::listenUndoStackChanges()
     updatePartsAndSystemObjectStaves();
 
     m_undoStack->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.changedTypes.empty()) {
+        if (range.changedTypes.empty() || m_ignoreUndoStackChanges) {
             return;
         }
 
@@ -487,7 +487,13 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 
     score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
 
+    //! HACK: Excerpt::setVoiceVisible recreates the staff,
+    //! so later in listenUndoStackChanges() we will call notifyAboutStaffRemoved() and notifyAboutStaffAdded(),
+    //! which will result in the wrong UI state in the Layout panel.
+    //! We should not recreate the staff here, only update it
+    m_ignoreUndoStackChanges = true;
     apply();
+    m_ignoreUndoStackChanges = false;
 
     Staff* newStaff = staffModifiable(staffId);
     notifyAboutStaffChanged(newStaff);

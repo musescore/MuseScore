@@ -150,6 +150,8 @@ private:
     std::vector<Staff*> m_systemObjectStaves;
     muse::async::Notification m_systemObjectStavesChanged;
 
+    bool m_ignoreUndoStackChanges = false;
+
     mutable muse::async::ChangedNotifier<const Part*> m_partChangedNotifier;
     mutable std::map<muse::ID, muse::async::ChangedNotifier<const Staff*> > m_staffChangedNotifierMap;
 };
