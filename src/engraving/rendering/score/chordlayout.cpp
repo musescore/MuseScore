@@ -1608,6 +1608,73 @@ void ChordLayout::offsetAndLayoutChords(Segment* segment, staff_idx_t staffIdx, 
     layoutChords3(posInfo.chords, notes, staff, ctx);
 }
 
+void ChordLayout::centreChords(const Segment* segment, OffsetInfo& offsetInfo, ChordPosInfo& posInfo, staff_idx_t staffIdx,
+                               const Fraction& tick, LayoutContext& ctx)
+{
+    const Staff* staff = ctx.dom().staff(staffIdx);
+    const bool isTab = staff->isTabStaff(segment->tick());
+
+    // only center chords on standard staves.  This is a simpler process for TAB and done elsewhere
+    if (isTab) {
+        return;
+    }
+
+    double sp = staff->spatium(tick);
+    double nominalWidth = ctx.conf().noteHeadWidth() * staff->staffMag(tick);
+
+    // only center chords if they differ from nominal by at least this amount
+    // this avoids unnecessary centering on differences due only to floating point roundoff
+    // it also allows for the possibility of disabling centering
+    // for notes only "slightly" larger than nominal, like half notes
+    // but this will result in them not being aligned with each other between voices
+    // unless you change to left alignment as described in the comments below
+    double centerThreshold = 0.01 * sp;
+
+    // amount by which actual width exceeds nominal, adjusted for staff mag() only
+    double headDiff = posInfo.maxUpWidth - nominalWidth;
+    // amount by which actual width exceeds nominal, adjusted for staff & chord/note mag()
+    double headDiff2 = posInfo.maxUpWidth - nominalWidth * (posInfo.maxUpMag / staff->staffMag(tick));
+    if (headDiff > centerThreshold && !isTab) {
+        // larger than nominal
+        offsetInfo.centerUp = headDiff * -0.5;
+        // maxUpWidth is true width, but we no longer will care about that
+        // instead, we care only about portion to right of origin
+        posInfo.maxUpWidth += offsetInfo.centerUp;
+        // to left align rather than center, delete both of the above
+        if (headDiff2 > centerThreshold) {
+            // if max notehead is wider than nominal with chord/note mag() applied
+            // then noteheads extend to left of origin
+            // because stemPosX() is based on nominal width
+            // so we need to correct for that too
+            offsetInfo.centerUp += headDiff2;
+            offsetInfo.oversizeUp = headDiff2;
+        }
+    } else if (-headDiff > centerThreshold) {
+        // smaller than nominal
+        offsetInfo.centerUp = -headDiff * 0.5;
+        if (headDiff2 > centerThreshold) {
+            // max notehead is wider than nominal with chord/note mag() applied
+            // perform same adjustment as above
+            offsetInfo.centerUp += headDiff2;
+            offsetInfo.oversizeUp = headDiff2;
+        }
+        offsetInfo.centerAdjustDown = offsetInfo.centerUp;
+    }
+
+    headDiff = posInfo.maxDownWidth - nominalWidth;
+    if (headDiff > centerThreshold) {
+        // larger than nominal
+        offsetInfo.centerDown = headDiff * -0.5;
+        // to left align rather than center, change the above to
+        //centerAdjustUp = headDiff;
+        posInfo.maxDownWidth = nominalWidth - offsetInfo.centerDown;
+    } else if (-headDiff > centerThreshold && !isTab) {
+        // smaller than nominal
+        offsetInfo.centerDown = -headDiff * 0.5;
+        offsetInfo.centerAdjustUp = offsetInfo.centerDown;
+    }
+}
+
 //---------------------------------------------------------
 //   layoutChords1
 //    - layout upstem and downstem chords
@@ -1688,60 +1755,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
 
         OffsetInfo offsetInfo = OffsetInfo();
 
-        if (!isTab) {
-            // only center chords on standard staves.  This is a simpler process for TAB and done elsewhere
-            // only center chords if they differ from nominal by at least this amount
-            // this avoids unnecessary centering on differences due only to floating point roundoff
-            // it also allows for the possibility of disabling centering
-            // for notes only "slightly" larger than nominal, like half notes
-            // but this will result in them not being aligned with each other between voices
-            // unless you change to left alignment as described in the comments below
-            double centerThreshold   = 0.01 * sp;
-
-            // amount by which actual width exceeds nominal, adjusted for staff mag() only
-            double headDiff = posInfo.maxUpWidth - nominalWidth;
-            // amount by which actual width exceeds nominal, adjusted for staff & chord/note mag()
-            double headDiff2 = posInfo.maxUpWidth - nominalWidth * (posInfo.maxUpMag / staff->staffMag(tick));
-            if (headDiff > centerThreshold && !isTab) {
-                // larger than nominal
-                offsetInfo.centerUp = headDiff * -0.5;
-                // maxUpWidth is true width, but we no longer will care about that
-                // instead, we care only about portion to right of origin
-                posInfo.maxUpWidth += offsetInfo.centerUp;
-                // to left align rather than center, delete both of the above
-                if (headDiff2 > centerThreshold) {
-                    // if max notehead is wider than nominal with chord/note mag() applied
-                    // then noteheads extend to left of origin
-                    // because stemPosX() is based on nominal width
-                    // so we need to correct for that too
-                    offsetInfo.centerUp += headDiff2;
-                    offsetInfo.oversizeUp = headDiff2;
-                }
-            } else if (-headDiff > centerThreshold) {
-                // smaller than nominal
-                offsetInfo.centerUp = -headDiff * 0.5;
-                if (headDiff2 > centerThreshold) {
-                    // max notehead is wider than nominal with chord/note mag() applied
-                    // perform same adjustment as above
-                    offsetInfo.centerUp += headDiff2;
-                    offsetInfo.oversizeUp = headDiff2;
-                }
-                offsetInfo.centerAdjustDown = offsetInfo.centerUp;
-            }
-
-            headDiff = posInfo.maxDownWidth - nominalWidth;
-            if (headDiff > centerThreshold) {
-                // larger than nominal
-                offsetInfo.centerDown = headDiff * -0.5;
-                // to left align rather than center, change the above to
-                //centerAdjustUp = headDiff;
-                posInfo.maxDownWidth = nominalWidth - offsetInfo.centerDown;
-            } else if (-headDiff > centerThreshold && !isTab) {
-                // smaller than nominal
-                offsetInfo.centerDown = -headDiff * 0.5;
-                offsetInfo.centerAdjustUp = offsetInfo.centerDown;
-            }
-        }
+        centreChords(segment, offsetInfo, posInfo, staffIdx, tick, ctx);
 
         // handle conflict between upstem and downstem chords
 
