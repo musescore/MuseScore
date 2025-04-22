@@ -145,12 +145,14 @@ void InputState::setVoice(voice_idx_t v)
         return;
     }
 
+    const track_idx_t newTrack = (m_track / VOICES) * VOICES + v;
+
     // TODO: Inserting notes to a new voice in the middle of a tuplet is not yet supported. In this case
     // we'll move the input to the start of the tuplet...
     if (const Segment* prevSeg = segment()) {
         const ChordRest* prevCr = prevSeg->cr(track());
         //! NOTE: if there's an existing ChordRest at the new voiceIndex, we don't need to move the cursor
-        if (prevCr && prevCr->topTuplet() && !prevSeg->cr(v)) {
+        if (prevCr && prevCr->topTuplet() && !prevSeg->cr(newTrack)) {
             Segment* newSeg = score->tick2segment(prevCr->topTuplet()->tick());
             if (newSeg) {
                 setSegment(newSeg);
@@ -158,7 +160,7 @@ void InputState::setVoice(voice_idx_t v)
         }
     }
 
-    setTrack((m_track / VOICES) * VOICES + v);
+    setTrack(newTrack);
 }
 
 //---------------------------------------------------------
