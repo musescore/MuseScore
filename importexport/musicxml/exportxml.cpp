@@ -3184,7 +3184,7 @@ static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notation
                   tagName += " placement=\"above\"";
                   }
 
-            if (breath->isCaesura() && (type.isEmpty()/* || preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT)*/)) {
+            if (breath->isCaesura() && (type.isEmpty() || preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))) {
                   // for backwards compatibility, as 3.6.2 and earlier can't import those special caesuras,
                   // but reports corruption on all subsequent measures and imports them entirely empty.
                   xml.tagE(tagName);
@@ -4351,7 +4351,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                         }
                   } // if (pel && ...
 
-            if (el->systemFlag())
+            if (el->systemFlag() && !preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))
                   tagname += " system=\"only-top\"";
             }
       xml.stag(tagname);
@@ -4623,7 +4623,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       */
       _attr.doAttr(_xml, false);
       QString tempoAttrs = QString("direction placement=\"%1\"").arg(text->placement() == Placement::BELOW ? "below" : "above");
-      if (text->systemFlag())
+      if (text->systemFlag() && !preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))
             tempoAttrs += QString(" system=\"%1\"").arg(text->isLinked() ? "also-top" : "only-top");
       _xml.stag(tempoAttrs);
       wordsMetronome(_xml, _score, text, offset);
