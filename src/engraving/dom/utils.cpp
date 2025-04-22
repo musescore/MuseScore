@@ -1582,7 +1582,7 @@ std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure)
     const MasterScore* master = measure->masterScore();
     const Score* score = measure->score();
 
-    const MeasureBase* masterMeasureBase = master->measure(measure->index());
+    const MeasureBase* masterMeasureBase = master->tick2measure(measure->tick());
     const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
 
     const RepeatList& repeatList = master->repeatList(true, false);
@@ -1599,7 +1599,7 @@ std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure)
         // Get next segment
         const RepeatSegment* nextSeg = *nextSegIt;
         const Measure* firstMasterMeasure = nextSeg->firstMeasure();
-        MeasureBase* firstMeasureBase = firstMasterMeasure ? score->measure(firstMasterMeasure->index()) : nullptr;
+        MeasureBase* firstMeasureBase = firstMasterMeasure ? score->tick2measure(firstMasterMeasure->tick()) : nullptr;
         Measure* firstMeasure = firstMeasureBase && firstMeasureBase->isMeasure() ? toMeasure(firstMeasureBase) : nullptr;
         if (!firstMeasure) {
             continue;
@@ -1616,7 +1616,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
     const MasterScore* master = measure->masterScore();
     const Score* score = measure->score();
 
-    const MeasureBase* masterMeasureBase = master->measure(measure->index());
+    const MeasureBase* masterMeasureBase = master->tick2measure(measure->tick());
     const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
 
     const RepeatList& repeatList = master->repeatList(true, false);
@@ -1633,7 +1633,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
         // Get next segment
         const RepeatSegment* prevSeg = *prevSegIt;
         const Measure* lastMasterMeasure = prevSeg->lastMeasure();
-        MeasureBase* lastMeasureBase = lastMasterMeasure ? score->measure(lastMasterMeasure->index()) : nullptr;
+        MeasureBase* lastMeasureBase = lastMasterMeasure ? score->tick2measure(lastMasterMeasure->tick()) : nullptr;
         Measure* lastMeasure = lastMeasureBase && lastMeasureBase->isMeasure() ? toMeasure(lastMeasureBase) : nullptr;
         if (!lastMeasure) {
             continue;
@@ -1677,10 +1677,10 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
         return true;
     }
 
-    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
+    const MeasureBase* firstMasterMeasureBase = master->tick2measure(firstMeasure->tick());
     const Measure* firstMasterMeasure = firstMasterMeasureBase
                                         && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
-    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
+    const MeasureBase* secondMasterMeasureBase = master->tick2measure(secondMeasure->tick());
     const Measure* secondMasterMeasure = secondMasterMeasureBase
                                          && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
 
@@ -1738,10 +1738,10 @@ bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment
         return false;
     }
 
-    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
+    const MeasureBase* firstMasterMeasureBase = master->tick2measure(firstMeasure->tick());
     const Measure* firstMasterMeasure = firstMasterMeasureBase
                                         && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
-    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
+    const MeasureBase* secondMasterMeasureBase = master->tick2measure(secondMeasure->tick());
     const Measure* secondMasterMeasure = secondMasterMeasureBase
                                          && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
 
