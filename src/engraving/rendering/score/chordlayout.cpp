@@ -1266,6 +1266,163 @@ void ChordLayout::computeUpBeamCase(Chord* item, Beam* beam)
     }
 }
 
+void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
+{
+    // initialize for palette
+    track_idx_t track = 0;                     // the track lines belong to
+    // the line pos corresponding to the bottom line of the staff
+    int lineBelow      = 8;                     // assuming 5-lined "staff"
+    double lineDistance = 1;
+    bool staffVisible  = true;
+    int stepOffset = 0;                         // for staff type changes with a step offset
+
+    Segment* segment = item->segment();
+
+    if (segment) {   //not palette
+        Fraction tick = segment->tick();
+        staff_idx_t idx = item->staffIdx() + item->staffMove();
+        track         = staff2track(idx);
+        const Staff* st     = ctx.dom().staff(idx);
+        lineBelow     = (st->lines(tick) - 1) * 2;
+        lineDistance  = st->lineDistance(tick);
+        staffVisible  = !st->isLinesInvisible(tick);
+        stepOffset = st->staffType(tick)->stepOffset();
+    }
+
+    // need ledger lines?
+    if (item->downLine() + stepOffset <= lineBelow + 1 && item->upLine() + stepOffset >= -1) {
+        muse::DeleteAll(item->ledgerLines());
+        item->ledgerLines().clear();
+        return;
+    }
+
+    // the extra length of a ledger line to be added on each side of the notehead
+    const double extraLen = ctx.conf().style().styleMM(Sid::ledgerLineLength);
+
+    bool visible = false;
+
+    struct LedgerLineData {
+        int line;
+        double minX, maxX;
+        bool visible;
+        bool accidental;
+    };
+    std::vector<LedgerLineData> ledgerLineData;
+
+    // scan chord notes, collecting visibility and x and y extrema
+    // NOTE: notes are sorted from bottom to top (line no. decreasing)
+    // notes are scanned twice from outside (bottom or top) toward the staff
+    // each pass stops at the first note without ledger lines
+    int n = static_cast<int>(item->notes().size());
+
+    for (const bool topToBottom : { false, true }) {
+        const int from = topToBottom ? n - 1 : 0;
+        const int delta = topToBottom ? -1 : 1;
+        std::vector<LedgerLineData> vecLines;
+        double hw = 0.0;
+        double minX = std::numeric_limits<double>::max();
+        double maxX = std::numeric_limits<double>::min();
+        int minLine = 0;
+        int maxLine = lineBelow;
+
+        for (int i = from; i < n && i >= 0; i += delta) {
+            const Note* note = item->notes().at(i);
+            int l = note->line() + stepOffset;
+
+            // if 1st pass and note not below staff or 2nd pass and note not above staff
+            if ((!topToBottom && l <= lineBelow + 1)
+                || (topToBottom && l >= -1)) {
+                break; // stop this pass
+            }
+            // round line number to even number toward 0
+            if (l < 0) {
+                l = (l + 1) & ~1;
+            } else {
+                l = l & ~1;
+            }
+
+            if (note->visible()) { // if one note is visible,
+                visible = true;    // all lines between it and the staff are visible
+            }
+            hw = std::max(hw, note->headWidth());
+
+            // Experimental:
+            // shorten ledger line to avoid collisions with accidentals
+            // TODO: do something with the following `accid` flag
+            //
+            // bool accid = (note->accidental() && note->line() >= (l-1) && note->line() <= (l+1) );
+
+            // ledger lines need the leftmost point of the notehead with a respect of bbox
+            const double x = note->pos().x() + note->bboxXShift();
+            if (x - extraLen * note->mag() < minX) {
+                minX = x - extraLen * note->mag();
+                // increase width of all lines between this one and the staff
+                for (auto& d : vecLines) {
+                    if (!d.accidental && ((l < 0 && d.line >= l) || (l > 0 && d.line <= l))) {
+                        d.minX = minX;
+                    }
+                }
+            }
+            // same for left side
+            if (x + hw + extraLen * note->mag() > maxX) {
+                maxX = x + hw + extraLen * note->mag();
+                for (auto& d : vecLines) {
+                    if ((l < 0 && d.line >= l) || (l > 0 && d.line <= l)) {
+                        d.maxX = maxX;
+                    }
+                }
+            }
+
+            // check if note vert. pos. is outside current range
+            // and, if so, add data for new line(s)
+            if (l < minLine) {
+                for (int i1 = l; i1 < minLine; i1 += 2) {
+                    vecLines.emplace_back(LedgerLineData {
+                        /*line=*/ i1,
+                        /*minX=*/ minX,
+                        /*maxX=*/ maxX,
+                        /*visible=*/ visible,
+                        /*accidental=*/ false
+                    });
+                }
+                minLine = l;
+            }
+            if (l > maxLine) {
+                for (int i1 = maxLine + 2; i1 <= l; i1 += 2) {
+                    vecLines.emplace_back(LedgerLineData {
+                        /*line=*/ i1,
+                        /*minX=*/ minX,
+                        /*maxX=*/ maxX,
+                        /*visible=*/ visible,
+                        /*accidental=*/ false
+                    });
+                }
+                maxLine = l;
+            }
+        }
+        if (minLine < 0 || maxLine > lineBelow) {
+            ledgerLineData.insert(ledgerLineData.end(), vecLines.begin(), vecLines.end());
+        }
+    }
+
+    double _spatium = item->spatium();
+    double stepDistance = lineDistance * 0.5;
+    item->resizeLedgerLinesTo(ledgerLineData.size());
+    for (size_t i = 0; i < ledgerLineData.size(); ++i) {
+        LedgerLineData lld = ledgerLineData[i];
+        LedgerLine* h = item->ledgerLines()[i];
+        h->setParent(item);
+        h->setTrack(track);
+        h->setVisible(lld.visible && staffVisible);
+        h->setLen(lld.maxX - lld.minX);
+        h->setPos(lld.minX, lld.line * _spatium * stepDistance);
+    }
+
+    for (LedgerLine* ll : item->ledgerLines()) {
+        TLayout::layoutLedgerLine(ll, ctx);
+    }
+}
+
 bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
 {
     assert(!beam->beamFragments().empty());
@@ -2106,7 +2263,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     }
 
     if (!isTab) {
-        layoutLedgerLines(posInfo.chords);
+        layoutLedgerLines(posInfo.chords, ctx);
         AccidentalsLayout::layoutAccidentals(posInfo.chords, ctx);
         for (Chord* chord : posInfo.chords) {
             for (Chord* grace : chord->graceNotes()) {
@@ -2582,12 +2739,12 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
     setDotX(chords, dotPos, staff, upDotPosX, downDotPosX);
 }
 
-void ChordLayout::layoutLedgerLines(const std::vector<Chord*>& chords)
+void ChordLayout::layoutLedgerLines(const std::vector<Chord*>& chords, LayoutContext& ctx)
 {
     for (Chord* item : chords) {
-        item->updateLedgerLines();
+        updateLedgerLines(item, ctx);
         for (Chord* grace : item->graceNotes()) {
-            grace->updateLedgerLines();
+            updateLedgerLines(grace, ctx);
         }
     }
 }
