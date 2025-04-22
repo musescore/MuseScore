@@ -154,8 +154,8 @@ private:
 
     static ChordPosInfo calculateChordPosInfo(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
                                               LayoutContext& ctx);
-    static void centreChords(const Segment* segment, OffsetInfo& offsetInfo, ChordPosInfo& posInfo, staff_idx_t staffIdx,
-                             const Fraction& tick, LayoutContext& ctx);
+    static OffsetInfo centreChords(const Segment* segment, ChordPosInfo& posInfo, staff_idx_t staffIdx, const Fraction& tick,
+                                   LayoutContext& ctx);
     static void calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, const Fraction& tick, OffsetInfo& offsetInfo,
                                       ChordPosInfo& posInfo, LayoutContext& ctx);
     static void offsetAndLayoutChords(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,

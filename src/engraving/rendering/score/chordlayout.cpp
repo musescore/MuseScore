@@ -1608,15 +1608,16 @@ void ChordLayout::offsetAndLayoutChords(Segment* segment, staff_idx_t staffIdx, 
     layoutChords3(posInfo.chords, notes, staff, ctx);
 }
 
-void ChordLayout::centreChords(const Segment* segment, OffsetInfo& offsetInfo, ChordPosInfo& posInfo, staff_idx_t staffIdx,
-                               const Fraction& tick, LayoutContext& ctx)
+OffsetInfo ChordLayout::centreChords(const Segment* segment, ChordPosInfo& posInfo, staff_idx_t staffIdx,
+                                     const Fraction& tick, LayoutContext& ctx)
 {
     const Staff* staff = ctx.dom().staff(staffIdx);
     const bool isTab = staff->isTabStaff(segment->tick());
 
+    OffsetInfo offsetInfo = OffsetInfo();
     // only center chords on standard staves.  This is a simpler process for TAB and done elsewhere
     if (isTab) {
-        return;
+        return offsetInfo;
     }
 
     double sp = staff->spatium(tick);
@@ -1673,6 +1674,8 @@ void ChordLayout::centreChords(const Segment* segment, OffsetInfo& offsetInfo, C
         offsetInfo.centerDown = -headDiff * 0.5;
         offsetInfo.centerAdjustUp = offsetInfo.centerDown;
     }
+
+    return offsetInfo;
 }
 
 void ChordLayout::calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, const Fraction& tick,
@@ -2089,9 +2092,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             posInfo.maxDownWidth = std::max(posInfo.maxDownWidth, hw);
         }
 
-        OffsetInfo offsetInfo = OffsetInfo();
-
-        centreChords(segment, offsetInfo, posInfo, staffIdx, tick, ctx);
+        OffsetInfo offsetInfo = centreChords(segment, posInfo, staffIdx, tick, ctx);
 
         calculateChordOffsets(segment, staffIdx, tick, offsetInfo, posInfo, ctx);
 
