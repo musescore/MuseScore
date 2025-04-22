@@ -4759,7 +4759,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
             }
         }           // if (pel && ...
 
-        if (el->systemFlag()) {
+        if (el->systemFlag() && !ExportMusicXml::configuration()->exportMu3Compat()) {
             tagname += u" system=\"only-top\"";
         }
     }
@@ -5048,7 +5048,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
 
     XmlWriter::Attributes tempoAttrs;
     tempoAttrs = { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } };
-    if (text->systemFlag()) {
+    if (text->systemFlag() && !ExportMusicXml::configuration()->exportMu3Compat()) {
         tempoAttrs.emplace_back(std::make_pair("system", text->isLinked() ? "also-top" : "only-top"));
     }
 
