@@ -2073,59 +2073,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             }
         }
 
-        // apply chord offsets
-        for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
-            EngravingItem* e = segment->element(track);
-            if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
-                Chord* chord = toChord(e);
-                Chord::LayoutData* chordLdata = chord->mutldata();
-                // only centre chords if we are separating voices and this voice has no collision
-                const bool combineVoices = chord->shouldCombineVoice();
-                if (!combineVoices && !muse::contains(tracksToAdjust, track)) {
-                    if (chord->up()) {
-                        chordLdata->moveX(offsetInfo.centerUp);
-                    } else {
-                        chordLdata->moveX(offsetInfo.centerDown);
-                    }
-                    continue;
-                }
-
-                if (chord->up()) {
-                    if (!muse::RealIsNull(offsetInfo.upOffset)) {
-                        offsetInfo.oversizeUp = isTab ? offsetInfo.oversizeUp / 2 : offsetInfo.oversizeUp;
-                        chordLdata->moveX(offsetInfo.upOffset + offsetInfo.centerAdjustUp + offsetInfo.oversizeUp);
-                        if (posInfo.downDots && !posInfo.upDots) {
-                            chordLdata->moveX(offsetInfo.dotAdjust);
-                        }
-                    } else {
-                        chordLdata->moveX(offsetInfo.centerUp);
-                    }
-                } else {
-                    if (!muse::RealIsNull(offsetInfo.downOffset)) {
-                        chordLdata->moveX(offsetInfo.downOffset + offsetInfo.centerAdjustDown);
-                        if (posInfo.upDots && !posInfo.downDots) {
-                            chordLdata->moveX(offsetInfo.dotAdjust);
-                        }
-                    } else {
-                        chordLdata->moveX(offsetInfo.centerDown);
-                    }
-                }
-            }
-        }
-
-        // layout chords
-        std::vector<Note*> notes;
-        if (posInfo.upVoices) {
-            notes.insert(notes.end(), posInfo.upStemNotes.begin(), posInfo.upStemNotes.end());
-        }
-        if (posInfo.downVoices) {
-            notes.insert(notes.end(), posInfo.downStemNotes.begin(), posInfo.downStemNotes.end());
-        }
-        if (posInfo.upVoices + posInfo.downVoices > 1) {
-            std::sort(notes.begin(), notes.end(),
-                      [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
-        }
-        layoutChords3(posInfo.chords, notes, staff, ctx);
+        offsetAndLayoutChords(segment, staffIdx, partStartTrack, partEndTrack, offsetInfo, posInfo, ctx);
     }
 
     if (!isTab) {
