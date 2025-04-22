@@ -1675,6 +1675,344 @@ void ChordLayout::centreChords(const Segment* segment, OffsetInfo& offsetInfo, C
     }
 }
 
+void ChordLayout::calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, const Fraction& tick,
+                                        OffsetInfo& offsetInfo, ChordPosInfo& posInfo, LayoutContext& ctx)
+{
+    // handle conflict between upstem and downstem chords
+    if (!posInfo.upVoices || !posInfo.downVoices) {
+        return;
+    }
+    const Staff* staff = ctx.dom().staff(staffIdx);
+    double sp = staff->spatium(tick);
+    const bool isTab = staff->isTabStaff(segment->tick());
+
+    Note* bottomUpNote = posInfo.upStemNotes.front();
+    Note* topDownNote  = posInfo.downStemNotes.back();
+    int separation = topDownNote->stringOrLine() - bottomUpNote->stringOrLine();
+
+    std::vector<Note*> overlapNotes;
+    overlapNotes.reserve(8);
+
+    if (separation == 1) {
+        // second
+        if (posInfo.upDots && !posInfo.downDots) {
+            offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
+            offsetInfo.tracksToAdjust.insert(bottomUpNote->track());
+        } else {
+            offsetInfo.downOffset = posInfo.maxUpWidth;
+            // align stems if present
+            if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
+                const Stem* topDownStem = topDownNote->chord()->stem();
+                offsetInfo.downOffset -= topDownStem->lineWidthMag();
+            } else if (topDownNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS
+                       && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
+                // stemless notes should be aligned as is they were stemmed
+                // (except in case of brevis, cause the notehead has the side bars)
+                offsetInfo.downOffset -= ctx.conf().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
+            }
+            offsetInfo.tracksToAdjust.insert(topDownNote->track());
+        }
+    } else if (separation < 1) {
+        // overlap (possibly unison)
+
+        // build list of overlapping notes
+        for (size_t i = 0, n = posInfo.upStemNotes.size(); i < n; ++i) {
+            if (posInfo.upStemNotes[i]->stringOrLine() >= topDownNote->stringOrLine() - 1) {
+                overlapNotes.push_back(posInfo.upStemNotes[i]);
+            } else {
+                break;
+            }
+        }
+        for (size_t i = posInfo.downStemNotes.size(); i > 0; --i) {             // loop most probably needs to be in this reverse order
+            if (posInfo.downStemNotes[i - 1]->stringOrLine() <= bottomUpNote->stringOrLine() + 1) {
+                overlapNotes.push_back(posInfo.downStemNotes[i - 1]);
+            } else {
+                break;
+            }
+        }
+        std::sort(overlapNotes.begin(), overlapNotes.end(),
+                  [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
+
+        // determine nature of overlap
+        bool shareHeads = true;                   // can all overlapping notes share heads?
+        bool matchPending = false;                // looking for a unison match
+        bool conflictUnison = false;              // unison found
+        bool conflictSecondUpHigher = false;                  // second found
+        bool conflictSecondDownHigher = false;                // second found
+        int lastLine = 1000;
+        track_idx_t lastTrack = muse::nidx;
+        Note* p = overlapNotes[0];
+        for (size_t i = 0, count = overlapNotes.size(); i < count; ++i) {
+            Note* n = overlapNotes[i];
+            NoteHeadType nHeadType;
+            NoteHeadType pHeadType;
+            Chord* nchord = n->chord();
+            Chord* pchord = p->chord();
+            if (n->ldata()->mirror()) {
+                if (separation < 0) {
+                    // don't try to share heads if there is any mirroring
+                    shareHeads = false;
+                    // don't worry about conflicts involving mirrored notes
+                    continue;
+                }
+            }
+            track_idx_t track = n->track();
+            int line = n->stringOrLine();
+            int d = lastLine - line;
+            switch (d) {
+            case 0:
+                // unison
+                conflictUnison = true;
+                matchPending = false;
+                nHeadType = (n->headType() == NoteHeadType::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
+                pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
+                // the most important rules for sharing noteheads on unisons between voices are
+                // that notes must be one same line with same tpc
+                // noteheads must be unmirrored and of same group
+                // and chords must be same size if notehead is anything other than HEAD_QUARTER
+                if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->ldata()->mirror()
+                    || p->ldata()->mirror()
+                    || (nchord->isSmall() != pchord->isSmall()
+                        && (nHeadType != NoteHeadType::HEAD_QUARTER || pHeadType != NoteHeadType::HEAD_QUARTER))) {
+                    shareHeads = false;
+                } else {
+                    // noteheads are potentially shareable
+                    // it is more subjective at this point
+                    // current default is to require *either* of the following:
+                    //    1) both chords have same number of dots, both have stems, and both noteheads are same type and are full size (automatic match)
+                    // or 2) one or more of the noteheads is not of type AUTO, but is explicitly set to match the other (user-forced match)
+                    // or 3) exactly one of the noteheads is invisible (user-forced match)
+                    // thus user can force notes to be shared despite differing number of dots or either being stemless
+                    // by setting one of the notehead types to match the other or by making one notehead invisible
+                    // TODO: consider adding a style option, staff properties, or note property to control sharing
+                    if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType
+                         || n->isSmall() || p->isSmall())
+                        && ((n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)
+                            || nHeadType != pHeadType)
+                        && (n->visible() == p->visible())) {
+                        shareHeads = false;
+                    }
+                }
+
+                break;
+            case 1:
+                // second
+                // trust that this won't be a problem for single unison
+                if (separation < 0) {
+                    if (n->chord()->up()) {
+                        conflictSecondUpHigher = true;
+                    } else {
+                        conflictSecondDownHigher = true;
+                    }
+                    shareHeads = false;
+                }
+                break;
+            default:
+                // no conflict
+                if (matchPending) {
+                    shareHeads = false;
+                }
+                matchPending = true;
+            }
+            if (!shareHeads) {
+                offsetInfo.tracksToAdjust.insert({ track, lastTrack });
+            }
+            p = n;
+            lastLine = line;
+            lastTrack = track;
+        }
+        if (matchPending) {
+            shareHeads = false;
+        }
+
+        bool conflict = conflictUnison || conflictSecondDownHigher || conflictSecondUpHigher;
+        bool ledgerOverlapAbove = false;
+        bool ledgerOverlapBelow = false;
+
+        double ledgerGap = 0.15 * sp;
+        double ledgerLen = ctx.conf().styleS(Sid::ledgerLineLength).val() * sp;
+        int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
+        int topDownStemLen = 0;
+        if (!conflictUnison && topDownNote->chord()->stem()) {
+            topDownStemLen = std::round(topDownNote->chord()->stem()->ldata()->bbox().height() / sp * 2);
+            if (bottomUpNote->stringOrLine() > firstLedgerBelow - 1 && topDownNote->stringOrLine() < bottomUpNote->stringOrLine()
+                && topDownNote->stringOrLine() + topDownStemLen >= firstLedgerBelow) {
+                ledgerOverlapBelow = true;
+            }
+        }
+
+        int firstLedgerAbove = -2;
+        int bottomUpStemLen = 0;
+        if (!conflictUnison && bottomUpNote->chord()->stem()) {
+            bottomUpStemLen = std::round(bottomUpNote->chord()->stem()->ldata()->bbox().height() / sp * 2);
+            if (topDownNote->stringOrLine() < -1 && topDownNote->stringOrLine() < bottomUpNote->stringOrLine()
+                && bottomUpNote->stringOrLine() - bottomUpStemLen <= firstLedgerAbove) {
+                ledgerOverlapAbove = true;
+            }
+        }
+
+        // calculate offsets
+        if (shareHeads) {
+            for (int i = static_cast<int>(overlapNotes.size()) - 1; i >= 1; i -= 2) {
+                Note* previousNote = overlapNotes[i - 1];
+                Note* n = overlapNotes[i];
+                if (!(previousNote->chord()->isNudged() || n->chord()->isNudged())) {
+                    const bool prevChordSmall = previousNote->chord()->isSmall();
+                    const bool nChordSmall = n->chord()->isSmall();
+                    if (previousNote->chord()->dots() == n->chord()->dots()) {
+                        // hide one set of dots
+                        // Hide the small augmentation dot if present
+                        bool onLine = !(previousNote->line() & 1);
+                        if (prevChordSmall) {
+                            previousNote->setDotsHidden(true);
+                        } else if (nChordSmall) {
+                            n->setDotsHidden(true);
+                        } else if (onLine) {
+                            // hide dots for lower voice
+                            if (previousNote->voice() & 1) {
+                                previousNote->setDotsHidden(true);
+                            } else {
+                                n->setDotsHidden(true);
+                            }
+                        } else {
+                            // hide dots for upper voice
+                            if (!(previousNote->voice() & 1)) {
+                                previousNote->setDotsHidden(true);
+                            } else {
+                                n->setDotsHidden(true);
+                            }
+                        }
+                    }
+                    // If either chord is small, adjust offset
+                    Chord* smallChord = prevChordSmall ? previousNote->chord() : nullptr;
+                    smallChord = nChordSmall ? n->chord() : smallChord;
+                    if (smallChord && !(prevChordSmall && nChordSmall)) {
+                        if (smallChord->up()) {
+                            offsetInfo.centerUp *= 2;
+                        } else {
+                            offsetInfo.centerDown = 0;
+                        }
+                    }
+                    // formerly we hid noteheads in an effort to fix playback
+                    // but this doesn't work for cases where noteheads cannot be shared
+                    // so better to solve the problem elsewhere
+                }
+            }
+        } else if (conflict && (posInfo.upDots && !posInfo.downDots)) {
+            offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
+        } else if (conflictUnison && separation == 0 && (!posInfo.downGrace || posInfo.upGrace)) {
+            offsetInfo.downOffset = posInfo.maxUpWidth + 0.15 * sp;
+        } else if (conflictUnison) {
+            offsetInfo.upOffset = posInfo.maxDownWidth + 0.15 * sp;
+        } else if (conflictSecondUpHigher) {
+            offsetInfo.upOffset = posInfo.maxDownWidth + 0.15 * sp;
+        } else if ((posInfo.downHooks && !posInfo.upHooks) && !(posInfo.upDots && !posInfo.downDots)) {
+            // Shift by ledger line length if ledger line conflict or just 0.3sp if no ledger lines
+            double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.3 * sp;
+            offsetInfo.downOffset = posInfo.maxUpWidth + adjSpace;
+        } else if (conflictSecondDownHigher) {
+            if (posInfo.downDots && !posInfo.upDots) {
+                double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.2 * sp;
+                offsetInfo.downOffset = posInfo.maxUpWidth + adjSpace;
+            } else {
+                // Prevent ledger line & notehead collision
+                double adjSpace
+                    = (topDownNote->stringOrLine() <= firstLedgerAbove
+                       || bottomUpNote->stringOrLine() >= firstLedgerBelow) ? ledgerLen - ledgerGap - 0.2 * sp : -0.2 * sp;
+                offsetInfo.upOffset = posInfo.maxDownWidth + adjSpace;
+                if (posInfo.downHooks) {
+                    bool needsHookSpace = (ledgerOverlapBelow || ledgerOverlapAbove);
+                    Hook* hook = topDownNote->chord()->hook();
+                    double hookSpace = hook ? hook->width() : 0.0;
+                    offsetInfo.upOffset = needsHookSpace ? hookSpace + ledgerLen + ledgerGap : offsetInfo.upOffset + 0.3 * sp;
+                }
+            }
+        } else {
+            // no direct conflict, so parts can overlap (downstem on left)
+            // just be sure that stems clear opposing noteheads and ledger lines
+            // Stems are in the middle of fret marks on TAB staves
+            double clearLeft = isTab ? bottomUpNote->chord()->stemPosX() : 0.0;
+            double clearRight = isTab ? bottomUpNote->chord()->stemPosX() : 0.0;
+            double overlapPadding = (isTab ? 0 : 0.3) * sp;
+            if (const Stem* topDownStem = topDownNote->chord()->stem()) {
+                if (ledgerOverlapBelow) {
+                    // Create space between stem and ledger line below staff
+                    clearLeft += ledgerLen + ledgerGap + topDownStem->lineWidthMag();
+                } else {
+                    clearLeft += topDownStem->lineWidthMag() + overlapPadding;
+                }
+            }
+            if (const Stem* bottomUpStem = bottomUpNote->chord()->stem()) {
+                if (ledgerOverlapAbove) {
+                    // Create space between stem and ledger line above staff
+                    clearRight += posInfo.maxDownWidth + ledgerLen + ledgerGap - posInfo.maxUpWidth
+                                  + bottomUpStem->lineWidthMag();
+                } else {
+                    clearRight += bottomUpStem->lineWidthMag()
+                                  + std::max(posInfo.maxDownWidth - posInfo.maxUpWidth, 0.0) + overlapPadding;
+                }
+            } else {
+                posInfo.downDots = 0;                 // no need to adjust for dots in this case
+            }
+            offsetInfo.upOffset = std::max(clearLeft, clearRight);
+            // Check if there's enough space to tuck under a flag
+            Note* topUpNote = posInfo.upStemNotes.back();
+            // Move notes out of the way of straight flags
+            int pad = ctx.conf().styleB(Sid::useStraightNoteFlags) ? 2 : 1;
+            bool overlapsFlag = topDownNote->stringOrLine() + topDownStemLen + pad > topUpNote->stringOrLine();
+            if (posInfo.downHooks && (ledgerOverlapBelow || overlapsFlag)) {
+                // we will need more space to avoid collision with hook
+                // but we won't need as much dot adjustment
+                Hook* hook = topDownNote->chord()->hook();
+                double hookWidth = hook ? hook->width() : 0.0;
+                if (ledgerOverlapBelow) {
+                    offsetInfo.upOffset = hookWidth + ledgerLen + ledgerGap;
+                }
+                if (isTab) {
+                    offsetInfo.upOffset = hookWidth + posInfo.maxDownWidth;
+                }
+                offsetInfo.upOffset = std::max(offsetInfo.upOffset, posInfo.maxDownWidth + 0.1 * sp);
+                offsetInfo.dotAdjustThreshold = posInfo.maxUpWidth - 0.3 * sp;
+            }
+            // if downstem chord is small, don't center
+            // and we might not need as much dot adjustment either
+            if (offsetInfo.centerDown > 0.0) {
+                offsetInfo.centerDown = 0.0;
+                offsetInfo.centerAdjustUp = 0.0;
+                offsetInfo.dotAdjustThreshold = (offsetInfo.upOffset - posInfo.maxDownWidth) + posInfo.maxUpWidth - 0.3 * sp;
+            }
+        }
+    }
+
+    // adjust for dots
+    if ((posInfo.upDots && !posInfo.downDots) || (posInfo.downDots && !posInfo.upDots)) {
+        // only one sets of dots
+        // place between chords
+        int dots;
+        double mag;
+        if (posInfo.upDots) {
+            dots = posInfo.upDots;
+            mag = posInfo.maxUpMag;
+        } else {
+            dots = posInfo.downDots;
+            mag = posInfo.maxDownMag;
+        }
+        double dotWidth = segment->symWidth(SymId::augmentationDot);
+        // first dot
+        offsetInfo.dotAdjust = ctx.conf().styleMM(Sid::dotNoteDistance) + dotWidth;
+        // additional dots
+        if (dots > 1) {
+            offsetInfo.dotAdjust += ctx.conf().styleMM(Sid::dotDotDistance).val() * (dots - 1);
+        }
+        offsetInfo.dotAdjust *= mag;
+        // only by amount over threshold
+        offsetInfo.dotAdjust = std::max(offsetInfo.dotAdjust - offsetInfo.dotAdjustThreshold, 0.0);
+    }
+    if (separation == 1) {
+        offsetInfo.dotAdjust += 0.1 * sp;
+    }
+}
+
 //---------------------------------------------------------
 //   layoutChords1
 //    - layout upstem and downstem chords
@@ -1751,341 +2089,11 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             posInfo.maxDownWidth = std::max(posInfo.maxDownWidth, hw);
         }
 
-        double sp = staff->spatium(tick);
-
         OffsetInfo offsetInfo = OffsetInfo();
 
         centreChords(segment, offsetInfo, posInfo, staffIdx, tick, ctx);
 
-        // handle conflict between upstem and downstem chords
-
-        if (posInfo.upVoices && posInfo.downVoices) {
-            Note* bottomUpNote = posInfo.upStemNotes.front();
-            Note* topDownNote  = posInfo.downStemNotes.back();
-            int separation = topDownNote->stringOrLine() - bottomUpNote->stringOrLine();
-
-            std::vector<Note*> overlapNotes;
-            overlapNotes.reserve(8);
-
-            if (separation == 1) {
-                // second
-                if (posInfo.upDots && !posInfo.downDots) {
-                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
-                    offsetInfo.tracksToAdjust.insert(bottomUpNote->track());
-                } else {
-                    offsetInfo.downOffset = posInfo.maxUpWidth;
-                    // align stems if present
-                    if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
-                        const Stem* topDownStem = topDownNote->chord()->stem();
-                        offsetInfo.downOffset -= topDownStem->lineWidthMag();
-                    } else if (topDownNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS
-                               && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
-                        // stemless notes should be aligned as is they were stemmed
-                        // (except in case of brevis, cause the notehead has the side bars)
-                        offsetInfo.downOffset -= ctx.conf().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
-                    }
-                    offsetInfo.tracksToAdjust.insert(topDownNote->track());
-                }
-            } else if (separation < 1) {
-                // overlap (possibly unison)
-
-                // build list of overlapping notes
-                for (size_t i = 0, n = posInfo.upStemNotes.size(); i < n; ++i) {
-                    if (posInfo.upStemNotes[i]->stringOrLine() >= topDownNote->stringOrLine() - 1) {
-                        overlapNotes.push_back(posInfo.upStemNotes[i]);
-                    } else {
-                        break;
-                    }
-                }
-                for (size_t i = posInfo.downStemNotes.size(); i > 0; --i) {         // loop most probably needs to be in this reverse order
-                    if (posInfo.downStemNotes[i - 1]->stringOrLine() <= bottomUpNote->stringOrLine() + 1) {
-                        overlapNotes.push_back(posInfo.downStemNotes[i - 1]);
-                    } else {
-                        break;
-                    }
-                }
-                std::sort(overlapNotes.begin(), overlapNotes.end(),
-                          [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
-
-                // determine nature of overlap
-                bool shareHeads = true;               // can all overlapping notes share heads?
-                bool matchPending = false;            // looking for a unison match
-                bool conflictUnison = false;          // unison found
-                bool conflictSecondUpHigher = false;              // second found
-                bool conflictSecondDownHigher = false;            // second found
-                int lastLine = 1000;
-                track_idx_t lastTrack = muse::nidx;
-                Note* p = overlapNotes[0];
-                for (size_t i = 0, count = overlapNotes.size(); i < count; ++i) {
-                    Note* n = overlapNotes[i];
-                    NoteHeadType nHeadType;
-                    NoteHeadType pHeadType;
-                    Chord* nchord = n->chord();
-                    Chord* pchord = p->chord();
-                    if (n->ldata()->mirror()) {
-                        if (separation < 0) {
-                            // don't try to share heads if there is any mirroring
-                            shareHeads = false;
-                            // don't worry about conflicts involving mirrored notes
-                            continue;
-                        }
-                    }
-                    track_idx_t track = n->track();
-                    int line = n->stringOrLine();
-                    int d = lastLine - line;
-                    switch (d) {
-                    case 0:
-                        // unison
-                        conflictUnison = true;
-                        matchPending = false;
-                        nHeadType = (n->headType() == NoteHeadType::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
-                        pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
-                        // the most important rules for sharing noteheads on unisons between voices are
-                        // that notes must be one same line with same tpc
-                        // noteheads must be unmirrored and of same group
-                        // and chords must be same size if notehead is anything other than HEAD_QUARTER
-                        if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->ldata()->mirror()
-                            || p->ldata()->mirror()
-                            || (nchord->isSmall() != pchord->isSmall()
-                                && (nHeadType != NoteHeadType::HEAD_QUARTER || pHeadType != NoteHeadType::HEAD_QUARTER))) {
-                            shareHeads = false;
-                        } else {
-                            // noteheads are potentially shareable
-                            // it is more subjective at this point
-                            // current default is to require *either* of the following:
-                            //    1) both chords have same number of dots, both have stems, and both noteheads are same type and are full size (automatic match)
-                            // or 2) one or more of the noteheads is not of type AUTO, but is explicitly set to match the other (user-forced match)
-                            // or 3) exactly one of the noteheads is invisible (user-forced match)
-                            // thus user can force notes to be shared despite differing number of dots or either being stemless
-                            // by setting one of the notehead types to match the other or by making one notehead invisible
-                            // TODO: consider adding a style option, staff properties, or note property to control sharing
-                            if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType
-                                 || n->isSmall() || p->isSmall())
-                                && ((n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)
-                                    || nHeadType != pHeadType)
-                                && (n->visible() == p->visible())) {
-                                shareHeads = false;
-                            }
-                        }
-
-                        break;
-                    case 1:
-                        // second
-                        // trust that this won't be a problem for single unison
-                        if (separation < 0) {
-                            if (n->chord()->up()) {
-                                conflictSecondUpHigher = true;
-                            } else {
-                                conflictSecondDownHigher = true;
-                            }
-                            shareHeads = false;
-                        }
-                        break;
-                    default:
-                        // no conflict
-                        if (matchPending) {
-                            shareHeads = false;
-                        }
-                        matchPending = true;
-                    }
-                    if (!shareHeads) {
-                        offsetInfo.tracksToAdjust.insert({ track, lastTrack });
-                    }
-                    p = n;
-                    lastLine = line;
-                    lastTrack = track;
-                }
-                if (matchPending) {
-                    shareHeads = false;
-                }
-
-                bool conflict = conflictUnison || conflictSecondDownHigher || conflictSecondUpHigher;
-                bool ledgerOverlapAbove = false;
-                bool ledgerOverlapBelow = false;
-
-                double ledgerGap = 0.15 * sp;
-                double ledgerLen = ctx.conf().styleS(Sid::ledgerLineLength).val() * sp;
-                int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
-                int topDownStemLen = 0;
-                if (!conflictUnison && topDownNote->chord()->stem()) {
-                    topDownStemLen = std::round(topDownNote->chord()->stem()->ldata()->bbox().height() / sp * 2);
-                    if (bottomUpNote->stringOrLine() > firstLedgerBelow - 1 && topDownNote->stringOrLine() < bottomUpNote->stringOrLine()
-                        && topDownNote->stringOrLine() + topDownStemLen >= firstLedgerBelow) {
-                        ledgerOverlapBelow = true;
-                    }
-                }
-
-                int firstLedgerAbove = -2;
-                int bottomUpStemLen = 0;
-                if (!conflictUnison && bottomUpNote->chord()->stem()) {
-                    bottomUpStemLen = std::round(bottomUpNote->chord()->stem()->ldata()->bbox().height() / sp * 2);
-                    if (topDownNote->stringOrLine() < -1 && topDownNote->stringOrLine() < bottomUpNote->stringOrLine()
-                        && bottomUpNote->stringOrLine() - bottomUpStemLen <= firstLedgerAbove) {
-                        ledgerOverlapAbove = true;
-                    }
-                }
-
-                // calculate offsets
-                if (shareHeads) {
-                    for (int i = static_cast<int>(overlapNotes.size()) - 1; i >= 1; i -= 2) {
-                        Note* previousNote = overlapNotes[i - 1];
-                        Note* n = overlapNotes[i];
-                        if (!(previousNote->chord()->isNudged() || n->chord()->isNudged())) {
-                            const bool prevChordSmall = previousNote->chord()->isSmall();
-                            const bool nChordSmall = n->chord()->isSmall();
-                            if (previousNote->chord()->dots() == n->chord()->dots()) {
-                                // hide one set of dots
-                                // Hide the small augmentation dot if present
-                                bool onLine = !(previousNote->line() & 1);
-                                if (prevChordSmall) {
-                                    previousNote->setDotsHidden(true);
-                                } else if (nChordSmall) {
-                                    n->setDotsHidden(true);
-                                } else if (onLine) {
-                                    // hide dots for lower voice
-                                    if (previousNote->voice() & 1) {
-                                        previousNote->setDotsHidden(true);
-                                    } else {
-                                        n->setDotsHidden(true);
-                                    }
-                                } else {
-                                    // hide dots for upper voice
-                                    if (!(previousNote->voice() & 1)) {
-                                        previousNote->setDotsHidden(true);
-                                    } else {
-                                        n->setDotsHidden(true);
-                                    }
-                                }
-                            }
-                            // If either chord is small, adjust offset
-                            Chord* smallChord = prevChordSmall ? previousNote->chord() : nullptr;
-                            smallChord = nChordSmall ? n->chord() : smallChord;
-                            if (smallChord && !(prevChordSmall && nChordSmall)) {
-                                if (smallChord->up()) {
-                                    offsetInfo.centerUp *= 2;
-                                } else {
-                                    offsetInfo.centerDown = 0;
-                                }
-                            }
-                            // formerly we hid noteheads in an effort to fix playback
-                            // but this doesn't work for cases where noteheads cannot be shared
-                            // so better to solve the problem elsewhere
-                        }
-                    }
-                } else if (conflict && (posInfo.upDots && !posInfo.downDots)) {
-                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
-                } else if (conflictUnison && separation == 0 && (!posInfo.downGrace || posInfo.upGrace)) {
-                    offsetInfo.downOffset = posInfo.maxUpWidth + 0.15 * sp;
-                } else if (conflictUnison) {
-                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.15 * sp;
-                } else if (conflictSecondUpHigher) {
-                    offsetInfo.upOffset = posInfo.maxDownWidth + 0.15 * sp;
-                } else if ((posInfo.downHooks && !posInfo.upHooks) && !(posInfo.upDots && !posInfo.downDots)) {
-                    // Shift by ledger line length if ledger line conflict or just 0.3sp if no ledger lines
-                    double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.3 * sp;
-                    offsetInfo.downOffset = posInfo.maxUpWidth + adjSpace;
-                } else if (conflictSecondDownHigher) {
-                    if (posInfo.downDots && !posInfo.upDots) {
-                        double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.2 * sp;
-                        offsetInfo.downOffset = posInfo.maxUpWidth + adjSpace;
-                    } else {
-                        // Prevent ledger line & notehead collision
-                        double adjSpace
-                            = (topDownNote->stringOrLine() <= firstLedgerAbove
-                               || bottomUpNote->stringOrLine() >= firstLedgerBelow) ? ledgerLen - ledgerGap - 0.2 * sp : -0.2 * sp;
-                        offsetInfo.upOffset = posInfo.maxDownWidth + adjSpace;
-                        if (posInfo.downHooks) {
-                            bool needsHookSpace = (ledgerOverlapBelow || ledgerOverlapAbove);
-                            Hook* hook = topDownNote->chord()->hook();
-                            double hookSpace = hook ? hook->width() : 0.0;
-                            offsetInfo.upOffset = needsHookSpace ? hookSpace + ledgerLen + ledgerGap : offsetInfo.upOffset + 0.3 * sp;
-                        }
-                    }
-                } else {
-                    // no direct conflict, so parts can overlap (downstem on left)
-                    // just be sure that stems clear opposing noteheads and ledger lines
-                    // Stems are in the middle of fret marks on TAB staves
-                    double clearLeft = isTab ? bottomUpNote->chord()->stemPosX() : 0.0;
-                    double clearRight = isTab ? bottomUpNote->chord()->stemPosX() : 0.0;
-                    double overlapPadding = (isTab ? 0 : 0.3) * sp;
-                    if (const Stem* topDownStem = topDownNote->chord()->stem()) {
-                        if (ledgerOverlapBelow) {
-                            // Create space between stem and ledger line below staff
-                            clearLeft += ledgerLen + ledgerGap + topDownStem->lineWidthMag();
-                        } else {
-                            clearLeft += topDownStem->lineWidthMag() + overlapPadding;
-                        }
-                    }
-                    if (const Stem* bottomUpStem = bottomUpNote->chord()->stem()) {
-                        if (ledgerOverlapAbove) {
-                            // Create space between stem and ledger line above staff
-                            clearRight += posInfo.maxDownWidth + ledgerLen + ledgerGap - posInfo.maxUpWidth
-                                          + bottomUpStem->lineWidthMag();
-                        } else {
-                            clearRight += bottomUpStem->lineWidthMag()
-                                          + std::max(posInfo.maxDownWidth - posInfo.maxUpWidth, 0.0) + overlapPadding;
-                        }
-                    } else {
-                        posInfo.downDots = 0;             // no need to adjust for dots in this case
-                    }
-                    offsetInfo.upOffset = std::max(clearLeft, clearRight);
-                    // Check if there's enough space to tuck under a flag
-                    Note* topUpNote = posInfo.upStemNotes.back();
-                    // Move notes out of the way of straight flags
-                    int pad = ctx.conf().styleB(Sid::useStraightNoteFlags) ? 2 : 1;
-                    bool overlapsFlag = topDownNote->stringOrLine() + topDownStemLen + pad > topUpNote->stringOrLine();
-                    if (posInfo.downHooks && (ledgerOverlapBelow || overlapsFlag)) {
-                        // we will need more space to avoid collision with hook
-                        // but we won't need as much dot adjustment
-                        Hook* hook = topDownNote->chord()->hook();
-                        double hookWidth = hook ? hook->width() : 0.0;
-                        if (ledgerOverlapBelow) {
-                            offsetInfo.upOffset = hookWidth + ledgerLen + ledgerGap;
-                        }
-                        if (isTab) {
-                            offsetInfo.upOffset = hookWidth + posInfo.maxDownWidth;
-                        }
-                        offsetInfo.upOffset = std::max(offsetInfo.upOffset, posInfo.maxDownWidth + 0.1 * sp);
-                        offsetInfo.dotAdjustThreshold = posInfo.maxUpWidth - 0.3 * sp;
-                    }
-                    // if downstem chord is small, don't center
-                    // and we might not need as much dot adjustment either
-                    if (offsetInfo.centerDown > 0.0) {
-                        offsetInfo.centerDown = 0.0;
-                        offsetInfo.centerAdjustUp = 0.0;
-                        offsetInfo.dotAdjustThreshold = (offsetInfo.upOffset - posInfo.maxDownWidth) + posInfo.maxUpWidth - 0.3 * sp;
-                    }
-                }
-            }
-
-            // adjust for dots
-            if ((posInfo.upDots && !posInfo.downDots) || (posInfo.downDots && !posInfo.upDots)) {
-                // only one sets of dots
-                // place between chords
-                int dots;
-                double mag;
-                if (posInfo.upDots) {
-                    dots = posInfo.upDots;
-                    mag = posInfo.maxUpMag;
-                } else {
-                    dots = posInfo.downDots;
-                    mag = posInfo.maxDownMag;
-                }
-                double dotWidth = segment->symWidth(SymId::augmentationDot);
-                // first dot
-                offsetInfo.dotAdjust = ctx.conf().styleMM(Sid::dotNoteDistance) + dotWidth;
-                // additional dots
-                if (dots > 1) {
-                    offsetInfo.dotAdjust += ctx.conf().styleMM(Sid::dotDotDistance).val() * (dots - 1);
-                }
-                offsetInfo.dotAdjust *= mag;
-                // only by amount over threshold
-                offsetInfo.dotAdjust = std::max(offsetInfo.dotAdjust - offsetInfo.dotAdjustThreshold, 0.0);
-            }
-            if (separation == 1) {
-                offsetInfo.dotAdjust += 0.1 * sp;
-            }
-        }
+        calculateChordOffsets(segment, staffIdx, tick, offsetInfo, posInfo, ctx);
 
         offsetAndLayoutChords(segment, staffIdx, partStartTrack, partEndTrack, offsetInfo, posInfo, ctx);
     }
