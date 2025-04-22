@@ -1572,8 +1572,8 @@ void ChordLayout::calculateMaxNoteWidths(ChordPosInfo& posInfo, const Fraction& 
     }
 }
 
-void ChordLayout::offsetAndLayoutChords(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
-                                        OffsetInfo& offsetInfo, const ChordPosInfo& posInfo, LayoutContext& ctx)
+void ChordLayout::applyChordOffsets(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
+                                    OffsetInfo& offsetInfo, const ChordPosInfo& posInfo, LayoutContext& ctx)
 {
     const Staff* staff = ctx.dom().staff(staffIdx);
     const bool isTab = staff->isTabStaff(segment->tick());
@@ -2102,7 +2102,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
 
         calculateChordOffsets(segment, staffIdx, tick, offsetInfo, posInfo, ctx);
 
-        offsetAndLayoutChords(segment, staffIdx, partStartTrack, partEndTrack, offsetInfo, posInfo, ctx);
+        applyChordOffsets(segment, staffIdx, partStartTrack, partEndTrack, offsetInfo, posInfo, ctx);
     }
 
     if (!isTab) {

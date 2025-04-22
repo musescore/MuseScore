@@ -159,8 +159,8 @@ private:
                                    LayoutContext& ctx);
     static void calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, const Fraction& tick, OffsetInfo& offsetInfo,
                                       ChordPosInfo& posInfo, LayoutContext& ctx);
-    static void offsetAndLayoutChords(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
-                                      OffsetInfo& offsetInfo, const ChordPosInfo& posInfo, LayoutContext& ctx);
+    static void applyChordOffsets(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
+                                  OffsetInfo& offsetInfo, const ChordPosInfo& posInfo, LayoutContext& ctx);
 };
 }
 
