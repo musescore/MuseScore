@@ -1124,6 +1124,7 @@ TEST_F(Engraving_PartsTests, partExclusion)
     Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
+    ScoreRW::saveScore(masterScore, u"partExclusion.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
 
     // Collect the relevant items
@@ -1181,6 +1182,7 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
     Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
+    ScoreRW::saveScore(masterScore, u"partPropertyLinking.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
                                             PARTS_DATA_DIR + u"partPropertyLinking-part-0.mscx"));
 
@@ -1256,11 +1258,11 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
     part->changeSelectedElementsVoice(1);
     part->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(part, u"part-visible-tracks-part.mscx",
-                                            PARTS_DATA_DIR + u"part-visible-tracks-part-ref.mscx"));
-    // score->undoRedo(true, 0);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-visible-tracks-score.mscx",
                                             PARTS_DATA_DIR + u"part-visible-tracks-score-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(part, u"part-visible-tracks-part.mscx",
+                                            PARTS_DATA_DIR + u"part-visible-tracks-part-ref.mscx"));
 }
 
 TEST_F(Engraving_PartsTests, inputFromParts) {
