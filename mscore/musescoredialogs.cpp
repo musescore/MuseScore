@@ -158,6 +158,24 @@ AboutBoxDialog::AboutBoxDialog()
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+      auto compilerDateISO = []() -> std::string {
+            // Store __DATE__ in ISO 8601 format ( e.g. 2025-04-20 )
+            int month, day, year;
+            char buffer[10];
+            static const char monthNames[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
+            sscanf(__DATE__, "%s %d %d", buffer, &day, &year);
+            month = ((strstr(monthNames, buffer) - monthNames) / 3) + 1;
+            sprintf(buffer, "%d-%02d-%02d", year, month, day);
+            return std::string(buffer);
+            };
+
+      std::string dateTime;
+      dateTime += preferences.getBool(PREF_UI_APP_BUILD_DATE_ISO) ? compilerDateISO() : __DATE__;
+      dateTime += " ";
+      dateTime += __TIME__;
+
+      buildDateLabel->setText(tr("Build date: %1").arg(dateTime.c_str()));
+
       QString visitAndDonateString;
 #if !defined(FOR_WINSTORE) && 0
       visitAndDonateString = tr("Visit %1 for new versions and more information.\nGet %2help%3 with the program or %4contribute%5 to its development.")

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
+    <width>459</width>
     <height>282</height>
    </rect>
   </property>
@@ -143,6 +143,13 @@
             </spacer>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="buildDateLabel">
+           <property name="text">
+            <string notr="true">Build date:</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="copyrightLabel">

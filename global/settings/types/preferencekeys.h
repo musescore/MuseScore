@@ -154,6 +154,7 @@
 #define PREF_UI_APP_SHOWSTATUSBAR                           "ui/application/showStatusBar"
 #define PREF_UI_APP_USENATIVEDIALOGS                        "ui/application/useNativeDialogs"
 #define PREF_UI_APP_USENEWWIZARD                            "ui/application/useNewWizard"
+#define PREF_UI_APP_BUILD_DATE_ISO                          "ui/application/build/date/isoFormat"
 #define PREF_UI_PIANO_HIGHLIGHTCOLOR                        "ui/piano/highlightColor"
 #define PREF_UI_PIANO_SHOWPITCHHELP                         "ui/piano/showPitchHelp"
 #define PREF_UI_SCORE_NOTE_DROPCOLOR                        "ui/score/note/dropColor"

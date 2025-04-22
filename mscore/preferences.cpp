@@ -259,6 +259,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(false)},
 #endif
             {PREF_UI_APP_USENEWWIZARD,                             new BoolPreference(true)},
+            {PREF_UI_APP_BUILD_DATE_ISO,                           new BoolPreference(true)},
             {PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor(0x0065BF))},
             {PREF_UI_PIANO_SHOWPITCHHELP,                          new BoolPreference(true)},
             {PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor(0x0065BF))},
