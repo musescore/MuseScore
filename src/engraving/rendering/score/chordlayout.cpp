@@ -1545,6 +1545,33 @@ ChordPosInfo ChordLayout::calculateChordPosInfo(Segment* segment, staff_idx_t st
     return posInfo;
 }
 
+void ChordLayout::calculateMaxNoteWidths(ChordPosInfo& posInfo, const Fraction& tick, const Staff* staff, LayoutContext& ctx)
+{
+    double nominalWidth  = ctx.conf().noteHeadWidth() * staff->staffMag(tick);
+    posInfo.maxUpWidth   = nominalWidth * posInfo.maxUpMag;
+    posInfo.maxDownWidth = nominalWidth * posInfo.maxDownMag;
+
+    // layout upstem noteheads
+    if (posInfo.upVoices > 1) {
+        std::sort(posInfo.upStemNotes.begin(), posInfo.upStemNotes.end(),
+                  [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
+    }
+    if (posInfo.upVoices) {
+        double hw = layoutChords2(posInfo.upStemNotes, true, ctx);
+        posInfo.maxUpWidth = std::max(posInfo.maxUpWidth, hw);
+    }
+
+    // layout downstem noteheads
+    if (posInfo.downVoices > 1) {
+        std::sort(posInfo.downStemNotes.begin(), posInfo.downStemNotes.end(),
+                  [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
+    }
+    if (posInfo.downVoices) {
+        double hw = layoutChords2(posInfo.downStemNotes, false, ctx);
+        posInfo.maxDownWidth = std::max(posInfo.maxDownWidth, hw);
+    }
+}
+
 void ChordLayout::offsetAndLayoutChords(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
                                         OffsetInfo& offsetInfo, const ChordPosInfo& posInfo, LayoutContext& ctx)
 {
@@ -2060,8 +2087,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         return;
     }
 
-    double nominalWidth = ctx.conf().noteHeadWidth() * staff->staffMag(tick);
-
     ChordPosInfo posInfo = calculateChordPosInfo(segment, staffIdx, partStartTrack, partEndTrack, ctx);
 
     if (posInfo.upVoices + posInfo.downVoices && (staffType->stemThrough() || staffType->isCommonTabStaff())) {
@@ -2069,28 +2094,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         // otherwise there might be issues with unisons between voices
         // in some corner cases
 
-        posInfo.maxUpWidth   = nominalWidth * posInfo.maxUpMag;
-        posInfo.maxDownWidth = nominalWidth * posInfo.maxDownMag;
-
-        // layout upstem noteheads
-        if (posInfo.upVoices > 1) {
-            std::sort(posInfo.upStemNotes.begin(), posInfo.upStemNotes.end(),
-                      [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
-        }
-        if (posInfo.upVoices) {
-            double hw = layoutChords2(posInfo.upStemNotes, true, ctx);
-            posInfo.maxUpWidth = std::max(posInfo.maxUpWidth, hw);
-        }
-
-        // layout downstem noteheads
-        if (posInfo.downVoices > 1) {
-            std::sort(posInfo.downStemNotes.begin(), posInfo.downStemNotes.end(),
-                      [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
-        }
-        if (posInfo.downVoices) {
-            double hw = layoutChords2(posInfo.downStemNotes, false, ctx);
-            posInfo.maxDownWidth = std::max(posInfo.maxDownWidth, hw);
-        }
+        calculateMaxNoteWidths(posInfo, tick, staff, ctx);
 
         OffsetInfo offsetInfo = centreChords(segment, posInfo, staffIdx, tick, ctx);
 
