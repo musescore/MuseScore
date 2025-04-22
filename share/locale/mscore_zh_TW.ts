@@ -597,17 +597,17 @@
 <context>
     <name>Direction</name>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="208"/>
+        <location filename="../../libmscore/mscore.cpp" line="187"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="209"/>
+        <location filename="../../libmscore/mscore.cpp" line="188"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="210"/>
+        <location filename="../../libmscore/mscore.cpp" line="189"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
@@ -3033,7 +3033,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="7871"/>
         <location filename="../../mscore/editstyle.ui" line="8319"/>
         <location filename="../../mscore/editstyle.ui" line="8415"/>
-        <location filename="../../mscore/editstyle.cpp" line="36"/>
+        <location filename="../../mscore/editstyle.cpp" line="38"/>
         <source>Continuous</source>
         <translation>連續線</translation>
     </message>
@@ -3041,7 +3041,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="7876"/>
         <location filename="../../mscore/editstyle.ui" line="8324"/>
         <location filename="../../mscore/editstyle.ui" line="8420"/>
-        <location filename="../../mscore/editstyle.cpp" line="37"/>
+        <location filename="../../mscore/editstyle.cpp" line="39"/>
         <source>Dashed</source>
         <translation>斷線</translation>
     </message>
@@ -3049,7 +3049,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="7881"/>
         <location filename="../../mscore/editstyle.ui" line="8329"/>
         <location filename="../../mscore/editstyle.ui" line="8425"/>
-        <location filename="../../mscore/editstyle.cpp" line="38"/>
+        <location filename="../../mscore/editstyle.cpp" line="40"/>
         <source>Dotted</source>
         <translation>點線</translation>
     </message>
@@ -3057,7 +3057,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="7886"/>
         <location filename="../../mscore/editstyle.ui" line="8334"/>
         <location filename="../../mscore/editstyle.ui" line="8430"/>
-        <location filename="../../mscore/editstyle.cpp" line="39"/>
+        <location filename="../../mscore/editstyle.cpp" line="41"/>
         <source>Dash-dotted</source>
         <translation>虛點線</translation>
     </message>
@@ -3065,7 +3065,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="7891"/>
         <location filename="../../mscore/editstyle.ui" line="8339"/>
         <location filename="../../mscore/editstyle.ui" line="8435"/>
-        <location filename="../../mscore/editstyle.cpp" line="40"/>
+        <location filename="../../mscore/editstyle.cpp" line="42"/>
         <source>Dash-dot-dotted</source>
         <translation>雙點虛線</translation>
     </message>
@@ -5764,7 +5764,7 @@ By default, they will be placed such as that their right end are at the same lev
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5898"/>
+        <location filename="../../mscore/musescore.cpp" line="5901"/>
         <source>Record</source>
         <translation>錄音</translation>
     </message>
@@ -11162,12 +11162,12 @@ time and key signatures</source>
         <translation>全部樂器</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="1367"/>
+        <location filename="../../mscore/instrwidget.cpp" line="1363"/>
         <source>%1 solo %2</source>
         <translation>%1 獨奏 %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="1376"/>
+        <location filename="../../mscore/instrwidget.cpp" line="1372"/>
         <source>%1 solo</source>
         <translation>%1 獨奏</translation>
     </message>
@@ -11710,7 +11710,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="196"/>
         <location filename="../../mscore/masterpalette.cpp" line="229"/>
-        <location filename="../../mscore/musescore.cpp" line="6324"/>
+        <location filename="../../mscore/musescore.cpp" line="6325"/>
         <source>Symbols</source>
         <translation>符號</translation>
     </message>
@@ -12325,13 +12325,18 @@ tuplet would cross measure</source>
         <translation>修訂：%1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescoredialogs.cpp" line="163"/>
+        <location filename="../../mscore/musescoredialogs.cpp" line="177"/>
+        <source>Build date: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescoredialogs.cpp" line="181"/>
         <source>Visit %1 for new versions and more information.
 Get %2help%3 with the program or %4contribute%5 to its development.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/musescoredialogs.cpp" line="169"/>
+        <location filename="../../mscore/musescoredialogs.cpp" line="187"/>
         <source>Copyright &amp;copy; 1999-2025 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
         <translation type="unfinished"></translation>
@@ -12340,7 +12345,7 @@ Published under the %1GNU General Public License version 2%2.</source>
 <context>
     <name>Ms::AboutMusicXMLBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescoredialogs.cpp" line="211"/>
+        <location filename="../../mscore/musescoredialogs.cpp" line="229"/>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications.
 Copyright © 2004-2017 the Contributors to the MusicXML
@@ -12564,292 +12569,292 @@ failed: %2</source>
 <context>
     <name>Ms::EditStyle</name>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="53"/>
+        <location filename="../../mscore/editstyle.cpp" line="55"/>
         <source>Apply to all Parts</source>
         <translation>套用至所有分譜</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="419"/>
-        <location filename="../../mscore/editstyle.cpp" line="786"/>
+        <location filename="../../mscore/editstyle.cpp" line="421"/>
+        <location filename="../../mscore/editstyle.cpp" line="788"/>
         <source>Above</source>
         <translation>上方</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="420"/>
-        <location filename="../../mscore/editstyle.cpp" line="787"/>
+        <location filename="../../mscore/editstyle.cpp" line="422"/>
+        <location filename="../../mscore/editstyle.cpp" line="789"/>
         <source>Below</source>
         <translation>下方</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="426"/>
-        <location filename="../../mscore/editstyle.cpp" line="793"/>
+        <location filename="../../mscore/editstyle.cpp" line="428"/>
+        <location filename="../../mscore/editstyle.cpp" line="795"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="427"/>
-        <location filename="../../mscore/editstyle.cpp" line="794"/>
+        <location filename="../../mscore/editstyle.cpp" line="429"/>
+        <location filename="../../mscore/editstyle.cpp" line="796"/>
         <source>Center</source>
         <translation>中心</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="428"/>
-        <location filename="../../mscore/editstyle.cpp" line="795"/>
+        <location filename="../../mscore/editstyle.cpp" line="430"/>
+        <location filename="../../mscore/editstyle.cpp" line="797"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="432"/>
-        <location filename="../../mscore/editstyle.cpp" line="798"/>
+        <location filename="../../mscore/editstyle.cpp" line="434"/>
+        <location filename="../../mscore/editstyle.cpp" line="800"/>
         <source>None</source>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="433"/>
-        <location filename="../../mscore/editstyle.cpp" line="799"/>
+        <location filename="../../mscore/editstyle.cpp" line="435"/>
+        <location filename="../../mscore/editstyle.cpp" line="801"/>
         <source>Brackets</source>
         <translation>括線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="434"/>
-        <location filename="../../mscore/editstyle.cpp" line="800"/>
+        <location filename="../../mscore/editstyle.cpp" line="436"/>
+        <location filename="../../mscore/editstyle.cpp" line="802"/>
         <source>Parentheses</source>
         <translation>圓括號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="437"/>
-        <location filename="../../mscore/editstyle.cpp" line="802"/>
+        <location filename="../../mscore/editstyle.cpp" line="439"/>
+        <location filename="../../mscore/editstyle.cpp" line="804"/>
         <source>Segment</source>
         <translation>區段</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="438"/>
-        <location filename="../../mscore/editstyle.cpp" line="803"/>
+        <location filename="../../mscore/editstyle.cpp" line="440"/>
+        <location filename="../../mscore/editstyle.cpp" line="805"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="439"/>
-        <location filename="../../mscore/editstyle.cpp" line="804"/>
+        <location filename="../../mscore/editstyle.cpp" line="441"/>
+        <location filename="../../mscore/editstyle.cpp" line="806"/>
         <source>System</source>
         <translation>組合譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="442"/>
-        <location filename="../../mscore/editstyle.cpp" line="806"/>
+        <location filename="../../mscore/editstyle.cpp" line="444"/>
+        <location filename="../../mscore/editstyle.cpp" line="808"/>
         <source>Number</source>
         <translation>號碼</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="443"/>
-        <location filename="../../mscore/editstyle.cpp" line="807"/>
+        <location filename="../../mscore/editstyle.cpp" line="445"/>
+        <location filename="../../mscore/editstyle.cpp" line="809"/>
         <source>Ratio</source>
         <translation>比例</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="444"/>
-        <location filename="../../mscore/editstyle.cpp" line="808"/>
+        <location filename="../../mscore/editstyle.cpp" line="446"/>
+        <location filename="../../mscore/editstyle.cpp" line="810"/>
         <source>None</source>
         <comment>no tuplet number type</comment>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="447"/>
-        <location filename="../../mscore/editstyle.cpp" line="481"/>
-        <location filename="../../mscore/editstyle.cpp" line="810"/>
-        <location filename="../../mscore/editstyle.cpp" line="817"/>
+        <location filename="../../mscore/editstyle.cpp" line="449"/>
+        <location filename="../../mscore/editstyle.cpp" line="483"/>
+        <location filename="../../mscore/editstyle.cpp" line="812"/>
+        <location filename="../../mscore/editstyle.cpp" line="819"/>
         <source>Automatic</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="448"/>
-        <location filename="../../mscore/editstyle.cpp" line="811"/>
+        <location filename="../../mscore/editstyle.cpp" line="450"/>
+        <location filename="../../mscore/editstyle.cpp" line="813"/>
         <source>Bracket</source>
         <translation>括線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="449"/>
-        <location filename="../../mscore/editstyle.cpp" line="812"/>
+        <location filename="../../mscore/editstyle.cpp" line="451"/>
+        <location filename="../../mscore/editstyle.cpp" line="814"/>
         <source>None</source>
         <comment>no tuplet bracket type</comment>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="477"/>
-        <location filename="../../mscore/editstyle.cpp" line="814"/>
+        <location filename="../../mscore/editstyle.cpp" line="479"/>
+        <location filename="../../mscore/editstyle.cpp" line="816"/>
         <source>Jazz</source>
         <translation>爵士</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="478"/>
-        <location filename="../../mscore/editstyle.cpp" line="815"/>
+        <location filename="../../mscore/editstyle.cpp" line="480"/>
+        <location filename="../../mscore/editstyle.cpp" line="817"/>
         <source>Literal</source>
         <translation>原樣</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="482"/>
-        <location filename="../../mscore/editstyle.cpp" line="818"/>
+        <location filename="../../mscore/editstyle.cpp" line="484"/>
+        <location filename="../../mscore/editstyle.cpp" line="820"/>
         <source>Root Only</source>
         <translation>只有根音</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="483"/>
-        <location filename="../../mscore/editstyle.cpp" line="819"/>
+        <location filename="../../mscore/editstyle.cpp" line="485"/>
+        <location filename="../../mscore/editstyle.cpp" line="821"/>
         <source>Close</source>
         <translation>八度以內所有音</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="484"/>
-        <location filename="../../mscore/editstyle.cpp" line="820"/>
+        <location filename="../../mscore/editstyle.cpp" line="486"/>
+        <location filename="../../mscore/editstyle.cpp" line="822"/>
         <source>Drop Two</source>
         <translation>第二個音下移八度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="485"/>
-        <location filename="../../mscore/editstyle.cpp" line="821"/>
+        <location filename="../../mscore/editstyle.cpp" line="487"/>
+        <location filename="../../mscore/editstyle.cpp" line="823"/>
         <source>Six Note</source>
         <translation>六音和弦</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="486"/>
-        <location filename="../../mscore/editstyle.cpp" line="822"/>
+        <location filename="../../mscore/editstyle.cpp" line="488"/>
+        <location filename="../../mscore/editstyle.cpp" line="824"/>
         <source>Four Note</source>
         <translation>四音和弦</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="487"/>
-        <location filename="../../mscore/editstyle.cpp" line="823"/>
+        <location filename="../../mscore/editstyle.cpp" line="489"/>
+        <location filename="../../mscore/editstyle.cpp" line="825"/>
         <source>Three Note</source>
         <translation>三音和弦</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="490"/>
-        <location filename="../../mscore/editstyle.cpp" line="825"/>
+        <location filename="../../mscore/editstyle.cpp" line="492"/>
+        <location filename="../../mscore/editstyle.cpp" line="827"/>
         <source>Until Next Chord Symbol</source>
         <translation>直到下一個和弦符號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="491"/>
-        <location filename="../../mscore/editstyle.cpp" line="826"/>
+        <location filename="../../mscore/editstyle.cpp" line="493"/>
+        <location filename="../../mscore/editstyle.cpp" line="828"/>
         <source>Until End of Measure</source>
         <translation>直到小節結束</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="492"/>
-        <location filename="../../mscore/editstyle.cpp" line="827"/>
+        <location filename="../../mscore/editstyle.cpp" line="494"/>
+        <location filename="../../mscore/editstyle.cpp" line="829"/>
         <source>Chord/Rest Duration</source>
         <translation>和弦／休止符時值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="855"/>
+        <location filename="../../mscore/editstyle.cpp" line="857"/>
         <source>Page number, except on first page</source>
         <translation>除首頁外顯示頁數</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="857"/>
+        <location filename="../../mscore/editstyle.cpp" line="859"/>
         <source>Page number, if there is more than one page</source>
         <translation>如果超過一頁則顯示頁數</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="859"/>
+        <location filename="../../mscore/editstyle.cpp" line="861"/>
         <source>Page number, on all pages</source>
         <translation>在所有頁面顯示頁數</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="861"/>
+        <location filename="../../mscore/editstyle.cpp" line="863"/>
         <source>Number of pages</source>
         <translation>頁數</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="863"/>
+        <location filename="../../mscore/editstyle.cpp" line="865"/>
         <source>File name</source>
         <translation>檔案名稱</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="865"/>
+        <location filename="../../mscore/editstyle.cpp" line="867"/>
         <source>File path+name</source>
         <translation>檔案路徑＋名稱</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="867"/>
+        <location filename="../../mscore/editstyle.cpp" line="869"/>
         <source>Part name, except on first page</source>
         <translation>除首頁外顯示分譜名稱</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="869"/>
+        <location filename="../../mscore/editstyle.cpp" line="871"/>
         <source>Part name, on all pages</source>
         <translation>在所有頁面顯示分譜名稱</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="871"/>
+        <location filename="../../mscore/editstyle.cpp" line="873"/>
         <source>Current date</source>
         <translation>目前日期</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="873"/>
+        <location filename="../../mscore/editstyle.cpp" line="875"/>
         <source>Creation date</source>
         <translation>建立日期</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="875"/>
+        <location filename="../../mscore/editstyle.cpp" line="877"/>
         <source>Last modification time</source>
         <translation>最後更改時間</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="877"/>
+        <location filename="../../mscore/editstyle.cpp" line="879"/>
         <source>Last modification date</source>
         <translation>最後更改日期</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="879"/>
+        <location filename="../../mscore/editstyle.cpp" line="881"/>
         <source>Copyright, on first page only</source>
         <translation>只在第一頁顯示版權資訊</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="881"/>
+        <location filename="../../mscore/editstyle.cpp" line="883"/>
         <source>Copyright, on all pages</source>
         <translation>在所有頁面顯示版權資訊</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="883"/>
+        <location filename="../../mscore/editstyle.cpp" line="885"/>
         <source>MuseScore version this score was last saved with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="885"/>
+        <location filename="../../mscore/editstyle.cpp" line="887"/>
         <source>MuseScore revision this score was last saved with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="887"/>
+        <location filename="../../mscore/editstyle.cpp" line="889"/>
         <source>The $ sign itself</source>
         <translation>$ 符號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="889"/>
+        <location filename="../../mscore/editstyle.cpp" line="891"/>
         <source>Metadata tag, see below</source>
         <translation>中繼資料標籤，請看下面</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="891"/>
+        <location filename="../../mscore/editstyle.cpp" line="893"/>
         <source>Available metadata tags and their current values</source>
         <translation>可用中繼資料標籤及其目前數值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="893"/>
+        <location filename="../../mscore/editstyle.cpp" line="895"/>
         <source>(in File &gt; Score Properties…):</source>
         <translation>（於檔案＞樂譜屬性…）：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="589"/>
-        <location filename="../../mscore/editstyle.cpp" line="838"/>
+        <location filename="../../mscore/editstyle.cpp" line="591"/>
+        <location filename="../../mscore/editstyle.cpp" line="840"/>
         <source>None</source>
         <comment>no frame for text</comment>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="590"/>
-        <location filename="../../mscore/editstyle.cpp" line="839"/>
+        <location filename="../../mscore/editstyle.cpp" line="592"/>
+        <location filename="../../mscore/editstyle.cpp" line="841"/>
         <source>Rectangle</source>
         <translation>矩形</translation>
     </message>
@@ -12864,13 +12869,13 @@ failed: %2</source>
         <translation>毫米</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="591"/>
-        <location filename="../../mscore/editstyle.cpp" line="840"/>
+        <location filename="../../mscore/editstyle.cpp" line="593"/>
+        <location filename="../../mscore/editstyle.cpp" line="842"/>
         <source>Circle</source>
         <translation>圓形</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="852"/>
+        <location filename="../../mscore/editstyle.cpp" line="854"/>
         <source>Special symbols in header/footer</source>
         <translation>頁首／頁尾的特別符號</translation>
     </message>
@@ -13489,12 +13494,12 @@ failed: %2</source>
         <translation>譜表類型</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="1473"/>
+        <location filename="../../mscore/instrwidget.cpp" line="1470"/>
         <source>Undo soloist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="1475"/>
+        <location filename="../../mscore/instrwidget.cpp" line="1472"/>
         <source>Make soloist</source>
         <translation>設置為獨奏</translation>
     </message>
@@ -13842,82 +13847,82 @@ Sound: %5</source>
     <name>Ms::MuseScore</name>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="343"/>
-        <location filename="../../mscore/musescore.cpp" line="7236"/>
+        <location filename="../../mscore/musescore.cpp" line="7237"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="344"/>
-        <location filename="../../mscore/musescore.cpp" line="7237"/>
+        <location filename="../../mscore/musescore.cpp" line="7238"/>
         <source>Exporting…</source>
         <translation>匯出中…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7158"/>
-        <location filename="../../mscore/musescore.cpp" line="7170"/>
+        <location filename="../../mscore/musescore.cpp" line="7159"/>
+        <location filename="../../mscore/musescore.cpp" line="7171"/>
         <source>Error Opening LAME library</source>
         <translation>開啟 LAME 資料庫時出現問題。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7159"/>
+        <location filename="../../mscore/musescore.cpp" line="7160"/>
         <source>Could not open MP3 encoding library!</source>
         <translation>未能開啟 MP3 編碼資料庫！</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7171"/>
+        <location filename="../../mscore/musescore.cpp" line="7172"/>
         <source>Not a valid or supported MP3 encoding library!</source>
         <translation>此並非有效或已支援的 MP3 編碼資料庫！</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7119"/>
-        <location filename="../../mscore/musescore.cpp" line="7195"/>
-        <location filename="../../mscore/musescore.cpp" line="7361"/>
+        <location filename="../../mscore/musescore.cpp" line="7120"/>
+        <location filename="../../mscore/musescore.cpp" line="7196"/>
+        <location filename="../../mscore/musescore.cpp" line="7347"/>
         <source>Encoding Error</source>
         <translation>編碼錯誤</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4490"/>
+        <location filename="../../mscore/musescore.cpp" line="4491"/>
         <source>Insert mode</source>
         <translation>插入模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4514"/>
+        <location filename="../../mscore/musescore.cpp" line="4515"/>
         <source>Drumset input mode</source>
         <translation>鼓組輸入模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6045"/>
+        <location filename="../../mscore/musescore.cpp" line="6048"/>
         <source>Invalid Command</source>
         <translation>無效的指令</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6046"/>
+        <location filename="../../mscore/musescore.cpp" line="6049"/>
         <source>Command %1 not valid in current state</source>
         <translation>指令 %1 在目前狀態無效</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6939"/>
+        <location filename="../../mscore/musescore.cpp" line="6940"/>
         <source>Find / Go to:</source>
         <translation>尋找／前往：</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7196"/>
+        <location filename="../../mscore/musescore.cpp" line="7197"/>
         <source>Unable to initialize MP3 stream</source>
         <translation>無法初始化 MP3 串流</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7120"/>
+        <location filename="../../mscore/musescore.cpp" line="7121"/>
         <source>Unable to open target file for writing</source>
         <translation>無法開啟目標檔案作寫入用途</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7362"/>
+        <location filename="../../mscore/musescore.cpp" line="7348"/>
         <source>Error %1 returned from MP3 encoder</source>
         <translation>從 MP3 編碼器回報錯誤 %1 </translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="252"/>
-        <location filename="../../mscore/musescore.cpp" line="5362"/>
+        <location filename="../../mscore/musescore.cpp" line="5365"/>
         <location filename="../../mscore/plugin/mscorePlugins.cpp" line="444"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
@@ -14039,7 +14044,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1239"/>
         <location filename="../../mscore/file.cpp" line="1266"/>
-        <location filename="../../mscore/musescore.cpp" line="6476"/>
+        <location filename="../../mscore/musescore.cpp" line="6477"/>
         <source>Load Style</source>
         <translation>載入型態</translation>
     </message>
@@ -14052,7 +14057,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1246"/>
         <location filename="../../mscore/file.cpp" line="1283"/>
         <location filename="../../mscore/file.cpp" line="1366"/>
-        <location filename="../../mscore/musescore.cpp" line="6467"/>
+        <location filename="../../mscore/musescore.cpp" line="6468"/>
         <source>Save Style</source>
         <translation>儲存型態</translation>
     </message>
@@ -14597,12 +14602,12 @@ Please select a measure and try again</source>
         <translation>工作區</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2366"/>
+        <location filename="../../mscore/musescore.cpp" line="2367"/>
         <source>Are you sure?</source>
         <translation>確定嗎？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2367"/>
+        <location filename="../../mscore/musescore.cpp" line="2368"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
@@ -14613,105 +14618,105 @@ Are you sure you want to proceed?</source>
 確定要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2620"/>
+        <location filename="../../mscore/musescore.cpp" line="2621"/>
         <source>Clear Recent Files</source>
         <translation>清除最近的檔案</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2625"/>
+        <location filename="../../mscore/musescore.cpp" line="2626"/>
         <source>No recent files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4207"/>
+        <location filename="../../mscore/musescore.cpp" line="4208"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>系統語言</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4215"/>
+        <location filename="../../mscore/musescore.cpp" line="4216"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>讀取語言檔案 %s 於第 %d 行第 %d 欄時發生錯誤：%s
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4456"/>
+        <location filename="../../mscore/musescore.cpp" line="4457"/>
         <source>No score</source>
         <translation>沒有樂譜</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4462"/>
+        <location filename="../../mscore/musescore.cpp" line="4463"/>
         <source>Normal mode</source>
         <translation>一般模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4470"/>
+        <location filename="../../mscore/musescore.cpp" line="4471"/>
         <source>Repitch input mode</source>
         <translation>音高更改輸入模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4475"/>
+        <location filename="../../mscore/musescore.cpp" line="4476"/>
         <source>Rhythm input mode</source>
         <translation>節奏輸入模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4480"/>
+        <location filename="../../mscore/musescore.cpp" line="4481"/>
         <source>Realtime (automatic) note input mode</source>
         <translation>即時（自動）音符輸出模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4485"/>
+        <location filename="../../mscore/musescore.cpp" line="4486"/>
         <source>Realtime (manual) note input mode</source>
         <translation>即時（手動）音符輸出模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4495"/>
+        <location filename="../../mscore/musescore.cpp" line="4496"/>
         <source>Steptime note input mode</source>
         <translation>單步音符輸入模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4534"/>
+        <location filename="../../mscore/musescore.cpp" line="4537"/>
         <source>TAB input mode</source>
         <translation>TAB 譜表輸入模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4537"/>
+        <location filename="../../mscore/musescore.cpp" line="4540"/>
         <source>Edit mode</source>
         <translation>編輯模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4540"/>
+        <location filename="../../mscore/musescore.cpp" line="4543"/>
         <source>Text edit mode</source>
         <translation>文字編輯模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4543"/>
+        <location filename="../../mscore/musescore.cpp" line="4546"/>
         <source>Lyrics edit mode</source>
         <translation>歌詞編輯模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4546"/>
+        <location filename="../../mscore/musescore.cpp" line="4549"/>
         <source>Chord symbol/figured bass edit mode</source>
         <translation>和弦符號／數字低音編輯模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4549"/>
+        <location filename="../../mscore/musescore.cpp" line="4552"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4552"/>
+        <location filename="../../mscore/musescore.cpp" line="4555"/>
         <source>Image capture mode</source>
         <translation>螢幕擷取模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4556"/>
+        <location filename="../../mscore/musescore.cpp" line="4559"/>
         <source>Score locked</source>
         <translation>樂譜被封鎖</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5363"/>
+        <location filename="../../mscore/musescore.cpp" line="5366"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -14719,87 +14724,87 @@ Restore session?</source>
 要回復嗎？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5990"/>
+        <location filename="../../mscore/musescore.cpp" line="5993"/>
         <source>Invalid selection. Cannot realize chord symbol</source>
         <translation>無效的選取，無法實體化和弦記號</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6006"/>
+        <location filename="../../mscore/musescore.cpp" line="6009"/>
         <source>No chord symbol selected. Cannot realize chord symbol</source>
         <translation>未選取任何和弦記號，無法實體化和弦記號</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6477"/>
+        <location filename="../../mscore/musescore.cpp" line="6478"/>
         <source>MuseScore may not be able to load this style file: %1</source>
         <translation>MuseScore可能無法載入此樣式檔案：%1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6780"/>
+        <location filename="../../mscore/musescore.cpp" line="6781"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6781"/>
+        <location filename="../../mscore/musescore.cpp" line="6782"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>無法建立連音：音符時值太短</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8128"/>
+        <location filename="../../mscore/musescore.cpp" line="8114"/>
         <source>Initializing sequencer and audio driver…</source>
         <translation>初始化音序器和音頻驅動…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8137"/>
+        <location filename="../../mscore/musescore.cpp" line="8123"/>
         <source>Loading SoundFonts…</source>
         <translation>載入音色庫…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8180"/>
+        <location filename="../../mscore/musescore.cpp" line="8166"/>
         <source>Initializing workspace…</source>
         <translation>初始化工作區域…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8184"/>
+        <location filename="../../mscore/musescore.cpp" line="8170"/>
         <source>Creating main window…</source>
         <translation>建立主視窗</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8201"/>
+        <location filename="../../mscore/musescore.cpp" line="8187"/>
         <source>Reading translations…</source>
         <translation>讀取翻譯中</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8208"/>
+        <location filename="../../mscore/musescore.cpp" line="8194"/>
         <source>Initializing startup wizard…</source>
         <translation>初始化啟動精靈…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8224"/>
+        <location filename="../../mscore/musescore.cpp" line="8210"/>
         <source>Initializing preferences…</source>
         <translation>初始化偏好設定…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8265"/>
+        <location filename="../../mscore/musescore.cpp" line="8251"/>
         <source>Initializing main window…</source>
         <translation>初始化主視窗…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8290"/>
+        <location filename="../../mscore/musescore.cpp" line="8275"/>
         <source>Restoring session…</source>
         <translation>回復先前狀態…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8321"/>
+        <location filename="../../mscore/musescore.cpp" line="8306"/>
         <source>Loading scores…</source>
         <translation>載入樂譜…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8332"/>
+        <location filename="../../mscore/musescore.cpp" line="8317"/>
         <source>Initializing start center…</source>
         <translation>初始化啟動中心…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="8354"/>
+        <location filename="../../mscore/musescore.cpp" line="8339"/>
         <source>Initializing tours…</source>
         <translation>初始化導覽…</translation>
     </message>
@@ -14863,22 +14868,22 @@ This plugin requires an open score to run.</source>
 <context>
     <name>Ms::MuseScoreApplication</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7809"/>
+        <location filename="../../mscore/musescore.cpp" line="7795"/>
         <source>Must specify at least one score to save online.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7870"/>
+        <location filename="../../mscore/musescore.cpp" line="7856"/>
         <source>--run-test-script is incompatible with --diff and --raw-diff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7905"/>
+        <location filename="../../mscore/musescore.cpp" line="7891"/>
         <source>Only two scores are needed for performing a comparison</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7910"/>
+        <location filename="../../mscore/musescore.cpp" line="7896"/>
         <source>Please specify scripts to execute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15958,60 +15963,60 @@ This plugin requires an open score to run.</source>
 <context>
     <name>Ms::ResourceManager</name>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="170"/>
-        <location filename="../../mscore/resourceManager.cpp" line="253"/>
+        <location filename="../../mscore/resourceManager.cpp" line="172"/>
+        <location filename="../../mscore/resourceManager.cpp" line="249"/>
         <source>Update</source>
         <translation>可安裝更新</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="154"/>
+        <location filename="../../mscore/resourceManager.cpp" line="156"/>
         <source>Install</source>
         <translation>安裝</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="73"/>
+        <location filename="../../mscore/resourceManager.cpp" line="75"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="155"/>
+        <location filename="../../mscore/resourceManager.cpp" line="157"/>
         <source>Uninstall</source>
         <translation>解除安裝</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="173"/>
-        <location filename="../../mscore/resourceManager.cpp" line="284"/>
-        <location filename="../../mscore/resourceManager.cpp" line="355"/>
-        <location filename="../../mscore/resourceManager.cpp" line="406"/>
+        <location filename="../../mscore/resourceManager.cpp" line="175"/>
+        <location filename="../../mscore/resourceManager.cpp" line="280"/>
+        <location filename="../../mscore/resourceManager.cpp" line="351"/>
+        <location filename="../../mscore/resourceManager.cpp" line="402"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="319"/>
-        <location filename="../../mscore/resourceManager.cpp" line="376"/>
+        <location filename="../../mscore/resourceManager.cpp" line="315"/>
+        <location filename="../../mscore/resourceManager.cpp" line="372"/>
         <source>Updating</source>
         <translation>正在更新</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="329"/>
-        <location filename="../../mscore/resourceManager.cpp" line="361"/>
-        <location filename="../../mscore/resourceManager.cpp" line="389"/>
-        <location filename="../../mscore/resourceManager.cpp" line="413"/>
+        <location filename="../../mscore/resourceManager.cpp" line="325"/>
+        <location filename="../../mscore/resourceManager.cpp" line="357"/>
+        <location filename="../../mscore/resourceManager.cpp" line="385"/>
+        <location filename="../../mscore/resourceManager.cpp" line="409"/>
         <source>Failed, try again</source>
         <translation>失敗，請再試一次</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="395"/>
+        <location filename="../../mscore/resourceManager.cpp" line="391"/>
         <source>Extensions Installation Failed</source>
         <translation>擴充套件安裝失敗</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="397"/>
+        <location filename="../../mscore/resourceManager.cpp" line="393"/>
         <source>Unable to save the extension file on disk</source>
         <translation>無法於磁碟上儲存擴充套件檔案</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="399"/>
+        <location filename="../../mscore/resourceManager.cpp" line="395"/>
         <source>Unable to download, save and verify the package.
 Check your internet connection.</source>
         <translation>無法下載、儲存和驗證套裝軟體。
@@ -16045,7 +16050,7 @@ failed: %2</source>
 失敗：%2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="3312"/>
+        <location filename="../../libmscore/edit.cpp" line="3307"/>
         <source>Please select the complete tuplet and retry the command</source>
         <translation>請選取整個連音或顫音，然後重試該指令。 </translation>
     </message>
@@ -16534,8 +16539,8 @@ Please select a measure and try again</source>
     </message>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.cpp" line="172"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="266"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="268"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="262"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="264"/>
         <source>New shortcut</source>
         <translation>新增快捷鍵</translation>
     </message>
@@ -16799,57 +16804,57 @@ Please select a measure and try again</source>
     <name>Ms::Timeline</name>
     <message>
         <location filename="../../mscore/timeline.cpp" line="791"/>
-        <location filename="../../mscore/timeline.cpp" line="1179"/>
-        <location filename="../../mscore/timeline.cpp" line="2453"/>
+        <location filename="../../mscore/timeline.cpp" line="1170"/>
+        <location filename="../../mscore/timeline.cpp" line="2444"/>
         <source>Tempo</source>
         <translation>速度</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="792"/>
-        <location filename="../../mscore/timeline.cpp" line="1207"/>
-        <location filename="../../mscore/timeline.cpp" line="2454"/>
+        <location filename="../../mscore/timeline.cpp" line="1198"/>
+        <location filename="../../mscore/timeline.cpp" line="2445"/>
         <source>Time Signature</source>
         <translation>拍號</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="793"/>
-        <location filename="../../mscore/timeline.cpp" line="1244"/>
-        <location filename="../../mscore/timeline.cpp" line="2455"/>
+        <location filename="../../mscore/timeline.cpp" line="1235"/>
+        <location filename="../../mscore/timeline.cpp" line="2446"/>
         <source>Rehearsal Mark</source>
         <translation>排練記號</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="794"/>
-        <location filename="../../mscore/timeline.cpp" line="1120"/>
-        <location filename="../../mscore/timeline.cpp" line="1124"/>
-        <location filename="../../mscore/timeline.cpp" line="1272"/>
-        <location filename="../../mscore/timeline.cpp" line="2456"/>
+        <location filename="../../mscore/timeline.cpp" line="1111"/>
+        <location filename="../../mscore/timeline.cpp" line="1115"/>
+        <location filename="../../mscore/timeline.cpp" line="1263"/>
+        <location filename="../../mscore/timeline.cpp" line="2447"/>
         <source>Key Signature</source>
         <translation>調號</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="795"/>
-        <location filename="../../mscore/timeline.cpp" line="1375"/>
-        <location filename="../../mscore/timeline.cpp" line="2457"/>
+        <location filename="../../mscore/timeline.cpp" line="1366"/>
+        <location filename="../../mscore/timeline.cpp" line="2448"/>
         <source>Barlines</source>
         <translation>小節線</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="796"/>
-        <location filename="../../mscore/timeline.cpp" line="1142"/>
-        <location filename="../../mscore/timeline.cpp" line="1428"/>
-        <location filename="../../mscore/timeline.cpp" line="2458"/>
+        <location filename="../../mscore/timeline.cpp" line="1133"/>
+        <location filename="../../mscore/timeline.cpp" line="1419"/>
+        <location filename="../../mscore/timeline.cpp" line="2449"/>
         <source>Jumps and Markers</source>
         <translation>跳越播放與標記</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="797"/>
-        <location filename="../../mscore/timeline.cpp" line="1503"/>
-        <location filename="../../mscore/timeline.cpp" line="1545"/>
-        <location filename="../../mscore/timeline.cpp" line="2459"/>
-        <location filename="../../mscore/timeline.cpp" line="2756"/>
-        <location filename="../../mscore/timeline.cpp" line="2994"/>
-        <location filename="../../mscore/timeline.cpp" line="3026"/>
+        <location filename="../../mscore/timeline.cpp" line="1494"/>
+        <location filename="../../mscore/timeline.cpp" line="1536"/>
+        <location filename="../../mscore/timeline.cpp" line="2450"/>
+        <location filename="../../mscore/timeline.cpp" line="2747"/>
+        <location filename="../../mscore/timeline.cpp" line="2985"/>
+        <location filename="../../mscore/timeline.cpp" line="3017"/>
         <source>Measures</source>
         <translation>小節</translation>
     </message>
@@ -16859,29 +16864,29 @@ Please select a measure and try again</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="1342"/>
+        <location filename="../../mscore/timeline.cpp" line="1333"/>
         <source>Custom Key Signature</source>
         <translation>自訂調號</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2983"/>
+        <location filename="../../mscore/timeline.cpp" line="2974"/>
         <source>Context menu</source>
         <translation>右鍵選單</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2985"/>
+        <location filename="../../mscore/timeline.cpp" line="2976"/>
         <source>Edit Instruments</source>
         <translation>編輯樂器</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="3003"/>
-        <location filename="../../mscore/timeline.cpp" line="3023"/>
+        <location filename="../../mscore/timeline.cpp" line="2994"/>
+        <location filename="../../mscore/timeline.cpp" line="3014"/>
         <source>Hide all</source>
         <translation>隱藏所有</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="3006"/>
-        <location filename="../../mscore/timeline.cpp" line="3032"/>
+        <location filename="../../mscore/timeline.cpp" line="2997"/>
+        <location filename="../../mscore/timeline.cpp" line="3023"/>
         <source>Show all</source>
         <translation>顯示所有</translation>
     </message>
@@ -17632,7 +17637,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="549"/>
-        <location filename="../../mscore/musescore.cpp" line="6320"/>
+        <location filename="../../mscore/musescore.cpp" line="6321"/>
         <source>Key Signatures</source>
         <translation>調號</translation>
     </message>
@@ -18218,7 +18223,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
         <location filename="../../mscore/menus.cpp" line="1766"/>
-        <location filename="../../mscore/musescore.cpp" line="6322"/>
+        <location filename="../../mscore/musescore.cpp" line="6323"/>
         <source>Time Signatures</source>
         <translation>拍號</translation>
     </message>
@@ -21924,21 +21929,21 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../../importexport/capella/capella.cpp" line="2789"/>
+        <location filename="../../importexport/capella/capella.cpp" line="2778"/>
         <location filename="../../importexport/midiimport/importmidi.cpp" line="1205"/>
         <source>Load failed: %1</source>
         <translation>載入失敗：%1</translation>
     </message>
     <message>
-        <location filename="../../importexport/capella/capella.cpp" line="2790"/>
+        <location filename="../../importexport/capella/capella.cpp" line="2779"/>
         <location filename="../../importexport/midiimport/importmidi.cpp" line="1206"/>
         <location filename="../../mscore/instrdialog.cpp" line="169"/>
-        <location filename="../../mscore/musescore.cpp" line="4220"/>
+        <location filename="../../mscore/musescore.cpp" line="4221"/>
         <source>Quit</source>
         <translation>離開</translation>
     </message>
     <message>
-        <location filename="../../importexport/capella/capella.cpp" line="2788"/>
+        <location filename="../../importexport/capella/capella.cpp" line="2777"/>
         <source>Import Capella</source>
         <translation>匯入 Capella</translation>
     </message>
@@ -22043,7 +22048,7 @@ Do you want to overwrite it?</source>
         <translation>無法從擴充套件解壓縮檔案</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4218"/>
+        <location filename="../../mscore/musescore.cpp" line="4219"/>
         <source>Load Languages Failed:</source>
         <translation>載入語言失敗：</translation>
     </message>
@@ -22138,7 +22143,7 @@ Do you want to overwrite it?</source>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5887"/>
+        <location filename="../../mscore/musescore.cpp" line="5890"/>
         <source>Record</source>
         <translation>錄音</translation>
     </message>
@@ -30621,8 +30626,13 @@ failed</source>
         <translation>指法襯線四線譜</translation>
     </message>
     <message>
-        <location filename="../../libmscore/clef.cpp" line="73"/>
+        <location filename="../../libmscore/clef.cpp" line="74"/>
         <source>Tenor clef 8va bassa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="75"/>
+        <source>G clef ottava bassa with C clef</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -31641,139 +31651,139 @@ failed</source>
 <context>
     <name>error</name>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="135"/>
+        <location filename="../../libmscore/mscore.cpp" line="119"/>
         <source>No chord/rest selected:
 Please select a chord or rest and retry</source>
         <translation>未選中和弦/休止符：
 請選取一個和弦/休止符，然後重試</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="136"/>
+        <location filename="../../libmscore/mscore.cpp" line="120"/>
         <source>No note or lyrics selected:
 Please select a note or lyrics and retry</source>
         <translation>未選中音符或歌詞：
 請選取一個音符或歌詞，然後重試</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="137"/>
+        <location filename="../../libmscore/mscore.cpp" line="121"/>
         <source>No note or rest selected:
 Please select a note or rest and retry</source>
         <translation>未選中音符/休止符：
 請選取一個音符/休止符，然後重試</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="134"/>
+        <location filename="../../libmscore/mscore.cpp" line="118"/>
         <source>No note selected:
 Please select a note and retry</source>
         <translation>未選中音符：
 請選取一個音符，然後重試</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="138"/>
+        <location filename="../../libmscore/mscore.cpp" line="122"/>
         <source>No flippable element selected:
 Please select an element that can be flipped and retry</source>
         <translation>未選中可翻轉物件：
 請選取一個可翻轉物件，然後重試</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="139"/>
+        <location filename="../../libmscore/mscore.cpp" line="123"/>
         <source>No staff selected:
 Please select one or more staves and retry</source>
         <translation>未選中譜表：
 請選取一個或多個譜表，然後重試</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="140"/>
+        <location filename="../../libmscore/mscore.cpp" line="124"/>
         <source>No note or figured bass selected:
 Please select a note or figured bass and retry</source>
         <translation>未選中數字低音：
 請選取一個音符或數字低音，然後重試</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="142"/>
+        <location filename="../../libmscore/mscore.cpp" line="126"/>
         <source>Cannot insert chord/rest in tuplet</source>
         <translation>無法向連音中插入和弦/休止符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="143"/>
+        <location filename="../../libmscore/mscore.cpp" line="127"/>
         <source>Cannot split tuplet</source>
         <translation>無法分割連音</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="144"/>
+        <location filename="../../libmscore/mscore.cpp" line="128"/>
         <source>Cannot split measure here:
 First beat of measure</source>
         <translation>無法在此分割小節：
 小節的第一拍</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="145"/>
+        <location filename="../../libmscore/mscore.cpp" line="129"/>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
         <translation>無法在此分割小節：
 無法分割三連音</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="146"/>
+        <location filename="../../libmscore/mscore.cpp" line="130"/>
         <source>Cannot split measure here:
 Measure would be too short</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="148"/>
+        <location filename="../../libmscore/mscore.cpp" line="132"/>
         <source>No destination to paste</source>
         <translation>沒有可以貼上的目標</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="149"/>
+        <location filename="../../libmscore/mscore.cpp" line="133"/>
         <source>Cannot paste into tuplet</source>
         <translation>無法於連音貼上</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="150"/>
+        <location filename="../../libmscore/mscore.cpp" line="134"/>
         <source>Tuplet cannot cross barlines</source>
         <translation>連音不能橫跨小節線</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="151"/>
+        <location filename="../../libmscore/mscore.cpp" line="135"/>
         <source>Cannot paste in local time signature</source>
         <translation>無法於本機拍號貼上</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="152"/>
+        <location filename="../../libmscore/mscore.cpp" line="136"/>
         <source>Cannot paste in tremolo</source>
         <translation>無法於顫音貼上</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="153"/>
+        <location filename="../../libmscore/mscore.cpp" line="137"/>
         <source>Nothing to paste</source>
         <translation>無所貼上</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="154"/>
+        <location filename="../../libmscore/mscore.cpp" line="138"/>
         <source>Destination is not a chord or rest</source>
         <translation>目標非和弦或休止符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="155"/>
+        <location filename="../../libmscore/mscore.cpp" line="139"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>無法變更本拍號：
 小節並非空白</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="156"/>
+        <location filename="../../libmscore/mscore.cpp" line="140"/>
         <source>Cannot change local time signature:
 This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="159"/>
+        <location filename="../../libmscore/mscore.cpp" line="143"/>
         <source>Cannot change time signature in front of a corrupted measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="465"/>
+        <location filename="../../libmscore/mscore.cpp" line="439"/>
         <source>Unknown error</source>
         <translation>未知錯誤</translation>
     </message>

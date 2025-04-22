@@ -139,47 +139,47 @@
         <translation>Басовий гемсхорн</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="161"/>
+        <location filename="../instruments/instrumentsxml.h" line="163"/>
         <source>Ocarina</source>
         <translation>Окарина</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="163"/>
+        <location filename="../instruments/instrumentsxml.h" line="167"/>
         <source>G Soprano Ocarina</source>
         <translation>Окарина-сопрано в ладу G</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="165"/>
+        <location filename="../instruments/instrumentsxml.h" line="169"/>
         <source>F Soprano Ocarina</source>
         <translation>Окарина-сопрано в ладу Фа</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="167"/>
+        <location filename="../instruments/instrumentsxml.h" line="161"/>
         <source>C Soprano Ocarina</source>
         <translation>Окарина-сопрано в ладу C</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="169"/>
+        <location filename="../instruments/instrumentsxml.h" line="165"/>
         <source>B♭ Soprano Ocarina</source>
         <translation>Окарина-сопрано в ладу B♭</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="171"/>
+        <location filename="../instruments/instrumentsxml.h" line="175"/>
         <source>G Alto Ocarina</source>
         <translation>Альтова Окарина в ладу G</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="173"/>
+        <location filename="../instruments/instrumentsxml.h" line="177"/>
         <source>F Alto Ocarina</source>
         <translation>Альтова Окарина в ладу Фа</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="175"/>
+        <location filename="../instruments/instrumentsxml.h" line="171"/>
         <source>C Alto Ocarina</source>
         <translation>Альтова окарина в ладу С</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="177"/>
+        <location filename="../instruments/instrumentsxml.h" line="173"/>
         <source>B♭ Alto Ocarina</source>
         <translation>Альтова окарина в ладу B♭</translation>
     </message>
@@ -2401,55 +2401,55 @@
         <translation>B. Gh.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="162"/>
+        <location filename="../instruments/instrumentsxml.h" line="164"/>
         <source>Oc.</source>
         <comment>Ocarina</comment>
         <translation>Oc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="164"/>
+        <location filename="../instruments/instrumentsxml.h" line="168"/>
         <source>G S. Oc.</source>
         <comment>G Soprano Ocarina</comment>
         <translation>G S. Oc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="166"/>
+        <location filename="../instruments/instrumentsxml.h" line="170"/>
         <source>F S. Oc.</source>
         <comment>F Soprano Ocarina</comment>
         <translation>Фа сопр. ок.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="168"/>
+        <location filename="../instruments/instrumentsxml.h" line="162"/>
         <source>C S. Oc.</source>
         <comment>C Soprano Ocarina</comment>
         <translation>C S. Oc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="170"/>
+        <location filename="../instruments/instrumentsxml.h" line="166"/>
         <source>B♭ S. Oc.</source>
         <comment>B♭ Soprano Ocarina</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="172"/>
+        <location filename="../instruments/instrumentsxml.h" line="176"/>
         <source>G A. Oc.</source>
         <comment>G Alto Ocarina</comment>
         <translation>G A. Oc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="174"/>
+        <location filename="../instruments/instrumentsxml.h" line="178"/>
         <source>F A. Oc.</source>
         <comment>F Alto Ocarina</comment>
         <translation>Фа альт. ок.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="176"/>
+        <location filename="../instruments/instrumentsxml.h" line="172"/>
         <source>C A. Oc.</source>
         <comment>C Alto Ocarina</comment>
         <translation>C A. Oc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="178"/>
+        <location filename="../instruments/instrumentsxml.h" line="174"/>
         <source>B♭ A. Oc.</source>
         <comment>B♭ Alto Ocarina</comment>
         <translation type="unfinished"></translation>
