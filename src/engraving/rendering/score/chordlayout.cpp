@@ -1886,47 +1886,49 @@ void ChordLayout::calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, 
             for (int i = static_cast<int>(overlapNotes.size()) - 1; i >= 1; i -= 2) {
                 Note* previousNote = overlapNotes[i - 1];
                 Note* n = overlapNotes[i];
-                if (!(previousNote->chord()->isNudged() || n->chord()->isNudged())) {
-                    const bool prevChordSmall = previousNote->chord()->isSmall();
-                    const bool nChordSmall = n->chord()->isSmall();
-                    if (previousNote->chord()->dots() == n->chord()->dots()) {
-                        // hide one set of dots
-                        // Hide the small augmentation dot if present
-                        bool onLine = !(previousNote->line() & 1);
-                        if (prevChordSmall) {
-                            previousNote->setDotsHidden(true);
-                        } else if (nChordSmall) {
-                            n->setDotsHidden(true);
-                        } else if (onLine) {
-                            // hide dots for lower voice
-                            if (previousNote->voice() & 1) {
-                                previousNote->setDotsHidden(true);
-                            } else {
-                                n->setDotsHidden(true);
-                            }
-                        } else {
-                            // hide dots for upper voice
-                            if (!(previousNote->voice() & 1)) {
-                                previousNote->setDotsHidden(true);
-                            } else {
-                                n->setDotsHidden(true);
-                            }
-                        }
-                    }
-                    // If either chord is small, adjust offset
-                    Chord* smallChord = prevChordSmall ? previousNote->chord() : nullptr;
-                    smallChord = nChordSmall ? n->chord() : smallChord;
-                    if (smallChord && !(prevChordSmall && nChordSmall)) {
-                        if (smallChord->up()) {
-                            offsetInfo.centerUp *= 2;
-                        } else {
-                            offsetInfo.centerDown = 0;
-                        }
-                    }
-                    // formerly we hid noteheads in an effort to fix playback
-                    // but this doesn't work for cases where noteheads cannot be shared
-                    // so better to solve the problem elsewhere
+                const bool skipNote = previousNote->chord()->isNudged() || n->chord()->isNudged();
+                if (skipNote) {
+                    continue;
                 }
+                const bool prevChordSmall = previousNote->chord()->isSmall();
+                const bool nChordSmall = n->chord()->isSmall();
+                if (previousNote->chord()->dots() == n->chord()->dots()) {
+                    // hide one set of dots
+                    // Hide the small augmentation dot if present
+                    bool onLine = !(previousNote->line() & 1);
+                    if (prevChordSmall) {
+                        previousNote->setDotsHidden(true);
+                    } else if (nChordSmall) {
+                        n->setDotsHidden(true);
+                    } else if (onLine) {
+                        // hide dots for lower voice
+                        if (previousNote->voice() & 1) {
+                            previousNote->setDotsHidden(true);
+                        } else {
+                            n->setDotsHidden(true);
+                        }
+                    } else {
+                        // hide dots for upper voice
+                        if (!(previousNote->voice() & 1)) {
+                            previousNote->setDotsHidden(true);
+                        } else {
+                            n->setDotsHidden(true);
+                        }
+                    }
+                }
+                // If either chord is small, adjust offset
+                Chord* smallChord = prevChordSmall ? previousNote->chord() : nullptr;
+                smallChord = nChordSmall ? n->chord() : smallChord;
+                if (smallChord && !(prevChordSmall && nChordSmall)) {
+                    if (smallChord->up()) {
+                        offsetInfo.centerUp *= 2;
+                    } else {
+                        offsetInfo.centerDown = 0;
+                    }
+                }
+                // formerly we hid noteheads in an effort to fix playback
+                // but this doesn't work for cases where noteheads cannot be shared
+                // so better to solve the problem elsewhere
             }
         } else if (conflict && (posInfo.upDots && !posInfo.downDots)) {
             offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
