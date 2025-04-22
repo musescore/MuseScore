@@ -1493,6 +1493,121 @@ void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, trac
     }
 }
 
+ChordPosInfo ChordLayout::calculateChordPosInfo(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack,
+                                                track_idx_t partEndTrack, LayoutContext& ctx)
+{
+    const Staff* staff = ctx.dom().staff(staffIdx);
+
+    ChordPosInfo posInfo = ChordPosInfo();
+
+    for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
+        EngravingItem* e = segment->element(track);
+        const bool calcChordPos = e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx;
+        if (!calcChordPos) {
+            continue;
+        }
+
+        Chord* chord = toChord(e);
+        posInfo.chords.push_back(chord);
+        bool hasGraceBefore = false;
+        for (Chord* c : chord->graceNotes()) {
+            if (c->isGraceBefore()) {
+                hasGraceBefore = true;
+            }
+            layoutChords2(c->notes(), c->up(), ctx);     // layout grace note noteheads
+            layoutChords3({ c }, c->notes(), staff, ctx);     // layout grace note chords
+        }
+        if (chord->up()) {
+            ++posInfo.upVoices;
+            posInfo.upStemNotes.insert(posInfo.upStemNotes.end(), chord->notes().begin(), chord->notes().end());
+            posInfo.upDots   = std::max(posInfo.upDots, chord->dots());
+            posInfo.maxUpMag = std::max(posInfo.maxUpMag, chord->mag());
+            if (!posInfo.upHooks && !chord->beam()) {
+                posInfo.upHooks = chord->hook();
+            }
+            if (hasGraceBefore) {
+                posInfo.upGrace = true;
+            }
+        } else {
+            ++posInfo.downVoices;
+            posInfo.downStemNotes.insert(posInfo.downStemNotes.end(), chord->notes().begin(), chord->notes().end());
+            posInfo.downDots = std::max(posInfo.downDots, chord->dots());
+            posInfo.maxDownMag = std::max(posInfo.maxDownMag, chord->mag());
+            if (!posInfo.downHooks && !chord->beam()) {
+                posInfo.downHooks = chord->hook();
+            }
+            if (hasGraceBefore) {
+                posInfo.downGrace = true;
+            }
+        }
+    }
+
+    return posInfo;
+}
+
+void ChordLayout::offsetAndLayoutChords(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
+                                        OffsetInfo& offsetInfo, const ChordPosInfo& posInfo, LayoutContext& ctx)
+{
+    const Staff* staff = ctx.dom().staff(staffIdx);
+    const bool isTab = staff->isTabStaff(segment->tick());
+
+    // apply chord offsets
+    for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
+        EngravingItem* e = segment->element(track);
+        const bool layoutChord = e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx;
+        if (!layoutChord) {
+            continue;
+        }
+        Chord* chord = toChord(e);
+        Chord::LayoutData* chordLdata = chord->mutldata();
+        // only centre chords if we are separating voices and this voice has no collision
+        const bool combineVoices = chord->shouldCombineVoice();
+        if (!combineVoices && !muse::contains(offsetInfo.tracksToAdjust, track)) {
+            if (chord->up()) {
+                chordLdata->moveX(offsetInfo.centerUp);
+            } else {
+                chordLdata->moveX(offsetInfo.centerDown);
+            }
+            continue;
+        }
+
+        if (chord->up()) {
+            if (!muse::RealIsNull(offsetInfo.upOffset)) {
+                offsetInfo.oversizeUp = isTab ? offsetInfo.oversizeUp / 2 : offsetInfo.oversizeUp;
+                chordLdata->moveX(offsetInfo.upOffset + offsetInfo.centerAdjustUp + offsetInfo.oversizeUp);
+                if (posInfo.downDots && !posInfo.upDots) {
+                    chordLdata->moveX(offsetInfo.dotAdjust);
+                }
+            } else {
+                chordLdata->moveX(offsetInfo.centerUp);
+            }
+        } else {
+            if (!muse::RealIsNull(offsetInfo.downOffset)) {
+                chordLdata->moveX(offsetInfo.downOffset + offsetInfo.centerAdjustDown);
+                if (posInfo.upDots && !posInfo.downDots) {
+                    chordLdata->moveX(offsetInfo.dotAdjust);
+                }
+            } else {
+                chordLdata->moveX(offsetInfo.centerDown);
+            }
+        }
+    }
+
+    // layout chords
+    std::vector<Note*> notes;
+    if (posInfo.upVoices) {
+        notes.insert(notes.end(), posInfo.upStemNotes.begin(), posInfo.upStemNotes.end());
+    }
+    if (posInfo.downVoices) {
+        notes.insert(notes.end(), posInfo.downStemNotes.begin(), posInfo.downStemNotes.end());
+    }
+    if (posInfo.upVoices + posInfo.downVoices > 1) {
+        std::sort(notes.begin(), notes.end(),
+                  [](Note* n1, const Note* n2) ->bool { return n1->stringOrLine() > n2->stringOrLine(); });
+    }
+    layoutChords3(posInfo.chords, notes, staff, ctx);
+}
+
 //---------------------------------------------------------
 //   layoutChords1
 //    - layout upstem and downstem chords
@@ -1539,68 +1654,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
 
     double nominalWidth = ctx.conf().noteHeadWidth() * staff->staffMag(tick);
 
-    struct ChordPosInfo {
-        std::vector<Chord*> chords;
-        std::vector<Note*> upStemNotes;
-        std::vector<Note*> downStemNotes;
-        int upVoices       = 0;
-        int downVoices     = 0;
-        double maxUpWidth   = 0.0;
-        double maxDownWidth = 0.0;
-        double maxUpMag     = 0.0;
-        double maxDownMag   = 0.0;
-
-        // dots and hooks can affect layout of notes as well as vice versa
-        int upDots         = 0;
-        int downDots       = 0;
-        bool upHooks       = false;
-        bool downHooks     = false;
-
-        // also check for grace notes
-        bool upGrace       = false;
-        bool downGrace     = false;
-    };
-
-    ChordPosInfo posInfo = ChordPosInfo();
-
-    for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
-        EngravingItem* e = segment->element(track);
-        if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
-            Chord* chord = toChord(e);
-            posInfo.chords.push_back(chord);
-            bool hasGraceBefore = false;
-            for (Chord* c : chord->graceNotes()) {
-                if (c->isGraceBefore()) {
-                    hasGraceBefore = true;
-                }
-                layoutChords2(c->notes(), c->up(), ctx); // layout grace note noteheads
-                layoutChords3({ c }, c->notes(), staff, ctx); // layout grace note chords
-            }
-            if (chord->up()) {
-                ++posInfo.upVoices;
-                posInfo.upStemNotes.insert(posInfo.upStemNotes.end(), chord->notes().begin(), chord->notes().end());
-                posInfo.upDots   = std::max(posInfo.upDots, chord->dots());
-                posInfo.maxUpMag = std::max(posInfo.maxUpMag, chord->mag());
-                if (!posInfo.upHooks && !chord->beam()) {
-                    posInfo.upHooks = chord->hook();
-                }
-                if (hasGraceBefore) {
-                    posInfo.upGrace = true;
-                }
-            } else {
-                ++posInfo.downVoices;
-                posInfo.downStemNotes.insert(posInfo.downStemNotes.end(), chord->notes().begin(), chord->notes().end());
-                posInfo.downDots = std::max(posInfo.downDots, chord->dots());
-                posInfo.maxDownMag = std::max(posInfo.maxDownMag, chord->mag());
-                if (!posInfo.downHooks && !chord->beam()) {
-                    posInfo.downHooks = chord->hook();
-                }
-                if (hasGraceBefore) {
-                    posInfo.downGrace = true;
-                }
-            }
-        }
-    }
+    ChordPosInfo posInfo = calculateChordPosInfo(segment, staffIdx, partStartTrack, partEndTrack, ctx);
 
     if (posInfo.upVoices + posInfo.downVoices && (staffType->stemThrough() || staffType->isCommonTabStaff())) {
         // TODO: use track as secondary sort criteria?
@@ -1630,22 +1684,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             posInfo.maxDownWidth = std::max(posInfo.maxDownWidth, hw);
         }
 
-        std::set<track_idx_t> tracksToAdjust;
-        double sp                 = staff->spatium(tick);
-
-        struct OffsetInfo {
-            double upOffset           = 0.0;      // offset to apply to upstem chords
-            double downOffset         = 0.0;      // offset to apply to downstem chords
-            double dotAdjust          = 0.0;      // additional chord offset to account for dots
-            double dotAdjustThreshold = 0.0;      // if it exceeds this amount
-
-            // centering adjustments for whole note, breve, and small chords
-            double centerUp          = 0.0;      // offset to apply in order to center upstem chords
-            double oversizeUp        = 0.0;      // adjustment to oversized upstem chord needed if laid out to the right
-            double centerDown        = 0.0;      // offset to apply in order to center downstem chords
-            double centerAdjustUp    = 0.0;      // adjustment to upstem chord needed after centering donwstem chord
-            double centerAdjustDown  = 0.0;      // adjustment to downstem chord needed after centering upstem chord
-        };
+        double sp = staff->spatium(tick);
 
         OffsetInfo offsetInfo = OffsetInfo();
 
@@ -1718,7 +1757,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 // second
                 if (posInfo.upDots && !posInfo.downDots) {
                     offsetInfo.upOffset = posInfo.maxDownWidth + 0.1 * sp;
-                    tracksToAdjust.insert(bottomUpNote->track());
+                    offsetInfo.tracksToAdjust.insert(bottomUpNote->track());
                 } else {
                     offsetInfo.downOffset = posInfo.maxUpWidth;
                     // align stems if present
@@ -1731,7 +1770,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         // (except in case of brevis, cause the notehead has the side bars)
                         offsetInfo.downOffset -= ctx.conf().styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
                     }
-                    tracksToAdjust.insert(topDownNote->track());
+                    offsetInfo.tracksToAdjust.insert(topDownNote->track());
                 }
             } else if (separation < 1) {
                 // overlap (possibly unison)
@@ -1836,7 +1875,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         matchPending = true;
                     }
                     if (!shareHeads) {
-                        tracksToAdjust.insert({ track, lastTrack });
+                        offsetInfo.tracksToAdjust.insert({ track, lastTrack });
                     }
                     p = n;
                     lastLine = line;
