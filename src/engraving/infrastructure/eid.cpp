@@ -168,3 +168,18 @@ EID EID::newUnique()
 
     return EID(s_unifDist(s_engine), s_unifDist(s_engine));
 }
+
+// FOR UNIT TESTING
+// EIDs are creates sequentially instead of randomly for test repeatability
+
+EID EID::newUniqueTestMode(uint64_t& maxVal)
+{
+    ++maxVal;
+    return EID(maxVal, maxVal);
+}
+
+void EID::updateMaxValTestMode(const EID& curEID, uint64_t& maxVal)
+{
+    maxVal = std::max(maxVal, curEID.m_first);
+    maxVal = std::max(maxVal, curEID.m_second);
+}

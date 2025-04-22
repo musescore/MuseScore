@@ -444,7 +444,7 @@ void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
 
 void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (MScore::testMode || ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
+    if (ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
         return;
     }
 
