@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -21,7 +22,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Laissez vibrer test</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -39,30 +41,39 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Laissez vibrer test</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>K_K</eid>
               <LaissezVib>
+                <eid>L_L</eid>
                 </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -71,11 +82,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <Chord>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>O_O</eid>
               <LaissezVib>
+                <eid>P_P</eid>
                 <up>up</up>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -85,11 +100,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Q_Q</eid>
         <voice>
           <Chord>
+            <eid>R_R</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>S_S</eid>
               <LaissezVib>
+                <eid>T_T</eid>
                 <up>down</up>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -99,11 +118,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>U_U</eid>
         <voice>
           <Chord>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>W_W</eid>
               <LaissezVib>
+                <eid>X_X</eid>
                 <lineType>2</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -113,11 +136,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Y_Y</eid>
         <voice>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>a_a</eid>
               <LaissezVib>
+                <eid>b_b</eid>
                 <lineType>1</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -127,11 +154,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>c_c</eid>
         <voice>
           <Chord>
+            <eid>d_d</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>e_e</eid>
               <LaissezVib>
+                <eid>f_f</eid>
                 <color r="255" g="38" b="0" a="255"/>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -140,6 +171,7 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>g_g</eid>
             </BarLine>
           </voice>
         </Measure>

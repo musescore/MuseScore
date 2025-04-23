@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -21,7 +22,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Single Tremolos</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -40,354 +42,454 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Single Tremolos</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>K_K</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>L_L</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r8</subtype>
+              <eid>M_M</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>P_P</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r16</subtype>
+              <eid>Q_Q</eid>
               </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>R_R</eid>
         <voice>
           <Chord>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>U_U</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r32</subtype>
+              <eid>V_V</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>X_X</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r64</subtype>
+              <eid>Z_Z</eid>
               </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>a_a</eid>
         <voice>
           <Chord>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>c_c</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>d_d</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r8</subtype>
+              <eid>e_e</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>g_g</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>h_h</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r16</subtype>
+              <eid>i_i</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>k_k</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>l_l</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r32</subtype>
+              <eid>m_m</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>n_n</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>o_o</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>p_p</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r64</subtype>
+              <eid>q_q</eid>
               </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>r_r</eid>
         <voice>
           <Beam>
+            <eid>s_s</eid>
             <l1>-8</l1>
             <l2>-8</l2>
             </Beam>
           <Chord>
+            <eid>t_t</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>u_u</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>v_v</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r8</subtype>
+              <eid>w_w</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>x_x</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>y_y</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>z_z</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r8</subtype>
+              <eid>0_0</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>1_1</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>2_2</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>3_3</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r16</subtype>
+              <eid>4_4</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>5_5</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>6_6</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>7_7</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r16</subtype>
+              <eid>8_8</eid>
               </TremoloSingleChord>
             </Chord>
           <Beam>
+            <eid>9_9</eid>
             <l1>-20</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>+_+</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>/_/</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>AB_AB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r32</subtype>
+              <eid>BB_BB</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>CB_CB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>EB_EB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r32</subtype>
+              <eid>FB_FB</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>GB_GB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>HB_HB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>IB_IB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r64</subtype>
+              <eid>JB_JB</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>KB_KB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>LB_LB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>MB_MB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r64</subtype>
+              <eid>NB_NB</eid>
               </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>OB_OB</eid>
         <voice>
           <Chord>
+            <eid>PB_PB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>QB_QB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r8</subtype>
+              <eid>RB_RB</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>SB_SB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>TB_TB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r16</subtype>
+              <eid>UB_UB</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>VB_VB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>WB_WB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r32</subtype>
+              <eid>XB_XB</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>YB_YB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>ZB_ZB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r64</subtype>
+              <eid>aB_aB</eid>
               </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>bB_bB</eid>
         <voice>
           <Chord>
+            <eid>cB_cB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>dB_dB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>eB_eB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>fB_fB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>buzzroll</subtype>
+              <eid>gB_gB</eid>
               </TremoloSingleChord>
             </Chord>
           <Chord>
+            <eid>hB_hB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>iB_iB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>jB_jB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>kB_kB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>buzzroll</subtype>
+              <eid>lB_lB</eid>
               </TremoloSingleChord>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>mB_mB</eid>
             </BarLine>
           </voice>
         </Measure>

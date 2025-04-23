@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -21,14 +22,16 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Harp pedals test</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -47,23 +50,29 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Harp pedals test</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -77,17 +86,20 @@
               <string name="5">0</string>
               <string name="6">0</string>
               </pedalState>
+            <eid>K_K</eid>
             <placement>below</placement>
             <color r="0" g="150" b="255" a="255"/>
             <text><sym>harpPedalRaised</sym><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalDivider</sym><sym>harpPedalCentered</sym><sym>harpPedalRaised</sym><sym>harpPedalRaised</sym><sym>harpPedalRaised</sym></text>
             </HarpPedalDiagram>
           <Rest>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <HarpPedalDiagram>
             <pedalState>
@@ -99,15 +111,18 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
+            <eid>N_N</eid>
             <text><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalDivider</sym><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalCentered</sym></text>
             </HarpPedalDiagram>
           <Rest>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>P_P</eid>
         <voice>
           <HarpPedalDiagram>
             <pedalState>
@@ -119,21 +134,26 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
+            <eid>Q_Q</eid>
             <text><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalDivider</sym><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalCentered</sym></text>
             </HarpPedalDiagram>
           <Rest>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>S_S</eid>
         <voice>
           <Rest>
+            <eid>T_T</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>U_U</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -145,12 +165,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>V_V</eid>
             </Clef>
           <TimeSig>
+            <eid>W_W</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -159,6 +182,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>Y_Y</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -167,6 +191,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>Z_Z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -175,10 +200,12 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>b_b</eid>
             </BarLine>
           </voice>
         </Measure>
