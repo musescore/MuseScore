@@ -527,7 +527,7 @@ TEST_F(Engraving_LinksTests, testPickupLinkedStaff) {
 
     score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     staff->setPart(ostaff->part());
-    score->undoInsertStaff(staff, 1);
+    score->undoInsertStaff(staff, 1, /* createRests = */ false);
     Excerpt::cloneStaff(ostaff, staff);
     score->endCmd();
 
