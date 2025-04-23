@@ -2179,12 +2179,12 @@ void MusicXmlParserPass2::part()
     setPartInstruments(m_logger, &m_e, part, id, m_score, m_pass1.getInstrList(id), m_pass1.getIntervals(id), instruments, partName);
     partName = replacePartNameAccidentals(partName);
     part->setPartName(partName);
-    if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(partName)) {
+    if (!isLikelyIncorrectPartName(partName)) {
         part->setLongNameAll(partName);
     } else {
         m_pass1.getPart(id)->setLongNameAll(u"");
     }
-    if (mxmlPart.getPrintAbbr()) {
+    if (!mxmlPart.getAbbr().empty()) {
         part->setPlainShortNameAll(mxmlPart.getAbbr());
     } else {
         m_pass1.getPart(id)->setPlainShortNameAll(u"");
@@ -2194,6 +2194,9 @@ void MusicXmlParserPass2::part()
     if (part->partName() == "") {
         String instrId = m_pass1.getInstrList(id).instrument(Fraction(0, 1));
         part->setPartName(muse::value(instruments, instrId).name);
+    }
+    if (m_pass1.nparts() == 1 && mxmlPart.getPrintName() && mxmlPart.getPrintAbbr()) {
+        m_score->style().set(Sid::hideInstrumentNameIfOneInstrument, false);
     }
 
 #ifdef DEBUG_VOICE_MAPPER
