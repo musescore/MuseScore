@@ -338,7 +338,7 @@ void NotationParts::listenUndoStackChanges()
     updatePartsAndSystemObjectStaves();
 
     m_undoStack->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.changedTypes.empty()) {
+        if (range.changedTypes.empty() || m_ignoreUndoStackChanges) {
             return;
         }
 
@@ -385,6 +385,9 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
         m_systemObjectStavesChanged.notify();
     }
 
+    std::vector<Staff*> removedStaves;
+    std::vector<Staff*> addedStaves;
+
     for (auto& pair : range.changedItems) {
         if (!pair.first || !pair.first->isStaff()) {
             continue;
@@ -393,10 +396,18 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
         Staff* staff = toStaff(pair.first);
 
         if (muse::contains(pair.second, CommandType::RemoveStaff)) {
-            notifyAboutStaffRemoved(staff);
+            removedStaves.push_back(staff);
         } else if (muse::contains(pair.second, CommandType::InsertStaff)) {
-            notifyAboutStaffAdded(staff);
+            addedStaves.push_back(staff);
         }
+    }
+
+    for (Staff* staff : removedStaves) {
+        notifyAboutStaffRemoved(staff);
+    }
+
+    for (Staff* staff: addedStaves) {
+        notifyAboutStaffAdded(staff);
     }
 }
 
@@ -487,7 +498,13 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 
     score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
 
+    //! HACK: Excerpt::setVoiceVisible recreates the staff,
+    //! so later in listenUndoStackChanges() we will call notifyAboutStaffRemoved() and notifyAboutStaffAdded(),
+    //! which will result in the wrong UI state in the Layout panel.
+    //! We should not recreate the staff here, only update it
+    m_ignoreUndoStackChanges = true;
     apply();
+    m_ignoreUndoStackChanges = false;
 
     Staff* newStaff = staffModifiable(staffId);
     notifyAboutStaffChanged(newStaff);
