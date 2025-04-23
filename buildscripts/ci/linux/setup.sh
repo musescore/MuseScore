@@ -93,7 +93,7 @@ apt_packages_runtime=(
   libdbus-1-3
   libegl1-mesa-dev
   libgles2-mesa-dev
-  libodbc1
+  libodbc2
   libpq-dev
   libssl-dev
   libxcomposite-dev
