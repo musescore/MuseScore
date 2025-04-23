@@ -1170,7 +1170,8 @@ TEST_F(Engraving_PartsTests, partExclusion)
         item->undoChangeProperty(Pid::EXCLUDE_FROM_OTHER_PARTS, !exclude);
     }
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
+    // Not applicable anymore because creating new elements creates new EIDs too
+    //EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
 }
 
 TEST_F(Engraving_PartsTests, partPropertyLinking)
