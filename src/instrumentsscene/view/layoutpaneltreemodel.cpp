@@ -157,6 +157,13 @@ bool LayoutPanelTreeModel::removeRows(int row, int count, const QModelIndex& par
     return true;
 }
 
+bool LayoutPanelTreeModel::shouldShowSystemObjectLayers() const
+{
+    // Only show system object staves in master score
+    // TODO: extend system object staves logic to parts
+    return m_notation && m_notation->isMaster();
+}
+
 void LayoutPanelTreeModel::initPartOrders()
 {
     m_sortedPartIdList.clear();
@@ -390,13 +397,16 @@ void LayoutPanelTreeModel::load()
     async::NotifyList<const Part*> masterParts = m_masterNotation->parts()->partList();
     sortParts(masterParts);
 
+    const bool showSystemObjectLayers = shouldShowSystemObjectLayers();
     const std::vector<Staff*>& systemObjectStaves = m_masterNotation->notation()->parts()->systemObjectStaves();
-    SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(systemObjectStaves);
+
+    SystemObjectGroupsByStaff systemObjects;
+    if (showSystemObjectLayers) {
+        systemObjects = collectSystemObjectGroups(systemObjectStaves);
+    }
 
     for (const Part* part : masterParts) {
-        if (m_notation->isMaster()) {
-            // Only show system object staves in master score
-            // TODO: extend system object staves logic to parts
+        if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
                 if (muse::contains(systemObjectStaves, staff)) {
                     m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
@@ -1044,6 +1054,10 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::modelIndexToItem(const QModel
 void LayoutPanelTreeModel::updateSystemObjectLayers()
 {
     if (!m_masterNotation || !m_rootItem || !m_shouldUpdateSystemObjectLayers) {
+        return;
+    }
+
+    if (!shouldShowSystemObjectLayers()) {
         return;
     }
 

@@ -133,6 +133,8 @@ private:
     void onMasterNotationChanged();
     void onNotationChanged();
 
+    bool shouldShowSystemObjectLayers() const;
+
     void initPartOrders();
     void onBeforeChangeNotation();
     void setLoadingBlocked(bool blocked);
