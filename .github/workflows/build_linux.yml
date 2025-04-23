@@ -67,7 +67,7 @@ jobs:
             dump-symbols-arch: x86-64
           - platform: linux_arm64
             arch: aarch64
-            runs-on: ubuntu-22.04-arm
+            runs-on: ubuntu-24.04-arm
             qt-host: linux_arm64
             qt-arch: linux_gcc_arm64
             dump-symbols-arch: aarch64
