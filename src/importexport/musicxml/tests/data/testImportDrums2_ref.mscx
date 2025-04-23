@@ -24,6 +24,7 @@
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
       <concertPitch>1</concertPitch>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <slurEndWidth>0.0625</slurEndWidth>
       <slurMidWidth>0.21875</slurMidWidth>
       <tieEndWidth>0.0625</tieEndWidth>
