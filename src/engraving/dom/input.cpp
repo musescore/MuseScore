@@ -146,18 +146,43 @@ void InputState::setVoice(voice_idx_t v)
     }
 
     const track_idx_t newTrack = (m_track / VOICES) * VOICES + v;
+    Segment* currSeg = segment();
+    if (!currSeg || currSeg->cr(newTrack)) {
+        setTrack(newTrack);
+        return;
+    }
 
-    // TODO: Inserting notes to a new voice in the middle of a tuplet is not yet supported. In this case
-    // we'll move the input to the start of the tuplet...
-    if (const Segment* prevSeg = segment()) {
-        const ChordRest* prevCr = prevSeg->cr(track());
-        //! NOTE: if there's an existing ChordRest at the new voiceIndex, we don't need to move the cursor
-        if (prevCr && prevCr->topTuplet() && !prevSeg->cr(newTrack)) {
-            Segment* newSeg = score->tick2segment(prevCr->topTuplet()->tick());
-            if (newSeg) {
-                setSegment(newSeg);
-            }
+    // If we haven't returned early - it means that currSeg doesn't have a valid ChordRest for the desired voice. If
+    // tuplets are involved, we may need to move the input position backwards to the last valid ChordRest...
+    Segment* candidateSeg = currSeg;
+
+    // First thing to check - is currSeg part of a tuplet? If so, move candidateSeg to the start of that tuplet...
+    const ChordRest* currCR = currSeg->cr(track());
+    const Tuplet* currTuplet = currCR ? currCR->topTuplet() : nullptr;
+    if (currTuplet) {
+        candidateSeg = score->tick2segment(currTuplet->tick());
+        IF_ASSERT_FAILED(candidateSeg) {
+            setSegment(currSeg->measure()->first());
+            setTrack(newTrack);
+            return;
         }
+    }
+
+    // If candidateSeg still doesn't have a valid ChordRest for the desired voice, we'll now check whether it is
+    // within the range of a tuplet at our desired voice. If so, move candidateSeg to the start of that tuplet...
+    const ChordRest* nextCR = candidateSeg->nextChordRest(newTrack, /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+    const Tuplet* nextTuplet = nextCR ? nextCR->topTuplet() : nullptr;
+    if (!candidateSeg->cr(newTrack) && nextTuplet) {
+        candidateSeg = score->tick2segment(nextTuplet->tick());
+        IF_ASSERT_FAILED(candidateSeg) {
+            setSegment(currSeg->measure()->first());
+            setTrack(newTrack);
+            return;
+        }
+    }
+
+    if (candidateSeg != currSeg) {
+        setSegment(candidateSeg);
     }
 
     setTrack(newTrack);
