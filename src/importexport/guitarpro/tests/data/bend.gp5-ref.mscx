@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -47,25 +49,32 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <eid>G_G</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
+            <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>J_J</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -73,12 +82,15 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>K_K</eid>
             <l1>24</l1>
             <l2>24</l2>
             </Beam>
           <Chord>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>M_M</eid>
               <Bend>
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="10" pitch="100" vibrato="0"/>
@@ -87,9 +99,11 @@
                 <point time="40" pitch="0" vibrato="0"/>
                 <point time="50" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <eid>N_N</eid>
                 </Bend>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -104,10 +118,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>R_R</eid>
                   </Tie>
                 <next>
                   <location>
@@ -129,8 +146,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>T_T</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -147,16 +166,20 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>U_U</eid>
         <voice>
           <Chord>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>W_W</eid>
               <Bend>
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="15" pitch="100" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="45" pitch="0" vibrato="0"/>
                 <point time="60" pitch="0" vibrato="0"/>
+                <eid>X_X</eid>
                 </Bend>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -165,12 +188,15 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <Bend>
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <eid>a_a</eid>
                 </Bend>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -181,13 +207,17 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>b_b</eid>
         <voice>
           <Chord>
+            <eid>c_c</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>d_d</eid>
               <Bend>
                 <point time="0" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <eid>e_e</eid>
                 </Bend>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -196,13 +226,16 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>g_g</eid>
               <Bend>
                 <point time="0" pitch="100" vibrato="0"/>
                 <point time="20" pitch="100" vibrato="0"/>
                 <point time="40" pitch="0" vibrato="0"/>
                 <point time="60" pitch="0" vibrato="0"/>
+                <eid>h_h</eid>
                 </Bend>
               <pitch>53</pitch>
               <tpc>13</tpc>

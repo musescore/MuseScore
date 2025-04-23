@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -48,27 +50,34 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <eid>G_G</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
+            <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>J_J</eid>
                 </Slur>
               <next>
                 <location>
@@ -77,6 +86,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>K_K</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -87,14 +97,17 @@
             <fractions>-1/8</fractions>
             </location>
           <StaffText>
+            <eid>L_L</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Chord>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -105,6 +118,7 @@
             <fractions>-1/8</fractions>
             </location>
           <StaffText>
+            <eid>O_O</eid>
             <text>H</text>
             </StaffText>
           <location>
@@ -113,8 +127,10 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>P_P</eid>
             </Dynamic>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -124,6 +140,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>R_R</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -131,8 +148,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
