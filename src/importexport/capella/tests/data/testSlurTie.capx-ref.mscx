@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <minSystemDistance>8</minSystemDistance>
@@ -25,7 +26,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -42,20 +44,26 @@
     <Staff id="1">
       <VBox>
         <height>14</height>
+        <eid>D_D</eid>
         </VBox>
       <Measure>
+        <eid>E_E</eid>
         <LayoutBreak>
+          <eid>F_F</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>I_I</eid>
                 </Slur>
               <next>
                 <location>
@@ -64,15 +72,19 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>J_J</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>L_L</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>M_M</eid>
                   </Tie>
                 <next>
                   <location>
@@ -85,8 +97,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>O_O</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -99,6 +113,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -108,6 +123,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
