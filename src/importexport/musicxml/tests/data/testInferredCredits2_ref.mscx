@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageHeight>11.6929</pageHeight>
@@ -54,7 +55,8 @@ from MUSESCORE: the musical: a tone poem
 Words &amp; Music by also Henry Ives (and ampersands)
 </metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -120,123 +122,155 @@ Words &amp; Music by also Henry Ives (and ampersands)
     <Staff id="1">
       <VBox>
         <height>10.3739</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Inferred Credits 2</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>from MUSESCORE: the musical: a tone poem</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Words &amp; Music by also Henry Ives (and ampersands)</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>poet</style>
           <text>Henry Ives</text>
           </Text>
         <Text>
+          <eid>I_I</eid>
           <style>subtitle</style>
           <text>Op.1 No.43</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>K_K</eid>
             </Clef>
           <TimeSig>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
+            <eid>M_M</eid>
             <text>Lyrics to be sung by candlelight
 (and this not to be inferred)</text>
             </StaffText>
           <Beam>
+            <eid>N_N</eid>
             <StemDirection>down</StemDirection>
             <l1>34</l1>
             <l2>34</l2>
             </Beam>
           <Chord>
+            <eid>O_O</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <eid>P_P</eid>
               <text>ha</text>
               </Lyrics>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>R_R</eid>
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <eid>S_S</eid>
               <text>ha</text>
               </Lyrics>
             <Note>
+              <eid>T_T</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>W_W</eid>
         <voice>
           <Chord>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>Y_Y</eid>
               <text>nice.</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>b_b</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>c_c</eid>
         <voice>
           <Rest>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>e_e</eid>
         <voice>
           <Rest>
+            <eid>f_f</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>g_g</eid>
         <voice>
           <Rest>
+            <eid>h_h</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>i_i</eid>
             </BarLine>
           </voice>
         </Measure>

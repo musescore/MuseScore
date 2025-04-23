@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26998</pageWidth>
@@ -52,7 +53,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Lyric elision</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -117,72 +119,91 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Lyric elision</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>James Mizen</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>K_K</eid>
               <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>L_L</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>N_N</eid>
               <text>ce‿e in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>O_O</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>Q_Q</eid>
               <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>R_R</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>T_T</eid>
               <text>ce<sym>lyricsElision</sym>e‿in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>U_U</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>

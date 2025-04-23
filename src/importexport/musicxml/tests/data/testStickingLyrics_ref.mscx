@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.50197</pageWidth>
@@ -44,7 +45,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -331,125 +333,159 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         </VBox>
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>F_F</eid>
             </Clef>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Sticking>
+            <eid>H_H</eid>
             <text>Rlr</text>
             </Sticking>
           <Beam>
+            <eid>I_I</eid>
             <StemDirection>down</StemDirection>
             <l1>34</l1>
             <l2>30</l2>
             </Beam>
           <Chord>
+            <eid>J_J</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
+              <eid>K_K</eid>
               </Articulation>
             <Note>
+              <eid>L_L</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>M_M</eid>
             <text>R</text>
             </Sticking>
           <Chord>
+            <eid>N_N</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>P_P</eid>
             <text>l</text>
             </Sticking>
           <Chord>
+            <eid>Q_Q</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
+              <eid>R_R</eid>
               </Articulation>
             <Note>
+              <eid>S_S</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>T_T</eid>
             <text>r</text>
             </Sticking>
           <Chord>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>V_V</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>W_W</eid>
             <text>B</text>
             </Sticking>
           <Beam>
+            <eid>X_X</eid>
             <StemDirection>down</StemDirection>
             <l1>38</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
+            <eid>Y_Y</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>a_a</eid>
             <text>lr</text>
             </Sticking>
           <Chord>
+            <eid>b_b</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
+              <eid>c_c</eid>
               </Articulation>
             <Note>
+              <eid>d_d</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>e_e</eid>
             <text>B</text>
             </Sticking>
           <Chord>
+            <eid>f_f</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>g_g</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>h_h</eid>
             <text>l</text>
             </Sticking>
           <Chord>
+            <eid>i_i</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>j_j</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>k_k</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.50197</pageWidth>
@@ -145,7 +146,8 @@ Arranged by [Arranger]</metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -153,7 +155,8 @@ Arranged by [Arranger]</metaTag>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -217,40 +220,51 @@ Arranged by [Arranger]</metaTag>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>title</style>
           <text><b>[Title]</b></text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <offset x="0" y="9.45"/>
           <text><font size="11.94"/>for Piano</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>composer</style>
           <text><font size="11"/><b>[COMPOSER]</b><i>Arranged by [Arranger]</i></text>
           </Text>
         </VBox>
       <HBox>
         <width>5</width>
+        <eid>I_I</eid>
         </HBox>
       <Measure>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>K_K</eid>
             </Clef>
           <TimeSig>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>N_N</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -264,14 +278,18 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>R_R</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>S_S</eid>
                   </Tie>
                 <next>
                   <location>
@@ -284,9 +302,11 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -301,12 +321,15 @@ Arranged by [Arranger]</metaTag>
           </voice>
         <voice>
           <Rest>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>X_X</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -320,18 +343,23 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>Z_Z</eid>
         <voice>
           <Chord>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>b_b</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>c_c</eid>
                   </Tie>
                 <next>
                   <location>
@@ -345,14 +373,18 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
+            <eid>d_d</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>f_f</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>g_g</eid>
                   </Tie>
                 <next>
                   <location>
@@ -366,23 +398,29 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>i_i</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
+            <eid>j_j</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>l_l</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>m_m</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -405,12 +443,15 @@ Arranged by [Arranger]</metaTag>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>n_n</eid>
             </Clef>
           <TimeSig>
+            <eid>o_o</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>p_p</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -419,13 +460,16 @@ Arranged by [Arranger]</metaTag>
       <Measure>
         <voice>
           <Rest>
+            <eid>q_q</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>r_r</eid>
             <staffMove>-1</staffMove>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>s_s</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -439,10 +483,12 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
+            <eid>t_t</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>u_u</eid>
             </BarLine>
           </voice>
         </Measure>
