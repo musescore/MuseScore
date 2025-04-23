@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>U_U</eid>
     <name>Klarinet in B♭</name>
     <Tracklist sTrack="0" dstTrack="0"/>
     <Tracklist sTrack="2" dstTrack="1"/>
@@ -59,16 +60,16 @@
     <showMargins>0</showMargins>
     <metaTag name="partName">Klarinet in B♭</metaTag>
     <Part id="1">
-      <Staff id="1">
-        <linkedTo>1</linkedTo>
-        <linkedTo>2</linkedTo>
+      <Staff>
+        <eid>V_V</eid>
+        <linkedTo>C_C</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <Staff id="2">
-        <linkedTo>1</linkedTo>
-        <linkedTo>2</linkedTo>
+      <Staff>
+        <eid>W_W</eid>
+        <linkedTo>C_C</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -92,30 +93,29 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>X_X</eid>
         <voice>
           <KeySig>
-            <linked>
-              </linked>
+            <eid>Y_Y</eid>
+            <linkedTo>F_F</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <linked>
-              <indexDiff>-1</indexDiff>
-              </linked>
+            <eid>Z_Z</eid>
+            <linkedTo>G_G</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <linked>
-              <indexDiff>-2</indexDiff>
-              </linked>
+            <eid>a_a</eid>
+            <linkedTo>H_H</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <linked>
-                <indexDiff>-3</indexDiff>
-                </linked>
+              <eid>b_b</eid>
+              <linkedTo>I_I</linkedTo>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>c_c</eid>
                 </Accidental>
               <pitch>83</pitch>
               <tpc>19</tpc>
@@ -129,36 +129,26 @@
       <Measure>
         <voice>
           <KeySig>
-            <linked>
-              <indexDiff>-4</indexDiff>
-              </linked>
+            <eid>d_d</eid>
+            <linkedTo>F_F</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <linked>
-              <location>
-                <staves>1</staves>
-                </location>
-              </linked>
+            <eid>e_e</eid>
+            <linkedTo>O_O</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <linked>
-              <location>
-                <voices>1</voices>
-                </location>
-              </linked>
+            <eid>f_f</eid>
+            <linkedTo>K_K</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <linked>
-                <location>
-                  <voices>1</voices>
-                  </location>
-                <indexDiff>-1</indexDiff>
-                </linked>
+              <eid>g_g</eid>
+              <linkedTo>L_L</linkedTo>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>h_h</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>

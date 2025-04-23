@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
@@ -30,7 +31,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">selection-filter-hairpins</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
@@ -86,27 +88,34 @@
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>delete-skip-annotations</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
             <root>14</root>
             <name>7</name>
+            <eid>I_I</eid>
             </Harmony>
           <Rest>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -116,16 +125,20 @@
           <Harmony>
             <root>16</root>
             <name>7</name>
+            <eid>K_K</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>L_L</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>7</name>
+            <eid>M_M</eid>
             </Harmony>
           <Rest>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -135,20 +148,25 @@
           <Harmony>
             <root>13</root>
             <name>7</name>
+            <eid>O_O</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>P_P</eid>
         <voice>
           <Rest>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>R_R</eid>
         <voice>
           <Rest>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -33,7 +34,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -101,14 +103,18 @@
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>D_D</eid>
         </VBox>
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tuplet>
+            <eid>G_G</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>half</baseNote>
@@ -118,16 +124,21 @@
               </Number>
             </Tuplet>
           <Rest>
+            <eid>H_H</eid>
             <durationType>half</durationType>
             </Rest>
           <Harmony>
             <root>17</root>
+            <eid>I_I</eid>
             </Harmony>
           <Chord>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>K_K</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>L_L</eid>
                   </Tie>
                 <next>
                   <location>
@@ -139,11 +150,14 @@
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>M_M</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>N_N</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -155,8 +169,10 @@
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>P_P</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>Q_Q</eid>
                   </Tie>
                 <next>
                   <location>
@@ -168,8 +184,10 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>R_R</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>S_S</eid>
                   </Tie>
                 <next>
                   <location>
@@ -182,10 +200,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>V_V</eid>
                   </Tie>
                 <next>
                   <location>
@@ -205,8 +226,10 @@
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>W_W</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>X_X</eid>
                   </Tie>
                 <next>
                   <location>
@@ -226,8 +249,10 @@
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>Y_Y</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>Z_Z</eid>
                   </Tie>
                 <next>
                   <location>
@@ -247,8 +272,10 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>a_a</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>b_b</eid>
                   </Tie>
                 <next>
                   <location>
@@ -272,12 +299,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>c_c</eid>
         <voice>
           <Chord>
+            <eid>d_d</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>e_e</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>f_f</eid>
                   </Tie>
                 <next>
                   <location>
@@ -297,8 +328,10 @@
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>g_g</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>h_h</eid>
                   </Tie>
                 <next>
                   <location>
@@ -318,8 +351,10 @@
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>i_i</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>j_j</eid>
                   </Tie>
                 <next>
                   <location>
@@ -339,8 +374,10 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>k_k</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>l_l</eid>
                   </Tie>
                 <next>
                   <location>
@@ -361,6 +398,7 @@
               </Note>
             </Chord>
           <Tuplet>
+            <eid>m_m</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>quarter</baseNote>
@@ -370,8 +408,10 @@
               </Number>
             </Tuplet>
           <Chord>
+            <eid>n_n</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>o_o</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -383,6 +423,7 @@
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>p_p</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -394,6 +435,7 @@
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>q_q</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -405,6 +447,7 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>r_r</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -418,12 +461,16 @@
             </Chord>
           <Harmony>
             <root>19</root>
+            <eid>s_s</eid>
             </Harmony>
           <Chord>
+            <eid>t_t</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>u_u</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>v_v</eid>
                   </Tie>
                 <next>
                   <location>
@@ -435,11 +482,14 @@
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>w_w</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>x_x</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>y_y</eid>
                   </Tie>
                 <next>
                   <location>
@@ -452,11 +502,14 @@
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>z_z</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>0_0</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>1_1</eid>
                   </Tie>
                 <next>
                   <location>
@@ -468,8 +521,10 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>2_2</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>3_3</eid>
                   </Tie>
                 <next>
                   <location>
@@ -482,10 +537,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>4_4</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>5_5</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>6_6</eid>
                   </Tie>
                 <next>
                   <location>
@@ -504,8 +562,10 @@
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>7_7</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>8_8</eid>
                   </Tie>
                 <next>
                   <location>
@@ -525,8 +585,10 @@
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>9_9</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>+_+</eid>
                   </Tie>
                 <next>
                   <location>
@@ -545,8 +607,10 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>/_/</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>AB_AB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -567,10 +631,13 @@
             </Chord>
           <endTuplet/>
           <Chord>
+            <eid>BB_BB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>CB_CB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>DB_DB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -590,8 +657,10 @@
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>EB_EB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>FB_FB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -612,8 +681,10 @@
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>GB_GB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>HB_HB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -633,8 +704,10 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>IB_IB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>JB_JB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -657,12 +730,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>KB_KB</eid>
         <voice>
           <Chord>
+            <eid>LB_LB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>MB_MB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>NB_NB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -682,8 +759,10 @@
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>OB_OB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>PB_PB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -704,8 +783,10 @@
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>QB_QB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>RB_RB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -725,8 +806,10 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>SB_SB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>TB_TB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -747,6 +830,7 @@
               </Note>
             </Chord>
           <Tuplet>
+            <eid>UB_UB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>16th</baseNote>
@@ -756,12 +840,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>VB_VB</eid>
             <l1>-8</l1>
             <l2>-4</l2>
             </Beam>
           <Chord>
+            <eid>WB_WB</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>XB_XB</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -773,6 +860,7 @@
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>YB_YB</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -785,6 +873,7 @@
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>ZB_ZB</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -796,6 +885,7 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>aB_aB</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -809,12 +899,16 @@
             </Chord>
           <Harmony>
             <root>14</root>
+            <eid>bB_bB</eid>
             </Harmony>
           <Chord>
+            <eid>cB_cB</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>dB_dB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>eB_eB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -826,8 +920,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>fB_fB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>gB_gB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -839,8 +935,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>hB_hB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>iB_iB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -852,8 +950,10 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>jB_jB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>kB_kB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -866,10 +966,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>lB_lB</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>mB_mB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>nB_nB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -888,8 +991,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>oB_oB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>pB_pB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -908,8 +1013,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>qB_qB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>rB_rB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -928,8 +1035,10 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>sB_sB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>tB_tB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -950,11 +1059,14 @@
             </Chord>
           <endTuplet/>
           <Chord>
+            <eid>uB_uB</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
+              <eid>vB_vB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>wB_wB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -974,8 +1086,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>xB_xB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>yB_yB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -995,8 +1109,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>zB_zB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>0B_0B</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1016,8 +1132,10 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>1B_1B</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>2B_2B</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1040,15 +1158,20 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>3B_3B</eid>
         <LayoutBreak>
+          <eid>4B_4B</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
+            <eid>5B_5B</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>6B_6B</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>7B_7B</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1068,8 +1191,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>8B_8B</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>9B_9B</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1089,8 +1214,10 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>+B_+B</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>/B_/B</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1110,8 +1237,10 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>AC_AC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>BC_BC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1132,6 +1261,7 @@
               </Note>
             </Chord>
           <Tuplet>
+            <eid>CC_CC</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1141,12 +1271,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>DC_DC</eid>
             <l1>-10</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
+            <eid>EC_EC</eid>
             <durationType>32nd</durationType>
             <Note>
+              <eid>FC_FC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1158,6 +1291,7 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>GC_GC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1169,6 +1303,7 @@
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>HC_HC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1180,6 +1315,7 @@
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>IC_IC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1193,12 +1329,16 @@
             </Chord>
           <Harmony>
             <root>16</root>
+            <eid>JC_JC</eid>
             </Harmony>
           <Chord>
+            <eid>KC_KC</eid>
             <durationType>32nd</durationType>
             <Note>
+              <eid>LC_LC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>MC_MC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1210,8 +1350,10 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>NC_NC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>OC_OC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1223,11 +1365,14 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>PC_PC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>QC_QC</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>RC_RC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1239,8 +1384,10 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>SC_SC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>TC_TC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1253,10 +1400,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>UC_UC</eid>
             <durationType>32nd</durationType>
             <Note>
+              <eid>VC_VC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>WC_WC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1275,8 +1425,10 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>XC_XC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>YC_YC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1295,8 +1447,10 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>ZC_ZC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>aC_aC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1315,8 +1469,10 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>bC_bC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>cC_cC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1337,10 +1493,13 @@
             </Chord>
           <endTuplet/>
           <Chord>
+            <eid>dC_dC</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>eC_eC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>fC_fC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1359,8 +1518,10 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>gC_gC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>hC_hC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1379,8 +1540,10 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>iC_iC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>jC_jC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1399,8 +1562,10 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>kC_kC</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>lC_lC</eid>
                   </Tie>
                 <next>
                   <location>
@@ -1420,9 +1585,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>mC_mC</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
+              <eid>nC_nC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1434,6 +1601,7 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>oC_oC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1445,6 +1613,7 @@
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>pC_pC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1456,6 +1625,7 @@
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>qC_qC</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>

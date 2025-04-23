@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
@@ -74,14 +75,16 @@
       <unsorted/>
       </Order>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -111,8 +114,10 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -127,25 +132,30 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
+            <eid>G_G</eid>
             <style>harp_pedal_text_diagram</style>
             <text>E<sym>csymAccidentalFlat</sym> F<sym>csymAccidentalNatural</sym> G<sym>csymAccidentalNatural</sym> A<sym>csymAccidentalNatural</sym> 
 D<sym>csymAccidentalNatural</sym> C<sym>csymAccidentalNatural</sym> B<sym>csymAccidentalFlat</sym> </text>
             </HarpPedalDiagram>
           <Rest>
+            <eid>H_H</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>I_I</eid>
         <voice>
           <Rest>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>K_K</eid>
         <voice>
           <HarpPedalDiagram>
             <isDiagram>0</isDiagram>
@@ -158,19 +168,23 @@ D<sym>csymAccidentalNatural</sym> C<sym>csymAccidentalNatural</sym> B<sym>csymAc
               <string name="5">1</string>
               <string name="6">0</string>
               </pedalState>
+            <eid>L_L</eid>
             <style>harp_pedal_text_diagram</style>
             <text>A<sym>csymAccidentalFlat</sym> 
 D<sym>csymAccidentalFlat</sym> </text>
             </HarpPedalDiagram>
           <Rest>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>N_N</eid>
         <voice>
           <Rest>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -181,10 +195,12 @@ D<sym>csymAccidentalFlat</sym> </text>
       <Measure>
         <voice>
           <TimeSig>
+            <eid>P_P</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -193,6 +209,7 @@ D<sym>csymAccidentalFlat</sym> </text>
       <Measure>
         <voice>
           <Rest>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -201,6 +218,7 @@ D<sym>csymAccidentalFlat</sym> </text>
       <Measure>
         <voice>
           <Rest>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -209,6 +227,7 @@ D<sym>csymAccidentalFlat</sym> </text>
       <Measure>
         <voice>
           <Rest>
+            <eid>T_T</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

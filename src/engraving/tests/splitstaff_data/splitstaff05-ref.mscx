@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
@@ -30,12 +31,14 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">mops</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -85,23 +88,29 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>F_F</eid>
             </Clef>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>I_I</eid>
             <durationType>16th</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>J_J</eid>
                 </Slur>
               <next>
                 <location>
@@ -111,22 +120,27 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>K_K</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>L_L</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
+            <eid>M_M</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <eid>O_O</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -138,21 +152,27 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>P_P</eid>
             </Clef>
           <KeySig>
+            <eid>Q_Q</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>R_R</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>T_T</eid>
             <durationType>16th</durationType>
             </Rest>
           <Chord>
+            <eid>U_U</eid>
             <durationType>16th</durationType>
             <Spanner type="Slur">
               <prev>
@@ -163,18 +183,22 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>V_V</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>Y_Y</eid>
             </BarLine>
           </voice>
         </Measure>

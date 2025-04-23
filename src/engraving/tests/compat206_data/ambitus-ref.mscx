@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <defaultsVersion>206</defaultsVersion>
@@ -21,7 +22,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -71,53 +73,66 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <Ambitus>
             <topPitch>84</topPitch>
             <topTpc>14</topTpc>
             <bottomPitch>47</bottomPitch>
             <bottomTpc>19</bottomTpc>
+            <eid>E_E</eid>
             <color r="0" g="255" b="0" a="255"/>
             </Ambitus>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>G_G</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>H_H</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>J_J</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>K_K</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>L_L</eid>
         <LayoutBreak>
+          <eid>M_M</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Rest>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <eid>O_O</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>P_P</eid>
         <voice>
           <Ambitus>
             <head>cross</head>
@@ -130,31 +145,40 @@
             <bottomAccidental>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>Q_Q</eid>
                 </Accidental>
               </bottomAccidental>
+            <eid>R_R</eid>
             </Ambitus>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>T_T</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>U_U</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>W_W</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>X_X</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>Y_Y</eid>
             </BarLine>
           </voice>
         </Measure>

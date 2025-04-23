@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27007</pageWidth>
@@ -170,7 +171,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           </StaffType>
         </Staff>
@@ -192,11 +194,14 @@
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>frame</style>
           <text>îèéààéà</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>frame</style>
           <offset x="55" y="0.5"/>
           <text>éééàè</text>
@@ -206,11 +211,14 @@
         <height>47.762</height>
         <topGap>10</topGap>
         <boxAutoSize>0</boxAutoSize>
+        <eid>G_G</eid>
         <Text>
+          <eid>H_H</eid>
           <style>frame</style>
           <text>êêàééééç*éô</text>
           </Text>
         <Text>
+          <eid>I_I</eid>
           <style>frame</style>
           <offset x="55" y="0.5"/>
           <text>àéùééé</text>
