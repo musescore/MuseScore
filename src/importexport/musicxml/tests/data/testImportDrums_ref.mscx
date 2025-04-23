@@ -17,6 +17,7 @@
       <staffDistance>5.5</staffDistance>
       <minSystemDistance>9.25</minSystemDistance>
       <romanNumeralFontFace>Edwin</romanNumeralFontFace>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <spatium>2.11667</spatium>
       </Style>
     <showInvisible>1</showInvisible>

@@ -73,7 +73,7 @@ private:
     muse::String m_name;
     bool m_printName = true;
     muse::String m_abbr;
-    bool m_printAbbr = false;
+    bool m_printAbbr = true;
     std::vector<muse::String> m_measureNumbers;               // MusicXML measure number attribute
     std::vector<engraving::Fraction> m_measureDurations;         // duration in fraction for every measure
     std::vector<MusicXmlOctaveShiftList> m_octaveShifts;   // octave shift list for every staff

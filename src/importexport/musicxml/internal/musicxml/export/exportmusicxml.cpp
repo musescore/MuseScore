@@ -7653,9 +7653,13 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
 
 static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrMap)
 {
+    const auto& parts = score->parts();
+    const Color longInstrumentColor = score->style().styleV(Sid::longInstrumentColor).value<Color>();
+    const Color shortInstrumentColor = score->style().styleV(Sid::shortInstrumentColor).value<Color>();
+    bool hiddenInstrName = score->style().styleB(Sid::hideInstrumentNameIfOneInstrument) && parts.size() == 1;
+
     xml.startElement("part-list");
     size_t staffCount = 0;                          // count sum of # staves in parts
-    const auto& parts = score->parts();
     const bool groupTime = score->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
     std::array<int, MAX_PART_GROUPS> partGroupEnd;  // staff where part group ends (bracketSpan is in staves, not parts)
     partGroupEnd.fill(-1);
@@ -7708,26 +7712,39 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         xml.startElementRaw(String(u"score-part id=\"P%1\"").arg(idx + 1));
         initInstrMap(instrMap, part->instruments(), score);
         static const std::wregex acc(L"[♭♯]");
-        XmlWriter::Attributes attributes;
+        XmlWriter::Attributes longInstrumentAttributes;
+        XmlWriter::Attributes shortInstrumentAttributes;
         // by default export the parts long name as part-name
         String partName = part->longName();
         // use the track name if no part long name
         if (partName.empty()) {
             partName = part->partName();
             if (!partName.empty()) {
-                attributes.emplace_back(std::make_pair("print-object", "no"));
+                hiddenInstrName = true;
             }
         }
-        xml.tag("part-name", attributes, MScoreTextToMusicXml::toPlainText(partName).replace(u"♭", u"b").replace(u"♯", u"#"));
+        if (hiddenInstrName) {
+            longInstrumentAttributes.push_back({ "print-object", "no" });
+            shortInstrumentAttributes.push_back({ "print-object", "no" });
+        }
+        if (longInstrumentColor != engravingConfiguration()->defaultColor()) {
+            longInstrumentAttributes.push_back({ "color", String::fromStdString(longInstrumentColor.toString()) });
+        }
+        xml.tag("part-name", longInstrumentAttributes,
+                MScoreTextToMusicXml::toPlainText(partName).replace(u'♭', 'b').replace(u'♯', '#'));
         if (partName.contains(acc)) {
-            xml.startElement("part-name-display");
+            xml.startElement("part-name-display", longInstrumentAttributes);
             writeDisplayName(xml, partName);
             xml.endElement();
         }
         if (!part->shortName().isEmpty()) {
-            xml.tag("part-abbreviation", MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u"♭", u"b").replace(u"♯", u"#"));
+            if (shortInstrumentColor != engravingConfiguration()->defaultColor()) {
+                shortInstrumentAttributes.push_back({ "color", String::fromStdString(shortInstrumentColor.toString()) });
+            }
+            xml.tag("part-abbreviation", shortInstrumentAttributes,
+                    MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u'♭', 'b').replace(u'♯', '#'));
             if (part->shortName().contains(acc)) {
-                xml.startElement("part-abbreviation-display");
+                xml.startElement("part-abbreviation-display", shortInstrumentAttributes);
                 writeDisplayName(xml, part->shortName());
                 xml.endElement();
             }

@@ -67,8 +67,16 @@
     </defaults>
   <part-list>
     <score-part id="P1">
-      <part-name>Clarinet in B♭</part-name>
-      <part-abbreviation>Cl. in B♭</part-abbreviation>
+      <part-name print-object="no">Clarinet in Bb</part-name>
+      <part-name-display print-object="no">
+        <display-text>Clarinet in B</display-text>
+        <accidental-text>flat</accidental-text>
+        </part-name-display>
+      <part-abbreviation print-object="no">Cl. in Bb</part-abbreviation>
+      <part-abbreviation-display print-object="no">
+        <display-text>Cl. in B</display-text>
+        <accidental-text>flat</accidental-text>
+        </part-abbreviation-display>
       <score-instrument id="P1-I1">
         <instrument-name>Clarinet</instrument-name>
         <instrument-sound>wind.reed.clarinet.bflat</instrument-sound>

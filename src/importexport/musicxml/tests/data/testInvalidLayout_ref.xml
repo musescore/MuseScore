@@ -17,8 +17,8 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>Voice</part-name>
-      <part-abbreviation>Vo.</part-abbreviation>
+      <part-name print-object="no">Voice</part-name>
+      <part-abbreviation print-object="no">Vo.</part-abbreviation>
       <score-instrument id="P1-I1">
         <instrument-name>Voice</instrument-name>
         </score-instrument>
