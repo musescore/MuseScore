@@ -171,7 +171,8 @@ jobs:
       run: echo "::add-matcher::.github/problem_matchers/gcc.json"
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4
+      # TODO: Change back to jurplel/install-qt-action@v4 when it supports arm64
+      uses: jdpurcell/install-qt-action@v5 
       with:
         version: '6.9.*'
         host: ${{ matrix.qt-host }}
