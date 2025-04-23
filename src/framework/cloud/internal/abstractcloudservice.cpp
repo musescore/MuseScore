@@ -93,7 +93,7 @@ void AbstractCloudService::initOAuthIfNecessary()
     m_replyHandler->setRedirectUrl(m_serverConfig.signInSuccessUrl);
 
     m_oauth2->setAuthorizationUrl(m_serverConfig.authorizationUrl);
-    m_oauth2->setAccessTokenUrl(m_serverConfig.accessTokenUrl);
+    m_oauth2->setTokenUrl(m_serverConfig.accessTokenUrl);
     m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QMultiMap<QString, QVariant>* parameters) {
         for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
             parameters->replace(key, m_serverConfig.authorizationParameters.value(key));
@@ -105,7 +105,8 @@ void AbstractCloudService::initOAuthIfNecessary()
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &AbstractCloudService::openUrl);
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &AbstractCloudService::onUserAuthorized);
 
-    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::serverReportedErrorOccurred,
+            [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
 }
