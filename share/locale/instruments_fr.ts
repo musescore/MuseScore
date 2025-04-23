@@ -2285,7 +2285,7 @@
         <location filename="../instruments/instrumentsxml.h" line="124"/>
         <source>Hb. Fl.</source>
         <comment>Hyperbass Flute</comment>
-        <translation>Fl. HB</translation>
+        <translation>Fl. Hb</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>

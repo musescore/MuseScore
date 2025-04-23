@@ -12329,7 +12329,7 @@ La division irrégulière dépasserait la mesure</translation>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="177"/>
         <source>Build date: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de compilation : %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="181"/>
@@ -30659,7 +30659,7 @@ a échoué</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="75"/>
         <source>G clef ottava bassa with C clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Clef de Sol ottava bassa et Clef d&apos;Ut</translation>
     </message>
 </context>
 <context>
