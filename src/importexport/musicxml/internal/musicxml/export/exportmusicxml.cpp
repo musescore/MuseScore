@@ -7620,24 +7620,30 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         static const std::wregex acc(L"[♭♯]");
         XmlWriter::Attributes attributes;
         // by default export the parts long name as part-name
+        bool hiddenInstrName = (score->style().styleB(Sid::hideInstrumentNameIfOneInstrument) && parts.size() == 1);
         String partName = part->longName();
         // use the track name if no part long name
         if (partName.empty()) {
             partName = part->partName();
             if (!partName.empty()) {
-                attributes.emplace_back(std::make_pair("print-object", "no"));
+                hiddenInstrName = true;
             }
+        }
+        // const bool hidePartName = hiddenInstrName || (score->style().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE);
+        if (hiddenInstrName) {
+            attributes.push_back({ "print-object", "no" });
         }
         xml.tag("part-name", attributes, MScoreTextToMusicXml::toPlainText(partName).replace(u"♭", u"b").replace(u"♯", u"#"));
         if (partName.contains(acc)) {
-            xml.startElement("part-name-display");
+            xml.startElement("part-name-display", attributes);
             writeDisplayName(xml, partName);
             xml.endElement();
         }
         if (!part->shortName().isEmpty()) {
-            xml.tag("part-abbreviation", MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u"♭", u"b").replace(u"♯", u"#"));
+            xml.tag("part-abbreviation", attributes,
+                    MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u"♭", u"b").replace(u"♯", u"#"));
             if (part->shortName().contains(acc)) {
-                xml.startElement("part-abbreviation-display");
+                xml.startElement("part-abbreviation-display", attributes);
                 writeDisplayName(xml, part->shortName());
                 xml.endElement();
             }
