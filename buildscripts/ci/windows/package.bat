@@ -8,16 +8,16 @@ SET TARGET_PROCESSOR_BITS=64
 SET TARGET_PROCESSOR_ARCH=x86_64
 SET BUILD_DIR=build.release
 SET INSTALL_DIR=build.install
-SET SIGN_CERTIFICATE_ENCRYPT_SECRET=""
-SET SIGN_CERTIFICATE_PASSWORD=""
+SET SIGN_KEY=""
+SET SIGN_SECRET=""
 SET BUILD_WIN_PORTABLE=OFF
 SET UPGRADE_UUID="11111111-1111-1111-1111-111111111111"
 
 :GETOPTS
 IF /I "%1" == "-m" SET BUILD_MODE=%2& SHIFT
 IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2& SHIFT
-IF /I "%1" == "--signsecret" SET SIGN_CERTIFICATE_ENCRYPT_SECRET=%2& SHIFT
-IF /I "%1" == "--signpass" SET SIGN_CERTIFICATE_PASSWORD=%2& SHIFT
+IF /I "%1" == "--signkey" SET SIGN_KEY=%2& SHIFT
+IF /I "%1" == "--signsecret" SET SIGN_SECRET=%2& SHIFT
 IF /I "%1" == "--portable" SET BUILD_WIN_PORTABLE=%2& SHIFT
 IF /I "%1" == "--guid" SET UPGRADE_UUID=%2& SHIFT
 SHIFT
@@ -64,13 +64,13 @@ IF %PACKAGE_TYPE% == "portable" (
     )
 )
 IF %DO_SIGN% == ON (
-    IF %SIGN_CERTIFICATE_ENCRYPT_SECRET% == "" ( 
+    IF %SIGN_KEY% == "" ( 
         SET DO_SIGN=OFF
-        ECHO "warning: not set SIGN_CERTIFICATE_ENCRYPT_SECRET"
+        ECHO "warning: not set SIGN_KEY"
     )
-    IF %SIGN_CERTIFICATE_PASSWORD% == "" ( 
+    IF %SIGN_SECRET% == "" ( 
         SET DO_SIGN=OFF
-        ECHO "warning: not set SIGN_CERTIFICATE_PASSWORD"
+        ECHO "warning: not set SIGN_SECRET"
     )
 )
 
@@ -89,6 +89,7 @@ ECHO "TARGET_PROCESSOR_ARCH: %TARGET_PROCESSOR_ARCH%"
 ECHO "BUILD_DIR: %BUILD_DIR%"
 ECHO "INSTALL_DIR: %INSTALL_DIR%"
 ECHO "PACKAGE_TYPE: %PACKAGE_TYPE%"
+ECHO "DO_SIGN: %DO_SIGN%"
 
 :: For MSI
 SET SIGN="buildscripts\ci\windows\sign.bat"
@@ -137,11 +138,11 @@ GOTO END_SUCCESS
 :PACK_MSI
 ECHO "Start msi packing..."
 :: sign dlls and exe files
-IF %DO_SIGN% == ON (
-    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
-) ELSE (
-    ECHO "Sign disabled"
-)
+@REM IF %DO_SIGN% == ON (
+@REM     ::CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
+@REM ) ELSE (
+@REM     ECHO "Sign disabled"
+@REM )
 
 :: generate unique GUID
 %UUIDGEN% > uuid.txt
@@ -193,7 +194,7 @@ COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y || GOTO END_ERROR
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
 IF %DO_SIGN% == ON (
-    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --name %ARTIFACT_NAME% --file %ARTIFACT_PATH% || exit \b 1
+    CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %ARTIFACT_PATH% || exit \b 1
 )
 
 bash ./buildscripts/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
@@ -207,11 +208,11 @@ GOTO END_SUCCESS
 ECHO "Start portable packing..."
 
 :: sign dlls and exe files
-IF %DO_SIGN% == ON (
-    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
-) ELSE (
-    ECHO "Sign disabled"
-)
+@REM IF %DO_SIGN% == ON (
+@REM     ::CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
+@REM ) ELSE (
+@REM     ECHO "Sign disabled"
+@REM )
 
 :: Create launcher
 ECHO "Start comLauncherGenerator..."
@@ -239,7 +240,7 @@ COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
 IF %DO_SIGN% == ON (
-    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --name %ARTIFACT_NAME% --file %ARTIFACT_PATH% || exit \b 1
+    CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %ARTIFACT_PATH% || exit \b 1
 )
 
 bash ./buildscripts/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%

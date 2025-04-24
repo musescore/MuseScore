@@ -44,7 +44,6 @@ on:
         required: false
 
 jobs:
-
   windows_x64:
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x64')
     runs-on: windows-2022
@@ -164,10 +163,10 @@ jobs:
     - name: Package
       shell: cmd
       run: |
-        IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
-        IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
+        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
+        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="''" )
         IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_MU4_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_MU4_GUID }} )
-        buildscripts\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
+        buildscripts\ci\windows\package.bat --signsecret %S_S% --signkey %S_K% --guid %GUID%
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
@@ -285,9 +284,9 @@ jobs:
     - name: Package
       shell: cmd
       run: |
-        IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
-        IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
-        buildscripts\ci\windows\package.bat --portable ON --signsecret %S_S% --signpass %S_P%
+        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
+        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="''" )
+        buildscripts\ci\windows\package.bat --portable ON  --signsecret %S_S% --signkey %S_K%
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
@@ -301,3 +300,16 @@ jobs:
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
+
+  # windows_sign_test:
+  #   if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'sign_test')
+  #   runs-on: windows-2022
+  #   steps:
+  #   - name: Clone repository
+  #     uses: actions/checkout@v4
+  #   - name: Sign test
+  #     shell: cmd
+  #     run: |
+  #       IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
+  #       IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_P="''" )
+  #       buildscripts\ci\windows\sign_test.bat --secret %S_S% --key %S_K%
