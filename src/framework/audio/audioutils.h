@@ -80,6 +80,22 @@ inline String audioSourceCategoryName(const AudioInputParams& params)
 
     return String::fromStdString(params.resourceMeta.id);
 }
+
+inline bool isOnlineAudioResource(const AudioResourceMeta& meta)
+{
+    const String& attr = meta.attributeVal(u"isOnline");
+    if (attr.empty()) {
+        return false;
+    }
+
+    bool ok = true;
+    const int val = attr.toInt(&ok);
+    if (!ok) {
+        return false;
+    }
+
+    return val == 1;
+}
 }
 
 #endif // MUSE_AUDIO_AUDIOUTILS_H

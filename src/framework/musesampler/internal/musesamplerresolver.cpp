@@ -135,19 +135,19 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
     }
 
     auto instrumentList = m_libHandler->getInstrumentList();
-    while (auto instrument = m_libHandler->getNextInstrument(instrumentList))
-    {
-        int instrumentId = m_libHandler->getInstrumentId(instrument);
-        String internalName = String::fromUtf8(m_libHandler->getInstrumentName(instrument));
-        String internalCategory = String::fromUtf8(m_libHandler->getInstrumentCategory(instrument));
-        String instrumentPackName = String::fromUtf8(m_libHandler->getInstrumentPackName(instrument));
-        String instrumentSoundId = String::fromUtf8(m_libHandler->getMpeSoundId(instrument));
-        String vendorName = String::fromUtf8(m_libHandler->getInstrumentVendorName(instrument));
+    while (auto instrument = m_libHandler->getNextInstrument(instrumentList)) {
+        const int instrumentId = m_libHandler->getInstrumentId(instrument);
+        const String internalName = String::fromUtf8(m_libHandler->getInstrumentName(instrument));
+        const String internalCategory = String::fromUtf8(m_libHandler->getInstrumentCategory(instrument));
+        const String instrumentSoundId = String::fromUtf8(m_libHandler->getMpeSoundId(instrument));
+        const String vendorName = String::fromUtf8(m_libHandler->getInstrumentVendorName(instrument));
+        const bool isOnline = m_libHandler->isOnlineInstrument(instrument);
 
         if (instrumentSoundId.empty()) {
             LOGE() << "MISSING INSTRUMENT ID for: " << internalName;
         }
 
+        String instrumentPackName = String::fromUtf8(m_libHandler->getInstrumentPackName(instrument));
         if (instrumentPackName.empty()) {
             instrumentPackName = internalCategory;
         }
@@ -164,6 +164,10 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
             { u"museName", internalName },
             { u"museUID", String::fromStdString(std::to_string(instrumentId)) },
         };
+
+        if (isOnline) {
+            meta.attributes.insert(std::make_pair(u"isOnline", String::number(1)));
+        }
 
         result.push_back(std::move(meta));
     }
