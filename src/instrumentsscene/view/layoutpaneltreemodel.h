@@ -146,7 +146,7 @@ private:
     void setupNotationConnections();
 
     void updateSelectedRows();
-    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes);
+    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes = {});
 
     void clear();
     void deleteItems();
@@ -191,6 +191,7 @@ private:
     QHash<NotationKey, QList<muse::ID> > m_sortedPartIdList;
 
     bool m_layoutPanelVisible = true;
+    bool m_scoreChanged = false;
     bool m_shouldUpdateSystemObjectLayers = false;
 
     bool m_dragInProgress = false;
