@@ -12224,7 +12224,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
         <location filename="../../src/engraving/dom/fret.cpp" line="911"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
-        <translation><numerusform>1 puntu en trastes %1</numerusform><numerusform>%n puntos en trastes %1</numerusform></translation>
+        <translation><numerusform>%n puntos en traste(s) %1</numerusform><numerusform>1 puntu en traste(s) %1</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="923"/>
@@ -12259,7 +12259,7 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message numerus="yes">
         <location filename="../../src/engraving/dom/fret.cpp" line="953"/>
         <source>%n string(s) total</source>
-        <translation><numerusform>%n cuerda en total</numerusform><numerusform>%n cuerdes en total</numerusform></translation>
+        <translation><numerusform>%n cuerdes en total</numerusform><numerusform>%n cuerda en total</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="751"/>
@@ -12328,77 +12328,77 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3324"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3362"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3322"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3360"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="739"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="751"/>
         <source>Voice: %1</source>
         <translation>Voz: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3330"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(activa %1‰ inactiva %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3338"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3367"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
         <source>Beat slash</source>
         <translation>Barres de pulsu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3338"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3367"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
         <source>Rhythm slash</source>
         <translation>Barres de ritmu</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3371"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3340"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3369"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Cuerda: %2; Traste: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3348"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Altor: %2; Duración: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3377"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 cabeza %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3377"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="754"/>
         <source>Cross-staff above</source>
         <translation>Encruz de pentagrama superior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3381"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="756"/>
         <source>Cross-staff below</source>
         <translation>Encruz de pentagrama inferior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3383"/>
         <source>too low</source>
         <translation>demasiao baxo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
         <source>too high</source>
         <translation>demasiao alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
         <source>too low for amateurs</source>
         <translation>demasiao baxo pa principiantes</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3391"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
         <source>too high for amateurs</source>
         <translation>demasiao alto pa principiantes</translation>
     </message>
@@ -12462,8 +12462,8 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
         <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3417"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3429"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3415"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3427"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2481"/>
         <source>Start of %1</source>
         <translation>Entamu de %1</translation>
@@ -12472,8 +12472,8 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
         <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3421"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3437"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3419"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3435"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2496"/>
         <source>End of %1</source>
         <translation>Fin de %1</translation>
@@ -14022,12 +14022,12 @@ Publicao con &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&l
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="193"/>
         <source>%1; Duration: %n measure(s)</source>
-        <translation><numerusform>%1; Duración: %n compás</numerusform><numerusform>%1; Duración: %n compases</numerusform></translation>
+        <translation><numerusform>%1; Duración: %n compases</numerusform><numerusform>%1; Duración: %n compás</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="202"/>
         <source>%n measure(s)</source>
-        <translation><numerusform>%n compás</numerusform><numerusform>%n compases</numerusform></translation>
+        <translation><numerusform>%n compases</numerusform><numerusform>%n compás</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -18989,7 +18989,7 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="53"/>
         <source>%n day(s) ago</source>
-        <translation><numerusform>va %n día</numerusform><numerusform>va %n díes</numerusform></translation>
+        <translation><numerusform>va %n díes</numerusform><numerusform>va %n día</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="59"/>
@@ -18999,7 +18999,7 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="63"/>
         <source>%n week(s) ago</source>
-        <translation><numerusform>va %n selmana</numerusform><numerusform>va %n selmanes</numerusform></translation>
+        <translation><numerusform>va %n selmanes</numerusform><numerusform>va %n selmana</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="71"/>
@@ -19009,12 +19009,12 @@ Traste %1 en cuerdes %2</translation>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="75"/>
         <source>%n month(s) ago</source>
-        <translation><numerusform>va %n mes</numerusform><numerusform>va %n meses</numerusform></translation>
+        <translation><numerusform>va %n meses</numerusform><numerusform>va %n mes</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="80"/>
         <source>%n year(s) ago</source>
-        <translation><numerusform>va %n añu</numerusform><numerusform>va %n años</numerusform></translation>
+        <translation><numerusform>va %n años</numerusform><numerusform>va %n añu</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="88"/>
@@ -19041,7 +19041,7 @@ Traste %1 en cuerdes %2</translation>
         <location filename="../../src/framework/global/dataformatter.cpp" line="104"/>
         <source>%n byte(s)</source>
         <extracomment>Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.</extracomment>
-        <translation><numerusform>%n byte</numerusform><numerusform>%n bytes</numerusform></translation>
+        <translation><numerusform>%n bytes</numerusform><numerusform>%n byte</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
@@ -19832,7 +19832,7 @@ compás d&apos;anacrusa</translation>
     <message numerus="yes">
         <location filename="../../src/importexport/musicxml/internal/musicxml/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
-        <translation><numerusform>Atopóse %n fallu, la importación pue tar incompleta.</numerusform><numerusform>Atopáronse %n fallos, la importación pue tar incompleta.</numerusform></translation>
+        <translation><numerusform>Atopáronse %n fallos, la importación pue tar incompleta.</numerusform><numerusform>Atopóse %n fallu, la importación pue tar incompleta.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/import/musicxmlvalidation.cpp" line="96"/>
@@ -22892,13 +22892,13 @@ compás d&apos;anacrusa</translation>
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="987"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>¿Tas seguru de querer desaniciar l&apos;instrumentu escoyíu?</numerusform><numerusform>¿Tas seguru de querer desaniciar los instrumentos escoyíos?</numerusform></translation>
+        <translation><numerusform>¿Tas seguru de querer desaniciar los instrumentos escoyíos?</numerusform><numerusform>¿Tas seguru de querer desaniciar l&apos;instrumentu escoyíu?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="992"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Esto va quitar l&apos;instrumentu de la partitura completa y de toles partitures de les partes.</numerusform><numerusform>Esto va quitar los instrumentos de la partitura completa y de toles partitures de les partes.</numerusform></translation>
+        <translation><numerusform>Esto va quitar los instrumentos de la partitura completa y de toles partitures de les partes.</numerusform><numerusform>Esto va quitar l&apos;instrumentu de la partitura completa y de toles partitures de les partes.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="242"/>
@@ -22925,6 +22925,11 @@ compás d&apos;anacrusa</translation>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="38"/>
         <source>System markings</source>
         <translation>Marques de sistema</translation>
+    </message>
+    <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="56"/>
+        <source>&amp;</source>
+        <translation>y</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
@@ -24585,7 +24590,7 @@ Arriendes d&apos;esto, Mastering MuseScore cunta con una comunidá de músicos s
     <message numerus="yes">
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
         <source>%n string(s)</source>
-        <translation><numerusform>%n cuerda</numerusform><numerusform>%n cuerdes</numerusform></translation>
+        <translation><numerusform>%n cuerdes</numerusform><numerusform>%n cuerda</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
@@ -25703,7 +25708,7 @@ Arriendes d&apos;esto, Mastering MuseScore cunta con una comunidá de músicos s
     <message numerus="yes">
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="527"/>
         <source>%1, contains %n matching element(s)</source>
-        <translation><numerusform>%1, contién un elementu coincidente</numerusform><numerusform>%1, contién %n elementos coincidentes</numerusform></translation>
+        <translation><numerusform>%1, contién %n elementos coincidentes</numerusform><numerusform>%1, contién %n elementu coincidente</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="528"/>
@@ -29750,7 +29755,7 @@ ficheru de paleta
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="57"/>
         <source>%n measure(s),</source>
-        <translation><numerusform>%n compás,</numerusform><numerusform>%n compases,</numerusform></translation>
+        <translation><numerusform>%n compases,</numerusform><numerusform>%n compás,</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="100"/>
@@ -31423,7 +31428,7 @@ ficheru de paleta
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4713"/>
         <source>Add %n measure(s)</source>
-        <translation><numerusform>Amestar 1 compás</numerusform><numerusform>Amestar %n compases</numerusform></translation>
+        <translation><numerusform>Amestar %n compases</numerusform><numerusform>Amestar %n compás</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4778"/>
@@ -31491,7 +31496,7 @@ ficheru de paleta
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5872"/>
         <source>Delete %n measure(s)</source>
-        <translation><numerusform>Desaniciar 1 compás</numerusform><numerusform>Desaniciar %n compases</numerusform></translation>
+        <translation><numerusform>Desaniciar %n compases</numerusform><numerusform>Desaniciar %n compás</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7609"/>
