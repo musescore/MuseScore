@@ -1131,7 +1131,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
                         }
                   }
             else if (tag == "subtype") {
-                  e.readInt();    // TODO
+                  volta->setVoltaType(e.readInt() == 1 ? Volta::Type::CLOSED : Volta::Type::OPEN);
                   }
             else if (tag == "lineWidth") {
                   volta->setLineWidth(e.readDouble() * volta->spatium());
