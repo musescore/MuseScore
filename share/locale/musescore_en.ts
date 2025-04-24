@@ -14343,7 +14343,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Replace partial tie with full tie</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="184"/>
+        <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="186"/>
         <source>Remove partial tie</source>
         <translation type="unfinished">Remove partial tie</translation>
     </message>
