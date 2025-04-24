@@ -72,6 +72,9 @@ IF %DO_SIGN% == ON (
         SET DO_SIGN=OFF
         ECHO "warning: not set SIGN_CERTIFICATE_PASSWORD"
     )
+
+    ECHO "warning: at the moment sign is disabled"
+    SET DO_SIGN=OFF
 )
 
 SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
