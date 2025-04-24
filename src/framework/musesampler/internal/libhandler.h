@@ -109,6 +109,10 @@ struct MuseSamplerLibHandler
 
     ms_reload_all_instruments reloadAllInstruments = nullptr;
 
+    ms_Instrument_is_online isOnlineInstrument = nullptr;
+    ms_MuseSampler_get_render_info getRenderInfo = nullptr;
+    ms_RenderProgressInfo_get_next getNextRenderProgressInfo = nullptr;
+
 private:
     ms_init initLib = nullptr;
     ms_disable_reverb disableReverb = nullptr;
@@ -305,8 +309,14 @@ public:
 
         if (at_least_v_0_101) {
             readyToPlay = (ms_MuseSampler_ready_to_play)muse::getLibFunc(m_lib, "ms_MuseSampler_ready_to_play");
+            isOnlineInstrument = (ms_Instrument_is_online)muse::getLibFunc(m_lib, "ms_Instrument_is_online");
+            getRenderInfo = (ms_MuseSampler_get_render_info)muse::getLibFunc(m_lib, "ms_MuseSampler_get_render_info");
+            getNextRenderProgressInfo = (ms_RenderProgressInfo_get_next)muse::getLibFunc(m_lib, "ms_RenderProgressInfo_get_next");
         } else {
             readyToPlay = [](ms_MuseSampler) { return true; };
+            isOnlineInstrument = [](ms_InstrumentInfo) { return false; };
+            getRenderInfo = [](ms_MuseSampler, int*) { return ms_RenderingRangeList(); };
+            getNextRenderProgressInfo = [](ms_RenderingRangeList) { return ms_RenderRangeInfo { 0, 0, ms_RenderingState_ErrorRendering }; };
         }
     }
 
@@ -464,7 +474,10 @@ private:
                << "\n ms_MuseSampler_set_playing - " << reinterpret_cast<uint64_t>(setPlaying)
                << "\n ms_MuseSampler_process - " << reinterpret_cast<uint64_t>(process)
                << "\n ms_MuseSampler_all_notes_off - " << reinterpret_cast<uint64_t>(allNotesOff)
-               << "\n ms_MuseSampler_ready_to_play - " << reinterpret_cast<uint64_t>(readyToPlay);
+               << "\n ms_MuseSampler_ready_to_play - " << reinterpret_cast<uint64_t>(readyToPlay)
+               << "\n ms_Instrument_is_online - " << reinterpret_cast<uint64_t>(isOnlineInstrument)
+               << "\n ms_MuseSampler_get_render_info - " << reinterpret_cast<uint64_t>(getRenderInfo)
+               << "\n ms_RenderProgressInfo_get_next - " << reinterpret_cast<uint64_t>(getNextRenderProgressInfo);
     }
 
     MuseSamplerLib m_lib = nullptr;
