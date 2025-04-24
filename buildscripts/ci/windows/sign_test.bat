@@ -1,10 +1,12 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
-ECHO "MuseScore sign"
+ECHO "MuseScore sign test
 
 SET SIGN_SECRET=""
 SET SIGN_KEY=""
 SET FILE_PATH=""
+SET SIGN="buildscripts\ci\windows\sign.bat"
+SET TEST_FILE="tools\codestyle\scan_files\bin\windows\scan_files.exe"
 
 :GETOPTS
 IF /I "%1" == "--file" SET FILE_PATH=%2& SHIFT
@@ -13,6 +15,5 @@ IF /I "%1" == "--key" SET SIGN_KEY=%2& SHIFT
 SHIFT
 IF NOT "%1" == "" GOTO GETOPTS
 
-ECHO "Try sign FILE_PATH: %FILE_PATH%"
 
-bash ./buildscripts/ci/windows/sign_service_aws.sh --s3_key %SIGN_KEY% --s3_secret %SIGN_SECRET% --file_path %FILE_PATH%
+CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %TEST_FILE%
