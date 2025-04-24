@@ -48,6 +48,7 @@ jobs:
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_x64') || contains(inputs.platforms, 'linux_arm64')
     runs-on: ${{ matrix.runs-on }}
     strategy:
+      fail-fast: false
       matrix:
         platform: ${{ 
           (github.event_name != 'workflow_dispatch' 
