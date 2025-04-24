@@ -312,7 +312,7 @@ void LayoutPanelTreeModel::setupNotationConnections()
 
     m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
         if (!m_layoutPanelVisible) {
-            m_shouldUpdateSystemObjectLayers = true;
+            m_scoreChanged = true;
             return;
         }
 
@@ -360,6 +360,8 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChangesRange
     for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
         item->onScoreChanged(changes);
     }
+
+    m_scoreChanged = false;
 }
 
 void LayoutPanelTreeModel::clear()
@@ -464,7 +466,12 @@ void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
 
     if (visible) {
         updateSelectedRows();
-        updateSystemObjectLayers();
+
+        if (m_scoreChanged) {
+            onScoreChanged();
+            m_shouldUpdateSystemObjectLayers = true;
+            updateSystemObjectLayers();
+        }
     }
 }
 
