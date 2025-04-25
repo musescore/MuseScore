@@ -273,10 +273,12 @@ void PageSettings::orientationClicked()
       }
 
 void PageSettings::on_resetPageStyleButton_clicked()
-{
-    preview->score()->style().resetStyles(preview->score(), pageStyles());
-    updatePreview();
-}
+      {
+      preview->score()->style().resetStyles(preview->score(), pageStyles());
+      pageOffsetEntry->setValue(1);
+
+      updatePreview();
+      }
 
 //---------------------------------------------------------
 //   twosidedToggled
