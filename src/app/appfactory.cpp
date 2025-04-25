@@ -144,6 +144,7 @@
 #include "importexport/guitarpro/guitarpromodule.h"
 #include "importexport/midi/midimodule.h"
 #include "importexport/musedata/musedatamodule.h"
+#include "importexport/musx/musxmodule.h"
 #include "importexport/ove/ovemodule.h"
 #include "importexport/audioexport/audioexportmodule.h"
 #include "importexport/imagesexport/imagesexportmodule.h"
@@ -409,6 +410,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new mu::iex::guitarpro::GuitarProModule());
     app->addModule(new mu::iex::midi::MidiModule());
     app->addModule(new mu::iex::musedata::MuseDataModule());
+    app->addModule(new mu::iex::musx::MusxModule());
     app->addModule(new mu::iex::ove::OveModule());
     app->addModule(new mu::iex::audioexport::AudioExportModule());
     app->addModule(new mu::iex::imagesexport::ImagesExportModule());

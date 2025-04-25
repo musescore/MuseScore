@@ -188,6 +188,7 @@ if (MUE_BUILD_IMPORTEXPORT_MODULE)
         iex_guitarpro
         iex_midi
         iex_musedata
+        iex_musx
         iex_ove
         iex_audioexport
         iex_imagesexport
