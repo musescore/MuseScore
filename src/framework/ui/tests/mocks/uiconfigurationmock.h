@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_UICONFIGURATIONMOCK_H
-#define MUSE_UI_UICONFIGURATIONMOCK_H
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -31,9 +30,9 @@ class UiConfigurationMock : public IUiConfiguration
 {
 public:
     MOCK_METHOD(ThemeList, themes, (), (const, override));
-
-    MOCK_METHOD(QStringList, possibleFontFamilies, (), (const, override));
     MOCK_METHOD(QStringList, possibleAccentColors, (), (const, override));
+    MOCK_METHOD(QStringList, possibleFontFamilies, (), (const, override));
+    MOCK_METHOD(void, setNonTextFonts, (const QStringList&), (override));
 
     MOCK_METHOD(bool, isDarkMode, (), (const, override));
     MOCK_METHOD(void, setIsDarkMode, (bool), (override));
@@ -56,7 +55,6 @@ public:
     MOCK_METHOD(int, fontSize, (FontSizeType), (const, override));
     MOCK_METHOD(void, setBodyFontSize, (int), (override));
     MOCK_METHOD(async::Notification, fontChanged, (), (const, override));
-    MOCK_METHOD(void, setNonTextFonts, (const QStringList&), (override));
 
     MOCK_METHOD(std::string, iconsFontFamily, (), (const, override));
     MOCK_METHOD(int, iconsFontSize, (IconSizeType), (const, override));
@@ -107,5 +105,3 @@ public:
     MOCK_METHOD(int, tooltipDelay, (), (const, override));
 };
 }
-
-#endif // MUSE_UI_UICONFIGURATIONMOCK_H

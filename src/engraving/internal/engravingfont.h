@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ENGRAVINGFONT_H
-#define MU_ENGRAVING_ENGRAVINGFONT_H
+#pragma once
 
 #include <unordered_map>
 
@@ -145,5 +144,3 @@ private:
     double m_textEnclosureThickness = 0;
 };
 }
-
-#endif // MU_ENGRAVING_ENGRAVINGFONT_H

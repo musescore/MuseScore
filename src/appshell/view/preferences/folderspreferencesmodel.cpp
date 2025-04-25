@@ -109,9 +109,9 @@ void FoldersPreferencesModel::load()
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         },
         {
-            FolderType::MusicFonts, muse::qtrc("appshell/preferences", "MusicFonts"),
-            notationConfiguration()->userMusicFontsPath().toString(),
-            notationConfiguration()->userMusicFontsPath().toString()
+            FolderType::MusicFonts, muse::qtrc("appshell/preferences", "Musical symbol fonts"),
+            notationConfiguration()->userMusicFontsPath().toQString(),
+            notationConfiguration()->userMusicFontsPath().toQString()
         },
 #ifdef MUSE_MODULE_VST
         {

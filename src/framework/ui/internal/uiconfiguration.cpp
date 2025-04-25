@@ -329,15 +329,6 @@ ThemeList UiConfiguration::themes() const
     return m_themes;
 }
 
-QStringList UiConfiguration::possibleFontFamilies() const
-{
-    QStringList allFonts = QFontDatabase::families();
-    for (const QString& fontFamily : m_nonTextFonts) {
-        allFonts.removeAll(fontFamily);
-    }
-    return allFonts;
-}
-
 QStringList UiConfiguration::possibleAccentColors() const
 {
     static const QStringList lightAccentColors {
@@ -365,6 +356,20 @@ QStringList UiConfiguration::possibleAccentColors() const
     }
 
     return lightAccentColors;
+}
+
+QStringList UiConfiguration::possibleFontFamilies() const
+{
+    QStringList allFonts = QFontDatabase::families();
+    for (const QString& fontFamily : m_nonTextFonts) {
+        allFonts.removeAll(fontFamily);
+    }
+    return allFonts;
+}
+
+void UiConfiguration::setNonTextFonts(const QStringList& fontFamilies)
+{
+    m_nonTextFonts = fontFamilies;
 }
 
 void UiConfiguration::resetThemes()
@@ -502,11 +507,6 @@ void UiConfiguration::setBodyFontSize(int size)
 muse::async::Notification UiConfiguration::fontChanged() const
 {
     return m_fontChanged;
-}
-
-void UiConfiguration::setNonTextFonts(const QStringList& fontFamilies)
-{
-    m_nonTextFonts = fontFamilies;
 }
 
 std::string UiConfiguration::iconsFontFamily() const

@@ -228,8 +228,8 @@ void NotationConfiguration::init()
 #endif
     }
 
-    settings()->setDefaultValue(USER_MUSIC_FONTS_PATH, Val(globalConfiguration()->userDataPath() + "/MusicFonts"));
-    settings()->valueChanged(USER_MUSIC_FONTS_PATH).onReceive(nullptr, [this](const Val& val) {
+    settings()->setDefaultValue(USER_MUSIC_FONTS_PATH, Val(io::path_t {}));
+    settings()->valueChanged(USER_MUSIC_FONTS_PATH).onReceive(this, [this](const Val& val) {
         m_userMusicFontsPathChanged.send(val.toString());
     });
 

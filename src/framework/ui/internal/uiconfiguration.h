@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_UICONFIGURATION_H
-#define MUSE_UI_UICONFIGURATION_H
+#pragma once
 
 #include "iuiconfiguration.h"
 
@@ -52,8 +51,9 @@ public:
     void deinit();
 
     ThemeList themes() const override;
-    QStringList possibleFontFamilies() const override;
     QStringList possibleAccentColors() const override;
+    QStringList possibleFontFamilies() const override;
+    void setNonTextFonts(const QStringList& fontFamilies) override;
 
     bool isDarkMode() const override;
     void setIsDarkMode(bool dark) override;
@@ -76,7 +76,6 @@ public:
     int fontSize(FontSizeType type = FontSizeType::BODY) const override;
     void setBodyFontSize(int size) override;
     async::Notification fontChanged() const override;
-    void setNonTextFonts(const QStringList& fontFamilies) override;
 
     std::string iconsFontFamily() const override;
     int iconsFontSize(IconSizeType type) const override;
@@ -168,5 +167,3 @@ private:
     Config m_config;
 };
 }
-
-#endif // MUSE_UI_UICONFIGURATION_H

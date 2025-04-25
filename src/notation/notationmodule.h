@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONMODULE_H
-#define MU_NOTATION_NOTATIONMODULE_H
+#pragma once
 
 #include <memory>
 
@@ -53,5 +52,3 @@ private:
     std::shared_ptr<EngravingFontsController> m_engravingFontsController;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONMODULE_H

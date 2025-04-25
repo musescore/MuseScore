@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_IUICONFIGURATION_H
-#define MUSE_UI_IUICONFIGURATION_H
+#pragma once
 
 #include <optional>
 
@@ -46,8 +45,9 @@ public:
     virtual ~IUiConfiguration() = default;
 
     virtual ThemeList themes() const = 0;
-    virtual QStringList possibleFontFamilies() const = 0;
     virtual QStringList possibleAccentColors() const = 0;
+    virtual QStringList possibleFontFamilies() const = 0;
+    virtual void setNonTextFonts(const QStringList& fontFamilies) = 0;
 
     virtual bool isDarkMode() const = 0;
     virtual void setIsDarkMode(bool dark) = 0;
@@ -70,7 +70,6 @@ public:
     virtual int fontSize(FontSizeType type = FontSizeType::BODY) const = 0;
     virtual void setBodyFontSize(int size) = 0;
     virtual async::Notification fontChanged() const = 0;
-    virtual void setNonTextFonts(const QStringList& fontFamilies) = 0;
 
     virtual std::string iconsFontFamily() const = 0;
     virtual int iconsFontSize(IconSizeType type) const = 0;
@@ -122,5 +121,3 @@ public:
     virtual int tooltipDelay() const = 0;
 };
 }
-
-#endif // MUSE_UI_IUICONFIGURATION_H

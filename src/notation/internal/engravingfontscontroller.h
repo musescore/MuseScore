@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_ENGRAVINGFONTSCONTROLLER_H
-#define MU_NOTATION_ENGRAVINGFONTSCONTROLLER_H
+#pragma once
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
@@ -43,9 +42,7 @@ public:
 private:
     void scanAllDirectories() const;
     void scanDirectory(const muse::io::path_t& path, bool isPrivate) const;
-    muse::io::path_t findFontPathGlobal(muse::String fontName) const;
-    muse::io::path_t findFontPathPrivate(QString metadataDir, muse::String fontName) const;
+    muse::io::path_t findFontPathGlobal(const QString& fontName) const;
+    muse::io::path_t findFontPathPrivate(const QString& metadataDir, const QString& fontName) const;
 };
 }
-
-#endif // MU_NOTATION_ENGRAVINGFONTSCONTROLLER_H
