@@ -748,6 +748,14 @@ enum class PartialSpannerDirection : signed char {
     BOTH
 };
 
+enum ChordStylePreset : unsigned char
+{
+    STANDARD,
+    JAZZ,
+    LEGACY,
+    CUSTOM
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -1102,6 +1110,10 @@ enum class TimeSigVSMargin : unsigned char {
     HANG_INTO_MARGIN,
     RIGHT_ALIGN_TO_BARLINE,
     CREATE_SPACE,
+};
+
+enum class NoteSpellingType : unsigned char {
+    STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO, FRENCH
 };
 
 //---------------------------------------------------------
