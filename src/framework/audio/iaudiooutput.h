@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,12 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_IAUDIOOUTPUT_H
-#define MUSE_AUDIO_IAUDIOOUTPUT_H
+#pragma once
 
 #include <memory>
 
-#include "global/progress.h"
 #include "global/async/promise.h"
 #include "global/async/channel.h"
 
@@ -62,5 +60,3 @@ public:
 
 using IAudioOutputPtr = std::shared_ptr<IAudioOutput>;
 }
-
-#endif // MUSE_AUDIO_IAUDIOOUTPUT_H
