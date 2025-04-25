@@ -122,6 +122,10 @@ public:
     MOCK_METHOD(void, setAddAccidentalDotsArticulationsToNextNoteEntered, (bool), (override));
     MOCK_METHOD(muse::async::Notification, addAccidentalDotsArticulationsToNextNoteEnteredChanged, (), (const, override));
 
+    MOCK_METHOD(muse::io::path_t, userMusicFontsPath, (), (const, override));
+    MOCK_METHOD(void, setUserMusicFontsPath, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, userMusicFontsPathChanged, (), (const, override));
+
     MOCK_METHOD(bool, isMidiInputEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMidiInputEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isMidiInputEnabledChanged, (), (const, override));

@@ -43,12 +43,14 @@ using namespace mu::engraving;
 // ScoreFont
 // =============================================
 
-EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath,
+EngravingFont::EngravingFont(const std::string& name, const std::string& family,
+                             const path_t& filePath, const path_t& metadataPath,
                              const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx),  m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
-    m_fontPath(filePath)
+    m_fontPath(filePath),
+    m_metadataPath(metadataPath)
 {
 }
 
@@ -60,6 +62,7 @@ EngravingFont::EngravingFont(const EngravingFont& other)
     m_name     = other.m_name;
     m_family   = other.m_family;
     m_fontPath = other.m_fontPath;
+    m_metadataPath = other.m_metadataPath;
 }
 
 // =============================================
@@ -116,7 +119,7 @@ void EngravingFont::ensureLoad()
         computeMetrics(sym, code);
     }
 
-    File metadataFile(FileInfo(m_fontPath).path() + u"/metadata.json");
+    File metadataFile(m_metadataPath);
     if (!metadataFile.open(IODevice::ReadOnly)) {
         LOGE() << "Failed to open glyph metadata file: " << metadataFile.filePath();
         return;
