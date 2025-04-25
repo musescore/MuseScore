@@ -38,8 +38,10 @@
 #include "stringdata.h"
 #include "system.h"
 #include "undo.h"
+
 #include "rw/read410/tread.h"
 #include "rw/read410/harmonytodiagramreader.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -248,7 +250,7 @@ std::vector<LineF> FretDiagram::dragAnchorLines() const
 //---------------------------------------------------------
 
 void FretDiagram::setStrings(int n)
-{   
+{
     int difference = n - m_strings;
     if (difference == 0 || n <= 0) {
         return;
@@ -315,7 +317,7 @@ void FretDiagram::setStrings(int n)
 //---------------------------------------------------------
 
 void FretDiagram::init(StringData* stringData, Chord* chord)
-{   
+{
     if (!stringData) {
         setStrings(6);
     } else {
@@ -505,18 +507,19 @@ void FretDiagram::removeBarres(int string, int fret /*= 0*/)
     auto iter = m_barres.begin();
     while (iter != m_barres.end()) {
         int bfret = iter->first;
-        std::vector<FretItem::Barre> bVect = iter->second;
-        for (auto& b : bVect) {
-            if (b.exists() && b.startString <= string && (b.endString >= string || b.endString == -1)) {
-                if (fret > 0 && fret != bfret) {
-                    ++iter;
-                } else {
-                    iter = m_barres.erase(iter);
-                }
-            } else {
-                ++iter;
-            }
+        if (fret > 0 && fret != bfret) {
+            ++iter;
+            continue;
         }
+        std::vector<FretItem::Barre>& bVect = iter->second;
+        for (auto it = bVect.begin(); it != bVect.end(); ++it) {
+            if (it->exists() && it->startString <= string && 
+                (it->endString >= string || it->endString == -1)) {
+                bVect.erase(it); 
+                break;
+            } 
+        }
+        ++iter;
     }
 }
 
@@ -691,7 +694,7 @@ std::vector<FretItem::Barre>& FretDiagram::getBarres(int f)
     if (m_barres.find(f) != m_barres.end()) {
         return m_barres[f];
     }
-    m_barres[f] = std::vector<FretItem::Barre>{ FretItem::Barre(-1, -1) };
+    m_barres[f] = std::vector<FretItem::Barre>{ };
     return m_barres[f];
 }
 
