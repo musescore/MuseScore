@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>schema/xml.xsd</file>
+        <file>schema/xlink.xsd</file>
+        <file>schema/musicxml.xsd</file>
+    </qresource>
+</RCC>

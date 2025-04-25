@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmusesounds.a CMakeFiles/musesounds.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/musesounds.dir/qrc_musesounds.cpp.o
+/usr/bin/ranlib libmusesounds.a

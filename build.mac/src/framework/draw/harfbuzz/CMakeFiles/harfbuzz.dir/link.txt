@@ -1,0 +1,2 @@
+/usr/bin/ar qc libharfbuzz.a CMakeFiles/harfbuzz.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libharfbuzz.a

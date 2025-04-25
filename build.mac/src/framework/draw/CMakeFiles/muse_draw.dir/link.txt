@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_draw.a CMakeFiles/muse_draw.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/muse_draw.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/muse_draw.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libmuse_draw.a

@@ -1,0 +1,10 @@
+gmock_autogen/timestamp: \
+	/Users/zainazeeza/MuseScore/src/framework/testing/thirdparty/googletest/googlemock/CMakeLists.txt \
+	/Users/zainazeeza/MuseScore/src/framework/testing/thirdparty/googletest/googlemock/src/gmock-all.cc \
+	/usr/local/share/cmake/Modules/CheckCSourceCompiles.cmake \
+	/usr/local/share/cmake/Modules/CheckIncludeFile.cmake \
+	/usr/local/share/cmake/Modules/CheckLibraryExists.cmake \
+	/usr/local/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
+	/usr/local/share/cmake/Modules/FindPackageMessage.cmake \
+	/usr/local/share/cmake/Modules/FindThreads.cmake \
+	/usr/local/bin/cmake

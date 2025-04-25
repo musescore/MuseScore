@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_extensions.a CMakeFiles/muse_extensions.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/muse_extensions.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/muse_extensions.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_extensions.dir/qrc_extensions.cpp.o
+/usr/bin/ranlib libmuse_extensions.a

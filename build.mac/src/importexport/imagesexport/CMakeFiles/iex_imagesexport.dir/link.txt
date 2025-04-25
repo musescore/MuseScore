@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiex_imagesexport.a CMakeFiles/iex_imagesexport.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libiex_imagesexport.a

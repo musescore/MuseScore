@@ -1,0 +1,2 @@
+/usr/bin/ar qc libconverter.a CMakeFiles/converter.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libconverter.a

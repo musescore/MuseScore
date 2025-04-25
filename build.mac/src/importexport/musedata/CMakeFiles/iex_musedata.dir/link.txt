@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiex_musedata.a CMakeFiles/iex_musedata.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libiex_musedata.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiex_musicxml.a CMakeFiles/iex_musicxml.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/iex_musicxml.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/iex_musicxml.dir/qrc_musicxml.cpp.o
+/usr/bin/ranlib libiex_musicxml.a

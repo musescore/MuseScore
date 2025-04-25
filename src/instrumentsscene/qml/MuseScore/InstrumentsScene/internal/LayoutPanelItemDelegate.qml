@@ -284,25 +284,42 @@ FocusableControl {
                 }
             }
 
-            StyledTextLabel {
-                id: titleLabel
-
+            Row {
                 anchors.left: expandButton.right
                 anchors.leftMargin: 4
                 anchors.right: parent.right
                 anchors.rightMargin: 8
                 anchors.verticalCenter: expandButton.verticalCenter
+                spacing: 4
 
-                text: model ? model.itemRole.title : ""
-                horizontalAlignment: Text.AlignLeft
-                opacity: model && model.itemRole.isVisible ? 1 : 0.75
+                StyledIconLabel {
+                    id: linkIcon
+                    visible: Boolean(model) && model.itemRole.isLinked
+                    iconCode: IconCode.LINK
+                    iconSize: 16
+                    opacity: titleLabel.opacity
 
-                font: {
-                    if (Boolean(model) && root.type === LayoutPanelItemType.PART && model.itemRole.isVisible) {
-                        return ui.theme.bodyBoldFont
+                    ToolTip {
+                        visible: linkIcon.hovered
+                        text: Boolean(model) ? qsTrc("layoutpanel", "Linked to: %1").arg(model.itemRole.linkedStaffName) : ""
+                        delay: Qt.styleHints.mousePressAndHoldInterval
                     }
+                }
 
-                    return ui.theme.bodyFont
+                StyledTextLabel {
+                    id: titleLabel
+                    width: parent.width - (linkIcon.visible ? linkIcon.width + parent.spacing : 0)
+                    text: model ? model.itemRole.title : ""
+                    horizontalAlignment: Text.AlignLeft
+                    opacity: model && model.itemRole.isVisible ? 1 : 0.75
+
+                    font: {
+                        if (Boolean(model) && root.type === LayoutPanelItemType.PART && model.itemRole.isVisible) {
+                            return ui.theme.bodyBoldFont
+                        }
+
+                        return ui.theme.bodyFont
+                    }
                 }
             }
         }

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiex_audioexport.a CMakeFiles/iex_audioexport.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libiex_audioexport.a

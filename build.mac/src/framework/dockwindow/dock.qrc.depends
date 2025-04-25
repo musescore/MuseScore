@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Dock/DockFloatingWindow.qml</file>
+        <file>qml/Muse/Dock/DockFrame.qml</file>
+        <file>qml/Muse/Dock/DockingHolder.qml</file>
+        <file>qml/Muse/Dock/DockPage.qml</file>
+        <file>qml/Muse/Dock/DockPanel.qml</file>
+        <file>qml/Muse/Dock/DockPanelTab.qml</file>
+        <file>qml/Muse/Dock/DockSeparator.qml</file>
+        <file>qml/Muse/Dock/DockTabBar.qml</file>
+        <file>qml/Muse/Dock/DockTitleBar.qml</file>
+        <file>qml/Muse/Dock/DockTitleBarMouseArea.qml</file>
+        <file>qml/Muse/Dock/DockToolBar.qml</file>
+        <file>qml/Muse/Dock/DockWidget.qml</file>
+        <file>qml/Muse/Dock/qmldir</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Audio/qmldir</file>
+        <file>qml/Muse/Audio/VolumePressureMeter.qml</file>
+        <file>qml/Muse/Audio/KnobControl.qml</file>
+        <file>qml/Muse/Audio/VolumeSlider.qml</file>
+    </qresource>
+</RCC>

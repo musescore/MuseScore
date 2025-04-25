@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Learn/LearnPage.qml</file>
+        <file>qml/Muse/Learn/qmldir</file>
+        <file>qml/Muse/Learn/internal/Playlist.qml</file>
+        <file>qml/Muse/Learn/internal/PlaylistItem.qml</file>
+        <file>qml/Muse/Learn/internal/ClassesPage.qml</file>
+        <file>qml/Muse/Learn/resources/marc_sabatella.JPG</file>
+    </qresource>
+</RCC>

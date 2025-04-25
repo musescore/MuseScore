@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiex_ove.a CMakeFiles/iex_ove.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libiex_ove.a

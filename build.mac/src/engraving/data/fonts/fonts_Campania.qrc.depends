@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="fonts/campania/Campania.otf">../../../../fonts/campania/Campania.otf</file>
+	    </qresource>
+</RCC>

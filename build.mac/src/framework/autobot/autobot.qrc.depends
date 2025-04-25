@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Autobot/qmldir</file>
+        <file>qml/Muse/Autobot/BatchTestsPanel.qml</file>
+        <file>qml/Muse/Autobot/BatchTestsDialog.qml</file>
+        <file>qml/Muse/Autobot/ScriptsPanel.qml</file>
+        <file>qml/Muse/Autobot/ScriptsDialog.qml</file>
+        <file>examples/NewScore.js</file>
+        <file>examples/PutNote.js</file>
+        <file>examples/SimpleZoom.js</file>
+        <file>examples/steps/NewScore.js</file>
+        <file>qml/Muse/Autobot/TestCaseRunPanel.qml</file>
+        <file>qml/Muse/Autobot/AutobotSelectFileDialog.qml</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcontext.a CMakeFiles/context.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libcontext.a

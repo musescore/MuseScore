@@ -1,0 +1,2 @@
+/usr/bin/ar qc libappshell.a CMakeFiles/appshell.dir/Unity/unity_3_cxx.cxx.o CMakeFiles/appshell.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/appshell.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/appshell.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/appshell.dir/qrc_appshell.cpp.o CMakeFiles/appshell.dir/view/internal/platform/macos/macosappmenumodelhook.mm.o
+/usr/bin/ranlib libappshell.a

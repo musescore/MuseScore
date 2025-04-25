@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/CommonScene/qmldir</file>
+        <file>qml/MuseScore/CommonScene/TempoView.qml</file>
+    </qresource>
+</RCC>

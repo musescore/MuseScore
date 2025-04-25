@@ -1,0 +1,15 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Declare files that will always have CRLF line endings on checkout.
+*.ac text eol=lf
+*.am text eol=lf
+*.m4 text eol=lf
+*.pc text eol=lf
+*.spec text eol=lf
+*.sh text eol=lf
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.c text
+*.h text

@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Diagnostics/qmldir</file>
+        <file>qml/Muse/Diagnostics/DiagnosticPathsDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticPathsPanel.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticNavigationDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticNavigationPanel.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticAccessibleDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticAccessiblePanel.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticProfilerDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticProfilerPanel.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticGraphicsInfoDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticGraphicsInfoPanel.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticActionsDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticActionsPanel.qml</file>
+    </qresource>
+</RCC>

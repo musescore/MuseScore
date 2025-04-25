@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiex_capella.a CMakeFiles/iex_capella.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libiex_capella.a

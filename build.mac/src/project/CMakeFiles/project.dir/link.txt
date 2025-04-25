@@ -1,0 +1,2 @@
+/usr/bin/ar qc libproject.a CMakeFiles/project.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/project.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/project.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/project.dir/qrc_project.cpp.o CMakeFiles/project.dir/internal/platform/macos/macosrecentfilescontroller.mm.o
+/usr/bin/ranlib libproject.a

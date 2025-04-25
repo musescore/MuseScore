@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_multiinstances.a CMakeFiles/muse_multiinstances.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_multiinstances.dir/qrc_multiinstances.cpp.o
+/usr/bin/ranlib libmuse_multiinstances.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_diagnostics.a CMakeFiles/muse_diagnostics.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/muse_diagnostics.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_diagnostics.dir/qrc_diagnostics.cpp.o
+/usr/bin/ranlib libmuse_diagnostics.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libliblouis.a CMakeFiles/liblouis.dir/liblouis/commonTranslationFunctions.c.o CMakeFiles/liblouis.dir/liblouis/compileTranslationTable.c.o CMakeFiles/liblouis.dir/liblouis/logging.c.o CMakeFiles/liblouis.dir/liblouis/lou_backTranslateString.c.o CMakeFiles/liblouis.dir/liblouis/lou_translateString.c.o CMakeFiles/liblouis.dir/liblouis/maketable.c.o CMakeFiles/liblouis.dir/liblouis/pattern.c.o CMakeFiles/liblouis.dir/liblouis/utils.c.o
+/usr/bin/ranlib libliblouis.a

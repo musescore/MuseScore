@@ -1,0 +1,226 @@
+name: C/C++ CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [
+          ubuntu-gcc-autotools,
+          ubuntu-clang-autotools,
+          ubuntu-gcc-ossfuzz,
+          macos-autotools,
+          ubuntu-gcc-cmake,
+          ubuntu-gcc-cmake-shared,
+          ubuntu-clang-cmake,
+          ubuntu-clang-cmake-shared,
+          macos-cmake,
+          macos-cmake-shared,
+          windows-vs2019-x64,
+          windows-vs2019-x64-shared,
+          windows-vs2019-Win32,
+          windows-vs2019-Win32-shared
+        ]
+        include:
+          - name: ubuntu-gcc-autotools
+            os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+            build-system: autotools
+
+          - name: ubuntu-clang-autotools
+            os: ubuntu-latest
+            cc: clang
+            cxx: clang++
+            build-system: autotools
+
+          - name: ubuntu-gcc-ossfuzz
+            os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+            build-system: ossfuzz
+
+          - name: macos-autotools
+            os: macos-latest
+            cc: clang
+            cxx: clang++
+            build-system: autotools
+
+          - name: ubuntu-gcc-cmake
+            os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+            build-system: cmake
+            cmake-generator: 'Ninja'
+            cmake-options: >-
+              -DCMAKE_BUILD_TYPE=Release
+              -DCMAKE_C_FLAGS="-Wall -Wextra"
+              -DCMAKE_VERBOSE_MAKEFILE=ON
+
+          - name: ubuntu-gcc-cmake-shared
+            os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+            build-system: cmake
+            cmake-generator: 'Ninja'
+            cmake-options: >-
+              -DCMAKE_BUILD_TYPE=Release
+              -DBUILD_SHARED_LIBS=ON
+              -DCMAKE_C_FLAGS="-Wall -Wextra"
+              -DCMAKE_VERBOSE_MAKEFILE=ON
+
+          - name: ubuntu-clang-cmake
+            os: ubuntu-latest
+            cc: clang
+            cxx: clang++
+            build-system: cmake
+            cmake-generator: 'Ninja'
+            cmake-options: >-
+              -DCMAKE_BUILD_TYPE=Release
+              -DCMAKE_C_FLAGS="-Wall -Wextra"
+              -DCMAKE_VERBOSE_MAKEFILE=ON
+
+          - name: ubuntu-clang-cmake-shared
+            os: ubuntu-latest
+            cc: clang
+            cxx: clang++
+            build-system: cmake
+            cmake-generator: 'Ninja'
+            cmake-options: >-
+              -DCMAKE_BUILD_TYPE=Release
+              -DBUILD_SHARED_LIBS=ON
+              -DCMAKE_C_FLAGS="-Wall -Wextra"
+              -DCMAKE_VERBOSE_MAKEFILE=ON
+
+          - name: macos-cmake
+            os: macos-latest
+            cc: clang
+            cxx: clang++
+            build-system: cmake
+            cmake-generator: 'Unix Makefiles'
+            cmake-options: >-
+              -DCMAKE_BUILD_TYPE=Release
+              -DCMAKE_C_FLAGS="-Wall -Wextra"
+              -DCMAKE_VERBOSE_MAKEFILE=ON
+
+          - name: macos-cmake-shared
+            os: macos-latest
+            cc: clang
+            cxx: clang++
+            build-system: cmake
+            cmake-generator: 'Unix Makefiles'
+            cmake-options: >-
+              -DCMAKE_BUILD_TYPE=Release
+              -DBUILD_SHARED_LIBS=ON
+              -DCMAKE_C_FLAGS="-Wall -Wextra"
+              -DCMAKE_VERBOSE_MAKEFILE=ON
+
+          - name: windows-vs2019-x64
+            os: windows-latest
+            triplet: 'x64-windows-static'
+            build-system: cmake
+            cmake-generator: 'Visual Studio 16 2019'
+            cmake-options: >-
+              -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>
+              -DCMAKE_BUILD_TYPE=Release
+              -DVCPKG_TARGET_TRIPLET=x64-windows-static
+              -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+          - name: windows-vs2019-x64-shared
+            os: windows-latest
+            triplet: 'x64-windows-static'
+            build-system: cmake
+            cmake-generator: 'Visual Studio 16 2019'
+            cmake-options: >-
+              -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>
+              -DBUILD_SHARED_LIBS=ON
+              -DBUILD_REGTEST=OFF
+              -DBUILD_EXAMPLES=OFF
+              -DINSTALL_PKGCONFIG_MODULE=OFF
+              -DCPACK_PACKAGE_NAME=libsndfile
+              -DCMAKE_BUILD_TYPE=Release
+              -DVCPKG_TARGET_TRIPLET=x64-windows-static
+              -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+          - name: windows-vs2019-Win32
+            os: windows-latest
+            triplet: 'x86-windows-static'
+            build-system: cmake
+            cmake-generator: 'Visual Studio 16 2019'
+            cmake-options: >-
+              -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>
+              -DCMAKE_GENERATOR_PLATFORM=Win32
+              -DCMAKE_BUILD_TYPE=Release
+              -DVCPKG_TARGET_TRIPLET=x86-windows-static
+              -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+          - name: windows-vs2019-Win32-shared
+            os: windows-latest
+            triplet: 'x86-windows-static'
+            build-system: cmake
+            cmake-generator: 'Visual Studio 16 2019'
+            cmake-options: >-
+              -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>
+              -DCMAKE_GENERATOR_PLATFORM=Win32
+              -DBUILD_SHARED_LIBS=ON
+              -DBUILD_REGTEST=OFF
+              -DBUILD_EXAMPLES=OFF
+              -DINSTALL_PKGCONFIG_MODULE=OFF
+              -DCPACK_PACKAGE_NAME=libsndfile
+              -DCMAKE_BUILD_TYPE=Release
+              -DVCPKG_TARGET_TRIPLET=x86-windows-static
+              -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install MacOS dependencies
+        if: startsWith(matrix.os,'macos')
+        run: |
+          brew update
+          brew install autoconf automake libtool autogen libogg libvorbis flac opus sqlite3 speex
+
+      - name: Install Lunux dependencies
+        if: startsWith(matrix.os,'ubuntu')
+        run: sudo apt-get install -y autogen ninja-build libogg-dev libvorbis-dev libflac-dev libopus-dev libasound2-dev libsqlite3-dev libspeex-dev
+
+      - name: Install Windows dependencies
+        if: startsWith(matrix.os,'windows')
+        run: |
+          vcpkg install libvorbis libflac opus sqlite3 speex --triplet ${{matrix.triplet}}
+
+      - name: Configure, build and test with Autotools
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        if: startsWith(matrix.build-system,'autotools')
+        run: |
+          ./autogen.sh
+          if [[ "${CC}" == "clang" ]]; then
+            ./configure --enable-werror && make clean all check && make distcheck
+          else
+            Scripts/asan-configure.sh --enable-werror && make clean all check && make distcheck
+          fi
+
+      - name: Configure, build and test with CMake
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        if: startsWith(matrix.build-system,'cmake')
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G "${{matrix.cmake-generator}}" ${{matrix.cmake-options}}
+          cmake --build . --config Release
+          ctest
+
+      - name: Configure, build and test with OSSFuzz
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        if: startsWith(matrix.build-system,'ossfuzz')
+        run: |
+          ./ossfuzz/ci_oss.sh

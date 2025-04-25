@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_learn.a CMakeFiles/muse_learn.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_learn.dir/qrc_learn.cpp.o
+/usr/bin/ranlib libmuse_learn.a

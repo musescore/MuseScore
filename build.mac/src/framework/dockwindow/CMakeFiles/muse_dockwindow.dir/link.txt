@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_dockwindow.a CMakeFiles/muse_dockwindow.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/muse_dockwindow.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_dockwindow.dir/qrc_dock.cpp.o
+/usr/bin/ranlib libmuse_dockwindow.a

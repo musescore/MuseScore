@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/MultiInstances/qmldir</file>
+        <file>qml/Muse/MultiInstances/MultiInstancesDevDialog.qml</file>
+        <file>qml/Muse/MultiInstances/MultiInstancesDevPanel.qml</file>
+    </qresource>
+</RCC>

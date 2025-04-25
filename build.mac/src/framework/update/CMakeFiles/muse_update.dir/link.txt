@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_update.a CMakeFiles/muse_update.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_update.dir/qrc_update.cpp.o
+/usr/bin/ranlib libmuse_update.a

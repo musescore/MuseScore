@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_mpe.a CMakeFiles/muse_mpe.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_mpe.dir/qrc_mpe.cpp.o
+/usr/bin/ranlib libmuse_mpe.a

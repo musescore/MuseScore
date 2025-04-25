@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_accessibility.a CMakeFiles/muse_accessibility.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libmuse_accessibility.a

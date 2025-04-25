@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="data/instruments.xml">../../share/instruments/instruments.xml</file>
+        <file alias="data/orders.xml">../../share/instruments/orders.xml</file>
+        <file alias="data/string_tunings_presets.json">../../share/instruments/string_tunings_presets.json</file>
+        <file alias="engraving/styles/legacy-style-defaults-v1.mss">data/styles/legacy-style-defaults-v1.mss</file>
+        <file alias="engraving/styles/legacy-style-defaults-v2.mss">data/styles/legacy-style-defaults-v2.mss</file>
+        <file alias="engraving/styles/legacy-style-defaults-v3.mss">data/styles/legacy-style-defaults-v3.mss</file>
+        <file alias="engraving/styles/migration-306-style-Leland.mss">data/styles/migration-306-style-Leland.mss</file>
+        <file alias="engraving/styles/migration-306-style-Edwin.mss">data/styles/migration-306-style-Edwin.mss</file>
+        <file alias="engraving/styles/legacy-style-defaults-v302.mss">data/styles/legacy-style-defaults-v302.mss</file>
+        <file alias="engraving/styles/gp-style.mss">data/styles/gp-style.mss</file>
+        <file alias="engraving/styles/gp-style-experimental.mss">data/styles/gp-style-experimental.mss</file>
+        <file>qml/MuseScore/Engraving/EngravingElementsDialog.qml</file>
+        <file>qml/MuseScore/Engraving/EngravingElementsPanel.qml</file>
+        <file>qml/MuseScore/Engraving/qmldir</file>
+        <file>data/harmony_to_diagram.xml</file>
+    </qresource>
+</RCC>

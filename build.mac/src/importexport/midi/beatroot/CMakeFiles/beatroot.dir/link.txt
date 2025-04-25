@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbeatroot.a CMakeFiles/beatroot.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libbeatroot.a

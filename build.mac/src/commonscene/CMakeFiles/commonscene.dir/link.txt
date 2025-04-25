@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcommonscene.a CMakeFiles/commonscene.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/commonscene.dir/qrc_commonscene.cpp.o
+/usr/bin/ranlib libcommonscene.a

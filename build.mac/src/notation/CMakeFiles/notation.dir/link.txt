@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnotation.a CMakeFiles/notation.dir/Unity/unity_8_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_7_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_6_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_5_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_4_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_3_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/notation.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/notation.dir/qrc_notationscene.cpp.o
+/usr/bin/ranlib libnotation.a

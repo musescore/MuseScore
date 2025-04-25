@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Braille/qmldir</file>
+        <file>qml/MuseScore/Braille/BrailleView.qml</file>
+    </qresource>
+</RCC>

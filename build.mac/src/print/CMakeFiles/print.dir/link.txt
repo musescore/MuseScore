@@ -1,0 +1,2 @@
+/usr/bin/ar qc libprint.a CMakeFiles/print.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libprint.a

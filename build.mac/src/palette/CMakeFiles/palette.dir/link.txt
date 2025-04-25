@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpalette.a CMakeFiles/palette.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/palette.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/palette.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/palette.dir/qrc_palette.cpp.o
+/usr/bin/ranlib libpalette.a

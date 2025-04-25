@@ -1,0 +1,37 @@
+{
+	"BUILD_DIR" : "/Users/zainazeeza/MuseScore/build.mac/src/framework/dockwindow/thirdparty/KDDockWidgets/src/kddockwidgets_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/zainazeeza/MuseScore/build.mac",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/zainazeeza/MuseScore/build.mac/src/framework/dockwindow/thirdparty/KDDockWidgets/src",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src",
+	"CMAKE_SOURCE_DIR" : "/Users/zainazeeza/MuseScore",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "Unix Makefiles",
+	"INCLUDE_DIR" : "/Users/zainazeeza/MuseScore/build.mac/src/framework/dockwindow/thirdparty/KDDockWidgets/src/kddockwidgets_autogen/include",
+	"INPUTS" : 
+	[
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/multisplitter/qml/Separator.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/TitleBarButton.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/RubberBand.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/ResizeHandlerHelper.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/TitleBar.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/DropArea.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/ClassicIndicatorsOverlay.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/ClassicIndicator.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/DockWidget.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/Frame.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/MainWindowMDI.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/FloatingWindow.qml",
+		"/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/quick/qml/TitleBarBase.qml"
+	],
+	"LOCK_FILE" : "/Users/zainazeeza/MuseScore/build.mac/src/framework/dockwindow/thirdparty/KDDockWidgets/src/CMakeFiles/kddockwidgets_autogen.dir/AutoRcc_kddockwidgets_qtquick_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "--no-zstd", "-name", "kddockwidgets_qtquick" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_kddockwidgets_qtquick.cpp",
+	"RCC_EXECUTABLE" : "/Users/zainazeeza/Qt/6.5.3/macos/./libexec/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/Users/zainazeeza/MuseScore/build.mac/src/framework/dockwindow/thirdparty/KDDockWidgets/src/CMakeFiles/kddockwidgets_autogen.dir/AutoRcc_kddockwidgets_qtquick_EWIEGA46WW_Used.txt",
+	"SOURCE" : "/Users/zainazeeza/MuseScore/src/framework/dockwindow/thirdparty/KDDockWidgets/src/kddockwidgets_qtquick.qrc",
+	"USE_BETTER_GRAPH" : false,
+	"VERBOSITY" : 0
+}

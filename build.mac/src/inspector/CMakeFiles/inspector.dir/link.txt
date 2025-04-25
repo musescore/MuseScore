@@ -1,0 +1,2 @@
+/usr/bin/ar qc libinspector.a CMakeFiles/inspector.dir/Unity/unity_7_cxx.cxx.o CMakeFiles/inspector.dir/Unity/unity_6_cxx.cxx.o CMakeFiles/inspector.dir/Unity/unity_5_cxx.cxx.o CMakeFiles/inspector.dir/Unity/unity_4_cxx.cxx.o CMakeFiles/inspector.dir/Unity/unity_3_cxx.cxx.o CMakeFiles/inspector.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/inspector.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/inspector.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/inspector.dir/qrc_inspector_resources.cpp.o
+/usr/bin/ranlib libinspector.a

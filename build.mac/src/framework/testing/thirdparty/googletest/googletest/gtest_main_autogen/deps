@@ -1,0 +1,11 @@
+gtest_main_autogen/timestamp: \
+	/Users/zainazeeza/MuseScore/src/framework/testing/thirdparty/googletest/googletest/CMakeLists.txt \
+	/Users/zainazeeza/MuseScore/src/framework/testing/thirdparty/googletest/googletest/cmake/internal_utils.cmake \
+	/Users/zainazeeza/MuseScore/src/framework/testing/thirdparty/googletest/googletest/src/gtest_main.cc \
+	/usr/local/share/cmake/Modules/CheckCSourceCompiles.cmake \
+	/usr/local/share/cmake/Modules/CheckIncludeFile.cmake \
+	/usr/local/share/cmake/Modules/CheckLibraryExists.cmake \
+	/usr/local/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
+	/usr/local/share/cmake/Modules/FindPackageMessage.cmake \
+	/usr/local/share/cmake/Modules/FindThreads.cmake \
+	/usr/local/bin/cmake

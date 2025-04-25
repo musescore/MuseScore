@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbraille.a CMakeFiles/braille.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/braille.dir/qrc_braille.cpp.o
+/usr/bin/ranlib libbraille.a

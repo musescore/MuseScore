@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_midi.a CMakeFiles/muse_midi.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_midi.dir/qrc_midi.cpp.o
+/usr/bin/ranlib libmuse_midi.a

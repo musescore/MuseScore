@@ -30,13 +30,27 @@ namespace mu::instrumentsscene {
 class StaffTreeItem : public AbstractLayoutPanelTreeItem
 {
     Q_OBJECT
+    Q_PROPERTY(bool isLinked READ isLinked NOTIFY isLinkedChanged)
+    Q_PROPERTY(QString linkedStaffName READ linkedStaffName NOTIFY linkedStaffNameChanged)
 
 public:
     StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
+    bool isLinked() const { return m_isLinked; }
+    QString linkedStaffName() const { return m_linkedStaffName; }
+
     void init(const notation::Staff* masterStaff);
 
+signals:
+    void isLinkedChanged(bool isLinked);
+    void linkedStaffNameChanged(QString linkedStaffName);
+
 private:
+    void setIsLinked(bool linked);
+    void setLinkedStaffName(const QString& name);
+
     bool m_isInited = false;
+    bool m_isLinked = false;
+    QString m_linkedStaffName;
 };
 }

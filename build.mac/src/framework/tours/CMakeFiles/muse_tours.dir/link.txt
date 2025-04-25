@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_tours.a CMakeFiles/muse_tours.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_tours.dir/qrc_tours.cpp.o
+/usr/bin/ranlib libmuse_tours.a

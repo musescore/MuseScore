@@ -1,0 +1,16 @@
+root = true
+
+[*]
+insert_final_newline = true
+
+[*.{h,hpp,c,tpl,def}]
+indent_style = tab
+tab_width = 4
+
+[*.py]
+indent_style = space
+indent_size = 4
+
+[*.yml]
+indent_style = space
+indent_size = 2

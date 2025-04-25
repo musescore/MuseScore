@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_actions.a CMakeFiles/muse_actions.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libmuse_actions.a

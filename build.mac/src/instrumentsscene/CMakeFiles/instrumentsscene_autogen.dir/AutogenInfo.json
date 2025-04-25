@@ -1,0 +1,381 @@
+{
+	"BUILD_DIR" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/instrumentsscene_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/zainazeeza/MuseScore/build.mac",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/zainazeeza/MuseScore/src/instrumentsscene",
+	"CMAKE_EXECUTABLE" : "/usr/local/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/Users/zainazeeza/MuseScore/src/instrumentsscene/CMakeLists.txt",
+		"/Users/zainazeeza/MuseScore/src/instrumentsscene/instrumentsscene.qrc"
+	],
+	"CMAKE_SOURCE_DIR" : "/Users/zainazeeza/MuseScore",
+	"CROSS_CONFIG" : false,
+	"DEP_FILE" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/instrumentsscene_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "instrumentsscene_autogen/timestamp",
+	"HEADERS" : 
+	[
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/instrumentsscenemodule.h",
+			"MU",
+			"EWIEGA46WW/moc_instrumentsscenemodule.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/instrumentsscenetypes.h",
+			"MU",
+			"EWIEGA46WW/moc_instrumentsscenetypes.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/internal/instrumentsactionscontroller.h",
+			"MU",
+			"EGDWYGFDBT/moc_instrumentsactionscontroller.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/internal/instrumentsuiactions.h",
+			"MU",
+			"EGDWYGFDBT/moc_instrumentsuiactions.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/internal/selectinstrumentscenario.h",
+			"MU",
+			"EGDWYGFDBT/moc_selectinstrumentscenario.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/abstractlayoutpaneltreeitem.h",
+			"MU",
+			"OTUN7GXZT4/moc_abstractlayoutpaneltreeitem.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/instrumentlistmodel.h",
+			"MU",
+			"OTUN7GXZT4/moc_instrumentlistmodel.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/instrumentsettingsmodel.h",
+			"MU",
+			"OTUN7GXZT4/moc_instrumentsettingsmodel.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/instrumentsonscorelistmodel.h",
+			"MU",
+			"OTUN7GXZT4/moc_instrumentsonscorelistmodel.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/layoutpanelcontextmenumodel.h",
+			"MU",
+			"OTUN7GXZT4/moc_layoutpanelcontextmenumodel.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/layoutpaneltreemodel.h",
+			"MU",
+			"OTUN7GXZT4/moc_layoutpaneltreemodel.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/layoutpanelutils.h",
+			"MU",
+			"OTUN7GXZT4/moc_layoutpanelutils.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/parttreeitem.h",
+			"MU",
+			"OTUN7GXZT4/moc_parttreeitem.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/roottreeitem.h",
+			"MU",
+			"OTUN7GXZT4/moc_roottreeitem.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/staffcontroltreeitem.h",
+			"MU",
+			"OTUN7GXZT4/moc_staffcontroltreeitem.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/staffsettingsmodel.h",
+			"MU",
+			"OTUN7GXZT4/moc_staffsettingsmodel.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/stafftreeitem.h",
+			"MU",
+			"OTUN7GXZT4/moc_stafftreeitem.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/systemobjectslayersettingsmodel.h",
+			"MU",
+			"OTUN7GXZT4/moc_systemobjectslayersettingsmodel.cpp",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/systemobjectslayertreeitem.h",
+			"MU",
+			"OTUN7GXZT4/moc_systemobjectslayertreeitem.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/instrumentsscene_autogen/include",
+	"MOC_COMPILATION_FILE" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/instrumentsscene_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"KORS_LOGGER_QT_SUPPORT",
+		"KORS_PROFILER_ENABLED",
+		"MUE_BUILD_APPSHELL_MODULE",
+		"MUE_BUILD_BRAILLE_MODULE",
+		"MUE_BUILD_CONVERTER_MODULE",
+		"MUE_BUILD_ENGRAVING_DEVTOOLS",
+		"MUE_BUILD_IMAGESEXPORT_MODULE",
+		"MUE_BUILD_IMPORTEXPORT_MODULE",
+		"MUE_BUILD_INSPECTOR_MODULE",
+		"MUE_BUILD_INSTRUMENTSSCENE_MODULE",
+		"MUE_BUILD_MUSESOUNDS_MODULE",
+		"MUE_BUILD_NOTATION_MODULE",
+		"MUE_BUILD_PALETTE_MODULE",
+		"MUE_BUILD_PLAYBACK_MODULE",
+		"MUE_BUILD_PROJECT_MODULE",
+		"NDEBUG",
+		"QT_CONCURRENT_LIB",
+		"QT_CORE5COMPAT_LIB",
+		"QT_CORE_LIB",
+		"QT_DBUS_LIB",
+		"QT_GUI_LIB",
+		"QT_NETWORKAUTH_LIB",
+		"QT_NETWORK_LIB",
+		"QT_NO_DEBUG",
+		"QT_OPENGL_LIB",
+		"QT_PRINTSUPPORT_LIB",
+		"QT_QMLINTEGRATION_LIB",
+		"QT_QMLMODELS_LIB",
+		"QT_QML_LIB",
+		"QT_QUICKCONTROLS2_LIB",
+		"QT_QUICKTEMPLATES2_LIB",
+		"QT_QUICKWIDGETS_LIB",
+		"QT_QUICK_LIB",
+		"QT_STATEMACHINE_LIB",
+		"QT_SUPPORT",
+		"QT_SVG_LIB",
+		"QT_WIDGETS_LIB",
+		"QT_XML_LIB",
+		"SCRIPT_INTERFACE",
+		"engraving_QML_IMPORT=\"\"",
+		"instrumentsscene_QML_IMPORT=\"/Users/zainazeeza/MuseScore/src/instrumentsscene/qml\"",
+		"muse_global_EXPORTS=1",
+		"muse_global_QML_IMPORT=\"\""
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene",
+		"/Users/zainazeeza/MuseScore/src/instrumentsscene",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtDBus.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtDBus.framework",
+		"/Users/zainazeeza/MuseScore/build.mac",
+		"/Users/zainazeeza/MuseScore/src",
+		"/Users/zainazeeza/MuseScore",
+		"/Users/zainazeeza/MuseScore/framework",
+		"/Users/zainazeeza/MuseScore/framework/global",
+		"/Users/zainazeeza/MuseScore/framework/testing/thirdparty/googletest/googletest/include",
+		"/Users/zainazeeza/MuseScore/src/framework",
+		"/Users/zainazeeza/MuseScore/src/framework/global",
+		"/Users/zainazeeza/MuseScore/src/framework/testing/thirdparty/googletest/googletest/include",
+		"/Users/zainazeeza/MuseScore/src/engraving",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtCore.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtCore.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtGui.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtGui.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtWidgets.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtWidgets.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtNetwork.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtNetwork.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtNetworkAuth.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtNetworkAuth.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQml.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQml.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/include/QtQmlIntegration",
+		"/Users/zainazeeza/Qt/6.5.3/macos/include",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuick.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuick.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQmlModels.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQmlModels.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtOpenGL.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtOpenGL.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuickControls2.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuickControls2.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuickTemplates2.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuickTemplates2.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuickWidgets.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtQuickWidgets.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtXml.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtXml.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtSvg.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtSvg.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtPrintSupport.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtPrintSupport.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtCore5Compat.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtCore5Compat.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtConcurrent.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtConcurrent.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtStateMachine.framework/Headers",
+		"/Users/zainazeeza/Qt/6.5.3/macos/lib/QtStateMachine.framework",
+		"/Users/zainazeeza/Qt/6.5.3/macos/mkspecs/macx-clang",
+		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
+		"/usr/local/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1",
+		"/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include",
+		"/Library/Developer/CommandLineTools/usr/include"
+	],
+	"MOC_MACRO_NAMES" : 
+	[
+		"Q_OBJECT",
+		"Q_GADGET",
+		"Q_NAMESPACE",
+		"Q_NAMESPACE_EXPORT",
+		"Q_GADGET_EXPORT"
+	],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/c++",
+		"-std=gnu++17",
+		"-dM",
+		"-E",
+		"-c",
+		"/usr/local/share/cmake/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/instrumentsscene_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : 
+	[
+		"/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/qrc_instrumentsscene.cpp"
+	],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 6,
+	"PARSE_CACHE_FILE" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/CMakeFiles/instrumentsscene_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/Users/zainazeeza/Qt/6.5.3/macos/./libexec/moc",
+	"QT_UIC_EXECUTABLE" : "/Users/zainazeeza/Qt/6.5.3/macos/./libexec/uic",
+	"QT_VERSION_MAJOR" : 6,
+	"QT_VERSION_MINOR" : 5,
+	"SETTINGS_FILE" : "/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/CMakeFiles/instrumentsscene_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/instrumentsscenemodule.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/internal/instrumentsactionscontroller.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/internal/instrumentsuiactions.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/internal/selectinstrumentscenario.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/abstractlayoutpaneltreeitem.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/instrumentlistmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/instrumentsettingsmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/instrumentsonscorelistmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/layoutpanelcontextmenumodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/layoutpaneltreemodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/parttreeitem.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/roottreeitem.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/staffcontroltreeitem.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/staffsettingsmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/stafftreeitem.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zainazeeza/MuseScore/src/instrumentsscene/view/systemobjectslayertreeitem.cpp",
+			"MU",
+			null
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : 
+	[
+		"/Users/zainazeeza/MuseScore/build.mac/src/instrumentsscene/qrc_instrumentsscene.cpp"
+	],
+	"UIC_UI_FILES" : [],
+	"USE_BETTER_GRAPH" : false,
+	"VERBOSITY" : 0
+}

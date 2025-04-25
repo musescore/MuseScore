@@ -1,0 +1,2 @@
+/usr/bin/ar qc libinstrumentsscene.a CMakeFiles/instrumentsscene.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/instrumentsscene.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/instrumentsscene.dir/qrc_instrumentsscene.cpp.o
+/usr/bin/ranlib libinstrumentsscene.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_autobot.a CMakeFiles/muse_autobot.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/muse_autobot.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_autobot.dir/qrc_autobot.cpp.o
+/usr/bin/ranlib libmuse_autobot.a

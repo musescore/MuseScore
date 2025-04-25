@@ -1,0 +1,2 @@
+/usr/bin/ar qc libiex_guitarpro.a CMakeFiles/iex_guitarpro.dir/Unity/unity_2_cxx.cxx.o CMakeFiles/iex_guitarpro.dir/Unity/unity_1_cxx.cxx.o CMakeFiles/iex_guitarpro.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libiex_guitarpro.a

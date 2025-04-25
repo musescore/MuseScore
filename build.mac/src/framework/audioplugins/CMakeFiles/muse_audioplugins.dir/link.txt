@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_audioplugins.a CMakeFiles/muse_audioplugins.dir/Unity/unity_0_cxx.cxx.o
+/usr/bin/ranlib libmuse_audioplugins.a

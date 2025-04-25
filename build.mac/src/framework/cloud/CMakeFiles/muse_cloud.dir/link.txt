@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuse_cloud.a CMakeFiles/muse_cloud.dir/Unity/unity_0_cxx.cxx.o CMakeFiles/muse_cloud.dir/qrc_cloud.cpp.o
+/usr/bin/ranlib libmuse_cloud.a

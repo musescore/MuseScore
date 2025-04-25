@@ -1,0 +1,2 @@
+/usr/bin/ar qc libopusenc.a "CMakeFiles/opusenc.dir/libopusenc-0.2.1/src/ogg_packer.c.o" "CMakeFiles/opusenc.dir/libopusenc-0.2.1/src/opus_header.c.o" "CMakeFiles/opusenc.dir/libopusenc-0.2.1/src/opusenc.c.o" "CMakeFiles/opusenc.dir/libopusenc-0.2.1/src/picture.c.o" "CMakeFiles/opusenc.dir/libopusenc-0.2.1/src/resample.c.o" "CMakeFiles/opusenc.dir/libopusenc-0.2.1/src/unicode_support.c.o"
+/usr/bin/ranlib libopusenc.a
