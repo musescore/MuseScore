@@ -487,11 +487,7 @@ enum class Sid {
     swingRatio,
     swingUnit,
 
-    useStandardNoteNames,
-    useGermanNoteNames,
-    useFullGermanNoteNames,
-    useSolfeggioNoteNames,
-    useFrenchNoteNames,
+    chordSymbolSpelling,
     automaticCapitalization,
     lowerCaseMinorChords,
     lowerCaseBassNotes,
