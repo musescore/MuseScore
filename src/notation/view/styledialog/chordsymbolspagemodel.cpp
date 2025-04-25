@@ -31,11 +31,7 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::chordExtensionAdjust,
     StyleId::chordModifierMag,
     StyleId::chordModifierAdjust,
-    StyleId::useStandardNoteNames,
-    StyleId::useGermanNoteNames,
-    StyleId::useFullGermanNoteNames,
-    StyleId::useSolfeggioNoteNames,
-    StyleId::useFrenchNoteNames,
+    StyleId::chordSymbolSpelling,
     StyleId::automaticCapitalization,
     StyleId::lowerCaseMinorChords,
     StyleId::lowerCaseBassNotes,
@@ -58,11 +54,30 @@ StyleItem* ChordSymbolsPageModel::extensionMag() const { return styleItem(StyleI
 StyleItem* ChordSymbolsPageModel::extensionAdjust() const { return styleItem(StyleId::chordExtensionAdjust); }
 StyleItem* ChordSymbolsPageModel::modifierMag() const { return styleItem(StyleId::chordModifierMag); }
 StyleItem* ChordSymbolsPageModel::modifierAdjust() const { return styleItem(StyleId::chordModifierAdjust); }
-StyleItem* ChordSymbolsPageModel::useStandardNoteNames() const { return styleItem(StyleId::useStandardNoteNames); }
-StyleItem* ChordSymbolsPageModel::useGermanNoteNames() const { return styleItem(StyleId::useGermanNoteNames); }
-StyleItem* ChordSymbolsPageModel::useFullGermanNoteNames() const { return styleItem(StyleId::useFullGermanNoteNames); }
-StyleItem* ChordSymbolsPageModel::useSolfeggioNoteNames() const { return styleItem(StyleId::useSolfeggioNoteNames); }
-StyleItem* ChordSymbolsPageModel::useFrenchNoteNames() const { return styleItem(StyleId::useFrenchNoteNames); }
+
+QVariantList ChordSymbolsPageModel::possibleChordSymbolSpellings() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Standard") },
+            { "value", static_cast<int>(engraving::NoteSpellingType::STANDARD) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "German") },
+            { "value", static_cast<int>(engraving::NoteSpellingType::GERMAN) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Full German") },
+            { "value", static_cast<int>(engraving::NoteSpellingType::GERMAN_PURE) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Solfeggio") },
+            { "value", static_cast<int>(engraving::NoteSpellingType::SOLFEGGIO) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "French") },
+            { "value", static_cast<int>(engraving::NoteSpellingType::FRENCH) } },
+    };
+
+    return options;
+}
+
 StyleItem* ChordSymbolsPageModel::automaticCapitalization() const { return styleItem(StyleId::automaticCapitalization); }
 StyleItem* ChordSymbolsPageModel::lowerCaseMinorChords() const { return styleItem(StyleId::lowerCaseMinorChords); }
 StyleItem* ChordSymbolsPageModel::lowerCaseBassNotes() const { return styleItem(StyleId::lowerCaseBassNotes); }

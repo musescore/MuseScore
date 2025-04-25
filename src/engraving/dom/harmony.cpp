@@ -262,21 +262,11 @@ void Harmony::determineRootBassSpelling(NoteSpellingType& rootSpelling, NoteCase
                                         NoteSpellingType& bassSpelling, NoteCaseType& bassCase)
 {
     // spelling
-    if (style().styleB(Sid::useStandardNoteNames)) {
-        rootSpelling = NoteSpellingType::STANDARD;
-    } else if (style().styleB(Sid::useGermanNoteNames)) {
-        rootSpelling = NoteSpellingType::GERMAN;
-    } else if (style().styleB(Sid::useFullGermanNoteNames)) {
-        rootSpelling = NoteSpellingType::GERMAN_PURE;
-    } else if (style().styleB(Sid::useSolfeggioNoteNames)) {
-        rootSpelling = NoteSpellingType::SOLFEGGIO;
-    } else if (style().styleB(Sid::useFrenchNoteNames)) {
-        rootSpelling = NoteSpellingType::FRENCH;
-    }
+
+    rootSpelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
     bassSpelling = rootSpelling;
 
     // case
-
     // always use case as typed if automatic capitalization is off
     if (!style().styleB(Sid::automaticCapitalization)) {
         rootCase = m_rootCase;

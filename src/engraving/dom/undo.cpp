@@ -2043,7 +2043,7 @@ static void changeChordStyle(Score* score)
         score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
     }
     score->chordList()->read(score->configuration()->appDataPath(), style.styleSt(Sid::chordDescriptionFile));
-    score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
+    score->chordList()->setCustomChordList(style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM);
 }
 
 //---------------------------------------------------------

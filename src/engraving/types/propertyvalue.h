@@ -82,6 +82,8 @@ enum class P_TYPE : unsigned char {
     TIMESIG_PLACEMENT,
     TIMESIG_STYLE,
     TIMESIG_MARGIN,
+    NOTE_SPELLING_TYPE,
+    CHORD_PRESET_TYPE,
 
     // Sound
     FRACTION,
@@ -229,6 +231,12 @@ public:
 
     PropertyValue(TimeSigVSMargin v)
         : m_type(P_TYPE::TIMESIG_MARGIN), m_data(make_data<TimeSigVSMargin>(v)) {}
+
+    PropertyValue(NoteSpellingType v)
+        : m_type(P_TYPE::NOTE_SPELLING_TYPE), m_data(make_data<NoteSpellingType>(v)) {}
+
+    PropertyValue(const ChordStylePreset& v)
+        : m_type(P_TYPE::CHORD_PRESET_TYPE), m_data(make_data<ChordStylePreset>(v)) {}
 
     // Sound
     PropertyValue(const Fraction& v)

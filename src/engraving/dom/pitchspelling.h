@@ -68,9 +68,6 @@ const int TPCS_PER_STEP           = (Tpc::TPC_MAX - Tpc::TPC_MIN + 1) / STEP_DEL
 enum class Prefer : char {
     FLATS=8, NEAREST=11, SHARPS=13
 };
-enum class NoteSpellingType : char {
-    STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO, FRENCH
-};
 enum class NoteCaseType : signed char {
     AUTO = -1, CAPITAL = 0, LOWER, UPPER
 };

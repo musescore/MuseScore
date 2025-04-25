@@ -2842,12 +2842,6 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             double sp = masterScore->style().spatium();
             compat::ReadChordListHook clhook(masterScore);
             readStyle(&masterScore->style(), e, clhook);
-            //style()->load(e);
-            // adjust this now so chords render properly on read
-            // other style adjustments can wait until reading is finished
-            if (masterScore->style().styleB(Sid::useGermanNoteNames)) {
-                masterScore->style().set(Sid::useStandardNoteNames, false);
-            }
             if (ctx.overrideSpatium()) {
                 masterScore->style().setSpatium(sp);
             }
