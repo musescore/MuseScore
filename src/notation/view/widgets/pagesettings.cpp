@@ -261,12 +261,8 @@ void PageSettings::orientationClicked()
 
 void PageSettings::on_resetPageStyleButton_clicked()
 {
-    for (auto styleId : pageStyles()) {
-        globalContext()->currentNotation()->style()->resetStyleValue(styleId);
-    }
-
-    pageOffsetEntry->setValue(1);
-
+    score()->undoChangePageNumberOffset(0);
+    globalContext()->currentNotation()->style()->resetStyleValues(pageStyles());
     updateValues();
 }
 
