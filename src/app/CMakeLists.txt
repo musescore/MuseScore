@@ -193,6 +193,7 @@ if (NOT CC_IS_EMSCRIPTEN)
             iex_guitarpro
             iex_midi
             iex_musedata
+            iex_musx
             iex_ove
             iex_audioexport
             iex_imagesexport

@@ -60,8 +60,8 @@ endif()
 
 # Mac-specific
 if(OS_IS_MAC)
-    set(MACOSX_DEPLOYMENT_TARGET 10.14)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
+    set(MACOSX_DEPLOYMENT_TARGET 10.15)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
 endif(OS_IS_MAC)
 
 # MSVC-specific
