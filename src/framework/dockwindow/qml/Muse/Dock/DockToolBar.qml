@@ -61,8 +61,8 @@ DockToolBarView {
         readonly property int minimumLength: 10
         readonly property int maximumLength: 16777215
 
-        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width + 2 * root.gripButtonPadding : 0
-        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * root.gripButtonPadding : 0
+        readonly property int gripButtonWidth: gripButton.visible ? gripButton.gripSize + 2 * root.gripButtonPadding : 0
+        readonly property int gripButtonHeight: gripButton.visible ? gripButton.gripSize + 2 * root.gripButtonPadding : 0
     }
 
     Item {
@@ -75,8 +75,10 @@ DockToolBarView {
         FlatButton {
             id: gripButton
 
-            width: root.isVertical ? parent.width : 24
-            height: root.isVertical ? 24 : parent.height
+            readonly property int gripSize: 24
+
+            width: root.isVertical ? parent.width : gripSize
+            height: root.isVertical ? gripSize : parent.height
 
             visible: root.floatable
 
