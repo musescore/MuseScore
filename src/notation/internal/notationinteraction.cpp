@@ -7339,6 +7339,57 @@ void NotationInteraction::addMelisma()
     toLyrics->selectAll(toLyrics->cursor());
 }
 
+void NotationInteraction::addElision() {
+
+    if (!m_editData.element || !m_editData.element->isLyrics()) {
+        LOGW("addElision called outside of lyrics editing context.");
+        return;
+    }
+
+    // fetch the text‐edit data & cursor
+    auto edd = m_editData.getData(m_editData.element);
+    if (!edd) {
+        LOGE("addElision: Failed to get EditData for the element.");
+        return;
+    }
+    auto* ted = static_cast<TextEditData*>(edd.get());
+    if (!ted) {
+        LOGE("addElision: EditData is not TextEditData.");
+        return;
+    }
+
+    TextCursor* cursor = ted->cursor();
+    if (!cursor) {
+        LOGE("addElision: Failed to get TextCursor from TextEditData.");
+        return;
+    }
+
+    // build the elision symbol and set the engraving font
+    String elisionStr = score()->engravingFont()->toString(mu::engraving::SymId::lyricsElision);
+    cursor->format()->setFontFamily(u"ScoreText");
+
+    // insert as one undoable action
+    score()->undo(new InsertText(cursor, elisionStr), &m_editData);
+
+    // force immediate layout & redraw of the lyrics line
+    auto* lyrics = toLyrics(m_editData.element);
+    lyrics->triggerLayout();
+    lyrics->score()->setLayoutAll(false);
+    lyrics->score()->update();
+
+    // re-enter text edit and restore cursor position
+    int oldPos = cursor->currentPosition();
+    startEditText(lyrics, PointF());
+    auto* newTed = static_cast<TextEditData*>(m_editData.getData(lyrics).get());
+    if (newTed) {
+        auto* newCursor = newTed->cursor();
+        newCursor->moveCursorToStart();
+        newCursor->movePosition(TextCursor::MoveOperation::Right,
+                                TextCursor::MoveMode::MoveAnchor,
+                                oldPos);
+    }
+}
+
 //! NOTE: Copied from ScoreView::lyricsReturn
 void NotationInteraction::addLyricsVerse()
 {

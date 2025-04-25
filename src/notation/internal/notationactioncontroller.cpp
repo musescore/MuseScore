@@ -157,6 +157,7 @@ void NotationActionController::init()
     registerAction("next-syllable", &Interaction::navigateToNextSyllable, PlayMode::NoPlay, &Controller::isEditingLyrics);
 
     registerAction("add-melisma", &Interaction::addMelisma, PlayMode::NoPlay, &Controller::isEditingLyrics);
+    registerAction("add-elision", &Interaction::addElision, PlayMode::NoPlay, &Controller::isEditingLyrics);
     registerAction("add-lyric-verse", &Interaction::addLyricsVerse, PlayMode::NoPlay, &Controller::isEditingLyrics);
 
     registerAction("flat2", [this]() { toggleAccidental(AccidentalType::FLAT2); });

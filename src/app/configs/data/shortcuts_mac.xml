@@ -969,6 +969,10 @@
     <seq>Shift+-</seq>
   </SC>
   <SC>
+    <key>add-elision</key>
+    <seq>Ctrl+Alt+=</seq>
+  </SC>
+  <SC>
     <key>next-lyric-verse</key>
     <seq>Down</seq>
   </SC>

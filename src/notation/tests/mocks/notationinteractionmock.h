@@ -234,6 +234,7 @@ public:
     MOCK_METHOD(void, setScoreConfig, (const ScoreConfig&), (override));
 
     MOCK_METHOD(void, addMelisma, (), (override));
+    MOCK_METHOD(void, addElision, (), (override));
     MOCK_METHOD(void, addLyricsVerse, (), (override));
 
     MOCK_METHOD(muse::Ret, canAddGuitarBend, (), (const, override));
