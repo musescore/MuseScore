@@ -124,3 +124,8 @@ bool SynthesizerStub::isActive() const
 void SynthesizerStub::setIsActive(bool)
 {
 }
+
+InputProcessingProgress SynthesizerStub::inputProcessingProgress() const
+{
+    return InputProcessingProgress();
+}

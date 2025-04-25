@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ISYNTHESIZER_H
-#define MUSE_AUDIO_ISYNTHESIZER_H
+#pragma once
 
 #include "global/async/channel.h"
 #include "global/async/asyncable.h"
@@ -55,6 +54,8 @@ public:
 
     void revokePlayingNotes() override;
 
+    InputProcessingProgress inputProcessingProgress() const override;
+
 protected:
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
     virtual void setupEvents(const mpe::PlaybackData& playbackData) = 0;
@@ -73,7 +74,7 @@ protected:
     async::Notification m_readyToPlayChanged;
 
     samples_t m_sampleRate = 0;
+
+    InputProcessingProgress m_inputProcessingProgress;
 };
 }
-
-#endif // MUSE_AUDIO_ISYNTHESIZER_H

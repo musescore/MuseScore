@@ -27,6 +27,7 @@
 
 #include "global/async/promise.h"
 #include "global/async/channel.h"
+#include "global/progress.h"
 
 #include "mpe/events.h"
 
@@ -61,6 +62,9 @@ public:
     virtual async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;
     virtual async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const = 0;
+
+    virtual async::Promise<InputProcessingProgress> inputProcessingProgress(const TrackSequenceId sequenceId,
+                                                                            const TrackId trackId) const = 0;
 
     virtual void clearSources() = 0;
 };

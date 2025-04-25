@@ -61,6 +61,8 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
+    InputProcessingProgress inputProcessingProgress() const override;
+
 private:
     audio::AudioInputParams m_params;
 };

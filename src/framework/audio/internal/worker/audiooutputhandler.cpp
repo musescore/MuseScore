@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -60,14 +60,12 @@ Promise<AudioOutputParams> AudioOutputHandler::outputParams(const TrackSequenceI
     return Promise<AudioOutputParams>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        ITrackSequencePtr s = sequence(sequenceId);
-
+        const ITrackSequencePtr s = sequence(sequenceId);
         if (!s) {
             return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
-        RetVal<AudioOutputParams> result = s->audioIO()->outputParams(trackId);
-
+        const RetVal<AudioOutputParams> result = s->audioIO()->outputParams(trackId);
         if (!result.ret) {
             return reject(result.ret.code(), result.ret.text());
         }
@@ -82,7 +80,6 @@ void AudioOutputHandler::setOutputParams(const TrackSequenceId sequenceId, const
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
-
         if (s) {
             s->audioIO()->setOutputParams(trackId, params);
         }
@@ -156,13 +153,12 @@ Promise<AudioSignalChanges> AudioOutputHandler::signalChanges(const TrackSequenc
     return Promise<AudioSignalChanges>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        ITrackSequencePtr s = sequence(sequenceId);
-
+        const ITrackSequencePtr s = sequence(sequenceId);
         if (!s) {
             return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
-        if (!s->audioIO()->isHasTrack(trackId)) {
+        if (!s->audioIO()->hasTrack(trackId)) {
             return reject(static_cast<int>(Err::InvalidTrackId), "no track");
         }
 

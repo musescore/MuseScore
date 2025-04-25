@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_SEQUENCETRACKS_H
-#define MUSE_AUDIO_SEQUENCETRACKS_H
+#pragma once
 
 #include "global/modularity/ioc.h"
 #include "global/async/asyncable.h"
@@ -37,7 +36,7 @@ class TracksHandler : public ITracks, public Injectable, public async::Asyncable
 
 public:
     explicit TracksHandler(IGetTrackSequence* getSequence, const modularity::ContextPtr& iocCtx);
-    ~TracksHandler();
+    ~TracksHandler() override;
 
     async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
     async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
@@ -64,6 +63,8 @@ public:
     void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;
     async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
 
+    async::Promise<InputProcessingProgress> inputProcessingProgress(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+
     void clearSources() override;
 
 private:
@@ -77,5 +78,3 @@ private:
     IGetTrackSequence* m_getSequence = nullptr;
 };
 }
-
-#endif // MUSE_AUDIO_SEQUENCETRACKS_H
