@@ -28,6 +28,7 @@
 #include "notationtypes.h"
 #include "inotationnoteinput.h"
 #include "inotationselection.h"
+#include "inotationselectionfilter.h"
 
 class QKeyEvent;
 class QInputMethodEvent;
@@ -86,8 +87,7 @@ public:
     virtual EngravingItem* contextItem() const = 0;
 
     // SelectionFilter
-    virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
-    virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
+    virtual INotationSelectionFilterPtr selectionFilter() const = 0;
 
     // Drag
     using IsDraggable = std::function<bool (const EngravingItem*)>;
