@@ -74,9 +74,9 @@
     <Staff id="1">
       <Measure>
         <Marker>
-          <style>repeat_right</style>
-          <text>To Coda</text>
-          <label>coda</label>
+          <style>repeat_left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
           </Marker>
         <voice>
           <Clef>
@@ -99,9 +99,9 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>repeat_right</style>
-          <text>To Coda</text>
-          <label>coda</label>
+          <style>repeat_left</style>
+          <text><sym>coda</sym></text>
+          <label>codab</label>
           </Marker>
         <voice>
           <Rest>
@@ -112,9 +112,9 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>repeat_right</style>
-          <text>To Coda</text>
-          <label>coda</label>
+          <style>repeat_left</style>
+          <text><sym>codaSquare</sym></text>
+          <label>varcoda</label>
           </Marker>
         <voice>
           <Rest>
@@ -128,9 +128,9 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <style>repeat_right</style>
-          <text>To Coda</text>
-          <label>coda</label>
+          <style>repeat_left</style>
+          <text><sym>coda</sym><sym>coda</sym></text>
+          <label>codetta</label>
           </Marker>
         <voice>
           <Rest>
@@ -142,8 +142,8 @@
       <Measure>
         <Marker>
           <style>repeat_right</style>
-          <text>To Coda</text>
-          <label>coda</label>
+          <text>Fine</text>
+          <label>fine</label>
           </Marker>
         <voice>
           <Rest>
@@ -154,8 +154,8 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>staff</style>
-          <text/>
+          <style>repeat_right</style>
+          <text>D.C.</text>
           <jumpTo>start</jumpTo>
           <playUntil>end</playUntil>
           <continueAt></continueAt>
@@ -169,8 +169,8 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>staff</style>
-          <text/>
+          <style>repeat_right</style>
+          <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
@@ -187,8 +187,8 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Jump>
-          <style>staff</style>
-          <text/>
+          <style>repeat_right</style>
+          <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>coda</playUntil>
           <continueAt>codab</continueAt>
@@ -202,8 +202,8 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>staff</style>
-          <text/>
+          <style>repeat_right</style>
+          <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
           <continueAt>codab</continueAt>
@@ -217,8 +217,8 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>staff</style>
-          <text/>
+          <style>repeat_right</style>
+          <text>D.S. al Fine</text>
           <jumpTo>segno</jumpTo>
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
@@ -232,8 +232,8 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>staff</style>
-          <text/>
+          <style>repeat_right</style>
+          <text>D.S.</text>
           <jumpTo>segno</jumpTo>
           <playUntil>end</playUntil>
           <continueAt></continueAt>
