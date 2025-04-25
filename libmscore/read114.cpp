@@ -1939,13 +1939,32 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               j->setPlayUntil(e.readElementText());
                         else if (t == "continueAt")
                               j->setContinueAt(e.readElementText());
-                        else if (t == "playRepeats")
-                              j->setPlayRepeats(e.readBool());
                         else if (t == "subtype")
-                              e.readInt();
+                              e.skipCurrentElement(); // obsolete, always "Repeat"
                         else if (!j->readProperties(e))
                               e.unknown();
                         }
+
+                  // infer jump type
+                  QString jumpTo = j->jumpTo();
+                  QString playUntil = j->playUntil();
+                  if (jumpTo == "start") {
+                        if (playUntil == "end" )
+                              j->setJumpType(Jump::Type::DC);
+                        else if (playUntil == "fine")
+                              j->setJumpType(Jump::Type::DC_AL_FINE);
+                        else
+                              j->setJumpType(Jump::Type::DC_AL_CODA);
+                        }
+                  else {
+                        if (playUntil == "end" )
+                              j->setJumpType(Jump::Type::DS);
+                        else if (playUntil == "fine")
+                              j->setJumpType(Jump::Type::DS_AL_FINE);
+                        else
+                              j->setJumpType(Jump::Type::DS_AL_CODA);
+                        }
+
                   m->add(j);
                   }
             else if (tag == "Marker") {
@@ -1970,7 +1989,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         // force the marker type for correct display
                         a->setXmlText("");
                         a->setMarkerType(a->markerType());
-//TODO::ws                        a->initElementStyle(Tid::REPEAT_LEFT);
+                        a->setTid(Tid::REPEAT_LEFT);
                         }
                   m->add(a);
                   }
