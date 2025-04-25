@@ -32,11 +32,8 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * extensionAdjust READ extensionAdjust CONSTANT)
     Q_PROPERTY(StyleItem * modifierMag READ modifierMag CONSTANT)
     Q_PROPERTY(StyleItem * modifierAdjust READ modifierAdjust CONSTANT)
-    Q_PROPERTY(StyleItem * useStandardNoteNames READ useStandardNoteNames CONSTANT)
-    Q_PROPERTY(StyleItem * useGermanNoteNames READ useGermanNoteNames CONSTANT)
-    Q_PROPERTY(StyleItem * useFullGermanNoteNames READ useFullGermanNoteNames CONSTANT)
-    Q_PROPERTY(StyleItem * useSolfeggioNoteNames READ useSolfeggioNoteNames CONSTANT)
-    Q_PROPERTY(StyleItem * useFrenchNoteNames READ useFrenchNoteNames CONSTANT)
+
+    Q_PROPERTY(StyleItem * chordSymbolSpelling READ chordSymbolSpelling CONSTANT)
     Q_PROPERTY(StyleItem * automaticCapitalization READ automaticCapitalization CONSTANT)
     Q_PROPERTY(StyleItem * lowerCaseMinorChords READ lowerCaseMinorChords CONSTANT)
     Q_PROPERTY(StyleItem * lowerCaseBassNotes READ lowerCaseBassNotes CONSTANT)
@@ -59,11 +56,8 @@ public:
     StyleItem* modifierMag() const;
     StyleItem* modifierAdjust() const;
 
-    StyleItem* useStandardNoteNames() const;
-    StyleItem* useGermanNoteNames() const;
-    StyleItem* useFullGermanNoteNames() const;
-    StyleItem* useSolfeggioNoteNames() const;
-    StyleItem* useFrenchNoteNames() const;
+    StyleItem* chordSymbolSpelling() const;
+    Q_INVOKABLE QVariantList possibleChordSymbolSpellings() const;
 
     StyleItem* automaticCapitalization() const;
     StyleItem* lowerCaseMinorChords() const;

@@ -256,5 +256,11 @@ public:
 
     static AsciiStringView toXml(TimeSigVSMargin timeSigVSMargin);
     static TimeSigVSMargin fromXml(const AsciiStringView& str, TimeSigVSMargin def);
+
+    static AsciiStringView toXml(NoteSpellingType noteSpellingType);
+    static NoteSpellingType fromXml(const AsciiStringView& str, NoteSpellingType def);
+
+    static AsciiStringView toXml(ChordStylePreset chordStylePreset);
+    static ChordStylePreset fromXml(const AsciiStringView& str, ChordStylePreset def);
 };
 }
