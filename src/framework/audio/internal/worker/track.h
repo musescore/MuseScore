@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_TRACK_H
-#define MUSE_AUDIO_TRACK_H
+#pragma once
 
 #include <memory>
 
@@ -54,6 +53,8 @@ public:
     virtual void prepareToPlay() = 0;
     virtual bool readyToPlay() const = 0;
     virtual async::Notification readyToPlayChanged() const = 0;
+
+    virtual InputProcessingProgress inputProcessingProgress() const = 0;
 };
 
 class ITrackAudioOutput : public IAudioSource
@@ -221,5 +222,3 @@ using SoundTrackPtr = std::shared_ptr<SoundTrack>;
 
 using TracksMap = std::map<TrackId, TrackPtr>;
 }
-
-#endif // MUSE_AUDIO_TRACK_H

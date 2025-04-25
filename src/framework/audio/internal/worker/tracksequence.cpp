@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -268,13 +268,7 @@ TrackPtr TrackSequence::track(const TrackId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    auto search = m_tracks.find(id);
-
-    if (search != m_tracks.end()) {
-        return search->second;
-    }
-
-    return nullptr;
+    return muse::value(m_tracks, id, nullptr);
 }
 
 const TracksMap& TrackSequence::allTracks() const
