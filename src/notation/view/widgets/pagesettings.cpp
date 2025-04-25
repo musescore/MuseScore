@@ -471,8 +471,8 @@ void PageSettings::spatiumChanged(double val)
 
 void PageSettings::pageOffsetChanged(int val)
 {
-    // TODO: Cancel does not work when page offset is changed?
-    score()->setPageNumberOffset(val - 1);
+    score()->undoChangePageNumberOffset(val - 1);
+    globalContext()->currentNotation()->notationChanged().notify();
 }
 
 void PageSettings::pageHeightChanged(double val)
