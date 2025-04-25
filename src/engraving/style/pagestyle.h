@@ -19,22 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PAGESTYLE_H
-#define MU_ENGRAVING_PAGESTYLE_H
+#pragma once
 
-#include <set>
-#include <memory>
+#include <vector>
 
 #include "styledef.h"
 
 namespace mu::engraving {
-const std::set<Sid>& pageStyles();
+const std::vector<Sid>& pageStyles();
 
 class MStyle;
 class PageSizeGetAccessor
 {
 public:
-
     PageSizeGetAccessor(const MStyle& style);
 
     double width() const;
@@ -50,14 +47,12 @@ public:
     double spatium() const;
 
 private:
-
     const MStyle& m_style;
 };
 
 class PageSizeSetAccessor
 {
 public:
-
     PageSizeSetAccessor(MStyle& style);
 
     double width() const;
@@ -85,9 +80,6 @@ public:
     void setSpatium(double v);
 
 private:
-
     MStyle& m_style;
 };
 }
-
-#endif // MU_ENGRAVING_PAGESTYLE_H
