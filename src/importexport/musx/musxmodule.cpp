@@ -21,11 +21,24 @@
  */
 #include "musxmodule.h"
 
+#include "modularity/ioc.h"
+
+#include "project/inotationreadersregister.h"
+#include "internal/notationmusxreader.h"
+
+using namespace muse::modularity;
 using namespace mu::iex::musx;
+using namespace mu::project;
 
 std::string MusxModule::moduleName() const
 {
     return "iex_musx";
 }
 
-
+void MusxModule::resolveImports()
+{
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    if (readers) {
+        readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationMusxReader>());
+    }
+}
