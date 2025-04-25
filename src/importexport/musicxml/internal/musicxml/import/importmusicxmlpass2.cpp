@@ -2217,6 +2217,7 @@ void MusicXmlParserPass2::part()
     setPartInstruments(m_logger, &m_e, part, id, m_score, m_pass1.getInstrList(id), m_pass1.getIntervals(id), instruments, partName);
     partName = replacePartNameAccidentals(partName);
     part->setPartName(partName);
+    const bool inconsistentVisibility = mxmlPart.getPrintName() != mxmlPart.getPrintAbbr();
     if (!isLikelyIncorrectPartName(partName)) {
         part->setLongNameAll(partName);
     } else {
@@ -2224,6 +2225,10 @@ void MusicXmlParserPass2::part()
     }
     if (!mxmlPart.getAbbr().empty()) {
         part->setPlainShortNameAll(mxmlPart.getAbbr());
+        if (inconsistentVisibility) {
+            // TODO: improve logic to set visibility of part names
+            part->setLongNameAll(u"");
+        }
     } else {
         m_pass1.getPart(id)->setPlainShortNameAll(u"");
     }
