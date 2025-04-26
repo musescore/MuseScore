@@ -21,20 +21,23 @@
  */
 
 #include "notationwritersregister.h"
+#include "importexport/lyrics/exportlrc.h"
 
 using namespace mu::project;
 
-void NotationWritersRegister::reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer)
+void NotationWritersRegister::reg(const std::vector<std::string> &suffixes, INotationWriterPtr writer)
 {
-    for (const std::string& suffix : suffixes) {
-        m_writers.insert({ suffix, writer });
+    for (const std::string &suffix : suffixes)
+    {
+        m_writers.insert({suffix, writer});
     }
 }
 
-INotationWriterPtr NotationWritersRegister::writer(const std::string& suffix) const
+INotationWriterPtr NotationWritersRegister::writer(const std::string &suffix) const
 {
     auto it = m_writers.find(suffix);
-    if (it != m_writers.end()) {
+    if (it != m_writers.end())
+    {
         return it->second;
     }
 
