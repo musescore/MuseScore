@@ -26,16 +26,17 @@
 
 #include "../inotationreadersregister.h"
 
-namespace mu::project {
-class NotationReadersRegister : public INotationReadersRegister
+namespace mu::project
 {
-public:
-    void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) override;
-    INotationReaderPtr reader(const std::string& suffix) override;
+    class NotationReadersRegister : public INotationReadersRegister
+    {
+    public:
+        void reg(const std::vector<std::string> &suffixes, INotationReaderPtr reader) override;
+        INotationReaderPtr reader(const std::string &suffix) override;
 
-private:
-    std::map<std::string, INotationReaderPtr> m_readers;
-};
+    private:
+        std::map<std::string, INotationReaderPtr> m_readers;
+    };
 }
 
 #endif // MU_PROJECT_NOTATIONREADERSREGISTER_H
