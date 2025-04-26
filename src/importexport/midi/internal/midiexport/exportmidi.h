@@ -29,32 +29,34 @@
 #include "engraving/compat/midi/pausemap.h"
 #include "engraving/compat/midi/compatmidirenderinternal.h"
 
-namespace mu::engraving {
-class Score;
-class TempoMap;
-class SynthesizerState;
+namespace mu::engraving
+{
+    class Score;
+    class TempoMap;
+    class SynthesizerState;
 }
 
-namespace mu::iex::midi {
-//---------------------------------------------------------
-//   ExportMidi
-//---------------------------------------------------------
-
-class ExportMidi
+namespace mu::iex::midi
 {
-public:
-    ExportMidi(engraving::Score* s) { m_score = s; }
-    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs);
-    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs);
-    bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
-    bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
+    //---------------------------------------------------------
+    //   ExportMidi
+    //---------------------------------------------------------
 
-private:
-    void writeHeader(const engraving::CompatMidiRendererInternal::Context& context);
+    class ExportMidi
+    {
+    public:
+        ExportMidi(engraving::Score *s) { m_score = s; }
+        bool write(const QString &name, bool midiExpandRepeats, bool exportRPNs);
+        bool write(QIODevice *device, bool midiExpandRepeats, bool exportRPNs);
+        bool write(const QString &name, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState &synthState);
+        bool write(QIODevice *device, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState &synthState);
 
-    QFile m_file;
-    MidiFile m_midiFile;
-    engraving::Score* m_score = nullptr;
-};
+    private:
+        void writeHeader(const engraving::CompatMidiRendererInternal::Context &context);
+
+        QFile m_file;
+        MidiFile m_midiFile;
+        engraving::Score *m_score = nullptr;
+    };
 }
 #endif // EXPORTMIDI_H
