@@ -33,20 +33,19 @@ ExportTypeList::ExportTypeList(std::initializer_list<ExportType> args)
 {
 }
 
-bool ExportTypeList::contains(const QString& id) const
+bool ExportTypeList::contains(const QString &id) const
 {
-    return std::find_if(cbegin(), cend(), [id](const ExportType& type) {
-        return type.id == id;
-    }) != cend();
+    return std::find_if(cbegin(), cend(), [id](const ExportType &type)
+                        { return type.id == id; }) != cend();
 }
 
-const ExportType& ExportTypeList::getById(const QString& id) const
+const ExportType &ExportTypeList::getById(const QString &id) const
 {
-    auto it = std::find_if(cbegin(), cend(), [id](const ExportType& type) {
-        return type.id == id;
-    });
+    auto it = std::find_if(cbegin(), cend(), [id](const ExportType &type)
+                           { return type.id == id; });
 
-    if (it != cend()) {
+    if (it != cend())
+    {
         return *it;
     }
 
@@ -57,7 +56,8 @@ const ExportType& ExportTypeList::getById(const QString& id) const
 QVariantList ExportTypeList::toVariantList() const
 {
     QVariantList result;
-    for (const ExportType& type : *this) {
+    for (const ExportType &type : *this)
+    {
         result << type.toMap();
     }
     return result;
@@ -66,21 +66,21 @@ QVariantList ExportTypeList::toVariantList() const
 QVariantMap ExportType::toMap() const
 {
     return {
-        { "id", id },
-        { "name", name },
-        { "subtypes", subtypes.toVariantList() },
-        { "settingsPagePath", settingsPagePath }
-    };
+        {"id", id},
+        {"name", name},
+        {"subtypes", subtypes.toVariantList()},
+        {"settingsPagePath", settingsPagePath}};
 }
 
 std::vector<std::string> ExportType::filter() const
 {
     QStringList filterSuffixes;
-    for (const QString& suffix : suffixes) {
+    for (const QString &suffix : suffixes)
+    {
         filterSuffixes << QString("*.%1").arg(suffix);
     }
 
-    return { QString("%1 (%2)").arg(filterName, filterSuffixes.join(" ")).toStdString() };
+    return {QString("%1 (%2)").arg(filterName, filterSuffixes.join(" ")).toStdString()};
 }
 
 bool ExportType::hasSubtypes() const
@@ -88,12 +88,13 @@ bool ExportType::hasSubtypes() const
     return !subtypes.isEmpty();
 }
 
-ExportType ExportType::makeWithSuffixes(const QStringList& suffixes, const QString& name, const QString& filterName,
-                                        const QString& settingsPagePath)
+ExportType ExportType::makeWithSuffixes(const QStringList &suffixes, const QString &name, const QString &filterName,
+                                        const QString &settingsPagePath)
 {
     ExportType type;
 
-    if (suffixes.isEmpty()) {
+    if (suffixes.isEmpty())
+    {
         return type;
     }
 
@@ -105,11 +106,12 @@ ExportType ExportType::makeWithSuffixes(const QStringList& suffixes, const QStri
     return type;
 }
 
-ExportType ExportType::makeWithSubtypes(const ExportTypeList& subtypes, const QString& name)
+ExportType ExportType::makeWithSubtypes(const ExportTypeList &subtypes, const QString &name)
 {
     ExportType type;
 
-    if (subtypes.isEmpty()) {
+    if (subtypes.isEmpty())
+    {
         return type;
     }
 
