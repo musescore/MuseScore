@@ -78,7 +78,7 @@ Err importMusx(MasterScore* score, const QString& name)
     const ByteArray data = xmlFile.readAll();
     xmlFile.close();
 
-    auto doc = ::musx::factory::DocumentFactory::create<::musx::xml::qt::Document>(std::vector<char>(data.constData(), data.constData() + data.size()));
+    auto doc = ::musx::factory::DocumentFactory::create<::musx::xml::qt::Document>(reinterpret_cast<const char *>(data.constData()), data.size());
 
     /*
     if (!bb.read(name)) {
