@@ -28,8 +28,27 @@ class MasterScore;
 class Score;
 }
 
+namespace musx::dom {
+class Document;
+}
+
 namespace mu::iex::finale {
-    engraving::Err importEnigmaXmlfromBuffer(engraving::Score* score, const muse::ByteArray& data);
-    engraving::Err importEnigmaXml(engraving::MasterScore* score, const QString& name);
-    engraving::Err importMusx(engraving::MasterScore* score, const QString& name);
+
+engraving::Err importEnigmaXmlfromBuffer(engraving::Score* score, const muse::ByteArray& data);
+engraving::Err importEnigmaXml(engraving::MasterScore* score, const QString& name);
+engraving::Err importMusx(engraving::MasterScore* score, const QString& name);
+
+class MusxImporter
+{
+public:
+    MusxImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc)
+        : m_score(score), m_doc(doc) {}
+
+    void importParts();
+
+private:
+    engraving::Score* m_score;
+    const std::shared_ptr<const musx::dom::Document> m_doc;
+};
+
 }
