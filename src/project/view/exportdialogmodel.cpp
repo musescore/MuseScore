@@ -36,79 +36,83 @@ using UnitType = INotationWriter::UnitType;
 
 static const UnitType DEFAULT_EXPORT_UNITTYPE = UnitType::PER_PART;
 
-ExportDialogModel::ExportDialogModel(QObject* parent)
-    : QAbstractListModel(parent)
-    , m_selectionModel(new QItemSelectionModel(this))
-    , m_selectedUnitType(DEFAULT_EXPORT_UNITTYPE)
+ExportDialogModel::ExportDialogModel(QObject *parent)
+    : QAbstractListModel(parent), m_selectionModel(new QItemSelectionModel(this)), m_selectedUnitType(DEFAULT_EXPORT_UNITTYPE)
 {
     connect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, &ExportDialogModel::selectionChanged);
 
-    ExportTypeList musicXmlTypes {
-        ExportType::makeWithSuffixes({ "mxl" },
+    ExportTypeList musicXmlTypes{
+        ExportType::makeWithSuffixes({"mxl"},
                                      muse::qtrc("project/export", "Compressed") + " (*.mxl)",
                                      muse::qtrc("project/export", "Compressed MusicXML files"),
                                      "MusicXmlSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "musicxml" },
+        ExportType::makeWithSuffixes({"musicxml"},
                                      muse::qtrc("project/export", "Uncompressed") + " (*.musicxml)",
                                      muse::qtrc("project/export", "Uncompressed MusicXML files"),
                                      "MusicXmlSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "xml" },
+        ExportType::makeWithSuffixes({"xml"},
                                      muse::qtrc("project/export", "Uncompressed (outdated)") + " (*.xml)",
                                      muse::qtrc("project/export", "Uncompressed MusicXML files"),
                                      "MusicXmlSettingsPage.qml"),
     };
 
     m_exportTypeList = {
-        ExportType::makeWithSuffixes({ "pdf" },
+        ExportType::makeWithSuffixes({"lrc"},
+                                     muse::qtrc("project/export", "LRC File"),
+                                     muse::qtrc("project/export", "LRC files"),
+                                     ""), // No settings page needed
+        ExportType::makeWithSuffixes({"pdf"},
                                      muse::qtrc("project/export", "PDF file"),
                                      muse::qtrc("project/export", "PDF files"),
                                      "PdfSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "png" },
+        ExportType::makeWithSuffixes({"png"},
                                      muse::qtrc("project/export", "PNG images"),
                                      muse::qtrc("project/export", "PNG images"),
                                      "PngSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "svg" },
+        ExportType::makeWithSuffixes({"svg"},
                                      muse::qtrc("project/export", "SVG images"),
                                      muse::qtrc("project/export", "SVG images"),
                                      "SvgSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "mp3" },
+        ExportType::makeWithSuffixes({"mp3"},
                                      muse::qtrc("project/export", "MP3 audio"),
                                      muse::qtrc("project/export", "MP3 audio files"),
                                      "Mp3SettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "wav" },
+        ExportType::makeWithSuffixes({"wav"},
                                      muse::qtrc("project/export", "WAV audio"),
                                      muse::qtrc("project/export", "WAV audio files"),
                                      "AudioSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "ogg" },
+        ExportType::makeWithSuffixes({"ogg"},
                                      muse::qtrc("project/export", "OGG audio"),
                                      muse::qtrc("project/export", "OGG audio files"),
                                      "OggSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "flac" },
+        ExportType::makeWithSuffixes({"flac"},
                                      muse::qtrc("project/export", "FLAC audio"),
                                      muse::qtrc("project/export", "FLAC audio files"),
                                      "AudioSettingsPage.qml"),
-        ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
+        ExportType::makeWithSuffixes({"mid", "midi", "kar"},
                                      muse::qtrc("project/export", "MIDI file"),
                                      muse::qtrc("project/export", "MIDI files"),
                                      "MidiSettingsPage.qml"),
         ExportType::makeWithSubtypes(musicXmlTypes,
                                      muse::qtrc("project/export", "MusicXML")),
-        ExportType::makeWithSuffixes({ "brf" },
+        ExportType::makeWithSuffixes({"brf"},
                                      //: Meaning like "measure-over-measure", but called "bar-over-bar"
                                      //: even in US English. Not to be confused with "bar-by-bar" format.
                                      //: See https://musescore.org/en/handbook/4/file-export#Score_formats
                                      muse::qtrc("project/export", "Braille (basic bar-over-bar)"),
                                      muse::qtrc("project/export", "Braille files")),
-        ExportType::makeWithSuffixes({ "mei" },
+        ExportType::makeWithSuffixes({"mei"},
                                      muse::qtrc("project/export", "MEI"),
                                      muse::qtrc("project/export", "MEI files"),
-                                     "MeiSettingsPage.qml")
-    };
+                                     "MeiSettingsPage.qml")};
 
     ExportInfo info = exportProjectScenario()->exportInfo();
-    if (info.id == "") {
+    if (info.id == "")
+    {
         setExportType(m_exportTypeList.front());
-    } else {
+    }
+    else
+    {
         selectExportTypeById(info.id);
     }
     m_exportPath = info.exportPath;
@@ -127,7 +131,8 @@ void ExportDialogModel::load()
     beginResetModel();
 
     IMasterNotationPtr masterNotation = this->masterNotation();
-    if (!masterNotation) {
+    if (!masterNotation)
+    {
         endResetModel();
         return;
     }
@@ -140,7 +145,8 @@ void ExportDialogModel::load()
 
     masterNotation->sortExcerpts(excerpts);
 
-    for (const IExcerptNotationPtr& excerpt : excerpts) {
+    for (const IExcerptNotationPtr &excerpt : excerpts)
+    {
         m_notations << excerpt->notation();
     }
 
@@ -150,15 +156,17 @@ void ExportDialogModel::load()
     selectSavedNotations();
 }
 
-QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
+QVariant ExportDialogModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid()) {
+    if (!index.isValid())
+    {
         return QVariant();
     }
 
     INotationPtr notation = m_notations[index.row()];
 
-    switch (role) {
+    switch (role)
+    {
     case RoleTitle:
         return notation->name();
     case RoleIsSelected:
@@ -170,44 +178,46 @@ QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int ExportDialogModel::rowCount(const QModelIndex&) const
+int ExportDialogModel::rowCount(const QModelIndex &) const
 {
     return m_notations.size();
 }
 
 QHash<int, QByteArray> ExportDialogModel::roleNames() const
 {
-    static const QHash<int, QByteArray> roles {
-        { RoleTitle, "title" },
-        { RoleIsSelected, "isSelected" },
-        { RoleIsMain, "isMain" }
-    };
+    static const QHash<int, QByteArray> roles{
+        {RoleTitle, "title"},
+        {RoleIsSelected, "isSelected"},
+        {RoleIsMain, "isMain"}};
 
     return roles;
 }
 
 void ExportDialogModel::setSelected(int scoreIndex, bool selected)
 {
-    if (!isIndexValid(scoreIndex)) {
+    if (!isIndexValid(scoreIndex))
+    {
         return;
     }
 
     QModelIndex modelIndex = index(scoreIndex);
     m_selectionModel->select(modelIndex, selected ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 
-    emit dataChanged(modelIndex, modelIndex, { RoleIsSelected });
+    emit dataChanged(modelIndex, modelIndex, {RoleIsSelected});
 }
 
 void ExportDialogModel::setAllSelected(bool selected)
 {
-    for (int i = 0; i < rowCount(); i++) {
+    for (int i = 0; i < rowCount(); i++)
+    {
         setSelected(i, selected);
     }
 }
 
 void ExportDialogModel::selectCurrentNotation()
 {
-    for (int i = 0; i < rowCount(); i++) {
+    for (int i = 0; i < rowCount(); i++)
+    {
         setSelected(i, m_notations[i] == context()->currentNotation());
     }
 }
@@ -215,9 +225,11 @@ void ExportDialogModel::selectCurrentNotation()
 void ExportDialogModel::selectSavedNotations()
 {
     ExportInfo info = exportProjectScenario()->exportInfo();
-    for (const INotationPtr& notation : info.notations) {
+    for (const INotationPtr &notation : info.notations)
+    {
         auto it = std::find(m_notations.begin(), m_notations.end(), notation);
-        if (it != m_notations.end()) {
+        if (it != m_notations.end())
+        {
             setSelected(std::distance(m_notations.begin(), it), true);
         }
     }
@@ -253,9 +265,10 @@ QVariantMap ExportDialogModel::selectedExportType() const
     return m_selectedExportType.toMap();
 }
 
-void ExportDialogModel::setExportType(const ExportType& type)
+void ExportDialogModel::setExportType(const ExportType &type)
 {
-    if (m_selectedExportType == type) {
+    if (m_selectedExportType == type)
+    {
         return;
     }
 
@@ -264,12 +277,17 @@ void ExportDialogModel::setExportType(const ExportType& type)
     emit selectedExportTypeChanged(type.toMap());
 
     std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
-
-    IF_ASSERT_FAILED(!unitTypes.empty()) {
+    if (type.id == "lrc")
+    {
+        unitTypes = {UnitType::MULTI_PART}; // only supports single file export
+    }
+    IF_ASSERT_FAILED(!unitTypes.empty())
+    {
         return;
     }
 
-    if (std::find(unitTypes.cbegin(), unitTypes.cend(), m_selectedUnitType) != unitTypes.cend()) {
+    if (std::find(unitTypes.cbegin(), unitTypes.cend(), m_selectedUnitType) != unitTypes.cend())
+    {
         return;
     }
 
@@ -278,16 +296,19 @@ void ExportDialogModel::setExportType(const ExportType& type)
     setUnitType(unitTypes.front());
 }
 
-void ExportDialogModel::selectExportTypeById(const QString& id)
+void ExportDialogModel::selectExportTypeById(const QString &id)
 {
-    for (const ExportType& type : std::as_const(m_exportTypeList)) {
+    for (const ExportType &type : std::as_const(m_exportTypeList))
+    {
         // First, check if it's a subtype
-        if (type.subtypes.contains(id)) {
+        if (type.subtypes.contains(id))
+        {
             setExportType(type.subtypes.getById(id));
             return;
         }
 
-        if (type.id == id) {
+        if (type.id == id)
+        {
             setExportType(type);
             return;
         }
@@ -299,15 +320,16 @@ void ExportDialogModel::selectExportTypeById(const QString& id)
 
 QVariantList ExportDialogModel::availableUnitTypes() const
 {
-    QMap<UnitType, QString> unitTypeNames {
-        { UnitType::PER_PAGE, muse::qtrc("project/export", "Each page to a separate file") },
-        { UnitType::PER_PART, muse::qtrc("project/export", "Each part to a separate file") },
-        { UnitType::MULTI_PART, muse::qtrc("project/export", "All parts combined in one file") },
+    QMap<UnitType, QString> unitTypeNames{
+        {UnitType::PER_PAGE, muse::qtrc("project/export", "Each page to a separate file")},
+        {UnitType::PER_PART, muse::qtrc("project/export", "Each part to a separate file")},
+        {UnitType::MULTI_PART, muse::qtrc("project/export", "All parts combined in one file")},
     };
 
     QVariantList result;
 
-    for (UnitType type : exportProjectScenario()->supportedUnitTypes(m_selectedExportType)) {
+    for (UnitType type : exportProjectScenario()->supportedUnitTypes(m_selectedExportType))
+    {
         QVariantMap obj;
         obj["text"] = unitTypeNames[type];
         obj["value"] = static_cast<int>(type);
@@ -329,18 +351,22 @@ void ExportDialogModel::setUnitType(int unitType)
 
 void ExportDialogModel::setUnitType(UnitType unitType)
 {
-    if (m_selectedUnitType == unitType) {
+    if (m_selectedUnitType == unitType)
+    {
         return;
     }
 
     bool found = false;
-    for (const QVariant& availabeUnitType : availableUnitTypes()) {
-        if (availabeUnitType.value<QVariantMap>()["value"].toInt() == static_cast<int>(unitType)) {
+    for (const QVariant &availabeUnitType : availableUnitTypes())
+    {
+        if (availabeUnitType.value<QVariantMap>()["value"].toInt() == static_cast<int>(unitType))
+        {
             found = true;
         }
     }
 
-    if (!found) {
+    if (!found)
+    {
         return;
     }
 
@@ -352,11 +378,13 @@ bool ExportDialogModel::exportScores()
 {
     INotationPtrList notations;
 
-    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+    for (const QModelIndex &index : m_selectionModel->selectedIndexes())
+    {
         notations.push_back(m_notations[index.row()]);
     }
 
-    if (notations.empty()) {
+    if (notations.empty())
+    {
         return false;
     }
 
@@ -365,28 +393,28 @@ bool ExportDialogModel::exportScores()
     // TODO: only restore filename if exactly the same notations are selected and the same unit type.
     // These settings may namely cause extra things to be added to the name, but these extra things
     // are not applicable to other values of these settings.
-    //if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
+    // if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
     //    filename = io::filename(m_exportPath);
     //}
     muse::io::path_t defaultPath;
-    if (m_exportPath != "" && filename != "") {
+    if (m_exportPath != "" && filename != "")
+    {
         defaultPath = io::absoluteDirpath(m_exportPath)
-                      .appendingComponent(io::filename(filename, false))
-                      .appendingSuffix(m_selectedExportType.suffixes[0]);
+                          .appendingComponent(io::filename(filename, false))
+                          .appendingSuffix(m_selectedExportType.suffixes[0]);
     }
 
-    RetVal<muse::io::path_t> exportPath
-        = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType, defaultPath);
-    if (!exportPath.ret) {
+    RetVal<muse::io::path_t> exportPath = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType, defaultPath);
+    if (!exportPath.ret)
+    {
         return false;
     }
 
     m_exportPath = exportPath.val;
 
-    async::Async::call(this, [this, notations]() {
-        exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,
-                                              shouldDestinationFolderBeOpenedOnExport());
-    });
+    async::Async::call(this, [this, notations]()
+                       { exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,
+                                                               shouldDestinationFolderBeOpenedOnExport()); });
 
     return true;
 }
@@ -396,9 +424,10 @@ int ExportDialogModel::pdfResolution() const
     return imageExportConfiguration()->exportPdfDpiResolution();
 }
 
-void ExportDialogModel::setPdfResolution(const int& resolution)
+void ExportDialogModel::setPdfResolution(const int &resolution)
 {
-    if (resolution == pdfResolution()) {
+    if (resolution == pdfResolution())
+    {
         return;
     }
 
@@ -411,9 +440,10 @@ bool ExportDialogModel::pdfTransparentBackground() const
     return imageExportConfiguration()->exportPdfWithTransparentBackground();
 }
 
-void ExportDialogModel::setPdfTransparentBackground(const bool& transparent)
+void ExportDialogModel::setPdfTransparentBackground(const bool &transparent)
 {
-    if (transparent == pdfTransparentBackground()) {
+    if (transparent == pdfTransparentBackground())
+    {
         return;
     }
 
@@ -426,9 +456,10 @@ int ExportDialogModel::pngResolution() const
     return imageExportConfiguration()->exportPngDpiResolution();
 }
 
-void ExportDialogModel::setPngResolution(const int& resolution)
+void ExportDialogModel::setPngResolution(const int &resolution)
 {
-    if (resolution == pngResolution()) {
+    if (resolution == pngResolution())
+    {
         return;
     }
 
@@ -441,9 +472,10 @@ bool ExportDialogModel::pngTransparentBackground() const
     return imageExportConfiguration()->exportPngWithTransparentBackground();
 }
 
-void ExportDialogModel::setPngTransparentBackground(const bool& transparent)
+void ExportDialogModel::setPngTransparentBackground(const bool &transparent)
 {
-    if (transparent == pngTransparentBackground()) {
+    if (transparent == pngTransparentBackground())
+    {
         return;
     }
 
@@ -456,9 +488,10 @@ bool ExportDialogModel::svgTransparentBackground() const
     return imageExportConfiguration()->exportSvgWithTransparentBackground();
 }
 
-void ExportDialogModel::setSvgTransparentBackground(const bool& transparent)
+void ExportDialogModel::setSvgTransparentBackground(const bool &transparent)
 {
-    if (transparent == svgTransparentBackground()) {
+    if (transparent == svgTransparentBackground())
+    {
         return;
     }
 
@@ -473,7 +506,8 @@ bool ExportDialogModel::svgIllustratorCompat() const
 
 void ExportDialogModel::setSvgIllustratorCompat(bool compat)
 {
-    if (compat == svgIllustratorCompat()) {
+    if (compat == svgIllustratorCompat())
+    {
         return;
     }
 
@@ -483,7 +517,7 @@ void ExportDialogModel::setSvgIllustratorCompat(bool compat)
 
 QList<int> ExportDialogModel::availableSampleRates() const
 {
-    const std::vector<int>& rates = audioExportConfiguration()->availableSampleRates();
+    const std::vector<int> &rates = audioExportConfiguration()->availableSampleRates();
     return QList<int>(rates.cbegin(), rates.cend());
 }
 
@@ -494,7 +528,8 @@ int ExportDialogModel::sampleRate() const
 
 void ExportDialogModel::setSampleRate(int rate)
 {
-    if (rate == sampleRate()) {
+    if (rate == sampleRate())
+    {
         return;
     }
 
@@ -504,7 +539,7 @@ void ExportDialogModel::setSampleRate(int rate)
 
 QList<int> ExportDialogModel::availableBitRates() const
 {
-    const std::vector<int>& rates = audioExportConfiguration()->availableMp3BitRates();
+    const std::vector<int> &rates = audioExportConfiguration()->availableMp3BitRates();
     return QList<int>(rates.cbegin(), rates.cend());
 }
 
@@ -515,7 +550,8 @@ int ExportDialogModel::bitRate() const
 
 void ExportDialogModel::setBitRate(int rate)
 {
-    if (rate == bitRate()) {
+    if (rate == bitRate())
+    {
         return;
     }
 
@@ -530,7 +566,8 @@ bool ExportDialogModel::midiExpandRepeats() const
 
 void ExportDialogModel::setMidiExpandRepeats(bool expandRepeats)
 {
-    if (expandRepeats == midiExpandRepeats()) {
+    if (expandRepeats == midiExpandRepeats())
+    {
         return;
     }
 
@@ -545,7 +582,8 @@ bool ExportDialogModel::midiExportRpns() const
 
 void ExportDialogModel::setMidiExportRpns(bool exportRpns)
 {
-    if (exportRpns == midiExportRpns()) {
+    if (exportRpns == midiExportRpns())
+    {
         return;
     }
 
@@ -560,7 +598,8 @@ bool ExportDialogModel::meiExportLayout() const
 
 void ExportDialogModel::setMeiExportLayout(bool exportLayout)
 {
-    if (exportLayout == meiExportLayout()) {
+    if (exportLayout == meiExportLayout())
+    {
         return;
     }
 
@@ -575,7 +614,8 @@ bool ExportDialogModel::meiUseMuseScoreIds() const
 
 void ExportDialogModel::setMeiUseMuseScoreIds(bool useMuseScoreIds)
 {
-    if (useMuseScoreIds == meiUseMuseScoreIds()) {
+    if (useMuseScoreIds == meiUseMuseScoreIds())
+    {
         return;
     }
 
@@ -585,20 +625,21 @@ void ExportDialogModel::setMeiUseMuseScoreIds(bool useMuseScoreIds)
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
-    std::map<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
+    std::map<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames{
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXmlLayoutType::AllLayout, muse::qtrc("project/export", "All layout") },
+        {MusicXmlLayoutType::AllLayout, muse::qtrc("project/export", "All layout")},
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXmlLayoutType::AllBreaks, muse::qtrc("project/export", "System and page breaks") },
+        {MusicXmlLayoutType::AllBreaks, muse::qtrc("project/export", "System and page breaks")},
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXmlLayoutType::ManualBreaks, muse::qtrc("project/export", "Manually added system and page breaks only") },
+        {MusicXmlLayoutType::ManualBreaks, muse::qtrc("project/export", "Manually added system and page breaks only")},
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXmlLayoutType::None, muse::qtrc("project/export", "No system or page breaks") },
+        {MusicXmlLayoutType::None, muse::qtrc("project/export", "No system or page breaks")},
     };
 
     QVariantList result;
 
-    for (const auto& [type, name] : musicXmlLayoutTypeNames) {
+    for (const auto &[type, name] : musicXmlLayoutTypeNames)
+    {
         QVariantMap obj;
         obj["text"] = name;
         obj["value"] = static_cast<int>(type);
@@ -610,10 +651,12 @@ QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 
 ExportDialogModel::MusicXmlLayoutType ExportDialogModel::musicXmlLayoutType() const
 {
-    if (musicXmlConfiguration()->exportLayout()) {
+    if (musicXmlConfiguration()->exportLayout())
+    {
         return MusicXmlLayoutType::AllLayout;
     }
-    switch (musicXmlConfiguration()->exportBreaksType()) {
+    switch (musicXmlConfiguration()->exportBreaksType())
+    {
     case IMusicXmlConfiguration::MusicXmlExportBreaksType::All:
         return MusicXmlLayoutType::AllBreaks;
     case IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual:
@@ -627,10 +670,12 @@ ExportDialogModel::MusicXmlLayoutType ExportDialogModel::musicXmlLayoutType() co
 
 void ExportDialogModel::setMusicXmlLayoutType(MusicXmlLayoutType layoutType)
 {
-    if (layoutType == musicXmlLayoutType()) {
+    if (layoutType == musicXmlLayoutType())
+    {
         return;
     }
-    switch (layoutType) {
+    switch (layoutType)
+    {
     case MusicXmlLayoutType::AllLayout:
         musicXmlConfiguration()->setExportLayout(true);
         break;
@@ -657,7 +702,8 @@ bool ExportDialogModel::shouldDestinationFolderBeOpenedOnExport() const
 
 void ExportDialogModel::setShouldDestinationFolderBeOpenedOnExport(bool enabled)
 {
-    if (enabled == shouldDestinationFolderBeOpenedOnExport()) {
+    if (enabled == shouldDestinationFolderBeOpenedOnExport())
+    {
         return;
     }
 
@@ -676,7 +722,8 @@ void ExportDialogModel::updateExportInfo()
     info.projectPath = project ? project->path() : "";
 
     std::vector<INotationPtr> notations;
-    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+    for (const QModelIndex &index : m_selectionModel->selectedIndexes())
+    {
         notations.emplace_back(m_notations[index.row()]);
     }
     info.notations = notations;
