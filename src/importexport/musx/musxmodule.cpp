@@ -39,6 +39,6 @@ void MusxModule::resolveImports()
 {
     auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationMusxReader>());
+        readers->reg({ /*"musx",*/ "enigmaxml" }, std::make_shared<NotationMusxReader>());
     }
 }
