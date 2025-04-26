@@ -190,10 +190,10 @@ if (NOT CC_IS_EMSCRIPTEN)
             iex_bb
             iex_bww
             iex_capella
+            iex_finale
             iex_guitarpro
             iex_midi
             iex_musedata
-            iex_musx
             iex_ove
             iex_audioexport
             iex_imagesexport

@@ -19,14 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#include "finalemodule.h"
 
-#include "project/inotationreader.h"
+#include "modularity/ioc.h"
 
-namespace mu::iex::musx {
-class NotationMusxReader : public project::INotationReader
+#include "project/inotationreadersregister.h"
+#include "internal/notationfinalereader.h"
+
+using namespace muse::modularity;
+using namespace mu::iex::finale;
+using namespace mu::project;
+
+std::string FinaleModule::moduleName() const
 {
-public:
-    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
-};
+    return "iex_finale";
+}
+
+void FinaleModule::resolveImports()
+{
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
+    if (readers) {
+        readers->reg({ "musx", "enigmaxml" }, std::make_shared<NotationFinaleReader>());
+    }
 }

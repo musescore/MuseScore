@@ -19,26 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "musxmodule.h"
+#pragma once
 
-#include "modularity/ioc.h"
+#include "engraving/engravingerrors.h"
 
-#include "project/inotationreadersregister.h"
-#include "internal/notationmusxreader.h"
-
-using namespace muse::modularity;
-using namespace mu::iex::musx;
-using namespace mu::project;
-
-std::string MusxModule::moduleName() const
-{
-    return "iex_musx";
+namespace mu::engraving {
+class MasterScore;
+class Score;
 }
 
-void MusxModule::resolveImports()
-{
-    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
-    if (readers) {
-        readers->reg({ /*"musx",*/ "enigmaxml" }, std::make_shared<NotationMusxReader>());
-    }
+namespace mu::iex::finale {
+    engraving::Err importEnigmaXmlfromBuffer(engraving::Score* score, const muse::ByteArray& data);
+    engraving::Err importEnigmaXml(engraving::MasterScore* score, const QString& name);
+    engraving::Err importMusx(engraving::MasterScore* score, const QString& name);
 }

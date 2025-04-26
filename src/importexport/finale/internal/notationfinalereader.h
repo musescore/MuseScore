@@ -21,15 +21,12 @@
  */
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include "project/inotationreader.h"
 
-namespace mu::iex::musx {
-class MusxModule : public muse::modularity::IModuleSetup
+namespace mu::iex::finale {
+class NotationFinaleReader : public project::INotationReader
 {
 public:
-
-    std::string moduleName() const override;
-    void resolveImports() override;
+    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
 };
-
-} // namespace mu::iex::musx
+}
