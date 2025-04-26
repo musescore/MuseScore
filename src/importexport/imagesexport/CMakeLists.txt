@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../lyrics)
+
 declare_module(iex_imagesexport)
 
 set(MODULE_SRC
@@ -26,7 +28,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iimagesexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/imagesexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/imagesexportconfiguration.h
-    
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractimagewriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractimagewriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.cpp
@@ -37,11 +39,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/pngwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pdfwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pdfwriter.h
-    )
+)
 
 set(MODULE_LINK
     engraving
-    )
+    iex_lyrics
+)
 
 setup_module()
-
