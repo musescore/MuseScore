@@ -24,37 +24,38 @@
 
 #include "../iimagesexportconfiguration.h"
 
-namespace mu::iex::imagesexport {
-class ImagesExportConfiguration : public IImagesExportConfiguration
+namespace mu::iex::imagesexport
 {
-public:
-    void init();
+    class ImagesExportConfiguration : public IImagesExportConfiguration
+    {
+    public:
+        void init();
 
-    int exportPdfDpiResolution() const override;
-    void setExportPdfDpiResolution(int dpi) override;
+        int exportPdfDpiResolution() const override;
+        void setExportPdfDpiResolution(int dpi) override;
 
-    bool exportPdfWithTransparentBackground() const override;
-    void setExportPdfWithTransparentBackground(bool transparent) override;
+        bool exportPdfWithTransparentBackground() const override;
+        void setExportPdfWithTransparentBackground(bool transparent) override;
 
-    float exportPngDpiResolution() const override;
-    void setExportPngDpiResolution(float dpi) override;
-    void setExportPngDpiResolutionOverride(std::optional<float> dpi) override;
+        float exportPngDpiResolution() const override;
+        void setExportPngDpiResolution(float dpi) override;
+        void setExportPngDpiResolutionOverride(std::optional<float> dpi) override;
 
-    bool exportPngWithTransparentBackground() const override;
-    void setExportPngWithTransparentBackground(bool transparent) override;
+        bool exportPngWithTransparentBackground() const override;
+        void setExportPngWithTransparentBackground(bool transparent) override;
 
-    bool exportSvgWithTransparentBackground() const override;
-    void setExportSvgWithTransparentBackground(bool transparent) override;
-    bool exportSvgWithIllustratorCompat() const override;
-    void setExportSvgWithIllustratorCompat(bool compat) override;
+        bool exportSvgWithTransparentBackground() const override;
+        void setExportSvgWithTransparentBackground(bool transparent) override;
+        bool exportSvgWithIllustratorCompat() const override;
+        void setExportSvgWithIllustratorCompat(bool compat) override;
 
-    int trimMarginPixelSize() const override;
-    void setTrimMarginPixelSize(std::optional<int> pixelSize) override;
+        int trimMarginPixelSize() const override;
+        void setTrimMarginPixelSize(std::optional<int> pixelSize) override;
 
-private:
-    std::optional<int> m_trimMarginPixelSize;
-    std::optional<float> m_customExportPngDpiOverride;
-};
+    private:
+        std::optional<int> m_trimMarginPixelSize;
+        std::optional<float> m_customExportPngDpiOverride;
+    };
 }
 
 #endif // MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
