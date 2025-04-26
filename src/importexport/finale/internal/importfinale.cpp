@@ -75,6 +75,9 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
 
     data.clear(); // free up data now that it isn't needed
 
+    MusxImporter importer(score, doc);
+    importer.importParts();  // just create Parts for now
+
     score->setUpTempoMap(); //??
     return engraving::Err::NoError;
 }
@@ -165,6 +168,54 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
     xmlFile.close();
 
     return importEnigmaXmlfromBuffer(score, std::move(data));
+}
+
+static std::string trimNewLineFromString(const std::string& src)
+{
+    size_t pos = src.find('\n');
+    if (pos != std::string::npos) {
+        return src.substr(0, pos);  // Truncate at the newline, excluding it
+    }
+    return src;
+}
+
+void MusxImporter::importParts()
+{
+    auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+
+    int partNumber = 0;
+    for (const auto& item : scrollView) {
+        auto staff = item->getStaff();
+        if (!staff)
+            continue; // safety check
+        auto multiStaffInst = staff->getMultiStaffInstGroup();
+        /// @todo skip staves in multiStaffInsts after the first staff
+
+        Part* part = new Part(m_score);
+        //part->setTrack(m_score->nstaves() * VOICES);
+
+        QString id = QString("P%1").arg(++partNumber);
+        part->setId(id);
+
+        auto fullName = staff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        if (!fullName.empty()) {
+            part->setPartName(QString::fromStdString(trimNewLineFromString(fullName)));
+            part->setLongName(QString::fromStdString(trimNewLineFromString(fullName)));
+        }
+
+        auto abrvName = staff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        if (!abrvName.empty()) {
+            part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
+        }
+
+
+        int numStaves = multiStaffInst ? multiStaffInst->staffNums.size() : 1;
+        for (int x = 1; x <= numStaves; x++) {
+            Staff* s = Factory::createStaff(part);
+            m_score->appendStaff(s);
+        }
+        m_score->appendPart(part);
+    }
 }
 
 }
