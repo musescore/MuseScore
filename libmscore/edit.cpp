@@ -5135,6 +5135,27 @@ void Score::undoRemoveElement(Element* element)
       }
 
 //---------------------------------------------------------
+//   canReselectItem
+//---------------------------------------------------------
+
+bool Score::canReselectItem(const Element* item) const
+      {
+      if (!item || item->selected())
+            return false;
+
+      Element* el = const_cast<Element*>(item);
+      Element* seg = el->findAncestor(ElementType::SEGMENT);
+      if (seg) {
+            QList<const Element*> elements;
+            seg->scanElements(&elements, collectElements, false);
+            bool contains = std::find(elements.cbegin(), elements.cend(), el) != elements.cend();
+            return contains;
+            }
+
+      return true;
+      }
+
+//---------------------------------------------------------
 //   undoChangeSpannerElements
 //---------------------------------------------------------
 

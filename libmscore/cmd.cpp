@@ -2783,7 +2783,8 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                   Element* e = cr;
                   if (cr->isChord())
                         e = toChord(cr)->upNote();
-                  select(e, SelectType::ADD);
+                  if (canReselectItem(e))
+                        select(e, SelectType::ADD);
                   }
             return;
             }

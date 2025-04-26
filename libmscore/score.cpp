@@ -3343,7 +3343,7 @@ void Score::padToggle(Pad p, const EditData& ed)
       if (!elementsToSelect.empty()) {
             std::vector<Element*> selectList;
             for (Element* e : elementsToSelect) {
-                  if (e && !e->selected()) {
+                  if (canReselectItem(e)) {
                         selectList.push_back(e);
                         }
                   }
