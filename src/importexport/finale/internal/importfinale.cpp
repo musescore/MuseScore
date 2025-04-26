@@ -66,10 +66,10 @@ using namespace musx::dom;
 namespace mu::iex::finale {
 
 //---------------------------------------------------------
-//   importMusicXmlfromBuffer
+//   importEnigmaXmlfromBuffer
 //---------------------------------------------------------
 
-Err importMusicXmlfromBuffer(Score* score, const ByteArray& data)
+Err importEnigmaXmlfromBuffer(Score* score, const ByteArray& data)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::qt::Document>(reinterpret_cast<const char *>(data.constData()), data.size());
 
@@ -140,7 +140,7 @@ Err importMusx(MasterScore* score, const QString& name)
         return Err::FileBadFormat;      // appropriate error message has been printed by extractScoreFile
     }
 
-    return importMusicXmlfromBuffer(score, data);
+    return importEnigmaXmlfromBuffer(score, data);
 }
 
 //---------------------------------------------------------
@@ -162,7 +162,7 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
     const ByteArray data = xmlFile.readAll();
     xmlFile.close();
 
-    return importMusicXmlfromBuffer(score, data);
+    return importEnigmaXmlfromBuffer(score, data);
 }
 
 }
