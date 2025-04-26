@@ -69,9 +69,11 @@ namespace mu::iex::finale {
 //   importEnigmaXmlfromBuffer
 //---------------------------------------------------------
 
-Err importEnigmaXmlfromBuffer(Score* score, const ByteArray& data)
+Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::qt::Document>(reinterpret_cast<const char *>(data.constData()), data.size());
+
+    data.clear(); // free up data now that it isn't needed
 
     score->setUpTempoMap(); //??
     return engraving::Err::NoError;
@@ -140,7 +142,7 @@ Err importMusx(MasterScore* score, const QString& name)
         return Err::FileBadFormat;      // appropriate error message has been printed by extractScoreFile
     }
 
-    return importEnigmaXmlfromBuffer(score, data);
+    return importEnigmaXmlfromBuffer(score, std::move(data));
 }
 
 //---------------------------------------------------------
@@ -159,10 +161,10 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
         return Err::FileOpenError;
     }
 
-    const ByteArray data = xmlFile.readAll();
+    ByteArray data = xmlFile.readAll();
     xmlFile.close();
 
-    return importEnigmaXmlfromBuffer(score, data);
+    return importEnigmaXmlfromBuffer(score, std::move(data));
 }
 
 }
