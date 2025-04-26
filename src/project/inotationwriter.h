@@ -32,40 +32,42 @@
 #include "global/progress.h"
 #include "notation/inotation.h"
 
-namespace mu::project {
-class INotationWriter
+namespace mu::project
 {
-public:
+    class INotationWriter
+    {
+    public:
+        virtual ~INotationWriter() = default;
 
-    virtual ~INotationWriter() = default;
+        enum class UnitType
+        {
+            PER_PAGE,
+            PER_PART,
+            MULTI_PART
+        };
 
-    enum class UnitType {
-        PER_PAGE,
-        PER_PART,
-        MULTI_PART
+        enum class OptionKey
+        {
+            UNIT_TYPE,
+            PAGE_NUMBER,
+            TRANSPARENT_BACKGROUND,
+            BEATS_COLORS
+        };
+
+        using Options = std::map<OptionKey, muse::Val>;
+
+        virtual std::vector<UnitType> supportedUnitTypes() const = 0;
+        virtual bool supportsUnitType(UnitType unitType) const = 0;
+
+        virtual muse::Ret write(notation::INotationPtr notation, muse::io::IODevice &device, const Options &options = Options()) = 0;
+        virtual muse::Ret writeList(const notation::INotationPtrList &notations, muse::io::IODevice &device,
+                                    const Options &options = Options()) = 0;
+
+        virtual muse::Progress *progress() { return nullptr; }
+        virtual void abort() {}
     };
 
-    enum class OptionKey {
-        UNIT_TYPE,
-        PAGE_NUMBER,
-        TRANSPARENT_BACKGROUND,
-        BEATS_COLORS
-    };
-
-    using Options = std::map<OptionKey, muse::Val>;
-
-    virtual std::vector<UnitType> supportedUnitTypes() const = 0;
-    virtual bool supportsUnitType(UnitType unitType) const = 0;
-
-    virtual muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) = 0;
-    virtual muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& device,
-                                const Options& options = Options()) = 0;
-
-    virtual muse::Progress* progress() { return nullptr; }
-    virtual void abort() {}
-};
-
-using INotationWriterPtr = std::shared_ptr<INotationWriter>;
+    using INotationWriterPtr = std::shared_ptr<INotationWriter>;
 }
 
 #endif // MU_PROJECT_INOTATIONWRITER_H
