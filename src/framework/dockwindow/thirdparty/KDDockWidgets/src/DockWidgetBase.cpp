@@ -938,7 +938,8 @@ Frame *DockWidgetBase::Private::frame() const
 
 void DockWidgetBase::Private::saveLastFloatingGeometry()
 {
-    if (q->isFloating() && q->isVisible()) {
+    // if (q->isFloating() && q->isVisible()) {
+    if (q->isFloating()) {
         // It's getting docked, save last floating position
         lastPositions().setLastFloatingGeometry(q->window()->geometry());
     }
