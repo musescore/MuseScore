@@ -1144,7 +1144,7 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
                 volta->endings().push_back(i);
             }
         } else if (tag == "subtype") {
-            e.readInt();
+            volta->setVoltaType(e.readInt() == 1 ? Volta::Type::CLOSED : Volta::Type::OPEN);
         } else if (tag == "lineWidth") {
             volta->setLineWidth(Spatium(e.readDouble()));
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
@@ -2000,14 +2000,34 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     j->setPlayUntil(e.readText());
                 } else if (t == "continueAt") {
                     j->setContinueAt(e.readText());
-                } else if (t == "playRepeats") {
-                    j->setPlayRepeats(e.readBool());
                 } else if (t == "subtype") {
-                    e.readInt();
+                    e.skipCurrentElement(); // obsolete, always "Repeat"
                 } else if (!TRead::readTextProperties(j, e, ctx)) {
                     e.unknown();
                 }
             }
+
+            // infer jump type
+            String jumpTo = j->jumpTo();
+            String playUntil = j->playUntil();
+            if (jumpTo == "start") {
+                if (playUntil == "end") {
+                    j->setJumpType(JumpType::DC);
+                } else if (playUntil == "fine") {
+                    j->setJumpType(JumpType::DC_AL_FINE);
+                } else {
+                    j->setJumpType(JumpType::DC_AL_CODA);
+                }
+            } else {
+                if (playUntil == "end") {
+                    j->setJumpType(JumpType::DS);
+                } else if (playUntil == "fine") {
+                    j->setJumpType(JumpType::DS_AL_FINE);
+                } else {
+                    j->setJumpType(JumpType::DS_AL_CODA);
+                }
+            }
+
             m->add(j);
         } else if (tag == "Marker") {
             Marker* a = Factory::createMarker(m);
@@ -2016,7 +2036,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             MarkerType mt = MarkerType::SEGNO;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
-                if (t == "subtype") {
+                if (t == "subtype" || t == "label") {
                     AsciiStringView s(e.readAsciiText());
                     a->setLabel(String::fromAscii(s.ascii()));
                     mt = TConv::fromXml(s, MarkerType::USER);
@@ -2031,6 +2051,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 // force the marker type for correct display
                 a->setXmlText(u"");
                 a->setMarkerType(a->markerType());
+                a->setTextStyleType(TextStyleType::REPEAT_LEFT);
             }
             m->add(a);
         } else if (tag == "Image") {

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONCONFIGURATION_H
-#define MU_NOTATION_NOTATIONCONFIGURATION_H
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -136,6 +135,10 @@ public:
     bool addAccidentalDotsArticulationsToNextNoteEntered() const override;
     void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
     muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
+
+    muse::io::path_t userMusicFontsPath() const override;
+    void setUserMusicFontsPath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> userMusicFontsPathChanged() const override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
@@ -288,6 +291,7 @@ private:
     muse::async::Notification m_mouseZoomPrecisionChanged;
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
+    muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;
     muse::async::Notification m_scoreOrderListPathsChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::async::Channel<int> m_selectionProximityChanged;
@@ -313,5 +317,3 @@ private:
     int m_styleDialogLastSubPageIndex = 0;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONCONFIGURATION_H

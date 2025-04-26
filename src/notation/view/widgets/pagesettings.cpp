@@ -261,10 +261,8 @@ void PageSettings::orientationClicked()
 
 void PageSettings::on_resetPageStyleButton_clicked()
 {
-    for (auto styleId : pageStyles()) {
-        globalContext()->currentNotation()->style()->resetStyleValue(styleId);
-    }
-
+    score()->undoChangePageNumberOffset(0);
+    globalContext()->currentNotation()->style()->resetStyleValues(pageStyles());
     updateValues();
 }
 
@@ -473,8 +471,8 @@ void PageSettings::spatiumChanged(double val)
 
 void PageSettings::pageOffsetChanged(int val)
 {
-    // TODO: Cancel does not work when page offset is changed?
-    score()->setPageNumberOffset(val - 1);
+    score()->undoChangePageNumberOffset(val - 1);
+    globalContext()->currentNotation()->notationChanged().notify();
 }
 
 void PageSettings::pageHeightChanged(double val)

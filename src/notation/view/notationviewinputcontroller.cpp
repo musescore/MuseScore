@@ -1138,7 +1138,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
         updateShadowNotePopupVisibility();
     }
 
-    updateShadowNotePopupVisibility();
+    updateShadowNotePopupVisibility(/*forceHide*/ true);
 }
 
 void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)

@@ -68,10 +68,6 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Setup environment for tx pull
-        run: |
-          bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-
       - name: Setup environment for pushing to S3
         if: env.DO_PUSH_TO_S3 == 'true'
         run: |
@@ -85,8 +81,10 @@ jobs:
           echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
 
       - name: Update .ts files (tx pull)
-        run: |
-          bash ./buildscripts/ci/translation/tx_pull.sh
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "pull -f"
 
       - name: Create Pull Request
         if: env.DO_CREATE_PR == 'true'

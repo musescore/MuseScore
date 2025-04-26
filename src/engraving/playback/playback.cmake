@@ -86,4 +86,5 @@ set(PLAYBACK_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utils/pitchutils.h
     ${CMAKE_CURRENT_LIST_DIR}/utils/expressionutils.h
     ${CMAKE_CURRENT_LIST_DIR}/utils/arrangementutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/utils/repeatutils.h
 )

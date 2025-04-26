@@ -36,6 +36,7 @@
 #include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
 #include "internal/notationcreator.h"
+#include "internal/engravingfontscontroller.h"
 
 #include "view/notationpaintview.h"
 #include "view/notationswitchlistmodel.h"
@@ -48,7 +49,10 @@
 #include "view/internal/undohistorymodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
-#include "view/selectionfiltermodel.h"
+
+#include "view/selectionfilter/voicesselectionfiltermodel.h"
+#include "view/selectionfilter/elementsselectionfiltermodel.h"
+
 #include "view/editgridsizedialogmodel.h"
 #include "view/editpercussionshortcutmodel.h"
 #include "view/paintedengravingitem.h"
@@ -121,6 +125,7 @@ void NotationModule::registerExports()
     m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController);
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>();
     m_instrumentsRepository = std::make_shared<InstrumentsRepository>();
+    m_engravingFontsController = std::make_shared<EngravingFontsController>();
 
     ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
@@ -187,7 +192,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<UndoRedoToolbarModel>("MuseScore.NotationScene", 1, 0, "UndoRedoToolbarModel");
     qmlRegisterType<UndoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoHistoryModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
-    qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
+    qmlRegisterType<ElementsSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "ElementsSelectionFilterModel");
+    qmlRegisterType<VoicesSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "VoicesSelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
     qmlRegisterType<EditPercussionShortcutModel>("MuseScore.NotationScene", 1, 0, "EditPercussionShortcutModel");
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");
@@ -240,6 +246,7 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
     m_instrumentsRepository->init();
     m_actionController->init();
     m_notationUiActions->init();
+    m_engravingFontsController->init();
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();

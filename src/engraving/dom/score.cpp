@@ -2040,9 +2040,14 @@ void Score::scanElementsInRange(void* data, void (* func)(void*, EngravingItem*)
             }
         }
     }
+
+    std::set<Spanner*> handledSpanners;
     for (EngravingItem* e : m_selection.elements()) {
-        if (e->isSpanner()) {
-            Spanner* spanner = toSpanner(e);
+        if (!e->isSpannerSegment()) {
+            continue;
+        }
+        Spanner* spanner = toSpannerSegment(e)->spanner();
+        if (handledSpanners.insert(spanner).second) {
             for (SpannerSegment* ss : spanner->spannerSegments()) {
                 ss->scanElements(data, func, all);
             }
@@ -3881,12 +3886,10 @@ void Score::collectMatch(void* data, EngravingItem* e)
     if (p->measure) {
         auto eMeasure = e->findMeasure();
         if (!eMeasure && e->isSpannerSegment()) {
-            if (auto ss = toSpannerSegment(e)) {
-                if (auto s = ss->spanner()) {
-                    if (auto se = s->startElement()) {
-                        if (auto mse = se->findMeasure()) {
-                            eMeasure = mse;
-                        }
+            if (auto s = toSpannerSegment(e)->spanner()) {
+                if (auto se = s->startElement()) {
+                    if (auto mse = se->findMeasure()) {
+                        eMeasure = mse;
                     }
                 }
             }
@@ -4380,6 +4383,11 @@ void Score::setPause(const Fraction& tick, double seconds)
 BeatsPerSecond Score::tempo(const Fraction& tick) const
 {
     return tempomap()->tempo(tick.ticks());
+}
+
+BeatsPerSecond Score::multipliedTempo(const Fraction& tick) const
+{
+    return tempomap()->multipliedTempo(tick.ticks());
 }
 
 //---------------------------------------------------------

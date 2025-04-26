@@ -923,6 +923,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     switch (clef) {
     case (engraving::ClefType::G8_VB):
     case (engraving::ClefType::G8_VA):
+    case (engraving::ClefType::G8_VB_C):
     case (engraving::ClefType::F8_VB):
     case (engraving::ClefType::F_8VA):
     case (engraving::ClefType::C4_8VB):

@@ -238,8 +238,8 @@ public:
     static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);
 
-    static Hairpin* createHairpin(Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Hairpin> makeHairpin(Segment* parent);
+    static Hairpin* createHairpin(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Hairpin> makeHairpin(EngravingItem* parent);
 
     static Glissando* createGlissando(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Glissando> makeGlissando(EngravingItem* parent);

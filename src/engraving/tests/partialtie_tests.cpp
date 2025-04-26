@@ -527,3 +527,127 @@ TEST_F(Engraving_PartialTieTests, partialTieListSelection)
 
     testPartialTieListSelection(test, startPointTick, secondTieNoteTick, jumpPoints);
 }
+
+TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
+{
+    const String test = u"toggle_delete";
+
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + test + u".mscx");
+    EXPECT_TRUE(score);
+
+    const Fraction tieFromTick = Fraction(3, 4);
+    const Fraction tieToTick = Fraction(4, 4);
+
+    Measure* m1 = score->firstMeasure();
+    EXPECT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
+    EXPECT_TRUE(m2);
+    Segment* tieFromSegment = m1->findSegment(SegmentType::ChordRest, tieFromTick);
+    EXPECT_TRUE(tieFromSegment);
+    Segment* tieToSegment = m2->findSegment(SegmentType::ChordRest, tieToTick);
+    EXPECT_TRUE(tieToSegment);
+
+    const int pitchC = 42;
+
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(tieToSegment);
+    score->inputState().setDuration(DurationType::V_WHOLE);
+    score->inputState().setNoteEntryMode(true);
+
+    score->cmdAddPitch(pitchC, false, false);
+    score->endCmd();
+
+    Chord* tieToChord = m2->findChord(Fraction(4, 4), 0);
+    Note* tieToNote = tieToChord ? tieToChord->upNote() : nullptr;
+    EXPECT_TRUE(tieToChord);
+    EXPECT_TRUE(tieToNote);
+
+    Chord* tieFromChord = toChord(tieFromSegment->element(0));
+    Note* tieFromNote = tieFromChord ? tieFromChord->upNote() : nullptr;
+    EXPECT_TRUE(tieFromNote);
+
+    // Toggle tie at 4/4
+    score->select(tieFromNote);
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdToggleTie();
+    score->endCmd();
+
+    // Clear the second measure
+
+    score->select(m2, SelectType::SINGLE, 0);
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    // Verify the tie is now partial
+    Tie* tie = tieFromNote->tieFor();
+    EXPECT_TRUE(tie);
+    EXPECT_TRUE(tie->isPartialTie());
+
+    // Undo
+    score->undoRedo(true, nullptr); // undo clear
+    score->undoRedo(true, nullptr); // undo toggle tie
+    score->undoRedo(true, nullptr); // undo add note
+
+    tieToSegment = m2->findSegment(SegmentType::ChordRest, tieToTick);
+    EXPECT_TRUE(tieToSegment);
+
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(tieToSegment);
+    score->inputState().setDuration(DurationType::V_WHOLE);
+    score->inputState().setNoteEntryMode(true);
+
+    score->cmdAddPitch(pitchC, false, false);
+    score->endCmd();
+
+    Chord* newTieToChord = m2->findChord(Fraction(4, 4), 0);
+    Note* newTieToNote = newTieToChord ? newTieToChord->upNote() : nullptr;
+    EXPECT_TRUE(newTieToChord);
+    EXPECT_TRUE(newTieToNote);
+
+    // Toggle tie again at 4/4
+    score->select(tieFromNote);
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdToggleTie();
+    score->endCmd();
+
+    // Verify the tie is now full
+    Tie* newTie = tieFromNote->tieFor();
+    EXPECT_TRUE(newTie);
+    EXPECT_FALSE(newTie->isPartialTie());
+    EXPECT_EQ(newTie->endNote(), newTieToNote);
+}
+
+static void deleteScoreWithPartialTies(String fileName)
+{
+    // Load score
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + fileName + u".mscx");
+    EXPECT_TRUE(score);
+
+    // Make sure there are some measures to delete
+    Measure* firstMeasure = score->firstMeasure();
+    EXPECT_TRUE(firstMeasure);
+    Measure* lastMeasure = score->lastMeasure();
+    EXPECT_TRUE(lastMeasure);
+    EXPECT_NE(firstMeasure, lastMeasure);
+
+    // Select all measures
+    score->select(firstMeasure, SelectType::RANGE, 0);
+    score->select(lastMeasure, SelectType::RANGE, score->nstaves() - 1);
+
+    // Delete selected measures
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+}
+
+TEST_F(Engraving_PartialTieTests, deleteAllMeasures)
+{
+    const String test1 = u"delete_measure_test1";
+    const String test2 = u"delete_measure_test2";
+
+    deleteScoreWithPartialTies(test1);
+    deleteScoreWithPartialTies(test2);
+}

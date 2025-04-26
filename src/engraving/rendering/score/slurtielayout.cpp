@@ -1220,6 +1220,10 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         if (item->isArpeggio() && (endCR->track() != item->track() || (!slur->up() && toArpeggio(item)->span() > 1))) {
             return true;
         }
+        // Ignore big time signatures
+        if (item->isTimeSig() && toTimeSig(item)->timeSigPlacement() != TimeSigPlacement::NORMAL) {
+            return true;
+        }
         return false;
     });
 
@@ -1451,7 +1455,7 @@ static bool tieSegmentShouldBeSkipped(Tie* item)
         return false;
     }
 
-    if (startNote->isContinuationOfBend()) {
+    if (startNote && startNote->isContinuationOfBend()) {
         return true;
     }
 

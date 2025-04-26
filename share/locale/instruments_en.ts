@@ -1229,332 +1229,136 @@
         <translation type="unfinished">Cb. Rec.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="601"/>
-        <source>Soprano ocarina pitched in G.</source>
-        <comment>g-soprano-ocarina description</comment>
-        <extracomment>description for Soprano Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Soprano ocarina pitched in G.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="605"/>
-        <source>G Soprano Ocarina</source>
-        <comment>g-soprano-ocarina longName</comment>
-        <extracomment>longName for Soprano Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">G Soprano Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="607"/>
-        <source>G S. Oc.</source>
-        <comment>g-soprano-ocarina shortName</comment>
-        <extracomment>shortName for Soprano Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">G S. Oc.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="609"/>
+        <location filename="../instruments/instrumentsxml.h" line="640"/>
         <source>G</source>
         <comment>g-soprano-ocarina traitName</comment>
-        <extracomment>traitName for Soprano Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">G</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="612"/>
-        <source>Soprano ocarina pitched in F.</source>
-        <comment>f-soprano-ocarina description</comment>
-        <extracomment>description for Soprano Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Soprano ocarina pitched in F.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="616"/>
-        <source>F Soprano Ocarina</source>
-        <comment>f-soprano-ocarina longName</comment>
-        <extracomment>longName for Soprano Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">F Soprano Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="618"/>
-        <source>F S. Oc.</source>
-        <comment>f-soprano-ocarina shortName</comment>
-        <extracomment>shortName for Soprano Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">F S. Oc.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="620"/>
+        <location filename="../instruments/instrumentsxml.h" line="651"/>
         <source>F</source>
         <comment>f-soprano-ocarina traitName</comment>
-        <extracomment>traitName for Soprano Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">F</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="623"/>
-        <source>Soprano ocarina pitched in C.</source>
-        <comment>ocarina description</comment>
-        <extracomment>description for Ocarina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Soprano ocarina pitched in C.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="625"/>
+        <location filename="../instruments/instrumentsxml.h" line="614"/>
         <source>Ocarina</source>
         <comment>ocarina trackName</comment>
         <extracomment>trackName for Ocarina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ocarina</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="627"/>
+        <location filename="../instruments/instrumentsxml.h" line="616"/>
         <source>Ocarina</source>
         <comment>ocarina longName</comment>
         <extracomment>longName for Ocarina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Ocarina</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="629"/>
+        <location filename="../instruments/instrumentsxml.h" line="618"/>
         <source>Oc.</source>
         <comment>ocarina shortName</comment>
         <extracomment>shortName for Ocarina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Oc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="632"/>
-        <source>Soprano ocarina pitched in C.</source>
-        <comment>c-soprano-ocarina description</comment>
-        <extracomment>description for Soprano Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Soprano ocarina pitched in C.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="634"/>
+        <location filename="../instruments/instrumentsxml.h" line="603"/>
         <source>Soprano Ocarina</source>
         <comment>c-soprano-ocarina trackName</comment>
-        <extracomment>trackName for Soprano Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano Ocarina</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="636"/>
-        <source>C Soprano Ocarina</source>
-        <comment>c-soprano-ocarina longName</comment>
-        <extracomment>longName for Soprano Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">C Soprano Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="638"/>
-        <source>C S. Oc.</source>
-        <comment>c-soprano-ocarina shortName</comment>
-        <extracomment>shortName for Soprano Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">C S. Oc.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="640"/>
+        <location filename="../instruments/instrumentsxml.h" line="609"/>
         <source>*C</source>
         <comment>c-soprano-ocarina traitName</comment>
-        <extracomment>traitName for Soprano Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">*C</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="643"/>
-        <source>Soprano ocarina pitched in B♭.</source>
-        <comment>bb-soprano-ocarina description</comment>
-        <extracomment>description for Soprano Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Soprano ocarina pitched in B♭.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="645"/>
+        <location filename="../instruments/instrumentsxml.h" line="623"/>
         <source>Soprano Ocarina</source>
         <comment>bb-soprano-ocarina trackName</comment>
-        <extracomment>trackName for Soprano Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano Ocarina</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="647"/>
-        <source>B♭ Soprano Ocarina</source>
-        <comment>bb-soprano-ocarina longName</comment>
-        <extracomment>longName for Soprano Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">B♭ Soprano Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="649"/>
-        <source>B♭ S. Oc.</source>
-        <comment>bb-soprano-ocarina shortName</comment>
-        <extracomment>shortName for Soprano Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">B♭ S. Oc.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="651"/>
+        <location filename="../instruments/instrumentsxml.h" line="629"/>
         <source>B♭</source>
         <comment>bb-soprano-ocarina traitName</comment>
-        <extracomment>traitName for Soprano Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">B♭</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="654"/>
-        <source>Alto ocarina pitched in G.</source>
-        <comment>g-alto-ocarina description</comment>
-        <extracomment>description for Alto Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Alto ocarina pitched in G.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="656"/>
-        <source>Alto Ocarina</source>
-        <comment>g-alto-ocarina trackName</comment>
-        <extracomment>trackName for Alto Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Alto Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="658"/>
-        <source>G Alto Ocarina</source>
-        <comment>g-alto-ocarina longName</comment>
-        <extracomment>longName for Alto Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">G Alto Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="660"/>
-        <source>G A. Oc.</source>
-        <comment>g-alto-ocarina shortName</comment>
-        <extracomment>shortName for Alto Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">G A. Oc.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="662"/>
-        <source>G</source>
-        <comment>g-alto-ocarina traitName</comment>
-        <extracomment>traitName for Alto Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">G</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="665"/>
-        <source>Alto ocarina pitched in F.</source>
-        <comment>f-alto-ocarina description</comment>
-        <extracomment>description for Alto Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Alto ocarina pitched in F.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="667"/>
-        <source>Alto Ocarina</source>
-        <comment>f-alto-ocarina trackName</comment>
-        <extracomment>trackName for Alto Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Alto Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="669"/>
-        <source>F Alto Ocarina</source>
-        <comment>f-alto-ocarina longName</comment>
-        <extracomment>longName for Alto Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">F Alto Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="671"/>
-        <source>F A. Oc.</source>
-        <comment>f-alto-ocarina shortName</comment>
-        <extracomment>shortName for Alto Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">F A. Oc.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="673"/>
-        <source>F</source>
-        <comment>f-alto-ocarina traitName</comment>
-        <extracomment>traitName for Alto Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">F</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="676"/>
-        <source>Alto ocarina pitched in C.</source>
-        <comment>c-alto-ocarina description</comment>
-        <extracomment>description for Alto Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Alto ocarina pitched in C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="678"/>
         <source>Alto Ocarina</source>
-        <comment>c-alto-ocarina trackName</comment>
-        <extracomment>trackName for Alto Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <comment>g-alto-ocarina trackName</comment>
+        <extracomment>trackName for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto Ocarina</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="680"/>
-        <source>C Alto Ocarina</source>
-        <comment>c-alto-ocarina longName</comment>
-        <extracomment>longName for Alto Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">C Alto Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="682"/>
-        <source>C A. Oc.</source>
-        <comment>c-alto-ocarina shortName</comment>
-        <extracomment>shortName for Alto Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">C A. Oc.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="684"/>
-        <source>*C</source>
-        <comment>c-alto-ocarina traitName</comment>
-        <extracomment>traitName for Alto Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">*C</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="687"/>
-        <source>Alto ocarina pitched in B♭.</source>
-        <comment>bb-alto-ocarina description</comment>
-        <extracomment>description for Alto Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Alto ocarina pitched in B♭.</translation>
+        <source>G</source>
+        <comment>g-alto-ocarina traitName</comment>
+        <extracomment>traitName for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="689"/>
         <source>Alto Ocarina</source>
-        <comment>bb-alto-ocarina trackName</comment>
-        <extracomment>trackName for Alto Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <comment>f-alto-ocarina trackName</comment>
+        <extracomment>trackName for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Alto Ocarina</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="691"/>
-        <source>B♭ Alto Ocarina</source>
-        <comment>bb-alto-ocarina longName</comment>
-        <extracomment>longName for Alto Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">B♭ Alto Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="693"/>
-        <source>B♭ A. Oc.</source>
-        <comment>bb-alto-ocarina shortName</comment>
-        <extracomment>shortName for Alto Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">B♭ A. Oc.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="695"/>
+        <source>F</source>
+        <comment>f-alto-ocarina traitName</comment>
+        <extracomment>traitName for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">F</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="656"/>
+        <source>Alto Ocarina</source>
+        <comment>c-alto-ocarina trackName</comment>
+        <extracomment>trackName for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="662"/>
+        <source>*C</source>
+        <comment>c-alto-ocarina traitName</comment>
+        <extracomment>traitName for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">*C</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="667"/>
+        <source>Alto Ocarina</source>
+        <comment>bb-alto-ocarina trackName</comment>
+        <extracomment>trackName for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="673"/>
         <source>B♭</source>
         <comment>bb-alto-ocarina traitName</comment>
-        <extracomment>traitName for Alto Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">B♭</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="698"/>
-        <source>Bass ocarina pitched in C.</source>
-        <comment>c-bass-ocarina description</comment>
-        <extracomment>description for Bass Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Bass ocarina pitched in C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="700"/>
         <source>Bass Ocarina</source>
         <comment>c-bass-ocarina trackName</comment>
-        <extracomment>trackName for Bass Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Bass Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="702"/>
-        <source>C Bass Ocarina</source>
-        <comment>c-bass-ocarina longName</comment>
-        <extracomment>longName for Bass Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">C Bass Ocarina</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="704"/>
-        <source>C B. Oc.</source>
-        <comment>c-bass-ocarina shortName</comment>
-        <extracomment>shortName for Bass Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">C B. Oc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="706"/>
         <source>*C</source>
         <comment>c-bass-ocarina traitName</comment>
-        <extracomment>traitName for Bass Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">*C</translation>
     </message>
     <message>
@@ -5399,6 +5203,202 @@
         <comment>fife trackName</comment>
         <extracomment>trackName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Fife</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="601"/>
+        <source>Soprano ocarina in C.</source>
+        <comment>c-soprano-ocarina description</comment>
+        <extracomment>description for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano ocarina in C.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="605"/>
+        <source>Soprano Ocarina</source>
+        <comment>c-soprano-ocarina longName</comment>
+        <extracomment>longName for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="607"/>
+        <source>S. Oc.</source>
+        <comment>c-soprano-ocarina shortName</comment>
+        <extracomment>shortName for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">S. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="612"/>
+        <source>Soprano ocarina in C.</source>
+        <comment>ocarina description</comment>
+        <extracomment>description for Ocarina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano ocarina in C.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="621"/>
+        <source>Soprano ocarina in B♭.</source>
+        <comment>bb-soprano-ocarina description</comment>
+        <extracomment>description for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano ocarina in B♭.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="625"/>
+        <source>Soprano Ocarina</source>
+        <comment>bb-soprano-ocarina longName</comment>
+        <extracomment>longName for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="627"/>
+        <source>S. Oc.</source>
+        <comment>bb-soprano-ocarina shortName</comment>
+        <extracomment>shortName for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">S. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="632"/>
+        <source>Soprano ocarina in G.</source>
+        <comment>g-soprano-ocarina description</comment>
+        <extracomment>description for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano ocarina in G.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="636"/>
+        <source>Soprano Ocarina</source>
+        <comment>g-soprano-ocarina longName</comment>
+        <extracomment>longName for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="638"/>
+        <source>S. Oc.</source>
+        <comment>g-soprano-ocarina shortName</comment>
+        <extracomment>shortName for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">S. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="643"/>
+        <source>Soprano ocarina in F.</source>
+        <comment>f-soprano-ocarina description</comment>
+        <extracomment>description for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano ocarina in F.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="647"/>
+        <source>Soprano Ocarina</source>
+        <comment>f-soprano-ocarina longName</comment>
+        <extracomment>longName for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Soprano Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="649"/>
+        <source>S. Oc.</source>
+        <comment>f-soprano-ocarina shortName</comment>
+        <extracomment>shortName for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">S. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="654"/>
+        <source>Alto (sometimes called tenor) ocarina in C.</source>
+        <comment>c-alto-ocarina description</comment>
+        <extracomment>description for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto (sometimes called tenor) ocarina in C.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="658"/>
+        <source>Alto Ocarina</source>
+        <comment>c-alto-ocarina longName</comment>
+        <extracomment>longName for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="660"/>
+        <source>A. Oc.</source>
+        <comment>c-alto-ocarina shortName</comment>
+        <extracomment>shortName for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">A. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="665"/>
+        <source>Alto (sometimes called tenor) ocarina in B♭.</source>
+        <comment>bb-alto-ocarina description</comment>
+        <extracomment>description for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto (sometimes called tenor) ocarina in B♭.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="669"/>
+        <source>Alto Ocarina</source>
+        <comment>bb-alto-ocarina longName</comment>
+        <extracomment>longName for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="671"/>
+        <source>A. Oc.</source>
+        <comment>bb-alto-ocarina shortName</comment>
+        <extracomment>shortName for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">A. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="676"/>
+        <source>Alto (sometimes called tenor) ocarina in G.</source>
+        <comment>g-alto-ocarina description</comment>
+        <extracomment>description for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto (sometimes called tenor) ocarina in G.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="680"/>
+        <source>Alto Ocarina</source>
+        <comment>g-alto-ocarina longName</comment>
+        <extracomment>longName for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="682"/>
+        <source>A. Oc.</source>
+        <comment>g-alto-ocarina shortName</comment>
+        <extracomment>shortName for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">A. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="687"/>
+        <source>Alto (sometimes called tenor) ocarina in F.</source>
+        <comment>f-alto-ocarina description</comment>
+        <extracomment>description for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto (sometimes called tenor) ocarina in F.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="691"/>
+        <source>Alto Ocarina</source>
+        <comment>f-alto-ocarina longName</comment>
+        <extracomment>longName for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="693"/>
+        <source>A. Oc.</source>
+        <comment>f-alto-ocarina shortName</comment>
+        <extracomment>shortName for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">A. Oc.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="698"/>
+        <source>Bass ocarina in C.</source>
+        <comment>c-bass-ocarina description</comment>
+        <extracomment>description for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass ocarina in C.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="702"/>
+        <source>Bass Ocarina</source>
+        <comment>c-bass-ocarina longName</comment>
+        <extracomment>longName for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass Ocarina</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="704"/>
+        <source>B. Oc.</source>
+        <comment>c-bass-ocarina shortName</comment>
+        <extracomment>shortName for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">B. Oc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1857"/>
@@ -15425,17 +15425,17 @@
         <translation type="unfinished">Flute in E♭, sounding a minor third above the standard flute.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="603"/>
+        <location filename="../instruments/instrumentsxml.h" line="634"/>
         <source>Soprano Ocarina</source>
         <comment>g-soprano-ocarina trackName</comment>
-        <extracomment>trackName for Soprano Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano Ocarina</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="614"/>
+        <location filename="../instruments/instrumentsxml.h" line="645"/>
         <source>Soprano Ocarina</source>
         <comment>f-soprano-ocarina trackName</comment>
-        <extracomment>trackName for Soprano Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>trackName for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Soprano Ocarina</translation>
     </message>
     <message>

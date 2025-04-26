@@ -83,6 +83,7 @@
 #include "dom/measurerepeat.h"
 
 #include "dom/note.h"
+#include "dom/noteline.h"
 
 #include "dom/ornament.h"
 #include "dom/ottava.h"
@@ -249,6 +250,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::NOTE:                 draw(item_cast<const Note*>(item), painter);
         break;
     case ElementType::NOTEHEAD:             draw(item_cast<const NoteHead*>(item), painter);
+        break;
+    case ElementType::NOTELINE_SEGMENT:     draw(item_cast<const NoteLineSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:             draw(item_cast<const Ornament*>(item), painter);
@@ -562,6 +565,12 @@ void SingleDraw::draw(const Note* item, Painter* painter)
 void SingleDraw::draw(const NoteHead* item, Painter* painter)
 {
     draw(static_cast<const Symbol*>(item), painter);
+}
+
+void SingleDraw::draw(const NoteLineSegment*, Painter*)
+{
+    // TRACE_DRAW_ITEM;
+    // To be implemented
 }
 
 void SingleDraw::draw(const Ornament* item, Painter* painter)

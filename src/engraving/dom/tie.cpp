@@ -243,12 +243,16 @@ void Tie::updatePossibleJumpPoints()
     if (!hasFollowingJumpItem) {
         const Note* tieEndNote = endNote();
         const Chord* endChord = tieEndNote ? tieEndNote->chord() : nullptr;
+        if (!endChord) {
+            return;
+        }
         const Segment* endNoteSegment = endChord ? endChord->segment() : nullptr;
         const ChordRest* finalCROfMeasure = measure->lastChordRest(track());
         const bool finalCRHasFollowingJump = finalCROfMeasure ? finalCROfMeasure->hasFollowingJumpItem() : false;
         const bool segsAreAdjacent = segmentsAreAdjacentInRepeatStructure(segment, endNoteSegment);
+        const bool segsAreInDifferentRepeatSegments = segmentsAreInDifferentRepeatSegments(segment, endNoteSegment);
 
-        if (!(finalCRHasFollowingJump && segsAreAdjacent)) {
+        if (!(finalCRHasFollowingJump && segsAreAdjacent) || !segsAreInDifferentRepeatSegments) {
             return;
         }
     }
@@ -501,8 +505,6 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
         return;
     }
 
-    TranslatableString undoCmd = addPartialTie ? TranslatableString("engraving", "Replace full tie with partial tie")
-                                 : TranslatableString("engraving", "Replace partial tie with full tie");
     Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(score->dummy()->note());
 
     score->undoRemoveElement(oldTie);
@@ -525,8 +527,6 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
     newTie->setOffset(oldTie->offset());
 
     score->undoAddElement(newTie);
-
-    score->endCmd();
 }
 
 void Tie::updateStartTieOnRemoval()

@@ -4,6 +4,10 @@ on:
   pull_request:
   workflow_dispatch:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_x64 linux_arm64'
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -18,6 +22,11 @@ on:
         required: false
   workflow_call:
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_x64 linux_arm64'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -35,8 +44,29 @@ on:
         required: false
 
 jobs:
-  linux_x64:
-    runs-on: ubuntu-22.04
+  build:
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_x64') || contains(inputs.platforms, 'linux_arm64')
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ${{ 
+          (github.event_name != 'workflow_dispatch' 
+           || (contains(inputs.platforms, 'linux_x64') && contains(inputs.platforms, 'linux_arm64'))) 
+          && fromJson('["linux_x64","linux_arm64"]') 
+          || (contains(inputs.platforms, 'linux_x64') && fromJson('["linux_x64"]') 
+          || (contains(inputs.platforms, 'linux_arm64') && fromJson('["linux_arm64"]') 
+          || fromJson('[]'))) 
+          }}
+        include:
+          - platform: linux_x64
+            arch: x86_64
+            runs-on: ubuntu-22.04
+            dump-symbols-arch: x86-64
+          - platform: linux_arm64
+            arch: aarch64
+            runs-on: ubuntu-22.04-arm
+            dump-symbols-arch: aarch64
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -107,7 +137,7 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Lin${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Lin_${{ matrix.arch }}${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
@@ -138,27 +168,28 @@ jobs:
   
     - name: Setup environment
       run: |
-        bash ./buildscripts/ci/linux/setup.sh
+        bash ./buildscripts/ci/linux/setup.sh --arch ${{ matrix.arch }}
     - name: Generate _en.ts files
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
       run: |
         bash ./buildscripts/ci/translation/run_lupdate.sh
-    - name: Update .ts files
+    - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
-      run: |
-        bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-        bash ./buildscripts/ci/translation/tx_pull.sh
+      uses: transifex/cli-action@v2
+      with:
+        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+        args: "pull -f"
     - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
+        bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch ${{ matrix.arch }}
         echo "============== ccache ==============="
         ccache -s
     - name: Package
       run: |
-        bash ./buildscripts/ci/linux/package.sh
+        bash ./buildscripts/ci/linux/package.sh --arch ${{ matrix.arch }}
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
@@ -166,7 +197,7 @@ jobs:
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       run: |
         APP_BIN=$(find "$(pwd)/build.release/src/app/" -type f -name "mscore4portable*" -print -quit)
-        ARCH=x86-64
+        ARCH=${{ matrix.dump-symbols-arch }}
         cmake -DAPP_BIN=${APP_BIN} \
               -DARCH=${ARCH} \
               -DSENTRY_URL=https://sentry.musescore.org \
@@ -177,7 +208,7 @@ jobs:
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
-        bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 4
+        bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux --arch ${{ matrix.arch }} -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v4
       with:

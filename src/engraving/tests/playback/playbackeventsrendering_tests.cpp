@@ -2280,6 +2280,85 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_PartiallyTiedArpeggio
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedArpeggio)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "partially_tied_arpeggio.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+    for (const RepeatSegment* repeat : score->repeatList()) {
+        const int tickPositionOffset = repeat->utick - repeat->tick;
+
+        for (const Measure* m : repeat->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    const std::vector<timestamp_t> expectedArpeggioTimestamps {
+        0, // 1st measure
+        3500000, // 2nd measure
+        7500000, // 2nd measure (repeated)
+    };
+
+    const std::vector<duration_t> expectedArpeggioDurations {
+        QUARTER_NOTE_DURATION, // 1st measure
+        QUARTER_NOTE_DURATION* 2, // 2nd measure
+        QUARTER_NOTE_DURATION, // 2nd measure (repeated)
+    };
+
+    size_t arpeggioNum = 0;
+
+    for (const auto& pair : result) {
+        if (pair.second.empty()) {
+            continue;
+        }
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const PlaybackEvent& event = pair.second.at(i);
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            ASSERT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
+
+            // [THEN] Each note event has the correct timestamp & duration
+            ASSERT_TRUE(arpeggioNum < expectedArpeggioTimestamps.size());
+            ASSERT_TRUE(arpeggioNum < expectedArpeggioDurations.size());
+
+            const duration_t expectedOffset = 60000 * i;
+            const timestamp_t expectedTimestamp = expectedArpeggioTimestamps.at(arpeggioNum) + expectedOffset;
+            const duration_t expectedDuration = expectedArpeggioDurations.at(arpeggioNum) - expectedOffset;
+
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTimestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedDuration);
+        }
+
+        arpeggioNum++;
+    }
+
+    delete score;
+}
+
+/**
  * @brief PlaybackEventsRendererTests_Single_Note_Tremolo
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 half note marked by the 8-th Tremolo articulation
@@ -2527,9 +2606,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
 
     constexpr timestamp_t expectedTremoloTimestamp = 2000000; // timestamp of the 1st tied note
     constexpr timestamp_t expectedTremoloDuration = WHOLE_NOTE_DURATION * 2; // total duration of all tied notes
+    constexpr timestamp_t expectedTremoloTimestampTo = expectedTremoloTimestamp + expectedTremoloDuration;
 
     constexpr pitch_level_t expectedPitchLevel = pitchLevel(PitchClass::F, 4);
     constexpr duration_t expectedSubNoteDuration = 62500;
+
+    size_t tremoloStartRangeEventCount = 0;
+    size_t tremoloEndRangeEventCount = 0;
 
     for (const auto& pair : result) {
         // [THEN] Expected number of sub-notes
@@ -2548,6 +2631,28 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
             EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
 
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+            // [THEN] Each note has the correct occupiedFrom/To
+            if (noteEvent.arrangementCtx().nominalTimestamp == expectedTremoloTimestamp) {
+                EXPECT_EQ(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloStartRangeEventCount++;
+            } else if (noteTimestampTo == expectedTremoloTimestampTo) {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloEndRangeEventCount++;
+            } else {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+            }
+
+            // [THEN] Each note event has the correct pitch level
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
+
+            // [THEN] Each note event has the correct duration
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
+
             // [THEN] Each note event has the correct pitch level
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
 
@@ -2555,6 +2660,122 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
             EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
         }
     }
+
+    // [THEN] We expect only 1 start & end event for the tremolo
+    EXPECT_EQ(tremoloStartRangeEventCount, 1);
+    EXPECT_EQ(tremoloEndRangeEventCount, 1);
+
+    delete score;
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_PartiallyTiedTremolo
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "partially_tied_tremolo.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+    for (const RepeatSegment* repeat : score->repeatList()) {
+        const int tickPositionOffset = repeat->utick - repeat->tick;
+
+        for (const Measure* m : repeat->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    // [THEN] We expect 4 lists of events (for each note with tremolo)
+    EXPECT_EQ(result.size(), 4);
+
+    const std::vector<timestamp_t> expectedTremoloTimestamps {
+        0, // 1st measure
+        5000000, // 3rd measure, outgoing partially tied A4
+        5000000, // 1st measure (repeated), incoming A4
+        11000000, // 3rd measure (repeated), outgoing A4 note
+    };
+
+    const std::vector<duration_t> expectedTremoloDurations {
+        HALF_NOTE_DURATION, // 1st measure
+        HALF_NOTE_DURATION* 2, // 3rd measure: total duration of all partially tied notes
+        HALF_NOTE_DURATION* 2, // 1st measure (repeated): total duration of all partially tied notes
+        HALF_NOTE_DURATION, // 3rd measure (repeated)
+    };
+
+    constexpr pitch_level_t expectedPitchLevel = pitchLevel(PitchClass::A, 4);
+    constexpr size_t expectedSubNoteCount = 8;
+    constexpr duration_t expectedSubNoteDuration = HALF_NOTE_DURATION / expectedSubNoteCount;
+
+    size_t tremoloNoteNum = 0;
+    size_t tremoloStartRangeEventCount = 0;
+    size_t tremoloEndRangeEventCount = 0;
+
+    for (const auto& pair : result) {
+        // [THEN] Expected number of sub-notes
+        EXPECT_EQ(pair.second.size(), expectedSubNoteCount);
+
+        const timestamp_t expectedTremoloTimestamp = expectedTremoloTimestamps.at(tremoloNoteNum);
+        const duration_t expectedTremoloDuration = expectedTremoloDurations.at(tremoloNoteNum);
+        const timestamp_t expectedTremoloTimestampTo = expectedTremoloTimestamp + expectedTremoloDuration;
+
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            ASSERT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo16th));
+
+            // [THEN] Each note event has the correct articulation time and duration
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Tremolo16th);
+            EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
+            EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
+
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+            // [THEN] Each note has the correct occupiedFrom/To
+            if (noteEvent.arrangementCtx().nominalTimestamp == expectedTremoloTimestamp) {
+                EXPECT_EQ(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloStartRangeEventCount++;
+            } else if (noteTimestampTo == expectedTremoloTimestampTo) {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                tremoloEndRangeEventCount++;
+            } else {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+            }
+
+            // [THEN] Each note event has the correct pitch level
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
+
+            // [THEN] Each note event has the correct duration
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
+        }
+
+        tremoloNoteNum++;
+    }
+
+    // [THEN] We expect 3 start & end events for each tremolo
+    EXPECT_EQ(tremoloStartRangeEventCount, 3);
+    EXPECT_EQ(tremoloEndRangeEventCount, 3);
 
     delete score;
 }
@@ -2723,10 +2944,118 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
  * @brief PlaybackEventsRendererTests_TiedNotesAndRepeats
  *  @details Checks whether we correctly calculate tied note durations when they are inside/outside repeats. See:
  *  https://github.com/musescore/MuseScore/issues/22863
+ *  https://github.com/musescore/MuseScore/issues/27661
  */
 TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
 {
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "tied_notes_and_repeats.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        const int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+
+        for (const Measure* m : repeatSegment->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    // [THEN] Expected pitch, time and duration of each event
+    const std::vector<pitch_level_t> expectedPitchList {
+        // 1st measure (no notes)
+
+        // 2nd measure
+        pitchLevel(PitchClass::C, 5),
+        pitchLevel(PitchClass::A, 4),
+
+        // 2nd measure (repeated)
+        pitchLevel(PitchClass::C, 5),
+        pitchLevel(PitchClass::A, 4),
+
+        // 3rd measure
+        pitchLevel(PitchClass::B, 4),
+
+        // 4th measure
+        pitchLevel(PitchClass::B, 4),
+
+        // 4th measure (repeated)
+        pitchLevel(PitchClass::B, 4),
+    };
+
+    constexpr timestamp_t secondMeasureTime = WHOLE_NOTE_DURATION;
+    constexpr timestamp_t secondMesaureRepeatedTime = WHOLE_NOTE_DURATION * 2;
+    constexpr timestamp_t thirdMeasure = WHOLE_NOTE_DURATION * 3;
+    constexpr timestamp_t fourthMeasure = WHOLE_NOTE_DURATION * 4;
+    constexpr timestamp_t fourthMeasureRepeated = WHOLE_NOTE_DURATION * 5;
+
+    const std::vector<TimestampAndDuration> expectedTnDList {
+        // 1st measure (no notes)
+
+        // 2nd measure
+        { secondMeasureTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
+        { secondMeasureTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION }, // A4 tied to a quarter A4 outside of the repeat
+
+        // 2nd measure (repeated)
+        { secondMesaureRepeatedTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
+        { secondMesaureRepeatedTime + HALF_NOTE_DURATION, HALF_NOTE_DURATION + QUARTER_NOTE_DURATION }, // A4 tied to a quarter A4 outside of the repeat
+
+        // 3rd measure
+        { thirdMeasure + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION* 2 }, // B4 tied to a quarter B4 in the next measure
+
+        // 4th measure
+        { fourthMeasure + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION* 2 }, // B4 tied to a quarter B4 in the next repeat segment
+
+        // 4th measure (repeated)
+        { fourthMeasureRepeated + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION + HALF_NOTE_DURATION }, // B4 tied to a half B4 in the next measure
+    };
+
+    ASSERT_EQ(expectedPitchList.size(), expectedTnDList.size());
+    EXPECT_FALSE(result.empty());
+
+    int eventNum = 0;
+    for (const auto& pair : result) {
+        for (const mpe::PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const TimestampAndDuration& expectedTnD = expectedTnDList.at(eventNum);
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            EXPECT_EQ(pair.first, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedTnD.duration);
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchList.at(eventNum));
+
+            ++eventNum;
+        }
+    }
+
+    EXPECT_EQ(eventNum, expectedTnDList.size());
+
+    delete score;
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_PartialTie
+ * @details Checks whether we correctly calculate the duration of partially tied notes
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, PartialTie)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "partial_tie.mscx");
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
@@ -2754,27 +3083,54 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
 
     // [THEN] Expected pitch, time and duration of each event
     std::vector<pitch_level_t> expectedPitchList {
-        pitchLevel(PitchClass::C, 5),
+        // 1st measure
         pitchLevel(PitchClass::A, 4),
-        pitchLevel(PitchClass::C, 5),
+
+        // 2nd measure: no notes
+
+        // 3rd measure
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::A, 4), // partial tie to a whole note, also tied to a quarter note in the 4th measure
+
+        // 1st measure (repeated)
+        // 2nd measure (repeated)
+
+        // 3rd measure (repeated)
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::F, 4),
         pitchLevel(PitchClass::A, 4),
+
+        // 4th measure (2nd repeat segment): 1 tied quarter A4 note, skip
     };
 
-    timestamp_t secondMeasureTime = WHOLE_NOTE_DURATION;
-    timestamp_t secondMesaureRepeatedTime = secondMeasureTime + QUARTER_NOTE_DURATION * 2 + HALF_NOTE_DURATION;
+    timestamp_t thirdMeasureTime = WHOLE_NOTE_DURATION * 2;
+    timestamp_t thirdMeasureRepeatedTime = WHOLE_NOTE_DURATION * 3 + WHOLE_NOTE_DURATION * 2;
 
     std::vector<TimestampAndDuration> expectedTnDList {
-        // 1st measure (no notes)
+        // 1st measure
+        { 0, WHOLE_NOTE_DURATION },
 
-        // 2nd measure
-        { secondMeasureTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
-        { secondMeasureTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION }, // A4 tied to a whole A4 outside of the repeat
+        // 2nd measure: no notes
 
-        // 2nd measure (repeated)
-        { secondMesaureRepeatedTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
-        { secondMesaureRepeatedTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION + WHOLE_NOTE_DURATION }, // A4 tied to a whole A4 outside of the repeat
+        // 3rd measure
+        { thirdMeasureTime, QUARTER_NOTE_DURATION },
+        { thirdMeasureTime + QUARTER_NOTE_DURATION, QUARTER_NOTE_DURATION },
+        { thirdMeasureTime + QUARTER_NOTE_DURATION * 2, QUARTER_NOTE_DURATION },
+        { thirdMeasureTime + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION + WHOLE_NOTE_DURATION }, // partial tie to a whole A4 note
 
-        // 3rd measure (there is only the whole tied A4)
+        // 1st measure (repeated): skip the whole A4 note
+        // 2nd measure (repeated): no notes
+
+        // 3rd measure (repeated)
+        { thirdMeasureRepeatedTime,  QUARTER_NOTE_DURATION },
+        { thirdMeasureRepeatedTime + QUARTER_NOTE_DURATION, QUARTER_NOTE_DURATION },
+        { thirdMeasureRepeatedTime + QUARTER_NOTE_DURATION * 2, QUARTER_NOTE_DURATION },
+        { thirdMeasureRepeatedTime + QUARTER_NOTE_DURATION * 3, QUARTER_NOTE_DURATION* 2 }, // also tied to a quarter note in the 4th measure
+
+        // 4th measure (2nd repeat segment): 1 tied quarter A4 note, skip
     };
 
     ASSERT_EQ(expectedPitchList.size(), expectedTnDList.size());
@@ -2837,8 +3193,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
 
     constexpr timestamp_t expectedTrillTimestamp = WHOLE_NOTE_DURATION; // timestamp of the 2nd tied note (where the trill starts)
     constexpr duration_t expectedTrillDuration = WHOLE_NOTE_DURATION * 2;
+    constexpr timestamp_t expectedTrillTimestampTo = expectedTrillTimestamp + expectedTrillDuration;
 
     size_t noteNum = 0;
+    size_t trillStartRangeEventCount = 0;
+    size_t trillEndRangeEventCount = 0;
 
     for (const auto& pair : result) {
         for (const PlaybackEvent& event : pair.second) {
@@ -2866,6 +3225,22 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
                 EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
                 EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
 
+                const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+                // [THEN] Each note has the correct occupiedFrom/To
+                if (noteEvent.arrangementCtx().nominalTimestamp == expectedTrillTimestamp) {
+                    EXPECT_EQ(articulationData.occupiedFrom, 0);
+                    EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                    trillStartRangeEventCount++;
+                } else if (noteTimestampTo == expectedTrillTimestampTo) {
+                    EXPECT_NE(articulationData.occupiedFrom, 0);
+                    EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                    trillEndRangeEventCount++;
+                } else {
+                    EXPECT_NE(articulationData.occupiedFrom, 0);
+                    EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                }
+
                 // [THEN] Each note event has the correct duration
                 constexpr duration_t expectedSubNoteDuration = WHOLE_NOTE_DURATION / expectedSubNotes;
                 EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
@@ -2874,6 +3249,10 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
 
         ++noteNum;
     }
+
+    // [THEN] We expect only 1 start & end event for the trill
+    EXPECT_EQ(trillStartRangeEventCount, 1);
+    EXPECT_EQ(trillEndRangeEventCount, 1);
 
     delete score;
 }
@@ -2933,7 +3312,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
         expectedTrillDuration, // 2nd repeat segment
     };
 
-    int repeatSegmentNum = 0;
+    size_t repeatSegmentNum = 0;
+    size_t trillStartRangeEventCount = 0;
+    size_t trillEndRangeEventCount = 0;
 
     for (const auto& pair : result) {
         // [THEN] Sub-notes of the trill
@@ -2941,6 +3322,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
         EXPECT_EQ(pair.second.size(), expectedSubNotes);
 
         const timestamp_t expectedTrillTimestamp = expectedTrillTimestamps.at(repeatSegmentNum);
+        const timestamp_t expectedTrillTimestampTo = expectedTrillTimestamp + expectedTrillDuration;
         ++repeatSegmentNum;
 
         for (const PlaybackEvent& event : pair.second) {
@@ -2955,11 +3337,31 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
             EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
 
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+            // [THEN] Each note has the correct occupiedFrom/To
+            if (noteEvent.arrangementCtx().nominalTimestamp == expectedTrillTimestamp) {
+                EXPECT_EQ(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+                trillStartRangeEventCount++;
+            } else if (noteTimestampTo == expectedTrillTimestampTo) {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+                trillEndRangeEventCount++;
+            } else {
+                EXPECT_NE(articulationData.occupiedFrom, 0);
+                EXPECT_NE(articulationData.occupiedTo, HUNDRED_PERCENT);
+            }
+
             // [THEN] Each note event has the correct duration
             constexpr duration_t expectedSubNoteDuration = expectedTrillDuration / expectedSubNotes;
             EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
         }
     }
+
+    // [THEN] We expect 2 start & end event for each trill
+    EXPECT_EQ(trillStartRangeEventCount, 2);
+    EXPECT_EQ(trillEndRangeEventCount, 2);
 
     delete score;
 }

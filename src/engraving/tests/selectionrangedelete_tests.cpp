@@ -156,7 +156,7 @@ void Engraving_SelectionRangeDeleteTests::deleteVoice(int voice, String idx)
     Measure* m1 = score->firstMeasure();
     EXPECT_TRUE(m1);
 
-    SelectionFilterType voiceFilterType = SelectionFilterType((int)SelectionFilterType::FIRST_VOICE + voice);
+    VoicesSelectionFilterTypes voiceFilterType = VoicesSelectionFilterTypes((int)VoicesSelectionFilterTypes::FIRST_VOICE + voice);
     score->selectionFilter().setFiltered(voiceFilterType, false);
     score->select(m1, SelectType::RANGE);
 
@@ -189,7 +189,7 @@ TEST_F(Engraving_SelectionRangeDeleteTests, deleteSkipAnnotations)
     Measure* m1 = score->firstMeasure();
     EXPECT_TRUE(m1);
 
-    SelectionFilterType annotationFilterType = SelectionFilterType((int)SelectionFilterType::CHORD_SYMBOL);
+    ElementsSelectionFilterTypes annotationFilterType = ElementsSelectionFilterTypes((int)ElementsSelectionFilterTypes::CHORD_SYMBOL);
     score->selectionFilter().setFiltered(annotationFilterType, false);
 
     score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));

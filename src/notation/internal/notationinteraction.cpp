@@ -225,6 +225,10 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack, iocContext());
     m_selection = std::make_shared<NotationSelection>(notation);
 
+    m_selectionFilter = std::make_shared<NotationSelectionFilter>(notation, [this]() {
+        notifyAboutSelectionChangedIfNeed();
+    });
+
     m_noteInput->stateChanged().onNotify(this, [this]() {
         if (!m_noteInput->isNoteInputMode()) {
             hideShadowNote();
@@ -1035,18 +1039,9 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
-bool NotationInteraction::isSelectionTypeFiltered(SelectionFilterType type) const
+INotationSelectionFilterPtr NotationInteraction::selectionFilter() const
 {
-    return score()->selectionFilter().isFiltered(type);
-}
-
-void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, bool filtered)
-{
-    score()->selectionFilter().setFiltered(type, filtered);
-    if (selection()->isRange()) {
-        score()->selection().updateSelectedElements();
-        notifyAboutSelectionChangedIfNeed();
-    }
+    return m_selectionFilter;
 }
 
 bool NotationInteraction::isDragStarted() const
@@ -1287,12 +1282,14 @@ bool NotationInteraction::isOutgoingDragElementAllowed(const EngravingItem* elem
     case ElementType::HBOX:
     case ElementType::TBOX:
     case ElementType::FBOX:
-    // TODO: Bends can't be copy-dragged until corresponding SingleLayout::layout and SingleDraw::draw methods have been implemented
+    // TODO: Bends & NoteLines can't be copy-dragged until corresponding SingleLayout::layout and SingleDraw::draw methods have been implemented
     case ElementType::GUITAR_BEND:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
     case ElementType::GUITAR_BEND_TEXT:
+    case ElementType::NOTELINE:
+    case ElementType::NOTELINE_SEGMENT:
         return false;
     default: return true;
     }
@@ -2710,7 +2707,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     ChordRest* secondChordRest = nullptr;
 
     Measure* meas = firstItem ? firstItem->findMeasure() : nullptr;
-    bool header = meas && meas->header() && firstItem->tick() == meas->tick();
+    bool header = meas && meas->header() && firstItem->tick() == meas->tick() && !firstItem->isChordRest();
 
     if (firstItem && secondItem
         && ((firstItem->isBarLine() != secondItem->isBarLine()) || (header && secondItem->isChordRest()))) {
@@ -2721,7 +2718,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         const bool hasAdjacentJump = (outgoing && cr->hasFollowingJumpItem()) || (!outgoing && cr->hasPrecedingJumpItem());
         const bool isNextToBarline = (outgoing ? cr->tick() + cr->actualTicks() : cr->tick()) == otherElement->tick();
 
-        if (!cr || !isNextToBarline || !hasAdjacentJump) {
+        if (!cr || (!header && (!isNextToBarline || !hasAdjacentJump))) {
             return;
         }
 

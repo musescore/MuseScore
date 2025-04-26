@@ -59,12 +59,15 @@ public:
     Q_INVOKABLE void resetAllFormatting();
 
 private:
+    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes) override;
+
     void listenVisibilityChanged();
     void createAndAddPart(const muse::ID& masterPartId);
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;
 
     const notation::Part* m_part = nullptr;
-    bool m_isInited = false;
+    bool m_ignoreVisibilityChange = true;
+    bool m_partExists = false;
 };
 }

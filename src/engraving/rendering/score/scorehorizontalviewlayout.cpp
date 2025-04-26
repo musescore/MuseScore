@@ -183,7 +183,7 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                         continue;
                     }
                     ChordRest* cr = toChordRest(e);
-                    if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
+                    if (BeamLayout::isStartOfCrossBeam(cr)) {                           // layout cross staff beams
                         TLayout::layoutBeam(cr->beam(), ctx);
                     }
                     if (TupletLayout::notTopTuplet(cr)) {

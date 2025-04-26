@@ -112,7 +112,7 @@ private:
 
     static bool leaveSpaceForTie(const Articulation* item);
 
-    static void computeUpBeamCase(Chord* item, Beam* beam, const LayoutContext& ctx);
+    static void computeUpBeamCase(Chord* item, Beam* beam);
 };
 }
 

@@ -2377,14 +2377,12 @@ void Note::setTrack(track_idx_t val)
         m_tieFor->setTrack2(val);
         for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
             seg->setTrack(val);
-            seg->setTrack(val);
         }
     }
     if (incomingPartialTie()) {
         m_tieBack->setTrack(val);
         m_tieBack->setTrack2(val);
         for (SpannerSegment* seg : m_tieBack->spannerSegments()) {
-            seg->setTrack(val);
             seg->setTrack(val);
         }
     }
@@ -2527,6 +2525,9 @@ PartialTie* Note::outgoingPartialTie() const
 
 void Note::setTieFor(Tie* t)
 {
+    if (!t) {
+        m_jumpPoints.clear();
+    }
     m_tieFor = t;
     if (m_tieFor && !m_tieFor->isLaissezVib()) {
         m_tieFor->updatePossibleJumpPoints();

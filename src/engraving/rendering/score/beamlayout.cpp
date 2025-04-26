@@ -57,6 +57,8 @@ using namespace mu::engraving::rendering::score;
 
 void BeamLayout::layout(Beam* item, const LayoutContext& ctx)
 {
+    TRACEFUNC;
+
     Beam::LayoutData* ldata = item->mutldata();
     // all of the beam layout code depends on _elements being in order by tick
     // this may not be the case if two cr's were recently swapped.
@@ -113,6 +115,7 @@ void BeamLayout::layout(Beam* item, const LayoutContext& ctx)
 
     // The beam may have changed shape. one-note trems within this beam need to be layed out here
     for (ChordRest* cr : item->elements()) {
+        ChordLayout::computeUp(cr, ctx);
         if (cr->isChord() && toChord(cr)->tremoloSingleChord()) {
             TremoloLayout::layout(toChord(cr)->tremoloSingleChord(), ctx);
         }
@@ -299,6 +302,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 
 void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
 {
+    TRACEFUNC;
+
     BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
     Chord* startChord = nullptr;
     Chord* endChord = nullptr;
@@ -390,65 +395,29 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
     setTremAnchors(item, ctx);
 }
 
-//---------------------------------------------------------
-//   isTopBeam
-//    returns true for the first CR of a beam that is not cross-staff
-//---------------------------------------------------------
-
-bool BeamLayout::isTopBeam(ChordRest* cr)
+bool BeamLayout::isStartOfNonCrossBeam(ChordRest* cr)
 {
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
-        // beam already considered cross?
-        if (b->cross() || b->fullCross()) {
+        if (b->cross()) {
             return false;
         }
 
-        // for beams not already considered cross,
-        // consider them so here if any elements were moved up
-        for (ChordRest* cr1 : b->elements()) {
-            // some element moved up?
-            if (cr1->staffMove() != 0) {
-                return false;
-            }
-        }
-
-        // not cross
         return true;
     }
 
-    // no beam or not first element
     return false;
 }
 
-//---------------------------------------------------------
-//   notTopBeam
-//    returns true for the first CR of a beam that is cross-staff
-//---------------------------------------------------------
-
-bool BeamLayout::notTopBeam(ChordRest* cr)
+bool BeamLayout::isStartOfCrossBeam(ChordRest* cr)
 {
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
-        // beam already considered cross?
-        if (b->cross() || b->fullCross()) {
+        if (b->cross()) {
             return true;
         }
-
-        // for beams not already considered cross,
-        // consider them so here if any elements were moved up
-        for (ChordRest* cr1 : b->elements()) {
-            // some element moved up?
-            if (cr1->staffMove() != 0) {
-                return true;
-            }
-        }
-
-        // not cross
-        return false;
     }
 
-    // no beam or not first element
     return false;
 }
 
@@ -653,6 +622,8 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
 
 void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 {
+    TRACEFUNC;
+
     for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
         const Staff* stf = ctx.dom().staff(track2staff(track));
 
@@ -872,7 +843,13 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
 void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
 {
-    if (!BeamLayout::isTopBeam(cr)) {
+    if (cr->isChord()) {
+        for (Chord* grace : toChord(cr)->graceNotes()) {
+            layoutNonCrossBeams(grace, ctx);
+        }
+    }
+
+    if (!BeamLayout::isStartOfNonCrossBeam(cr)) {
         return;
     }
 
@@ -894,21 +871,11 @@ void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
     }
 
     for (ChordRest* beamCR : beam->elements()) {
-        if (beamCR->isRest()) {
+        if (beamCR->isRest() && beamCR->vStaffIdx() == beam->staffIdx()) {
             verticalAdjustBeamedRests(toRest(beamCR), beam, ctx);
         }
 
         beamCR->segment()->createShape(beamCR->staffIdx());
-    }
-
-    if (!cr->isChord()) {
-        return;
-    }
-
-    for (Chord* grace : toChord(cr)->graceNotes()) {
-        if (BeamLayout::isTopBeam(grace)) {
-            TLayout::layoutBeam(grace->beam(), ctx);
-        }
     }
 }
 

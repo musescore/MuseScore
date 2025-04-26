@@ -116,4 +116,5 @@ extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure)
 extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
 extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
 extern bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg);
+extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
 } // namespace mu::engraving

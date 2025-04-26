@@ -155,12 +155,13 @@ private:
                              LayoutContext& ctx);
     static void doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx);
     static void layoutNoteAnchoredSpanners(System* system, Chord* chord);
-    static void layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx);
-    static void doLayoutGuitarBends(Chord* chord, LayoutContext& ctx);
+    static void layoutGuitarBends(Chord* chord, LayoutContext& ctx);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
     static bool measureHasCrossStuffOrModifiedBeams(const Measure* measure);
     static void restoreTiesAndBends(System* system, LayoutContext& ctx);
     static void layoutTuplets(const std::vector<ChordRest*>& chordRests, LayoutContext& ctx);
+
+    static void layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 
     static double instrumentNamesWidth(System* system, LayoutContext& ctx, bool isFirstSystem);
     static double totalBracketOffset(LayoutContext& ctx);
