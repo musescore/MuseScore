@@ -84,8 +84,19 @@ DockWidgetBase *TabBarWidget::currentDockWidget() const
 
 void TabBarWidget::mousePressEvent(QMouseEvent *e)
 {
-    onMousePress(e->pos());
-    QTabBar::mousePressEvent(e);
+    if (e->button() == Qt::MiddleButton) {
+        int index = tabAt(e->pos());
+        if (index >= 0) {
+            if (DockWidgetBase* dw = dockWidgetAt(index)) {
+                if (!(dw->options() & DockWidgetBase::Option_NotClosable)) {
+                    dw->close();
+                }
+            }
+        }
+    } else {
+        onMousePress(e->pos());
+        QTabBar::mousePressEvent(e);
+    }
 }
 
 void TabBarWidget::mouseMoveEvent(QMouseEvent *e)
