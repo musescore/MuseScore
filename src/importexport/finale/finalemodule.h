@@ -19,21 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationmusxreader.h"
+#pragma once
 
-#include "engraving/dom/score.h"
-#include "engraving/engravingerrors.h"
+#include "modularity/imodulesetup.h"
 
-
-using namespace mu::iex::musx;
-using namespace mu::engraving;
-
-namespace mu::iex::musx {
-extern Err importMusx(MasterScore* score, const QString& name);
-}
-
-muse::Ret NotationMusxReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
+namespace mu::iex::finale {
+class FinaleModule : public muse::modularity::IModuleSetup
 {
-    Err err = importMusx(score, path.toQString());
-    return make_ret(err, path);
-}
+public:
+
+    std::string moduleName() const override;
+    void resolveImports() override;
+};
+
+} // namespace mu::iex::finale

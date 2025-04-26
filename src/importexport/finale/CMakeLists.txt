@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Musx Import Module (Experimental)
 
-declare_module(iex_musx)
+declare_module(iex_finale)
 
 include(FetchContent)
 
@@ -19,12 +19,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(musx)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmusxreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmusxreader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musx_import.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musx_import.h
-    ${CMAKE_CURRENT_LIST_DIR}/musxmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musxmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/ezgz.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/finalemodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/finalemodule.h
     )
 
 set(MODULE_LINK
