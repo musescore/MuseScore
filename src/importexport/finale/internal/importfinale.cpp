@@ -22,6 +22,9 @@
 #include "importfinale.h"
 #include "thirdparty/ezgz.hpp"
 
+#include <vector>
+#include <exception>
+
 #include <QFile>
 #include <QFileInfo>
 
