@@ -565,43 +565,36 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
 
-    //! [GIVEN] Previous selected measure
-    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::MEASURE });
-
-    //! [GIVEN] User selected measure that is already selected
-    INotationInteraction::HitElementContext newContext = oldContext;
-    newContext.element->setSelected(true);
-
-    std::vector<EngravingItem*> selectedElements {
-        newContext.element
-    };
+    //! [GIVEN] User selects a measure
+    INotationInteraction::HitElementContext context = hitMeasureContext(score, 0 /*first measure*/);
 
     EXPECT_CALL(*m_interaction, hitElement(_, _))
-    .WillOnce(Return(newContext.element));
+    .WillOnce(Return(context.element));
 
     EXPECT_CALL(*m_interaction, hitStaff(_))
-    .WillOnce(Return(newContext.element->staff()));
+    .WillOnce(Return(context.staff));
 
     //! [GIVEN] The new hit element context with new measure will be set
-    EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
+    EXPECT_CALL(*m_interaction, setHitElementContext(context))
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
     .Times(2)
-    .WillOnce(ReturnRef(oldContext))
-    .WillOnce(ReturnRef(oldContext));
+    .WillOnce(ReturnRef(context))
+    .WillOnce(ReturnRef(context));
 
     //! [GIVEN] There is a range selection
     ON_CALL(*m_selection, isRange())
     .WillByDefault(Return(true));
-    ON_CALL(*m_selectionRange, containsPoint(_))
+    ON_CALL(*m_selectionRange, containsItem(context.element, _))
     .WillByDefault(Return(true));
 
+    std::vector<EngravingItem*> selectElements = { context.element };
     EXPECT_CALL(*m_selection, elements())
-    .WillOnce(ReturnRef(selectedElements));
+    .WillOnce(ReturnRef(selectElements));
 
     //! [THEN] We should seek measure from the range
-    EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
+    EXPECT_CALL(*m_playbackController, seekElement(context.element))
     .Times(1);
 
     //! [THEN] No selection change
@@ -610,6 +603,56 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
 
     //! [WHEN] User pressed left mouse button
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Shift_On_Selected_Selected_Range
+ * @details User pressed left mouse button with Shift on already selected range
+ *          This should result in a call to `select`, to extend/diminish the selection
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Shift_On_Already_Selected_Range)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] User selects a measure
+    INotationInteraction::HitElementContext context = hitMeasureContext(score, 0 /*first measure*/);
+
+    EXPECT_CALL(*m_interaction, hitElement(_, _))
+    .WillOnce(Return(context.element));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(context.staff));
+
+    //! [GIVEN] The new hit element context with new measure will be set
+    EXPECT_CALL(*m_interaction, setHitElementContext(context))
+    .Times(1);
+
+    EXPECT_CALL(*m_interaction, hitElementContext())
+    .Times(2)
+    .WillOnce(ReturnRef(context))
+    .WillOnce(ReturnRef(context));
+
+    //! [GIVEN] There is a range selection
+    ON_CALL(*m_selection, isRange())
+    .WillByDefault(Return(true));
+    ON_CALL(*m_selectionRange, containsItem(context.element, _))
+    .WillByDefault(Return(true));
+
+    //! [THEN] We should seek measure from the range
+    EXPECT_CALL(*m_playbackController, seekElement(context.element))
+    .Times(1);
+
+    //! [THEN] Selection is extended/diminished
+    std::vector<EngravingItem*> selectElements = { context.element };
+    EXPECT_CALL(*m_interaction, select(selectElements, _, _))
+    .Times(1);
+
+    EXPECT_CALL(*m_selection, elements())
+    .WillOnce(ReturnRef(selectElements));
+
+    //! [WHEN] User pressed left mouse button
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
 }
 
 /**
@@ -791,10 +834,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     EXPECT_CALL(*m_selection, isRange())
     .WillRepeatedly(Return(true));
 
-    //! [THEN] New element is initially not in selected range,
-    //!        but is in selected range after performing selection
+    //! [GIVEN] Element is in selected range at the moment that it is selected for the second time
     EXPECT_CALL(*m_selectionRange, containsItem(contextMenuOnMeasureContext.element, _))
-    .WillOnce(Return(false))
     .WillOnce(Return(true));
 
     std::vector<const EngravingItem*> playElements = { selectMeasureContext.element };
@@ -885,11 +926,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     .WillOnce(ReturnRef(selectElements))
     .WillOnce(ReturnRef(contextMenuSelectElements));
 
-    //! [THEN] Old element is not in selected range at the moment that it is selected
-    EXPECT_CALL(*m_selectionRange, containsItem(selectMeasureContext.element, _))
-    .WillOnce(Return(false));
-
-    //! [THEN] New element is not in selected range at the moment that it is selected
+    //! [GIVEN] New element is not in selected range at the moment that it is selected
     EXPECT_CALL(*m_selectionRange, containsItem(contextMenuOnMeasureContext.element, _))
     .WillOnce(Return(false));
 
