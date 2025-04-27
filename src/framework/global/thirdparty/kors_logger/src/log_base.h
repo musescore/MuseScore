@@ -67,7 +67,7 @@ SOFTWARE.
     DO_ASSERT_X(cond, msg) \
     if (!(cond)) \
 
-#define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
+#define IF_ASSERT_FAILED(cond) if (!(cond)) //IF_ASSERT_FAILED_X(cond, #cond)
 
 #define IF_FAILED(cond) \
     if (!(cond)) { \

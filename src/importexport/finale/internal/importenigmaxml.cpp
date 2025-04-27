@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "importfinale.h"
+#include "importenigmaxml.h"
+#include "dom/sig.h"
 #include "thirdparty/ezgz.hpp"
 
 #include <vector>
@@ -54,6 +55,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
+#include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
 #include "engraving/engravingerrors.h"
 
@@ -75,8 +77,8 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
 
     data.clear(); // free up data now that it isn't needed
 
-    MusxImporter importer(score, doc);
-    importer.importParts();  // just create Parts for now
+    EnigmaXmlImporter importer(score, doc);
+    importer.import();
 
     score->setUpTempoMap(); //??
     return engraving::Err::NoError;
@@ -179,7 +181,97 @@ static std::string trimNewLineFromString(const std::string& src)
     return src;
 }
 
-void MusxImporter::importParts()
+Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const others::Staff> musxStaff)
+{
+    Staff* s = Factory::createStaff(part);
+    /// @todo This staffLines setting will move to wherever we parse staff styles
+    if (musxStaff->staffLines.has_value()) {
+        s->setLines(Fraction(0, 1), musxStaff->staffLines.value());
+    } else if (musxStaff->customStaff.has_value()) {
+        s->setLines(Fraction(0, 1), musxStaff->customStaff.value().size());
+    }
+    s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
+    m_staff2Inst.emplace(m_score->nstaves(), InstCmper(musxStaff->getCmper()));
+    m_score->appendStaff(s);
+    return s;
+}
+
+void EnigmaXmlImporter::import()
+{
+    importParts();
+    importMeasures();
+}
+
+static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig)
+{
+    auto [count, noteType] = simpleMusxTimeSig;
+    if (count.remainder()) {
+        if ((Edu(noteType) % count.denominator()) == 0) {
+            noteType = musx::dom::NoteType(Edu(noteType) / count.denominator());
+            count *= count.denominator();
+        } else {
+            LOGE() << "Time signature has fractional portion that could not be reduced.";
+            return Fraction(4, 4);
+        }
+    }
+    return Fraction(count.numerator(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
+}
+
+void EnigmaXmlImporter::importMeasures()
+{
+    Fraction currTimeSig = Fraction(4, 4); // default time signature
+    m_score->sigmap()->clear();
+    m_score->sigmap()->add(0, currTimeSig);     // default time signature
+
+    auto musxMeasures = m_doc->getOthers()->getArray<others::Measure>(SCORE_PARTID);
+    int counter = 0; // DBG
+    for (const auto& musxMeasure : musxMeasures) {
+        Fraction tick{ 0, 1 };
+        auto lastMeasure = m_score->measures()->last();
+        if (lastMeasure) {
+            tick = lastMeasure->tick() + lastMeasure->ticks();
+        }
+
+        Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+        measure->setTick(tick);
+        auto musxTimeSig = musxMeasure->createDisplayTimeSignature()->calcSimplified();
+        auto scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig);
+        if (scoreTimeSig != currTimeSig) {
+            m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
+            currTimeSig = scoreTimeSig;
+        }
+        measure->setTick(tick);
+        measure->setTimesig(scoreTimeSig);
+        measure->setTicks(scoreTimeSig);
+        m_score->measures()->add(measure);
+        if (++counter >= 100) break; //DBG
+    }
+
+    /// @todo maybe move this to separate function
+    const TimeSigMap& sigmap = *m_score->sigmap();
+
+    for (auto is = sigmap.cbegin(); is != sigmap.cend(); ++is) {
+        const SigEvent& se = is->second;
+        const int tick = is->first;
+        Measure* m = m_score->tick2measure(Fraction::fromTicks(tick));
+        if (!m) {
+            continue;
+        }
+        Fraction newTimeSig = se.timesig();
+        for (size_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
+            Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
+            TimeSig* ts = Factory::createTimeSig(seg);
+            ts->setSig(newTimeSig);
+            ts->setTrack(static_cast<int>(staffIdx) * VOICES);
+            seg->add(ts);
+        }
+        if (newTimeSig != se.timesig()) {     // was a pickup measure - skip next timesig
+            ++is;
+        }
+    }
+}
+
+void EnigmaXmlImporter::importParts()
 {
     auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
 
@@ -189,10 +281,11 @@ void MusxImporter::importParts()
         if (!staff)
             continue; // safety check
         auto multiStaffInst = staff->getMultiStaffInstGroup();
-        /// @todo skip staves in multiStaffInsts after the first staff
+        if (multiStaffInst && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
+            continue;
+        }
 
         Part* part = new Part(m_score);
-        //part->setTrack(m_score->nstaves() * VOICES);
 
         QString id = QString("P%1").arg(++partNumber);
         part->setId(id);
@@ -208,11 +301,18 @@ void MusxImporter::importParts()
             part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
         }
 
-
-        int numStaves = multiStaffInst ? multiStaffInst->staffNums.size() : 1;
-        for (int x = 1; x <= numStaves; x++) {
-            Staff* s = Factory::createStaff(part);
-            m_score->appendStaff(s);
+        if (multiStaffInst) {
+            m_part2Inst.emplace(id, multiStaffInst->staffNums);
+            for (auto inst : multiStaffInst->staffNums) {
+                if (auto instStaff = m_doc->getOthers()->get<others::Staff>(SCORE_PARTID, inst)) {
+                    createStaff(part, instStaff);
+                    m_inst2Part.emplace(inst, id);
+                }
+            }
+        } else {
+            createStaff(part, staff);
+            m_part2Inst.emplace(id, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
+            m_inst2Part.emplace(staff->getCmper(), id);
         }
         m_score->appendPart(part);
     }

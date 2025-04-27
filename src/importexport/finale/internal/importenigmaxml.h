@@ -21,34 +21,46 @@
  */
 #pragma once
 
+#include <unordered_map>
+#include <memory>
+
 #include "engraving/engravingerrors.h"
+
+#include "musx/musx.h"
 
 namespace mu::engraving {
 class MasterScore;
 class Score;
-}
-
-namespace musx::dom {
-class Document;
+class Part;
+class Staff;
 }
 
 namespace mu::iex::finale {
 
-engraving::Err importEnigmaXmlfromBuffer(engraving::Score* score, const muse::ByteArray& data);
+engraving::Err importEnigmaXmlfromBuffer(engraving::Score* score, muse::ByteArray&& data);
 engraving::Err importEnigmaXml(engraving::MasterScore* score, const QString& name);
 engraving::Err importMusx(engraving::MasterScore* score, const QString& name);
 
-class MusxImporter
+class EnigmaXmlImporter
 {
 public:
-    MusxImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc)
+    EnigmaXmlImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc)
         : m_score(score), m_doc(doc) {}
 
-    void importParts();
+    void import();
 
 private:
+    void importParts();
+    void importMeasures();
+
+    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff);
+
     engraving::Score* m_score;
     const std::shared_ptr<const musx::dom::Document> m_doc;
+
+    std::unordered_map<QString, std::vector<musx::dom::InstCmper>> m_part2Inst;
+    std::unordered_map<musx::dom::InstCmper, QString> m_inst2Part;
+    std::unordered_map<musx::dom::InstCmper, size_t> m_staff2Inst;
 };
 
 }
