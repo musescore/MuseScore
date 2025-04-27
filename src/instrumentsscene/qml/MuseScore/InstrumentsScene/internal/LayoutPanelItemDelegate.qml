@@ -40,6 +40,7 @@ FocusableControl {
     readonly property bool isSelected: item && item.isSelected
     readonly property bool isSelectable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
+    readonly property bool isLinked: item && item.isLinked
     readonly property bool settingsAvailable: item && item.settingsAvailable
     readonly property bool settingsEnabled: item && item.settingsEnabled
 
@@ -284,10 +285,21 @@ FocusableControl {
                 }
             }
 
+            StyledIconLabel {
+                id: linkIcon
+
+                anchors.left: expandButton.right
+                anchors.leftMargin: 4
+                anchors.verticalCenter: expandButton.verticalCenter
+                visible: root.isLinked
+                iconCode: IconCode.LINK
+                opacity: model && model.itemRole.isVisible ? 1 : 0.75
+            }
+
             StyledTextLabel {
                 id: titleLabel
 
-                anchors.left: expandButton.right
+                anchors.left: root.isLinked ? linkIcon.right : expandButton.right
                 anchors.leftMargin: 4
                 anchors.right: parent.right
                 anchors.rightMargin: 8

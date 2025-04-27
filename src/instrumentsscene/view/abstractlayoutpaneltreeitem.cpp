@@ -88,6 +88,11 @@ bool AbstractLayoutPanelTreeItem::isExpandable() const
     return m_isExpandable;
 }
 
+bool AbstractLayoutPanelTreeItem::isLinked() const
+{
+    return m_isLinked;
+}
+
 bool AbstractLayoutPanelTreeItem::settingsAvailable() const
 {
     return m_settingsAvailable;
@@ -302,6 +307,16 @@ void AbstractLayoutPanelTreeItem::setIsExpandable(bool expandable)
 
     m_isExpandable = expandable;
     emit isExpandableChanged(expandable);
+}
+
+void AbstractLayoutPanelTreeItem::setIsLinked(bool linked)
+{
+    if (m_isLinked == linked) {
+        return;
+    }
+
+    m_isLinked = linked;
+    emit isLinkedChanged(linked);
 }
 
 void AbstractLayoutPanelTreeItem::setSettingsAvailable(bool available)
