@@ -6439,7 +6439,7 @@
         <source>B♭ basso</source>
         <comment>bb-horn-basso traitName</comment>
         <extracomment>traitName for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭ baxu</translation>
+        <translation>Si♭ baxu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2264"/>

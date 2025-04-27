@@ -1092,7 +1092,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="118"/>
         <source>Extra distance above staff:</source>
-        <translation>谱表上方的额外距离。</translation>
+        <translation>谱表上方的额外距离：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="144"/>
@@ -1474,7 +1474,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="474"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="752"/>
         <source>pt</source>
-        <translation>点</translation>
+        <translation>pt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="494"/>
@@ -1601,7 +1601,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1030"/>
         <source>Beside staff</source>
-        <translation>置之谱外</translation>
+        <translation>于谱表旁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1037"/>
@@ -2207,7 +2207,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="530"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation>重置“首谱行组缩进”值</translation>
+        <translation>重置“首行谱行组缩进”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="556"/>
@@ -2227,7 +2227,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="731"/>
         <source>Swing:</source>
-        <translation>Swing摇摆节拍：</translation>
+        <translation>Swing：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="738"/>
@@ -2237,7 +2237,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
         <source>Select swing ratio:</source>
-        <translation>选择Swing摇摆节拍比例：</translation>
+        <translation>设置Swing比例：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="829"/>
@@ -2338,7 +2338,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1665"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation>重置“括号间距系数”值</translation>
+        <translation>重置“直连谱号上/下边距系数”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1710"/>
@@ -2353,7 +2353,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1733"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>重置“连谱号间距系数”值</translation>
+        <translation>重置“花连谱号上/下边距系数”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1746"/>
@@ -2363,7 +2363,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1756"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation>重置“最大大谱表间距”值</translation>
+        <translation>重置“大谱表最大间距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1766"/>
@@ -2385,12 +2385,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1855"/>
         <source>Factor for distance above/below brace:</source>
-        <translation>连谱号间距系数</translation>
+        <translation>花连谱号上/下边距系数：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1868"/>
         <source>Factor for distance above/below bracket:</source>
-        <translation>括号间距系数：</translation>
+        <translation>直连谱号上/下边距系数：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1086"/>
@@ -2486,7 +2486,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2361"/>
         <source>Show header also on first page</source>
-        <translation>第一页上也显示页眉</translation>
+        <translation>首页也显示页眉</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2364"/>
@@ -2547,12 +2547,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2687"/>
         <source>Use odd/even page footer</source>
-        <translation>奇偶页页脚不同</translation>
+        <translation>奇偶页使用不同页脚</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2989"/>
         <source>Show first</source>
-        <translation>首号显示</translation>
+        <translation>第一小节显示小节号</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3011"/>
@@ -2572,7 +2572,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3119"/>
         <source>Every system</source>
-        <translation>每个行组</translation>
+        <translation>每个谱行组</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3139"/>
@@ -2582,35 +2582,35 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3178"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation>在小节休止符处显示小节号的范围</translation>
+        <translation>在长休止符处显示小节号的范围</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3395"/>
         <source>Bracket distance:</source>
         <comment>System bracket</comment>
-        <translation>连谱号间距：</translation>
+        <translation>直连谱号边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3468"/>
         <source>Brace thickness:</source>
-        <translation>花括号粗细：</translation>
+        <translation>花连谱号粗细：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3513"/>
         <source>Brace distance:</source>
-        <translation>花括号间距：</translation>
+        <translation>花连谱号边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3536"/>
         <source>Bracket thickness:</source>
         <comment>System bracket</comment>
-        <translation>连谱号粗细：</translation>
+        <translation>直连谱号粗细：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3549"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
-        <translation>重置“括号粗细”值</translation>
+        <translation>重置“直连谱号粗细”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3650"/>
@@ -2685,7 +2685,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="661"/>
         <source>On first system of sections:</source>
-        <translation>在乐章的首个谱表组上</translation>
+        <translation>在乐章的首个谱行组上</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="668"/>
@@ -2912,7 +2912,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4148"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
-        <translation>重置“最低小节宽度”值</translation>
+        <translation>重置“小节最小宽度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4806"/>
@@ -2939,7 +2939,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5332"/>
         <source>Only before courtesy key signatures</source>
-        <translation>只在辅助调号之前</translation>
+        <translation>仅在提示调号前</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
@@ -2949,7 +2949,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5362"/>
         <source>Only before courtesy time signatures</source>
-        <translation>只在辅助拍号之前</translation>
+        <translation>仅在提示拍号前</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5616"/>
@@ -2964,7 +2964,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5702"/>
         <source>Combine voices that share the same stem direction</source>
-        <translation>合并移动方向相同的声部</translation>
+        <translation>合并符干方向相同的声部</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5769"/>
@@ -2980,7 +2980,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7102"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
-        <translation>重置“括号粗细”值</translation>
+        <translation>重置“连谱号粗细”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7475"/>
@@ -3002,7 +3002,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation>1＆3声部位于谱表上方，2＆4声部位于谱表下方</translation>
+        <translation>1＆3声部时位于谱表上方，2＆4声部时位于谱表下方</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
@@ -3017,7 +3017,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10208"/>
         <source>Label for full bends</source>
-        <translation>全弯音标签</translation>
+        <translation>全弯音标记</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10319"/>
@@ -3032,7 +3032,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>使用Cue号大小的数字表示倚音弯音</translation>
+        <translation>倚音弯音使用小数字表示</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
@@ -3142,7 +3142,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3436"/>
         <source>Reset &apos;Bracket distance&apos; value</source>
-        <translation>重置“连谱号距离”值</translation>
+        <translation>重置“连谱号边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3503"/>
@@ -3152,7 +3152,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3526"/>
         <source>Reset &apos;Brace distance&apos; value</source>
-        <translation>重置“花连谱号距离”值</translation>
+        <translation>重置“花连谱号边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4816"/>
@@ -3365,7 +3365,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Mask barlines when intersecting text</source>
-        <translation>文本压到小节线加衬</translation>
+        <translation>小节线避开文本</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5393"/>
@@ -3503,7 +3503,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6425"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6428"/>
         <source>Number consecutive measure repeats</source>
-        <translation>连续小节反复次数</translation>
+        <translation>显示小节连续反复次数</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6437"/>
@@ -3513,7 +3513,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6457"/>
         <source>measures</source>
-        <translation>小节换行</translation>
+        <translation>小节</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6491"/>
@@ -3926,13 +3926,13 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7563"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7765"/>
         <source>Line thickness at end:</source>
-        <translation>连音符端点粗细：</translation>
+        <translation>端点粗细：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7605"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7807"/>
         <source>Line thickness middle:</source>
-        <translation>连音符中部粗细：</translation>
+        <translation>中部粗细：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7972"/>
@@ -3959,7 +3959,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7637"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7839"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>重置“连音符中部粗细”值</translation>
+        <translation>重置“中部粗细”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
@@ -4131,7 +4131,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9288"/>
         <source>Numbers only</source>
-        <translation>仅限数字</translation>
+        <translation>仅显示数字</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9327"/>
@@ -4141,7 +4141,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9378"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>重置“仅限数字”值</translation>
+        <translation>重置“仅显示数字”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10222"/>
@@ -4382,7 +4382,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12902"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14692"/>
         <source>pt</source>
-        <translation>点</translation>
+        <translation>pt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12918"/>
@@ -4562,27 +4562,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13229"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
-        <translation>重置“延展垂直偏移”值</translation>
+        <translation>重置“扩展垂直偏移”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13239"/>
         <source>Extension vertical offset:</source>
-        <translation>延展垂直偏移：</translation>
+        <translation>扩展部分垂直偏移：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13249"/>
         <source>Extension scaling:</source>
-        <translation>上标字号：</translation>
+        <translation>扩展部分缩放：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13262"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
-        <translation>重置“上标字号”值</translation>
+        <translation>重置“扩展部分缩放”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13272"/>
         <source>Modifier scaling:</source>
-        <translation>调整级数：</translation>
+        <translation>修饰符缩放：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13282"/>
@@ -4592,7 +4592,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13295"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
-        <translation>重置“调整级数”值</translation>
+        <translation>重置“修饰符缩放”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13308"/>
@@ -4602,7 +4602,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13330"/>
         <source>Lower case minor chords</source>
-        <translation>小调和弦小写</translation>
+        <translation>小、半减、减和弦小写</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13337"/>
@@ -4668,7 +4668,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13542"/>
         <source>Distance to fretboard diagram:</source>
-        <translation>品格图间距:</translation>
+        <translation>与品格图的间距:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13552"/>
@@ -4678,7 +4678,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13584"/>
         <source>Minimum chord spacing:</source>
-        <translation>最小和弦距离：</translation>
+        <translation>最小和弦间距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13594"/>
@@ -6263,12 +6263,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="385"/>
         <source>Transpose key signatures</source>
-        <translation>移调调号</translation>
+        <translation>将调号同时移调</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="412"/>
         <source>Degree type</source>
-        <translation>级数类型</translation>
+        <translation>度数类型</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="416"/>
@@ -6304,7 +6304,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="491"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Keep degree alterations</source>
-        <translation>保持音程变化</translation>
+        <translation>保持变音号</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="507"/>
@@ -6389,7 +6389,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="55"/>
         <source>Voicing:</source>
-        <translation>声部排列</translation>
+        <translation>排列</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="69"/>
@@ -6417,25 +6417,25 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="98"/>
         <source>Drop two</source>
         <extracomment>2nd note an octave down</extracomment>
-        <translation>高二降八</translation>
+        <translation>Drop 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="103"/>
         <source>Six note</source>
         <extracomment>6 note chord</extracomment>
-        <translation>六音</translation>
+        <translation>六音和弦</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="108"/>
         <source>Four note</source>
         <extracomment>4 note chord</extracomment>
-        <translation>四音</translation>
+        <translation>四音和弦</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="113"/>
         <source>Three note</source>
         <extracomment>3 note chord</extracomment>
-        <translation>三音</translation>
+        <translation>三音和弦</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="122"/>
@@ -6456,7 +6456,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="93"/>
         <source>Close</source>
         <extracomment>all notes within an octave</extracomment>
-        <translation>关闭</translation>
+        <translation>密集排列</translation>
     </message>
 </context>
 <context>
@@ -6829,7 +6829,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="346"/>
         <source>&amp;Swap with clipboard</source>
-        <translation>交换剪贴板 (&amp;S)</translation>
+        <translation>与剪贴板内容交换 (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="352"/>
@@ -6855,12 +6855,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="376"/>
         <source>Similar on this staff</source>
-        <translation>此谱表上</translation>
+        <translation>此谱表上的相似内容</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="382"/>
         <source>Similar in this range</source>
-        <translation>此选区内</translation>
+        <translation>此选区内的相似内容</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="388"/>
@@ -7514,7 +7514,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
         <source>Copy/paste: swap with clipboard</source>
-        <translation>拷贝/粘贴：交换剪贴板</translation>
+        <translation>拷贝/粘贴：与剪贴板内容交换</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="359"/>
@@ -7892,7 +7892,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
         <source>&amp;Note-anchored line</source>
-        <translation>音符锚线 (&amp;M)</translation>
+        <translation>音符锚线 (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1245"/>
@@ -7952,7 +7952,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
         <source>&amp;Dynamic</source>
-        <translation>力度 (&amp;L)</translation>
+        <translation>力度记号 (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1310"/>
@@ -7992,7 +7992,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1346"/>
         <source>Add text: Roman numeral analysis</source>
-        <translation>添加文本：和弦级数分析</translation>
+        <translation>添加文本：罗马数字分析</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1352"/>
@@ -8002,7 +8002,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1358"/>
         <source>Add text: lyrics</source>
-        <translation>添加文本：歌词</translation>
+        <translation>添加文本：唱词</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1364"/>
@@ -8840,12 +8840,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
         <source>Input by note name</source>
-        <translation>通过音名输入</translation>
+        <translation>按音名输入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2068"/>
         <source>Toggle note input mode: input by note name</source>
-        <translation>切换音符输入模式：按音符名称输入</translation>
+        <translation>切换音符输入模式：按音名输入</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
@@ -9195,12 +9195,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>&amp;Layout</source>
-        <translation>布局 (&amp;L)</translation>
+        <translation>版面 (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
         <source>Show/hide layout panel</source>
-        <translation>显示/隐藏布局面板</translation>
+        <translation>显示/隐藏版面面板</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
@@ -10297,12 +10297,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2548"/>
         <source>Show sound flags</source>
-        <translation>显示音色旗标</translation>
+        <translation>显示音色标志</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2549"/>
         <source>Show/hide sound flags</source>
-        <translation>显示/隐藏音色旗标</translation>
+        <translation>显示/隐藏音色标志</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
@@ -10991,27 +10991,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="485"/>
         <source>A&amp;ctions</source>
-        <translation>操作 (&amp;Z)</translation>
+        <translation>操作 (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="486"/>
         <source>&amp;Accessibility</source>
-        <translation>无障碍 (&amp;W)</translation>
+        <translation>无障碍 (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="487"/>
         <source>&amp;Engraving</source>
-        <translation>雕版 (&amp;B)</translation>
+        <translation>雕版 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
         <source>E&amp;xtensions</source>
-        <translation>扩展 (&amp;K)</translation>
+        <translation>扩展 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="489"/>
         <source>Auto&amp;bot</source>
-        <translation>机器人 (&amp;J)</translation>
+        <translation>机器人 (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="490"/>
@@ -12328,77 +12328,77 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3324"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3362"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3322"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3360"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="739"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="751"/>
         <source>Voice: %1</source>
         <translation>声部：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3330"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>（起%1‰ 止%2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3338"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3367"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
         <source>Beat slash</source>
         <translation>节拍式斜杠</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3338"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3367"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
         <source>Rhythm slash</source>
         <translation>节奏感斜杠</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3371"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3340"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3369"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1；第%2弦；第%3品</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3348"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; 音高: %2; 时值: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3377"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1符头%2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3377"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="754"/>
         <source>Cross-staff above</source>
         <translation>跨到上方谱表</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3381"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="756"/>
         <source>Cross-staff below</source>
         <translation>跨到下方谱表</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3383"/>
         <source>too low</source>
         <translation>过低</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
         <source>too high</source>
         <translation>过高</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
         <source>too low for amateurs</source>
         <translation>对业余者过低</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3391"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
         <source>too high for amateurs</source>
         <translation>对业余者过高</translation>
     </message>
@@ -12462,8 +12462,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3417"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3429"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3415"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3427"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2481"/>
         <source>Start of %1</source>
         <translation>%1之始</translation>
@@ -12472,8 +12472,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3421"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3437"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3419"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3435"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2496"/>
         <source>End of %1</source>
         <translation>%1之终</translation>
@@ -12879,7 +12879,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
         <source>Sound flag</source>
-        <translation>音色旗标</translation>
+        <translation>音色标志</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
@@ -13525,12 +13525,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1252"/>
         <source>Lyrics odd lines</source>
-        <translation>奇数歌词行</translation>
+        <translation>奇数唱词行</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1253"/>
         <source>Lyrics even lines</source>
-        <translation>偶数歌词行</translation>
+        <translation>偶数唱词行</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1255"/>
@@ -13540,7 +13540,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1256"/>
         <source>Roman numeral analysis</source>
-        <translation>和弦级数分析</translation>
+        <translation>罗马数字分析</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1262"/>
@@ -14336,7 +14336,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/systemlock.cpp" line="169"/>
         <source>Start measure: %1; End measure: %2</source>
-        <translation>起点小节：%1；终点小节：%2</translation>
+        <translation>起始小节：%1；终止小节：%2</translation>
     </message>
 </context>
 <context>
@@ -15532,7 +15532,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2468"/>
         <source>Ride Cymbal 1</source>
-        <translation>节奏钹 1</translation>
+        <translation>叠音镲 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2469"/>
@@ -15572,7 +15572,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
         <source>Ride Cymbal 2</source>
-        <translation>节奏钹 2</translation>
+        <translation>叠音镲 2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
@@ -15722,7 +15722,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2511"/>
         <source>Ride (Edge)</source>
-        <translation>点镲（边缘）</translation>
+        <translation>叠音镲（边缘）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2513"/>
@@ -16182,17 +16182,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="698"/>
         <source>Do (Funk)</source>
-        <translation>Do（乡土爵士）</translation>
+        <translation>Do (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="699"/>
         <source>Re (Funk)</source>
-        <translation>Re（乡土爵士）</translation>
+        <translation>Re (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="700"/>
         <source>Ti (Funk)</source>
-        <translation>Ti（乡土爵士）</translation>
+        <translation>Ti (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="703"/>
@@ -16571,7 +16571,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1618"/>
         <source>Legato</source>
-        <translation>连贯地</translation>
+        <translation>连奏</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1619"/>
@@ -17216,32 +17216,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3516"/>
         <source>Double flat lowered by one syntonic comma</source>
-        <translation>低共振号的重降号</translation>
+        <translation>低合音差的重降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3517"/>
         <source>Double flat raised by one syntonic comma</source>
-        <translation>高共振号的重降号</translation>
+        <translation>高合音差的重降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3519"/>
         <source>Double flat lowered by three syntonic commas</source>
-        <translation>低三个共振号的重降号</translation>
+        <translation>低三个合音差的重降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3520"/>
         <source>Double flat raised by three syntonic commas</source>
-        <translation>高三个共振号的重降号</translation>
+        <translation>高三个合音差的重降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3522"/>
         <source>Double flat lowered by two syntonic commas</source>
-        <translation>低两个共振号的重降号</translation>
+        <translation>低两个合音差的重降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3523"/>
         <source>Double flat raised by two syntonic commas</source>
-        <translation>高两个共振号的重降号</translation>
+        <translation>高两个合音差的重降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3524"/>
@@ -17256,32 +17256,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3527"/>
         <source>Double sharp lowered by one syntonic comma</source>
-        <translation>低共振号的重升号</translation>
+        <translation>低合音差的重升号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3528"/>
         <source>Double sharp raised by one syntonic comma</source>
-        <translation>高共振号的重升号</translation>
+        <translation>高合音差的重升号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3529"/>
         <source>Double sharp lowered by three syntonic commas</source>
-        <translation>低三个共振号的重升号</translation>
+        <translation>低三个合音差的重升号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3530"/>
         <source>Double sharp raised by three syntonic commas</source>
-        <translation>高三个共振号的重升号</translation>
+        <translation>高三个合音差的重升号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3531"/>
         <source>Double sharp lowered by two syntonic commas</source>
-        <translation>低两个共振号的重升号</translation>
+        <translation>低两个合音差的重升号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3532"/>
         <source>Double sharp raised by two syntonic commas</source>
-        <translation>高两个共振号的重升号</translation>
+        <translation>高两个合音差的重升号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3533"/>
@@ -17321,32 +17321,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3547"/>
         <source>Flat lowered by one syntonic comma</source>
-        <translation>低共振号的降号</translation>
+        <translation>低合音差的降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3548"/>
         <source>Flat raised by one syntonic comma</source>
-        <translation>高共振号的降号</translation>
+        <translation>高合音差的降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3552"/>
         <source>Flat lowered by three syntonic commas</source>
-        <translation>低三个共振号的降号</translation>
+        <translation>低三个合音差的降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3553"/>
         <source>Flat raised by three syntonic commas</source>
-        <translation>高三个共振号的降号</translation>
+        <translation>高三个合音差的降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3555"/>
         <source>Flat lowered by two syntonic commas</source>
-        <translation>低两个共振号的降号</translation>
+        <translation>低两个合音差的降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3556"/>
         <source>Flat raised by two syntonic commas</source>
-        <translation>高两个共振号的降号</translation>
+        <translation>高两个合音差的降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3575"/>
@@ -17361,7 +17361,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3579"/>
         <source>Lower by one septimal comma</source>
-        <translation>低一个七分号</translation>
+        <translation>低一个七音差</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3580"/>
@@ -17376,7 +17376,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3582"/>
         <source>Lower by two septimal commas</source>
-        <translation>低两个七分号</translation>
+        <translation>低两个七音差</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3586"/>
@@ -17396,12 +17396,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3591"/>
         <source>Natural lowered by one syntonic comma</source>
-        <translation>低共振号的还原号</translation>
+        <translation>低合音差的还原号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3592"/>
         <source>Natural raised by one syntonic comma</source>
-        <translation>高共振号的还原号</translation>
+        <translation>高合音差的还原号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3595"/>
@@ -17411,22 +17411,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3596"/>
         <source>Natural lowered by three syntonic commas</source>
-        <translation>低三个共振号的还原号</translation>
+        <translation>低三个合音差的还原号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3597"/>
         <source>Natural raised by three syntonic commas</source>
-        <translation>高三个共振号的还原号</translation>
+        <translation>高三个合音差的还原号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3598"/>
         <source>Natural lowered by two syntonic commas</source>
-        <translation>低两个共振号的还原号</translation>
+        <translation>低两个合音差的还原号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3599"/>
         <source>Natural raised by two syntonic commas</source>
-        <translation>高两个共振号的还原号</translation>
+        <translation>高两个合音差的还原号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3610"/>
@@ -19808,7 +19808,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="884"/>
         <source>Shuffle (3:1)</source>
-        <translation>乱摆（3:1）</translation>
+        <translation>Shuffle (3:1)</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="889"/>
@@ -20497,7 +20497,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="171"/>
         <source>Span presets</source>
-        <translation>连谱线预设样式：</translation>
+        <translation>连谱号预设样式：</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="180"/>
@@ -20575,12 +20575,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="58"/>
         <source>Column</source>
-        <translation>栏</translation>
+        <translation>连谱号内外层次</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="76"/>
         <source>Span</source>
-        <translation>连谱线</translation>
+        <translation>连谱号管辖范围</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="93"/>
@@ -20620,7 +20620,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="73"/>
         <source>Drop two</source>
-        <translation>高二降八</translation>
+        <translation>Drop 2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="74"/>
@@ -20693,7 +20693,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="86"/>
         <source>Display brackets, clefs and key signatures in the next measure</source>
-        <translation>在下一小节显示连谱线、谱号、调号</translation>
+        <translation>在下一小节显示连谱号、谱号、调号</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="49"/>
@@ -21175,7 +21175,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="82"/>
         <source>Feathered beams</source>
-        <translation>分散式符杠</translation>
+        <translation>发散式符杠</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="97"/>
@@ -21265,7 +21265,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="188"/>
         <source>Combine with voices that share the same stem direction</source>
-        <translation>合并移动方向相同的声部</translation>
+        <translation>合并符干方向相同的声部</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
@@ -21643,7 +21643,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="106"/>
         <source>Sound flags</source>
-        <translation>音色旗标</translation>
+        <translation>音色标志</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="82"/>
@@ -22927,6 +22927,11 @@ pickup measure</source>
         <translation>谱行组记号</translation>
     </message>
     <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="56"/>
+        <source>&amp;</source>
+        <translation>与</translation>
+    </message>
+    <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
         <source>System markings hidden</source>
         <translation>已隐藏谱行组对象</translation>
@@ -23173,12 +23178,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="145"/>
         <source>Draw inner stems through beams</source>
-        <translation>符杠贯穿所有符杠</translation>
+        <translation>符干贯穿所有符杠</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="146"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
-        <translation>符杠只连到外侧符杠（法式）</translation>
+        <translation>符干只连到外侧符杠（法式）</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
@@ -24630,12 +24635,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation>在子和弦上将变音号相隔一个八度对齐</translation>
+        <translation>在子和弦中将相隔八度音符的变音号对齐</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
-        <translation>变音号对齐偏移的八度记号</translation>
+        <translation>将相隔八度偏移音符的变音号对齐</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
@@ -24839,7 +24844,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="958"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1326"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation>密集排列</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="193"/>
@@ -24895,19 +24900,19 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="959"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1327"/>
         <source>Drop two</source>
-        <translation>上二降八</translation>
+        <translation>Drop 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="960"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1328"/>
         <source>Six note</source>
-        <translation>六音</translation>
+        <translation>六音和弦</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="961"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1329"/>
         <source>Four note</source>
-        <translation>四音</translation>
+        <translation>四音和弦</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="962"/>
@@ -25074,17 +25079,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="88"/>
         <source>Show all clefs on every system</source>
-        <translation>在每个谱行组上显示谱号</translation>
+        <translation>每个谱行组均显示谱号</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="89"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation>只在谱行组开头显示谱号，之后的所有行均隐藏</translation>
+        <translation>仅首谱行组显示谱号</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="101"/>
         <source>Hide tab clefs after the first system where they appear</source>
-        <translation>在首个谱行组出现后隐藏指法谱号</translation>
+        <translation>仅首谱行组显示谱号（指法谱）</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
@@ -25119,12 +25124,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="159"/>
         <source>On all staves</source>
-        <translation>在所有谱表上方</translation>
+        <translation>所有谱表均显示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="160"/>
         <source>Above staves</source>
-        <translation>在谱表之上</translation>
+        <translation>在谱表上方显示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="161"/>
@@ -25211,7 +25216,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="467"/>
         <source>Hide after the first system where they appear</source>
-        <translation>只在谱行组开头显示</translation>
+        <translation>仅首谱行组显示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="479"/>
@@ -25231,32 +25236,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="562"/>
         <source>Changes that apply to both the repeat/jump and the subsequent bar</source>
-        <translation>适用于重复/跳跃号和后续小节的更改</translation>
+        <translation>同时应用于反复/跳跃号内与后续小节的更改</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="569"/>
         <source>At repeats, only show changes before the barline</source>
-        <translation>在反复号处，仅显示小节线前的更改</translation>
+        <translation>在反复号前显示更改</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="575"/>
         <source>At all other jumps, only show changes before the barline</source>
-        <translation>在所有其他跳跃号中，只显示小节线前的变化</translation>
+        <translation>在跳跃号前显示更改</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="689"/>
         <source>Show when cancelling a courtesy before repeats</source>
-        <translation>当在反复号前取消辅助调号时显示</translation>
+        <translation>当反复号前存在取消更改的提示记号时显示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="700"/>
         <source>Show when cancelling a courtesy before all other jumps</source>
-        <translation>当在所有其他跳跃号之前取消辅助调号时显示</translation>
+        <translation>当跳跃号前存在取消更改的提示记号时显示</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="585"/>
         <source>Changes that apply only after repeats and jumps</source>
-        <translation>仅在重复和跳跃后才应用的更改</translation>
+        <translation>仅在反复与跳跃后才应用的更改</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="595"/>
@@ -25266,12 +25271,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="604"/>
         <source>Place clefs after repeats</source>
-        <translation>在反复号后放置谱号</translation>
+        <translation>将谱号置于反复号后</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="626"/>
         <source>Allow changes between end-start repeats</source>
-        <translation>允许在结束-开始重复之间进行更改</translation>
+        <translation>允许在反复号终止-起始之间更改</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="652"/>
@@ -25286,7 +25291,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="678"/>
         <source>Show at all other jumps</source>
-        <translation>在所有其他跳跃号处显示</translation>
+        <translation>在跳跃号处显示</translation>
     </message>
 </context>
 <context>
@@ -28480,7 +28485,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="685"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>此乐器上的音色旗标可能会被重置，但谱表文本将被保留。此操作无法撤销。</translation>
+        <translation>此乐器上的音色标志可能会被重置，但谱表文本将被保留。此操作无法撤销。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
@@ -28535,7 +28540,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="108"/>
         <source>Sound flag options are not available for this sound.</source>
-        <translation>音色旗标在此音色中不可用</translation>
+        <translation>音色标志在此音色中不可用</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
@@ -28565,12 +28570,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="97"/>
         <source>Sound flag settings</source>
-        <translation>音色旗标设置</translation>
+        <translation>音色标志设置</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="150"/>
         <source>Sound flag menu</source>
-        <translation>音色旗标菜单</translation>
+        <translation>音色标志菜单</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="162"/>
@@ -28585,7 +28590,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="166"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>音色旗标可能被重置，但谱表文本将被保留。此操作无法撤消。</translation>
+        <translation>音色标志可能被重置，但谱表文本将被保留。此操作无法撤消。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml" line="76"/>
@@ -31635,7 +31640,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5667"/>
         <source>Add text</source>
-        <translation>添加文字</translation>
+        <translation>添加文本</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5735"/>
@@ -31830,7 +31835,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7593"/>
         <source>Toggle automatic placement</source>
-        <translation>切换自动布局</translation>
+        <translation>切换自动排布</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7604"/>
@@ -32044,22 +32049,22 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="183"/>
         <source>Toggle sound flag preset</source>
-        <translation>切换 音色旗标预设</translation>
+        <translation>切换 音色标志预设</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="210"/>
         <source>Toggle sound flag playing technique</source>
-        <translation>切换音色旗标演奏技巧</translation>
+        <translation>切换音色标志演奏技巧</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="333"/>
         <source>Reset sound flag</source>
-        <translation>重置音色旗标</translation>
+        <translation>重置音色标志</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="359"/>
         <source>Toggle ‘Apply sound flag to all staves’</source>
-        <translation>切换“对所有谱表应用音色旗标”</translation>
+        <translation>切换“对所有谱表应用音色标志”</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="1084"/>
