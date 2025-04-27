@@ -2672,12 +2672,10 @@ void Note::verticalDrag(EditData &ed)
             int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
             int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
             for (Note* nn : tiedNotes()) {
-                  nn->setAccidentalType(AccidentalType::NONE);
                   nn->setPitch(newPitch, newTpc1, newTpc2);
                   nn->triggerLayout();
                   }
             }
-      score()->inputState().setAccidentalType(AccidentalType::NONE);
       }
 
 //---------------------------------------------------------
