@@ -234,6 +234,22 @@ struct ShowAnchors {
         endTickExtendedRegion = Fraction(-1, 1);
     }
 
+    bool operator==(const ShowAnchors& other) const
+    {
+        return voiceIdx == other.voiceIdx
+               && staffIdx == other.staffIdx
+               && endStaffIdx == other.endStaffIdx
+               && startTickMainRegion == other.startTickMainRegion
+               && endTickMainRegion == other.endTickMainRegion
+               && startTickExtendedRegion == other.startTickExtendedRegion
+               && endTickExtendedRegion == other.endTickExtendedRegion;
+    }
+
+    bool operator!=(const ShowAnchors& other) const
+    {
+        return !(*this == other);
+    }
+
     voice_idx_t voiceIdx = muse::nidx;
     staff_idx_t staffIdx = muse::nidx;
     staff_idx_t endStaffIdx = muse::nidx;

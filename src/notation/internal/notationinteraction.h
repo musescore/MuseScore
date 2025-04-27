@@ -117,8 +117,8 @@ public:
     bool startDropSingle(const QByteArray& edata) override;
     bool startDropRange(const QByteArray& data) override;
     bool startDropImage(const QUrl& url) override;
-    bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool isDropRangeAccepted(const muse::PointF& pos) override;
+    bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool updateDropRange(const muse::PointF& pos) override;
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;

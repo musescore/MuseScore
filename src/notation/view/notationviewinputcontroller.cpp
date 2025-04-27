@@ -1269,25 +1269,23 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        bool isInternal = event->source() == m_view->asItem();
-        if (!isInternal || event->modifiers() & Qt::AltModifier) {
-            event->setDropAction(Qt::CopyAction);
-        } else {
-            event->setDropAction(Qt::MoveAction);
-        }
-    } else {
-        event->setDropAction(Qt::CopyAction);
-    }
-
     PointF pos = m_view->toLogical(event->position());
     Qt::KeyboardModifiers modifiers = event->modifiers();
 
     bool isAccepted = false;
     if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        isAccepted = viewInteraction()->isDropRangeAccepted(pos);
+        bool isInternal = event->source() == m_view->asItem();
+        if (!isInternal || modifiers & Qt::AltModifier) {
+            event->setDropAction(Qt::CopyAction);
+        } else {
+            event->setDropAction(Qt::MoveAction);
+        }
+
+        isAccepted = viewInteraction()->updateDropRange(pos);
     } else {
-        isAccepted = viewInteraction()->isDropSingleAccepted(pos, modifiers);
+        event->setDropAction(Qt::CopyAction);
+
+        isAccepted = viewInteraction()->updateDropSingle(pos, modifiers);
     }
 
     event->setAccepted(isAccepted);
