@@ -2799,9 +2799,10 @@ void NotationInteraction::endDrop()
 {
     score()->hideAnchors();
     score()->setUpdateAll();
-    setDropTarget(nullptr);
+    setDropTarget(nullptr, /*notify=*/ false);
     resetDropData();
     score()->update();
+    notifyAboutDragChanged();
 }
 
 muse::async::Notification NotationInteraction::dropChanged() const
