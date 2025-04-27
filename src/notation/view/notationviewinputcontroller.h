@@ -180,7 +180,12 @@ private:
         bool isHitGrip = false;
     };
 
-    bool needSelect(const ClickContext& ctx) const;
+    void handleClickInNoteInputMode(QMouseEvent* event);
+    bool tryHandleClickGrip(const ClickContext& ctx);
+    bool tryHandleClickDragOutgoingElement(const ClickContext& ctx);
+    void handleClickSelect(const ClickContext& ctx);
+    void cycleThroughOverlappingHitElements(const std::vector<EngravingItem*>& hitElements, staff_idx_t hitStaffIndex);
+    bool tryHandleClickDragOutgoingRange(const ClickContext& ctx);
     void handleLeftClick(const ClickContext& ctx);
     void handleRightClick(const ClickContext& ctx);
     void handleLeftClickRelease(const QPointF& releasePoint);
