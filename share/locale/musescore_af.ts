@@ -7678,13 +7678,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>Skuif maat na vorige stelsel</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="651"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>Skuif maat na volgende stelsel</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
@@ -9624,7 +9624,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="658"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Skep stelsel van seleksie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
@@ -9967,7 +9967,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1650"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1651"/>
         <source>Flip horizontally</source>
-        <translation type="unfinished"/>
+        <translation>Keer horisontaal om</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1663"/>
@@ -11392,7 +11392,7 @@ Uitgegee ingevolge die &lt;a href=&quot;%1&quot;&gt;GNU Algemene Openbare Lisens
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="62"/>
         <source>Apply accidentals, augmentation dots, and articulations:</source>
-        <translation type="unfinished"/>
+        <translation>Pas toevallige tekens, punteringe en artikulasies toe:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="69"/>
@@ -12324,77 +12324,77 @@ Uitgegee ingevolge die &lt;a href=&quot;%1&quot;&gt;GNU Algemene Openbare Lisens
         <translation>Noot</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3324"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3362"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3322"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3360"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="739"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="751"/>
         <source>Voice: %1</source>
         <translation>Stem: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3330"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(aan %1‰ af %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3338"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3367"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
         <source>Beat slash</source>
         <translation>Slag-skuinsstreep</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3338"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3367"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
         <source>Rhythm slash</source>
         <translation>Ritme-skuinsstreep</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3371"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3340"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3369"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; snaar: %2; riggel: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3348"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Toonhoogte: %2; Duur: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3377"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 kop %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3377"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="754"/>
         <source>Cross-staff above</source>
         <translation>Trans-notebalk bo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3381"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="756"/>
         <source>Cross-staff below</source>
         <translation>Trans-notebalk onder</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3383"/>
         <source>too low</source>
         <translation>te laag</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
         <source>too high</source>
         <translation>te hoog</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
         <source>too low for amateurs</source>
         <translation>te laag vir amateurs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3391"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
         <source>too high for amateurs</source>
         <translation>te hoog vir amateurs</translation>
     </message>
@@ -12458,8 +12458,8 @@ Uitgegee ingevolge die &lt;a href=&quot;%1&quot;&gt;GNU Algemene Openbare Lisens
         <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3417"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3429"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3415"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3427"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2481"/>
         <source>Start of %1</source>
         <translation>Begin van %1</translation>
@@ -12468,8 +12468,8 @@ Uitgegee ingevolge die &lt;a href=&quot;%1&quot;&gt;GNU Algemene Openbare Lisens
         <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3421"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3437"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3419"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3435"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2496"/>
         <source>End of %1</source>
         <translation>Einde van %1</translation>
@@ -20334,7 +20334,7 @@ opslagmaat</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="187"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="189"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Skep stelsel van seleksie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="190"/>
@@ -22923,6 +22923,11 @@ opslagmaat</translation>
         <translation>Stelselmerke</translation>
     </message>
     <message>
+        <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="56"/>
+        <source>&amp;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
         <source>System markings hidden</source>
         <translation>Stelselmerke versteek</translation>
@@ -22987,7 +22992,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation type="unfinished"/>
+        <translation>Welkom by Mastering MuseScore - die mees uitgebreide bron om van die wêreld se gewildste musieknotasieprogrammatuur te leer! My naam is Marc Sabatella en ek het gehelp met die ontwikkel, ondersteuning en bevordering van MuseScore sedert die eerste vrystelling meer as tien jaar gelede.
+
+Of u nou net begin met musieknotasieprogrammatuur of ’n ervare gebruiker is wat graag gevorderde musiekskrif- en afspeeltegnieke wil ontdek, my aanlyn kursus Mastering MuseScore behandel alles wat u moet weet om die meeste uit MuseScore te put.
+
+Daarbenewens bied Mastering MuseScore ’n ondersteunende gemeenskap van musikante, met gespreksruimtes, videostrome en ander verwante kursusse en dienste om u te help om die beste musiek te skep. Benut die geleentheid om MuseScore te leer van een van die mees erkende kundiges!
+
+(Let wel: Mastering MuseScore is slegs in Engels beskikbaar)</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="97"/>
@@ -23018,12 +23029,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="43"/>
         <source>MuseSampler library is not found</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler-biblioteek is nie gevind nie</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="45"/>
         <source>MuseSampler library is detected, version %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler-biblioteek is gevind, weergawe %1</translation>
     </message>
 </context>
 <context>
@@ -23036,7 +23047,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="167"/>
         <source>Sorry, we are unable to load these sounds right now</source>
-        <translation type="unfinished"/>
+        <translation>Jammer, ons kan nie nou hierdie klanke laai nie</translation>
     </message>
 </context>
 <context>
@@ -23158,7 +23169,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="132"/>
         <source>Beam style</source>
-        <translation type="unfinished"/>
+        <translation>Dwarsbalkstyl</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="145"/>
@@ -23267,7 +23278,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
         <source>Close search</source>
-        <translation type="unfinished"/>
+        <translation>Sluit soektog</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
@@ -23429,7 +23440,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1850"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>Aangesien die styllêer van ’n ander weergawe van MuseScore Studio is, is dit nie gewaarborg dat u partituur korrek gaan vertoon nie.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1852"/>
@@ -23479,7 +23490,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="132"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Skep stelsel van seleksie</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="208"/>
@@ -23509,12 +23520,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="257"/>
         <source>To previous system</source>
-        <translation type="unfinished"/>
+        <translation>Na vorige stelsel</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="258"/>
         <source>To next system</source>
-        <translation type="unfinished"/>
+        <translation>Na volgende stelsel</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -23774,12 +23785,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="64"/>
         <source>Dash (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>Streep (strepieslyn):</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml" line="70"/>
         <source>Gap (dashed line):</source>
-        <translation type="unfinished"/>
+        <translation>Gaping (strepieslyn):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="81"/>
@@ -23946,12 +23957,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="124"/>
         <source>Number only</source>
-        <translation type="unfinished"/>
+        <translation>Slegs syfer</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="133"/>
         <source>Custom suffix:</source>
-        <translation type="unfinished"/>
+        <translation>Pasgemakte agtervoegsel:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="150"/>
@@ -24002,7 +24013,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="209"/>
         <source>Edit fingering text style</source>
-        <translation type="unfinished"/>
+        <translation>Wysig vingerteksstyl</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="218"/>
@@ -24012,12 +24023,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="222"/>
         <source>Trimmed</source>
-        <translation type="unfinished"/>
+        <translation>Gesnoei</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="223"/>
         <source>Extended</source>
-        <translation type="unfinished"/>
+        <translation>Uitgebrei</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="229"/>
@@ -24318,12 +24329,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
         <source>These measures cannot be joined</source>
-        <translation type="unfinished"/>
+        <translation>Hierdie mate kan nie saamgevoeg word nie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
         <source>Please remove the staff type change and retry.</source>
-        <translation type="unfinished"/>
+        <translation>Verwyder die notebalktipeverandering en probeer weer.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -24590,7 +24601,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="92"/>
         <source>Placement of inner ties with respect to augmentation dots:</source>
-        <translation type="unfinished"/>
+        <translation>Plasing van binnebindboë in verhouding met gepunteerde note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="101"/>
@@ -24600,12 +24611,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="109"/>
         <source>Always before dots</source>
-        <translation type="unfinished"/>
+        <translation>Altyd voor punte</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="117"/>
         <source>Always after dots</source>
-        <translation type="unfinished"/>
+        <translation>Altyd na punte</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
@@ -31455,7 +31466,7 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5230"/>
         <source>Toggle augmentation dots</source>
-        <translation type="unfinished"/>
+        <translation>Wissel punterings</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5459"/>
@@ -31470,7 +31481,7 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5473"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Skep stelsel van seleksie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5596"/>
@@ -31480,64 +31491,64 @@ het misluk: </translation>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5872"/>
         <source>Delete %n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Skrap %n maat(e)</numerusform><numerusform>Skrap %n maat(e)</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7609"/>
         <source>Add accidental</source>
-        <translation type="unfinished"/>
+        <translation>Voeg toevallige teken toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5133"/>
         <source>Add brackets</source>
-        <translation type="unfinished"/>
+        <translation>Voeg hakies toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4976"/>
         <source>Flip horizontally</source>
-        <translation type="unfinished"/>
+        <translation>Keer horisontaal om</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5138"/>
         <source>Add braces</source>
-        <translation type="unfinished"/>
+        <translation>Voeg balkhakies toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5143"/>
         <source>Add parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Voegronde hakies toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5213"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7583"/>
         <source>Toggle articulation</source>
-        <translation type="unfinished"/>
+        <translation>Wissel artikulasie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5264"/>
         <source>Add grace note</source>
-        <translation type="unfinished"/>
+        <translation>Voeg versieringsnoot toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5291"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="701"/>
         <source>Add tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Voeg onreëlmatige nootgroep toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5312"/>
         <source>Set beam type</source>
-        <translation type="unfinished"/>
+        <translation>Stel dwarsbalktipe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5325"/>
         <source>Increase duration</source>
-        <translation type="unfinished"/>
+        <translation>Vermeerder duur</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5324"/>
         <source>Decrease duration</source>
-        <translation type="unfinished"/>
+        <translation>Verminder duur</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1096"/>
@@ -31579,17 +31590,17 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5445"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>Skuif maat na vorige stelsel</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5452"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>Skuif maat na volgende stelsel</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5480"/>
         <source>Apply system lock to selection</source>
-        <translation type="unfinished"/>
+        <translation>Pas stelselvergrendeling op seleksie toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5490"/>
@@ -31599,17 +31610,17 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5497"/>
         <source>Transposition</source>
-        <translation type="unfinished"/>
+        <translation>Transposisie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5521"/>
         <source>Swap voices</source>
-        <translation type="unfinished"/>
+        <translation>Ruil stemme om</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5552"/>
         <source>Add interval</source>
-        <translation type="unfinished"/>
+        <translation>Voeg interval toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5559"/>
@@ -31619,12 +31630,12 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5585"/>
         <source>Change voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>Verander stemtoewysing</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5667"/>
         <source>Add text</source>
-        <translation type="unfinished"/>
+        <translation>Voeg teks toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5735"/>
@@ -31649,7 +31660,7 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5793"/>
         <source>Add time signature</source>
-        <translation type="unfinished"/>
+        <translation>Voeg tydmaatteken toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5804"/>
@@ -31729,12 +31740,12 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5998"/>
         <source>Reset to default layout</source>
-        <translation type="unfinished"/>
+        <translation>Herstel na verstek uitleg</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6024"/>
         <source>Set score view settings</source>
-        <translation type="unfinished"/>
+        <translation>Stel partituuraansiginstellings</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6202"/>
@@ -31794,42 +31805,42 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7507"/>
         <source>Format text</source>
-        <translation type="unfinished"/>
+        <translation>Formatteer teks</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7527"/>
         <source>Toggle subscript</source>
-        <translation type="unfinished"/>
+        <translation>Wissel onderskrif</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7529"/>
         <source>Toggle superscript</source>
-        <translation type="unfinished"/>
+        <translation>Wissel boskrif</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7531"/>
         <source>Toggle subscript/superscript</source>
-        <translation type="unfinished"/>
+        <translation>Wissel onder-/boskrif</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7588"/>
         <source>Toggle ornament</source>
-        <translation type="unfinished"/>
+        <translation>Wissel versiering</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7593"/>
         <source>Toggle automatic placement</source>
-        <translation type="unfinished"/>
+        <translation>Wissel outomatiese plasing</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7604"/>
         <source>Add clef</source>
-        <translation type="unfinished"/>
+        <translation>Voeg sleutel toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7614"/>
         <source>Transpose semitone</source>
-        <translation type="unfinished"/>
+        <translation>Transponeer halftoon</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7620"/>
@@ -31841,22 +31852,22 @@ het misluk: </translation>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="443"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="483"/>
         <source>Enter note</source>
-        <translation type="unfinished"/>
+        <translation>Voer noot in</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationmidiinput.cpp" line="361"/>
         <source>Realtime advance</source>
-        <translation type="unfinished"/>
+        <translation>Intydse vorder</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="439"/>
         <source>Add note to chord</source>
-        <translation type="unfinished"/>
+        <translation>Voeg noot tot akkoord toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="441"/>
         <source>Insert note</source>
-        <translation type="unfinished"/>
+        <translation>Voeg noot in</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="463"/>
@@ -31866,7 +31877,7 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="508"/>
         <source>Delete note</source>
-        <translation type="unfinished"/>
+        <translation>Skrap noot</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="911"/>
@@ -31887,78 +31898,78 @@ het misluk: </translation>
         <location filename="../../src/notation/internal/notationparts.cpp" line="278"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
         <source>Show instrument</source>
-        <translation type="unfinished"/>
+        <translation>Toon instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="279"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3043"/>
         <source>Hide instrument</source>
-        <translation type="unfinished"/>
+        <translation>Versteek instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="312"/>
         <source>Set sharps/flats no preference</source>
-        <translation type="unfinished"/>
+        <translation>Stel kruise/molle geen voorkeur</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="313"/>
         <source>Set prefer flats</source>
-        <translation type="unfinished"/>
+        <translation>Stel voorkeur molle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="314"/>
         <source>Set prefer sharps</source>
-        <translation type="unfinished"/>
+        <translation>Stel voorkeur kruise</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="315"/>
         <source>Set sharps/flats automatic</source>
-        <translation type="unfinished"/>
+        <translation>Stel kruise/molle outomaties</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="317"/>
         <source>Set sharps/flats preference</source>
-        <translation type="unfinished"/>
+        <translation>Stel kruise/molle voorkeur</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="429"/>
         <source>Set instrument name</source>
-        <translation type="unfinished"/>
+        <translation>Stel instrumentnaam</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="456"/>
         <source>Set abbreviated instrument name</source>
-        <translation type="unfinished"/>
+        <translation>Stel afgekorte instrumentnaam</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="483"/>
         <source>Show voice %1</source>
-        <translation type="unfinished"/>
+        <translation>Toon stem %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="484"/>
         <source>Hide voice %1</source>
-        <translation type="unfinished"/>
+        <translation>Versteek stem %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="513"/>
         <source>Show staff</source>
-        <translation type="unfinished"/>
+        <translation>Toon notebalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="514"/>
         <source>Hide staff</source>
-        <translation type="unfinished"/>
+        <translation>Versteek notebalk</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="547"/>
         <source>Set staff type</source>
-        <translation type="unfinished"/>
+        <translation>Stel notebalktipe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="569"/>
         <source>Edit staff properties</source>
-        <translation type="unfinished"/>
+        <translation>Wysig notebalkeienskappe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="633"/>
@@ -31973,12 +31984,12 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="1074"/>
         <source>Move instruments</source>
-        <translation type="unfinished"/>
+        <translation>Skuif instrumente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="1103"/>
         <source>Move staves</source>
-        <translation type="unfinished"/>
+        <translation>Skuif notebalke</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationstyle.cpp" line="116"/>
@@ -31988,7 +31999,7 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/view/internal/harppedalpopupmodel.cpp" line="179"/>
         <source>Edit harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>Wysig harppedaaldiagram</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="142"/>
@@ -32013,22 +32024,22 @@ het misluk: </translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="318"/>
         <source>Edit measure properties</source>
-        <translation type="unfinished"/>
+        <translation>Wysig maateienskappe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="101"/>
         <source>Edit page settings</source>
-        <translation type="unfinished"/>
+        <translation>Wysig bladsy-eienskappe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="144"/>
         <source>Edit staff text properties</source>
-        <translation type="unfinished"/>
+        <translation>Wysig notebalktekseienskappe</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.cpp" line="212"/>
         <source>Edit time signature properties</source>
-        <translation type="unfinished"/>
+        <translation>Wysig tydmaattekeneienskappe</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="183"/>
