@@ -858,7 +858,8 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 void NotationViewInputController::handleRightClick(const ClickContext& ctx)
 {
     m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
-    m_view->showContextMenu(selectionType(), ctx.event->pos());
+
+    // See also AbstractNotationPaintView::event for context menu event handling
 }
 
 bool NotationViewInputController::startTextEditingAllowed() const
