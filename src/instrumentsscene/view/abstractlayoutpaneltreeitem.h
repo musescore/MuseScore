@@ -55,6 +55,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
     Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
+    Q_PROPERTY(bool isLinked READ isLinked CONSTANT)
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(bool settingsAvailable READ settingsAvailable NOTIFY settingsAvailableChanged)
     Q_PROPERTY(bool settingsEnabled READ settingsEnabled NOTIFY settingsEnabledChanged)
@@ -71,6 +72,7 @@ public:
     LayoutPanelItemType::ItemType type() const;
     bool isVisible() const;
     bool isExpandable() const;
+    bool isLinked() const;
     bool isRemovable() const;
 
     bool isSelectable() const;
@@ -114,6 +116,7 @@ public slots:
     void setIsVisible(bool isVisible, bool setChildren = true);
     void setId(const muse::ID& id);
     void setIsExpandable(bool expandable);
+    void setIsLinked(bool linked);
     void setIsRemovable(bool removable);
     void setIsSelectable(bool selectable);
     void setIsSelected(bool selected);
@@ -124,6 +127,7 @@ signals:
     void titleChanged(QString title);
     void isVisibleChanged(bool isVisible);
     void isExpandableChanged(bool isExpandable);
+    void isLinkedChanged(bool isLinked);
     void isRemovableChanged(bool isRemovable);
     void isSelectableChanged(bool isSelectable);
     void isSelectedChanged(bool isSelected);
@@ -145,6 +149,7 @@ private:
     LayoutPanelItemType::ItemType m_type = LayoutPanelItemType::UNDEFINED;
     bool m_isVisible = false;
     bool m_isExpandable = false;
+    bool m_isLinked = false;
     bool m_isRemovable = false;
     bool m_isSelectable = false;
     bool m_isSelected = false;
