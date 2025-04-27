@@ -79,5 +79,10 @@ if (OS_IS_MAC)
     )
 endif(OS_IS_MAC)
 
+#if (NOT OS_IS_MAC)
+    # use QKeyMapper
+    set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
+#endif(NOT OS_IS_MAC)
+
 setup_module()
 
