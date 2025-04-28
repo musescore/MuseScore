@@ -70,6 +70,7 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "show-skylines", &EngravingDebuggingOptions::showSkylines },
     { "show-system-bounding-rects", &EngravingDebuggingOptions::showSystemBoundingRects },
     { "show-element-masks", &EngravingDebuggingOptions::showElementMasks },
+    { "show-line-attach-points", &EngravingDebuggingOptions::showLineAttachPoints },
     { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures }
 };
 

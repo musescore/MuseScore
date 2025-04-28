@@ -4010,7 +4010,7 @@ bool Note::hasAnotherStraightAboveOrBelow(bool above) const
 
 PointF Note::posInStaffCoordinates()
 {
-    double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x() + headWidth() / 2;
+    double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x();
     return PointF(X, y());
 }
 

@@ -2613,6 +2613,13 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              TranslatableString("action", "Show/hide element masks"),
              Checkable::Yes
              ),
+    UiAction("show-line-attach-points",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Show line-attach points"),
+             TranslatableString("action", "Show/hide line-attach points"),
+             Checkable::Yes
+             ),
     UiAction("mark-corrupted-measures",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
