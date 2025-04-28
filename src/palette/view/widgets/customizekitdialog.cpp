@@ -155,7 +155,7 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
 
-    loadPitchesList();
+    QTreeWidgetItem* itemToSelect = loadPitchesList();
 
     for (auto g : noteHeadNames) {
         noteHead->addItem(TConv::translatedUserName(g), int(g));
@@ -253,7 +253,7 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     connect(quarterCmb, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::customQuarterChanged);
 
     Q_ASSERT(pitchList->topLevelItemCount() > 0);
-    pitchList->setCurrentItem(pitchList->topLevelItem(0));
+    pitchList->setCurrentItem(itemToSelect ? itemToSelect : pitchList->topLevelItem(0));
 
     quarterCmb->setAccessibleName(quarterLbl->text() + " " + quarterCmb->currentText());
     halfCmb->setAccessibleName(halfLbl->text() + " " + halfCmb->currentText());
@@ -278,11 +278,17 @@ void CustomizeKitDialog::customGboxToggled(bool checked)
     }
 }
 
-void CustomizeKitDialog::loadPitchesList()
+QTreeWidgetItem* CustomizeKitDialog::loadPitchesList()
 {
+    const INotationInteractionPtr interaction = m_notation->interaction();
+    const mu::engraving::Note* note = dynamic_cast<mu::engraving::Note*>(interaction->contextItem());
+    const int originPitch = note ? note->pitch() : -1;
+
     pitchList->blockSignals(true);
     pitchList->clear();
     pitchList->blockSignals(false);
+
+    QTreeWidgetItem* itemToSelect = nullptr;
 
     for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
         QTreeWidgetItem* item = new CustomizeKitTreeWidgetItem(pitchList);
@@ -291,8 +297,14 @@ void CustomizeKitDialog::loadPitchesList()
         item->setText(Column::SHORTCUT, m_editedDrumset.shortcut(i));
         item->setText(Column::NAME, m_editedDrumset.translatedName(i));
         item->setData(Column::PITCH, Qt::UserRole, i);
+        if (i == originPitch) {
+            itemToSelect = item;
+        }
     }
+
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
+
+    return itemToSelect;
 }
 
 void CustomizeKitDialog::setEnabledPitchControls(bool enable)
