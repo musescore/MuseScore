@@ -56,12 +56,7 @@ IF %PACKAGE_TYPE% == "msi" (
     SET DO_SIGN=ON
 )
 IF %PACKAGE_TYPE% == "portable" ( 
-    IF %BUILD_MODE% == testing (
-        SET DO_SIGN=ON
-    )
-    IF %BUILD_MODE% == stable (
-        SET DO_SIGN=ON
-    )
+    SET DO_SIGN=ON
 )
 IF %DO_SIGN% == ON (
     IF %SIGN_KEY% == "" ( 
@@ -137,12 +132,6 @@ GOTO END_SUCCESS
 :: ============================
 :PACK_MSI
 ECHO "Start msi packing..."
-:: sign dlls and exe files
-@REM IF %DO_SIGN% == ON (
-@REM     ::CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
-@REM ) ELSE (
-@REM     ECHO "Sign disabled"
-@REM )
 
 :: generate unique GUID
 %UUIDGEN% > uuid.txt
@@ -194,7 +183,7 @@ COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y || GOTO END_ERROR
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
 IF %DO_SIGN% == ON (
-    CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %ARTIFACT_PATH% || exit \b 1
+    CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %ARTIFACT_PATH% || exit /b 1
 )
 
 bash ./buildscripts/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
@@ -206,13 +195,6 @@ GOTO END_SUCCESS
 :: ============================
 :PACK_PORTABLE
 ECHO "Start portable packing..."
-
-:: sign dlls and exe files
-@REM IF %DO_SIGN% == ON (
-@REM     ::CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
-@REM ) ELSE (
-@REM     ECHO "Sign disabled"
-@REM )
 
 :: Create launcher
 ECHO "Start comLauncherGenerator..."
@@ -240,7 +222,7 @@ COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
 IF %DO_SIGN% == ON (
-    CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %ARTIFACT_PATH% || exit \b 1
+    CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %ARTIFACT_PATH% || exit /b 1
 )
 
 bash ./buildscripts/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
