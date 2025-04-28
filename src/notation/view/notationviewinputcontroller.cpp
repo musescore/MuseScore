@@ -895,7 +895,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     Qt::KeyboardModifiers keyState = event->modifiers();
 
     m_view->hideContextMenu();
-    m_view->hideElementPopup();
+    if (!viewInteraction()->isTextEditingStarted()) {
+        m_view->hideElementPopup();
+    }
 
     PointF logicPos = m_view->toLogical(event->pos());
 
