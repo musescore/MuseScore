@@ -74,8 +74,8 @@ public:
     MOCK_METHOD(bool, startDropSingle, (const QByteArray&), (override));
     MOCK_METHOD(bool, startDropRange, (const QByteArray&), (override));
     MOCK_METHOD(bool, startDropImage, (const QUrl&), (override));
-    MOCK_METHOD(bool, isDropSingleAccepted, (const muse::PointF&, Qt::KeyboardModifiers), (override));
-    MOCK_METHOD(bool, isDropRangeAccepted, (const muse::PointF&), (override));
+    MOCK_METHOD(bool, updateDropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
+    MOCK_METHOD(bool, updateDropRange, (const muse::PointF&), (override));
     MOCK_METHOD(bool, dropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, dropRange, (const QByteArray&, const muse::PointF&, bool), (override));
     MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
