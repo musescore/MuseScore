@@ -414,6 +414,9 @@
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r8</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -421,6 +424,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r16</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -428,6 +434,9 @@
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r32</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -435,14 +444,17 @@
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>buzzroll</subtype>
+              </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Beam>
-            <l1>0</l1>
-            <l2>-6</l2>
+            <l1>-16</l1>
+            <l2>-18</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -450,6 +462,9 @@
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r8</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -464,6 +479,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r64</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -482,6 +500,9 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r16</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -496,6 +517,9 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r8</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -514,6 +538,9 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r8</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -521,6 +548,9 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>buzzroll</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
@@ -535,14 +565,17 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r64</subtype>
+              </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Beam>
-            <l1>48</l1>
-            <l2>40</l2>
+            <l1>52</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -550,6 +583,9 @@
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>buzzroll</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -557,6 +593,9 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r32</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -564,6 +603,9 @@
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r8</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -571,10 +613,13 @@
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>buzzroll</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Beam>
-            <l1>-12</l1>
-            <l2>-12</l2>
+            <l1>-32</l1>
+            <l2>-32</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -589,6 +634,9 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r64</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
@@ -596,6 +644,9 @@
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r8</subtype>
+              </TremoloSingleChord>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
