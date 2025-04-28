@@ -77,6 +77,7 @@
       <Measure>
         <eid>D_D</eid>
         <Marker>
+          <eid>E_E</eid>
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
@@ -107,6 +108,7 @@
       <Measure>
         <eid>J_J</eid>
         <Marker>
+          <eid>K_K</eid>
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
@@ -122,6 +124,7 @@
       <Measure>
         <eid>M_M</eid>
         <Marker>
+          <eid>N_N</eid>
           <style>repeat_left</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
@@ -141,6 +144,7 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
+          <eid>R_R</eid>
           <style>repeat_left</style>
           <text><sym>coda</sym><sym>coda</sym></text>
           <label>codetta</label>
@@ -172,6 +176,7 @@
       <Measure>
         <eid>W_W</eid>
         <Jump>
+          <eid>X_X</eid>
           <style>repeat_right</style>
           <text>D.C.</text>
           <jumpTo>start</jumpTo>
@@ -189,6 +194,7 @@
       <Measure>
         <eid>Z_Z</eid>
         <Jump>
+          <eid>a_a</eid>
           <style>repeat_right</style>
           <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
@@ -210,6 +216,7 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Jump>
+          <eid>e_e</eid>
           <style>repeat_right</style>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
@@ -227,6 +234,7 @@
       <Measure>
         <eid>g_g</eid>
         <Jump>
+          <eid>h_h</eid>
           <style>repeat_right</style>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
@@ -244,6 +252,7 @@
       <Measure>
         <eid>j_j</eid>
         <Jump>
+          <eid>k_k</eid>
           <style>repeat_right</style>
           <text>D.S. al Fine</text>
           <jumpTo>segno</jumpTo>
@@ -261,6 +270,7 @@
       <Measure>
         <eid>m_m</eid>
         <Jump>
+          <eid>n_n</eid>
           <style>repeat_right</style>
           <text>D.S.</text>
           <jumpTo>segno</jumpTo>
