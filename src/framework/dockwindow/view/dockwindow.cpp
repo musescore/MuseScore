@@ -731,6 +731,7 @@ void DockWindow::initDocks(DockPageView* page)
     adjustContentForAvailableSpace(page);
 
     for (DockToolBarView* toolbar : m_toolBars.list()) {
+        toolbar->setParentItem(this);
         toolbar->init();
     }
 

@@ -357,6 +357,8 @@ QPoint QWidgetAdapter::pos() const
 void QWidgetAdapter::show()
 {
     setVisible(true);
+    QShowEvent ev;
+    event(&ev);
 }
 
 void QWidgetAdapter::setFixedHeight(int height)

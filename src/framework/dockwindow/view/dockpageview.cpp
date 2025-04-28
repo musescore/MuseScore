@@ -54,6 +54,7 @@ void DockPageView::init()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
+        dock->setParentItem(this);
         dock->init();
 
         connect(dock, &DockBase::floatingChanged, [this](){
