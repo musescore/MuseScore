@@ -36,7 +36,7 @@ InfoPanel {
 
     signal editShortcutRequested()
     signal execPointSelected(int index)
-    signal remove()
+    signal removeRequest()
 
     buttonsPanel: RowLayout {
         id: buttons
@@ -107,7 +107,7 @@ InfoPanel {
                 text: qsTrc("workspace", "Remove")
 
                 onClicked: {
-                    root.remove()
+                    root.removeRequest()
                 }
             }
 
