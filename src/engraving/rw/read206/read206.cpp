@@ -1863,9 +1863,8 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
 //    symbols which were not available for use prior to 3.0
 //---------------------------------------------------------
 
-static void convertDoubleArticulations(Chord* chord, XmlReader& e, ReadContext& ctx)
+static void convertDoubleArticulations(Chord* chord)
 {
-    UNUSED(e);
     std::vector<Articulation*> pairableArticulations;
     for (Articulation* a : chord->articulations()) {
         if (a->isStaccato() || a->isTenuto()
@@ -1979,7 +1978,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    convertDoubleArticulations(chord, e, ctx);
+    convertDoubleArticulations(chord);
     fixTies(chord);
 }
 
@@ -3452,8 +3451,6 @@ Ret Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             e.skipCurrentElement();
         }
     }
-
-    int id = 1;
 
     for (Staff* s : score->staves()) {
         s->updateOttava();
