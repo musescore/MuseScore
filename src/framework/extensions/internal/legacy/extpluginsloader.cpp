@@ -80,7 +80,7 @@ ManifestList ExtPluginsLoader::loadManifestList(const io::path_t& defPath, const
         if (!m.isValid()) {
             continue;
         }
-        m.isUserExtension = true;
+        m.isRemovable = true;
         retList.push_back(m);
     }
 

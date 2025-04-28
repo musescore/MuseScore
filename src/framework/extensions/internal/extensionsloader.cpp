@@ -67,7 +67,7 @@ ManifestList ExtensionsLoader::loadManifestList(const io::path_t& defPath, const
             continue;
         }
 
-        m.isUserExtension = true;
+        m.isRemovable = true;
         retList.push_back(m);
     }
 
