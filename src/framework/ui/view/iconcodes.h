@@ -488,6 +488,9 @@ public:
         FRET_FRAME = 0xF491,
         DURATION_CURSOR = 0xF492,
 
+        CHORD_STAGGER = 0xF3EC,
+        CHORD_ALIGN = 0xF3EE,
+
         LOWER_CASE = 0xF49E,
         UPPER_CASE = 0xF49F,
 
