@@ -65,6 +65,8 @@ private slots:
     void defineShortcut();
 
 private:
+    void initDrumsetAndKey();
+
     void apply();
     void cancel();
     void loadPitchesList();
