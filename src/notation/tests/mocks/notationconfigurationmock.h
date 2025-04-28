@@ -154,6 +154,7 @@ public:
 
     MOCK_METHOD(bool, isMetronomeEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMetronomeEnabled, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, isMetronomeEnabledChanged, (), (const, override));
 
     MOCK_METHOD(bool, isCountInEnabled, (), (const, override));
     MOCK_METHOD(void, setIsCountInEnabled, (bool), (override));

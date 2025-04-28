@@ -1104,7 +1104,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     case MoveDirection::Left:
         if (playbackController()->isPlaying()) {
             MeasureBeat beat = playbackController()->currentBeat();
-            int targetBeatIdx = beat.beatIndex;
+            int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
             int increment = (direction == MoveDirection::Right ? 1 : -1);
 

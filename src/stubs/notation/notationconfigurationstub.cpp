@@ -427,6 +427,12 @@ void NotationConfigurationStub::setIsMetronomeEnabled(bool)
 {
 }
 
+muse::async::Notification NotationConfigurationStub::isMetronomeEnabledChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::isCountInEnabled() const
 {
     return false;

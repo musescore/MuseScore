@@ -149,6 +149,7 @@ AudioSourceType MuseSamplerWrapper::type() const
 
 void MuseSamplerWrapper::flushSound()
 {
+    m_sequencer.flushOffstream();
     m_allNotesOffRequested = true;
 }
 
