@@ -244,7 +244,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
                     eClone->setGenerated(generated);
                     eClone->setParent(mmrEndBarlineSeg);
-                    ctx.mutDom().undoAddElement(eClone);// ???
+                    ctx.mutDom().doUndoAddElement(eClone);// ???
                 } else {
                     BarLine* mmrEndBarline = toBarLine(mmrEndBarlineSeg->element(staffIdx * VOICES));
                     BarLine* lastMeasureEndBarline = toBarLine(e);
@@ -279,7 +279,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     Clef* mmrClef = lastMeasureClef->generated() ? lastMeasureClef->clone() : toClef(
                         lastMeasureClef->linkedClone());
                     mmrClef->setParent(mmrClefSeg);
-                    ctx.mutDom().undoAddElement(mmrClef);
+                    ctx.mutDom().doUndoAddElement(mmrClef);
                 } else {
                     Clef* mmrClef = toClef(mmrClefSeg->element(track));
                     mmrClef->setClefType(lastMeasureClef->clefType());
