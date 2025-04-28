@@ -1585,11 +1585,7 @@ static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
         endSegment = endSegment->next1MMenabled();
     }
 
-    if (!endSegment) {
-        endSegment = score->lastSegmentMM();
-    }
-
-    return endSegment;
+    return endSegment ? endSegment : score->lastSegmentMM();
 }
 
 static bool dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
@@ -1679,7 +1675,7 @@ bool NotationInteraction::updateDropRange(const PointF& pos)
     const Segment* endSegment = nullptr;
     ShowAnchors showAnchors;
 
-    bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment, &endSegment, &showAnchors);
+    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment, &endSegment, &showAnchors);
 
     if (showAnchors != score()->showAnchors()) {
         score()->setShowAnchors(showAnchors);
@@ -1995,8 +1991,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
 
-    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
-    if (staffIdx == muse::nidx || !segment) {
+    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
+    if (!ok) {
         return false;
     }
 
