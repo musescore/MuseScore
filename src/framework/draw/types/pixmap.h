@@ -40,6 +40,8 @@ public:
     Pixmap() = default;
     Pixmap(Size size)
         : m_size(size) {}
+    Pixmap(const ByteArray& data, Size size)
+        : m_size(size) { setData(data); }
     Pixmap(int w, int h)
         : m_size(Size(w, h)) {}
 
