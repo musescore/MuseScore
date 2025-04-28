@@ -44,7 +44,6 @@ public:
         : Injectable(iocCtx) {}
 
     void reloadExtensions() override;
-    Ret removeExtension(const Uri& uri) override;
 
     ManifestList manifestList(Filter filter = Filter::All) const override;
     async::Notification manifestListChanged() const override;
