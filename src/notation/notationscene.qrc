@@ -100,6 +100,5 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-on.png</file>
         <file>qml/MuseScore/NotationScene/internal/SelectionFilterSection.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleDropdownRow.qml</file>
     </qresource>
 </RCC>
