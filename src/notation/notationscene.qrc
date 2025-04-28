@@ -104,6 +104,5 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/hammerOnPullOffImages/hopoNotShowAll.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleDropdownRow.qml</file>
     </qresource>
 </RCC>

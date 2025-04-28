@@ -27,10 +27,22 @@ using namespace mu::notation;
 
 ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     : AbstractStyleDialogModel(parent, {
+    StyleId::chordStyle,
+    StyleId::chordsXmlFile,
+    StyleId::chordDescriptionFile,
     StyleId::chordExtensionMag,
     StyleId::chordExtensionAdjust,
     StyleId::chordModifierMag,
     StyleId::chordModifierAdjust,
+    StyleId::verticallyStackModifiers,
+    StyleId::chordBassNoteStagger,
+    StyleId::chordBassNoteScale,
+    StyleId::polychordDividerThickness,
+    StyleId::polychordDividerSpacing,
+    StyleId::verticallyAlignChordSymbols,
+    StyleId::chordAlignmentToNotehead,
+    StyleId::chordAlignmentToFretboard,
+    StyleId::chordAlignmentExcludeModifiers,
     StyleId::chordSymbolSpelling,
     StyleId::automaticCapitalization,
     StyleId::lowerCaseMinorChords,
@@ -38,23 +50,74 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::allCapsNoteNames,
     StyleId::harmonyFretDist,
     StyleId::minHarmonyDistance,
-    StyleId::maxHarmonyBarDistance,
-    StyleId::maxChordShiftAbove,
-    StyleId::maxChordShiftBelow,
     StyleId::harmonyVoiceLiteral,
     StyleId::harmonyVoicing,
     StyleId::harmonyDuration,
-    StyleId::chordsXmlFile,
     StyleId::capoPosition,
 })
 {
 }
 
+StyleItem* ChordSymbolsPageModel::chordStylePreset() const { return styleItem(StyleId::chordStyle); }
+StyleItem* ChordSymbolsPageModel::chordDescriptionFile() const { return styleItem(StyleId::chordDescriptionFile); }
+
+QVariantList ChordSymbolsPageModel::possiblePresetOptions() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Standard") },
+            { "value", mu::engraving::ChordStylePreset::STANDARD } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Jazz") },
+            { "value", mu::engraving::ChordStylePreset::JAZZ } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Legacy MuseScore") },
+            { "value", mu::engraving::ChordStylePreset::LEGACY } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Load custom XML...") },
+            { "value", mu::engraving::ChordStylePreset::CUSTOM } },
+    };
+
+    return options;
+}
+
+void ChordSymbolsPageModel::setChordStyle(mu::engraving::ChordStylePreset selection)
+{
+    switch (selection) {
+    case mu::engraving::ChordStylePreset::STANDARD:
+        chordDescriptionFile()->setValue("chords_std.xml");
+        break;
+    case mu::engraving::ChordStylePreset::JAZZ:
+        chordDescriptionFile()->setValue("chords_jazz.xml");
+        break;
+    case mu::engraving::ChordStylePreset::LEGACY:
+        chordDescriptionFile()->setValue("chords_legacy.xml");
+        break;
+    case mu::engraving::ChordStylePreset::CUSTOM:
+        // Get text from text box
+        break;
+    }
+}
+
 StyleItem* ChordSymbolsPageModel::extensionMag() const { return styleItem(StyleId::chordExtensionMag); }
 StyleItem* ChordSymbolsPageModel::extensionAdjust() const { return styleItem(StyleId::chordExtensionAdjust); }
+
 StyleItem* ChordSymbolsPageModel::modifierMag() const { return styleItem(StyleId::chordModifierMag); }
 StyleItem* ChordSymbolsPageModel::modifierAdjust() const { return styleItem(StyleId::chordModifierAdjust); }
+StyleItem* ChordSymbolsPageModel::verticallyStackModifiers() const { return styleItem(StyleId::verticallyStackModifiers); }
 
+StyleItem* ChordSymbolsPageModel::chordBassNoteStagger() const { return styleItem(StyleId::chordBassNoteStagger); }
+StyleItem* ChordSymbolsPageModel::chordBassNoteScale() const { return styleItem(StyleId::chordBassNoteScale); }
+
+StyleItem* ChordSymbolsPageModel::polychordDividerThickness() const { return styleItem(StyleId::polychordDividerThickness); }
+StyleItem* ChordSymbolsPageModel::polychordDividerSpacing() const { return styleItem(StyleId::polychordDividerSpacing); }
+
+StyleItem* ChordSymbolsPageModel::verticallyAlignChordSymbols() const { return styleItem(StyleId::verticallyAlignChordSymbols); }
+StyleItem* ChordSymbolsPageModel::chordAlignmentToNotehead() const { return styleItem(StyleId::chordAlignmentToNotehead); }
+StyleItem* ChordSymbolsPageModel::chordAlignmentToFretboard() const { return styleItem(StyleId::chordAlignmentToFretboard); }
+StyleItem* ChordSymbolsPageModel::chordAlignmentExcludeModifiers() const { return styleItem(StyleId::chordAlignmentExcludeModifiers); }
+
+StyleItem* ChordSymbolsPageModel::chordSymbolSpelling() const { return styleItem(StyleId::chordSymbolSpelling); }
 QVariantList ChordSymbolsPageModel::possibleChordSymbolSpellings() const
 {
     QVariantList options {
@@ -82,11 +145,9 @@ StyleItem* ChordSymbolsPageModel::automaticCapitalization() const { return style
 StyleItem* ChordSymbolsPageModel::lowerCaseMinorChords() const { return styleItem(StyleId::lowerCaseMinorChords); }
 StyleItem* ChordSymbolsPageModel::lowerCaseBassNotes() const { return styleItem(StyleId::lowerCaseBassNotes); }
 StyleItem* ChordSymbolsPageModel::allCapsNoteNames() const { return styleItem(StyleId::allCapsNoteNames); }
+
 StyleItem* ChordSymbolsPageModel::harmonyFretDist() const { return styleItem(StyleId::harmonyFretDist); }
 StyleItem* ChordSymbolsPageModel::minHarmonyDist() const { return styleItem(StyleId::minHarmonyDistance); }
-StyleItem* ChordSymbolsPageModel::maxHarmonyBarDistance() const { return styleItem(StyleId::maxHarmonyBarDistance); }
-StyleItem* ChordSymbolsPageModel::maxChordShiftAbove() const { return styleItem(StyleId::maxChordShiftAbove); }
-StyleItem* ChordSymbolsPageModel::maxChordShiftBelow() const { return styleItem(StyleId::maxChordShiftBelow); }
 
 QVariantList ChordSymbolsPageModel::possibleHarmonyVoiceLiteralOptions() const
 {
@@ -152,4 +213,3 @@ StyleItem* ChordSymbolsPageModel::harmonyVoiceLiteral() const { return styleItem
 StyleItem* ChordSymbolsPageModel::harmonyVoicing() const { return styleItem(StyleId::harmonyVoicing); }
 StyleItem* ChordSymbolsPageModel::harmonyDuration() const { return styleItem(StyleId::harmonyDuration); }
 StyleItem* ChordSymbolsPageModel::capoPosition() const { return styleItem(StyleId::capoPosition); }
-StyleItem* ChordSymbolsPageModel::chordsXmlFile() const { return styleItem(StyleId::chordsXmlFile); }
