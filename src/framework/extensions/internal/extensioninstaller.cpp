@@ -66,7 +66,7 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
             });
 
             if (result.button() == int(IInteractive::Button::Ok)) {
-                provider()->removeExtension(existingManifest.uri);
+                this->uninstallExtension(existingManifest.uri);
             } else {
                 return make_ok();
             }
@@ -95,4 +95,25 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
     }
 
     return ret;
+}
+
+Ret ExtensionInstaller::uninstallExtension(const Uri& uri)
+{
+    Manifest manifest = provider()->manifest(uri);
+    if (!manifest.isValid()) {
+        return make_ret(Ret::Code::UnknownError);
+    } else if (!manifest.isRemovable) {
+        return make_ret(Ret::Code::NotSupported);
+    }
+
+    io::path_t path = manifest.path;
+
+    Ret ret = fileSystem()->remove(io::dirpath(path));
+    if (!ret) {
+        LOGE() << "Failed to delete the folder: " << path;
+        return ret;
+    }
+
+    provider()->reloadExtensions();
+    return make_ok();
 }

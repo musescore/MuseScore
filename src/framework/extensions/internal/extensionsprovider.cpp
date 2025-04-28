@@ -69,25 +69,6 @@ void ExtensionsProvider::reloadExtensions()
     m_manifestListChanged.notify();
 }
 
-muse::Ret ExtensionsProvider::removeExtension(const Uri& uri)
-{
-    const Manifest manifest = this->manifest(uri);
-    if (!manifest.isValid()) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    io::path_t path = manifest.path;
-
-    Ret ret = fileSystem()->remove(io::dirpath(path));
-    if (!ret) {
-        LOGE() << "Failed to delete the folder: " << path;
-        return ret;
-    }
-
-    reloadExtensions();
-    return make_ok();
-}
-
 ManifestList ExtensionsProvider::manifestList(Filter filter) const
 {
     if (filter == Filter::Enabled) {

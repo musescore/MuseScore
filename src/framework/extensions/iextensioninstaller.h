@@ -1,6 +1,7 @@
 #pragma once
 
 #include "modularity/imoduleinterface.h"
+#include "extensionstypes.h"
 
 #include "global/types/ret.h"
 #include "global/io/path.h"
@@ -15,5 +16,6 @@ public:
 
     virtual Ret isFileSupported(const io::path_t path) const = 0;
     virtual Ret installExtension(const io::path_t path) = 0;
+    virtual Ret uninstallExtension(const Uri& uri) = 0;
 };
 }

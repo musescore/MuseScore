@@ -21,5 +21,6 @@ public:
 
     Ret isFileSupported(const io::path_t path) const override;
     Ret installExtension(const io::path_t path) override;
+    Ret uninstallExtension(const Uri& uri) override;
 };
 }

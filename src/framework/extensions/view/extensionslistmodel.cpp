@@ -225,7 +225,7 @@ void ExtensionsListModel::reloadPlugins()
 
 void ExtensionsListModel::removeExtension(const QString& uri)
 {
-    provider()->removeExtension(Uri(uri.toStdString()));
+    installer()->uninstallExtension(Uri(uri.toStdString()));
 }
 
 QVariantList ExtensionsListModel::categories() const
