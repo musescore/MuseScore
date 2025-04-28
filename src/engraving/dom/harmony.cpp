@@ -334,7 +334,7 @@ void Harmony::determineRootBassSpelling()
 //    return true if chord is recognized
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* bass, bool syntaxOnly)
+const ChordDescription* Harmony::parseHarmony(const String& ss, int& root, int& bass, bool syntaxOnly)
 {
     m_id = -1;
     if (m_parsedForm) {
@@ -350,8 +350,8 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
     if (m_harmonyType == HarmonyType::ROMAN) {
         m_userName = ss;
         m_textName = ss;
-        *root = Tpc::TPC_INVALID;
-        *bass = Tpc::TPC_INVALID;
+        root = Tpc::TPC_INVALID;
+        bass = Tpc::TPC_INVALID;
         return 0;
     }
 
@@ -387,8 +387,8 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
         }
         m_function = s.mid(0, n);
         s = s.mid(n);
-        *root = Tpc::TPC_INVALID;
-        *bass = Tpc::TPC_INVALID;
+        root = Tpc::TPC_INVALID;
+        bass = Tpc::TPC_INVALID;
     } else {
         determineRootBassSpelling();
         size_t idx;
@@ -403,18 +403,18 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
                 return 0;
             }
         }
-        *root = r;
-        *bass = Tpc::TPC_INVALID;
+        root = r;
+        bass = Tpc::TPC_INVALID;
         size_t slash = s.lastIndexOf(u'/');
         if (slash != muse::nidx) {
             String bs = s.mid(slash + 1).simplified();
             s = s.mid(idx, slash - idx).simplified();
             size_t idx2;
-            *bass = convertNote(bs, m_bassSpelling, m_bassCase, idx2);
+            bass = convertNote(bs, m_bassSpelling, m_bassCase, idx2);
             if (idx2 != bs.size()) {
-                *bass = Tpc::TPC_INVALID;
+                bass = Tpc::TPC_INVALID;
             }
-            if (*bass == Tpc::TPC_INVALID) {
+            if (bass == Tpc::TPC_INVALID) {
                 // if what follows after slash is not (just) a TPC
                 // then reassemble chord and try to parse with the slash
                 s = s + u"/" + bs;
@@ -520,7 +520,7 @@ bool Harmony::editTextual(EditData& ed)
     int bass = TPC_INVALID;
     String str = xmlText();
     m_isMisspelled = !str.isEmpty()
-                     && !parseHarmony(str, &root, &bass, true)
+                     && !parseHarmony(str, root, bass, true)
                      && root == TPC_INVALID
                      && m_harmonyType == HarmonyType::STANDARD;
     if (m_isMisspelled) {
@@ -642,7 +642,7 @@ void Harmony::setHarmony(const String& s)
     m_realizedHarmony.setDirty(true);
 
     int r, b;
-    const ChordDescription* cd = parseHarmony(s, &r, &b);
+    const ChordDescription* cd = parseHarmony(s, r, b);
     if (!cd && m_parsedForm && m_parsedForm->parseable()) {
         // our first time encountering this chord
         // generate a descriptor and use it
@@ -1141,13 +1141,14 @@ void TextSegment::set(const String& s, const Font& f, double _x, double _y, Poin
 
 void Harmony::render(const String& s, double& x, double& y)
 {
-    int fontIdx = 0;
-    if (!s.isEmpty()) {
-        Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList[fontIdx] : font();
-        TextSegment* ts = new TextSegment(s, f, x, y);
-        m_textList.push_back(ts);
-        x += ts->width();
+    if (s.isEmpty()) {
+        return;
     }
+
+    Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
+    TextSegment* ts = new TextSegment(s, f, x, y);
+    m_textList.push_back(ts);
+    x += ts->width();
 }
 
 //---------------------------------------------------------
@@ -1159,7 +1160,6 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
 {
     ChordList* chordList = score()->chordList();
     std::stack<PointF> stack;
-    int fontIdx    = 0;
     double _spatium = spatium();
     double mag      = magS();
 
@@ -1167,7 +1167,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
     for (const RenderAction& a : renderList) {
 // a.print();
         if (a.type == RenderAction::RenderActionType::SET) {
-            TextSegment* ts = new TextSegment(m_fontList[fontIdx], x, y);
+            TextSegment* ts = new TextSegment(m_fontList.front(), x, y);
             ChordSymbol cs = chordList->symbol(a.text);
             if (cs.isValid()) {
                 ts->m_font = m_fontList[cs.fontIdx];
@@ -1203,7 +1203,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             } else if (m_function.size() > 0) {
                 c = m_function.at(m_function.size() - 1);
             }
-            TextSegment* ts = new TextSegment(m_fontList[fontIdx], x, y);
+            TextSegment* ts = new TextSegment(m_fontList.front(), x, y);
             String lookup = u"note" + c;
             ChordSymbol cs = chordList->symbol(lookup);
             if (!cs.isValid()) {
@@ -1232,7 +1232,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
                 context = u"german_B";
             }
             if (!acc.empty()) {
-                TextSegment* ts = new TextSegment(m_fontList[fontIdx], x, y);
+                TextSegment* ts = new TextSegment(m_fontList.front(), x, y);
                 String lookup = context + acc;
                 ChordSymbol cs = chordList->symbol(lookup);
                 if (!cs.isValid()) {

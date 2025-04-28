@@ -154,7 +154,7 @@ public:
     String harmonyName() const;
     void render();
 
-    const ChordDescription* parseHarmony(const String& s, int* root, int* bass, bool syntaxOnly = false);
+    const ChordDescription* parseHarmony(const String& s, int& root, int& bass, bool syntaxOnly = false);
 
     const String& extensionName() const;
 
