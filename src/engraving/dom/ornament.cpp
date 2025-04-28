@@ -20,19 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ornament.h"
+
 #include "accidental.h"
 #include "chord.h"
 #include "engravingitem.h"
 #include "factory.h"
 #include "key.h"
 #include "note.h"
-#include "ornament.h"
 #include "score.h"
 #include "shape.h"
 #include "staff.h"
 #include "utils.h"
 
-namespace mu::engraving {
+using namespace mu::engraving;
+
 Ornament::Ornament(ChordRest* parent)
     : Articulation(parent, ElementType::ORNAMENT)
 {
@@ -462,4 +464,3 @@ void Ornament::mapOldTrillAccidental(Note* note, const Note* mainNote)
         break;
     }
 }
-} // namespace mu::engraving

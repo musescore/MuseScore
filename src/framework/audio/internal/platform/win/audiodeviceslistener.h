@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_AUDIODEVICESLISTENER_H
-#define MUSE_AUDIO_AUDIODEVICESLISTENER_H
+#pragma once
 
 #include "wasapitypes.h"
 
@@ -55,5 +54,3 @@ private:
     bool m_successfullyInitializedCOM = false;
 };
 }
-
-#endif // MUSE_AUDIO_AudioDevicesListener_H

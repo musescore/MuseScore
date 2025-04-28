@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "types/fraction.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 class Chord;
@@ -155,4 +155,4 @@ private:
     static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
                                         bool systemEnd);
 };
-} // namespace mu::engraving::layout
+}
