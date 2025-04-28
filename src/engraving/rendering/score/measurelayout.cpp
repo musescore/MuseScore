@@ -2674,7 +2674,13 @@ void MeasureLayout::removeSystemHeader(Measure* m)
     }
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
         if (seg->isKeySigType()) {
-            bool keySigChangeHappensHere = m->score()->keyList().count(m->tick().ticks()) > 0;
+            bool keySigChangeHappensHere = false;
+            for (Staff* staff : m->score()->staves()) {
+                if (staff->keyList()->count(m->tick().ticks()) > 0) {
+                    keySigChangeHappensHere = true;
+                    break;
+                }
+            }
             if (!keySigChangeHappensHere || seg->header()) {
                 seg->setEnabled(false);
             }
