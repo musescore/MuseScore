@@ -199,7 +199,7 @@ Item {
             extensionsModel.selectExecPoint(selectedPlugin.uri, index)
         }
 
-        onRemove: function() {
+        onRemoveRequest: function() {
             extensionsModel.removeExtension(selectedPlugin.uri)
             prv.resetSelectedPlugin()
             panel.close()
