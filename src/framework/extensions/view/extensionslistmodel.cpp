@@ -44,7 +44,7 @@ ExtensionsListModel::ExtensionsListModel(QObject* parent)
         { rCategory, "category" },
         { rVersion, "version" },
         { rShortcuts, "shortcuts" },
-        { rIsUserExtension, "isUserExtension" }
+        { rIsRemovable, "isRemovable" }
     };
 }
 
@@ -121,8 +121,8 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
         //: No keyboard shortcut is assigned to this plugin.
         return muse::qtrc("extensions", "Not defined");
     }
-    case rIsUserExtension: {
-        return plugin.isUserExtension;
+    case rIsRemovable: {
+        return plugin.isRemovable;
     }
     }
 

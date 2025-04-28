@@ -227,7 +227,7 @@ struct Manifest {
     String version;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
-    bool isUserExtension = false;
+    bool isRemovable = false;
 
     std::vector<Action> actions;
 

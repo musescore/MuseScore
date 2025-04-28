@@ -187,7 +187,7 @@ Item {
         background: flickable
 
         isEnabled: Boolean(selectedPlugin) ? selectedPlugin.enabled : false
-        isUserExtension: Boolean(selectedPlugin) ? selectedPlugin.isUserExtension : false
+        isRemovable: Boolean(selectedPlugin) ? selectedPlugin.isRemovable : false
 
         additionalInfoModel: [
             {"title": qsTrc("extensions", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },

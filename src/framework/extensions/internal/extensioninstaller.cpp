@@ -48,7 +48,7 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
             return make_ok();
         }
 
-        if (alreadyInstalled && !existingManifest.isUserExtension) {
+        if (alreadyInstalled && !existingManifest.isRemovable) {
             interactive()->error(trc("extensions", "This extension cannot be updated."), std::string(),
                                  { interactive()->buttonData(IInteractive::Button::Ok) });
 

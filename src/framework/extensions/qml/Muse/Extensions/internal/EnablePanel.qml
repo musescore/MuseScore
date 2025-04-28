@@ -32,7 +32,7 @@ InfoPanel {
 
     property var execPointsModel: null
     property int currentExecPointIndex: 0
-    property bool isUserExtension: false
+    property bool isRemovable: false
 
     signal editShortcutRequested()
     signal execPointSelected(int index)
@@ -93,7 +93,7 @@ InfoPanel {
             FlatButton {
                 id: removeButton
                 
-                visible: root.isUserExtension
+                visible: root.isRemovable
                 navigation.name: text + "Button"
                 navigation.panel: root.contentNavigation
                 navigation.column: 2
