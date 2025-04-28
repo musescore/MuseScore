@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# Enable exit on any error
 trap 'echo Sign failed; exit 1' ERR
 
 S3_KEY=""
@@ -48,17 +49,18 @@ S3_UNSIGNED_URL="s3://$S3_BUCKET/$S3_UNSIGNED_DIR/$FILE_NAME"
 S3_SIGNED_URL="s3://$S3_BUCKET/$S3_SIGNED_DIR/$FILE_NAME"
 FILE_SIGNED_PATH="${FILE_PATH}_signed"
 
-
 export AWS_ACCESS_KEY_ID=$S3_KEY
 export AWS_SECRET_ACCESS_KEY=$S3_SECRET 
 export AWS_DEFAULT_REGION=us-east-1
 
-#$s3aws ls s3://$S3_BUCKET
 aws s3 ls s3://$S3_BUCKET
 
 echo "Send file to sign service..."
 aws s3 cp $FILE_PATH $S3_UNSIGNED_URL
 aws s3 ls s3://$S3_BUCKET/$S3_UNSIGNED_DIR/
+
+# Disable exit on any error
+trap '' ERR
 
 signed=-1
 for i in 1 2 3 4 5 6 7 8 9; do
@@ -74,18 +76,21 @@ for i in 1 2 3 4 5 6 7 8 9; do
     sleep 60
 done
 
-echo "Sign success"
+echo "Signed file downloaded successfully"
 
-echo "Delete sign file from service"
+# Enable exit on any error
+trap 'echo Sign failed; exit 1' ERR
+
+echo "Delete signed file from service"
 aws s3 rm $S3_SIGNED_URL 
 
-echo "Rename origin unsign file"
+echo "Rename original unsigned file"
 mv $FILE_PATH "${FILE_PATH}_origin"
 
-echo "Rename sign file to origin name"
+echo "Rename signed file to original name"
 mv $FILE_SIGNED_PATH $FILE_PATH
 
-echo "Delete origin file"
+echo "Delete original unsigned file"
 rm -f "${FILE_PATH}_origin"
 
 echo "All done"
