@@ -7654,12 +7654,12 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
             // deprecated in MusicXML 4.0
             // attributes: print-style
             ha->setRootTpc(Tpc::TPC_INVALID);
-            ha->setBaseTpc(Tpc::TPC_INVALID);
+            ha->setBassTpc(Tpc::TPC_INVALID);
             functionText = m_e.readText();
             ha->setHarmonyType(HarmonyType::ROMAN);
         } else if (m_e.name() == "numeral") {
             ha->setRootTpc(Tpc::TPC_INVALID);
-            ha->setBaseTpc(Tpc::TPC_INVALID);
+            ha->setBassTpc(Tpc::TPC_INVALID);
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "numeral-root") {
                     functionText = m_e.attribute("text");
@@ -7723,7 +7723,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                     skipLogCurrElem();
                 }
             }
-            ha->setBaseTpc(step2tpc(step, AccidentalVal(alter)));
+            ha->setBassTpc(step2tpc(step, AccidentalVal(alter)));
         } else if (m_e.name() == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;

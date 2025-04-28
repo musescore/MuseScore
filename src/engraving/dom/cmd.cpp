@@ -4288,7 +4288,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             if (!concertPitch) {
                 offset = interval.chromatic;
             }
-            notes = r.generateNotes(h->rootTpc(), h->baseTpc(),
+            notes = r.generateNotes(h->rootTpc(), h->bassTpc(),
                                     literal, voicing, offset);
         }
 

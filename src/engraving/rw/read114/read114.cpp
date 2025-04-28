@@ -1390,12 +1390,12 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         const AsciiStringView tag(e.name());
         if (tag == "base") {
             if (ctx.mscVersion() >= 106) {
-                h->setBaseTpc(e.readInt());
+                h->setBassTpc(e.readInt());
             } else {
-                h->setBaseTpc(table[e.readInt() - 1]);
+                h->setBassTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "baseCase") {
-            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+            h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
             h->setId(e.readInt());
         } else if (tag == "name") {

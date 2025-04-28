@@ -6534,7 +6534,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                             interval.flip();
                         }
                         int rootTpc = transposeTpc(h->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(h->baseTpc(), interval, true);
+                        int baseTpc = transposeTpc(h->bassTpc(), interval, true);
                         score->undoTransposeHarmony(h, rootTpc, baseTpc);
                     }
                 }
