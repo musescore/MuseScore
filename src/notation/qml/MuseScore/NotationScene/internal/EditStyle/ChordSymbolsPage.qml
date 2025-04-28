@@ -37,6 +37,68 @@ StyledFlickable {
         id: chordSymbolsModel
     }
 
+    property var extensionStyles: [
+        chordSymbolsModel.extensionMag,
+        chordSymbolsModel.extensionAdjust
+    ];
+
+    property var modifierStyles: [
+        chordSymbolsModel.modifierMag,
+        chordSymbolsModel.modifierAdjust,
+        chordSymbolsModel.verticallyStackModifiers
+    ];
+
+    property var bassStyles: [
+        chordSymbolsModel.chordBassNoteStagger,
+        chordSymbolsModel.chordBassNoteScale
+    ];
+
+    property var polychordStyles: [
+        chordSymbolsModel.polychordDividerThickness,
+        chordSymbolsModel.polychordDividerSpacing
+    ];
+
+    property var alignmentStyles: [
+        chordSymbolsModel.verticallyAlignChordSymbols,
+        chordSymbolsModel.chordAlignmentToNotehead,
+        chordSymbolsModel.chordAlignmentToFretboard,
+        chordSymbolsModel.chordAlignmentExcludeModifiers
+    ];
+
+    property var capitalizationStyles: [
+        chordSymbolsModel.automaticCapitalization,
+        chordSymbolsModel.lowerCaseMinorChords,
+        chordSymbolsModel.lowerCaseBassNotes,
+        chordSymbolsModel.allCapsNoteNames
+    ];
+
+    property var positioningStyles: [
+        chordSymbolsModel.harmonyFretDist,
+        chordSymbolsModel.minHarmonyDist
+    ];
+
+    property var playbackStyles: [
+        chordSymbolsModel.harmonyVoiceLiteral,
+        chordSymbolsModel.harmonyVoicing,
+        chordSymbolsModel.harmonyDuration,
+        chordSymbolsModel.capoPosition
+    ];
+
+    function resetStyles(styles) {
+        for (let styleItem of styles) {
+            styleItem.value = styleItem.defaultValue
+        }
+    }
+
+    function isResetEnabled(styles) {
+        for (const styleItem of styles) {
+            if (!styleItem.isDefault) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     signal goToTextStylePage(string s)
 
     ColumnLayout {
@@ -47,6 +109,27 @@ StyledFlickable {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
             title: qsTrc("notation/editstyle/chordsymbols", "Preset")
+
+            ColumnLayout {
+                spacing: 12
+                anchors.fill: parent
+
+                StyledDropdown {
+                    id: presetDropdown
+                    width: 172
+
+                    model: chordSymbolsModel.possiblePresetOptions()
+
+                    currentIndex: chordSymbolsModel.chordStylePreset && !chordSymbolsModel.chordStylePreset.isUndefined
+                                  ? presetDropdown.indexOfValue(chordSymbolsModel.chordStylePreset.value)
+                                  : -1
+
+                    onActivated: function(index, value) {
+                        chordSymbolsModel.chordStylePreset = value
+                        chordSymbolsModel.setChordStyle(value)
+                    }
+                }
+            }
         }
 
         StyledGroupBox {
@@ -69,11 +152,51 @@ StyledFlickable {
                 StyledGroupBox {
                     Layout.fillWidth: true
                     title: qsTrc("notation/editstyle/chordsymbols", "Spelling")
+
+                    RowLayout {
+                        spacing: 6
+                        anchors.fill: parent
+
+                        RadioButtonGroup {
+                            id: spellingRadioButtonGroup
+                            Layout.fillWidth: true
+                            model: chordSymbolsModel.possibleChordSymbolSpellings()
+
+                            delegate: RoundedRadioButton {
+                                height: 30
+                                checked: modelData.value === chordSymbolsModel.chordSymbolSpelling.value
+                                text: modelData.text ? modelData.text : ""
+
+                                onToggled: {
+                                    chordSymbolsModel.chordSymbolSpelling.value = modelData.value
+                                }
+                            }
+                        }
+
+                        FlatButton {
+                            Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                            icon: IconCode.UNDO
+                            enabled: !chordSymbolsModel.chordSymbolSpelling.isDefault
+                            onClicked: chordSymbolsModel.chordSymbolSpelling.value = chordSymbolsModel.chordSymbolSpelling.defaultValue
+                        }
+                    }
                 }
 
                 StyledGroupBox {
+
+                    label: CheckBox {
+                        id: capitaliseCheckBox
+                        text: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
+
+                        checked: chordSymbolsModel.automaticCapitalization && Boolean(chordSymbolsModel.automaticCapitalization.value)
+                        onClicked: {
+                            if (chordSymbolsModel.automaticCapitalization) {
+                                chordSymbolsModel.automaticCapitalization.value = !checked
+                            }
+                        }
+                    }
+
                     Layout.fillWidth: true
-                    title: qsTrc("notation/editstyle/chordsymbols", "Automatically capitalize note names")
 
                     RowLayout {
                         spacing: 6
@@ -97,28 +220,88 @@ StyledFlickable {
                             onClicked: chordSymbolsModel.allCapsNoteNames.value = !chordSymbolsModel.allCapsNoteNames.value
                         }
 
-                        //TODO RESET
+                        FlatButton {
+                            Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                            icon: IconCode.UNDO
+                            enabled: isResetEnabled(root.capitalizationStyles)
+                            onClicked: resetStyles(root.capitalizationStyles)
+                        }
                     }
                 }
 
                 StyledGroupBox {
                     Layout.fillWidth: true
                     title: qsTrc("notation/editstyle/chordsymbols", "Extensions (e.g. 7, 11)")
+
                     ColumnLayout {
                         spacing: 12
                         anchors.fill: parent
 
-                        StyleSpinboxRow {
-                            styleItem: chordSymbolsModel.extensionMag
-                            label: qsTrc("notation", "Scale:")
-                            inPercentage: true
-                            hasReset: false
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Scale:")
+                            }
+
+                            Item {
+                                Layout.preferredWidth: 326
+                                implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+                                IncrementalPropertyControl {
+                                    width: 80
+
+                                    currentValue: Math.round(chordSymbolsModel.extensionMag.value * 100)
+                                    minValue: 0
+                                    maxValue: 999
+                                    step: 1
+                                    decimals: 0
+
+                                    measureUnitsSymbol: '%'
+
+                                    onValueEdited: function(newValue) {
+                                        chordSymbolsModel.extensionMag.value = newValue / 100
+                                    }
+                                }
+                            }
+
+                            FlatButton {
+                                Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                                icon: IconCode.UNDO
+                                enabled: isResetEnabled(root.extensionStyles)
+                                onClicked: resetStyles(root.extensionStyles)
+                            }
                         }
-                        StyleSpinboxRow {
-                            styleItem: chordSymbolsModel.extensionAdjust
-                            label: qsTrc("notation", "Vertical offset:")
-                            inPercentage: true
-                            hasReset: false
+
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Vertical offset:")
+                            }
+
+                            IncrementalPropertyControl {
+                                Layout.preferredWidth: 80
+
+                                currentValue: Math.round(chordSymbolsModel.extensionAdjust.value * 100)
+                                minValue: 0
+                                maxValue: 999
+                                step: 1
+                                decimals: 0
+
+                                measureUnitsSymbol: '%'
+
+                                onValueEdited: function(newValue) {
+                                    chordSymbolsModel.extensionAdjust.value = newValue / 100
+                                }
+                            }
                         }
                     }
                 }
@@ -131,17 +314,77 @@ StyledFlickable {
                         spacing: 12
                         anchors.fill: parent
 
-                        StyleSpinboxRow {
-                            styleItem: chordSymbolsModel.modifierMag
-                            label: qsTrc("notation", "Scale:")
-                            inPercentage: true
-                            hasReset: false
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Scale:")
+                            }
+
+                            Item {
+                                Layout.preferredWidth: 326
+                                implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+                                IncrementalPropertyControl {
+                                    width: 80
+
+                                    currentValue: Math.round(chordSymbolsModel.modifierMag.value * 100)
+                                    minValue: 0
+                                    maxValue: 999
+                                    step: 1
+                                    decimals: 0
+
+                                    measureUnitsSymbol: '%'
+
+                                    onValueEdited: function(newValue) {
+                                        chordSymbolsModel.modifierMag.value = newValue / 100
+                                    }
+                                }
+                            }
+
+                            FlatButton {
+                                Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                                icon: IconCode.UNDO
+                                enabled: isResetEnabled(root.modifierStyles)
+                                onClicked: resetStyles(root.modifierStyles)
+                            }
                         }
-                        StyleSpinboxRow {
-                            styleItem: chordSymbolsModel.modifierAdjust
-                            label: qsTrc("notation", "Vertical offset:")
-                            inPercentage: true
-                            hasReset: false
+
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Vertical offset:")
+                            }
+
+                            IncrementalPropertyControl {
+                                Layout.preferredWidth: 80
+
+                                currentValue: Math.round(chordSymbolsModel.modifierAdjust.value * 100)
+                                minValue: 0
+                                maxValue: 999
+                                step: 1
+                                decimals: 0
+
+                                measureUnitsSymbol: '%'
+
+                                onValueEdited: function(newValue) {
+                                    chordSymbolsModel.modifierAdjust.value = newValue / 100
+                                }
+                            }
+                        }
+
+                        CheckBox {
+                            text: qsTrc("notation/editstyle/chordsymbols", "Vertically stack modifiers")
+                            checked: chordSymbolsModel.verticallyStackModifiers.value === true
+                            onClicked: chordSymbolsModel.verticallyStackModifiers.value = !chordSymbolsModel.verticallyStackModifiers.value
                         }
                     }
                 }
@@ -149,11 +392,178 @@ StyledFlickable {
                 StyledGroupBox {
                     Layout.fillWidth: true
                     title: qsTrc("notation/editstyle/chordsymbols", "Altered bass notes (eg. A7/G)")
+
+                    ColumnLayout {
+                        spacing: 12
+                        anchors.fill: parent
+
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Style:")
+                            }
+
+                            Item {
+                                Layout.preferredWidth: 326
+                                implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+
+                                RadioButtonGroup {
+                                    id: radioButtonGroup
+
+                                    // anchors.fill: parent
+                                    width: 100
+
+                                    model: [
+                                        { iconCode: IconCode.CHORD_ALIGN, iconSize: 20, value: false },
+                                        { iconCode: IconCode.CHORD_STAGGER, iconSize: 20, value: true }
+                                    ]
+
+                                    delegate: FlatRadioButton {
+                                        height: 48
+
+                                        navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
+
+                                        checked: chordSymbolsModel.chordBassNoteStagger.value === modelData.value
+                                        onToggled: chordSymbolsModel.chordBassNoteStagger.value = modelData.value
+
+                                        Column {
+                                            anchors.centerIn: parent
+                                            height: childrenRect.height
+                                            spacing: 8
+
+                                            StyledIconLabel {
+                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
+                                                font.pixelSize: modelData.iconSize ? modelData.iconSize : 28
+                                            }
+
+                                            StyledTextLabel {
+                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                text: modelData.text ? modelData.text : ""
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            FlatButton {
+                                Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                                icon: IconCode.UNDO
+                                enabled: isResetEnabled(root.bassStyles)
+                                onClicked: resetStyles(root.bassStyles)
+                            }
+                        }
+
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Bass note scale:")
+                            }
+
+                            IncrementalPropertyControl {
+                                Layout.preferredWidth: 80
+
+                                currentValue: Math.round(chordSymbolsModel.chordBassNoteScale.value * 100)
+                                minValue: 0
+                                maxValue: 999
+                                step: 1
+                                decimals: 0
+
+                                measureUnitsSymbol: '%'
+
+                                onValueEdited: function(newValue) {
+                                    chordSymbolsModel.chordBassNoteScale.value = newValue / 100
+                                }
+                            }
+                        }
+                    }
                 }
 
                 StyledGroupBox {
                     Layout.fillWidth: true
                     title: qsTrc("notation/editstyle/chordsymbols", "Polychords (e.g. C|F♯)")
+
+                    ColumnLayout {
+                        spacing: 12
+                        anchors.fill: parent
+
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Divider thickness:")
+                            }
+
+                            Item {
+                                Layout.preferredWidth: 326
+                                implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+                                IncrementalPropertyControl {
+                                    width: 80
+
+                                    currentValue: chordSymbolsModel.polychordDividerThickness.value
+                                    minValue: 0
+                                    maxValue: 99
+                                    step: 0.01
+                                    decimals: 2
+
+                                    measureUnitsSymbol: qsTrc("global", "sp")
+
+                                    onValueEdited: function(newValue) {
+                                        chordSymbolsModel.polychordDividerThickness.value = newValue
+                                    }
+                                }
+                            }
+
+                            FlatButton {
+                                Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                                icon: IconCode.UNDO
+                                enabled: isResetEnabled(root.polychordStyles)
+                                onClicked: resetStyles(root.polychordStyles)
+                            }
+                        }
+
+                        RowLayout {
+                            spacing: 6
+                            Layout.fillWidth: true
+
+                            StyledTextLabel {
+                                Layout.preferredWidth: 120
+                                horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
+                                text: qsTrc("notation", "Divider spacing:")
+                            }
+
+                            IncrementalPropertyControl {
+                                Layout.preferredWidth: 80
+
+                                currentValue: chordSymbolsModel.polychordDividerSpacing.value
+                                minValue: 0
+                                maxValue: 99
+                                step: 0.01
+                                decimals: 2
+
+                                measureUnitsSymbol: qsTrc("global", "sp")
+
+                                onValueEdited: function(newValue) {
+                                    chordSymbolsModel.polychordDividerSpacing.value = newValue
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -162,6 +572,64 @@ StyledFlickable {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
             title: qsTrc("notation/editstyle/chordsymbols", "Alignment")
+
+            ColumnLayout {
+                spacing: 12
+                anchors.fill: parent
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    CheckBox {
+                        text: qsTrc("notation/editstyle/chordsymbols", "Vertically align chord symbols on the same system")
+                        checked: chordSymbolsModel.verticallyAlignChordSymbols.value === true
+                        onClicked: chordSymbolsModel.verticallyAlignChordSymbols.value = !chordSymbolsModel.verticallyAlignChordSymbols.value
+                    }
+
+                    FlatButton {
+                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                        icon: IconCode.UNDO
+                        enabled: isResetEnabled(root.alignmentStyles)
+                        onClicked: resetStyles(root.alignmentStyles)
+                    }
+                }
+
+
+                IconAndTextButtonSelector {
+                    styleItem: chordSymbolsModel.chordAlignmentToNotehead
+                    label: qsTrc("notation", "Alignment to notehead:")
+                    controlAreaWidth: 98
+                    buttonHeight: 30
+                    hasReset: false
+
+                    model: [
+                        { iconCode: IconCode.ALIGN_LEFT, iconSize: 16, value: 0},
+                        { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, iconSize: 16, value: 2},
+                        { iconCode: IconCode.ALIGN_RIGHT, iconSize: 16, value: 1 }
+                    ]
+                }
+
+                IconAndTextButtonSelector {
+                    styleItem: chordSymbolsModel.chordAlignmentToFretboard
+                    label: qsTrc("notation", "Alignment to fretboard diagrams:")
+                    controlAreaWidth: 98
+                    buttonHeight: 30
+                    hasReset: false
+
+                    model: [
+                        { iconCode: IconCode.ALIGN_LEFT, iconSize: 16, value: 0},
+                        { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, iconSize: 16, value: 2},
+                        { iconCode: IconCode.ALIGN_RIGHT, iconSize: 16, value: 1 }
+                    ]
+                }
+
+                CheckBox {
+                    text: qsTrc("notation/editstyle/chordsymbols", "Exclude modifiers from horizontal alignment")
+                    checked: chordSymbolsModel.chordAlignmentExcludeModifiers.value === true
+                    onClicked: chordSymbolsModel.chordAlignmentExcludeModifiers.value = !chordSymbolsModel.chordAlignmentExcludeModifiers.value
+                }
+            }
         }
 
         StyledGroupBox {
@@ -173,20 +641,71 @@ StyledFlickable {
                 spacing: 12
                 anchors.fill: parent
 
-                StyleSpinboxRow {
-                    styleItem: chordSymbolsModel.harmonyFretDist
-                    label: qsTrc("notation", "Minimum space from fretboard diagram:")
-                    suffix: qsTrc("global", "sp")
-                    step: 0.1
-                    hasReset: false
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Minimum space from fretboard diagram:")
+                    }
+
+                    Item {
+                        Layout.preferredWidth: 326
+                        implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+                        IncrementalPropertyControl {
+                            width: 80
+
+                            currentValue: chordSymbolsModel.harmonyFretDist.value
+                            minValue: 0
+                            maxValue: 99
+                            step: 0.1
+                            decimals: 2
+
+                            measureUnitsSymbol: qsTrc("global", "sp")
+
+                            onValueEdited: function(newValue) {
+                                chordSymbolsModel.harmonyFretDist.value = newValue
+                            }
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                        icon: IconCode.UNDO
+                        enabled: isResetEnabled(root.positioningStyles)
+                        onClicked: resetStyles(root.positioningStyles)
+                    }
                 }
 
-                StyleSpinboxRow {
-                    styleItem: chordSymbolsModel.minHarmonyDist
-                    label: qsTrc("notation", "Minimum space between chord symbols:")
-                    suffix: qsTrc("global", "sp")
-                    step: 0.1
-                    hasReset: false
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Minimum space between chord symbols:")
+                    }
+
+                    IncrementalPropertyControl {
+                        Layout.preferredWidth: 80
+
+                        currentValue: chordSymbolsModel.minHarmonyDist.value
+                        minValue: 0
+                        maxValue: 99
+                        step: 0.1
+                        decimals: 2
+
+                        measureUnitsSymbol: qsTrc("global", "sp")
+
+                        onValueEdited: function(newValue) {
+                            chordSymbolsModel.minHarmonyDist.value = newValue
+                        }
+                    }
                 }
             }
         }
@@ -200,32 +719,131 @@ StyledFlickable {
                 spacing: 12
                 width: parent.width
 
-                StyleDropdownRow {
-                    styleItem: chordSymbolsModel.harmonyVoiceLiteral
-                    label: qsTrc("notation", "Interpretation:")
-                    hasReset: false
-                    model: chordSymbolsModel.possibleHarmonyVoiceLiteralOptions()
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Interpretation:")
+                    }
+
+                    Item {
+                        Layout.preferredWidth: 326
+                        Layout.preferredHeight: interpretationDropdown.height
+                        StyledDropdown {
+                            id: interpretationDropdown
+                            width: 172
+
+                            model: chordSymbolsModel.possibleHarmonyVoiceLiteralOptions()
+
+                            currentIndex: chordSymbolsModel.harmonyVoiceLiteral && !chordSymbolsModel.harmonyVoiceLiteral.isUndefined
+                                          ? interpretationDropdown.indexOfValue(chordSymbolsModel.harmonyVoiceLiteral.value)
+                                          : -1
+
+                            onActivated: function(index, value) {
+                                chordSymbolsModel.harmonyVoiceLiteral.value = value
+                            }
+                        }
+
+                    }
+
+                    FlatButton {
+                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                        icon: IconCode.UNDO
+                        enabled: isResetEnabled(root.playbackStyles)
+                        onClicked: resetStyles(root.playbackStyles)
+                    }
                 }
 
-                StyleDropdownRow {
-                    styleItem: chordSymbolsModel.harmonyVoicing
-                    label: qsTrc("notation", "Voicing:")
-                    hasReset: false
-                    model: chordSymbolsModel.possibleHarmonyVoicingOptions()
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Voicing:")
+                    }
+
+                    Item {
+                        Layout.preferredWidth: 326
+                        Layout.preferredHeight: voicingDropdown.height
+                        StyledDropdown {
+                            id: voicingDropdown
+                            Layout.preferredWidth: 172
+
+                            model: chordSymbolsModel.possibleHarmonyVoicingOptions()
+
+                            currentIndex: chordSymbolsModel.harmonyVoicing && !chordSymbolsModel.harmonyVoicing.isUndefined
+                                          ? voicingDropdown.indexOfValue(chordSymbolsModel.harmonyVoicing.value)
+                                          : -1
+
+                            onActivated: function(index, value) {
+                                chordSymbolsModel.harmonyVoicing.value = value
+                            }
+                        }
+                    }
                 }
 
-                StyleDropdownRow {
-                    styleItem: chordSymbolsModel.harmonyDuration
-                    label: qsTrc("notation", "Duration:")
-                    hasReset: false
-                    model: chordSymbolsModel.possibleHarmonyDurationOptions()
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Duration:")
+                    }
+
+                    Item {
+                        Layout.preferredWidth: 326
+                        Layout.preferredHeight: durationDropdown.height
+                        StyledDropdown {
+                            id: durationDropdown
+                            Layout.preferredWidth: 172
+
+                            model: chordSymbolsModel.possibleHarmonyDurationOptions()
+
+                            currentIndex: chordSymbolsModel.harmonyDuration && !chordSymbolsModel.harmonyDuration.isUndefined
+                                          ? durationDropdown.indexOfValue(chordSymbolsModel.harmonyDuration.value)
+                                          : -1
+
+                            onActivated: function(index, value) {
+                                chordSymbolsModel.harmonyDuration.value = value
+                            }
+                        }
+                    }
                 }
 
-                StyleSpinboxRow {
-                    styleItem: chordSymbolsModel.capoPosition
-                    label: qsTrc("notation", "Capo fret position:")
-                    hasReset: false
-                    step: 1
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+
+                    StyledTextLabel {
+                        Layout.preferredWidth: 120
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        text: qsTrc("notation", "Capo fret position:")
+                    }
+
+                    IncrementalPropertyControl {
+                        Layout.preferredWidth: 80
+
+                        currentValue: chordSymbolsModel.capoPosition.value
+                        minValue: 0
+                        maxValue: 11
+                        step: 1
+                        decimals: 0
+
+                        onValueEdited: function(newValue) {
+                            chordSymbolsModel.capoPosition.value = newValue
+                        }
+                    }
                 }
             }
         }

@@ -28,10 +28,24 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(StyleItem * chordStylePreset READ chordStylePreset CONSTANT)
+    Q_PROPERTY(StyleItem * chordDescriptionFile READ chordDescriptionFile CONSTANT)
+
     Q_PROPERTY(StyleItem * extensionMag READ extensionMag CONSTANT)
     Q_PROPERTY(StyleItem * extensionAdjust READ extensionAdjust CONSTANT)
     Q_PROPERTY(StyleItem * modifierMag READ modifierMag CONSTANT)
     Q_PROPERTY(StyleItem * modifierAdjust READ modifierAdjust CONSTANT)
+    Q_PROPERTY(StyleItem * verticallyStackModifiers READ verticallyStackModifiers CONSTANT)
+
+    Q_PROPERTY(StyleItem * chordBassNoteStagger READ chordBassNoteStagger CONSTANT)
+    Q_PROPERTY(StyleItem * chordBassNoteScale READ chordBassNoteScale CONSTANT)
+    Q_PROPERTY(StyleItem * polychordDividerThickness READ polychordDividerThickness CONSTANT)
+    Q_PROPERTY(StyleItem * polychordDividerSpacing READ polychordDividerSpacing CONSTANT)
+
+    Q_PROPERTY(StyleItem * verticallyAlignChordSymbols READ verticallyAlignChordSymbols CONSTANT)
+    Q_PROPERTY(StyleItem * chordAlignmentToNotehead READ chordAlignmentToNotehead CONSTANT)
+    Q_PROPERTY(StyleItem * chordAlignmentToFretboard READ chordAlignmentToFretboard CONSTANT)
+    Q_PROPERTY(StyleItem * chordAlignmentExcludeModifiers READ chordAlignmentExcludeModifiers CONSTANT)
 
     Q_PROPERTY(StyleItem * chordSymbolSpelling READ chordSymbolSpelling CONSTANT)
     Q_PROPERTY(StyleItem * automaticCapitalization READ automaticCapitalization CONSTANT)
@@ -40,21 +54,35 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * allCapsNoteNames READ allCapsNoteNames CONSTANT)
     Q_PROPERTY(StyleItem * harmonyFretDist READ harmonyFretDist CONSTANT)
     Q_PROPERTY(StyleItem * minHarmonyDist READ minHarmonyDist CONSTANT)
-    Q_PROPERTY(StyleItem * maxHarmonyBarDistance READ maxHarmonyBarDistance CONSTANT)
-    Q_PROPERTY(StyleItem * maxChordShiftAbove READ maxChordShiftAbove CONSTANT)
-    Q_PROPERTY(StyleItem * maxChordShiftBelow READ maxChordShiftBelow CONSTANT)
     Q_PROPERTY(StyleItem * harmonyVoiceLiteral READ harmonyVoiceLiteral CONSTANT)
     Q_PROPERTY(StyleItem * harmonyVoicing READ harmonyVoicing CONSTANT)
     Q_PROPERTY(StyleItem * harmonyDuration READ harmonyDuration CONSTANT)
     Q_PROPERTY(StyleItem * capoPosition READ capoPosition CONSTANT)
-    Q_PROPERTY(StyleItem * chordsXmlFile READ chordsXmlFile CONSTANT)
 public:
+
     explicit ChordSymbolsPageModel(QObject* parent = nullptr);
+
+    StyleItem* chordStylePreset() const;
+    StyleItem* chordDescriptionFile() const;
+    Q_INVOKABLE QVariantList possiblePresetOptions() const;
 
     StyleItem* extensionMag() const;
     StyleItem* extensionAdjust() const;
+
     StyleItem* modifierMag() const;
     StyleItem* modifierAdjust() const;
+    StyleItem* verticallyStackModifiers() const;
+
+    StyleItem* chordBassNoteStagger() const;
+    StyleItem* chordBassNoteScale() const;
+
+    StyleItem* polychordDividerThickness() const;
+    StyleItem* polychordDividerSpacing() const;
+
+    StyleItem* verticallyAlignChordSymbols() const;
+    StyleItem* chordAlignmentToNotehead() const;
+    StyleItem* chordAlignmentToFretboard() const;
+    StyleItem* chordAlignmentExcludeModifiers() const;
 
     StyleItem* chordSymbolSpelling() const;
     Q_INVOKABLE QVariantList possibleChordSymbolSpellings() const;
@@ -66,9 +94,6 @@ public:
 
     StyleItem* harmonyFretDist() const;
     StyleItem* minHarmonyDist() const;
-    StyleItem* maxHarmonyBarDistance() const;
-    StyleItem* maxChordShiftAbove() const;
-    StyleItem* maxChordShiftBelow() const;
 
     Q_INVOKABLE QVariantList possibleHarmonyVoiceLiteralOptions() const;
     Q_INVOKABLE QVariantList possibleHarmonyVoicingOptions() const;
@@ -77,9 +102,9 @@ public:
     StyleItem* harmonyVoiceLiteral() const;
     StyleItem* harmonyVoicing() const;
     StyleItem* harmonyDuration() const;
-
     StyleItem* capoPosition() const;
 
-    StyleItem* chordsXmlFile() const;
+public slots:
+    void setChordStyle(mu::engraving::ChordStylePreset);
 };
 }
