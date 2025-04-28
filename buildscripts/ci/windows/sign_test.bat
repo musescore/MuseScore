@@ -1,6 +1,5 @@
 @echo off
-setlocal ENABLEDELAYEDEXPANSION
-ECHO "MuseScore sign test
+ECHO MuseScore sign test
 
 SET SIGN_SECRET=""
 SET SIGN_KEY=""
