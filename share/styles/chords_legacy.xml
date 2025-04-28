@@ -408,7 +408,7 @@
 
   <renderRoot>:n :a m:0.5:0</renderRoot>
   <renderFunction>:a m:0.5:0 :n</renderFunction>
-  <renderBase>m:-0.2:0 / m:0.2:0 :n :a</renderBase>
+  <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
 
 <!--
       Part III: chord list
