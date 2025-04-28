@@ -1,0 +1,189 @@
+name: Build and draft release
+
+on:
+  # schedule: # scheduled workflows will only run on the default branch
+  #   - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
+  push: # push.inputs field does not exist, use gen1 and gen2 below
+    branches:
+    - temp23
+  workflow_dispatch: # triggered by github web ui run "Build and draft release" workflow button
+    inputs:
+      manual_name:
+        description: 'Release name:'
+        default: 'default'
+        type: string
+        required: true
+      manual_tag:
+        description: 'Release tag:'
+        default: 'default'
+        type: string
+        required: true
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_portable_x64 windows_portable_x32'
+        type: string
+        required: true
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      runtest:
+        description: 'Check: Unit tests (mtests) (in linux yml)'
+        default: 'off'
+        type: string
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish (obsolette)'
+        default: 'off'
+        type: string
+        required: true
+
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  debugbefore:
+    name: debug before (pub dev yml)
+    runs-on: ubuntu-latest
+    steps:
+    - name: debug before # ${{ inputs.platforms }} empty on push
+      run: |
+        echo "github.event_name=${{github.event_name}}"
+        echo "inputs.platforms=${{ inputs.platforms }}"
+
+  plan:
+    name: generate strings (pub dev yml)
+    runs-on: ubuntu-latest
+    outputs:
+      manual_name: ${{ steps.gen1.outputs.manual_name }}
+      manual_tag: ${{ steps.gen1.outputs.manual_tag }}
+      platforms: ${{ steps.gen1.outputs.platforms }}
+      build_mode: ${{ steps.gen1.outputs.build_mode }}
+      runtest: ${{ steps.gen1.outputs.runtest }}
+      publish: ${{ steps.gen1.outputs.publish }}
+      execfrompubdevpush: ${{ steps.gen1.outputs.execfrompubdevpush }}
+    steps:
+    - id: gen1
+      name: empty inputs on push workaround
+      run: |
+        if [[ "${{ github.event_name }}" == "push" ]]; then
+
+          echo "triggered by 1. on.push of publishdev or 2. on.push of others that triggers on.workflow_call of publishdev" 
+
+          echo "manual_name=default" >> "$GITHUB_OUTPUT"
+          echo "manual_tag=default" >> "$GITHUB_OUTPUT"
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_portable_x64 windows_portable_x32" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=true" >> "$GITHUB_OUTPUT"
+
+        else
+
+          echo "manual_name=${{ inputs.manual_name }}" >> "$GITHUB_OUTPUT"
+          echo "manual_tag=${{ inputs.manual_tag }}" >> "$GITHUB_OUTPUT"
+          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
+          echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
+
+        fi
+
+  debugafter:
+    name: debug after (pub dev yml)
+    needs:
+      - plan
+    runs-on: ubuntu-latest
+    steps:
+    - name: debug after # confirm use "needs.plan.outputs." in replace of "inputs."
+      run: |
+        echo "needs.plan.outputs.platforms=${{ needs.plan.outputs.platforms }}"
+
+  plan2:
+    name: Generate release name and tag
+    needs:
+      - plan
+    runs-on: ubuntu-latest
+    outputs:
+      release_name: ${{ steps.gen2.outputs.release_name }}
+      release_tag: ${{ steps.gen2.outputs.release_tag }}
+    steps:
+    - name: Clone repo
+      uses: actions/checkout@v4
+      # with:
+      #   fetch-depth: 0 # entire history for all branches and tags
+    - id: gen2
+      name: empty inputs on push workaround 2
+      run: |
+        if [[ "${{ needs.plan.outputs.manual_name }}" == "default" ]]; then
+          echo "release_name=$(git log -1 --format=%cd --date=format:%Y%m%d)" >> "$GITHUB_OUTPUT"
+        else
+          echo "release_name=${{ needs.plan.outputs.manual_name }}" >> "$GITHUB_OUTPUT"
+        fi
+        if [[ "${{ needs.plan.outputs.manual_tag }}" == "default" ]] ; then
+          echo "release_tag=$(git log -1 --format=%cd --date=format:%Y%m%d)" >> "$GITHUB_OUTPUT"
+        else
+          echo "release_tag=${{ needs.plan.outputs.manual_tag }}" >> "$GITHUB_OUTPUT"
+        fi
+
+  debugafter2:
+    name: debug after 2 (pub dev yml)
+    needs:
+      - plan2
+    runs-on: ubuntu-latest
+    steps:
+    - name: debug after # confirm use "needs.plan.outputs." in replace of "inputs."
+      run: |
+        echo "needs.plan2.outputs.release_tag=${{ needs.plan2.outputs.release_tag }}"
+
+  build:
+    name: Build
+    needs:
+      - plan
+    uses: ./.github/workflows/build_all.yml
+    secrets: inherit
+    with:
+      platforms: ${{ needs.plan.outputs.platforms }}
+      build_mode: ${{ needs.plan.outputs.build_mode }}
+      runtest: ${{ needs.plan.outputs.runtest }}
+      publish: ${{ needs.plan.outputs.publish }}
+      execfrompubdevpush: ${{ needs.plan.outputs.execfrompubdevpush }}
+
+  create_release:
+    name: Create release
+    needs:
+      - plan
+      - build
+      - plan2
+    if: ${{ ! failure() && ! cancelled() }} # ? meaning of original comment from master ? >> run even if prior jobs were skipped
+    runs-on: ubuntu-latest
+    environment:
+      name: devpublish
+      url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.plan2.outputs.release_tag }}
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - name: Download and extract artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: build.artifacts
+    - name: Collate release binaries
+      run: |
+        build/ci/release/collate_release_binaries.sh
+    - name: Tag the lastest commit on default branch
+      run: |
+        git tag "${{ needs.plan2.outputs.release_tag }}" "${GITHUB_SHA}"
+        git push origin "${{ needs.plan2.outputs.release_tag }}"
+    - name: Draft release page
+      uses: softprops/action-gh-release@v2
+      with: # https://github.com/softprops/action-gh-release?tab=readme-ov-file#inputs
+        draft: true
+        files: release/*
+        name: ${{ needs.plan2.outputs.release_name }}
+        tag_name: ${{ needs.plan2.outputs.release_tag }}
+        fail_on_unmatched_files: true
+        generate_release_notes: false

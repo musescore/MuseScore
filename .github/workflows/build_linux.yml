@@ -1,36 +1,135 @@
 name: 'Build: Linux / Check: Unit tests (mtests)'
 
 on:
-  push:
+  schedule: # scheduled workflows will only run on the default branch
+    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
+  push: # push.inputs field does not exist, use gen1 below
     branches:
     - 3.x
-  pull_request:
-  schedule:
-    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
-  workflow_dispatch:
+  pull_request: # all branches. pull_request.inputs field does not exist, edit gen1 below
+  workflow_dispatch: # triggered by github web ui run "build linux" workflow button
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_x64'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
+        type: string
         required: true
-      publish:
-        description: 'Publish to FTP: on - publish'
-        default: 'off'
+      runtest:
+        description: 'Check: Unit tests (mtests)'
+        default: 'on'
+        type: string
         required: false
-  workflow_call:
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        type: string
+        required: false
+      execfrompubdevpush:
+        description: 'workflow github.event_name workaround, leave as is'
+        default: 'false'
+        type: string
+        required: true
+  workflow_call: # triggered by "uses" from other yml files. copy paste of workflow_dispatch for simplicity. "default" fields under non workflow_dispatch are ignored (unsure)
     inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'linux_x64'
+        type: string
+        required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
         type: string
         required: true
+      runtest:
+        description: 'Check: Unit tests (mtests)'
+        default: 'on'
+        type: string
+        required: false
       publish:
-        description: 'Publish to FTP: on - publish'
+        description: 'Publish to FTP: on - publish (obsolette)'
         default: 'off'
         type: string
+        required: false
+      execfrompubdevpush:
+        description: 'workflow github.event_name workaround, leave as is'
+        default: 'false'
+        type: string
+        required: true
 
 jobs:
+  debugbefore:
+    name: debug before (linux yml)
+    runs-on: ubuntu-latest
+    steps:
+    - name: debug before # ${{ inputs.platforms }} empty on push
+      run: |
+        echo "github.event_name=${{github.event_name}}"
+        echo "inputs.platforms=${{ inputs.platforms }}"
+        echo "inputs.execfrompubdevpush=${{ inputs.execfrompubdevpush }}"
+
+  plan:
+    name: generate strings (linux yml)
+    runs-on: ubuntu-latest
+    outputs:
+      platforms: ${{ steps.gen1.outputs.platforms }}
+      build_mode: ${{ steps.gen1.outputs.build_mode }}
+      runtest: ${{ steps.gen1.outputs.runtest }}
+      publish: ${{ steps.gen1.outputs.publish }}
+    steps:
+    - name: debug passing buildlinuxyml  # ${{ inputs.platforms }} empty on push
+      run: |
+        echo "github.event_name=${{github.event_name}}"
+        echo "inputs.platforms=${{ inputs.platforms }}"
+    - id: gen1
+      name: empty inputs on push workaround
+      run: |
+        if [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ inputs.execfrompubdevpush }}" != "true" ]]; then
+
+          echo "triggered by on.push of build linux" 
+
+          echo "platforms=linux_x64" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=on" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "push" ]];  then
+
+          echo "triggered by on.push of publishdev , on.workflow_call of build linux"
+
+          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
+          echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+
+        else
+
+          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
+          echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+
+        fi
+
+  debugafter:
+    name: debug after (linux yml)
+    needs:
+      - plan
+    runs-on: ubuntu-latest
+    steps:
+    - name: debug after # confirm use "needs.plan.outputs." in replace of "inputs."
+      run: |
+        echo "needs.plan.outputs.platforms=${{ needs.plan.outputs.platforms }}"
+        
   linux_x64:
+    if: ${{ contains(needs.plan.outputs.platforms, 'linux_x64') }}
+    needs:
+      - plan
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
@@ -43,14 +142,14 @@ jobs:
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
       run: |
-        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ needs.plan.outputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         bash ./build/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ inputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && "$BUILD_MODE" == "nightly") ]]; then
+        if [[ "${{ needs.plan.outputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && "$BUILD_MODE" == "nightly") ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
@@ -95,6 +194,9 @@ jobs:
         path: ./build.artifacts/
 
   run_mtests:
+    if: needs.plan.outputs.runtest != 'off'
+    needs:
+      - plan
     runs-on: ubuntu-22.04
     env:
         # Enable AddressSanitizer in the mtest build
