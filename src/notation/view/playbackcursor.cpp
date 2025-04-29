@@ -56,7 +56,6 @@ void PlaybackCursor::setNotation(INotationPtr notation)
 
 void PlaybackCursor::move(muse::midi::tick_t tick, bool isPlaying)
 {
-    // LOGALEX();
     // m_rect = resolveCursorRectByTick(tick);
     m_rect = resolveCursorRectByTick(tick, isPlaying);
 }
