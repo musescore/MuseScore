@@ -23,7 +23,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importenigmaxml.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importenigmaxml.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/ezgz.hpp
     ${CMAKE_CURRENT_LIST_DIR}/finalemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/finalemodule.h
     )
