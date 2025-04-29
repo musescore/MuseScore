@@ -81,8 +81,10 @@ public:
     virtual int musicalFontSize() const = 0;
     virtual async::Notification musicalFontChanged() const = 0;
 
-    virtual std::string defaultFontFamily() const = 0;
-    virtual int defaultFontSize() const = 0;
+    virtual QFont defaultFont() const = 0;
+#ifdef Q_OS_WIN
+    virtual async::Notification defaultFontChanged() const = 0;
+#endif
 
     virtual void resetFonts() = 0;
 
