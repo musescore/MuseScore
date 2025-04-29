@@ -46,6 +46,7 @@ set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
 # Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
 # - app-portable    - for desktop portable app (Windows build for PortableApps.com)
+# - app-web         - for web app (experimental for internal use)
 # - vtest           - for visual tests (for CI)
 # - utest           - for unit tests (for CI)
 
@@ -79,6 +80,7 @@ option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
 option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON)
+option(MUE_BUILD_PRINT_MODULE "Build print module" ON)
 option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
 option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON)
 

@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,19 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+#pragma once
 
-import Muse.UiComponents 1.0
+#include "modularity/imodulesetup.h"
 
-Rectangle {
-
-    property var navigationSection
-    property int contentNavigationPanelOrderStart: 1
-
-    signal resizeRequested(int newWidth, int newHeight)
-
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Playback ToolBar Stub"
-    }
+namespace muse::extensions {
+class ExtensionsModule : public modularity::IModuleSetup
+{
+public:
+    std::string moduleName() const override;
+    void registerExports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+};
 }
