@@ -37,14 +37,14 @@ else()
 endif()
 
 # architecture detection
-# based on QT5 processor detection code
-# qtbase/blobs/master/src/corelib/global/qprocessordetection.h
+# based on Qt processor detection code
+# https://github.com/qt/qtbase/blob/dev/src/corelib/global/qprocessordetection.h
 
 # we only have binary blobs compatible with x86_64, aarch64, and armv7l
 
 set(archdetect_c_code "
-    #if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(_M_ARM) || defined(__aarch64__) || defined(__ARM64__)
-        #if defined(__aarch64__) || defined(__ARM64__)
+    #if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(_M_ARM) || defined(_M_ARM64) || defined(__aarch64__) || defined(__ARM64__)
+        #if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
             #error cmake_ARCH aarch64
         #elif defined(__ARM_ARCH_7A__)
             #error cmake_ARCH armv7l
