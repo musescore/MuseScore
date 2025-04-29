@@ -281,7 +281,7 @@ void EnigmaXmlImporter::importMeasures()
 
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         measure->setTick(tick);
-        auto musxTimeSig = musxMeasure->createDisplayTimeSignature()->calcSimplified();
+        auto musxTimeSig = musxMeasure->createTimeSignature()->calcSimplified();
         auto scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig);
         if (scoreTimeSig != currTimeSig) {
             m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
@@ -291,6 +291,16 @@ void EnigmaXmlImporter::importMeasures()
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
         m_score->measures()->add(measure);
+        for (mu::engraving::Staff* staff : m_score->staves()) {
+            mu::engraving::staff_idx_t staffIdx = staff->idx();
+            // for now, add a full measure rest.
+            mu::engraving::Segment* seg = measure->getSegment(mu::engraving::SegmentType::ChordRest, tick);
+            Rest* rest = mu::engraving::Factory::createRest(seg, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
+            rest->setScore(m_score);
+            rest->setTicks(measure->ticks());
+            rest->setTrack(staffIdx * VOICES);
+            seg->add(rest);
+        }
         if (++counter >= 100) break; //DBG
     }
 
