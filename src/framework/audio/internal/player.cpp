@@ -77,6 +77,7 @@ TrackSequenceId Player::sequenceId() const
 
 void Player::play(const secs_t delay)
 {
+    LOGALEX();
     ONLY_AUDIO_MAIN_THREAD;
 
     Async::call(this, [this, delay]() {
