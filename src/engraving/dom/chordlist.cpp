@@ -474,8 +474,7 @@ void ParsedChord::configure(const ChordList* cl)
     m_augmented << u"aug" << u"+";
     m_lower << u"b" << u"-" << u"dim";
     m_raise << u"#" << u"+" << u"aug";
-    m_mod1 << u"sus" << u"alt";
-    m_mod2 << u"sus" << u"add" << u"no" << u"omit" << u"^";
+    m_mod << u"sus" << u"add" << u"no" << u"omit" << u"^" << u"type";
     m_symbols << u"t" << u"^" << u"-" << u"+" << u"o" << u"0";
 }
 
@@ -546,7 +545,13 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
     }
     // quality and first modifier ran together with no separation - eg, mima7, augadd
     // keep quality portion, reset index to read modifier portion later
-    if (!initial.empty() && initial != tok1 && tok1L != "tristan" && tok1L != "omit") {
+    // Prevent greedy capture of first character as chord quality in the following cases
+    static const std::array<String, 3> modifiersStartingWithQualityCharacters {
+        u"tristan",
+        u"omit",
+        u"type"
+    };
+    if (!initial.empty() && initial != tok1 && !muse::contains(modifiersStartingWithQualityCharacters, tok1L)) {
         i -= (tok1.size() - initial.size());
         tok1 = initial;
         tok1L = initial.toLower();
@@ -801,7 +806,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             }
             tok1.append(s.at(i));
             tok1L.append(s.at(i).toLower());
-            if (m_mod2.contains(tok1L)) {
+            if (m_mod.contains(tok1L)) {
                 initial = tok1;
             }
         }
