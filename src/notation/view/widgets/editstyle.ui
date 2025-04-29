@@ -289,7 +289,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>591</width>
+                <width>598</width>
                 <height>523</height>
                </rect>
               </property>
@@ -990,8 +990,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>631</width>
-                <height>710</height>
+                <width>414</width>
+                <height>374</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2339,8 +2339,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>737</width>
-             <height>731</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3857,8 +3857,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>635</width>
-             <height>720</height>
+             <width>371</width>
+             <height>282</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -4088,9 +4088,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
-                <width>616</width>
-                <height>882</height>
+                <y>-171</y>
+                <width>598</width>
+                <height>618</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -4816,6 +4816,29 @@
                   <string>System header</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_59">
+                  <item row="1" column="2">
+                   <widget class="QToolButton" name="resetSystemHeaderDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'System header distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_112">
+                    <property name="text">
+                     <string>Time signature to first note:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>systemHeaderTimeSigDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="systemHeaderTimeSigDistance">
                     <property name="keyboardTracking">
@@ -4842,15 +4865,41 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_112">
-                    <property name="text">
-                     <string>Time signature to first note:</string>
+                  <item row="2" column="2">
+                   <widget class="QToolButton" name="resetSystemHeaderTimeSigDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
                     </property>
-                    <property name="buddy">
-                     <cstring>systemHeaderTimeSigDistance</cstring>
+                    <property name="accessibleName">
+                     <string>Reset 'System header with time signature distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
                     </property>
                    </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_111">
+                    <property name="text">
+                     <string>Clef/key signature to first note:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>systemHeaderDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <spacer name="horizontalSpacer_60">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </spacer>
                   </item>
                   <item row="1" column="3">
                    <spacer name="horizontalSpacer_59">
@@ -4865,54 +4914,26 @@
                     </property>
                    </spacer>
                   </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_111">
-                    <property name="text">
-                     <string>Clef/key signature to first note:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>systemHeaderDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="2">
-                   <widget class="QToolButton" name="resetSystemHeaderTimeSigDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'System header with time signature distance' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QToolButton" name="resetSystemHeaderDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'System header distance' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="3" column="0">
-                   <spacer name="horizontalSpacer_60">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                   <widget class="QLabel" name="label_17">
+                    <property name="text">
+                     <string>Start of the system to first note:</string>
                     </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>0</height>
-                     </size>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QDoubleSpinBox" name="systemHeaderMinStartOfSystemDistance">
+                    <property name="suffix">
+                     <string>sp</string>
                     </property>
-                   </spacer>
+                   </widget>
+                  </item>
+                  <item row="3" column="2">
+                   <widget class="QToolButton" name="resetSystemHeaderMinStartOfSystemDistance">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </widget>
@@ -4951,8 +4972,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>635</width>
-             <height>720</height>
+             <width>269</width>
+             <height>496</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5746,8 +5767,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>620</width>
-             <height>787</height>
+             <width>401</width>
+             <height>585</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_67">
@@ -6648,8 +6669,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>578</width>
-                <height>527</height>
+                <width>367</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -7519,7 +7540,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>416</width>
+             <width>424</width>
              <height>342</height>
             </rect>
            </property>
@@ -8228,8 +8249,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>635</width>
-             <height>720</height>
+             <width>459</width>
+             <height>496</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -11637,8 +11658,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>696</width>
-             <height>731</height>
+             <width>473</width>
+             <height>484</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -13134,8 +13155,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>631</width>
-                <height>710</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
@@ -13886,8 +13907,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>533</width>
-                <height>638</height>
+                <width>363</width>
+                <height>550</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
