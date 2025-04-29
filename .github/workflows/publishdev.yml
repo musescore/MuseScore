@@ -1,6 +1,9 @@
 name: Build and draft release
 
 # tag and release name format edit id: gen2 below
+# result:
+# - last commit tagged
+# - release draft created (not published yet)
 
 on:
   # schedule: # scheduled workflows will only run on the default branch. edit default values under gen1 and gen2 below
@@ -41,6 +44,11 @@ on:
         default: 'off'
         type: string
         required: true
+      notarize:
+        description: 'Notarize (in macos yml): on, off'
+        default: 'on'
+        type: string
+        required: true
   # workflow_call: # triggered by "uses" from other yml files.
 
 defaults:
@@ -67,6 +75,7 @@ jobs:
       build_mode: ${{ steps.gen1.outputs.build_mode }}
       runtest: ${{ steps.gen1.outputs.runtest }}
       publish: ${{ steps.gen1.outputs.publish }}
+      notarize: ${{ steps.gen1.outputs.notarize }}
       execfrompubdevpush: ${{ steps.gen1.outputs.execfrompubdevpush }}
     steps:
     - id: gen1
@@ -74,7 +83,7 @@ jobs:
       run: |
         if [[ "${{ github.event_name }}" == "pull_request" ]];  then
 
-          echo "triggered by on.pull_request"
+          echo "triggered by 1. on.pull_request of publishdev or 2. on.pull_request of others that triggers on.workflow_call of publishdev" 
 
           echo "manual_name=default" >> "$GITHUB_OUTPUT"
           echo "manual_tag=default" >> "$GITHUB_OUTPUT"
@@ -82,11 +91,11 @@ jobs:
           echo "build_mode=devel" >> "$GITHUB_OUTPUT"
           echo "runtest=off" >> "$GITHUB_OUTPUT"
           echo "publish=off" >> "$GITHUB_OUTPUT"
-          echo "execfrompubdevpush=true" >> "$GITHUB_OUTPUT"
+          echo "notarize=off" >> "$GITHUB_OUTPUT"                # pull_request notarize off
 
         elif [[ "${{ github.event_name }}" == "schedule" ]];  then
 
-          echo "triggered by on.schedule"
+          echo "triggered by 1. on.schedule of publishdev or 2. on.schedule of others that triggers on.workflow_call of publishdev" 
 
           echo "manual_name=default" >> "$GITHUB_OUTPUT"
           echo "manual_tag=default" >> "$GITHUB_OUTPUT"
@@ -94,7 +103,7 @@ jobs:
           echo "build_mode=devel" >> "$GITHUB_OUTPUT"
           echo "runtest=off" >> "$GITHUB_OUTPUT"
           echo "publish=off" >> "$GITHUB_OUTPUT"
-          echo "execfrompubdevpush=true" >> "$GITHUB_OUTPUT"
+          echo "notarize=on" >> "$GITHUB_OUTPUT"
 
         elif [[ "${{ github.event_name }}" == "push" ]]; then
 
@@ -106,7 +115,7 @@ jobs:
           echo "build_mode=devel" >> "$GITHUB_OUTPUT"
           echo "runtest=off" >> "$GITHUB_OUTPUT"
           echo "publish=off" >> "$GITHUB_OUTPUT"
-          echo "execfrompubdevpush=true" >> "$GITHUB_OUTPUT"
+          echo "notarize=on" >> "$GITHUB_OUTPUT"
 
         else
 
@@ -116,9 +125,11 @@ jobs:
           echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
           echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
           echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
-          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
+          echo "notarize=${{ inputs.notarize }}" >> "$GITHUB_OUTPUT"
 
         fi
+
+        echo "execfrompubdevpush=true" >> "$GITHUB_OUTPUT"
 
   debugafter:
     name: debug after (pub dev yml)
@@ -163,7 +174,7 @@ jobs:
       - plan2
     runs-on: ubuntu-latest
     steps:
-    - name: debug after # confirm use "needs.plan.outputs." in replace of "inputs."
+    - name: debug after # confirm use "needs.plan2.outputs." in replace of "inputs."
       run: |
         echo "needs.plan2.outputs.release_tag=${{ needs.plan2.outputs.release_tag }}"
 
@@ -178,6 +189,7 @@ jobs:
       build_mode: ${{ needs.plan.outputs.build_mode }}
       runtest: ${{ needs.plan.outputs.runtest }}
       publish: ${{ needs.plan.outputs.publish }}
+      notarize: ${{ needs.plan.outputs.notarize }}
       execfrompubdevpush: ${{ needs.plan.outputs.execfrompubdevpush }}
 
   create_release:

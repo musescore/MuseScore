@@ -74,9 +74,17 @@ jobs:
     - id: gen1
       name: empty inputs on push workaround
       run: |
-        if [[ "${{ github.event_name }}" == "pull_request" ]];  then
+        if [[ "${{ inputs.execfrompubdevpush }}" == "true" ]]; then
 
-          echo "triggered by on.pull_request"
+          echo "triggered by on.push/pull_request/schedule of publishdev , on.workflow_call of build windows"
+
+          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "pull_request" ]];  then
+
+          echo "triggered by 1. on.pull_request of build windows or 2. on.pull_request of workflows other than publishdev that triggers on.workflow_call of build windows"
 
           echo "platforms=windows_x64 windows_x32 windows_portable_x32 windows_portable_x64" >> "$GITHUB_OUTPUT"
           echo "build_mode=devel" >> "$GITHUB_OUTPUT"
@@ -84,27 +92,19 @@ jobs:
 
         elif [[ "${{ github.event_name }}" == "schedule" ]];  then
 
-          echo "triggered by on.schedule"
+          echo "triggered by 1. on.schedule of build windows or 2. on.schedule of workflows other than publishdev that triggers on.workflow_call of build windows"
 
           echo "platforms=windows_x64 windows_x32 windows_portable_x32 windows_portable_x64" >> "$GITHUB_OUTPUT"
           echo "build_mode=devel" >> "$GITHUB_OUTPUT"
           echo "publish=off" >> "$GITHUB_OUTPUT"
 
-        elif [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ inputs.execfrompubdevpush }}" != "true" ]]; then
+        elif [[ "${{ github.event_name }}" == "push" ]]; then
 
-          echo "triggered by on.push of build windows" 
+          echo "triggered by 1. on.push of build windows or 2. on.push of workflows other than publishdev that triggers on.workflow_call of build windows"
 
           echo "platforms=windows_x64 windows_x32 windows_portable_x32 windows_portable_x64" >> "$GITHUB_OUTPUT"
           echo "build_mode=devel" >> "$GITHUB_OUTPUT"
           echo "publish=off" >> "$GITHUB_OUTPUT"
-
-        elif [[ "${{ github.event_name }}" == "push" ]];  then
-
-          echo "triggered by on.push of publishdev , on.workflow_call of build windows"
-
-          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
-          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
-          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
 
         else
 

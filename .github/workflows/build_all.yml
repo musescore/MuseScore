@@ -27,6 +27,11 @@ on:
         default: 'off'
         type: string
         required: false
+      notarize:
+        description: 'Notarize (in macos yml): on, off'
+        default: 'on'
+        type: string
+        required: true
       runtestjob:
         description: 'run test job dummy'
         default: 'off'
@@ -59,6 +64,11 @@ on:
         default: 'off'
         type: string
         required: false
+      notarize:
+        description: 'Notarize (in macos yml): on, off'
+        default: 'on'
+        type: string
+        required: true
       runtestjob:
         description: 'run test job dummy (in buildall yml)'
         default: 'off'
@@ -93,62 +103,68 @@ jobs:
       build_mode: ${{ steps.gen1.outputs.build_mode }}
       runtest: ${{ steps.gen1.outputs.runtest }}
       publish: ${{ steps.gen1.outputs.publish }}
+      notarize: ${{ steps.gen1.outputs.notarize }}
       runtestjob: ${{ steps.gen1.outputs.runtestjob }}
       execfrompubdevpush: ${{ steps.gen1.outputs.execfrompubdevpush }}
     steps:
     - id: gen1
       name: empty inputs on push workaround
       run: |
-        if [[ "${{ github.event_name }}" == "pull_request" ]];  then
+        if [[ "${{ inputs.execfrompubdevpush }}" == "true" ]]; then
 
-          echo "triggered by on.pull_request"
-
-          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
-          echo "runtest=off" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
-          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
-          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
-
-        elif [[ "${{ github.event_name }}" == "schedule" ]];  then
-
-          echo "triggered by on.schedule"
-
-          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
-          echo "runtest=off" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
-          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
-          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
-
-        elif [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ inputs.execfrompubdevpush }}" != "true" ]]; then
-
-          echo "triggered by on.push of build all" 
-
-          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
-          echo "runtest=off" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
-          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
-          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
-
-        elif [[ "${{ github.event_name }}" == "push" ]];  then
-
-          echo "triggered by on.push of publishdev , on.workflow_call of build all"
+          echo "triggered by on.push/pull_request/schedule of publishdev , on.workflow_call of build all"
 
           echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
           echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
           echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
           echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          echo "notarize=${{ inputs.notarize }}" >> "$GITHUB_OUTPUT"
           echo "runtestjob=${{ inputs.runtestjob }}" >> "$GITHUB_OUTPUT"
           echo "execfrompubdevpush=${{ inputs.execfrompubdevpush }}" >> "$GITHUB_OUTPUT"
-        
+
+        elif [[ "${{ github.event_name }}" == "pull_request" ]];  then
+
+          echo "triggered by 1. on.pull_request of build all or 2. on.pull_request of workflows other than publishdev that triggers on.workflow_call of build all"
+
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "notarize=off" >> "$GITHUB_OUTPUT"                # pull_request notarize off
+          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "schedule" ]];  then
+
+          echo "triggered by 1. on.schedule of build all or 2. on.schedule of workflows other than publishdev that triggers on.workflow_call of build all"
+
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "notarize=on" >> "$GITHUB_OUTPUT"
+          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "push" ]]; then
+
+          echo "triggered by 1. on.push of build all or 2. on.push of workflows other than publishdev that triggers on.workflow_call of build all"
+
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "notarize=on" >> "$GITHUB_OUTPUT"
+          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
+
         else
 
           echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
           echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
           echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
           echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          echo "notarize=${{ inputs.notarize }}" >> "$GITHUB_OUTPUT"
           echo "runtestjob=${{ inputs.runtestjob }}" >> "$GITHUB_OUTPUT"
           echo "execfrompubdevpush=${{ inputs.execfrompubdevpush }}" >> "$GITHUB_OUTPUT"
 
@@ -187,6 +203,7 @@ jobs:
       platforms: ${{ needs.plan.outputs.platforms }}
       build_mode: ${{ needs.plan.outputs.build_mode }}
       publish: ${{ needs.plan.outputs.publish }}
+      notarize: ${{ needs.plan.outputs.notarize }}
       execfrompubdevpush: ${{ needs.plan.outputs.execfrompubdevpush }}
 
   windows:
