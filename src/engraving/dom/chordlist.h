@@ -203,7 +203,7 @@ private:
     String m_xmlSymbols;
     String m_xmlParens;
     StringList m_xmlDegrees;
-    StringList m_major, m_minor, m_diminished, m_augmented, m_lower, m_raise, m_mod1, m_mod2, m_symbols;
+    StringList m_major, m_minor, m_diminished, m_augmented, m_lower, m_raise, m_mod, m_symbols;
     HChord m_chord;
     bool m_parseable = false;
     bool m_understandable = false;

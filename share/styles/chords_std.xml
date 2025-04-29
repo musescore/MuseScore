@@ -116,6 +116,12 @@
     <sym code="0x266d" name="sb"/>
     <sym code="0x266f" name="s#"/>
     <sym code="0x0394" name="striangle"/>
+
+    <sym code="add" name="sadd"/>
+    <sym code="sus" name="ssus"/>
+    <sym code="no" name="sno"/>
+    <sym code="omit" name="somit"/>
+    <sym code="type" name="stype"/>
     </font>
 
   <font>
@@ -388,22 +394,27 @@
 
   <token class="modifier">
     <name>add</name>
-    <render>add</render>
+    <render>sadd</render>
     </token>
 
   <token class="modifier">
     <name>sus</name>
-    <render>sus</render>
+    <render>ssus</render>
     </token>
 
   <token class="modifier">
     <name>no</name>
-    <render>no</render>
+    <render>sno</render>
     </token>
 
   <token class="modifier">
     <name>omit</name>
-    <render>omit</render>
+    <render>somit</render>
+    </token>
+
+  <token class="modifier">
+    <name>type</name>
+    <render>stype</render>
     </token>
 
   <renderRoot>:n :a m:0.5:0</renderRoot>
