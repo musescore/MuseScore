@@ -237,6 +237,19 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     } else if (musxStaff->customStaff.has_value()) {
         s->setLines(Fraction(0, 1), musxStaff->customStaff.value().size());
     }
+    auto calcBarlineOffsetHalfSpaces = [](Evpu offset, bool isCustom, bool forTop) -> int {
+        if (isCustom) {
+            if (forTop) {
+                offset -= 48;
+            } else {
+                offset += 48;
+            }
+        }
+        double halfSpaces = (double(offset) * 2.0) / EVPU_PER_SPACE;
+        return int(std::lround(halfSpaces));
+    };
+    s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset, musxStaff->customStaff.has_value(), true));
+    s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset, musxStaff->customStaff.has_value(), false));
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
     m_staff2Inst.emplace(m_score->nstaves(), InstCmper(musxStaff->getCmper()));
     m_score->appendStaff(s);
