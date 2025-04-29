@@ -21,8 +21,8 @@
  */
 #include "importenigmaxml.h"
 #include "dom/sig.h"
-#include "thirdparty/ezgz.hpp"
 
+#include <zlib.h>
 #include <vector>
 #include <exception>
 
@@ -67,13 +67,64 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
+static size_t readGzipUncompressedSize(const ByteArray& gzDataInput)
+{
+    if (gzDataInput.size() < 18) { // Must be at least 18 bytes
+        return 0;
+    }
+
+    const uint8_t* p = reinterpret_cast<const uint8_t*>(gzDataInput.constData());
+    size_t n = gzDataInput.size();
+
+    uint32_t isize = static_cast<uint32_t>(p[n - 4])
+                     | (static_cast<uint32_t>(p[n - 3]) << 8)
+                     | (static_cast<uint32_t>(p[n - 2]) << 16)
+                     | (static_cast<uint32_t>(p[n - 1]) << 24);
+    return static_cast<size_t>(isize);
+}
+
+static bool gunzipBuffer(const ByteArray& gzDataInput, ByteArray& output)
+{
+    constexpr size_t chunkSize = 262144; // 256 KB chunks
+    output.clear();
+    output.reserve(readGzipUncompressedSize(gzDataInput));
+
+    z_stream stream{};
+    stream.next_in = const_cast<Bytef*>(gzDataInput.constData());
+    stream.avail_in = static_cast<uInt>(gzDataInput.size());
+
+    if (inflateInit2(&stream, 16 + MAX_WBITS) != Z_OK) {
+        LOGE() << "inflateInit2 failed";
+        return false;
+    }
+
+    int ret;
+    do {
+        size_t oldSize = output.size();
+        output.resize(oldSize + chunkSize);
+        stream.next_out = output.data() + oldSize;
+        stream.avail_out = static_cast<uInt>(chunkSize);
+
+        ret = inflate(&stream, Z_NO_FLUSH);
+        if (ret != Z_OK && ret != Z_STREAM_END) {
+            LOGE() << "inflate failed";
+            inflateEnd(&stream);
+            return false;
+        }
+    } while (ret != Z_STREAM_END);
+
+    output.resize(output.size() - stream.avail_out); // Trim extra
+    inflateEnd(&stream);
+    return true;
+}
+
 //---------------------------------------------------------
 //   importEnigmaXmlfromBuffer
 //---------------------------------------------------------
 
 Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::qt::Document>(reinterpret_cast<const char *>(data.constData()), data.size());
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::qt::Document>(data.constChar(), data.size());
 
     data.clear(); // free up data now that it isn't needed
 
@@ -118,12 +169,8 @@ static bool extractScoreFile(const String& name, ByteArray& data)
         gzipData[i] ^= c;
     }
 
-    try {
-        std::vector<char> result = EzGz::IGzFile<>({ reinterpret_cast<uint8_t*>(gzipData.data()), gzipData.size() }).readAll();
-        data = ByteArray(result.data(), result.size());
-    } catch (const std::exception &ex) {
+    if (!gunzipBuffer(gzipData, data)) {
         LOGE() << "unable to extract Enigmaxml from file: " << name;
-        LOGE() << " (exception: " << ex.what() << ")";
         return false;
     }
 
