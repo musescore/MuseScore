@@ -123,100 +123,84 @@ endif()
 # Dependency library declaration
 ###########################################
 set(LINK_LIB
+
+    # Always needed by everyone
     ${QT_LIBRARIES}
     muse::global
     muse::draw
-    muse::network
-
-    braille
-    muse::diagnostics
-    engraving
     muse::actions
+
+    # have stub, links real or stub
+    muse::network
+    muse::vst
+    muse::update
     muse::accessibility
-    context
     muse::shortcuts
     muse::workspace
     muse::audio
     muse::mpe
     muse::midi
     muse::learn
+    muse::tours
+    muse::multiinstances
+    muse::cloud
+    muse::languages
+    muse::extensions
+
+    braille
+    muse::diagnostics
+    engraving
+    context
     notation
     project
-    print
     commonscene
     palette
     inspector
     playback
     instrumentsscene
-    muse::vst
-    muse::update
     musesounds
     )
 
-if (MUSE_MODULE_UI)
-    list(APPEND LINK_LIB muse::ui)
-    list(APPEND LINK_LIB muse::uicomponents)
-    list(APPEND LINK_LIB muse::dockwindow)
-endif()
-
-if (MUSE_MODULE_TOURS)
-    list(APPEND LINK_LIB muse::tours)
-endif()
-
-if (MUSE_MODULE_AUDIOPLUGINS)
-    list(APPEND LINK_LIB muse::audioplugins)
-endif()
-
-if (MUE_BUILD_CONVERTER_MODULE)
-    list(APPEND LINK_LIB converter)
-endif()
-
-if (MUE_BUILD_APPSHELL_MODULE)
-    list(APPEND LINK_LIB appshell)
-endif()
-
-if (NOT CC_IS_EMSCRIPTEN)
-    list(APPEND LINK_LIB muse::cloud)
-    list(APPEND LINK_LIB muse::languages)
-    list(APPEND LINK_LIB muse::multiinstances)
-
-    if (MUSE_MODULE_EXTENSIONS)
-        list(APPEND LINK_LIB muse::extensions)
+macro(add_to_link_if_enabled opt lib)
+    if (${opt})
+        list(APPEND LINK_LIB ${lib})
     endif()
+endmacro()
 
-    if (MUE_BUILD_IMPORTEXPORT_MODULE)
-        list(APPEND LINK_LIB
-            iex_musicxml
-            iex_bb
-            iex_bww
-            iex_capella
-            iex_guitarpro
-            iex_midi
-            iex_musedata
-            iex_ove
-            iex_audioexport
-            iex_imagesexport
-            iex_mei
-        )
+add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT} muse::autobot)
+add_to_link_if_enabled(${MUSE_MODULE_AUDIOPLUGINS} muse::audioplugins)
+add_to_link_if_enabled(${MUSE_MODULE_MUSESAMPLER} muse::musesampler)
+add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui)
+add_to_link_if_enabled(${MUSE_MODULE_UI} muse::uicomponents)
+add_to_link_if_enabled(${MUSE_MODULE_UI} muse::dockwindow)
 
-        if (MUE_BUILD_VIDEOEXPORT_MODULE)
-            list(APPEND LINK_LIB iex_videoexport)
-        endif()
-    else()
-        if (MUE_BUILD_IMAGESEXPORT_MODULE)
-            list(APPEND LINK_LIB iex_imagesexport)
-        endif()
+add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
+add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
+add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
+
+
+if (MUE_BUILD_IMPORTEXPORT_MODULE)
+    list(APPEND LINK_LIB
+        iex_musicxml
+        iex_bb
+        iex_bww
+        iex_capella
+        iex_guitarpro
+        iex_midi
+        iex_musedata
+        iex_ove
+        iex_audioexport
+        iex_imagesexport
+        iex_mei
+    )
+
+    if (MUE_BUILD_VIDEOEXPORT_MODULE)
+        list(APPEND LINK_LIB iex_videoexport)
     endif()
-
-endif()
-
-
-if (MUSE_MODULE_AUTOBOT)
-    list(APPEND LINK_LIB muse::autobot)
-endif()
-
-if (MUSE_MODULE_MUSESAMPLER)
-    list(APPEND LINK_LIB muse::musesampler)
+else()
+    if (MUE_BUILD_IMAGESEXPORT_MODULE)
+        list(APPEND LINK_LIB iex_imagesexport)
+    endif()
 endif()
 
 set (MSCORE_APPEND_SRC)
