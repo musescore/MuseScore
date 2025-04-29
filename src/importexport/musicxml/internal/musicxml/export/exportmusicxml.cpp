@@ -7627,7 +7627,8 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         xml.startElementRaw(String(u"score-part id=\"P%1\"").arg(idx + 1));
         initInstrMap(instrMap, part->instruments(), score);
         static const std::wregex acc(L"[♭♯]");
-        XmlWriter::Attributes attributes;
+        XmlWriter::Attributes longInstrumentAttributes;
+        XmlWriter::Attributes shortInstrumentAttributes;
         // by default export the parts long name as part-name
         bool hiddenInstrName = (score->style().styleB(Sid::hideInstrumentNameIfOneInstrument) && parts.size() == 1);
         String partName = part->longName();
@@ -7640,19 +7641,29 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         }
         // const bool hidePartName = hiddenInstrName || (score->style().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE);
         if (hiddenInstrName) {
-            attributes.push_back({ "print-object", "no" });
+            longInstrumentAttributes.push_back({ "print-object", "no" });
+            shortInstrumentAttributes.push_back({ "print-object", "no" });
         }
-        xml.tag("part-name", attributes, MScoreTextToMusicXml::toPlainText(partName).replace(u"♭", u"b").replace(u"♯", u"#"));
+        if (score->style().styleV(Sid::longInstrumentColor) != engravingConfiguration()->defaultColor()) {
+            const Color longInstrumentColor = score->style().styleV(Sid::longInstrumentColor).value<Color>();
+            longInstrumentAttributes.push_back({ "color", String::fromStdString(longInstrumentColor.toString()) });
+        }
+        xml.tag("part-name", longInstrumentAttributes,
+                MScoreTextToMusicXml::toPlainText(partName).replace(u"♭", u"b").replace(u"♯", u"#"));
         if (partName.contains(acc)) {
-            xml.startElement("part-name-display", attributes);
+            xml.startElement("part-name-display", longInstrumentAttributes);
             writeDisplayName(xml, partName);
             xml.endElement();
         }
         if (!part->shortName().isEmpty()) {
-            xml.tag("part-abbreviation", attributes,
+            if (score->style().styleV(Sid::shortInstrumentColor) != engravingConfiguration()->defaultColor()) {
+                const Color shortInstrumentColor = score->style().styleV(Sid::shortInstrumentColor).value<Color>();
+                shortInstrumentAttributes.push_back({ "color", String::fromStdString(shortInstrumentColor.toString()) });
+            }
+            xml.tag("part-abbreviation", shortInstrumentAttributes,
                     MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u"♭", u"b").replace(u"♯", u"#"));
             if (part->shortName().contains(acc)) {
-                xml.startElement("part-abbreviation-display", attributes);
+                xml.startElement("part-abbreviation-display", shortInstrumentAttributes);
                 writeDisplayName(xml, part->shortName());
                 xml.endElement();
             }
