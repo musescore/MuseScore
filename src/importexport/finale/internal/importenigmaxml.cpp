@@ -35,6 +35,7 @@
 #include "global/serialization/zipreader.h"
 
 #include "engraving/dom/box.h"
+#include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordlist.h"
 #include "engraving/dom/drumset.h"
@@ -221,18 +222,16 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
 
 static ClefType clefTypeFromClefType(ClefIndex clef)
 {
-    // For now, base this on the default clef defintions.
+    // For now, base this on the default clef definitions.
     // A future todo could be to infer the clef from the actual
     // clef definition record in the Musx document's clef options.
-
-    using MusxClef = musx::DefaultClefType;
 
     switch (DefaultClefType(clef)) {
     case DefaultClefType::Treble:         return ClefType::G;
     case DefaultClefType::Alto:           return ClefType::C3;
     case DefaultClefType::Tenor:          return ClefType::C4;
     case DefaultClefType::Bass:           return ClefType::F;
-    case DefaultClefType::Percussion:     return ClefType::PERC;
+    case DefaultClefType::Percussion:     return ClefType::PERC2;
     case DefaultClefType::Treble8vb:      return ClefType::G8_VB;
     case DefaultClefType::Bass8vb:        return ClefType::F8_VB;
     case DefaultClefType::Baritone:       return ClefType::F_B;
@@ -240,19 +239,24 @@ static ClefType clefTypeFromClefType(ClefIndex clef)
     case DefaultClefType::BaritoneC:      return ClefType::C5;
     case DefaultClefType::MezzoSoprano:   return ClefType::C2;
     case DefaultClefType::Soprano:        return ClefType::C1;
-    case DefaultClefType::AltPercussion:  return ClefType::PERC2;
+    case DefaultClefType::AltPercussion:  return ClefType::PERC;
     case DefaultClefType::Treble8va:      return ClefType::G8_VA;
     case DefaultClefType::Bass8va:        return ClefType::F_8VA;
     case DefaultClefType::Blank:          return ClefType::INVALID;
     case DefaultClefType::Tab1:
     case DefaultClefType::Tab2:           return ClefType::TAB;
-    default:                       return ClefType::INVALID;
+    default:                              return ClefType::INVALID;
     }
 }
 
 static ClefTypeList clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
 {
-
+    ClefType concertClef = clefTypeFromClefType(musxStaff->calcFirstClefIndex());
+    ClefType transposeClef = concertClef;
+    if (musxStaff->transposition && musxStaff->transposition->setToClef) {
+        transposeClef = clefTypeFromClefType(musxStaff->transposedClef);
+    }
+    return ClefTypeList(concertClef, transposeClef);
 }
 
 static std::string trimNewLineFromString(const std::string& src)
@@ -273,8 +277,9 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     } else if (musxStaff->customStaff.has_value()) {
         s->setLines(Fraction(0, 1), musxStaff->customStaff.value().size());
     }
-    auto calcBarlineOffsetHalfSpaces = [](Evpu offset, bool isCustom, bool forTop) -> int {
-        if (isCustom) {
+    auto calcBarlineOffsetHalfSpaces = [](Evpu offset, int numLines, bool forTop) -> int {
+        if (numLines == 1) {
+            // This works for single-line staves. Needs more testing for other non-standard scenarios.
             if (forTop) {
                 offset -= 48;
             } else {
@@ -284,11 +289,12 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
         double halfSpaces = (double(offset) * 2.0) / EVPU_PER_SPACE;
         return int(std::lround(halfSpaces));
     };
-    s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset, musxStaff->customStaff.has_value(), true));
-    s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset, musxStaff->customStaff.has_value(), false));
+    s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset, s->lines(Fraction(0, 1)), true));
+    s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset, s->lines(Fraction(0, 1)), false));
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
-    s->setDefaultClefType(ClefTypeList(ClefType::F, ClefType::C3));
+    s->setDefaultClefType(clefTypeListFromMusxStaff(musxStaff));
     m_staff2Inst.emplace(m_score->nstaves(), InstCmper(musxStaff->getCmper()));
+    m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), m_score->nstaves());
     m_score->appendStaff(s);
     return s;
 }
@@ -296,6 +302,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
 void EnigmaXmlImporter::import()
 {
     importParts();
+    importBrackets();
     importMeasures();
 }
 
@@ -311,7 +318,7 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
             return Fraction(4, 4);
         }
     }
-    return Fraction(count.numerator(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
+    return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
 }
 
 void EnigmaXmlImporter::importMeasures()
@@ -331,6 +338,7 @@ void EnigmaXmlImporter::importMeasures()
 
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         measure->setTick(tick);
+        /// @todo eventually we need to import all the TimeSig features we can. Right now it's just the simplified case.
         auto musxTimeSig = musxMeasure->createTimeSignature()->calcSimplified();
         auto scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig);
         if (scoreTimeSig != currTimeSig) {
@@ -341,9 +349,9 @@ void EnigmaXmlImporter::importMeasures()
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
         m_score->measures()->add(measure);
+        // for now, add a full measure rest to each staff for the measure.
         for (mu::engraving::Staff* staff : m_score->staves()) {
             mu::engraving::staff_idx_t staffIdx = staff->idx();
-            // for now, add a full measure rest.
             mu::engraving::Segment* restSeg = measure->getSegment(mu::engraving::SegmentType::ChordRest, tick);
             Rest* rest = mu::engraving::Factory::createRest(restSeg, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
             rest->setScore(m_score);
@@ -385,8 +393,14 @@ void EnigmaXmlImporter::importParts()
     int partNumber = 0;
     for (const auto& item : scrollView) {
         auto staff = item->getStaff();
-        if (!staff)
+        IF_ASSERT_FAILED(staff) {
             continue; // safety check
+        }
+        auto compositeStaff = others::StaffComposite::createCurrent(m_doc, SCORE_PARTID, staff->getCmper(), 1, 0);
+        IF_ASSERT_FAILED(compositeStaff) {
+            continue; // safety check
+        }
+
         auto multiStaffInst = staff->getMultiStaffInstGroup();
         if (multiStaffInst && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
             continue;
@@ -397,13 +411,15 @@ void EnigmaXmlImporter::importParts()
         QString id = QString("P%1").arg(++partNumber);
         part->setId(id);
 
-        auto fullName = staff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
-        if (!fullName.empty()) {
-            part->setPartName(QString::fromStdString(trimNewLineFromString(fullName)));
-            part->setLongName(QString::fromStdString(trimNewLineFromString(fullName)));
+        auto fullBaseName = staff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        if (!fullBaseName.empty()) {
+            part->setPartName(QString::fromStdString(trimNewLineFromString(fullBaseName)));
         }
-
-        auto abrvName = staff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        auto fullEffectiveName = compositeStaff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        if (!fullEffectiveName.empty()) {
+            part->setLongName(QString::fromStdString(trimNewLineFromString(fullEffectiveName)));
+        }
+        auto abrvName = compositeStaff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
         if (!abrvName.empty()) {
             part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
         }
@@ -411,17 +427,120 @@ void EnigmaXmlImporter::importParts()
         if (multiStaffInst) {
             m_part2Inst.emplace(id, multiStaffInst->staffNums);
             for (auto inst : multiStaffInst->staffNums) {
-                if (auto instStaff = m_doc->getOthers()->get<others::Staff>(SCORE_PARTID, inst)) {
+                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, SCORE_PARTID, inst, 1, 0)) {
                     createStaff(part, instStaff);
                     m_inst2Part.emplace(inst, id);
                 }
             }
         } else {
-            createStaff(part, staff);
+            createStaff(part, compositeStaff);
             m_part2Inst.emplace(id, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
             m_inst2Part.emplace(staff->getCmper(), id);
         }
         m_score->appendPart(part);
+    }
+}
+
+void EnigmaXmlImporter::importBrackets()
+{
+    struct StaffGroupLayer
+    {
+        details::StaffGroupInfo info;
+        int layer{};
+    };
+
+    auto computeStaffGroupLayers = [](std::vector<details::StaffGroupInfo> groups) -> std::vector<StaffGroupLayer> {
+        const size_t n = groups.size();
+        std::vector<StaffGroupLayer> result;
+        result.reserve(n);
+
+        for (auto& g : groups)
+            result.push_back({ std::move(g), 0 });
+
+        for (size_t i = 0; i < n; ++i) {
+            const auto& gi = result[i].info;
+            if (!gi.startSlot || !gi.endSlot)
+                continue;
+
+            for (size_t j = 0; j < n; ++j) {
+                if (i == j) continue;
+                const auto& gj = result[j].info;
+                if (!gj.startSlot || !gj.endSlot)
+                    continue;
+
+                if (*gi.startSlot >= *gj.startSlot && *gi.endSlot <= *gj.endSlot &&
+                    (*gi.startSlot > *gj.startSlot || *gi.endSlot < *gj.endSlot)) {
+                    result[i].layer = std::max(result[i].layer, result[j].layer + 1);
+                }
+            }
+        }
+
+        std::sort(result.begin(), result.end(), [](const StaffGroupLayer& a, const StaffGroupLayer& b) {
+            if (a.layer != b.layer)
+                return a.layer < b.layer;
+            if (!a.info.startSlot || !b.info.startSlot)
+                return static_cast<bool>(b.info.startSlot);
+            return *a.info.startSlot < *b.info.startSlot;
+        });
+
+        return result;
+    };
+
+    auto toMuseScoreBracketType = [](details::StaffGroup::BracketStyle style) -> BracketType {
+        using MusxBracketStyle = details::StaffGroup::BracketStyle;
+        switch (style) {
+        case MusxBracketStyle::None:                  return BracketType::NO_BRACKET;
+        case MusxBracketStyle::ThickLine:             return BracketType::LINE;
+        case MusxBracketStyle::BracketStraightHooks:  return BracketType::NORMAL;
+        case MusxBracketStyle::PianoBrace:            return BracketType::BRACE;
+        case MusxBracketStyle::BracketCurvedHooks:    return BracketType::NORMAL;
+        case MusxBracketStyle::DeskBracket:           return BracketType::SQUARE;
+        default:                                      return BracketType::NO_BRACKET;
+        }
+    };
+
+    auto scorePartInfo = m_doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, SCORE_PARTID);
+    if (!scorePartInfo) {
+        LOGE() << "Unable to read PartDefinition for score";
+        return;
+    }
+    auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+
+    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, scorePartInfo, scrollView);
+    auto groupsByLayer = computeStaffGroupLayers(staffGroups);
+    for (const auto& groupInfo : groupsByLayer) {
+        IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
+            LOGE() << "Group info encountered without start or end slot information";
+            continue;
+        }
+        auto musxStartStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.startSlot.value());
+        auto musxEndStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.endSlot.value());
+        IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
+            LOGE() << "Group info encountered without start or end slot information";
+            continue;
+        }
+        auto getStaffIdx = [&](InstCmper inst) -> std::optional<size_t> {
+            auto it = m_inst2Staff.find(inst);
+            IF_ASSERT_FAILED_X(it != m_inst2Staff.end(), "Musx inst value not found in m_inst2Staff") {
+                return std::nullopt;
+            }
+            return it->second;
+        };
+        auto staffIdx = getStaffIdx(musxStartStaff->getCmper());
+        IF_ASSERT_FAILED(staffIdx) {
+            continue;
+        }
+        BracketItem* bi = Factory::createBracketItem(m_score->dummy());
+        bi->setBracketType(toMuseScoreBracketType(groupInfo.info.group->bracket->style));
+        int groupSpan = groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1;
+        bi->setBracketSpan(groupSpan);
+        bi->setColumn(size_t(groupInfo.layer));
+        m_score->staff(staffIdx.value())->addBracket(bi);
+        if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
+            for (size_t idx = staffIdx.value(); idx < staffIdx.value() + groupSpan - 1; idx++) {
+                m_score->staff(idx)->setBarLineSpan(true);
+            }
+        }
     }
 }
 
