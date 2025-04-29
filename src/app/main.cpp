@@ -195,8 +195,10 @@ int main(int argc, char** argv)
     QCoreApplication* qapp = nullptr;
 
     if (runMode == IApplication::RunMode::AudioPluginRegistration) {
+        LOGI() << "runMode:-- IApplication::RunMode::AudioPluginRegistration ..." ;
         qapp = new QCoreApplication(argcFinal, argvFinal);
     } else {
+        LOGI() << "runMode:-- ! IApplication::RunMode::AudioPluginRegistration ..." ;
         qapp = new QApplication(argcFinal, argvFinal);
     }
 
